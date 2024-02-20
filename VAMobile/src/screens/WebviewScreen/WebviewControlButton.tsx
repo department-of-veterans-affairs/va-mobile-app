@@ -1,5 +1,5 @@
+import React from 'react'
 import { StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
 
 import { Box, BoxProps, VA_ICON_MAP } from 'components'
 import { VAIcon } from 'components'
@@ -31,7 +31,7 @@ type ControlButtonProps = {
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width, height, fill, testID, a11yHint }) => {
+function WebviewControlButton({ icon, onPress, disabled, width, height, fill, testID, a11yHint }: ControlButtonProps) {
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active

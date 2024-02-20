@@ -1,25 +1,29 @@
-import { DateTime } from 'luxon'
-import { ScrollView } from 'react-native'
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { StackScreenProps } from '@react-navigation/stack'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
+import { ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
-import { AppointmentsState } from 'store/slices'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VAScrollViewProps } from 'components/VAScrollView'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { AppointmentsState } from 'store/slices'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import CernerAlert from '../CernerAlert'
+import { HealthStackParamList } from '../HealthStackScreens'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
@@ -36,16 +40,20 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   }
 }
 
-const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
+function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(0)
-  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
+  const {
+    upcomingVaServiceError,
+    upcomingCcServiceError,
+    pastVaServiceError,
+    pastCcServiceError,
+    currentPageAppointmentsByYear,
+  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -71,14 +79,17 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    if (apptsNotInDowntime) {
+    if (screenContentAllowed('WG_Appointments') && apptsNotInDowntime) {
       dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
     }
   }, [dispatch, apptsNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -86,7 +97,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   if (!userAuthorizedServices?.appointments) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('appointments')}>
         <NoMatchInRecords />
       </FeatureLandingTemplate>
     )
@@ -99,7 +113,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     setSelectedTab(tab)
   }
 
-  const serviceErrorAlert = (): ReactElement => {
+  function serviceErrorAlert() {
     const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
     const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
@@ -133,7 +147,12 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
+          <SegmentedControl
+            labels={controlLabels}
+            onChange={onTabChange}
+            selected={selectedTab}
+            a11yHints={a11yHints}
+          />
         </Box>
         {serviceErrorAlert()}
         {CernerAlert ? (

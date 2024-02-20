@@ -1,59 +1,63 @@
-import 'react-native'
 import React from 'react'
 
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { screen } from '@testing-library/react-native'
-import ClaimsHistoryScreen from './ClaimsHistoryScreen'
-import * as api from 'store/api'
-import { CommonErrorTypesConstants } from 'constants/errors'
+
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import * as api from 'store/api'
 import { ClaimsAndAppealsGetDataMeta } from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
+import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        appeals: false,
-        appointments: true,
-        claims: false,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+    useAuthorizedServices: jest
+      .fn()
+      .mockReturnValue({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: {
+          appeals: false,
+          appointments: true,
+          claims: false,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      }),
   }
 })
 
@@ -161,7 +165,11 @@ context('ClaimsHistoryScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .calledWith(`/v0/claims-and-appeals-overview`, {
+            showCompleted: 'false',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1',
+          })
           .mockResolvedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
         initializeTestInstance()
       })
@@ -173,7 +181,11 @@ context('ClaimsHistoryScreen', () => {
     it('should display an alertbox specifying claims is unavailable', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .calledWith(`/v0/claims-and-appeals-overview`, {
+            showCompleted: 'false',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1',
+          })
           .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationClaimsServiceError })
         initializeTestInstance()
       })
@@ -185,7 +197,11 @@ context('ClaimsHistoryScreen', () => {
     it('should display an alertbox specifying appeals is unavailable', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .calledWith(`/v0/claims-and-appeals-overview`, {
+            showCompleted: 'false',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1',
+          })
           .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationAppealsServiceError })
         initializeTestInstance()
       })
@@ -197,7 +213,11 @@ context('ClaimsHistoryScreen', () => {
     it('should display an alert and not display the segmented control or the ClaimsAndAppealsListView component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .calledWith(`/v0/claims-and-appeals-overview`, {
+            showCompleted: 'false',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1',
+          })
           .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPaginationAppealsClaimsServiceError })
         initializeTestInstance()
       })

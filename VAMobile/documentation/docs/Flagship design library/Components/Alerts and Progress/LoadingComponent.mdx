@@ -1,9 +1,40 @@
+---
+title: Loading indicator
+---
+
 import CodeBlock from '@theme/CodeBlock'
 import LoadingComponentString from '!!raw-loader!@componentsDocs/LoadingComponent/LoadingComponent'
 import ComponentTopInfo from '../../../../src/components/ComponentInfo'
 
+A loading indicator provides a clue to ongoing activity when the site needs to load additional content.
+
+### Examples
+
+#### Default
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/UlUUAKULuL2peMxSvfY5wx/%5BNEW%5D-Loading-indicator?type=design&node-id=264-681&mode=design&t=xRDrqMxMbVbX50XK-4" allowfullscreen></iframe>
+
+#### Variations
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/UlUUAKULuL2peMxSvfY5wx/%5BNEW%5D-Loading-indicator?type=design&node-id=264-673&mode=design&t=xRDrqMxMbVbX50XK-4" allowfullscreen></iframe>
+
+### Usage
+
+[Refer to the VA Design System for usage guidance](https://design.va.gov/components/loading-indicator)
+
+### Content considerations
+* Refer to the [VA Design System for content considerations](https://design.va.gov/components/loading-indicator#content-considerations)
+
+### Accessibility considerations
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/loading-indicator#accessibility-considerations)
+* The loading indicator component is used to notify users that the page content is loading. On the website, W3C WAI-ARIA aria-live="polite", aria-label and aria-valuetext are used to ensure screen reader users are also provided the same information. On the mobile app, use the equivalent accessibility hints and labels in React Native.
+
+### Related
+* [Loading indicator - VA Design System](https://design.va.gov/components/loading-indicator)
+* [Progress indicator - HIG](https://developer.apple.com/design/human-interface-guidelines/progress-indicators)
+* [Progress indicator - Material Design](https://m3.material.io/components/progress-indicators)
+
+### Code usage
+Link to Storybook coming soon
+
 export const exampleString =`<LoadingComponent text={'secureMessaging.formMessage.saveDraft.loading'} />`
-
-
 
 <ComponentTopInfo componentName="LoadingComponent" example={exampleString} codeString={LoadingComponentString}/>

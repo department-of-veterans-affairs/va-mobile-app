@@ -1,16 +1,17 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, LargePanel, TextView } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowWillYou'>
 
-const HowWillYouScreen: FC<HowWillYouScreenProps> = () => {
+function HowWillYouScreen({}: HowWillYouScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

@@ -1,16 +1,17 @@
 import { Linking } from 'react-native'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
+import getEnv from 'utils/env'
 import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
-import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
 const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
 const APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL = '@store_app_version_encourage_update_local_override'
 const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
-const { APPLE_STORE_LINK } = getEnv()
+const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 export const FeatureConstants: {
   ENCOURAGEUPDATE: number
@@ -124,11 +125,11 @@ export const getStoreVersion = async (): Promise<string> => {
 }
 
 /**
- * opens the Apple Store when they confirm they want to update the app
+ * opens the Apple or Google Play Store
  */
 
 export const openAppStore = () => {
-  const link = APPLE_STORE_LINK
+  const link = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
   Linking.canOpenURL(link).then(
     (supported) => {
       supported && Linking.openURL(link)

@@ -1,9 +1,9 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
@@ -11,16 +11,17 @@ type ContactInformationProps = {
   attributes: AppointmentAttributes
 }
 
-const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
+function ContactInformation({ attributes }: ContactInformationProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType, phoneOnly } =
+    attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending) {
     return (
-      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
+      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween} testID="apptContactDetailsTestID">
         {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.yourContactDetails')}

@@ -1,13 +1,23 @@
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import React, { ReactNode } from 'react'
+import DocumentPicker from 'react-native-document-picker'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
+import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
-import DocumentPicker from 'react-native-document-picker'
 import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
+import {
+  EMAIL_REGEX_EXP,
+  MAIL_TO_REGEX_EXP,
+  NUMBERS_ONLY_REGEX_EXP,
+  PHONE_REGEX_EXP,
+  URL2_REGEX_EXP,
+  URL_REGEX_EXP,
+} from 'constants/common'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -16,12 +26,24 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
-import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
-import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  SecureMessagingFolderList,
+  SecureMessagingMessageList,
+} from 'store/api/types'
 import theme from 'styles/themes/standardTheme'
+import {
+  getFormattedMessageTime,
+  getNumberAccessibilityLabelFromString,
+  getNumbersFromString,
+  stringToTitleCase,
+} from 'utils/formattingUtils'
+
+import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 
 const MAX_SUBJECT_LENGTH = 50
 
@@ -33,13 +55,20 @@ export const getMessagesListItems = (
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } =
+      attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
-    const paperClipProps = hasAttachments || attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps =
+      readReceipt !== READ && !isOutbound
+        ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps)
+        : undefined
+    const paperClipProps =
+      hasAttachments || attachment
+        ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps)
+        : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -93,10 +122,14 @@ export const getMessagesListItems = (
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => {
-        logAnalyticsEvent(Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'))
+        logAnalyticsEvent(
+          Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'),
+        )
         onMessagePress(message.id, isDraftsFolder)
       },
-      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
+      a11yHintText: isDraftsFolder
+        ? t('secureMessaging.viewMessage.draft.a11yHint')
+        : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
       a11yValue: t('listPosition', { position: index + 1, total: messages.length }),
     }
@@ -331,7 +364,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param fileUris - list of already attached files uri values
  * @param imageBase64s - list of already attached images base64 values
- * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility. Useful for preventing back navigation when action sheet is opened
+ * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility.
+ * Useful for preventing back navigation when action sheet is opened
  */
 export const onAddFileAttachments = (
   t: TFunction,
@@ -357,17 +391,45 @@ export const onAddFileAttachments = (
       switch (buttonIndex) {
         case 0:
           launchCamera(
-            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            {
+              mediaType: 'photo',
+              quality: 1,
+              maxWidth: MAX_IMAGE_DIMENSION,
+              maxHeight: MAX_IMAGE_DIMENSION,
+              includeBase64: true,
+            },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(
+                response,
+                setError,
+                setErrorA11y,
+                callbackIfUri,
+                totalBytesUsed,
+                imageBase64s,
+                t,
+              )
             },
           )
           break
         case 1:
           launchImageLibrary(
-            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            {
+              mediaType: 'photo',
+              quality: 1,
+              maxWidth: MAX_IMAGE_DIMENSION,
+              maxHeight: MAX_IMAGE_DIMENSION,
+              includeBase64: true,
+            },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(
+                response,
+                setError,
+                setErrorA11y,
+                callbackIfUri,
+                totalBytesUsed,
+                imageBase64s,
+                t,
+              )
             },
           )
           break
@@ -418,4 +480,146 @@ export const saveDraftWithAttachmentAlert = (
   } else {
     dispatchSaveDraft()
   }
+}
+
+export const getLinkifiedText = (
+  body: string,
+  t: TFunction,
+  launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
+): ReactNode => {
+  const textReconstructedBody: Array<ReactNode> = []
+  const bodySplit = body.split(' ')
+  let dontAddNextString = false
+  _.forEach(bodySplit, (text, index) => {
+    if (dontAddNextString) {
+      //if previous entry was a phone number with xxx xxx xxxx format need to not add xxxx again
+      dontAddNextString = false
+      return
+    }
+
+    if (index !== 0 && index !== bodySplit.length - 1) {
+      //phone number with spaces xxx xxx xxxx format
+      const previousText = bodySplit[index - 1]
+      const nextText = bodySplit[index + 1]
+      if (
+        previousText.length === 3 &&
+        text.length === 3 &&
+        nextText.length === 4 &&
+        NUMBERS_ONLY_REGEX_EXP.test(previousText) &&
+        NUMBERS_ONLY_REGEX_EXP.test(text) &&
+        NUMBERS_ONLY_REGEX_EXP.test(nextText)
+      ) {
+        textReconstructedBody.pop()
+        textReconstructedBody.pop()
+        textReconstructedBody.push(
+          <TouchableWithoutFeedback
+            onPress={() => {
+              launchExternalLink('tel:' + previousText + text + nextText)
+            }}
+            accessibilityRole="link"
+            accessible={true}
+            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
+            accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
+            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
+          </TouchableWithoutFeedback>,
+        )
+        textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+        dontAddNextString = true
+        return
+      }
+    }
+
+    const emailMatch = EMAIL_REGEX_EXP.exec(text)
+    const mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
+    const phoneMatch = PHONE_REGEX_EXP.exec(text)
+    const urlMatch = URL_REGEX_EXP.exec(text)
+    const url2Match = URL2_REGEX_EXP.exec(text)
+    if (emailMatch) {
+      //matches <email address> only
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('mailto:' + text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}
+          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (mailToMatch) {
+      // matches mailto:<email address>
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink(text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}
+          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (phoneMatch) {
+      // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('tel:' + getNumbersFromString(text))
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
+          accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (urlMatch) {
+      // matches any https, http url
+      textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink(text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}
+          accessibilityHint={t('openInBrowser.a11yHint')}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (url2Match) {
+      // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
+      // into a link - may need to update this if we need to include other domains greater than 3 digits)
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('https://' + text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}
+          accessibilityHint={t('openInBrowser.a11yHint')}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else {
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
+    }
+  })
+  return (
+    <Box>
+      <TextView selectable={true} paragraphSpacing={true}>
+        {textReconstructedBody}
+      </TextView>
+    </Box>
+  )
 }

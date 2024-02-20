@@ -1,12 +1,12 @@
-import { ViewStyle } from 'react-native'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import { ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-const NoClaimLettersScreen: FC = () => {
+function NoClaimLettersScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

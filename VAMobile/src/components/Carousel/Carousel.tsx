@@ -1,8 +1,9 @@
 import React, { FC, ReactElement } from 'react'
 
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
+
+import { TFunction } from 'i18next'
 import _ from 'underscore'
 
 import CarouselTabBar from './CarouselTabBar'
@@ -32,7 +33,7 @@ type CarouselStackComponentProps = {
   screenList: Array<CarouselScreen>
 }
 
-const CarouselStackComponent: FC<CarouselStackComponentProps> = ({ screenList }) => {
+function CarouselStackComponent({ screenList }: CarouselStackComponentProps) {
   return (
     <CarouselStack.Navigator
       screenOptions={{
@@ -58,11 +59,19 @@ type CarouselProps = {
   translation: TFunction
 }
 
-/**A common component to set up a carousel of screens and display a carousel tab at the bottom of the screen, which displays a skip button, continue button, and a progress bar*/
-const Carousel: FC<CarouselProps> = ({ screenList, onCarouselEnd, translation }) => {
+/** A common component to set up a carousel of screens and display a carousel tab at the bottom of the screen,
+ * which displays a skip button, continue button, and a progress bar */
+function Carousel({ screenList, onCarouselEnd, translation }: CarouselProps) {
   return (
-    <CarouselTabNav.Navigator tabBar={(props): React.ReactNode => <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />}>
-      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} options={{ headerShown: false }} />
+    <CarouselTabNav.Navigator
+      tabBar={(props): React.ReactNode => (
+        <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />
+      )}>
+      <CarouselTabNav.Screen
+        name="Main"
+        children={(): ReactElement => <CarouselStackComponent screenList={screenList} />}
+        options={{ headerShown: false }}
+      />
     </CarouselTabNav.Navigator>
   )
 }

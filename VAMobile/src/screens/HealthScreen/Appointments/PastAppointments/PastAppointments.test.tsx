@@ -1,29 +1,34 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import PastAppointments from './PastAppointments'
-import {} from 'store/slices'
-import { AppointmentsGroupedByYear, AppointmentStatus, AppointmentStatusConstants } from 'store/api/types'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGroupedByYear } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getAppointmentsInDateRange, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import 'store/slices'
+import {
+  ErrorsState,
+  InitialState,
+  getAppointmentsInDateRange,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+} from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
+import PastAppointments from './PastAppointments'
+
 const mockNavigationSpy = jest.fn()
-const mockNavigateToSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
+  const original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 jest.mock('../../../../utils/platform', () => {
-  let actual = jest.requireActual('../../../../utils/platform')
+  const actual = jest.requireActual('../../../../utils/platform')
   return {
     ...actual,
     isAndroid: jest.fn(() => {
@@ -33,8 +38,8 @@ jest.mock('../../../../utils/platform', () => {
 })
 
 jest.mock('store/slices/', () => {
-  let actual = jest.requireActual('store/slices')
-  let appointment = jest.requireActual('../../../../utils/tests/appointments').defaultAppoinment
+  const actual = jest.requireActual('store/slices')
+  const appointment = jest.requireActual('../../../../utils/tests/appointments').defaultAppoinment
   return {
     ...actual,
     getAppointmentsInDateRange: jest.fn(() => {
@@ -49,7 +54,7 @@ jest.mock('store/slices/', () => {
 })
 
 jest.mock('../../../../store/api', () => {
-  let api = jest.requireActual('../../../../store/api')
+  const api = jest.requireActual('../../../../store/api')
 
   return {
     ...api,
@@ -57,8 +62,10 @@ jest.mock('../../../../store/api', () => {
 })
 
 context('PastAppointments', () => {
-  let props: any
-  let appointmentData = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED, isPending = false): AppointmentsGroupedByYear => {
+  const appointmentData = (
+    status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
+    isPending = false,
+  ): AppointmentsGroupedByYear => {
     return {
       '2020': {
         '3': [
@@ -66,6 +73,7 @@ context('PastAppointments', () => {
             ...defaultAppoinment,
             attributes: {
               ...defaultAppointmentAttributes,
+              healthcareService: undefined,
               status,
               isPending,
             },
@@ -80,7 +88,7 @@ context('PastAppointments', () => {
     loading: boolean = false,
     errorsState: ErrorsState = initialErrorsState,
   ): void => {
-    props = mockNavProps()
+    const props = mockNavProps()
 
     render(<PastAppointments {...props} />, {
       preloadedState: {
@@ -161,7 +169,11 @@ context('PastAppointments', () => {
   it('initializes correctly', () => {
     expect(screen.getByText('Select a date range')).toBeTruthy()
     expect(screen.getAllByText('Past 3 months')).toBeTruthy()
-    expect(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System')).toBeTruthy()
+    expect(
+      screen.getByTestId(
+        'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
+      ),
+    ).toBeTruthy()
     expect(screen.getByText('2 to 2 of 2')).toBeTruthy()
     expect(screen.getByTestId('previous-page')).toBeTruthy()
     expect(screen.getByTestId('next-page')).toBeTruthy()
@@ -176,9 +188,12 @@ context('PastAppointments', () => {
 
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
+      fireEvent.press(
+        screen.getByTestId(
+          'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
+        ),
+      )
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', { appointmentID: '1' })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 
@@ -206,14 +221,15 @@ context('PastAppointments', () => {
   describe('when there are no appointments', () => {
     it('should render NoAppointments', () => {
       initializeTestInstance()
-      expect(screen.getByText("You don’t have any appointments")).toBeTruthy()
+      expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
@@ -225,7 +241,8 @@ context('PastAppointments', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
@@ -239,9 +256,11 @@ context('PastAppointments', () => {
   describe('when the dropdown value is updated', () => {
     it('should call getAppointmentsInDateRange', () => {
       fireEvent.press(screen.getByTestId('getDateRangeTestID picker'))
-      fireEvent.press(screen.getByAccessibilityValue({
-        "text": "2 of 6",
-      }))
+      fireEvent.press(
+        screen.getByAccessibilityValue({
+          text: '2 of 6',
+        }),
+      )
       fireEvent.press(screen.getByText('Done'))
       expect(getAppointmentsInDateRange).toHaveBeenCalled()
     })

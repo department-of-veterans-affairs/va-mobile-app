@@ -1,20 +1,33 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import {
+  AppointmentData,
+  AppointmentPhone,
+  AppointmentStatus,
+  AppointmentType,
+  AppointmentTypeConstants,
+} from 'store/api/types'
 import { context, render } from 'testUtils'
-import { AppointmentData, AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
+
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 context('AppointmentCancellationInfo', () => {
-  let appointmentPhoneData = {
+  const appointmentPhoneData = {
     areaCode: '123',
     number: '456-7890',
     extension: '',
   }
-  let appointmentLocationName = 'VA Long Beach Healthcare System'
+  const appointmentLocationName = 'VA Long Beach Healthcare System'
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, isCovidVaccine = false): void => {
+  const initializeTestInstance = (
+    appointmentType: AppointmentType,
+    status: AppointmentStatus,
+    phoneData?: AppointmentPhone,
+    isCovidVaccine = false,
+  ): void => {
     const mockAppointment: AppointmentData = {
       ...defaultAppoinment,
       attributes: {
@@ -38,7 +51,11 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS, 'BOOKED', appointmentPhoneData)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your VA health facility. You can't cancel V\ufeffA Video Connect at an ATLAS location appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "Call your VA health facility. You can't cancel V\ufeffA Video Connect at an ATLAS location appointments online.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })
@@ -48,7 +65,11 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE, 'BOOKED', appointmentPhoneData)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your VA health facility. You can't cancel V\ufeffA Video Connect at a VA location appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "Call your VA health facility. You can't cancel V\ufeffA Video Connect at a VA location appointments online.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })
@@ -58,7 +79,11 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, 'BOOKED', appointmentPhoneData)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your VA health facility. You can't cancel V\ufeffA Video Connect using a VA device appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "Call your VA health facility. You can't cancel V\ufeffA Video Connect using a VA device appointments online.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })
@@ -68,7 +93,11 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, 'BOOKED', appointmentPhoneData)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your VA health facility. You can't cancel V\ufeffA Video Connect at home appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "Call your VA health facility. You can't cancel V\ufeffA Video Connect at home appointments online.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })
@@ -78,7 +107,9 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, 'BOOKED', appointmentPhoneData)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your community care provider. You can't cancel community care appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText("Call your community care provider. You can't cancel community care appointments online."),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })
@@ -87,9 +118,13 @@ context('AppointmentCancellationInfo', () => {
   describe('when the appointment type is VA', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA, 'BOOKED', appointmentPhoneData)
-      expect(screen.getByText('Cancel this appointment')).toBeTruthy()
-      expect(screen.getByText("If you want to reschedule this appointment, you'll need to first cancel this one and then create a new appointment.")).toBeTruthy()
-      expect(screen.getByText("Cancel appointment")).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
+      expect(
+        screen.getByText('You can cancel this appointment in the app. But if you need to reschedule, call us.'),
+      ).toBeTruthy()
+      expect(screen.getByRole('link', { name: '123-456-7890' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'Cancel appointment' })).toBeTruthy()
     })
   })
 
@@ -97,7 +132,9 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, 'BOOKED', undefined)
       expect(screen.getByText('Do you need to cancel?')).toBeTruthy()
-      expect(screen.getByText("Call your community care provider. You can't cancel community care appointments online.")).toBeTruthy()
+      expect(
+        screen.getByText("Call your community care provider. You can't cancel community care appointments online."),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('Find your VA location')).toBeTruthy()
     })
@@ -107,7 +144,11 @@ context('AppointmentCancellationInfo', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, 'BOOKED', appointmentPhoneData, true)
       expect(screen.getByText('To cancel this appointment, call your VA  medical center')).toBeTruthy()
-      expect(screen.getByText("COVID-19 appointments can't be canceled online. Please call the VA facility to cancel your appointment.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "COVID-19 appointments can't be canceled online. Please call the VA facility to cancel your appointment.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText(appointmentLocationName)).toBeTruthy()
       expect(screen.getByText('123-' + appointmentPhoneData.number)).toBeTruthy()
     })

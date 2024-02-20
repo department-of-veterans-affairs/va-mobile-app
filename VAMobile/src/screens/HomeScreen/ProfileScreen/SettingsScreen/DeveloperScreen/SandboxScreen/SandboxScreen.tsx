@@ -1,18 +1,20 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { StackScreenProps } from '@react-navigation/stack'
 
 import * as CommonComponents from 'components'
 import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VATextInput } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressOptions } from './PickerOptions'
-import { StackScreenProps } from '@react-navigation/stack'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
+import { OnPressOptions } from './PickerOptions'
 
 type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sandbox'>
 
-const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
+function SandboxScreen({ navigation }: SandboxScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -46,7 +48,14 @@ const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => 
   }
 
   const componentPicker = () => {
-    return <VAModalPicker selectedValue={selectedOption} onSelectionChange={onSelectComponentOption} pickerOptions={pickerOptions} labelKey={'Components'} />
+    return (
+      <VAModalPicker
+        selectedValue={selectedOption}
+        onSelectionChange={onSelectComponentOption}
+        pickerOptions={pickerOptions}
+        labelKey={'Components'}
+      />
+    )
   }
   const renderSandboxComponent = () => {
     const whiteListed = CommonComponentWhiteList[selectedOption]
@@ -125,7 +134,10 @@ const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => 
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('sandbox.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('debug.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('sandbox.title')}>
       <Box mx={theme.dimensions.gutter}>
         {componentPicker()}
         <Box my={theme.dimensions.standardMarginBetween}>{renderOptions()}</Box>

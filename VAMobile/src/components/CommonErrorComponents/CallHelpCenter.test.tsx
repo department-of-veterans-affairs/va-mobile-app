@@ -1,8 +1,10 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import CallHelpCenter from './CallHelpCenter'
 
-const onTryAgainSpy = jest.fn(() => { })
+const onTryAgainSpy = jest.fn(() => {})
 
 context('ErrorComponent', () => {
   const initializeTestInstance = (errorText?: string, onTryAgain?: jest.Mock) => {

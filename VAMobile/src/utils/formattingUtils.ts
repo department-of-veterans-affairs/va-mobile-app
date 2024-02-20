@@ -1,6 +1,8 @@
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-import { DateTime, DateTimeFormatOptions } from 'luxon'
+
 import { TFunction } from 'i18next'
+import { $Dictionary } from 'i18next/typescript/helpers'
+import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 /**
  * Returns the formatted phone number
@@ -96,7 +98,10 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
  * @returns Returns datetime as: Month DD, YYYY, HH:MM PM TIMEZONE
  */
 export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, { month: 'long', timeZoneName: 'short' })
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, {
+    month: 'long',
+    timeZoneName: 'short',
+  })
 }
 
 /**
@@ -127,7 +132,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  *
  * @returns date string formatted based on formatBy
  */
-export const getFormattedDate = (date: string, formatBy: string): string => {
+export const getFormattedDate = (date: string | null, formatBy: string): string => {
   if (date) {
     return DateTime.fromISO(date).toLocal().toFormat(formatBy)
   }
@@ -351,6 +356,6 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
  * @param t - translation function
  * @param options - optional param for variables in interpolated translations
  */
-export const getTranslation = (key: string, t: TFunction, options?: object): string => {
+export const getTranslation = (key: string, t: TFunction, options?: $Dictionary): string => {
   return options ? t(key, options) : t(key)
 }

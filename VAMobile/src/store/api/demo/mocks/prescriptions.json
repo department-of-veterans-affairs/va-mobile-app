@@ -512,7 +512,7 @@
           "facilityName": "",
           "instructions": "",
           "isRefillable": false,
-          "isTrackable": true,
+          "isTrackable": false,
           "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 100MG TAB",
           "prescriptionNumber": "",
@@ -533,7 +533,7 @@
           "facilityName": "",
           "instructions": "",
           "isRefillable": false,
-          "isTrackable": true,
+          "isTrackable": false,
           "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 1MG TAB",
           "prescriptionNumber": "",
@@ -705,6 +705,33 @@
           "prescriptionId": 21142592
         },
         "id": "21142592",
+        "type": "PrescriptionTracking"
+      }
+    ]
+  },
+  "/v0/health/rx/prescriptions/21142625/tracking": {
+    "data": [
+      {
+        "attributes": {
+          "deliveryService": "FEDEX",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": "3636850"
+            },
+            {
+              "prescriptionName": "LAMIVUDINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            }
+          ],
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "prescriptionNumber": "3636856",
+          "shippedDate": "2022-06-14T00:00:00.000Z",
+          "trackingNumber": "7534533636856",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142625
+        },
+        "id": "21142625",
         "type": "PrescriptionTracking"
       }
     ]

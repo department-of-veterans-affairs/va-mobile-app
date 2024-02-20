@@ -1,26 +1,24 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import Nametag from './Nametag'
-import { InitialState } from 'store/slices'
 import { BranchesOfServiceConstants } from 'store/api/types'
+import { InitialState } from 'store/slices'
+import { context, render } from 'testUtils'
+
+import Nametag from './Nametag'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
-const navigateToSpy = jest.fn()
-mockNavigationSpy.mockReturnValue(navigateToSpy)
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
@@ -96,7 +94,6 @@ context('Nametag', () => {
     renderWithBranch('United States Air Force')
     fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
-    expect(navigateToSpy).toHaveBeenCalledWith()
   })
 
   it('does not display branch when service history is empty', () => {

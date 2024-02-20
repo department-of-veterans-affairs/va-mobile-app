@@ -11,7 +11,7 @@
   "authors": "Facebook",
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.71.7"
+    "tag": "v0.72.7"
   },
   "module_name": "yoga",
   "header_dir": "yoga",
@@ -19,14 +19,7 @@
   "pod_target_xcconfig": {
     "DEFINES_MODULE": "YES"
   },
-  "compiler_flags": [
-    "-fno-omit-frame-pointer",
-    "-fexceptions",
-    "-Wall",
-    "-Werror",
-    "-std=c++17",
-    "-fPIC"
-  ],
+  "compiler_flags": ["-fno-omit-frame-pointer", "-fexceptions", "-Wall", "-Werror", "-std=c++17", "-fPIC"],
   "platforms": {
     "ios": "12.4"
   },

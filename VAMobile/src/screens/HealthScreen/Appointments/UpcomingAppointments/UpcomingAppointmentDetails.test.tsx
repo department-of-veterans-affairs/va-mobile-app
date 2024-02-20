@@ -1,41 +1,38 @@
 import React from 'react'
 import { Alert } from 'react-native'
-import { screen, fireEvent } from '@testing-library/react-native'
-import { when } from 'jest-when'
 
-import { context, mockNavProps, render } from 'testUtils'
-import { initialAppointmentsState, InitialState } from 'store/slices'
-import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import {
+  AppointmentCancellationStatusTypes,
   AppointmentPhone,
   AppointmentStatus,
-  AppointmentType,
-  AppointmentCancellationStatusTypes,
-  AppointmentStatusDetailType,
-  AppointmentTypeConstants,
   AppointmentStatusConstants,
+  AppointmentStatusDetailType,
   AppointmentStatusDetailTypeConsts,
+  AppointmentType,
+  AppointmentTypeConstants,
 } from 'store/api/types'
+import { InitialState, initialAppointmentsState } from 'store/slices'
 import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('UpcomingAppointmentDetails', () => {
-  let props: any
-  let goBackSpy = jest.fn()
-  let navigateSpy = jest.fn()
-  let navigateToSessionNotStartedSpy = jest.fn()
+  const goBackSpy = jest.fn()
+  const navigateSpy = jest.fn()
 
-  let apptPhoneData = {
+  const apptPhoneData = {
     areaCode: '123',
     number: '456-7890',
     extension: '',
@@ -50,12 +47,11 @@ context('UpcomingAppointmentDetails', () => {
     statusDetail: AppointmentStatusDetailType | null = null,
     hasUrl: boolean = false,
   ): void => {
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { appointmentID: '1' } })
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('SessionNotStarted')
-      .mockReturnValue(navigateToSessionNotStartedSpy)
+    const props = mockNavProps(
+      undefined,
+      { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy },
+      { params: { appointmentID: '1' } },
+    )
 
     render(<UpcomingAppointmentDetails {...props} />, {
       preloadedState: {
@@ -73,15 +69,20 @@ context('UpcomingAppointmentDetails', () => {
               ? phoneData === null
                 ? { '1': bookedAppointmentsList[8] }
                 : hasUrl
-                ? { '1': bookedAppointmentsList[9] }
-                : {
-                    '1': bookedAppointmentsList.filter((obj) => {
-                      return obj.attributes.appointmentType === appointmentType && obj.attributes.isCovidVaccine === isCovid ? true : false
-                    })[0],
-                  }
+                  ? { '1': bookedAppointmentsList[9] }
+                  : {
+                      '1': bookedAppointmentsList.filter((obj) => {
+                        return obj.attributes.appointmentType === appointmentType &&
+                          obj.attributes.isCovidVaccine === isCovid
+                          ? true
+                          : false
+                      })[0],
+                    }
               : {
                   '1': canceledAppointmentList.filter((obj) => {
-                    return obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                    return (
+                      obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                    )
                   })[0],
                 },
           loadedAppointmentsByTimeFrame: {
@@ -129,7 +130,15 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should prompt an alert for leaving the app when the URL is present', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
+      initializeTestInstance(
+        AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true,
+      )
       jest.spyOn(Alert, 'alert')
       fireEvent.press(screen.getByText('Join session'))
       expect(Alert.alert).toHaveBeenCalled()
@@ -138,7 +147,7 @@ context('UpcomingAppointmentDetails', () => {
     it('should navigate to the SessionNotStarted screen when the URL is empty', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       fireEvent.press(screen.getByText('Join session'))
-      expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SessionNotStarted')
     })
   })
 
@@ -175,17 +184,13 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is va', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA)
-      expect(screen.getByText('VA appointment')).toBeTruthy()
-      expect(screen.getByText('Blind Rehabilitation Center')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
     })
   })
 
   describe('when the appointment type is covid vaccine', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(undefined, undefined, undefined, true)
-      expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
       expect(screen.getByText('Special instructions')).toBeTruthy()
       expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
@@ -193,8 +198,15 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
-      expect(screen.getByText('To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      initializeTestInstance(
+        AppointmentTypeConstants.VA,
+        AppointmentStatusConstants.CANCELLED,
+        undefined,
+        false,
+        undefined,
+        AppointmentStatusDetailTypeConsts.PATIENT,
+      )
+      expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
     })
   })
 
@@ -206,22 +218,50 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        undefined,
+        undefined,
+        undefined,
+        AppointmentStatusDetailTypeConsts.PATIENT,
+      )
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if you cancelled (rebook)', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        undefined,
+        undefined,
+        undefined,
+        AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
+      )
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        undefined,
+        undefined,
+        undefined,
+        AppointmentStatusDetailTypeConsts.CLINIC,
+      )
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        undefined,
+        undefined,
+        undefined,
+        AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
+      )
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })

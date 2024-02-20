@@ -1,7 +1,8 @@
 import _ from 'underscore'
 
-import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
+
+import * as api from '../api'
 import { getServiceHistory } from './militaryServiceSlice'
 
 export const ActionTypes: {
@@ -28,7 +29,7 @@ context('militaryService', () => {
                 formattedBeginDate: 'September 17, 1997',
                 formattedEndDate: 'December 31, 2002',
                 characterOfDischarge: 'Honorable',
-                honorableServiceIndicator: 'Y'
+                honorableServiceIndicator: 'Y',
               },
             ],
           },

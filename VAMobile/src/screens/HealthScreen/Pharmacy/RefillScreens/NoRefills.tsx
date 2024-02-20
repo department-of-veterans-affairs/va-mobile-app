@@ -1,13 +1,13 @@
-import { ViewStyle } from 'react-native'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import { ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
-const NoRefills: FC = () => {
+function NoRefills() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -22,7 +22,11 @@ const NoRefills: FC = () => {
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('prescriptions.noRefill.header')}
         </TextView>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('prescriptions.noRefill.text'))}>
+        <TextView
+          variant="MobileBody"
+          textAlign="center"
+          my={theme.dimensions.standardMarginBetween}
+          accessibilityLabel={a11yLabelVA(t('prescriptions.noRefill.text'))}>
           {t('prescriptions.noRefill.text')}
         </TextView>
       </Box>

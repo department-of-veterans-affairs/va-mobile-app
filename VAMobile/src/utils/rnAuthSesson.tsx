@@ -1,6 +1,7 @@
 import { NativeModules } from 'react-native'
-import { isIOS } from 'utils/platform'
+
 import getEnv from 'utils/env'
+import { isIOS } from 'utils/platform'
 
 const RnAuthSession = NativeModules.RNAuthSession
 const CustomTabs = NativeModules.CustomTabsIntentModule
@@ -17,5 +18,13 @@ export const startAuthSession = async (codeChallenge: string): Promise<string> =
     return await RnAuthSession.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
   } else {
     return await CustomTabs.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
+  }
+}
+
+export const clearCookies = async (): Promise<boolean> => {
+  if (isIOS()) {
+    return await RnAuthSession.clearCookies()
+  } else {
+    return await CustomTabs.clearCookies()
   }
 }

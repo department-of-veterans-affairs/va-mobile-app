@@ -1,25 +1,26 @@
-import 'react-native'
 import React from 'react'
 
-import { context, mockNavProps, render, waitFor } from 'testUtils'
 import { screen } from '@testing-library/react-native'
+
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import {
   ErrorsState,
   initialAuthState,
   initialErrorsState,
-  initializeErrorsByScreenID,
   initialMilitaryServiceState,
+  initializeErrorsByScreenID,
 } from 'store/slices'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
+
 import ProfileScreen from './ProfileScreen'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types'
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -36,9 +37,9 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: false
-      }
-    })
+        userProfileUpdate: false,
+      },
+    }),
   }
 })
 
@@ -54,17 +55,15 @@ jest.mock('utils/hooks', () => {
 })
 
 context('ProfileScreen', () => {
-  let props: any
-
-  const initializeTestInstance = ( militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState ): void => {
-
-    props = mockNavProps(undefined,
-      {
-        setOptions: jest.fn(),
-        navigate: jest.fn(),
-        addListener: jest.fn(),
-      }
-    )
+  const initializeTestInstance = (
+    militaryInformationLoading = false,
+    errorState: ErrorsState = initialErrorsState,
+  ): void => {
+    const props = mockNavProps(undefined, {
+      setOptions: jest.fn(),
+      navigate: jest.fn(),
+      addListener: jest.fn(),
+    })
 
     render(<ProfileScreen {...props} />, {
       preloadedState: {

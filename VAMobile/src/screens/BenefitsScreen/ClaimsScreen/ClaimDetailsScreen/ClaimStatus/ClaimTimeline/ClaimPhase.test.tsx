@@ -1,36 +1,28 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
-import { when } from 'jest-when'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import ClaimPhase from './ClaimPhase'
+
 import { claim } from '../../../claimData'
+import ClaimPhase from './ClaimPhase'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('ClaimPhase', () => {
-  let props: any
-  let mockNavigateToClaimFileUploadSpy: jest.Mock
-
   const initializeTestInstance = (phase: number, current: number) => {
-    mockNavigateToClaimFileUploadSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('FileRequest', { claimID: undefined })
-      .mockReturnValue(mockNavigateToClaimFileUploadSpy)
-    props = {
+    const props = {
       phase,
       current,
       attributes: claim.attributes,
+      claimID: claim.id,
     }
 
     render(<ClaimPhase {...props} />)
@@ -54,7 +46,11 @@ context('ClaimPhase', () => {
     it('should render text details after pressing icon', () => {
       initializeTestInstance(2, 2)
       fireEvent.press(screen.getAllByRole('tab')[0])
-      expect(screen.getByText('Your claim has been assigned to a reviewer who is determining if additional information is needed.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          'Your claim has been assigned to a reviewer who is determining if additional information is needed.',
+        ),
+      ).toBeTruthy()
     })
   })
 
@@ -87,7 +83,7 @@ context('ClaimPhase', () => {
         expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
         expect(screen.getByRole('button', { name: 'Review file requests' })).toBeTruthy()
         fireEvent.press(screen.getByRole('button', { name: 'Review file requests' }))
-        expect(mockNavigateToClaimFileUploadSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequest', { claimID: '600156928' })
       })
 
       describe('when number of requests is equal to 1', () => {

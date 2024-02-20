@@ -1,12 +1,16 @@
 import * as Keychain from 'react-native-keychain'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { utils } from '@react-native-firebase/app'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
+import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
+import { Events, UserAnalytics } from 'constants/analytics'
+import { EnvironmentTypesConstants } from 'constants/common'
+import { AppDispatch, AppThunk } from 'store'
 import * as api from 'store/api'
 import {
   AUTH_STORAGE_TYPE,
@@ -19,27 +23,33 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
 } from 'store/api/types'
-import { AppDispatch, AppThunk } from 'store'
-import { EnvironmentTypesConstants } from 'constants/common'
-import { Events, UserAnalytics } from 'constants/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import getEnv from 'utils/env'
+import { pkceAuthorizeParams } from 'utils/oauth'
+import { isAndroid } from 'utils/platform'
+import { clearCookies } from 'utils/rnAuthSesson'
+
+import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
-import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
-import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
+import { updateDemoMode } from './demoSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchSetAnalyticsLogin } from './analyticsSlice'
+import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
+import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
+import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
-import { isAndroid } from 'utils/platform'
-import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { pkceAuthorizeParams } from 'utils/oauth'
-import { updateDemoMode } from './demoSlice'
-import getEnv from 'utils/env'
 
-const { AUTH_SIS_ENDPOINT, AUTH_SIS_REVOKE_URL, AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_SIS_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } = getEnv()
+const {
+  AUTH_SIS_ENDPOINT,
+  AUTH_SIS_REVOKE_URL,
+  AUTH_SIS_TOKEN_EXCHANGE_URL,
+  AUTH_SIS_TOKEN_REFRESH_URL,
+  ENVIRONMENT,
+  IS_TEST,
+} = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
@@ -100,6 +110,9 @@ const postLoggedIn = async () => {
   } catch (error) {
     if (isErrorObject(error)) {
       logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_user_call(error.status))
+      }
     }
   }
 }
@@ -207,7 +220,12 @@ export const loginStart =
     dispatch(dispatchStartAuthLogin(syncing))
   }
 
-const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
+const finishInitialize = async (
+  dispatch: AppDispatch,
+  loginPromptType: LOGIN_PROMPT_TYPE,
+  loggedIn: boolean,
+  authCredentials?: AuthCredentialData,
+): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
   // if undefined we assume save with biometrics (first time through)
@@ -294,7 +312,11 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
-const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
+const storeRefreshToken = async (
+  refreshToken: string,
+  options: Keychain.Options,
+  storageType: AUTH_STORAGE_TYPE,
+): Promise<void> => {
   const splitToken = refreshToken.split('.')
   await Promise.all([
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
@@ -302,6 +324,12 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
     AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
   ])
+    .then(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(true))
+    })
+    .catch(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(false))
+    })
 }
 
 /**
@@ -309,8 +337,18 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
-  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
+  const result = await Promise.all([
+    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+  ])
   const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+
+  if (reconstructedToken) {
+    await logAnalyticsEvent(Events.vama_login_token_get(true))
+  } else {
+    await logAnalyticsEvent(Events.vama_login_token_get(false))
+  }
+
   return reconstructedToken
 }
 
@@ -378,7 +416,7 @@ export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
-    await CookieManager.clearAll()
+    await clearCookies()
 
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
@@ -430,9 +468,12 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
   }
 }
 
-export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
+export const attemptIntializeAuthWithRefreshToken = async (
+  dispatch: AppDispatch,
+  refreshToken: string,
+): Promise<void> => {
   try {
-    await CookieManager.clearAll()
+    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
@@ -452,9 +493,14 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
     postLoggedIn()
-  } catch (err) {
-    console.error(err)
-    logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+  } catch (error) {
+    if (isErrorObject(error)) {
+      console.error(error)
+      logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+      }
+    }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -496,7 +542,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
       refreshToken = await retrieveRefreshToken()
     }
 
-    await CookieManager.clearAll()
+    await clearCookies()
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
@@ -625,7 +671,7 @@ export const handleTokenCallbackUrl =
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
-      await CookieManager.clearAll()
+      await clearCookies()
       const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
@@ -646,6 +692,9 @@ export const handleTokenCallbackUrl =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
+        if (error.status) {
+          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
+        }
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
@@ -667,7 +716,7 @@ export const sendLoginStartAnalytics = (): AppThunk => async () => {
 }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
-  await CookieManager.clearAll()
+  await clearCookies()
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
@@ -738,10 +787,10 @@ const authSlice = createSlice({
       const successfulLogin = !action.payload.error
 
       return {
-        ...state,
+        ...(action.payload.error ? initialAuthState : state),
         ...action.payload,
         webLoginUrl: undefined,
-        loading: false,
+        ...(action.payload.error ? { initializing: false } : { loading: false }),
         successfulLogin: successfulLogin,
         loggedIn: successfulLogin,
       }

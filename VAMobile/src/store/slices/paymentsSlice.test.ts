@@ -1,7 +1,8 @@
 import { find } from 'underscore'
 
-import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
+
+import * as api from '../api'
 import { getPayments } from './paymentsSlice'
 
 const url: string = '/v0/payment-history'
@@ -54,7 +55,8 @@ context('paymentHistory', () => {
         },
         links: {
           self: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
-          first: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
+          first:
+            'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',
           prev: null,
           next: null,
           last: 'https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1',

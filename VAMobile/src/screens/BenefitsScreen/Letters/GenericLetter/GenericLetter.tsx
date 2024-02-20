@@ -1,21 +1,24 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
 
-import { AlertBox, BasicError, Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { RootState } from 'store'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { generateTestID } from 'utils/common'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
 
-const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
+function GenericLetter({ navigation, route }: GenericLetterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -28,15 +31,25 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
 
   if (letterDownloadError) {
     return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
-        <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+      <FeatureLandingTemplate
+        backLabel={t('letters.overview.viewLetters')}
+        backLabelOnPress={navigation.goBack}
+        title={t('letters.details.title')}>
+        <BasicError
+          onTryAgain={onViewLetter}
+          messageText={t('letters.download.error')}
+          buttonA11yHint={t('letters.download.tryAgain.a11y')}
+        />
       </FeatureLandingTemplate>
     )
   }
 
   if (downloading) {
     return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('letters.overview.viewLetters')}
+        backLabelOnPress={navigation.goBack}
+        title={t('letters.details.title')}>
         <LoadingComponent text={t('letters.loading')} />
       </FeatureLandingTemplate>
     )
@@ -60,14 +73,17 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          <TextView
+            {...testIdProps(descriptionA11yLabel || description)}
+            variant="MobileBody"
+            mt={theme.dimensions.standardMarginBetween}
+            paragraphSpacing={true}>
             {description}
           </TextView>
-          <VAButton
+          <Button
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
             testID={t('letters.benefitService.viewLetter')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
           />
         </TextArea>
       </Box>

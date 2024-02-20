@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native'
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 
 const globalAny: any = global
 
@@ -26,17 +27,16 @@ NativeModules.RNInAppUpdate = {
 
 NativeModules.SettingsManager = {
   ...NativeModules.SettingsManager,
-  settings: {AppleLocale: 'en_US'}
+  settings: { AppleLocale: 'en_US' },
 }
 
 NativeModules.I18nManager = {
   ...NativeModules.I18nManager,
-  localeIdentifier: 'en_US'
+  localeIdentifier: 'en_US',
 }
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext)
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -67,6 +67,23 @@ jest.mock('../src/utils/hooks', () => {
     useRouteNavigation: () => {
       return jest.fn()
     },
+  }
+})
+
+jest.mock('../src/utils/waygateConfig', () => {
+  let original = jest.requireActual('../src/utils/waygateConfig')
+  return {
+    ...original,
+    waygateEnabled: jest.fn().mockReturnValue({
+      enabled: true,
+      errorMsgTitle: undefined,
+      errorMsgBody: undefined,
+      appUpdateButton: false,
+      allowFunction: false,
+      denyAccess: false,
+    }),
+    waygateNativeAlert: jest.fn().mockReturnValue(true),
+    screenContentAllowed: jest.fn().mockReturnValue(true),
   }
 })
 
@@ -131,7 +148,7 @@ jest.mock('react-native-keychain', () => {
 jest.mock('react-native-localize', () => {
   return {
     getLocales: jest.fn(),
-    findBestAvailableLanguage: jest.fn(() => ['en']),
+    findBestLanguageTag: jest.fn(() => ['en']),
   }
 })
 
@@ -140,12 +157,6 @@ jest.mock('@react-native-async-storage/async-storage', () => {
     setItem: jest.fn(() => Promise.resolve()),
     getItem: jest.fn(() => Promise.resolve()),
     removeItem: jest.fn(() => Promise.resolve()),
-  }
-})
-
-jest.mock('@react-native-cookies/cookies', () => {
-  return {
-    clearAll: jest.fn(),
   }
 })
 

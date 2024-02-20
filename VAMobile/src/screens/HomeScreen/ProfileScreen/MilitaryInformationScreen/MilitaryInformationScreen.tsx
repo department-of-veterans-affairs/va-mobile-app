@@ -1,30 +1,50 @@
-import { map } from 'underscore'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
+
+import { map } from 'underscore'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextLine,
+  TextView,
+  TextViewProps,
+} from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
-const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
+function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>(
+    (s) => s.militaryService,
+  )
+  const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+  } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     if (needsDataLoad && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
@@ -53,7 +73,9 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     }
   })
 
-  const navigateTo = useRouteNavigation()
+  const onIncorrectService = () => {
+    navigateTo('IncorrectServiceInfo')
+  }
 
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
@@ -62,22 +84,22 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
-    onPress: navigateTo('IncorrectServiceInfo'),
+    onPress: onIncorrectService,
     textDecoration: 'underline',
     textDecorationColor: 'link',
   }
 
-  if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const errorCheck = useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError
+  const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-      {loading || loadingUserAuthorizedServices ? (
+    <FeatureLandingTemplate
+      backLabel={t('profile.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('militaryInformation.title')}>
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
+      ) : loadingCheck ? (
         <LoadingComponent text={t('militaryInformation.loading')} />
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />

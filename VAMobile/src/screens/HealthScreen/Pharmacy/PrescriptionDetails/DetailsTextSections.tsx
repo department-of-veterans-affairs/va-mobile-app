@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, BoxProps, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -20,10 +20,11 @@ type DetailsTextSections = {
   rightSectionValue?: string | number
   /** set the value accessibility label for the text on the right */
   rightSectionValueLabel?: string
+  children?: React.ReactNode
 }
 
 /** Common component for the prescription details data sections */
-const DetailsTextSections: FC<DetailsTextSections> = ({
+function DetailsTextSections({
   leftSectionTitle,
   leftSectionValue,
   leftSectionValueLabel,
@@ -33,11 +34,16 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   rightSectionValue,
   rightSectionValueLabel,
   children,
-}) => {
+}: DetailsTextSections) {
   const theme = useTheme()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
-  const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
+  const getTextElements = (
+    headerText: string,
+    valueText?: string | number,
+    headerLabel?: string,
+    valueLabel?: string,
+  ) => {
     return (
       <>
         <TextView accessibilityLabel={headerLabel} variant="MobileBodyBold">
@@ -61,9 +67,15 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
     : {}
 
   return (
-    <Box mt={standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={standardMarginBetween}>
+    <Box
+      mt={standardMarginBetween}
+      borderTopWidth={1}
+      borderTopColor={'prescriptionDivider'}
+      pt={standardMarginBetween}>
       <Box {...containerProps}>
-        <Box accessible={hasRightText ? true : false}>{getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}</Box>
+        <Box accessible={hasRightText ? true : false}>
+          {getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}
+        </Box>
         {hasRightText && (
           <Box alignItems="flex-end" accessible={true}>
             {getTextElements(rightSectionTitle, rightSectionValue, rightSectionTitleLabel, rightSectionValueLabel)}

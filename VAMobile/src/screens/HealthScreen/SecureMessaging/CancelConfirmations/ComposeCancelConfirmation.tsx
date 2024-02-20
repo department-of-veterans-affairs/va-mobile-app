@@ -1,10 +1,15 @@
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
+import { NAMESPACE } from 'constants/namespaces'
+import {
+  FolderNameTypeConstants,
+  FormHeaderType,
+  FormHeaderTypeConstants,
+  SegmentedControlIndexes,
+} from 'constants/secureMessaging'
+import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import {
   resetHasLoadedRecipients,
   resetReplyTriageError,
@@ -14,8 +19,7 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
-import { useState } from 'react'
+import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -30,9 +34,12 @@ type ComposeCancelConfirmationProps = {
   draftMessageID?: number
 }
 
-export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
+export function useComposeCancelConfirmation(): [
+  isDiscarded: boolean,
+  composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void,
+] {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
@@ -59,7 +66,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
 
       const onSaveDraft = (): void => {
         if (!isFormValid) {
-          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })()
+          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
         } else {
           dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
           dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
@@ -71,11 +78,11 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
         resetAlerts()
         if (isReply && replyToID) {
           dispatch(resetReplyTriageError())
-          navigateTo('ViewMessageScreen', { messageID: replyToID })()
+          navigateTo('ViewMessage', { messageID: replyToID })
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
-          navigateTo('SecureMessaging')()
+          navigateTo('SecureMessaging')
         }
       }
 
@@ -84,8 +91,8 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
           origin === 'Compose'
             ? t('composeCancelConfirmation.compose.title')
             : origin === 'Draft'
-            ? t('composeCancelConfirmation.draft.title')
-            : t('composeCancelConfirmation.reply.title'),
+              ? t('composeCancelConfirmation.draft.title')
+              : t('composeCancelConfirmation.reply.title'),
         message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
@@ -114,6 +121,6 @@ export function useGoToDrafts(): (draftSaved: boolean) => void {
       folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
       folderName: FolderNameTypeConstants.drafts,
       draftSaved,
-    })()
+    })
   }
 }

@@ -1,7 +1,37 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import {
+  Box,
+  ClickForActionLink,
+  ClickToCallPhoneNumber,
+  FeatureLandingTemplate,
+  LinkTypeOptionsConstants,
+  TextArea,
+  TextView,
+} from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import {
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+} from 'store/api/types'
+import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+
+import {
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  isAPendingAppointment,
+} from '../../../../utils/appointments'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import {
   AppointmentAddressAndNumber,
   AppointmentAlert,
@@ -13,22 +43,11 @@ import {
   ProviderName,
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
-import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, FeatureLandingTemplate, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from '../../../../utils/appointments'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
-import getEnv from 'utils/env'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 
-const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
+function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
   const { appointmentID } = route.params
 
   const theme = useTheme()
@@ -38,7 +57,8 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status, phoneOnly, location } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, location, serviceCategoryName } =
+    attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -55,14 +75,19 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   const appointmentTypeAndDateIsLastItem =
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME ||
+    appointmentIsCanceled
 
-  const renderScheduleAnotherAppointment = (): ReactElement => {
+  function renderScheduleAnotherAppointment() {
     if (pendingAppointment) {
       return <></>
     }
 
-    if (phoneOnly) {
+    if (
+      phoneOnly ||
+      (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+    ) {
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
@@ -72,7 +97,9 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
             </TextView>
-            {location.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
+            {location?.phone && location.phone.areaCode && location.phone.number ? (
+              <ClickToCallPhoneNumber phone={location.phone} />
+            ) : undefined}
             <ClickForActionLink
               displayedText={t('appointments.vaSchedule')}
               a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
@@ -87,7 +114,9 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
+          <TextView
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
             {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
           </TextView>
         </TextArea>
@@ -106,7 +135,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />

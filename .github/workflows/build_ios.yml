@@ -91,8 +91,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          # cache: 'yarn'
-          # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
         uses: nick-fields/retry@v2
         with:
@@ -104,16 +102,20 @@ jobs:
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Bundle app
-        run: yarn bundle:ios
       - name: Install pods
         run: pod install
+      - name: Bundle app
+        run: yarn bundle:ios
       - name: Install gems
         run: bundle install
       - name: Update fastlane
         run: bundle update fastlane
-      - name: Run fastlane
-        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      - name: Run fastlane with retries
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3

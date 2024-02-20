@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { CtaButton, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'

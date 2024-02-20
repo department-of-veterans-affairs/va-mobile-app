@@ -1,13 +1,12 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoMilitaryInformationAccess: FC = () => {
+function NoMilitaryInformationAccess() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -16,7 +15,12 @@ const NoMilitaryInformationAccess: FC = () => {
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
         {t('militaryInformation.noMilitaryInfoAccess.title')}
       </TextView>
-      <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>
+      <TextView
+        variant="MobileBody"
+        textAlign="center"
+        my={theme.dimensions.standardMarginBetween}
+        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}
+        testID="noMilitaryAccessTestID">
         {t('militaryInformation.noMilitaryInfoAccess.body')}
       </TextView>
     </Box>

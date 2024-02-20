@@ -10,8 +10,12 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
     inputs:
+      testRail_name:
+        description: 'Name testRail run (will default to date if blank)'
+        type: string
+        required: false
       run_testRail:
-        description: Run_TestRail
+        description: 'Add results to testRail?'
         type: boolean
         required: false
   schedule:
@@ -19,7 +23,7 @@ on:
   workflow_run:
     workflows: ['[Release] New Release Issue']
     types: 
-      - completed
+      - in_progress
   
 defaults:
   run:
@@ -119,6 +123,13 @@ jobs:
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
+      - name: Upload e2e-junit
+        if: failure() || success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-junit
+          path: VAMobile/e2e/test_reports/e2e-junit.xml
+          
       - name: Inform Slack of Failure
         id: post_failure
         if: failure() && github.event_name == 'schedule'
@@ -148,15 +159,11 @@ jobs:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
 
-      - name: Upload e2e-junit
-        uses: actions/upload-artifact@v3
-        with:
-          name: e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
-      
   send_test_results_to_testrail:
-    if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{ github.event.inputs.run_testRail == true}}
-    needs: [e2e-android]
+    if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
+    needs: e2e-android
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
+    with: 
+      testRail_name: ${{ inputs.testRail_name }}
     secrets: inherit
