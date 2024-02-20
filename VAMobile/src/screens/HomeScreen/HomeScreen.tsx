@@ -147,6 +147,10 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
+  const onContactVA = () => {
+    navigateTo('ContactVA')
+  }
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
