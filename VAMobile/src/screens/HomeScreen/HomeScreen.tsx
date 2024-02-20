@@ -169,7 +169,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             />
           </Box>
         )}
-        {Number(unreadMessageCount) > 0 && (
+        {!!unreadMessageCount && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
               title={`${t('messages')}`}
