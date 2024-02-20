@@ -1,13 +1,14 @@
+import React from 'react'
+
 import { Box, BoxProps, TextView, VAIcon } from 'components'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import React, { FC } from 'react'
+import { isIOS } from 'utils/platform'
 
 type WebviewTitleProps = {
   title: string
 }
-const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
+function WebviewTitle({ title }: WebviewTitleProps) {
   const theme = useTheme()
 
   const titleBoxProps: BoxProps = {

@@ -1,15 +1,16 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, LargePanel, TextView, TextViewProps } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
 
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
-const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
+function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

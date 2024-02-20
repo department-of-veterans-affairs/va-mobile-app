@@ -1,29 +1,59 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList, VAButton } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { useNavigationState } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
 
 const { LINK_URL_IN_APP_RECRUITMENT, LINK_URL_VETERAN_USABILITY_PROJECT } = getEnv()
 
-const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation }) => {
+function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
+  const currentScreenName = useNavigationState((state) => state.routes[state.routes.length - 1]).name
+  const [isWebviewOpen, setIsWebviewOpen] = useState(false)
+
+  useBeforeNavBackListener(navigation, () => {
+    logAnalyticsEvent(Events.vama_givefb_close(currentScreenName))
+  })
+
+  useEffect(() => {
+    // Track when the user is leaving the Webview
+    if (isWebviewOpen && currentScreenName !== 'Webview') {
+      logAnalyticsEvent(Events.vama_givefb_close('Webview'))
+      setIsWebviewOpen(false)
+    }
+  }, [isWebviewOpen, currentScreenName])
 
   const onPress = () => {
-    navigation.navigate('Webview', { url: LINK_URL_IN_APP_RECRUITMENT, displayTitle: t('webview.vagov'), loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading') })
+    logAnalyticsEvent(Events.vama_givefb_open('launch'))
+    navigateTo('Webview', {
+      url: LINK_URL_IN_APP_RECRUITMENT,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading'),
+    })
+    setIsWebviewOpen(true)
   }
 
   return (
     <LargePanel title={t('inAppRecruitment.giveFeedback')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('inAppRecruitment.makeAppBetter.header')}
         </TextView>
@@ -46,16 +76,22 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             },
           ]}
         />
-        <VAButton onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} buttonType={ButtonTypesConstants.buttonPrimary} />
+        <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             displayedText={t('inAppRecruitment.learnMore')}
             numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
             linkType={LinkTypeOptionsConstants.url}
             a11yLabel={t('inAppRecruitment.learnMore')}
+            testID="inAppRecruitmentLearnMoreTestID"
+            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
           />
         </Box>
-        <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
+        <TextView
+          variant="HelperText"
+          mt={theme.dimensions.standardMarginBetween}
+          paragraphSpacing={true}
+          accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
           {t('inAppRecruitment.contracts')}
         </TextView>
       </Box>

@@ -1,6 +1,7 @@
-import { AppThunk } from 'store'
-import { DateTime } from 'luxon'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { DateTime } from 'luxon'
+
+import { AppThunk } from 'store'
 
 export const ACTION_START_DEFAULT = -1
 
@@ -79,5 +80,10 @@ const analyticSlice = createSlice({
 })
 
 // Action creators created by the slice
-export const { dispatchSetAnalyticsLogin, dispatchSetActionStart, dispatchSetTotalTimeStart, dispatchFirebaseDebugMode } = analyticSlice.actions
+export const {
+  dispatchSetAnalyticsLogin,
+  dispatchSetActionStart,
+  dispatchSetTotalTimeStart,
+  dispatchFirebaseDebugMode,
+} = analyticSlice.actions
 export default analyticSlice.reducer

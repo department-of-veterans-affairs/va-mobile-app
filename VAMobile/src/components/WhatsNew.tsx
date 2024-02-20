@@ -1,16 +1,18 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useSelector } from 'react-redux'
+import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -105,7 +107,7 @@ export const WhatsNew = () => {
             </Box>
           ) : undefined}
         </Box>
-        <VAButton onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonTypesConstants.buttonSecondary} />
+        <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
       </>
     ),
     a11yLabel: t('whatsNew.title'),

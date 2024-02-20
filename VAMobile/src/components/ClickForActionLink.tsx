@@ -1,9 +1,10 @@
-import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
-import Box from './Box'
 import React, { FC } from 'react'
+import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
-import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { useExternalLink, useTheme } from 'utils/hooks'
+import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
+
+import Box from './Box'
 import TextView, { ColorVariant, TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -175,7 +176,13 @@ const ClickForActionLink: FC<LinkButtonProps> = ({
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon name={getIconName()} fill={colorOverride ? (colorOverride as ColorVariant) : 'link'} fill2={colorOverride ? 'transparent' : ''} width={25} height={25} />
+        <VAIcon
+          name={getIconName()}
+          fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
+          fill2={colorOverride ? 'transparent' : ''}
+          width={25}
+          height={25}
+        />
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>

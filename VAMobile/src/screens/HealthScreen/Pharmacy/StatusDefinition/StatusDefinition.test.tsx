@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { render, context, mockNavProps } from 'testUtils'
-import StatusDefinition from './StatusDefinition'
 import { RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { context, mockNavProps, render } from 'testUtils'
+
+import StatusDefinition from './StatusDefinition'
 
 context('StatusDefinition', () => {
   const initializeTestInstance = (routeMock?: { display: string; value: RefillStatus }) => {
@@ -26,6 +28,10 @@ context('StatusDefinition', () => {
       value: RefillStatusConstants.ACTIVE,
     })
     expect(screen.getByText('Active')).toBeTruthy()
-    expect(screen.getByText('A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.',
+      ),
+    ).toBeTruthy()
   })
 })

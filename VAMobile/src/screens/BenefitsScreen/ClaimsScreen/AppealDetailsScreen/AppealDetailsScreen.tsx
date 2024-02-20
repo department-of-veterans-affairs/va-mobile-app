@@ -1,27 +1,31 @@
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { filter, pluck } from 'underscore'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { filter, pluck } from 'underscore'
+
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
+import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'AppealDetailsScreen'>
 
-const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
+function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -34,9 +38,12 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
   const { attributes, type } = appeal || ({} as AppealData)
-  const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
+  const { updated, programArea, events, status, aoj, docket, issues, active } =
+    attributes || ({} as AppealAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
     // if appeals is still loading cancel it
@@ -46,7 +53,9 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   })
 
   useEffect(() => {
-    dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    if (screenContentAllowed('WG_AppealDetailsScreen')) {
+      dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    }
   }, [dispatch, appealID])
 
   const onTabChange = (tab: number) => {
@@ -90,57 +99,59 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
     return event?.date || ''
   }
 
-  if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingAppeal) {
-    return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
-        <LoadingComponent text={t('appealDetails.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
   const formattedUpdatedTime = getFormattedTimeForTimeZone(updated || '')
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
-    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')} testID="appealsDetailsTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box mx={theme.dimensions.gutter}>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
-            {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
-          </TextView>
-          <TextView variant="MobileBody" testID="appealsUpToDateTestID">
-            {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
-          </TextView>
-          <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
+    <FeatureLandingTemplate
+      backLabel={t('claims.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('appealDetails.title')}
+      testID="appealsDetailsTestID">
+      {useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
+      ) : loadingAppeal ? (
+        <LoadingComponent text={t('appealDetails.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mx={theme.dimensions.gutter}>
+            <TextView
+              variant="BitterBoldHeading"
+              mb={theme.dimensions.condensedMarginBetween}
+              accessibilityRole="header">
+              {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
+            </TextView>
+            <TextView variant="MobileBody" testID="appealsUpToDateTestID">
+              {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
+            </TextView>
+            <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <SegmentedControl
+                labels={controlLabels}
+                onChange={onTabChange}
+                selected={selectedTab}
+                a11yHints={segmentedControlA11yHints}
+              />
+            </Box>
+          </Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            {appeal && selectedTab === 0 && (
+              <AppealStatus
+                events={events}
+                status={status}
+                aoj={aoj}
+                appealType={type}
+                docketName={docket?.type}
+                numAppealsAhead={docket?.ahead}
+                isActiveAppeal={active}
+                programArea={programArea}
+              />
+            )}
+            {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
           </Box>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          {appeal && selectedTab === 0 && (
-            <AppealStatus
-              events={events}
-              status={status}
-              aoj={aoj}
-              appealType={type}
-              docketName={docket?.type}
-              numAppealsAhead={docket?.ahead}
-              isActiveAppeal={active}
-              programArea={programArea}
-            />
-          )}
-          {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
-        </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

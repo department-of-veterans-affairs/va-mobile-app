@@ -1,16 +1,18 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
+import { HealthStackParamList } from '../../HealthStackScreens'
+
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
-const PrescriptionHelp: FC<PrescriptionHelpProps> = () => {
+function PrescriptionHelp({}: PrescriptionHelpProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

@@ -1,33 +1,44 @@
-import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentsStackParamList } from './PaymentsStackScreens'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
+import { PaymentsStackParamList } from './PaymentsStackScreens'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
-const PaymentsScreen: FC<PaymentsScreenProps> = () => {
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+function PaymentsScreen({}: PaymentsScreenProps) {
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Payments') })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const onPayments = navigateTo('PaymentHistory')
-  const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onPayments = () => {
+    navigateTo('PaymentHistory')
+  }
+  const onDirectDeposit = () => {
+    if (userAuthorizedServices?.directDepositBenefitsUpdate) {
+      navigateTo('DirectDeposit')
+    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate) {
+      navigateTo('HowToUpdateDirectDeposit')
+    }
+  }
 
   return (
-    <CategoryLanding title={t('payments.title')}>
+    <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}
@@ -54,12 +65,12 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
 
 type PaymentsStackScreenProps = Record<string, unknown>
 
-const PaymentsScreenStack = createStackNavigator()
+const PaymentsScreenStack = createStackNavigator<PaymentsStackParamList>()
 
 /**
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
+function PaymentsStackScreen({}: PaymentsStackScreenProps) {
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -78,10 +89,26 @@ const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
         },
       }}>
       <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ headerShown: false }} />
-      <PaymentsScreenStack.Screen name="PaymentDetails" component={PaymentDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <PaymentsScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <PaymentsScreenStack.Screen
+        name="PaymentDetails"
+        component={PaymentDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <PaymentsScreenStack.Screen
+        name="DirectDeposit"
+        component={DirectDepositScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <PaymentsScreenStack.Screen
+        name="HowToUpdateDirectDeposit"
+        component={HowToUpdateDirectDepositScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <PaymentsScreenStack.Screen
+        name="PaymentHistory"
+        component={PaymentHistoryScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
     </PaymentsScreenStack.Navigator>
   )
 }

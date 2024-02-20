@@ -1,6 +1,6 @@
 {
   "name": "RNScreens",
-  "version": "3.20.0",
+  "version": "3.29.0",
   "summary": "Native navigation primitives for your React Native app.",
   "description": "RNScreens - first incomplete navigation solution for your React Native app",
   "homepage": "https://github.com/software-mansion/react-native-screens",
@@ -14,16 +14,17 @@
   },
   "source": {
     "git": "https://github.com/software-mansion/react-native-screens.git",
-    "tag": "3.20.0"
+    "tag": "3.29.0"
   },
   "source_files": "ios/**/*.{h,m,mm}",
   "requires_arc": true,
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32",
   "dependencies": {
-    "React-Core": [
-
-    ],
-    "React-RCTImage": [
-
-    ]
+    "React-Core": [],
+    "RCT-Folly": ["2021.07.22.00"]
+  },
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\"",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17"
   }
 }

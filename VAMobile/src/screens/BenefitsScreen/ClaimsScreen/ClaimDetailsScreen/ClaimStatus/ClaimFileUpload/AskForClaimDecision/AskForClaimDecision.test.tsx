@@ -1,15 +1,32 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import AskForClaimDecision from './AskForClaimDecision'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState, submitClaimDecision } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import {
+  ErrorsState,
+  InitialState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  submitClaimDecision,
+} from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import AskForClaimDecision from './AskForClaimDecision'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     submitClaimDecision: jest.fn(() => {
@@ -22,9 +39,13 @@ jest.mock('store/slices', () => {
 })
 
 context('AskForClaimDecision', () => {
-  let navigateSpy: any
-  const initializeTestInstance = (submittedDecision: boolean, error?: Error, errorsState: ErrorsState = initialErrorsState, decisionLetterSent = true): void => {
-    navigateSpy = jest.fn()
+  const navigateSpy = jest.fn()
+  const initializeTestInstance = (
+    submittedDecision: boolean,
+    error?: Error,
+    errorsState: ErrorsState = initialErrorsState,
+    decisionLetterSent = true,
+  ): void => {
     const props = mockNavProps(
       undefined,
       {
@@ -65,13 +86,21 @@ context('AskForClaimDecision', () => {
   it('should initialize', () => {
     expect(screen.getByText('Claim evaluation')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Evaluation details' })).toBeTruthy()
-    expect(screen.getByText("We sent you a letter in the mail asking for more evidence to support your claim. We’ll wait 30 days for your evidence. If you don’t have anything more you want to submit, let us know and we’ll go ahead and make a decision on your claim.")).toBeTruthy()
+    expect(
+      screen.getByText(
+        'We sent you a letter in the mail asking for more evidence to support your claim. We’ll wait 30 days for your evidence. If you don’t have anything more you want to submit, let us know and we’ll go ahead and make a decision on your claim.',
+      ),
+    ).toBeTruthy()
     expect(screen.getByText('Taking the full 30 days won’t affect:')).toBeTruthy()
     expect(screen.getByText('Whether you get VA benefits')).toBeTruthy()
     expect(screen.getByText('The payment amount')).toBeTruthy()
     expect(screen.getByText('Whether you get our help to gather evidence to support your claim')).toBeTruthy()
     expect(screen.getByText('The date benefits will begin if we approve your claim')).toBeTruthy()
-    expect(screen.getByText("I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)")).toBeTruthy()
+    expect(
+      screen.getByText(
+        'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
+      ),
+    ).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Request claim evaluation' })).toBeTruthy()
   })
 
@@ -80,7 +109,11 @@ context('AskForClaimDecision', () => {
       describe('if the claim is closed', () => {
         it('should call navigation navigate for the ClaimDetailsScreen with claimType set to CLOSED', () => {
           initializeTestInstance(true)
-          expect(navigateSpy).toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: 'id', claimType: 'CLOSED', focusOnSnackbar: true })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
+            claimID: 'id',
+            claimType: 'CLOSED',
+            focusOnSnackbar: true,
+          })
         })
       })
     })
@@ -88,7 +121,11 @@ context('AskForClaimDecision', () => {
     describe('when submitted decision is false or there is an error', () => {
       it('should not call navigation go back', () => {
         initializeTestInstance(true, { name: 'ERROR', message: 'ERROR' })
-        expect(navigateSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: 'id', claimType: 'CLOSED', focusOnSnackbar: true })
+        expect(navigateSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: 'id',
+          claimType: 'CLOSED',
+          focusOnSnackbar: true,
+        })
       })
     })
   })
@@ -106,7 +143,8 @@ context('AskForClaimDecision', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,

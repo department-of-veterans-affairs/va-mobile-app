@@ -1,8 +1,10 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
+import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
+
 import { context, mockNavProps, render } from 'testUtils'
+
 import EstimatedDecisionDate from './EstimatedDecisionDate'
 
 const mockExternalLinkSpy = jest.fn()
@@ -29,9 +31,13 @@ context('EstimatedDecisionDate', () => {
   })
 
   describe('when showCovidMessage is true', () => {
-    it('should show an AlertBox and VAButton and should launch external link when button is pressed', () => {
+    it('should show an AlertBox and Button and should launch external link when button is pressed', () => {
       initializeTestCase('2020-12-20', true)
-      expect(screen.getByText("We can’t provide an estimated date on when your claim will be complete due to the affect that COVID-19 has had on scheduling in-person claim exams. We’re starting to schedule in-person exams again in many locations. To see the status of claim exams in your area, you can review locations where we’re now offering in-person exams.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          'We can’t provide an estimated date on when your claim will be complete due to the affect that COVID-19 has had on scheduling in-person claim exams. We’re starting to schedule in-person exams again in many locations. To see the status of claim exams in your area, you can review locations where we’re now offering in-person exams.',
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('Review locations')).toBeTruthy()
       fireEvent.press(screen.getByRole('button', { name: 'Review locations' }))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
@@ -63,7 +69,9 @@ context('EstimatedDecisionDate', () => {
           const dateBeforeToday = DateTime.local().minus({ years: 1 })
           initializeTestCase(dateBeforeToday.toISO(), false)
           expect(screen.getByText(dateBeforeToday.toFormat('MMMM dd, yyyy'))).toBeTruthy()
-          expect(screen.getByText('We estimated your claim would be completed by now but we need more time.')).toBeTruthy()
+          expect(
+            screen.getByText('We estimated your claim would be completed by now but we need more time.'),
+          ).toBeTruthy()
         })
       })
     })

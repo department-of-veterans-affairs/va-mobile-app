@@ -1,13 +1,19 @@
 import React from 'react'
 
-import { Box, ButtonTypesConstants, PickerItem, TextView, VAButton } from 'components'
-import { getTheme } from 'styles/themes/standardTheme'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, PickerItem, TextView } from 'components'
 import VAColors from 'styles/themes/VAColors'
+import { getTheme } from 'styles/themes/standardTheme'
 
 const standardTheme = getTheme()
 
 // Converts basic object(ex. { key: value }) -> [ { label: '', value: '' }]
-export const objectToPickerOptions = (options: Record<string, string>, appendValueToLabel = false, useLabelAsValue = false): Array<PickerItem> => {
+export const objectToPickerOptions = (
+  options: Record<string, string>,
+  appendValueToLabel = false,
+  useLabelAsValue = false,
+): Array<PickerItem> => {
   return Object.entries(options).map((value) => {
     return {
       label: appendValueToLabel ? `${value[0]} (${value[1]})` : value[0],
@@ -28,7 +34,7 @@ export const generateChildrenPickerOptions = () => {
       label: 'one button',
       value: (
         <Box my={standardTheme.dimensions.standardMarginBetween}>
-          <VAButton onPress={() => {}} label={'Button'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={() => {}} label={'Button'} />
         </Box>
       ),
     },
@@ -37,8 +43,9 @@ export const generateChildrenPickerOptions = () => {
       value: (
         <Box my={standardTheme.dimensions.standardMarginBetween}>
           <TextView>
-            Et sint culpa est facere doloribus id quidem omnis aut recusandae voluptas ut similique molestias et dolorem dolores id laboriosam repellendus. Qui culpa maxime et
-            fugiat eius qui expedita voluptatem et exercitationem reprehenderit quod quia 33 consequatur optio.
+            Et sint culpa est facere doloribus id quidem omnis aut recusandae voluptas ut similique molestias et dolorem
+            dolores id laboriosam repellendus. Qui culpa maxime et fugiat eius qui expedita voluptatem et exercitationem
+            reprehenderit quod quia 33 consequatur optio.
           </TextView>
         </Box>
       ),
@@ -48,11 +55,12 @@ export const generateChildrenPickerOptions = () => {
       value: (
         <Box my={standardTheme.dimensions.standardMarginBetween}>
           <TextView>
-            Et sint culpa est facere doloribus id quidem omnis aut recusandae voluptas ut similique molestias et dolorem dolores id laboriosam repellendus. Qui culpa maxime et
-            fugiat eius qui expedita voluptatem et exercitationem reprehenderit quod quia 33 consequatur optio.
+            Et sint culpa est facere doloribus id quidem omnis aut recusandae voluptas ut similique molestias et dolorem
+            dolores id laboriosam repellendus. Qui culpa maxime et fugiat eius qui expedita voluptatem et exercitationem
+            reprehenderit quod quia 33 consequatur optio.
           </TextView>
           <Box my={standardTheme.dimensions.condensedMarginBetween}>
-            <VAButton onPress={() => {}} label={'Button'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Button onPress={() => {}} label={'Button'} />
           </Box>
         </Box>
       ),
@@ -84,7 +92,11 @@ export const VAColorsOptions = objectToPickerOptions(VAColors, true)
 export const VABorderColorOptions = objectToPickerOptions(standardTheme.colors.border, true)
 
 // 'ColorVariant' or 'keyof VATextColors | keyof VAButtonTextColors' in props
-export const VATextAndButtonColorOptions = objectToPickerOptions({ ...standardTheme.colors.text, ...standardTheme.colors.buttonText }, true, true)
+export const VATextAndButtonColorOptions = objectToPickerOptions(
+  { ...standardTheme.colors.text, ...standardTheme.colors.buttonText },
+  true,
+  true,
+)
 
 // Booleans true or false
 export const BooleanOptions = generateBooleanPickerOptions()

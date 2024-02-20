@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, BoxProps } from 'components'
 import { VABackgroundColors } from 'styles/theme'
@@ -26,7 +26,7 @@ const getBgColor = (phase: number, current: number): keyof VABackgroundColors =>
 /**
  * component that renders a step number or completed check for a ClaimPhase in a ClaimTimeline
  * */
-const PhaseIndicator: FC<PhaseIndicatorProps> = ({ phase, current }) => {
+function PhaseIndicator({ phase, current }: PhaseIndicatorProps) {
   const fs = useFontScale()
   const phaseIndicatorBorderWidth = 2
 

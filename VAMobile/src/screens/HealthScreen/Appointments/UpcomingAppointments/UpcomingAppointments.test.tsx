@@ -1,25 +1,25 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import UpcomingAppointments from './UpcomingAppointments'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { AppointmentStatusConstants, AppointmentsGroupedByYear } from 'store/api/types'
 import { initialAppointmentsState } from 'store/slices'
-import { AppointmentsGroupedByYear, AppointmentStatusConstants } from 'store/api/types'
+import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppoinment } from 'utils/tests/appointments'
 
-let mockNavigationSpy = jest.fn()
+import UpcomingAppointments from './UpcomingAppointments'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
+  const original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     getAppointmentsInDateRange: jest.fn(() => {
@@ -32,7 +32,7 @@ jest.mock('store/slices', () => {
 })
 
 jest.mock('store/api', () => {
-  let api = jest.requireActual('store/api')
+  const api = jest.requireActual('store/api')
 
   return {
     ...api,
@@ -40,17 +40,25 @@ jest.mock('store/api', () => {
 })
 
 context('UpcomingAppointments', () => {
-  let navigateToSpy: jest.Mock
-  let appointmentsByYearData: AppointmentsGroupedByYear = {
+  const appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
-      '3': [{ ...defaultAppoinment }],
+      '3': [
+        {
+          ...defaultAppoinment,
+          attributes: {
+            ...defaultAppoinment.attributes,
+            healthcareService: undefined,
+          },
+        },
+      ],
     },
   }
 
-  const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false) => {
+  const initializeTestInstance = (
+    currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear,
+    loading: boolean = false,
+  ) => {
     const props = mockNavProps()
-    navigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(navigateToSpy)
 
     render(<UpcomingAppointments {...props} />, {
       preloadedState: {
@@ -143,9 +151,12 @@ context('UpcomingAppointments', () => {
 
   describe('on appointment press', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
+      fireEvent.press(
+        screen.getByTestId(
+          'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
+        ),
+      )
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
-      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 

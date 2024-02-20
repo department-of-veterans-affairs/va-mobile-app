@@ -1,30 +1,40 @@
-import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import { ScrollView } from 'react-native'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
-import { EMAIL_REGEX_EXP } from 'constants/common'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { SaveEmailData } from 'api/types'
-import { SnackbarMessages } from 'components/SnackBar'
-import { isErrorObject, showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useContactInformation, useDeleteEmail, useSaveEmail } from 'api/contactInformation'
+import { SaveEmailData } from 'api/types'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
+import { EMAIL_REGEX_EXP } from 'constants/common'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { isErrorObject, showSnackBar } from 'utils/common'
+import {
+  useAlert,
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useIsScreenReaderEnabled,
+  useTheme,
+} from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
 /**
  * Screen for editing a users email in the personal info section
  */
-const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
+function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: contactInformation } = useContactInformation()
-  const { mutate: saveEmail, isLoading: savingEmail, isSuccess: emailSaved } = useSaveEmail()
-  const { mutate: deleteEmail, isLoading: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
+  const { mutate: saveEmail, isPending: savingEmail, isSuccess: emailSaved } = useSaveEmail()
+  const { mutate: deleteEmail, isPending: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()
@@ -95,7 +105,13 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           if (error.status === 400) {
             showSnackBar(saveSnackbarMessages.errorMsg, dispatch, undefined, true, true)
           } else {
-            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, () => saveEmail(emailData, mutateOptions), false, true)
+            showSnackBar(
+              saveSnackbarMessages.errorMsg,
+              dispatch,
+              () => saveEmail(emailData, mutateOptions),
+              false,
+              true,
+            )
           }
         }
       },
@@ -123,19 +139,16 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
     const mutateOptions = {
       onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
-      onError: () => showSnackBar(removeSnackbarMessages.errorMsg, dispatch, () => deleteEmail(emailData, mutateOptions), false, true),
+      onError: () =>
+        showSnackBar(
+          removeSnackbarMessages.errorMsg,
+          dispatch,
+          () => deleteEmail(emailData, mutateOptions),
+          false,
+          true,
+        ),
     }
     deleteEmail(emailData, mutateOptions)
-  }
-
-  if (savingEmail || deletingEmail) {
-    const loadingText = deletingEmail ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
-
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={loadingText} />
-      </FullScreenSubtask>
-    )
   }
 
   const isEmailInvalid = (): boolean => {
@@ -184,28 +197,53 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     })
   }
 
+  const loadingCheck = savingEmail || deletingEmail
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={t('contactInformation.emailAddress')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}
+      rightButtonText={!loadingCheck ? t('save') : undefined}
+      onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
       rightButtonDisabled={saveDisabled}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {contactInformation?.contactEmail?.emailAddress && (
-          <Box my={theme.dimensions.standardMarginBetween}>
-            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-      </Box>
+      {savingEmail || deletingEmail ? (
+        <LoadingComponent
+          text={
+            deletingEmail ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
+          }
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {contactInformation?.contactEmail?.emailAddress && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: emailTitle })}
+                buttonType={ButtonVariants.Destructive}
+              />
+            </Box>
+          )}
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox
+                scrollViewRef={scrollViewRef}
+                title={t('editEmail.alertError')}
+                border="error"
+                focusOnError={onSaveClicked}
+              />
+            </Box>
+          )}
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            setFormContainsError={setFormContainsError}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

@@ -1,6 +1,7 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +11,7 @@ import { useTheme } from 'utils/hooks'
 
 type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentIssue'>
 
-const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
+function PaymentIssue({}: PaymentIssueScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

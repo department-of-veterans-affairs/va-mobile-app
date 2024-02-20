@@ -1,10 +1,12 @@
 import React from 'react'
 import { Linking } from 'react-native'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
 import { initialPrescriptionState } from 'store/slices'
 import { initialClaimsAndAppealsState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigationSpy = jest.fn()
@@ -28,13 +30,13 @@ context('HomeScreen', () => {
           ...initialPrescriptionState,
           prescriptionStatusCount: {
             isRefillable: refillablePrescriptionsCount || 0,
-          }
+          },
         },
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
           activeClaimsCount: activeClaimsCount || 0,
         },
-      }
+      },
     })
   }
 
@@ -65,7 +67,11 @@ context('HomeScreen', () => {
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Find a VA location' }))
-      expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {
+        displayTitle: 'va.gov',
+        url: 'https://www.va.gov/find-locations/',
+        loadingMessage: 'Loading VA location finder...',
+      })
     })
   })
 

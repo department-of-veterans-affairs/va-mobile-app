@@ -1,15 +1,16 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { AppointmentAttributes } from 'store/api'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
-import { Box, ButtonTypesConstants, VAButton } from 'components'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentAttributes } from 'store/api'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { cancelAppointment } from 'store/slices'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
@@ -17,7 +18,7 @@ type PendingAppointmentCancelButtonProps = {
   appointmentID?: string
 }
 
-const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
+function PendingAppointmentCancelButton({ attributes, appointmentID }: PendingAppointmentCancelButtonProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
@@ -38,7 +39,14 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
         ),
       )
       dispatch(
-        cancelAppointment(cancelId, appointmentID, true, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+        cancelAppointment(
+          cancelId,
+          appointmentID,
+          true,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
       )
     }
 
@@ -70,12 +78,12 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <VAButton
+        <Button
           onPress={onCancel}
           label={t('cancelRequest')}
           a11yHint={t('appointments.pending.cancelRequest.a11yHint')}
-          buttonType={ButtonTypesConstants.buttonDestructive}
-          {...testIdProps(t('cancelRequest'))}
+          buttonType={ButtonVariants.Destructive}
+          testID={t('cancelRequest')}
         />
       </Box>
     )

@@ -1,10 +1,14 @@
 import * as Keychain from 'react-native-keychain'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import _ from 'underscore'
 
+import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
-import { isAndroid } from '../../utils/platform'
+
 import getEnv from '../../utils/env'
+import { isAndroid } from '../../utils/platform'
 import * as api from '../api'
 import {
   cancelWebLogin,
@@ -20,8 +24,6 @@ import {
   startBiometricsLogin,
   startWebLogin,
 } from './authSlice'
-import { AUTH_STORAGE_TYPE, LoginServiceTypeConstants, LOGIN_PROMPT_TYPE } from 'store/api/types'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export const ActionTypes: {
   AUTH_START_LOGIN: string
@@ -40,6 +42,11 @@ jest.mock('utils/remoteConfig')
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
   isIOS: jest.fn(),
+}))
+
+jest.mock('../../utils/rnAuthSesson', () => ({
+  startAuthSession: jest.fn(),
+  clearCookies: jest.fn(),
 }))
 
 jest.mock('../../utils/env', () =>
@@ -72,9 +79,7 @@ const defaultEnvParams = {
   AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
-const sampleIdToken = 'TEST_TOKEN';
-
-let mockFeatureEnabled = featureEnabled as jest.Mock
+const sampleIdToken = 'TEST_TOKEN'
 const getItemMock = AsyncStorage.getItem as jest.Mock
 
 let mockedAuthResponse: { data: { access_token: string; refresh_token: string; id_token: string } }
@@ -148,7 +153,14 @@ context('authAction SIS', () => {
 
       const store = realStore()
       await store.dispatch(handleTokenCallbackUrl('asdfasdfasdf'))
-      store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK }))
+      store.dispatch(
+        dispatchInitializeAction({
+          loggedIn: true,
+          canStoreWithBiometric: false,
+          shouldStoreWithBiometric: false,
+          loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK,
+        }),
+      )
       expect(store.getState().auth.loggedIn).toBeTruthy()
 
       await store.dispatch(logout())
@@ -166,7 +178,14 @@ context('authAction SIS', () => {
     const DEV: boolean = global.__DEV__
     beforeEach(() => {
       store = realStore()
-      store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
+      store.dispatch(
+        dispatchInitializeAction({
+          loggedIn: true,
+          canStoreWithBiometric: false,
+          shouldStoreWithBiometric: false,
+          loginPromptType: LOGIN_PROMPT_TYPE.LOGIN,
+        }),
+      )
 
       // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
       global.__DEV__ = false
@@ -207,7 +226,13 @@ context('authAction SIS', () => {
       const prefMock = AsyncStorage.getItem as jest.Mock
       prefMock.mockResolvedValue(null)
       fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-      store.dispatch(dispatchStoreAuthorizeParams({ codeVerifier: 'mylongcodeverifier', codeChallenge: 'mycodechallenge', authorizeStateParam: '2355adfs' }))
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'mylongcodeverifier',
+          codeChallenge: 'mycodechallenge',
+          authorizeStateParam: '2355adfs',
+        }),
+      )
       await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })

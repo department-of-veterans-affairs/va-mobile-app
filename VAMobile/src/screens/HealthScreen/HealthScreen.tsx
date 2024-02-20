@@ -1,80 +1,75 @@
-import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
-import { getInbox } from 'store/slices/secureMessagingSlice'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { loadAllPrescriptions } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import Appointments from './Appointments'
-import CernerAlert from './CernerAlert'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
+import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import CernerAlert from './CernerAlert'
+import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
-import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
   const onPharmacy = () => {
-    // If rx list is already loaded, reload it to ensure freshness
-    if (!prescriptionsNeedLoad) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-    pharmacyNavHandler()
+    // always reload to ensure freshness
+    dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+    navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', {
+      url: WEBVIEW_URL_CORONA_FAQ,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.covidUpdates.loading'),
+    })
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
-  useEffect(() => {
-    if (smNotInDowntime) {
-      // fetch inbox metadata to display unread messages count tag
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-  }, [dispatch, smNotInDowntime])
-
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box
+        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
+        mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
-          onPress={onAppointments}
+          onPress={() => navigateTo('Appointments')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -82,7 +77,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={onSecureMessaging}
+          onPress={() => navigateTo('SecureMessaging')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -103,7 +98,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
-          onPress={onVaVaccines}
+          onPress={() => navigateTo('VaccineList')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -131,12 +126,12 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
 type HealthStackScreenProps = Record<string, unknown>
 
-const HealthScreenStack = createStackNavigator()
+const HealthScreenStack = createStackNavigator<HealthStackParamList>()
 
 /**
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HealthStackScreen: FC<HealthStackScreenProps> = () => {
+function HealthStackScreen({}: HealthStackScreenProps) {
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -155,16 +150,48 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
         },
       }}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HealthScreenStack.Screen
+        name="Appointments"
+        component={Appointments}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen
+        name="PastAppointmentDetails"
+        component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionDetails"
+        component={PrescriptionDetails}
+        options={{ headerShown: false }}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionHistory"
+        component={PrescriptionHistory}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="SecureMessaging"
+        component={SecureMessaging}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="UpcomingAppointmentDetails"
+        component={UpcomingAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineDetails"
+        component={VaccineDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineList"
+        component={VaccineListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
     </HealthScreenStack.Navigator>
   )
 }

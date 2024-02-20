@@ -1,27 +1,24 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import { ErrorsState, initialSecureMessagingState, initialErrorsState } from 'store/slices'
-import Folder from './Folders'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { SecureMessagingFolderList } from 'store/api/types'
+import { initialSecureMessagingState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import Folder from './Folders'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('Folder', () => {
-  let props: any
-  let mockNavigateToSpy: jest.Mock
-
-  let listOfFolders: SecureMessagingFolderList = [
+  const listOfFolders: SecureMessagingFolderList = [
     {
       type: 'folders',
       id: '-2',
@@ -79,10 +76,8 @@ context('Folder', () => {
     },
   ]
 
-  const initializeTestInstance = (foldersList: SecureMessagingFolderList, loading = false, errorsState: ErrorsState = initialErrorsState) => {
-    props = mockNavProps()
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
+  const initializeTestInstance = (foldersList: SecureMessagingFolderList, loading = false) => {
+    const props = mockNavProps()
 
     render(<Folder {...props} />, {
       preloadedState: {
@@ -116,7 +111,6 @@ context('Folder', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 })

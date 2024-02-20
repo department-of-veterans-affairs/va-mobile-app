@@ -1,31 +1,42 @@
-import { pick } from 'underscore'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { FC, useEffect, useRef, useState } from 'react'
-
-import { AnalyticsState } from 'store/slices'
-import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VATextInput } from 'components'
-import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
-import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { StackScreenProps } from '@react-navigation/stack'
-import { resetReviewActionCount } from 'utils/inAppReviews'
-import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { pick } from 'underscore'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { RootState } from 'store'
+import { AnalyticsState } from 'store/slices'
+import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
+import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import getEnv, { EnvVars } from 'utils/env'
+import {
+  FeatureConstants,
+  getLocalVersion,
+  getStoreVersion,
+  getVersionSkipped,
+  overrideLocalVersion,
+  setVersionSkipped,
+} from 'utils/homeScreenAlerts'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
-const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation }) => {
+function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
+  const tokenInfo =
+    (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -111,35 +122,41 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('debug.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('settings.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('debug.title')}>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={() => navigateTo('Sandbox')} label={'Sandbox'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('HapticsDemoScreen')} label={'haptics demo'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={() => navigateTo('HapticsDemo')} label={'Haptics demo'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={resetInAppReview} label={'Reset in-app review actions'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={onClickFirebaseDebugMode} label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button
+            onPress={onClickFirebaseDebugMode}
+            label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
+          />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={() => navigateTo('RemoteConfig')} label={'Remote Config'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -235,7 +252,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
             }}
           />
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAButton
+            <Button
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0')
                 setWhatsNewSkippedVersionHomeScreen('0.0')
@@ -247,7 +264,6 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 checkWhatsNewLocalVersion()
               }}
               label={'Reset Versions'}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>

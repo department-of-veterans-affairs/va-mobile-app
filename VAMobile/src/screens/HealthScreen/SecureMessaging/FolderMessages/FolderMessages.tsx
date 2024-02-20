@@ -1,47 +1,63 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import {
+  Box,
+  ChildTemplate,
+  ErrorComponent,
+  LoadingComponent,
+  MessageList,
+  Pagination,
+  PaginationProps,
+} from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
+import {
+  SecureMessagingState,
+  dispatchResetDeleteDraftComplete,
+  listFolderMessages,
+  resetSaveDraftComplete,
+} from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+function FolderMessages({ navigation, route }: FolderMessagesProps) {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const navigateTo = useRouteNavigation()
+  const { messagesByFolderId, loading, paginationMetaByFolderId, deleteDraftComplete } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
 
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
   const title = t('text.raw', { text: folderName })
 
   useEffect(() => {
-    // Load first page messages
-    dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-    // If draft saved message showing, clear status so it doesn't show again
-    dispatch(resetSaveDraftComplete())
-  }, [dispatch, folderID])
-
-  useEffect(() => {
-    if (saveDraftComplete) {
+    if (screenContentAllowed('WG_FolderMessages')) {
+      // Load first page messages
+      dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       // If draft saved message showing, clear status so it doesn't show again
       dispatch(resetSaveDraftComplete())
     }
-  }, [dispatch, saveDraftComplete])
+  }, [dispatch, folderID])
 
   useEffect(() => {
     if (deleteDraftComplete) {
@@ -50,11 +66,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }, [deleteDraftComplete, dispatch, t])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
-    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const screen = isDraft ? 'EditDraft' : 'ViewMessage'
     const args = isDraft
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
       : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
-    navigation.navigate(screen, args)
+
+    navigateTo(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
@@ -87,10 +104,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   const requestPage = (requestedPage: number) => {
     // request the next page
-    dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+    dispatch(
+      listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID),
+    )
   }
 
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -106,15 +125,26 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
   }
 
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
   return (
     <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-      <StartNewMessageButton />
+      <Box mx={theme.dimensions.buttonPadding}>
+        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
+      </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
       </Box>

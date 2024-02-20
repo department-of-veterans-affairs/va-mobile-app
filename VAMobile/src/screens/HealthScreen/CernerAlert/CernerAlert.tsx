@@ -1,26 +1,40 @@
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
 
-import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
+import {
+  Box,
+  ClickForActionLink,
+  CollapsibleAlert,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextView,
+} from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
-const CernerAlert: FC = () => {
+function CernerAlert() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { data: facilitiesInfo } = useFacilitiesInfo()
 
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+
+  useEffect(() => {
+    cernerFacilities.length && logAnalyticsEvent(Events.vama_cerner_alert())
+  }, [cernerFacilities.length])
+
   if (!facilitiesInfo) {
     return null
   }
-
-  const cernerFacilities = facilitiesInfo.filter((f) => f.cerner)
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
@@ -30,9 +44,11 @@ const CernerAlert: FC = () => {
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
   const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
-  const headerA11yLabel = allCernerFacilities ? a11yLabelVA(t('cernerAlert.header.all')) : a11yLabelVA(t('cernerAlert.header.some'))
+  const headerA11yLabel = allCernerFacilities
+    ? a11yLabelVA(t('cernerAlert.header.all'))
+    : a11yLabelVA(t('cernerAlert.header.some'))
 
-  const accordionContent = (): ReactNode => {
+  function accordionContent() {
     const body = cernerFacilities.map((facility: Facility) => {
       return (
         <TextView
@@ -62,7 +78,10 @@ const CernerAlert: FC = () => {
           {t('cernerAlert.ourRecordsShow')}
         </TextView>
         {body}
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('cernerAlert.footer'))}>
+        <TextView
+          variant="MobileBody"
+          paragraphSpacing={true}
+          accessibilityLabel={a11yLabelVA(t('cernerAlert.footer'))}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -70,7 +89,15 @@ const CernerAlert: FC = () => {
     )
   }
 
-  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yLabel={headerA11yLabel} />
+  return (
+    <CollapsibleAlert
+      border="warning"
+      headerText={headerText}
+      body={accordionContent()}
+      a11yLabel={headerA11yLabel}
+      onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
+    />
+  )
 }
 
 export default CernerAlert

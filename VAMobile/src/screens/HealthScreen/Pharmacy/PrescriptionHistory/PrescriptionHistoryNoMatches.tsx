@@ -1,10 +1,10 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import { ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
-import { ViewStyle } from 'react-native'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
@@ -15,7 +15,7 @@ type PrescriptionHistoryNoMatchesProps = {
   isFiltered: boolean
 }
 
-const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab, isFiltered }) => {
+function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHistoryNoMatchesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -40,7 +40,11 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
         <TextView textAlign={'center'} variant="MobileBodyBold">
           {t('prescription.history.empty.filtered.title')}
         </TextView>
-        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
+        <TextView
+          pt={theme.dimensions.condensedMarginBetween}
+          textAlign={'center'}
+          variant="MobileBody"
+          {...contenta11y}>
           {getFilteredTabString()}
         </TextView>
       </>
@@ -111,7 +115,11 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
 
   return (
     <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+      <Box
+        justifyContent="center"
+        mx={theme.dimensions.gutter}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <Box mt={theme.dimensions.condensedMarginBetween}>{getContent()}</Box>
       </Box>
     </VAScrollView>

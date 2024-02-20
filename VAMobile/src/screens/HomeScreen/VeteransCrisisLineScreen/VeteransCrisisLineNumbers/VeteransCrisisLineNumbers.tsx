@@ -1,22 +1,17 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkTypeOptionsConstants } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP } = getEnv()
 
-/**
- * View for Veterans Crisis Line phone/text/TTY numbers
- *
- * Returns VeteransCrisisLineNumbers component
- */
-const VeteransCrisisLineNumbers: FC = () => {
+function VeteransCrisisLineNumbers() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
