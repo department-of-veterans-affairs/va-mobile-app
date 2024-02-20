@@ -218,6 +218,10 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && activeClaimsAndAppeals?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_claims_count(activeClaimsAndAppeals.meta.activeClaimsCount))
+      }
+
       dispatch(
         dispatchFinishPrefetchGetClaimsAndAppeals({
           active: activeClaimsAndAppeals,
@@ -268,10 +272,6 @@ export const getClaimsAndAppeals =
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
           showCompleted: isActive ? 'false' : 'true',
         })
-      }
-
-      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta) {
-        await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
       }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
@@ -570,6 +570,7 @@ const claimsAndAppealsSlice = createSlice({
       state.finishedLoadingClaimsAndAppeals = true
       state.claimsAndAppealsByClaimType.ACTIVE = activeList
       state.claimsAndAppealsByClaimType.CLOSED = closedList
+      state.claimsFirstRetrieval = !!error
       state.claimsAndAppealsMetaPagination.ACTIVE =
         activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
       state.claimsAndAppealsMetaPagination.CLOSED =
@@ -620,7 +621,6 @@ const claimsAndAppealsSlice = createSlice({
         ? curLoadedClaimsAndAppeals
         : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
       state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
-      state.claimsFirstRetrieval = !!error
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
