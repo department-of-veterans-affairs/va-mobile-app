@@ -128,7 +128,7 @@ export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, st
   let lastDayOfyear: string | undefined
   if (year) {
     const startDay = DateTime.fromISO(year)
-      .set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
+      .set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 999 })
       .endOf('day')
       .toISO()
     const endDay = DateTime.fromISO(year)
