@@ -10,24 +10,25 @@ import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerificati
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
   return {
-    ...original,
+    ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
 
 jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
   return {
-    ...actual,
+    ...jest.requireActual<typeof import('store/slices')>('store/slices'),
     downloadLetter: jest.fn(() => ({ type: '', payload: '' })),
     getLetterBeneficiaryData: jest.fn(() => ({ type: '', payload: '' })),
   }
 })
 
 context('BenefitSummaryServiceVerification', () => {
+  const { HONORABLE } = CharacterOfServiceConstants
   const date = '2013-06-06T15:00:00.000+00:00'
+  const enteredDate = '1990-01-01T15:00:00.000+00:00'
+  const releasedDate = '1993-10-01T15:00:00.000+00:00'
 
   const initializeTestInstance = (
     monthlyAwardAmount?: number,
@@ -43,23 +44,9 @@ context('BenefitSummaryServiceVerification', () => {
           letters: [],
           downloading: downloading,
           letterDownloadError: hasDownloadError ? new Error('error') : undefined,
-          mostRecentServices: [
-            {
-              branch: 'Army',
-              characterOfService: CharacterOfServiceConstants.HONORABLE,
-              enteredDate: '1990-01-01T15:00:00.000+00:00',
-              releasedDate: '1993-10-01T15:00:00.000+00:00',
-            },
-          ],
+          mostRecentServices: [{ branch: 'Army', characterOfService: HONORABLE, enteredDate, releasedDate }],
           letterBeneficiaryData: {
-            militaryService: [
-              {
-                branch: 'Army',
-                characterOfService: CharacterOfServiceConstants.HONORABLE,
-                enteredDate: '1990-01-01T15:00:00.000+00:00',
-                releasedDate: '1993-10-01T15:00:00.000+00:00',
-              },
-            ],
+            militaryService: [{ branch: 'Army', characterOfService: HONORABLE, enteredDate, releasedDate }],
             benefitInformation: {
               awardEffectiveDate: awardEffectiveDate || null,
               hasChapter35Eligibility: false,
