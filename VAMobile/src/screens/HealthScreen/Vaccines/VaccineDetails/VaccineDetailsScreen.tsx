@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every, isString } from 'underscore'
+import { every } from 'underscore'
 
 import { useVaccineLocation } from 'api/vaccines/getVaccineLocation'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
@@ -28,7 +28,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
   const { data: location, isLoading: detailsLoading } = useVaccineLocation(
     vaccine.relationships?.location?.data?.id || '',
     {
-      enabled: isString(vaccine.relationships?.location?.data?.id) && screenContentAllowed('WG_VaccineDetails'),
+      enabled: !!vaccine.relationships?.location?.data?.id && screenContentAllowed('WG_VaccineDetails'),
     },
   )
 

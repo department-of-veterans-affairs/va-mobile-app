@@ -24,5 +24,6 @@ export const useVaccineLocation = (locationId: string, options?: { enabled?: boo
     meta: {
       errorName: 'getVaccineLocation: Service error',
     },
+    retry: 0,
   })
 }
