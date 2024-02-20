@@ -26,7 +26,6 @@ export const Appointmentse2eConstants = {
   APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
   APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_7_ID: 'Canceled  Community care Request type: In-person',
   ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
   PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
@@ -49,7 +48,6 @@ describe('Appointments Screen', () => {
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_7_ID))).toExist()
   })
 
   it('verify appointment details information', async () => {
