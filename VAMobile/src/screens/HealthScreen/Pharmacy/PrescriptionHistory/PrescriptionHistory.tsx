@@ -78,8 +78,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     filteredPrescriptions: prescriptions,
     prescriptions: allPrescriptions,
     loadingHistory,
-    statusCounts,
     prescriptionsNeedLoad,
+    prescriptionStatusCount,
+    pendingPrescriptions,
+    shippedPrescriptions,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const {
@@ -165,40 +167,40 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     {
       display: 'prescription.history.tag.active',
       value: RefillStatusConstants.ACTIVE,
-      count: statusCounts.active || 0,
+      count: prescriptionStatusCount.active || 0,
       additionalLabelText: [t('prescription.history.tag.active.helpText')],
     },
     {
       display: 'prescription.history.tag.discontinued',
       value: RefillStatusConstants.DISCONTINUED,
-      count: statusCounts.discontinued || 0,
+      count: prescriptionStatusCount.discontinued || 0,
     },
     {
       display: 'prescription.history.tag.expired',
       value: RefillStatusConstants.EXPIRED,
-      count: statusCounts.expired || 0,
+      count: prescriptionStatusCount.expired || 0,
     },
     {
       display: 'prescription.history.tag.pending',
       value: RefillStatusConstants.PENDING,
-      count: statusCounts.pending || 0,
+      count: pendingPrescriptions?.length || 0,
       additionalLabelText: [t('prescription.history.tag.pending.helpText')],
     },
     {
       display: 'prescription.history.tag.tracking',
       value: RefillStatusConstants.TRACKING,
-      count: statusCounts.tracking || 0,
+      count: shippedPrescriptions?.length || 0,
       additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
     },
     {
       display: 'prescription.history.tag.transferred',
       value: RefillStatusConstants.TRANSFERRED,
-      count: statusCounts.transferred || 0,
+      count: prescriptionStatusCount.transferred || 0,
     },
     {
       display: 'prescription.history.tag.unknown',
       value: RefillStatusConstants.UNKNOWN,
-      count: statusCounts.unknown || 0,
+      count: prescriptionStatusCount.unknown || 0,
     },
   ]
 

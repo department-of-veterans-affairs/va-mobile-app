@@ -14,6 +14,7 @@ import * as api from '../api'
 import {
   APIError,
   PrescriptionData,
+  PrescriptionStatusCountData,
   PrescriptionTrackingInfo,
   PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
@@ -22,7 +23,6 @@ import {
   PrescriptionsPaginationData,
   RefillRequestSummaryItems,
   ScreenIDTypes,
-  StatusCounts,
   get,
   put,
 } from '../api'
@@ -48,7 +48,6 @@ export type PrescriptionState = {
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
   loadingTrackingInfo: boolean
-  statusCounts: StatusCounts
   trackingInfo?: Array<PrescriptionTrackingInfo>
   // Request refill (RefillScreen, RefillRequestSummary)
   submittingRequestRefills: boolean
@@ -56,6 +55,8 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefillsRetry: boolean
   refillRequestSummaryItems: RefillRequestSummaryItems
   prescriptionsNeedLoad: boolean
+  prescriptionStatusCount: PrescriptionStatusCountData
+  prescriptionFirstRetrieval: boolean
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -66,18 +67,19 @@ export const initialPrescriptionState: PrescriptionState = {
   refillableCount: 0,
   nonRefillableCount: 0,
   loadingTrackingInfo: false,
-  statusCounts: {},
   trackingInfo: [],
   submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   refillRequestSummaryItems: [],
   prescriptionsNeedLoad: true,
+  prescriptionStatusCount: {} as PrescriptionStatusCountData,
+  prescriptionFirstRetrieval: true,
 }
 
 export const loadAllPrescriptions =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchStartLoadAllPrescriptions())
 
     const params = {
@@ -88,6 +90,9 @@ export const loadAllPrescriptions =
 
     try {
       const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+      if (getState().prescriptions.prescriptionFirstRetrieval && allData?.meta?.prescriptionStatusCount) {
+        await logAnalyticsEvent(Events.vama_hs_rx_count(allData.meta.prescriptionStatusCount.isRefillable || 0))
+      }
       dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -282,7 +287,7 @@ const prescriptionSlice = createSlice({
       state,
       action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>,
     ) => {
-      const { allPrescriptions } = action.payload
+      const { allPrescriptions, error } = action.payload
 
       const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
 
@@ -322,15 +327,11 @@ const prescriptionSlice = createSlice({
       state.refillablePrescriptions = refillablePrescriptions
 
       state.loadingHistory = false
-      state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionPagination = { ...meta.pagination }
+      state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
-
-      state.statusCounts = {
-        ...meta.prescriptionStatusCount,
-        pending: pendingPrescriptions.length,
-        tracking: shippedPrescriptions.length,
-      }
+      state.prescriptionFirstRetrieval = !!error
     },
     dispatchStartFilterAndSortPrescriptions: (state) => {
       state.loadingHistory = true

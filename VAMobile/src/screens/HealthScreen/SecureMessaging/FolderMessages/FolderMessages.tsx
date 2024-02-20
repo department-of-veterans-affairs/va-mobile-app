@@ -42,7 +42,7 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<
+  const { messagesByFolderId, loading, paginationMetaByFolderId, deleteDraftComplete } = useSelector<
     RootState,
     SecureMessagingState
   >((state) => state.secureMessaging)
@@ -58,13 +58,6 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
       dispatch(resetSaveDraftComplete())
     }
   }, [dispatch, folderID])
-
-  useEffect(() => {
-    if (saveDraftComplete) {
-      // If draft saved message showing, clear status so it doesn't show again
-      dispatch(resetSaveDraftComplete())
-    }
-  }, [dispatch, saveDraftComplete])
 
   useEffect(() => {
     if (deleteDraftComplete) {

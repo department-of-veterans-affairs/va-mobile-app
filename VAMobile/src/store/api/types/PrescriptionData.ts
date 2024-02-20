@@ -101,7 +101,7 @@ export type PrescriptionsGetData = {
 
 export type PrescriptionsGetMeta = {
   pagination: PrescriptionsPaginationData
-  prescriptionStatusCount: StatusCounts
+  prescriptionStatusCount: PrescriptionStatusCountData
 }
 
 export type PrescriptionsPaginationData = {
@@ -109,6 +109,20 @@ export type PrescriptionsPaginationData = {
   perPage: number
   totalPages: number
   totalEntries: number
+}
+
+export type PrescriptionStatusCountData = {
+  active?: number
+  isRefillable?: number
+  discontinued?: number
+  expired?: number
+  historical?: number
+  pending?: number
+  transferred?: number
+  submitted?: number
+  hold?: number
+  unknown?: number
+  total?: number
 }
 
 export type PrescriptionsPaginationLinks = {
@@ -121,10 +135,6 @@ export type PrescriptionsPaginationLinks = {
 
 export type PrescriptionsMap = {
   [key: string]: PrescriptionData
-}
-
-export type StatusCounts = {
-  [key: string]: number | undefined
 }
 
 export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>

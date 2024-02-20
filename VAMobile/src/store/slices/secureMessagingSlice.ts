@@ -96,6 +96,7 @@ export type SecureMessagingState = {
   deleteDraftComplete: boolean
   deleteDraftFailed: boolean
   deletingDraft: boolean
+  inboxFirstRetrieval: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -138,6 +139,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   deleteDraftComplete: false,
   deleteDraftFailed: false,
   deletingDraft: false,
+  inboxFirstRetrieval: true,
 }
 
 /**
@@ -159,7 +161,6 @@ export const fetchInboxMessages =
         } as Params,
       )
       dispatch(dispatchFinishFetchInboxMessages({ inboxMessages }))
-      dispatch(getInbox())
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `fetchInboxMessages: ${secureMessagingNonFatalErrorString}`)
@@ -174,7 +175,7 @@ export const fetchInboxMessages =
  */
 export const getInbox =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
@@ -183,6 +184,10 @@ export const getInbox =
       //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
+
+      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount) {
+        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox?.data.attributes.unreadCount))
+      }
 
       dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
     } catch (error) {
@@ -766,6 +771,7 @@ const secureMessagingSlice = createSlice({
 
       return {
         ...state,
+        inboxFirstRetrieval: !!error,
         inboxMessages: messages,
         // TODO add to folderMessagesById(0)
         // TODO inject folderId?
@@ -780,20 +786,6 @@ const secureMessagingSlice = createSlice({
       }
     },
 
-    dispatchStartListFolders: (state) => {
-      state.loadingFolders = true
-    },
-
-    dispatchFinishListFolders: (
-      state,
-      action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>,
-    ) => {
-      const { folderData, error } = action.payload
-      state.folders = folderData?.data || state.folders
-      state.loadingFolders = false
-      state.error = error
-    },
-
     dispatchStartGetInbox: (state) => {
       state.hasLoadedInbox = false
     },
@@ -805,6 +797,21 @@ const secureMessagingSlice = createSlice({
       const { inboxData, error } = action.payload
       state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
       state.hasLoadedInbox = true
+      state.error = error
+      state.inboxFirstRetrieval = !!error
+    },
+
+    dispatchStartListFolders: (state) => {
+      state.loadingFolders = true
+    },
+
+    dispatchFinishListFolders: (
+      state,
+      action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>,
+    ) => {
+      const { folderData, error } = action.payload
+      state.folders = folderData?.data || state.folders
+      state.loadingFolders = false
       state.error = error
     },
 
