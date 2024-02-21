@@ -2143,6 +2143,11 @@
   dependencies:
     stacktrace-js "^2.0.2"
 
+"@react-native-firebase/dynamic-links@^18.8.0":
+  version "18.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/dynamic-links/-/dynamic-links-18.8.0.tgz#4304f859ed6a310db9472795ab95ccb107b45827"
+  integrity sha512-tTUV24psIx6J+qU15pHkDMo0gHioT3Pi4P5z9P2odCbsoS1fSMsZ86AolwVJPTLRs7IJ3j3cEWzx7ocpvktoNQ==
+
 "@react-native-firebase/perf@^18.7.3":
   version "18.7.3"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/perf/-/perf-18.7.3.tgz#5f128ed35e20042c1b118e1b959e0585220845c4"
