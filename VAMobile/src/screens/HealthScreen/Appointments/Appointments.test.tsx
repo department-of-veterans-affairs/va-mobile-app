@@ -1,56 +1,61 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import * as api from 'store/api'
-import Appointments from './Appointments'
 import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
+import Appointments from './Appointments'
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: false,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: false,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+    useAuthorizedServices: jest
+      .fn()
+      .mockReturnValue({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: false,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: false,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      }),
   }
 })
 
@@ -66,7 +71,7 @@ context('AppointmentsScreen', () => {
       await waitFor(() => {
         initializeTestInstance()
       })
-      expect(screen.getByText("You don’t have any appointments")).toBeTruthy()
+      expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
   })
 
@@ -112,7 +117,9 @@ context('AppointmentsScreen', () => {
           .mockRejectedValue({ networkError: true } as api.APIError)
         initializeTestInstance()
       })
-      expect(screen.getByText("We're having trouble getting your appointments. Refresh this screen or try again later.")).toBeTruthy()
+      expect(
+        screen.getByText("We're having trouble getting your appointments. Refresh this screen or try again later."),
+      ).toBeTruthy()
     })
   })
 })

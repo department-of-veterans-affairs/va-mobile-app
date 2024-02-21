@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { context, render, screen } from 'testUtils'
+
 import VAIcon from './VAIcon'
 
 jest.mock('../../utils/hooks', () => {
-  let original = jest.requireActual('../../utils/hooks')
+  const original = jest.requireActual('../../utils/hooks')
   return {
     ...original,
     useFontScale: () => {

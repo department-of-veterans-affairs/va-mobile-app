@@ -1,11 +1,16 @@
 import React from 'react'
-import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
-import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
-import { context, fireEvent, render, screen } from 'testUtils'
-import CarouselTabBar from './CarouselTabBar'
-import { CarouselScreen, TextView } from '../index'
 
-let mockNavigationSpy = jest.fn()
+import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
+import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
+
+import { TFunction } from 'i18next'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
+import { CarouselScreen, TextView } from '../index'
+import CarouselTabBar from './CarouselTabBar'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
 
@@ -16,8 +21,8 @@ jest.mock('utils/hooks', () => {
 })
 
 context('CarouselTabBar', () => {
-  let t = jest.fn(() => { })
-  let onCarouselEndSpy = jest.fn()
+  const t = jest.fn(() => {})
+  const onCarouselEndSpy = jest.fn()
 
   const TestComponent = () => {
     return <TextView>Test Component</TextView>
@@ -35,8 +40,8 @@ context('CarouselTabBar', () => {
         skipHint: 'skip',
         continueHint: 'next',
         doneHint: 'done',
-        backHint: 'back'
-      }
+        backHint: 'back',
+      },
     },
     {
       name: 'TestComponent2',
@@ -45,29 +50,33 @@ context('CarouselTabBar', () => {
         skipHint: 'skip',
         continueHint: 'next',
         doneHint: 'done',
-        backHint: 'back'
-      }
+        backHint: 'back',
+      },
     },
   ]
 
-  const singleScreen: Array<CarouselScreen> = [{
-    name: 'TestComponent',
-    component: TestComponent,
-    a11yHints: {
-      skipHint: 'skip',
-      continueHint: 'next',
-      doneHint: 'done',
-      backHint: 'back'
-    }
-  }]
+  const singleScreen: Array<CarouselScreen> = [
+    {
+      name: 'TestComponent',
+      component: TestComponent,
+      a11yHints: {
+        skipHint: 'skip',
+        continueHint: 'next',
+        doneHint: 'done',
+        backHint: 'back',
+      },
+    },
+  ]
 
   const initializeTestInstance = (screenList: Array<CarouselScreen>) => {
     render(
       <CarouselTabBar
         screenList={screenList}
         onCarouselEnd={onCarouselEndSpy}
-        translation={t as any}
-        navigation={{ navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+        translation={t as unknown as TFunction}
+        navigation={
+          { navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+        }
       />,
     )
   }

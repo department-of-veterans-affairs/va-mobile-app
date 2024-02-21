@@ -1,22 +1,28 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import {
+  AppointmentAttributes,
+  AppointmentStatus,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailType,
+  AppointmentStatusDetailTypeConsts,
+} from 'store/api/types'
 import { context, render } from 'testUtils'
-import { AppointmentStatusDetailType, AppointmentStatus, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types'
+
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
 
 context('AppointmentTypeAndDate', () => {
-  let props: any
-
   const initializeTestInstance = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
     isPending: boolean = false,
     serviceCategoryName: string | null = null,
     phoneOnly: boolean = false,
-    isPastAppointment: boolean = false
+    isPastAppointment: boolean = false,
   ): void => {
-    props = {
+    const props = {
       appointmentType: 'VA',
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
       startDateLocal: '2021-02-06T18:53:14.000-01:00',
@@ -27,7 +33,7 @@ context('AppointmentTypeAndDate', () => {
       typeOfCare: 'typeOfCare',
       serviceCategoryName,
       phoneOnly: phoneOnly,
-    }
+    } as AppointmentAttributes
 
     render(<AppointmentTypeAndDate attributes={props} isPastAppointment={isPastAppointment} />)
   }
@@ -61,7 +67,14 @@ context('AppointmentTypeAndDate', () => {
 
   describe('when phoneAppointment and it is canceled by you', () => {
     it('should render canceled title, body and date of appointment with the canceled by you text', () => {
-      initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT, false, null, true, false)
+      initializeTestInstance(
+        AppointmentStatusConstants.CANCELLED,
+        AppointmentStatusDetailTypeConsts.PATIENT,
+        false,
+        null,
+        true,
+        false,
+      )
       expect(screen.getByRole('header', { name: 'Canceled phone appointment' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
       expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
@@ -70,7 +83,14 @@ context('AppointmentTypeAndDate', () => {
 
   describe('when phoneAppointment and it is canceled by clinic', () => {
     it('should render canceled title, body and date of appointment with the canceled by clinic text', () => {
-      initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC, false, null, true, false)
+      initializeTestInstance(
+        AppointmentStatusConstants.CANCELLED,
+        AppointmentStatusDetailTypeConsts.CLINIC,
+        false,
+        null,
+        true,
+        false,
+      )
       expect(screen.getByRole('header', { name: 'Canceled phone appointment' })).toBeTruthy()
       expect(screen.getByText('Facility canceled this appointment.')).toBeTruthy()
       expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
@@ -80,15 +100,17 @@ context('AppointmentTypeAndDate', () => {
   describe('when isAppointmentCanceled is true', () => {
     it('should render a TextView with the cancellation text', () => {
       initializeTestInstance(AppointmentStatusConstants.CANCELLED)
-      expect(screen.getByText('VA appointment')).toBeTruthy()
-      expect(screen.getByText('Canceled appointment for Saturday, February 6, 2021 at 11:53 AM PST')).toBeTruthy()
+      expect(screen.getByText('Canceled in-person appointment')).toBeTruthy()
+      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
+      expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
     })
   })
 
   describe('when isAppointmentCanceled is false', () => {
-    it('should only render 2 TextViews', () => {
+    it('should only render correctly', () => {
       initializeTestInstance()
-      expect(screen.getByText('VA appointment')).toBeTruthy()
+      expect(screen.getByText('In-person appointment')).toBeTruthy()
+      expect(screen.getByText('Go to VA facility for this appointment.')).toBeTruthy()
       expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
     })
   })
@@ -104,7 +126,11 @@ context('AppointmentTypeAndDate', () => {
     it('should display the correct text', () => {
       initializeTestInstance(AppointmentStatusConstants.BOOKED, null, false, 'COMPENSATION & PENSION')
       expect(screen.getByText('Claim exam')).toBeTruthy()
-      expect(screen.getByText("This appointment is for disability rating purposes only. It doesn't include treatment. If you have medical evidence to support your claim, bring copies to this appointment.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "This appointment is for disability rating purposes only. It doesn't include treatment. If you have medical evidence to support your claim, bring copies to this appointment.",
+        ),
+      ).toBeTruthy()
     })
   })
 })

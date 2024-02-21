@@ -1,8 +1,17 @@
-import { context, realStore } from 'testUtils'
-import _ from 'underscore'
-import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LettersList, LetterTypeConstants } from 'store/api/types'
 import FileViewer from 'react-native-file-viewer'
+
 import { when } from 'jest-when'
+import _ from 'underscore'
+
+import {
+  CharacterOfServiceConstants,
+  LetterBeneficiaryData,
+  LetterBeneficiaryDataPayload,
+  LetterTypeConstants,
+  LettersList,
+} from 'store/api/types'
+import { context, realStore } from 'testUtils'
+
 import * as api from '../api'
 import { downloadLetter, getLetterBeneficiaryData, getLetters } from './lettersSlice'
 

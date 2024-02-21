@@ -1,7 +1,9 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import NeedHelpData from './NeedHelpData'
 
 const mockExternalLinkSpy = jest.fn()
@@ -24,7 +26,9 @@ context('NeedHelpData', () => {
 
   it('Renders NeedHelpData', () => {
     expect(screen.getByText('Need help?')).toBeTruthy()
-    expect(screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.')).toBeTruthy()
+    expect(
+      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
+    ).toBeTruthy()
     expect(screen.getByText('800-827-1000')).toBeTruthy()
     expect(screen.queryByText('To review more details about your appeal, visit VA.gov:')).toBeFalsy()
     expect(screen.queryByText('Visit VA.gov')).toBeFalsy()

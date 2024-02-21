@@ -1,11 +1,12 @@
+import React, { FC, useEffect, useReducer, useState } from 'react'
 import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { Shadow, ShadowProps } from 'react-native-shadow-2'
+
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC, useEffect, useReducer, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
-import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
+import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -61,7 +62,14 @@ export type HeaderBannerProps = {
   dividerMarginBypass?: boolean
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions, dividerMarginBypass }) => {
+const HeaderBanner: FC<HeaderBannerProps> = ({
+  leftButton,
+  title,
+  rightButton,
+  divider: bannerDivider,
+  menuViewActions,
+  dividerMarginBypass,
+}) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
@@ -247,10 +255,17 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           <Box {...titleBannerBoxProps}>
             <Box flex={4} alignItems="flex-start">
               {leftButton?.descriptiveBack ? (
-                <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
+                <DescriptiveBackButton
+                  label={leftButton.text}
+                  onPress={leftButton.onPress}
+                  focusOnButton={focus === 'Left'}
+                />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-                  <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                  <TouchableWithoutFeedback
+                    ref={focus === 'Left' ? focusRef : () => {}}
+                    onPress={leftButton.onPress}
+                    accessibilityRole="button">
                     <Box {...commonBoxProps}>
                       <Box display="flex" flexDirection="row" alignItems="center">
                         <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
@@ -269,12 +284,24 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               </Box>
             )}
 
-            <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
+            <Box
+              mr={theme.dimensions.buttonPadding}
+              mt={theme.dimensions.buttonPadding}
+              flex={4}
+              alignItems={'flex-end'}>
               {rightButton && (
-                <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
+                <TouchableWithoutFeedback
+                  ref={focus === 'Right' ? focusRef : () => {}}
+                  onPress={rightButton.onPress}
+                  accessibilityRole="button">
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
-                      <VAIconWithText testID={rightButton.testID} label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
+                      <VAIconWithText
+                        testID={rightButton.testID}
+                        label={rightButton.text}
+                        labelA11y={rightButton.a11yLabel}
+                        {...rightButton.icon}
+                      />
                     ) : (
                       <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
                     )}

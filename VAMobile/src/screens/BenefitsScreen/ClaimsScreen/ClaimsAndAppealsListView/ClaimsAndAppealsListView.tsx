@@ -1,28 +1,28 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
-import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  LabelTagTypeConstants,
+  Pagination,
+  PaginationProps,
+  TextLine,
+} from 'components'
+import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+import { featureEnabled } from 'utils/remoteConfig'
+
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-
-export const ClaimTypeConstants: {
-  ACTIVE: ClaimType
-  CLOSED: ClaimType
-} = {
-  ACTIVE: 'ACTIVE',
-  CLOSED: 'CLOSED',
-}
-
-export type ClaimType = 'ACTIVE' | 'CLOSED'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
@@ -33,7 +33,9 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
   // Use the metaData to tell us what the currentPage is.
@@ -73,9 +75,18 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
-      if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && attributes.decisionLetterSent) {
+      if (
+        featureEnabled('decisionLettersWaygate') &&
+        userAuthorizedServices?.decisionLetters &&
+        attributes.decisionLetterSent
+      ) {
         const margin = theme.dimensions.condensedMarginBetween
-        textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
+        textLines.push({
+          text: t('claims.decisionLetterAvailable'),
+          textTag: { labelType: LabelTagTypeConstants.tagBlue },
+          mt: margin,
+          mb: margin,
+        })
       }
 
       const position = (currentPage - 1) * perPage + index + 1

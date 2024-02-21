@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,7 +15,12 @@ function NoMilitaryInformationAccess() {
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
         {t('militaryInformation.noMilitaryInfoAccess.title')}
       </TextView>
-      <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>
+      <TextView
+        variant="MobileBody"
+        textAlign="center"
+        my={theme.dimensions.standardMarginBetween}
+        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}
+        testID="noMilitaryAccessTestID">
         {t('militaryInformation.noMilitaryInfoAccess.body')}
       </TextView>
     </Box>

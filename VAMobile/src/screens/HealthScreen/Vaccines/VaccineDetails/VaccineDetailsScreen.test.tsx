@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
 import { initialVaccineState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
 import VaccineDetailsScreen from './VaccineDetailsScreen'
 
 context('VaccineDetailsScreen', () => {
-
   const initializeTestInstance = (vId: string = 'N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000', loaded: boolean = true) => {
     const props = mockNavProps(undefined, undefined, { params: { vaccineId: vId } })
     render(<VaccineDetailsScreen {...props} />, {
@@ -100,8 +101,14 @@ context('VaccineDetailsScreen', () => {
     expect(screen.getByText('None noted')).toBeTruthy()
     expect(screen.getByText('Reaction')).toBeTruthy()
     expect(screen.getByText('Notes')).toBeTruthy()
-    expect(screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')).toBeTruthy()
-    expect(screen.getByText('We base this information on your current VA health records. If you have any questions, contact your health care team.')).toBeTruthy()
+    expect(
+      screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText(
+        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+      ),
+    ).toBeTruthy()
     expect(screen.queryByText('facility 1')).toBeFalsy()
     expect(screen.queryByText('123 abc street')).toBeFalsy()
     expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()

@@ -1,8 +1,10 @@
-import { loadWaygateOverrides } from 'utils/waygateConfig'
-import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import getEnv from 'utils/env'
 import remoteConfig from '@react-native-firebase/remote-config'
+
+import getEnv from 'utils/env'
+import { loadWaygateOverrides } from 'utils/waygateConfig'
+
+import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
@@ -21,6 +23,7 @@ export type FeatureToggleType =
   | 'inAppUpdates'
   | 'preferredNameGenderWaygate'
   | 'haptics'
+  | 'homeScreenPrefetch'
   | 'whatsNewUI'
   | 'decisionLettersWaygate'
   | 'patientCheckIn'
@@ -34,6 +37,7 @@ type FeatureToggleValues = {
   inAppUpdates: boolean
   preferredNameGenderWaygate: boolean
   haptics: boolean
+  homeScreenPrefetch: boolean
   whatsNewUI: boolean
   decisionLettersWaygate: boolean
   patientCheckIn: boolean
@@ -48,6 +52,7 @@ export const defaults: FeatureToggleValues = {
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,
+  homeScreenPrefetch: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
   patientCheckIn: false,

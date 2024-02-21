@@ -1,12 +1,19 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import LargePanel from './LargePanel'
 
 context('LargePanel', () => {
-  let onPressSpy = jest.fn(() => { })
+  const onPressSpy = jest.fn(() => {})
 
-  const initializeTestInstance = (titleText?: string, leftButtonText?: string, rightButtonText?: string, footerButtonText?: string, onFooterButtonPress?: () => void): void => {
-
+  const initializeTestInstance = (
+    titleText?: string,
+    leftButtonText?: string,
+    rightButtonText?: string,
+    footerButtonText?: string,
+    onFooterButtonPress?: () => void,
+  ): void => {
     render(
       <LargePanel
         title={titleText}

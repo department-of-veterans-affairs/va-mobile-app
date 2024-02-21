@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { SaveAddressParameters } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
-import { contactInformationKeys } from './queryKeys'
-import { isErrorObject } from 'utils/common'
+import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+
+import { contactInformationKeys } from './queryKeys'
 import { validateAddress } from './validateAddress'
 
 /**

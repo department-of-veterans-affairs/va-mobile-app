@@ -1,5 +1,10 @@
+import {
+  DemographicsPayload,
+  GenderIdentityUpdatePayload,
+  PreferredNameUpdatePayload,
+} from 'api/types/DemographicsData'
+
 import { DemoStore } from './store'
-import { DemographicsPayload, GenderIdentityUpdatePayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
 
 export type DemographicsDemoStore = {
   '/v0/user/demographics': DemographicsPayload

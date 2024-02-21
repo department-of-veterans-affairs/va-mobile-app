@@ -1,11 +1,13 @@
 import React from 'react'
+
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { mockNavProps, QueriesData, render, when } from 'testUtils'
-import EditAddressScreen from './EditAddressScreen'
-import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
 import { contactInformationKeys } from 'api/contactInformation'
+import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
 import { post } from 'store/api'
+import { QueriesData, mockNavProps, render, when } from 'testUtils'
+
+import EditAddressScreen from './EditAddressScreen'
 
 const residentialAddress: AddressData = {
   id: 0,
@@ -58,13 +60,10 @@ jest.mock('@react-navigation/native', () => {
 })
 
 describe('EditAddressScreen', () => {
-  let props: any
-  let goBackSpy: any
+  const goBackSpy = jest.fn()
 
   const renderWithData = (isResidential?: boolean, contactInformation?: Partial<UserContactInformation>) => {
-    goBackSpy = jest.fn()
-
-    props = mockNavProps(
+    const props = mockNavProps(
       {},
       {
         goBack: goBackSpy,
@@ -80,15 +79,17 @@ describe('EditAddressScreen', () => {
     let queriesData: QueriesData | undefined
 
     if (contactInformation) {
-      queriesData = [{
-        queryKey: contactInformationKeys.contactInformation,
-        data: {
-          ...contactInformation
-        }
-      }]
+      queriesData = [
+        {
+          queryKey: contactInformationKeys.contactInformation,
+          data: {
+            ...contactInformation,
+          },
+        },
+      ]
     }
 
-    render(<EditAddressScreen {...props} />, {queriesData})
+    render(<EditAddressScreen {...props} />, { queriesData })
   }
 
   beforeEach(() => {
@@ -105,12 +106,12 @@ describe('EditAddressScreen', () => {
 
     describe('when the checkbox is unchecked', () => {
       beforeEach(() => {
-        renderWithData(false, {mailingAddress})
+        renderWithData(false, { mailingAddress })
         const checkbox = screen.getByRole('checkbox', { checked: false })
 
         fireEvent.press(checkbox)
         expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
-        
+
         fireEvent.press(checkbox)
         expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
       })
@@ -122,7 +123,7 @@ describe('EditAddressScreen', () => {
       it('sets state, city, and military post office to empty strings', () => {
         expect(screen.getByTestId('cityTestID').props.value).toEqual('')
         expect(screen.getByTestId('stateTestID').props.children).toEqual('')
-        expect(screen.queryByTestId('militaryPostOfficeTestID')).toBeFalsy
+        expect(screen.queryByTestId('militaryPostOfficeTestID')).toBeFalsy()
       })
     })
   })
@@ -139,7 +140,7 @@ describe('EditAddressScreen', () => {
 
     describe('when the old value and new value of country are not both domestic or both international', () => {
       it('sets state and zip code to empty strings', () => {
-        renderWithData(false, {mailingAddress})
+        renderWithData(false, { mailingAddress })
         const zipCodeInput = screen.getByTestId('zipCodeTestID')
 
         expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
@@ -156,7 +157,7 @@ describe('EditAddressScreen', () => {
 
     describe('when the old and new value of country are both domestic or international', () => {
       it('keeps the values of state and zip code', () => {
-        const mailingAddress: AddressData = {
+        const newAddress: AddressData = {
           id: 0,
           addressLine1: '4313 Cassin Way',
           addressLine2: 'Suite 992',
@@ -172,7 +173,7 @@ describe('EditAddressScreen', () => {
           zipCodeSuffix: '',
         }
 
-        renderWithData(false, { mailingAddress })
+        renderWithData(false, { mailingAddress: newAddress })
 
         expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
         expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
@@ -180,7 +181,7 @@ describe('EditAddressScreen', () => {
         fireEvent.press(screen.getByTestId('countryPickerTestID'))
         fireEvent.press(screen.getByText('Algeria'))
         fireEvent.press(screen.getByRole('button', { name: 'Done' }))
-        
+
         expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
         expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
       })
@@ -225,7 +226,7 @@ describe('EditAddressScreen', () => {
 
   describe('when the user selects a military post office with the picker', () => {
     it('updates the value of militaryPostOffice', () => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
@@ -241,7 +242,7 @@ describe('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
       const militaryPostOfficeSelector = screen.getByTestId('militaryPostOfficeTestID')
 
       fireEvent.press(militaryPostOfficeSelector)
@@ -285,7 +286,7 @@ describe('EditAddressScreen', () => {
 
   describe('when the address type is OVERSEAS MILITARY', () => {
     it('initializes the checkbox with the value true', () => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
@@ -301,7 +302,7 @@ describe('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
 
       expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
     })
@@ -315,7 +316,7 @@ describe('EditAddressScreen', () => {
 
   describe('when checkboxSelected is true', () => {
     beforeEach(() => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
@@ -331,7 +332,7 @@ describe('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
     })
 
     describe('when the country is not already USA', () => {
@@ -357,7 +358,7 @@ describe('EditAddressScreen', () => {
 
   describe('when checkboxSelected is false', () => {
     it('sets the state picker pickerOptions to States', () => {
-      expect(screen.getByRole('checkbox', { checked: false }))
+      expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
       fireEvent.press(screen.getByTestId('stateTestID'))
       expect(screen.getByText('Alabama')).toBeTruthy()
     })
@@ -376,13 +377,13 @@ describe('EditAddressScreen', () => {
   describe('when the country is domestic', () => {
     it('renders the state picker', () => {
       fireEvent.press(screen.getByTestId('stateTestID'))
-      expect(screen.getByText('Alabama'))
+      expect(screen.getByText('Alabama')).toBeTruthy()
     })
   })
 
   describe('when the country is not domestic', () => {
     it('renders state text input', () => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: '4313 Cassin Way',
         addressLine2: 'Suite 992',
@@ -398,7 +399,7 @@ describe('EditAddressScreen', () => {
         zipCodeSuffix: '',
       }
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
 
       fireEvent.press(screen.getByTestId('stateTestID'))
       expect(screen.queryByText('Alabama')).toBeFalsy()
@@ -407,7 +408,7 @@ describe('EditAddressScreen', () => {
 
   describe('when address is saved', () => {
     it('calls navigation goBack', async () => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: 'Unit 2050 Box 4190',
         addressLine2: '',
@@ -422,7 +423,7 @@ describe('EditAddressScreen', () => {
         zipCode: '96278',
       }
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
 
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       await waitFor(() => expect(goBackSpy).toBeCalled())
@@ -431,7 +432,7 @@ describe('EditAddressScreen', () => {
 
   describe('when there are suggested addresses', () => {
     it('displays the AddressValidation component', async () => {
-      const mailingAddress: AddressData = {
+      const newAddress: AddressData = {
         id: 0,
         addressLine1: 'Unit 2050 Box 4190',
         addressLine2: '',
@@ -440,7 +441,7 @@ describe('EditAddressScreen', () => {
         addressType: 'OVERSEAS MILITARY',
         city: 'APO',
         countryCodeIso3: 'USA',
-        countryName: "United States",
+        countryName: 'United States',
         internationalPostalCode: '',
         stateCode: 'AP',
         zipCode: '96278',
@@ -450,44 +451,45 @@ describe('EditAddressScreen', () => {
       const abortSignal = abortController.signal
 
       when(post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal)
-        .mockResolvedValue(
-          {
-            data: [
-              {
-                id: 1,
-                type: 'mock_type',
-                attributes: {
-                  addressLine1: '1707 Tiburon Blvd',
-                  addressLine2: 'Address line 2',
-                  addressLine3: 'Address line 3',
-                  addressPou: 'RESIDENCE/CHOICE',
-                  addressType: 'DOMESTIC',
-                  city: 'Tiburon',
-                  countryCodeIso3: '1',
-                  internationalPostalCode: '1',
-                  province: 'province',
-                  stateCode: 'CA',
-                  zipCode: '94920',
-                  zipCodeSuffix: '1234',
-                },
-                meta: {
-                  address: {
-                    confidenceScore: 68,
-                    addressType: 'DOMESTIC',
-                    deliveryPointValidation: DeliveryPointValidationTypesConstants.MISSING_UNIT_NUMBER,
-                    residentialDeliveryIndicator: 'RESIDENTIAL',
-                  },
-                  validationKey: 315989,
-                },
+        .calledWith('/v0/user/addresses/validate', newAddress, undefined, abortSignal)
+        .mockResolvedValue({
+          data: [
+            {
+              id: 1,
+              type: 'mock_type',
+              attributes: {
+                addressLine1: '1707 Tiburon Blvd',
+                addressLine2: 'Address line 2',
+                addressLine3: 'Address line 3',
+                addressPou: 'RESIDENCE/CHOICE',
+                addressType: 'DOMESTIC',
+                city: 'Tiburon',
+                countryCodeIso3: '1',
+                internationalPostalCode: '1',
+                province: 'province',
+                stateCode: 'CA',
+                zipCode: '94920',
+                zipCodeSuffix: '1234',
               },
-            ],
-          })
+              meta: {
+                address: {
+                  confidenceScore: 68,
+                  addressType: 'DOMESTIC',
+                  deliveryPointValidation: DeliveryPointValidationTypesConstants.MISSING_UNIT_NUMBER,
+                  residentialDeliveryIndicator: 'RESIDENTIAL',
+                },
+                validationKey: 315989,
+              },
+            },
+          ],
+        })
 
-      renderWithData(false, { mailingAddress })
+      renderWithData(false, { mailingAddress: newAddress })
 
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      await waitFor(() => expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal))
+      await waitFor(() =>
+        expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', newAddress, undefined, abortSignal),
+      )
       await waitFor(() => expect(screen.getByText('Verify your address')).toBeTruthy())
     })
   })
@@ -527,14 +529,14 @@ describe('EditAddressScreen', () => {
   describe('when the address is residential and there is address data', () => {
     it('displays the remove button', () => {
       renderWithData(true, { residentialAddress })
-      expect(screen.getByRole('button', { name: 'Remove home address' })).toBeTruthy
+      expect(screen.getByRole('button', { name: 'Remove home address' })).toBeTruthy()
     })
   })
 
   describe('validateAddress', () => {
     describe('when INTERNATIONAL', () => {
       it('passes province and internationalPostalCode as part of the expected payload', async () => {
-        const mailingAddress: AddressData = {
+        const newAddress: AddressData = {
           id: 0,
           addressLine1: '127 Harvest Moon Dr',
           addressLine2: '',
@@ -549,37 +551,40 @@ describe('EditAddressScreen', () => {
           zipCode: '',
         }
 
-        renderWithData(false, { mailingAddress })
+        renderWithData(false, { mailingAddress: newAddress })
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
 
-        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate',
-          {
-            id: 0,
-            addressLine1: '127 Harvest Moon Dr',
-            addressLine2: '',
-            addressLine3: '',
-            addressPou: 'CORRESPONDENCE',
-            addressType: 'INTERNATIONAL',
-            city: 'Bolton',
-            countryName: 'Canada',
-            countryCodeIso3: 'CAN',
-            internationalPostalCode: 'L7E 2W1',
-            zipCode: '',
-            province: 'Ontario',
-          },
-          undefined,
-          abortSignal
-        ))
+        await waitFor(() =>
+          expect(post).toBeCalledWith(
+            '/v0/user/addresses/validate',
+            {
+              id: 0,
+              addressLine1: '127 Harvest Moon Dr',
+              addressLine2: '',
+              addressLine3: '',
+              addressPou: 'CORRESPONDENCE',
+              addressType: 'INTERNATIONAL',
+              city: 'Bolton',
+              countryName: 'Canada',
+              countryCodeIso3: 'CAN',
+              internationalPostalCode: 'L7E 2W1',
+              zipCode: '',
+              province: 'Ontario',
+            },
+            undefined,
+            abortSignal,
+          ),
+        )
       })
     })
 
     describe('when DOMESTIC', () => {
       it('passes stateCode and zipCode as part of the expected payload', async () => {
-        const mailingAddress: AddressData = {
+        const newAddress: AddressData = {
           id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
@@ -594,37 +599,40 @@ describe('EditAddressScreen', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-        renderWithData(false, { mailingAddress })
+        renderWithData(false, { mailingAddress: newAddress })
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
 
-        await waitFor(() => (expect(post).toBeCalledWith('/v0/user/addresses/validate',
-          {
-            id: 0,
-            addressLine1: '1707 Tiburon Blvd',
-            addressLine2: 'Address line 2',
-            addressLine3: 'Address line 3',
-            addressPou: 'CORRESPONDENCE',
-            addressType: 'DOMESTIC',
-            city: 'Tiburon',
-            countryName: 'United States',
-            countryCodeIso3: 'USA',
-            stateCode: 'CA',
-            zipCode: '94920',
-            internationalPostalCode: '',
-          },
-          undefined,
-          abortSignal
-        )))
+        await waitFor(() =>
+          expect(post).toBeCalledWith(
+            '/v0/user/addresses/validate',
+            {
+              id: 0,
+              addressLine1: '1707 Tiburon Blvd',
+              addressLine2: 'Address line 2',
+              addressLine3: 'Address line 3',
+              addressPou: 'CORRESPONDENCE',
+              addressType: 'DOMESTIC',
+              city: 'Tiburon',
+              countryName: 'United States',
+              countryCodeIso3: 'USA',
+              stateCode: 'CA',
+              zipCode: '94920',
+              internationalPostalCode: '',
+            },
+            undefined,
+            abortSignal,
+          ),
+        )
       })
     })
 
     describe('when OVERSEAS MILITARY', () => {
       it('passes stateCode and zipCode as part of the expected payload', async () => {
-        const mailingAddress: AddressData = {
+        const newAddress: AddressData = {
           id: 0,
           addressLine1: 'Unit 2050 Box 4190',
           addressLine2: '',
@@ -638,30 +646,34 @@ describe('EditAddressScreen', () => {
           stateCode: 'AP',
           zipCode: '96278',
         }
-        renderWithData(false, { mailingAddress })
+        renderWithData(false, { mailingAddress: newAddress })
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
 
-        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate', 
-          {
-            addressLine1: 'Unit 2050 Box 4190', 
-            addressLine2: '', 
-            addressLine3: '',
-            addressPou: "CORRESPONDENCE", 
-            addressType: "OVERSEAS MILITARY", 
-            city: 'APO', 
-            countryCodeIso3: "USA", 
-            countryName: "United States", 
-            id: 0, 
-            internationalPostalCode: "", 
-            stateCode: "AP", "zipCode": "96278"
-          }, 
-          undefined,
-          abortSignal
-        ))
+        await waitFor(() =>
+          expect(post).toBeCalledWith(
+            '/v0/user/addresses/validate',
+            {
+              addressLine1: 'Unit 2050 Box 4190',
+              addressLine2: '',
+              addressLine3: '',
+              addressPou: 'CORRESPONDENCE',
+              addressType: 'OVERSEAS MILITARY',
+              city: 'APO',
+              countryCodeIso3: 'USA',
+              countryName: 'United States',
+              id: 0,
+              internationalPostalCode: '',
+              stateCode: 'AP',
+              zipCode: '96278',
+            },
+            undefined,
+            abortSignal,
+          ),
+        )
       })
     })
   })

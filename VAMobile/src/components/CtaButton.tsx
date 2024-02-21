@@ -1,11 +1,12 @@
-import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -22,7 +23,18 @@ export type CtaButtonProps = {
  *
  * @returns CtaButton component
  */
-const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent, accessibilityLabel, accessibilityHint }) => {
+const CtaButton: FC<CtaButtonProps> = ({
+  onPress,
+  iconColor,
+  backgroundColor,
+  children,
+  px,
+  py,
+  alignItems,
+  justifyContent,
+  accessibilityLabel,
+  accessibilityHint,
+}) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -50,10 +62,20 @@ const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, ch
       {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}
       {...a11yHintProp(accessibilityHint || t('component.crisisLine.hint'))}>
       <Box {...boxProps}>
-        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+        <TextView
+          variant="MobileBody"
+          display="flex"
+          flexDirection="row"
+          color="primaryContrast"
+          mr={theme.dimensions.textIconMargin}>
           {children}
         </TextView>
-        <VAIcon name="ChevronRight" fill={iconColor || theme.colors.icon.veteransCrisisLineArrow} width={10} height={15} />
+        <VAIcon
+          name="ChevronRight"
+          fill={iconColor || theme.colors.icon.veteransCrisisLineArrow}
+          width={10}
+          height={15}
+        />
       </Box>
     </TouchableWithoutFeedback>
   )

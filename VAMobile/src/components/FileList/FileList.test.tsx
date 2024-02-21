@@ -1,14 +1,17 @@
 import React from 'react'
-import Mock = jest.Mock
-import { context, fireEvent, render, screen } from 'testUtils'
-import FileList from './FileList'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { context, fireEvent, render, screen } from 'testUtils'
+
+import FileList from './FileList'
+
+import Mock = jest.Mock
 
 const mockAlertSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
 
   return {
     ...original,
@@ -34,7 +37,7 @@ context('FileList', () => {
   } as DocumentPickerResponse
 
   const initializeTestInstance = (useImage = false) => {
-    onDeleteSpy = jest.fn(() => { })
+    onDeleteSpy = jest.fn(() => {})
 
     let files: ImagePickerResponse[] | DocumentPickerResponse[]
 

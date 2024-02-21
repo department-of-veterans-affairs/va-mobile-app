@@ -1,6 +1,6 @@
-import { AccessibilityProps, Pressable, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { AccessibilityProps, Pressable, ViewStyle } from 'react-native'
 
 import { BorderColorVariant, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -45,7 +45,9 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
   }
 
   const getBorderColor = (isSelected: boolean): BorderColorVariant => {
-    return (isSelected ? theme.colors.border.tabSelectorActive : theme.colors.border.tabSelectorInactive) as BorderColorVariant
+    return (
+      isSelected ? theme.colors.border.tabSelectorActive : theme.colors.border.tabSelectorInactive
+    ) as BorderColorVariant
   }
 
   return (
@@ -62,7 +64,12 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
           accessibilityValue: { text: t('positionOf', { position: index + 1, tabTotal: tabs.length }) },
         }
         return (
-          <Box key={index} flexGrow={1} flexShrink={0} borderBottomColor={getBorderColor(isSelected)} borderBottomWidth={2.5}>
+          <Box
+            key={index}
+            flexGrow={1}
+            flexShrink={0}
+            borderBottomColor={getBorderColor(isSelected)}
+            borderBottomWidth={2.5}>
             <Pressable testID={testID} {...a11yProps} onPress={() => onChange(value)} style={tabButtonStyle}>
               <TextView
                 maxFontSizeMultiplier={1.5}

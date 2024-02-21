@@ -1,11 +1,20 @@
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
+import {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StatusBar,
+  View,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { CrisisLineCta, TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
-import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import { CrisisLineCta, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
+import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
+
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use these templates:
 1. Wrap the screen content you want in <CategoryLanding> </CategoryLanding> and supply the appropriate props for desired functionality
@@ -13,25 +22,24 @@ import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
 
-type headerButton = {
-  label: string
-  labelA11y?: string
-  icon: VAIconProps
-  onPress: () => void
-}
-
 export type CategoryLandingProps = {
   /** Optional title for page that transitions to header */
   title?: string
   /** Optional header button requiring label, icon, and onPress props */
-  headerButton?: headerButton
+  headerButton?: HeaderButton
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
   /** optional testID for scrollView */
   testID?: string
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, testID }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({
+  title,
+  headerButton,
+  children,
+  scrollViewProps,
+  testID,
+}) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -50,7 +58,14 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 
   const headerProps: HeaderBannerProps = {
     title: title ? { type: 'Transition', title, scrollOffset, transitionHeaderHeight } : { type: 'VA' },
-    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
+    rightButton: headerButton
+      ? {
+          text: headerButton.label,
+          a11yLabel: headerButton.labelA11y,
+          onPress: headerButton.onPress,
+          icon: headerButton.icon,
+        }
+      : undefined,
   }
 
   const subtitleProps: TextViewProps = {
@@ -97,7 +112,11 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <HeaderBanner {...headerProps} />
       <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>

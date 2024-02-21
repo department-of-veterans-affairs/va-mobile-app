@@ -1,8 +1,9 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -103,7 +104,13 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 
       return (
         <Box key={idx} mt={mt}>
-          <RadioGroup options={group.items} onChange={group.onSetOption} isRadioList={true} radioListTitle={group.title} value={group.selectedValue} />
+          <RadioGroup
+            options={group.items}
+            onChange={group.onSetOption}
+            isRadioList={true}
+            radioListTitle={group.title}
+            value={group.selectedValue}
+          />
         </Box>
       )
     })
@@ -176,7 +183,11 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
                 <TextView {...commonButtonProps}>{t('cancel')}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" accessibilityRole={'header'} textAlign={'center'} allowFontScaling={false}>
+                <TextView
+                  variant="MobileBodyBold"
+                  accessibilityRole={'header'}
+                  textAlign={'center'}
+                  allowFontScaling={false}>
                   {headerText}
                 </TextView>
               </Box>

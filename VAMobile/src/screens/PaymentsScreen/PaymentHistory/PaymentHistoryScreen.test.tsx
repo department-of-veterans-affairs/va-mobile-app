@@ -1,11 +1,13 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, initialPaymentsState } from 'store/slices'
-import PaymentHistoryScreen from './PaymentHistoryScreen'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { ErrorsState, initialErrorsState, initialPaymentsState, initializeErrorsByScreenID } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import PaymentHistoryScreen from './PaymentHistoryScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -17,7 +19,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     getPayments: jest.fn(() => {
@@ -30,9 +32,11 @@ jest.mock('store/slices', () => {
 })
 
 context('PaymentHistoryScreen', () => {
-
-  const initializeTestInstance = (loading = false, availableYears?: Array<string>, errorState: ErrorsState = initialErrorsState) => {
-
+  const initializeTestInstance = (
+    loading = false,
+    availableYears?: Array<string>,
+    errorState: ErrorsState = initialErrorsState,
+  ) => {
     render(<PaymentHistoryScreen {...mockNavProps()} />, {
       preloadedState: {
         payments: {

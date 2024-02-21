@@ -1,12 +1,13 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import { useTheme } from 'utils/hooks'
+
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import RefillTag from './RefillTag'
 
 export type PrescriptionListItemProps = {
@@ -60,13 +61,22 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
         </Box>
       )}
       {renderInstructions()}
-      <TextView accessibilityLabel={`${refillDateText}.`} variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
+      <TextView
+        accessibilityLabel={`${refillDateText}.`}
+        variant={'HelperText'}
+        mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {refillDateText}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
+      <TextView
+        variant={'HelperText'}
+        mt={condensedMarginBetween}
+        accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
         {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
+      <TextView
+        variant={'HelperText'}
+        mt={condensedMarginBetween}
+        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
     </Box>
