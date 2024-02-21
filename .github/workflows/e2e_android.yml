@@ -10,7 +10,7 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
     inputs:
-      tests_to_test:
+      tests_to_run:
         description: 'List tests to test in ["test name", "test name"] format.  All tests will run if left blank'
         type: string
         required: false
@@ -62,11 +62,11 @@ jobs:
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   matrix-e2e-android:
-    if: github.event.inputs.tests_to_test != ''
+    if: github.event.inputs.tests_to_run != ''
     runs-on: macos-latest-xl
     strategy:
       matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -145,7 +145,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-android:
-    if: always() && github.event.inputs.tests_to_test == ''
+    if: always() && github.event.inputs.tests_to_run == ''
     needs: start_slack_thread
     runs-on: macos-latest-xl
     steps:
@@ -247,11 +247,11 @@ jobs:
           path: VAMobile/artifacts
 
   matrix-send_test_results_to_testrail:
-    if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_test != ''
+    if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_run != ''
     needs: matrix-e2e-android
     strategy:
       matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}     
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}     
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
@@ -260,7 +260,7 @@ jobs:
     secrets: inherit
 
   send_test_results_to_testrail:
-    if: always() && github.event.inputs.tests_to_test == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
+    if: always() && github.event.inputs.tests_to_run == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
     needs: e2e-android
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
