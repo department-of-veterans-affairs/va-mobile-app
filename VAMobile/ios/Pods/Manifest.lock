@@ -488,7 +488,9 @@ PODS:
   - React-jsinspector (0.72.7)
   - React-logger (0.72.7):
     - glog
-  - react-native-document-picker (8.2.1):
+  - react-native-blob-util (0.19.6):
+    - React-Core
+  - react-native-document-picker (8.2.2):
     - React-Core
   - react-native-image-picker (7.1.0):
     - RCT-Folly (= 2021.07.22.00)
@@ -612,8 +614,6 @@ PODS:
   - ReactNativeWebPFormat (1.2.0):
     - React-Core
     - SDWebImageWebPCoder
-  - rn-fetch-blob (0.12.0):
-    - React-Core
   - RNCAsyncStorage (1.21.0):
     - React-Core
   - RNFBAnalytics (18.7.3):
@@ -718,6 +718,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -742,7 +743,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
   - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
-  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
@@ -843,6 +843,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-blob-util:
+    :path: "../node_modules/react-native-blob-util"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
@@ -891,8 +893,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keyboard-manager"
   ReactNativeWebPFormat:
     :path: "../node_modules/react-native-webp-format"
-  rn-fetch-blob:
-    :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBAnalytics:
@@ -980,7 +980,8 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 10e6c77ff6b32274b8d152d08ed0328c4b30a821
   React-jsinspector: 8baadae51f01d867c3921213a25ab78ab4fbcd91
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
-  react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
+  react-native-blob-util: d8fa1a7f726867907a8e43163fdd8b441d4489ea
+  react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
   react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
@@ -1004,7 +1005,6 @@ SPEC CHECKSUMS:
   ReactCommon: 54a0af7fed8df83c4de245309f1627110ba1f8af
   ReactNativeKeyboardManager: 60292dbac467c49841a7d69588208ec4a4f7b2a2
   ReactNativeWebPFormat: f5f043cc9ded052e535c3869ec341f91ba5a67c5
-  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNFBAnalytics: 28a203d4832713a2aef1226dc347abb0a205515d
   RNFBApp: c21258de1485419a845efbba9c09ec946c89891d

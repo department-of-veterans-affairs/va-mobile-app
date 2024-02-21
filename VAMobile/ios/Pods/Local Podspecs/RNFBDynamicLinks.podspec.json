@@ -17,10 +17,18 @@
   },
   "source_files": "ios/**/*.{h,m}",
   "dependencies": {
-    "React-Core": [],
-    "RNFBApp": [],
-    "Firebase/DynamicLinks": ["10.19.0"],
-    "GoogleUtilities/AppDelegateSwizzler": []
+    "React-Core": [
+
+    ],
+    "RNFBApp": [
+
+    ],
+    "Firebase/DynamicLinks": [
+      "10.19.0"
+    ],
+    "GoogleUtilities/AppDelegateSwizzler": [
+
+    ]
   },
   "static_framework": false
 }
