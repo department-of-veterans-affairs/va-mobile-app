@@ -153,9 +153,8 @@ const RadioGroup = <T,>({
       ]
 
       if (option.additionalLabelText && option.additionalLabelText.length > 0) {
-        textLines[0].variant = 'MobileBodyBold'
         option.additionalLabelText.forEach((item) => {
-          textLines.push({ text: item, variant: 'MobileBody' })
+          textLines.push({ text: item, variant: 'HelperText' })
         })
       }
 
