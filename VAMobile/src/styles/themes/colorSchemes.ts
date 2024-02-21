@@ -1,3 +1,5 @@
+import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import colors from './VAColors'
 
 export const primaryTextColor = colors.grayDark
@@ -213,7 +215,7 @@ export const darkTheme = {
     headerDropShadow: colors.black,
     shadow: colors.grayMedium,
     profileBanner: colors.primaryDarker2,
-    ctaButton: colors.uswdsRedVivid40,
+    ctaButton: DSColors.uswdsRedVivid40,
     completedPhase: colors.greenLight,
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
