@@ -49,11 +49,7 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('SyncScreen', () => {
-  const initializeTestInstance = (
-    loggedIn = false,
-    loggingOut = false,
-    syncing = true,
-  ): void => {
+  const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
     const store = {
       auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
     }

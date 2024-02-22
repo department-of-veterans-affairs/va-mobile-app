@@ -1,14 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useServiceHistory } from 'api/militaryService'
 import { useDisabilityRating } from 'api/disabilityRating'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
 import {
@@ -23,7 +22,6 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
