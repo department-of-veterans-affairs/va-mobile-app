@@ -12,7 +12,6 @@ import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import paymentsReducer from 'store/slices/paymentsSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -37,7 +36,6 @@ const store = configureStore({
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     vaccine: vaccineReducer,
-    payments: paymentsReducer,
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
