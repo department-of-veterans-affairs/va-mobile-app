@@ -28,7 +28,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
@@ -46,7 +46,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
