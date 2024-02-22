@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
+import { useMessageRecipients, useMessageSignature } from 'api/secureMessaging'
 import {
   AlertBox,
   Box,
@@ -42,8 +43,6 @@ import {
 } from 'store/api/types'
 import {
   SecureMessagingState,
-  getMessageRecipients,
-  getMessageSignature,
   resetHasLoadedRecipients,
   resetSaveDraftComplete,
   resetSendMessageComplete,
@@ -93,24 +92,22 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
-  const {
-    sendingMessage,
-    sendMessageComplete,
-    savedDraftID,
-    recipients,
-    hasLoadedRecipients,
-    saveDraftComplete,
-    savingDraft,
-    loadingSignature,
-    signature,
-  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete, savedDraftID, saveDraftComplete, savingDraft } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
-
+  const { data: recipients, isFetched: hasLoadedRecipients } = useMessageRecipients({
+    enabled: screenContentAllowed('WG_StartNewMessage'),
+  })
+  const { data: signature, isFetched: signatureFetched } = useMessageSignature({
+    enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
+  })
   const [to, setTo] = useState('')
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const [message, setMessage] = useMessageWithSignature()
+  const [message, setMessage] = useMessageWithSignature(signature, signatureFetched)
   const validateMessage = useValidateMessageWithSignature()
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -119,17 +116,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
     if (screenContentAllowed('WG_StartNewMessage')) {
       dispatch(resetSaveDraftComplete())
-      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
-      if (PREPOPULATE_SIGNATURE && !signature) {
-        dispatch(getMessageSignature())
-      }
       InteractionManager.runAfterInteractions(() => {
         setIsTransitionComplete(true)
       })
@@ -226,7 +218,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     (category !== CategoryTypeFields.other || subject)
   )
 
-  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
+  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || !signatureFetched || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded

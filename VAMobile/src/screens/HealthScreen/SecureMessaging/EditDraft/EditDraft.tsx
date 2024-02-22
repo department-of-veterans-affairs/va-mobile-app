@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
+import { useMessageRecipients } from 'api/secureMessaging'
 import {
   AlertBox,
   Box,
@@ -42,7 +43,6 @@ import {
   deleteDraft,
   dispatchResetDeleteDraftFailed,
   getMessage,
-  getMessageRecipients,
   getThread,
   resetSaveDraftComplete,
   resetSaveDraftFailed,
@@ -99,16 +99,17 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const {
     sendingMessage,
     sendMessageComplete,
-    hasLoadedRecipients,
     loading,
     messagesById,
-    recipients,
     saveDraftComplete,
     savingDraft,
     threads,
     deleteDraftComplete,
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { data: recipients, isFetched: hasLoadedRecipients } = useMessageRecipients({
+    enabled: screenContentAllowed('WG_EditDraft'),
+  })
   const destructiveAlert = useDestructiveActionSheet()
   const draftAttachmentAlert = useDestructiveActionSheet()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
@@ -149,7 +150,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
         dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
       }
-      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
       InteractionManager.runAfterInteractions(() => {
         setIsTransitionComplete(true)
       })

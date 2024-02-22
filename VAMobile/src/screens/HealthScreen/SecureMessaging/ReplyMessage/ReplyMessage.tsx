@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useMessageSignature } from 'api/secureMessaging'
 import {
   Box,
   CollapsibleView,
@@ -36,7 +37,6 @@ import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 
 import {
   SecureMessagingState,
   dispatchSetActionStart,
-  getMessageSignature,
   resetSaveDraftComplete,
   resetSendMessageComplete,
   resetSendMessageFailed,
@@ -71,7 +71,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
-  const [messageReply, setMessageReply] = useMessageWithSignature()
   const validateMessage = useValidateMessageWithSignature()
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -88,9 +87,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     loading,
     saveDraftComplete,
     savingDraft,
-    loadingSignature,
-    signature,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { data: signature, isFetched: signatureFetched } = useMessageSignature({
+    enabled: PREPOPULATE_SIGNATURE,
+  })
+  const [messageReply, setMessageReply] = useMessageWithSignature(signature, signatureFetched)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const [isDiscarded, replyCancelConfirmation] = useComposeCancelConfirmation()
 
@@ -137,9 +138,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   useEffect(() => {
     dispatch(resetSaveDraftComplete())
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
-    if (PREPOPULATE_SIGNATURE && !signature) {
-      dispatch(getMessageSignature())
-    }
     InteractionManager.runAfterInteractions(() => {
       setIsTransitionComplete(true)
     })
@@ -174,7 +172,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     }
   }, [sendMessageComplete, dispatch, navigateTo])
 
-  if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
+  if (loading || savingDraft || !signatureFetched || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded

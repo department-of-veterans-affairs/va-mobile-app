@@ -27,6 +27,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -406,14 +407,16 @@ export function useAutoScrollToElement(): [
  *
  * @returns message state and the setMessage function
  */
-export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+export function useMessageWithSignature(
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+  signatureFetched: boolean,
+): [string, React.Dispatch<React.SetStateAction<string>>] {
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
-  }, [loadingSignature, signature])
+  }, [signatureFetched, signature])
   return [message, setMessage]
 }
 

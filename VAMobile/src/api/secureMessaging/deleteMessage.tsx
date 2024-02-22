@@ -20,6 +20,10 @@ const deleteMessage = async ({ messageID }: DeleteMessageParameters) => {
 export const useDeleteMessage = () => {
   const queryClient = useQueryClient()
 
+  //snackbar stuff showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+  //showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+  //[secureMessagingKeys.folderMessages, folderID, page] invalidate the query in onSuccess block for the corresponding usage area
+  // on move to trash folder if that is available newFolderID === SecureMessagingSystemFolderIdConstants.DELETED use useDelete instead of useMove
   return useMutation({
     mutationFn: deleteMessage,
     onSuccess: async () => {

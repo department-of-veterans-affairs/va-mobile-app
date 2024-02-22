@@ -1,15 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useInboxData } from 'api/secureMessaging'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { loadAllPrescriptions } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -27,7 +26,6 @@ import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDeta
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
@@ -43,8 +41,12 @@ export function HealthScreen({}: HealthScreenProps) {
   const dispatch = useAppDispatch()
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { data: inboxData } = useInboxData(false, {
+    enabled: isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+  })
+  const unreadCount = inboxData?.data.attributes.unreadCount
 
   const onPharmacy = () => {
     // always reload to ensure freshness
@@ -59,8 +61,6 @@ export function HealthScreen({}: HealthScreenProps) {
       loadingMessage: t('webview.covidUpdates.loading'),
     })
   }
-
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
@@ -82,7 +82,7 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          tagCount={userAuthorizedServices?.secureMessaging && smNotInDowntime ? unreadCount : undefined}
+          tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
         {featureEnabled('prescriptions') && (

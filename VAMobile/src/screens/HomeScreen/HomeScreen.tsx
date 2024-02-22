@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useInboxData } from 'api/secureMessaging'
 import {
   Box,
   CategoryLanding,
@@ -24,15 +25,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AnalyticsState,
   AppointmentsState,
   ClaimsAndAppealsState,
   PrescriptionState,
-  SecureMessagingState,
   getClaimsAndAppeals,
-  getInbox,
   loadAllPrescriptions,
   prefetchAppointments,
 } from 'store/slices'
@@ -76,11 +75,11 @@ export function HomeScreen({}: HomeScreenProps) {
   const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
     (state) => state.prescriptions,
   )
-  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { isFetched: smPrefetch } = useInboxData(true, {
+    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
+  })
 
   useEffect(() => {
     if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
@@ -105,13 +104,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
-      dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
-    }
-  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
-
-  useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])

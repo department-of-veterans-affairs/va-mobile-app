@@ -16,7 +16,6 @@ import {
   ScreenIDTypesConstants,
   SecureMessagingAttachment,
   SecureMessagingFolderData,
-  SecureMessagingFolderGetData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
   SecureMessagingFolderMessagesGetData,
@@ -30,9 +29,7 @@ import {
   SecureMessagingMessageMap,
   SecureMessagingPaginationMeta,
   SecureMessagingRecipientDataList,
-  SecureMessagingRecipients,
   SecureMessagingSaveDraftData,
-  SecureMessagingSignatureData,
   SecureMessagingSignatureDataAttributes,
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
@@ -92,7 +89,6 @@ export type SecureMessagingState = {
   loadingSignature: boolean
   movingMessage: boolean
   isUndo?: boolean
-  moveMessageFailed: boolean
   deleteDraftComplete: boolean
   deleteDraftFailed: boolean
   deletingDraft: boolean
@@ -135,7 +131,6 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingSignature: false,
   movingMessage: false,
   isUndo: false,
-  moveMessageFailed: false,
   deleteDraftComplete: false,
   deleteDraftFailed: false,
   deletingDraft: false,
@@ -166,35 +161,6 @@ export const fetchInboxMessages =
         logNonFatalErrorToFirebase(error, `fetchInboxMessages: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishFetchInboxMessages({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to get inbox data
- */
-export const getInbox =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
-    dispatch(dispatchStartGetInbox())
-
-    try {
-      //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
-      const folderID = SecureMessagingSystemFolderIdConstants.INBOX
-      const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
-
-      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount) {
-        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox?.data.attributes.unreadCount))
-      }
-
-      dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getInbox: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishGetInbox({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -326,7 +292,7 @@ export const getMessage =
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
         if (!demoMode) {
-          dispatch(getInbox(screenID))
+          // dispatch(getInbox(screenID))
         }
       }
       await registerReviewEvent()
@@ -372,52 +338,6 @@ export const downloadFileAttachment =
          *  for network connection errors
          */
         dispatch(dispatchFinishDownloadFileAttachment(error))
-      }
-    }
-  }
-
-/**
- * Redux action to fetch recipients
- */
-export const getMessageRecipients =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
-    dispatch(dispatchStartGetMessageRecipients())
-
-    try {
-      const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
-      const preferredList = recipientsData?.data.filter((recipient) => recipient.attributes.preferredTeam)
-      dispatch(dispatchFinishGetMessageRecipients({ recipients: preferredList }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getMessageRecipients: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishGetMessageRecipients({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to fetch user signature
- */
-export const getMessageSignature =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageSignature(screenID))))
-    dispatch(dispatchStartGetMessageSignature())
-
-    try {
-      const signatureData = await api.get<SecureMessagingSignatureData>('/v0/messaging/health/messages/signature')
-      const signature = signatureData?.data.attributes
-      dispatch(dispatchFinishGetMessageSignature({ signature }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getMessageSignature: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishGetMessageSignature({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -559,139 +479,6 @@ export const sendMessage =
     }
   }
 
-const refreshFoldersAfterMove = (
-  dispatch: AppDispatch,
-  messages: SnackbarMessages,
-  messageID: number,
-  newFolderID: number,
-  currentFolderID: number,
-  folderToRefresh: number,
-  currentPage: number,
-  messagesLeft: number,
-  isUndo: boolean,
-  folders: SecureMessagingFolderList,
-) => {
-  const page = currentPage === 1 ? currentPage : messagesLeft === 1 && isUndo === false ? currentPage - 1 : currentPage
-  const folderScreenID = ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID
-
-  if (folderToRefresh === SecureMessagingSystemFolderIdConstants.INBOX) {
-    dispatch(fetchInboxMessages(page, folderScreenID))
-  } else {
-    dispatch(listFolderMessages(folderToRefresh, page, folderScreenID))
-  }
-
-  dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
-  dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true))
-  dispatch(dispatchFinishMoveMessage({ isUndo }))
-
-  showSnackBar(
-    isUndo && messages.undoMsg ? messages.undoMsg : messages.successMsg,
-    dispatch,
-    () => {
-      dispatch(
-        moveMessage(
-          messages,
-          messageID,
-          currentFolderID,
-          newFolderID,
-          folderToRefresh,
-          currentPage,
-          messagesLeft,
-          true,
-          folders,
-        ),
-      )
-    },
-    isUndo,
-    false,
-    true,
-  )
-}
-
-/**
- * Redux action to move message to another folder or to the trash
- */
-export const moveMessage =
-  (
-    messages: SnackbarMessages,
-    messageID: number,
-    newFolderID: number,
-    currentFolderID: number,
-    folderToRefresh: number,
-    currentPage: number,
-    messagesLeft: number,
-    isUndo: boolean,
-    folders: SecureMessagingFolderList,
-  ): AppThunk =>
-  async (dispatch) => {
-    const retryFunction = () =>
-      dispatch(
-        moveMessage(
-          messages,
-          messageID,
-          newFolderID,
-          currentFolderID,
-          folderToRefresh,
-          currentPage,
-          messagesLeft,
-          isUndo,
-          folders,
-        ),
-      )
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
-    dispatch(dispatchStartMoveMessage(isUndo))
-
-    try {
-      if (newFolderID === SecureMessagingSystemFolderIdConstants.DELETED) {
-        await callDeleteMessageApi(messageID)
-      } else {
-        await callMoveMessageApi(messageID, newFolderID)
-      }
-
-      const folder = (): string => {
-        switch (newFolderID) {
-          case SecureMessagingSystemFolderIdConstants.SENT:
-            return 'sent'
-          case SecureMessagingSystemFolderIdConstants.INBOX:
-            return 'inbox'
-          case SecureMessagingSystemFolderIdConstants.DELETED:
-            return 'deleted'
-          case SecureMessagingSystemFolderIdConstants.DRAFTS:
-            return 'drafts'
-          default:
-            return 'custom'
-        }
-      }
-
-      await logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
-      refreshFoldersAfterMove(
-        dispatch,
-        messages,
-        messageID,
-        newFolderID,
-        currentFolderID,
-        folderToRefresh,
-        currentPage,
-        messagesLeft,
-        isUndo,
-        folders,
-      )
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `moveMessage: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(
-          isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg,
-          dispatch,
-          retryFunction,
-          false,
-          true,
-          true,
-        )
-      }
-    }
-  }
-
 /**
  * Redux action to delete a saved draft
  */
@@ -730,17 +517,6 @@ export const deleteDraft =
  */
 export const callDeleteMessageApi = async (messageID: number): Promise<void> => {
   await api.del(`/v0/messaging/health/messages/${messageID}`)
-}
-
-/**
- * Move a message
- * @param messageID - the messageID number
- * @param newFolderID - the new folder for the message
- */
-export const callMoveMessageApi = async (messageID: number, newFolderID: number): Promise<void> => {
-  await api.patch(`/v0/messaging/health/messages/${messageID}/move`, {
-    folder_id: newFolderID,
-  } as unknown as api.Params)
 }
 
 /**
@@ -784,21 +560,6 @@ const secureMessagingSlice = createSlice({
         },
         termsAndConditionError,
       }
-    },
-
-    dispatchStartGetInbox: (state) => {
-      state.hasLoadedInbox = false
-    },
-
-    dispatchFinishGetInbox: (
-      state,
-      action: PayloadAction<{ inboxData?: SecureMessagingFolderGetData; error?: api.APIError }>,
-    ) => {
-      const { inboxData, error } = action.payload
-      state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
-      state.hasLoadedInbox = true
-      state.error = error
-      state.inboxFirstRetrieval = !!error
     },
 
     dispatchStartListFolders: (state) => {
@@ -979,40 +740,6 @@ const secureMessagingSlice = createSlice({
       }
     },
 
-    dispatchStartGetMessageRecipients: (state) => {
-      state.hasLoadedRecipients = false
-    },
-
-    dispatchFinishGetMessageRecipients: (
-      state,
-      action: PayloadAction<{ recipients?: SecureMessagingRecipientDataList; error?: api.APIError }>,
-    ) => {
-      const { recipients, error } = action.payload
-      return {
-        ...state,
-        recipients: recipients || [],
-        error,
-        hasLoadedRecipients: true,
-      }
-    },
-
-    dispatchStartGetMessageSignature: (state) => {
-      state.loadingSignature = true
-    },
-
-    dispatchFinishGetMessageSignature: (
-      state,
-      action: PayloadAction<{ signature?: SecureMessagingSignatureDataAttributes; error?: api.APIError }>,
-    ) => {
-      const { signature, error } = action.payload
-      return {
-        ...state,
-        signature,
-        error,
-        loadingSignature: false,
-      }
-    },
-
     dispatchStartSaveDraft: (state) => {
       state.savingDraft = true
     },
@@ -1077,18 +804,6 @@ const secureMessagingSlice = createSlice({
       state.hasLoadedRecipients = false
     },
 
-    dispatchStartMoveMessage: (state, action: PayloadAction<boolean>) => {
-      state.isUndo = action.payload
-      state.movingMessage = true
-      state.moveMessageFailed = false
-    },
-
-    dispatchFinishMoveMessage: (state, action: PayloadAction<{ isUndo?: boolean; error?: api.APIError }>) => {
-      const { isUndo, error } = action.payload
-      state.movingMessage = false
-      state.isUndo = isUndo
-      state.moveMessageFailed = !!error
-    },
     dispatchStartDeleteDraft: (state) => {
       state.deletingDraft = true
     },
@@ -1120,8 +835,6 @@ export const {
   dispatchStartFetchInboxMessages,
   dispatchFinishListFolders,
   dispatchStartListFolders,
-  dispatchFinishGetInbox,
-  dispatchStartGetInbox,
   dispatchFinishListFolderMessages,
   dispatchStartListFolderMessages,
   dispatchFinishGetThread,
@@ -1132,10 +845,6 @@ export const {
   dispatchUpdateSecureMessagingTab,
   dispatchStartDownloadFileAttachment,
   dispatchFinishDownloadFileAttachment,
-  dispatchFinishGetMessageRecipients,
-  dispatchStartGetMessageRecipients,
-  dispatchFinishGetMessageSignature,
-  dispatchStartGetMessageSignature,
   dispatchFinishSaveDraft,
   dispatchStartSaveDraft,
   resetSaveDraftComplete,
@@ -1148,11 +857,9 @@ export const {
   resetHasLoadedRecipients,
   resetReplyTriageError,
   dispatchFinishDeleteDraft,
-  dispatchFinishMoveMessage,
   dispatchResetDeleteDraftComplete,
   dispatchResetDeleteDraftFailed,
   dispatchStartDeleteDraft,
-  dispatchStartMoveMessage,
 } = secureMessagingSlice.actions
 
 export default secureMessagingSlice.reducer
