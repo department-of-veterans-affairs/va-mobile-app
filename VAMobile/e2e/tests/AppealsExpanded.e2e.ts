@@ -133,6 +133,7 @@ describe('AppealsExpanded', () => {
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
         value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
       ) {
+        await element(by.id('claimsHistoryID')).scrollTo('bottom')
         await element(by.id('next-page')).tap()
         await element(by.id('claimsHistoryID')).scrollTo('top')
       }
@@ -180,10 +181,7 @@ describe('AppealsExpanded', () => {
         await openBenefits()
         await openClaims()
         await openClaimsHistory()
-        console.log('test')
-        console.log(i)
         if (i >= 4 && i <= 13) {
-          console.log('Test')
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
           await element(by.id('claimsHistoryID')).scrollTo('top')

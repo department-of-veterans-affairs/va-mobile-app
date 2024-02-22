@@ -108,7 +108,11 @@ export async function apppointmentVerification(pastAppointment = false) {
     if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     }
@@ -135,7 +139,11 @@ export async function apppointmentVerification(pastAppointment = false) {
       .withTimeout(10000)
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     }
@@ -188,7 +196,11 @@ export async function apppointmentVerification(pastAppointment = false) {
     if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -266,7 +278,11 @@ export async function apppointmentVerification(pastAppointment = false) {
       .withTimeout(10000)
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -341,7 +357,11 @@ export async function apppointmentVerification(pastAppointment = false) {
       .withTimeout(10000)
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -443,7 +463,11 @@ export async function apppointmentVerification(pastAppointment = false) {
       .withTimeout(10000)
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -565,7 +589,11 @@ export async function apppointmentVerification(pastAppointment = false) {
       .withTimeout(10000)
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
