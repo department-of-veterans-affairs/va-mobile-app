@@ -3,7 +3,9 @@ import {
   AddressValidationData,
   ContactInformationPayload,
   DeliveryPointValidationTypesConstants,
+  DirectDepositData,
   FormattedPhoneType,
+  PaymentAccountData,
   PhoneData,
   PhoneKey,
   PhoneType,
@@ -12,13 +14,7 @@ import {
 } from 'api/types'
 
 import { Params } from '../api'
-import {
-  DirectDepositData,
-  EditResponseData,
-  LettersData,
-  MilitaryServiceHistoryData,
-  PaymentAccountData,
-} from '../types'
+import { EditResponseData, LettersData, MilitaryServiceHistoryData } from '../types'
 import { DemoStore } from './store'
 import { MOCK_EDIT_RESPONSE } from './utils'
 
