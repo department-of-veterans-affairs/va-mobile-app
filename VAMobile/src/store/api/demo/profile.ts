@@ -5,6 +5,7 @@ import {
   DeliveryPointValidationTypesConstants,
   DirectDepositData,
   FormattedPhoneType,
+  MilitaryServiceHistoryData,
   PaymentAccountData,
   PhoneData,
   PhoneKey,
@@ -14,7 +15,7 @@ import {
 } from 'api/types'
 
 import { Params } from '../api'
-import { EditResponseData, LettersData, MilitaryServiceHistoryData } from '../types'
+import { EditResponseData, LettersData } from '../types'
 import { DemoStore } from './store'
 import { MOCK_EDIT_RESPONSE } from './utils'
 

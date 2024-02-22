@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDisabilityRating } from 'api/disabilityRating'
+import { useServiceHistory } from 'api/militaryService'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, completeSync, logInDemoMode } from 'store/slices'
-import { MilitaryServiceState, checkForDowntimeErrors, getServiceHistory } from 'store/slices'
+import { AuthState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
@@ -29,17 +29,15 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<
-    RootState,
-    MilitaryServiceState
-  >((s) => s.militaryService)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
   })
   // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
-
+  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime && loggedIn,
+  })
   const { isFetched: useDisabilityRatingFetched } = useDisabilityRating({
     enabled: userAuthorizedServices?.disabilityRating && drNotInDowntime && loggedIn,
   })
@@ -56,28 +54,6 @@ function SyncScreen({}: SyncScreenProps) {
   }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
-    if (loggedIn) {
-      if (
-        !loadingUserAuthorizedServices &&
-        userAuthorizedServices?.militaryServiceHistory &&
-        !militaryHistoryLoaded &&
-        !militaryHistoryLoading &&
-        mhNotInDowntime
-      ) {
-        dispatch(getServiceHistory())
-      }
-    }
-  }, [
-    dispatch,
-    loggedIn,
-    loadingUserAuthorizedServices,
-    userAuthorizedServices?.militaryServiceHistory,
-    mhNotInDowntime,
-    militaryHistoryLoaded,
-    militaryHistoryLoading,
-  ])
-
-  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -90,9 +66,10 @@ function SyncScreen({}: SyncScreenProps) {
 
     const finishSyncingMilitaryHistory =
       !mhNotInDowntime ||
-      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || useServiceHistoryFetched))
     const finishSyncingDisabilityRating =
-      !loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched)
+      !drNotInDowntime ||
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }
@@ -101,7 +78,7 @@ function SyncScreen({}: SyncScreenProps) {
     loggedIn,
     loggingOut,
     loadingUserAuthorizedServices,
-    militaryHistoryLoaded,
+    useServiceHistoryFetched,
     userAuthorizedServices,
     t,
     useDisabilityRatingFetched,

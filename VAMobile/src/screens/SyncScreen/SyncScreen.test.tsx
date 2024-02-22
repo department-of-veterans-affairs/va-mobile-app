@@ -2,8 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { initialAuthState, initialMilitaryServiceState } from 'store/slices'
-import { completeSync, getServiceHistory } from 'store/slices'
+import { completeSync, initialAuthState } from 'store/slices'
 import { context, render, waitFor } from 'testUtils'
 
 import { SyncScreen } from './index'
@@ -13,12 +12,6 @@ jest.mock('store/slices', () => {
   return {
     ...actual,
     completeSync: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    getServiceHistory: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -56,15 +49,9 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('SyncScreen', () => {
-  const initializeTestInstance = (
-    militaryLoading = true,
-    loggedIn = false,
-    loggingOut = false,
-    syncing = true,
-  ): void => {
+  const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
     const store = {
       auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
-      militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
     }
     render(<SyncScreen />, { preloadedState: store })
   }
@@ -92,14 +79,9 @@ context('SyncScreen', () => {
     expect(screen.getByText('Signing you out...')).toBeTruthy()
   })
 
-  it('loads military history', () => {
-    initializeTestInstance(true, true, false)
-    expect(getServiceHistory).toHaveBeenCalled()
-  })
-
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
-      initializeTestInstance(false, true, false)
+      initializeTestInstance(true, false, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
       })

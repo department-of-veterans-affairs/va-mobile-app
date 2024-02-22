@@ -1,4 +1,3 @@
-export * from './ServiceHistoryData'
 export * from './UserData'
 export * from './DecisionLettersData'
 export * from './LettersData'

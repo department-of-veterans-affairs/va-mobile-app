@@ -23,7 +23,6 @@ import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
-import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
@@ -91,7 +90,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       claimsAndAppeals: claimsAndAppealsReducer as any,
       decisionLetters: decisionLettersReducer as any,
       letters: lettersReducer as any,
-      militaryService: militaryServiceReducer as any,
       notifications: notificationReducer as any,
       secureMessaging: secureMessagingReducer as any,
       snackBar: snackbarReducer as any,
