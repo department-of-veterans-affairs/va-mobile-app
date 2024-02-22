@@ -17,9 +17,22 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { HomeStackParamList } from './HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import {
+  AppointmentsState,
+  ClaimsAndAppealsState,
+  DisabilityRatingState,
+  LettersState,
+  PrescriptionState,
+  getLetterBeneficiaryData,
+  prefetchClaimsAndAppeals,
+} from 'store/slices'
+import { AnalyticsState, SecureMessagingState } from 'store/slices'
+import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
@@ -27,8 +40,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
+
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
@@ -51,14 +63,26 @@ export function HomeScreen({}: HomeScreenProps) {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
+  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
+  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
+  const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+
+  useEffect(() => {
+    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
+    }
+  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
 
   useFocusEffect(
     useCallback(() => {
@@ -174,6 +198,16 @@ export function HomeScreen({}: HomeScreenProps) {
               title={`${t('claims.title')}`}
               subText={`(${activeClaimsCount} ${t('open')})`}
               onPress={() => Linking.openURL('vamobile://claims')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
+        {!!unreadMessageCount && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('messages')}`}
+              subText={`${unreadMessageCount} ${t('unread')}`}
+              onPress={() => Linking.openURL('vamobile://messages')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>
