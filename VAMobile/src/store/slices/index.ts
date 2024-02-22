@@ -13,7 +13,6 @@ import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
-import { initialVaccineState } from 'store/slices/vaccineSlice'
 
 import { initialDecisionLettersState } from './decisionLettersSlice'
 import { initialPrescriptionState } from './prescriptionSlice'
@@ -30,13 +29,11 @@ export * from './militaryServiceSlice'
 export * from './notificationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
-export * from './vaccineSlice'
 export * from './prescriptionSlice'
 export * from './settingsSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
-  directDeposit: initialDirectDepositState,
   militaryService: initialMilitaryServiceState,
   decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
@@ -48,7 +45,6 @@ export const InitialState: RootState = {
   secureMessaging: initialSecureMessagingState,
   demo: initialDemoState,
   analytics: initialAnalyticsState,
-  vaccine: initialVaccineState,
   snackBar: initialSnackBarState,
   prescriptions: initialPrescriptionState,
   settings: initialSettingsState,
