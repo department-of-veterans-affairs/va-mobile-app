@@ -2,8 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
-import { PrescriptionHistoryTabConstants } from 'store/api/types'
+import { PrescriptionsGetData } from 'store/api'
 import { initialPrescriptionState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -249,17 +248,10 @@ const prescriptionData: PrescriptionsGetData = {
       totalEntries: 63,
     },
     prescriptionStatusCount: {
-      active: 0,
-      isRefillable: 1,
-      discontinued: 0,
-      expired: 0,
-      historical: 0,
-      pending: 0,
-      transferred: 0,
-      submitted: 0,
-      hold: 0,
-      unknown: 0,
-      total: 1,
+      active: 4,
+      discontinued: 4,
+      transferred: 1,
+      total: 9,
     },
   },
   links: {
@@ -272,19 +264,10 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
-    const props = mockNavProps(
-      undefined,
-      {
-        setParams: jest.fn(),
-        setOptions: jest.fn(),
-      },
-      { params: { startingTab } },
-    )
-
+  const initializeTestInstance = (includeTransferred = false) => {
     const data = prescriptionData.data
 
-    render(<PrescriptionHistory {...props} />, {
+    render(<PrescriptionHistory {...mockNavProps()} />, {
       preloadedState: {
         prescriptions: {
           ...initialPrescriptionState,
@@ -320,11 +303,6 @@ context('PrescriptionHistory', () => {
           prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
-          tabCounts: {
-            '0': 8,
-            '1': 4,
-            '2': 3,
-          },
         },
       },
     })
@@ -353,12 +331,6 @@ context('PrescriptionHistory', () => {
     it('should show the alert for transferred prescriptions', () => {
       initializeTestInstance(true)
       expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
-    })
-  })
-  describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-    it('should not show StartRefillRequest button', () => {
-      initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
-      expect(screen.queryByRole('button', { name: 'Start refill request' })).toBeFalsy()
     })
   })
 })

@@ -4,40 +4,23 @@ import { ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type PrescriptionHistoryNoMatchesProps = {
-  /** currently selected tab */
-  currentTab: PrescriptionHistoryTabs
   /** whether a filter has been applied to the results */
   isFiltered: boolean
 }
 
-function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHistoryNoMatchesProps) {
+function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatchesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const getFilteredTabString = () => {
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return t('prescription.history.empty.filtered.all')
-      case PrescriptionHistoryTabConstants.PENDING:
-        return t('prescription.history.empty.filtered.pending')
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return t('prescription.history.empty.filtered.tracking')
-    }
-  }
-
   const getFilteredNoMatch = () => {
-    let contenta11y = {}
-    if (currentTab === PrescriptionHistoryTabConstants.ALL) {
-      contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.all')) }
-    }
+    const contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.message')) }
     return (
       <>
-        <TextView textAlign={'center'} variant="MobileBodyBold">
+        <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.filtered.title')}
         </TextView>
         <TextView
@@ -45,7 +28,7 @@ function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHi
           textAlign={'center'}
           variant="MobileBody"
           {...contenta11y}>
-          {getFilteredTabString()}
+          {t('prescription.history.empty.filtered.message')}
         </TextView>
       </>
     )
@@ -56,56 +39,20 @@ function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHi
       return getFilteredNoMatch()
     }
 
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.title')}
-            </TextView>
-            <TextView
-              pt={theme.dimensions.condensedMarginBetween}
-              textAlign={'center'}
-              variant="MobileBody"
-              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>
-              {t('prescription.history.empty.message')}
-            </TextView>
-          </>
-        )
-      case PrescriptionHistoryTabConstants.PENDING:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.pending.title')}
-            </TextView>
-            <TextView
-              pt={theme.dimensions.condensedMarginBetween}
-              textAlign={'center'}
-              variant="MobileBody"
-              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.pending.message'))}>
-              {t('prescription.history.empty.pending.message')}
-            </TextView>
-          </>
-        )
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return (
-          <>
-            <TextView textAlign={'center'} variant="MobileBodyBold">
-              {t('prescription.history.empty.tracking.title')}
-            </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody">
-              {t('prescription.history.empty.tracking.p1')}
-            </TextView>
-            <TextView
-              pt={theme.dimensions.condensedMarginBetween}
-              textAlign={'center'}
-              variant="MobileBody"
-              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.tracking.p2'))}>
-              {t('prescription.history.empty.tracking.p2')}
-            </TextView>
-          </>
-        )
-    }
+    return (
+      <>
+        <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
+          {t('prescription.history.empty.title')}
+        </TextView>
+        <TextView
+          pt={theme.dimensions.condensedMarginBetween}
+          textAlign={'center'}
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>
+          {t('prescription.history.empty.message')}
+        </TextView>
+      </>
+    )
   }
 
   const noMatchScrollStyles: ViewStyle = {

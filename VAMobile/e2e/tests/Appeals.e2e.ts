@@ -14,7 +14,7 @@ export const AppealsIdConstants = {
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
   APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
-  APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
+  APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
 export async function getDateWithTimeZone(dateString: string) {
@@ -114,6 +114,6 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
     await element(by.text('Ok')).tap()
     await setTimeout(5000)
-    await device.takeScreenshot('AppealsNeedHelpVisitVAScreen')
+    await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
   })
 })
