@@ -674,6 +674,6 @@ beforeAll(async () => {
 })
 
 describe('Appointments Screen Expansion', () => {
-  //apppointmentVerification()
+  apppointmentVerification()
   apppointmentVerification(true)
 })
