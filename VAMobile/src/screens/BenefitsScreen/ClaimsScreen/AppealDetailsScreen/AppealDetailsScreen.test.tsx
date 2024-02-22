@@ -104,9 +104,9 @@ context('AppealDetailsScreen', () => {
       )
       await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy(),
+        expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Visit VA.gov' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy())
     })
   })
 

@@ -1,7 +1,7 @@
+import { PaymentsGetData } from 'api/types'
 import { getFormattedDate } from 'utils/formattingUtils'
 
 import { Params } from '..'
-import { PaymentsGetData } from '../types'
 import { DemoStore } from './store'
 
 type PaymentsPageNumber = '1' & '2'

@@ -20,18 +20,13 @@ import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
-import directDepositReducer from 'store/slices/directDepositSlice'
-import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
-import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import paymentsReducer from 'store/slices/paymentsSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
-import vaccineReducer from 'store/slices/vaccineSlice'
 import theme from 'styles/themes/standardTheme'
 import i18nReal from 'utils/i18n'
 
@@ -91,16 +86,11 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
       appointments: appointmentsReducer as any,
-      directDeposit: directDepositReducer as any,
-      disabilityRating: disabilityRatingReducer as any,
       decisionLetters: decisionLettersReducer as any,
       letters: lettersReducer as any,
-      militaryService: militaryServiceReducer as any,
       notifications: notificationReducer as any,
       secureMessaging: secureMessagingReducer as any,
       snackBar: snackbarReducer as any,
-      vaccine: vaccineReducer as any,
-      payments: paymentsReducer as any,
       prescriptions: prescriptionsReducer as any,
       settings: settingsReducer as any,
     },

@@ -860,11 +860,17 @@ export const Events = {
       name: 'vama_rx_filter',
     }
   },
-  vama_rx_filter_sel: (filter: string): Event => {
+  vama_rx_filter_cancel: (): Event => {
+    return {
+      name: 'vama_rx_filter_cancel',
+    }
+  },
+  vama_rx_filter_sel: (filter: string, sort: string): Event => {
     return {
       name: 'vama_rx_filter_sel',
       params: {
         filter,
+        sort,
       },
     }
   },
@@ -881,11 +887,6 @@ export const Events = {
   vama_rx_noauth: (): Event => {
     return {
       name: 'vama_rx_noauth',
-    }
-  },
-  vama_rx_pendingtab: (): Event => {
-    return {
-      name: 'vama_rx_pendingtab',
     }
   },
   vama_rx_refill_fail: (rx_ids: string[]): Event => {
@@ -972,11 +973,6 @@ export const Events = {
       params: {
         rx_id: rx_id,
       },
-    }
-  },
-  vama_rx_trackingtab: (): Event => {
-    return {
-      name: 'vama_rx_trackingtab',
     }
   },
   vama_segcontrol_click: (label: string): Event => {
@@ -1118,13 +1114,9 @@ export const Events = {
       },
     }
   },
-  vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+  vama_update_dir_dep: (): Event => {
     return {
       name: 'vama_update_dir_dep',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
   vama_user_call: (status_code: number): Event => {

@@ -61,8 +61,8 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
 
   const collapsibleContent = (): ReactNode => {
     const linkToCallProps: LinkButtonProps = {
-      a11yLabel: a11yLabelVA(t('fileUpload.goToVaGov')),
-      displayedText: t('fileUpload.goToVaGov'),
+      a11yLabel: a11yLabelVA(t('goToVAGov')),
+      displayedText: t('goToVAGov'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_VA_GOV,

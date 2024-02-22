@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useBankData } from 'api/directDeposit'
 import {
   Box,
   ClickToCallPhoneNumber,
@@ -17,13 +16,11 @@ import {
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
@@ -34,24 +31,17 @@ type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'Direct
  * Screen for displaying direct deposit information and help numbers
  */
 function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
-  const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>(
-    (state) => state.directDeposit,
-  )
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
-
+  const {
+    data: directDepositData,
+    isLoading: loading,
+    isError: useBankDataError,
+  } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
+  const bankData = directDepositData?.data.attributes?.paymentAccount
   const { gutter, contentMarginBottom } = theme.dimensions
-
-  useFocusEffect(
-    useCallback(() => {
-      if (screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime) {
-        dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-      }
-    }, [dispatch, ddNotInDowntime]),
-  )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
@@ -91,7 +81,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
+  if (useBankDataError) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}
