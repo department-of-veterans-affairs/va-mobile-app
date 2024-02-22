@@ -68,7 +68,8 @@ function SyncScreen({}: SyncScreenProps) {
       !mhNotInDowntime ||
       (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || useServiceHistoryFetched))
     const finishSyncingDisabilityRating =
-      !loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched)
+      !drNotInDowntime ||
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }

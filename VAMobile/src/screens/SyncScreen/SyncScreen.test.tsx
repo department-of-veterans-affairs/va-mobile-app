@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { initialAuthState } from 'store/slices'
+import { completeSync, initialAuthState } from 'store/slices'
 import { context, render, waitFor } from 'testUtils'
 
 import { SyncScreen } from './index'
@@ -81,7 +81,7 @@ context('SyncScreen', () => {
 
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
-      initializeTestInstance(false, true, false)
+      initializeTestInstance(true, false, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
       })
