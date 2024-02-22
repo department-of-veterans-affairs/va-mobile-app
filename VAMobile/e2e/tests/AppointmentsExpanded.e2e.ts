@@ -131,12 +131,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - Onsite appt', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -187,12 +192,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Home appt', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
@@ -270,12 +280,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed claim exam', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -349,12 +364,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -455,12 +475,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -581,12 +606,17 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -644,6 +674,6 @@ beforeAll(async () => {
 })
 
 describe('Appointments Screen Expansion', () => {
-  apppointmentVerification()
+  //apppointmentVerification()
   apppointmentVerification(true)
 })
