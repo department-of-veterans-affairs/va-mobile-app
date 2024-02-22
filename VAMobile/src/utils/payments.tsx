@@ -2,18 +2,10 @@ import React, { ReactNode } from 'react'
 
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
-import { each, forEach, groupBy, keys, map } from 'underscore'
+import { forEach, groupBy, keys, map } from 'underscore'
 
+import { PaymentsByDate, PaymentsData, PaymentsMetaPagination } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
-import {
-  LoadedPayments,
-  PaymentsByDate,
-  PaymentsGetData,
-  PaymentsList,
-  PaymentsMap,
-  PaymentsMetaPagination,
-  PaymentsPaginationByYearAndPage,
-} from 'store/api'
 import { VATheme } from 'styles/theme'
 
 import { getTestIDFromTextLines } from './accessibility'
@@ -24,59 +16,11 @@ import { formatDateUtc, getFormattedDate } from './formattingUtils'
  *
  * @returns return the payment list grouped by date
  */
-export const groupPaymentsByDate = (paymentsList?: PaymentsList): PaymentsByDate => {
+export const groupPaymentsByDate = (paymentsList?: Array<PaymentsData>): PaymentsByDate => {
   const paymentsByDate = groupBy(paymentsList || [], (payment) => {
     return formatDateUtc(payment.attributes.date, 'yyyy-MM-dd')
   })
-
   return paymentsByDate
-}
-
-/**
- * @param paymentList - type PaymentsList, list of payments
- *
- * @returns map of the payments id
- */
-export const mapPaymentsById = (paymentList?: PaymentsList): PaymentsMap => {
-  const paymentsMap = {} as PaymentsMap
-
-  // map Payments by id
-  each(paymentList || [], (payment) => {
-    paymentsMap[payment.id] = payment
-  })
-
-  return paymentsMap
-}
-
-/**
- * @param payments - type LoadedPayments, list of cache payments
- * @param paginationData - type PaymentsPaginationByYearAndPage, list of cache pagination
- * @param pageAndYear - year and page key tp retrieve cached pagination and payments
- *
- * @returns returns the cached data for the year and page
- */
-export const getLoadedPayments = (
-  payments: LoadedPayments,
-  paginationData: PaymentsPaginationByYearAndPage,
-  pageAndYear: string,
-): PaymentsGetData | null => {
-  const loadedPayments = payments[pageAndYear]
-  const loadedPagination = paginationData[pageAndYear]
-  // do we have the Payments?
-  if (loadedPayments) {
-    return {
-      data: loadedPayments,
-      meta: {
-        pagination: {
-          currentPage: loadedPagination.currentPage,
-          perPage: loadedPagination.perPage,
-          totalEntries: loadedPagination.totalEntries,
-        },
-        dataFromStore: true, // informs reducer not to save these payments to the store
-      },
-    } as PaymentsGetData
-  }
-  return null
 }
 
 /**
@@ -94,7 +38,7 @@ export const getGroupedPayments = (
   paymentsGroupedByDate: PaymentsByDate,
   theme: VATheme,
   translations: { t: TFunction },
-  onPaymentPress: (paymentsId: string) => void,
+  onPaymentPress: (payment: PaymentsData) => void,
   isReverseSort: boolean,
   paymentsPageMetaData: PaymentsMetaPagination,
 ): ReactNode => {
@@ -140,9 +84,9 @@ export const getGroupedPayments = (
  * @returns Array list of payment items
  */
 const getListItemsForPayments = (
-  listOfPayments: PaymentsList,
+  listOfPayments: Array<PaymentsData>,
   translations: { t: TFunction },
-  onPaymentPress: (payementId: string) => void,
+  onPaymentPress: (payement: PaymentsData) => void,
   paymentsPagination: PaymentsMetaPagination,
   groupIdx: number,
 ): Array<DefaultListItemObj> => {
@@ -165,7 +109,7 @@ const getListItemsForPayments = (
     listItems.push({
       textLines,
       a11yValue,
-      onPress: () => onPaymentPress(payment.id),
+      onPress: () => onPaymentPress(payment),
       a11yHintText: t('payments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })
@@ -184,7 +128,7 @@ export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, st
   let lastDayOfyear: string | undefined
   if (year) {
     const startDay = DateTime.fromISO(year)
-      .set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
+      .set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 999 })
       .endOf('day')
       .toISO()
     const endDay = DateTime.fromISO(year)
@@ -198,14 +142,4 @@ export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, st
   }
 
   return [firstDayOfyear, lastDayOfyear]
-}
-
-/**
- * @param year - type string, set the year
- * @param year - type number, set the page number
- *
- * @returns string example 2021-1
- */
-export const createYearAndPageString = (year: string, page: number): string => {
-  return `${year}-${page}`
 }

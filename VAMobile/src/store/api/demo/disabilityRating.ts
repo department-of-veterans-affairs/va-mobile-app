@@ -1,4 +1,4 @@
-import { DisabilityRatingData } from '../types'
+import { DisabilityRatingData } from 'api/types'
 
 /**
  * Type denoting the demo data store

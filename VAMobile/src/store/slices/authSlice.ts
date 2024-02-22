@@ -34,13 +34,9 @@ import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
-import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
-import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
-import { dispatchVaccineLogout } from './vaccineSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -573,12 +569,8 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchMilitaryHistoryLogout())
-    dispatch(dispatchDisabilityRatingLogout())
-    dispatch(dispatchClearPaymentsOnLogout())
     dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())
-    dispatch(dispatchVaccineLogout())
   }
 }
 

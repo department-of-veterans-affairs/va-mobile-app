@@ -2,10 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { RatingData, ScreenIDTypesConstants } from 'store/api/types'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
-import { context, render } from 'testUtils'
+import { disabilityRatingKeys } from 'api/disabilityRating'
+import { RatingData } from 'api/types'
+import { QueriesData, context, render } from 'testUtils'
 
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 
@@ -47,29 +46,19 @@ context('DisabilityRatingsScreen', () => {
     ],
   }
 
-  const initializeTestInstance = (
-    ratingInfo = ratingDataMock,
-    loading = false,
-    errorState: ErrorsState = initialErrorsState,
-  ) => {
-    render(<DisabilityRatingsScreen />, {
-      preloadedState: {
-        disabilityRating: {
-          ratingData: ratingInfo,
-          loading,
-          needsDataLoad: false,
-          preloadComplete: true,
-        },
-        errors: errorState,
+  const initializeTestInstance = (ratingInfo = ratingDataMock) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: disabilityRatingKeys.disabilityRating,
+        data: ratingInfo,
       },
-    })
+    ]
+
+    render(<DisabilityRatingsScreen />, { queriesData })
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
   it('Renders Disability Ratings correctly and not render no disability ratings', () => {
+    initializeTestInstance()
     expect(screen.getAllByRole('header', { name: 'Combined disability rating' })).toBeTruthy()
     expect(screen.getByText('70%')).toBeTruthy()
     expect(
@@ -103,35 +92,12 @@ context('DisabilityRatingsScreen', () => {
     ).toBeFalsy()
   })
 
-  describe('when loading is set to true', () => {
-    it('should show loading screen', () => {
-      initializeTestInstance(ratingDataMock, true)
-      expect(screen.getByText('Loading your disability rating...')).toBeTruthy()
-    })
-  })
-
   describe('when there is no disability ratings', () => {
     it('should render no disability ratings', () => {
       initializeTestInstance({} as RatingData)
       expect(
         screen.getByRole('header', { name: 'You do not have a VA combined disability rating on record.' }),
       ).toBeTruthy()
-    })
-  })
-
-  describe('when there is an error', () => {
-    it('should show an error screen', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(ratingDataMock, undefined, errorState)
-      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
     })
   })
 })
