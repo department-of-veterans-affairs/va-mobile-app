@@ -82,7 +82,6 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
   }
 
   function renderPagination() {
-    const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
         setPage(page + 1)

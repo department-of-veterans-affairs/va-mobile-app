@@ -8,19 +8,16 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { READ, UNREAD } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { AppDispatch, AppThunk } from 'store'
-import { Params, contentTypes } from 'store/api/api'
+import { AppThunk } from 'store'
+import { contentTypes } from 'store/api/api'
 import {
   APIError,
   ScreenIDTypes,
-  ScreenIDTypesConstants,
   SecureMessagingAttachment,
   SecureMessagingFolderData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
-  SecureMessagingFolderMessagesGetData,
   SecureMessagingFolderMessagesMap,
-  SecureMessagingFoldersGetData,
   SecureMessagingFormData,
   SecureMessagingMessageAttributes,
   SecureMessagingMessageData,
@@ -136,92 +133,6 @@ export const initialSecureMessagingState: SecureMessagingState = {
   deletingDraft: false,
   inboxFirstRetrieval: true,
 }
-
-/**
- * Redux action to fetch inbox messages
- */
-export const fetchInboxMessages =
-  (page: number, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
-    dispatch(dispatchStartFetchInboxMessages())
-
-    try {
-      const folderID = SecureMessagingSystemFolderIdConstants.INBOX
-      const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(
-        `/v0/messaging/health/folders/${folderID}/messages`,
-        {
-          page: page.toString(),
-        } as Params,
-      )
-      dispatch(dispatchFinishFetchInboxMessages({ inboxMessages }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `fetchInboxMessages: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishFetchInboxMessages({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to fetch the folders
- */
-export const listFolders =
-  (screenID?: ScreenIDTypes, forceRefresh = false): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
-    dispatch(dispatchStartListFolders())
-
-    try {
-      let folders
-      const currentStateFolders = getState().secureMessaging?.folders
-
-      // Since users can't manage folders from within the app, they are unlikely to change
-      // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
-      if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', {
-          useCache: `${!forceRefresh}`,
-        })
-      }
-      dispatch(dispatchFinishListFolders({ folderData: folders }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `listFolders: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishListFolders({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to fetch folder's messages
- */
-export const listFolderMessages =
-  (folderID: number, page: number, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
-    dispatch(dispatchStartListFolderMessages())
-
-    try {
-      const messages = await api.get<SecureMessagingFolderMessagesGetData>(
-        `/v0/messaging/health/folders/${folderID}/messages`,
-        {
-          page: page.toString(),
-        } as Params,
-      )
-      dispatch(dispatchFinishListFolderMessages({ folderID: folderID, messageData: messages }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `listFolderMessages: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishListFolderMessages({ folderID: folderID, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
 
 /**
  * Redux action to fetch the messages thread
@@ -378,17 +289,6 @@ export const saveDraft =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishSaveDraft({ messageID: Number(response?.data?.id) }))
-
-      if (refreshFolder) {
-        dispatch(
-          listFolderMessages(
-            SecureMessagingSystemFolderIdConstants.DRAFTS,
-            1,
-            ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID,
-          ),
-        )
-      }
-      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
@@ -466,7 +366,6 @@ export const sendMessage =
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
-      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage(undefined))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
@@ -491,15 +390,6 @@ export const deleteDraft =
 
     try {
       await callDeleteMessageApi(messageID)
-
-      dispatch(
-        listFolderMessages(
-          SecureMessagingSystemFolderIdConstants.DRAFTS,
-          1,
-          ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID,
-        ),
-      )
-      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
 
       dispatch(dispatchFinishDeleteDraft(undefined))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
@@ -526,99 +416,6 @@ const secureMessagingSlice = createSlice({
   name: 'secureMessaging',
   initialState: initialSecureMessagingState,
   reducers: {
-    dispatchStartFetchInboxMessages: (state) => {
-      state.loadingInbox = true
-    },
-
-    dispatchFinishFetchInboxMessages: (
-      state,
-      action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>,
-    ) => {
-      const { inboxMessages, error } = action.payload
-      const messages = inboxMessages ? inboxMessages.data : []
-      const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
-      const messagesById = messages?.reduce(
-        (obj, m) => {
-          obj[m.attributes.messageId] = m.attributes
-          return obj
-        },
-        { ...state.messagesById },
-      )
-
-      return {
-        ...state,
-        inboxFirstRetrieval: !!error,
-        inboxMessages: messages,
-        // TODO add to folderMessagesById(0)
-        // TODO inject folderId?
-        messagesById,
-        loadingInbox: false,
-        error,
-        paginationMetaByFolderId: {
-          ...state.paginationMetaByFolderId,
-          [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
-        },
-        termsAndConditionError,
-      }
-    },
-
-    dispatchStartListFolders: (state) => {
-      state.loadingFolders = true
-    },
-
-    dispatchFinishListFolders: (
-      state,
-      action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>,
-    ) => {
-      const { folderData, error } = action.payload
-      state.folders = folderData?.data || state.folders
-      state.loadingFolders = false
-      state.error = error
-    },
-
-    dispatchStartListFolderMessages: (state) => {
-      state.loading = true
-    },
-
-    dispatchFinishListFolderMessages: (
-      state,
-      action: PayloadAction<{
-        folderID: number
-        messageData?: SecureMessagingFolderMessagesGetData
-        error?: api.APIError
-      }>,
-    ) => {
-      const { folderID, messageData, error } = action.payload
-      const messageMap = {
-        ...state.messagesByFolderId,
-        [folderID]: messageData,
-      }
-      let updatedPaginationMeta = {
-        ...state.paginationMetaByFolderId,
-      }
-
-      updatedPaginationMeta = {
-        ...state.paginationMetaByFolderId,
-        [folderID]: messageData?.meta?.pagination,
-      }
-
-      const messagesById = messageData
-        ? messageData.data.reduce(
-            (obj, m) => {
-              obj[m.attributes.messageId] = m.attributes
-              return obj
-            },
-            { ...state.messagesById },
-          )
-        : ({} as SecureMessagingMessageMap)
-
-      state.messagesByFolderId = messageMap
-      state.messagesById = messagesById
-      state.loading = false
-      state.error = error
-      state.paginationMetaByFolderId = updatedPaginationMeta
-    },
-
     dispatchStartGetThread: (state) => {
       state.loading = true
     },
@@ -831,12 +628,6 @@ const secureMessagingSlice = createSlice({
 })
 
 export const {
-  dispatchFinishFetchInboxMessages,
-  dispatchStartFetchInboxMessages,
-  dispatchFinishListFolders,
-  dispatchStartListFolders,
-  dispatchFinishListFolderMessages,
-  dispatchStartListFolderMessages,
   dispatchFinishGetThread,
   dispatchStartGetThread,
   dispatchFinishGetMessage,

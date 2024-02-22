@@ -138,7 +138,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     if (messageFetched && message.readReceipt !== READ && !demoMode) {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.inboxData })
     }
-  }, [messageFetched, message])
+  }, [messageFetched, message.readReceipt, demoMode, queryClient])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
@@ -225,25 +225,25 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
+      const folder = (): string => {
+        switch (newFolder) {
+          case SecureMessagingSystemFolderIdConstants.SENT:
+            return 'sent'
+          case SecureMessagingSystemFolderIdConstants.INBOX:
+            return 'inbox'
+          case SecureMessagingSystemFolderIdConstants.DELETED:
+            return 'deleted'
+          case SecureMessagingSystemFolderIdConstants.DRAFTS:
+            return 'drafts'
+          default:
+            return 'custom'
+        }
+      }
       const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
       const mutateOptions = {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, page] })
-          const folder = (): string => {
-            switch (newFolder) {
-              case SecureMessagingSystemFolderIdConstants.SENT:
-                return 'sent'
-              case SecureMessagingSystemFolderIdConstants.INBOX:
-                return 'inbox'
-              case SecureMessagingSystemFolderIdConstants.DELETED:
-                return 'deleted'
-              case SecureMessagingSystemFolderIdConstants.DRAFTS:
-                return 'drafts'
-              default:
-                return 'custom'
-            }
-          }
           logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
           showSnackBar(
             snackbarMessages.successMsg,
@@ -256,20 +256,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   queryClient.invalidateQueries({
                     queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage],
                   })
-                  const folder = (): string => {
-                    switch (newFolder) {
-                      case SecureMessagingSystemFolderIdConstants.SENT:
-                        return 'sent'
-                      case SecureMessagingSystemFolderIdConstants.INBOX:
-                        return 'inbox'
-                      case SecureMessagingSystemFolderIdConstants.DELETED:
-                        return 'deleted'
-                      case SecureMessagingSystemFolderIdConstants.DRAFTS:
-                        return 'drafts'
-                      default:
-                        return 'custom'
-                    }
-                  }
                   logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
                   showSnackBar(
                     snackbarMessages.undoMsg ? snackbarMessages.undoMsg : snackbarMessages.successMsg,
@@ -286,8 +272,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                     false,
                     true,
                     true,
-                  ),
-                    setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+                  )
+                  setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
                   folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
                 },
               }
@@ -305,8 +291,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             false,
             true,
             true,
-          ),
-            setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+          )
+          setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
           folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
         },
       }
