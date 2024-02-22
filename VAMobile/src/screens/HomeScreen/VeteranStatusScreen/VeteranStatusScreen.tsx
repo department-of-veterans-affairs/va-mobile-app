@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDisabilityRating } from 'api/disabilityRating'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   BackgroundVariant,
@@ -22,7 +23,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState } from 'store/slices'
+import { MilitaryServiceState } from 'store/slices'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
@@ -35,7 +36,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
     (state) => state.militaryService,
   )
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
