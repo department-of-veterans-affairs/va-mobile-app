@@ -26,8 +26,9 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
@@ -45,7 +46,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -79,6 +79,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
@@ -98,14 +99,6 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
-        dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
-      }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
 
   useFocusEffect(
     useCallback(() => {
@@ -224,6 +217,16 @@ export function HomeScreen({}: HomeScreenProps) {
               title={`${t('claims.title')}`}
               subText={`(${activeClaimsCount} ${t('open')})`}
               onPress={() => Linking.openURL('vamobile://claims')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
+        {!!unreadMessageCount && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('messages')}`}
+              subText={`${unreadMessageCount} ${t('unread')}`}
+              onPress={() => Linking.openURL('vamobile://messages')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>

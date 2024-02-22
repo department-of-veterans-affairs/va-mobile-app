@@ -36,7 +36,8 @@ export const linking: LinkingOptions<any> = {
   // Sets the navigation state for deeply nested screens to ensure navigating backwards works correctly
   getStateFromPath(path) {
     const pathParts = path.split('/').filter(Boolean)
-    if (pathParts[0] === 'messages' && pathParts.length === 2) {
+    if (pathParts[0] === 'messages') {
+      const hasMessageID = pathParts.length === 2
       return {
         routes: [
           {
@@ -49,7 +50,7 @@ export const linking: LinkingOptions<any> = {
                     routes: [
                       { name: 'Health' },
                       { name: 'SecureMessaging' },
-                      { name: 'ViewMessage', params: { messageID: pathParts[1] } },
+                      ...(hasMessageID ? [{ name: 'ViewMessage', params: { messageID: pathParts[1] } }] : []),
                     ],
                   },
                 },
