@@ -7,7 +7,7 @@ import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/scree
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
+import { PrescriptionData, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 
 import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -104,7 +104,7 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   TypeOfCareNotListedHelpScreen: undefined
   PrescriptionHistory: {
-    startingTab?: PrescriptionHistoryTabs | undefined
+    startingFilter?: RefillStatus
   }
   PrescriptionDetails: {
     prescriptionId: string

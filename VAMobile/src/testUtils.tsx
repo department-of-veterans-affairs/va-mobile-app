@@ -26,7 +26,6 @@ import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import paymentsReducer from 'store/slices/paymentsSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -100,7 +99,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       secureMessaging: secureMessagingReducer as any,
       snackBar: snackbarReducer as any,
       vaccine: vaccineReducer as any,
-      payments: paymentsReducer as any,
       prescriptions: prescriptionsReducer as any,
       settings: settingsReducer as any,
     },
