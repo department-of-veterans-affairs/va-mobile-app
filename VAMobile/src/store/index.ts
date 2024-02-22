@@ -7,7 +7,6 @@ import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
-import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
@@ -16,7 +15,6 @@ import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
-import vaccineReducer from 'store/slices/vaccineSlice'
 
 // Creates the store
 const store = configureStore({
@@ -28,14 +26,12 @@ const store = configureStore({
     analytics: analyticsReducer,
     appointments: appointmentsReducer,
     claimsAndAppeals: claimsAndAppealsReducer,
-    directDeposit: directDepositReducer,
     disabilityRating: disabilityRatingReducer,
     decisionLetters: decisionLettersReducer,
     letters: lettersReducer,
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
-    vaccine: vaccineReducer,
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },

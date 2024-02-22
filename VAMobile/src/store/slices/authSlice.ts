@@ -38,7 +38,6 @@ import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
-import { dispatchVaccineLogout } from './vaccineSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -574,7 +573,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchDisabilityRatingLogout())
     dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())
-    dispatch(dispatchVaccineLogout())
   }
 }
 

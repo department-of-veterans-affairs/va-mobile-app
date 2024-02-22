@@ -1,4 +1,4 @@
-import { AccountTypes } from 'store/api/types'
+import { AccountTypes } from 'api/types'
 
 export const ACCOUNT_TYPES: {
   checking: AccountTypes
