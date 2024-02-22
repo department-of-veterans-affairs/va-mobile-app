@@ -16,7 +16,6 @@ import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
-import vaccineReducer from 'store/slices/vaccineSlice'
 
 // Creates the store
 const store = configureStore({
@@ -35,7 +34,6 @@ const store = configureStore({
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
-    vaccine: vaccineReducer,
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
