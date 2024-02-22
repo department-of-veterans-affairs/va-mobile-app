@@ -11,7 +11,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
  * Notifes VA to make a claim decision
  */
 
-const submitClaimDecision = async (claimID: string) => {
+const submitClaimDecision = (claimID: string) => {
   return post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 }
 
@@ -22,7 +22,7 @@ export const useSubmitClaimDecision = (claimID: string) => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: submitClaimDecision,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [claimsAndAppealsKeys.claim, claimID] })
     },
     onError: (error) => {

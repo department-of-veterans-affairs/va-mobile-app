@@ -49,7 +49,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     isError: claimsAndAppealsListError,
     isLoading: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
-  } = useClaimsAndAppeals(claimType, 1, false, {
+  } = useClaimsAndAppeals(claimType, 1, {
     enabled: claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime),
   })
 

@@ -13,7 +13,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Uploads a File to Claim
  */
-const uploadFileToClaim = async ({ claimID, request, files }: UploadFileToClaimParamaters) => {
+const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamaters) => {
   if (files.length > 1) {
     const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
       return file.base64
@@ -59,7 +59,7 @@ const uploadFileToClaim = async ({ claimID, request, files }: UploadFileToClaimP
 
     formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
     formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
-    await post<ClaimDocUploadData>(
+    return post<ClaimDocUploadData>(
       `/v0/claim/${claimID}/documents`,
       formData as unknown as Params,
       contentTypes.multipart,

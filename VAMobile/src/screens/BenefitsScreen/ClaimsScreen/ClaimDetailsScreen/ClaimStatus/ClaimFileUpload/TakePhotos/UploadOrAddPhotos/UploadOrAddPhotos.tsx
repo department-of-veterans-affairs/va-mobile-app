@@ -121,7 +121,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       onMutate: () => {
         logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'photo'))
       },
-      onSuccess: async () => {
+      onSuccess: () => {
         setImagesList([])
         setFilesUploadedSuccess(true)
         logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'photo'))

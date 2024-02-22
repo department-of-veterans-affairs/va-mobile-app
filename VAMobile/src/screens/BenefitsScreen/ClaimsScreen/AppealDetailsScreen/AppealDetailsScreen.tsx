@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { useQueryClient } from '@tanstack/react-query'
 import { filter, pluck } from 'underscore'
 
-import { claimsAndAppealsKeys, useAppeal } from 'api/claimsAndAppeals'
+import { useAppeal } from 'api/claimsAndAppeals'
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -28,7 +27,6 @@ type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'Appeal
 function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const queryClient = useQueryClient()
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const [selectedTab, setSelectedTab] = useState(0)
@@ -51,7 +49,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   useBeforeNavBackListener(navigation, () => {
     // if appeals is still loading cancel it
     if (loadingAppeal) {
-      queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
       abortController.abort()
     }
   })

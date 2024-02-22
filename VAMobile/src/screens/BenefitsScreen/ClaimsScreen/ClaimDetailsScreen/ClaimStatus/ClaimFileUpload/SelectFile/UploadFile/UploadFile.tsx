@@ -94,7 +94,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       onMutate: () => {
         logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'file'))
       },
-      onSuccess: async () => {
+      onSuccess: () => {
         setFilesList([])
         setFilesUploadedSuccess(true)
         logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'file'))

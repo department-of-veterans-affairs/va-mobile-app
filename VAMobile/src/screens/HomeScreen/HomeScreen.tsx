@@ -76,7 +76,7 @@ export function HomeScreen({}: HomeScreenProps) {
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, true, {
+  const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled:
       (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
       !claimsInDowntime &&
@@ -100,6 +100,12 @@ export function HomeScreen({}: HomeScreenProps) {
       dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+
+  useEffect(() => {
+    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+    }
+  }, [claimsPrefetch, claimsData])
 
   useEffect(() => {
     if (apptsPrefetch && claimsPrefetch && !rxPrefetch && !smPrefetch) {

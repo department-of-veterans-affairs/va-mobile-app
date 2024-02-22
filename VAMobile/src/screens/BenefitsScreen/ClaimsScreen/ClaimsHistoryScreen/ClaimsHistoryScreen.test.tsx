@@ -99,7 +99,7 @@ const mockPayload: ClaimsAndAppealsListPayload = {
 }
 
 context('ClaimsHistoryScreen', () => {
-  const initializeTestInstance = (errors: Array<ClaimsAndAppealsGetDataMetaError>) => {
+  const initializeTestInstance = (errors?: Array<ClaimsAndAppealsGetDataMetaError>) => {
     const queryPayload = mockPayload
     queryPayload.meta.errors = errors
     const queriesData: QueriesData = [
@@ -114,7 +114,7 @@ context('ClaimsHistoryScreen', () => {
   describe('when claims service and appeals service are both not authorized', () => {
     it('should render the NoClaimsAndAppealsAccess component', async () => {
       await waitFor(() => {
-        initializeTestInstance([])
+        initializeTestInstance()
       })
       expect(screen.getByText("We can't find any claims information for you")).toBeTruthy()
     })
@@ -122,7 +122,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when loadingAllClaimsAndAppeals is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance([])
+      initializeTestInstance()
       expect(screen.getByText('Loading your claims and appeals...')).toBeTruthy()
     })
   })
@@ -136,7 +136,7 @@ context('ClaimsHistoryScreen', () => {
           'page[number]': '1',
         })
         .mockRejectedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
-      initializeTestInstance([])
+      initializeTestInstance()
       await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
