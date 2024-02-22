@@ -8,6 +8,7 @@ import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
+import { useDisabilityRating } from 'api/disabilityRating'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
 import {
@@ -23,7 +24,6 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { DisabilityRatingState } from 'store/slices'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
@@ -36,7 +36,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
