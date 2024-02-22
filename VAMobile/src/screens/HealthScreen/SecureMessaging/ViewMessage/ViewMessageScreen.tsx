@@ -260,6 +260,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   showSnackBar(
                     snackbarMessages.undoMsg ? snackbarMessages.undoMsg : snackbarMessages.successMsg,
                     dispatch,
+                    undefined,
+                    true,
+                    false,
+                    true,
                   )
                   setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
                   folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
@@ -277,8 +281,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
                 },
               }
+              moveMessage(undoParams, undoMutateOptions)
             },
-            true,
+            false,
             false,
             true,
           )
