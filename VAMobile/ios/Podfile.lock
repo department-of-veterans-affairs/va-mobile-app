@@ -483,9 +483,7 @@ PODS:
   - React-jsinspector (0.72.7)
   - React-logger (0.72.7):
     - glog
-  - react-native-blob-util (0.19.6):
-    - React-Core
-  - react-native-document-picker (8.2.2):
+  - react-native-document-picker (8.2.1):
     - React-Core
   - react-native-image-picker (7.1.0):
     - RCT-Folly (= 2021.07.22.00)
@@ -708,7 +706,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -831,8 +828,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-blob-util:
-    :path: "../node_modules/react-native-blob-util"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
@@ -965,8 +960,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 10e6c77ff6b32274b8d152d08ed0328c4b30a821
   React-jsinspector: 8baadae51f01d867c3921213a25ab78ab4fbcd91
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
-  react-native-blob-util: d8fa1a7f726867907a8e43163fdd8b441d4489ea
-  react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
+  react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
   react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
@@ -1011,4 +1005,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 71cfabcb52e3b2ad52dad40bf80370529df9a239
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
