@@ -87,6 +87,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
       text === 'At Northport VA Medical Center' ||
       text === 'At Nashville VA Medical Center'
     ) {
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
     }
 
