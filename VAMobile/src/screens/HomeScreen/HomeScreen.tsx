@@ -103,14 +103,6 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useFocusEffect(
     useCallback(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
-        dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
-      }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
-
-  useFocusEffect(
-    useCallback(() => {
       if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
         dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
       }
