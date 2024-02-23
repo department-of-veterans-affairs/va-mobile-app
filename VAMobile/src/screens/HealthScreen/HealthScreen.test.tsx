@@ -3,8 +3,10 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { SecureMessagingFolderGetData, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import * as api from 'store/api'
+import { loadAllPrescriptions } from 'store/slices'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { HealthScreen } from './HealthScreen'
@@ -69,14 +71,21 @@ context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-
+  const inboxData: SecureMessagingFolderGetData = {
+    data: {
+      id: '1',
+      type: 'hah',
+      attributes: {
+        folderId: 1,
+        name: 'inbox',
+        count: 22,
+        unreadCount: 13,
+        systemFolder: true,
+      },
+    },
+  }
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (
-    unreadCount = 13,
-    hasLoadedInbox = true,
-    prescriptionsEnabled = false,
-    prescriptionsNeedLoad = false,
-  ) => {
+  const initializeTestInstance = (prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
@@ -84,22 +93,6 @@ context('HealthScreen', () => {
     render(<HealthScreen {...props} />, {
       preloadedState: {
         prescriptions: { prescriptionsNeedLoad },
-        secureMessaging: {
-          ...initialSecureMessagingState,
-          hasLoadedInbox,
-          inbox: {
-            type: 'Inbox',
-            id: '123',
-            attributes: {
-              //SecureMessagingFolderAttributes
-              folderId: 123,
-              name: 'Inbox',
-              count: 45,
-              unreadCount: unreadCount,
-              systemFolder: true,
-            },
-          },
-        },
       },
     })
   }
@@ -120,7 +113,7 @@ context('HealthScreen', () => {
 
     describe('feature enabled', () => {
       it('does not display prescriptions button if feature toggle enabled', async () => {
-        initializeTestInstance(0, true, true)
+        initializeTestInstance(true)
         expect(screen.getByText('Appointments')).toBeTruthy()
         expect(screen.getByText('Messages')).toBeTruthy()
         expect(screen.getByText('Prescriptions')).toBeTruthy()
@@ -132,13 +125,13 @@ context('HealthScreen', () => {
 
   describe('on click of the prescriptions button', () => {
     it('should call useRouteNavigation', async () => {
-      initializeTestInstance(0, true, true)
+      initializeTestInstance(true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
     it('should reload rx data if data is present', async () => {
-      initializeTestInstance(0, true, true, false)
+      initializeTestInstance(true, false)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
     })
@@ -178,7 +171,10 @@ context('HealthScreen', () => {
   })
 
   it('should render messagesCountTag with the correct count number', async () => {
-    initializeTestInstance(13)
-    expect(screen.getByText('13')).toBeTruthy()
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}`)
+      .mockResolvedValue(inboxData)
+    initializeTestInstance()
+    await waitFor(() => expect(screen.getByText('13')).toBeTruthy())
   })
 })

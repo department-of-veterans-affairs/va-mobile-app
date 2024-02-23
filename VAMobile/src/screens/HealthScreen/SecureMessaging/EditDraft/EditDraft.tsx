@@ -60,7 +60,6 @@ import {
   useAttachments,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
-  useError,
   useRouteNavigation,
   useTheme,
 } from 'utils/hooks'
@@ -98,7 +97,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
-  const { data: recipients, isFetched: hasLoadedRecipients } = useMessageRecipients({
+  const {
+    data: recipients,
+    isFetched: hasLoadedRecipients,
+    isError: recipientsError,
+  } = useMessageRecipients({
     enabled: screenContentAllowed('WG_EditDraft'),
   })
   const destructiveAlert = useDestructiveActionSheet()
@@ -114,10 +117,17 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const { attachmentFileToAdd } = route.params
 
   const messageID = Number(route.params?.messageID)
-  const { data: messageDraftData, isLoading: loadingMessage } = useMessage(messageID, {
+  console.log(messageID)
+  const {
+    data: messageDraftData,
+    isLoading: loadingMessage,
+    isError: messageError,
+  } = useMessage(messageID, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
-  const { data: threadData } = useThread(messageID, false, { enabled: screenContentAllowed('WG_EditDraft') })
+  const { data: threadData, isError: threadError } = useThread(messageID, false, {
+    enabled: screenContentAllowed('WG_EditDraft'),
+  })
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const isReplyDraft = thread.length > 1
@@ -324,7 +334,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
+  if (recipientsError || threadError || messageError) {
     return (
       <FullScreenSubtask
         title={t('editDraft')}

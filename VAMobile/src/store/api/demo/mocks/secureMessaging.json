@@ -447,6 +447,48 @@
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {
     "data": []
   },
+  "/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=false": {
+    "data": []
+  },
+  "/v1/messaging/health/messages/2112896/thread?excludeProvidedMessage=false": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/signature": {
+    "data": {
+      "id": 1,
+      "type": "hah",
+      "attributes": {
+        "signatureName": "signatureName",
+        "includeSignature": false,
+        "signatureTitle": "Title"
+      }
+    }
+  },
+  "/v1/messaging/health/messages/2113141/thread?excludeProvidedMessage=false": {
+    "data": [
+      {
+        "id": "2113141",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2113141,
+          "category": "TEST_RESULTS",
+          "subject": "Test Inquiry",
+          "body": null,
+          "hasAttachments": false,
+          "attachment": false,
+          "sentDate": "2021-11-17T01:00:53.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
+        }
+      }
+    ]
+  },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=false": {
     "data": [
       {
