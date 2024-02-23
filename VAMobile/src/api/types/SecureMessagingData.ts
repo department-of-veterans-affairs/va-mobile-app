@@ -5,17 +5,6 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
-export type SecureMessagingPaginationMeta = {
-  currentPage: number
-  perPage: number
-  totalPages: number
-  totalEntries: number
-}
-
-export type SecureMessagingMessagesSortMeta = {
-  sentDate: string
-}
-
 /**
  * MESSAGES
  */
@@ -77,32 +66,26 @@ export type SecureMessagingMessageData = {
   attributes: SecureMessagingMessageAttributes
 }
 
-export type SecureMessagingMessageIncluded = {
-  attributes: {
-    name: string
-    attachmentSize: number
-  }
-  id: number
-  links: {
-    download: string
-  }
-  type: string
-}
-
 export type SecureMessagingSaveDraftData = {
   data: SecureMessagingMessageData
 }
 
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
-  included: Array<SecureMessagingMessageIncluded>
+  included: Array<{
+    attributes: {
+      name: string
+      attachmentSize: number
+    }
+    id: number
+    links: {
+      download: string
+    }
+    type: string
+  }>
 }
 
 export type SecureMessagingMessageList = Array<SecureMessagingMessageData>
-
-export type SecureMessagingMessageMap = {
-  [key: string]: SecureMessagingMessageAttributes
-}
 
 export type SecureMessagingFormData = {
   recipient_id?: number
@@ -120,8 +103,6 @@ export type SecureMessagingThreadGetData = {
   data: SecureMessagingMessageList
 }
 
-export type SecureMessagingThreads = Array<Array<number>>
-
 /**
  * RECIPIENTS
  */
@@ -133,34 +114,30 @@ export type SecureMessagingRecipient = {
   triageTeamId: number
 }
 
-/**
- * CATEGORIES
- */
-
-export type SecureMessagingCategory = {
-  category: string
-}
-
-/**
- * FOLDERS
- */
-
-export type SecureMessagingFolderAttributes = {
-  folderId: number
-  name: string
-  count: number
-  unreadCount: number
-  systemFolder: boolean
-}
-
 export type SecureMessagingFolderData = {
   type: string
   id: string
-  attributes: SecureMessagingFolderAttributes
+  attributes: {
+    folderId: number
+    name: string
+    count: number
+    unreadCount: number
+    systemFolder: boolean
+  }
 }
 
 export type SecureMessagingFolderGetData = {
-  data: SecureMessagingFolderData
+  data: {
+    type: string
+    id: string
+    attributes: {
+      folderId: number
+      name: string
+      count: number
+      unreadCount: number
+      systemFolder: boolean
+    }
+  }
 }
 
 export type SecureMessagingPaginationLinks = {
@@ -172,8 +149,15 @@ export type SecureMessagingPaginationLinks = {
 }
 
 export type SecureMessagingFolderMessagesMeta = {
-  sort: SecureMessagingMessagesSortMeta
-  pagination: SecureMessagingPaginationMeta
+  sort: {
+    sentDate: string
+  }
+  pagination: {
+    currentPage: number
+    perPage: number
+    totalPages: number
+    totalEntries: number
+  }
 }
 
 export type SecureMessagingFolderMessagesGetData = {
@@ -182,54 +166,51 @@ export type SecureMessagingFolderMessagesGetData = {
   meta: SecureMessagingFolderMessagesMeta
 }
 
-export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
+export type SecureMessagingFolderList = Array<{
+  type: string
+  id: string
+  attributes: {
+    folderId: number
+    name: string
+    count: number
+    unreadCount: number
+    systemFolder: boolean
+  }
+}>
 
 export type SecureMessagingFoldersGetData = {
   data: SecureMessagingFolderList
   links: SecureMessagingPaginationLinks
   meta: {
-    pagination: SecureMessagingPaginationMeta
+    pagination: {
+      currentPage: number
+      perPage: number
+      totalPages: number
+      totalEntries: number
+    }
   }
-}
-
-export type SecureMessagingFolderMap = {
-  [key: string]: SecureMessagingFolderData
-}
-
-export type SecureMessagingFolderMessagesMap = {
-  [key: string]: SecureMessagingFolderMessagesGetData
-}
-
-export type SecureMessagingRecipientsMetaSortName = 'ASC' | 'DESC'
-
-export type SecureMessagingRecipientsMetaSort = {
-  name: SecureMessagingRecipientsMetaSortName
-}
-
-export type SecureMessagingRecipientsMeta = {
-  sort: SecureMessagingRecipientsMetaSort
-}
-
-export type SecureMessagingRecipientDataAttributesRelationType = 'PATIENT'
-
-export type SecureMessagingRecipientDataAttributes = {
-  triageTeamId: number
-  name: string
-  relationType: SecureMessagingRecipientDataAttributesRelationType
-  preferredTeam: boolean
 }
 
 export type SecureMessagingRecipientData = {
   id: string
   type: string
-  attributes: SecureMessagingRecipientDataAttributes
+  attributes: {
+    triageTeamId: number
+    name: string
+    relationType: 'PATIENT'
+    preferredTeam: boolean
+  }
 }
 
 export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientData>
 
 export type SecureMessagingRecipients = {
   data: SecureMessagingRecipientDataList
-  meta: SecureMessagingRecipientsMeta
+  meta: {
+    sort: {
+      name: 'ASC' | 'DESC'
+    }
+  }
 }
 
 export const SecureMessagingSystemFolderIdConstants: {
