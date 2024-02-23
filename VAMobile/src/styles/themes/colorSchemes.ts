@@ -1,3 +1,5 @@
+import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import colors from './VAColors'
 
 export const primaryTextColor = colors.grayDark
@@ -15,7 +17,7 @@ export const lightTheme = {
     headerDropShadow: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
-    ctaButton: colors.crisisLineRed,
+    ctaButton: colors.secondaryDark,
     completedPhase: colors.greenDarker,
     currentPhase: colors.primary,
     upcomingPhase: colors.grayLight,
@@ -145,6 +147,7 @@ export const lightTheme = {
     textWithIconButtonInactive: colors.gray,
     veteranStatus: colors.white,
     webviewTitle: colors.base,
+    crisisLineButton: colors.white,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -212,7 +215,7 @@ export const darkTheme = {
     headerDropShadow: colors.black,
     shadow: colors.grayMedium,
     profileBanner: colors.primaryDarker2,
-    ctaButton: colors.crisisLineRed,
+    ctaButton: DSColors.uswdsRedVivid40,
     completedPhase: colors.greenLight,
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
@@ -339,6 +342,7 @@ export const darkTheme = {
     textWithIconButtonInactive: colors.grayLight,
     veteranStatus: colors.white,
     webviewTitle: colors.white,
+    crisisLineButton: colors.black,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

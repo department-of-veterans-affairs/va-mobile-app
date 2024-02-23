@@ -116,14 +116,17 @@ context('StartNewMessage', () => {
   })
 
   describe('when there is an error', () => {
-    it('should display the ErrorComponent', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockRejectedValue({ networkError: true } as api.APIError)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockRejectedValue({ networkError: true } as api.APIError)
-      initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+    it('should display the ErrorComponent', () => {
+      initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    })
+  })
+
+  describe('when returning from confirmation screen', () => {
+    it('should show Recheck Info if validation had failed', () => {
+      initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
+      fireEvent.press(screen.getByText('Save'))
+      expect(screen.getByText('We need more information')).toBeTruthy()
     })
   })
 

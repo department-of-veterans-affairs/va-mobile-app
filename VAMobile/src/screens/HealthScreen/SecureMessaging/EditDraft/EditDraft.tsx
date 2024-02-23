@@ -666,9 +666,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       scrollViewRef={scrollViewRef}
       title={isLoading ? '' : t('editDraft')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={isLoading ? undefined : leftButtonAction}
-      menuViewActions={isLoading ? undefined : menuViewActions}
-      showCrisisLineCta={!(isLoading || hasError)}
+      onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
+      menuViewActions={MenViewActions}
+      showCrisisLineButton={true}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       {isLoading ? (

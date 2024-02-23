@@ -476,7 +476,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={true}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (

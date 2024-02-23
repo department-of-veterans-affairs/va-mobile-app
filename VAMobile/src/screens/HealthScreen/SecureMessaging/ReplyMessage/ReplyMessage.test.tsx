@@ -147,18 +147,15 @@ context('ReplyMessage', () => {
     initializeTestInstance()
   })
 
-  describe('render correctly', () => {
-    it('should also navigate on click of Only use messages for non-urgent needs', async () => {
-      expect(screen.getByText('Loading your message...')).toBeTruthy()
-      await waitFor(() => expect(screen.getByText('Message (Required)')).toBeTruthy())
-      await waitFor(() => expect(screen.getAllByRole('tab').length).toBe(3))
-      await waitFor(() => expect(screen.getByText('mock sender 1')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('mock sender 2')).toBeTruthy())
-      await waitFor(() => expect(screen.getAllByText('mock sender 3').length).toBe(2))
-      await waitFor(() => expect(screen.queryByText('mock sender 45')).toBeFalsy())
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
-      await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+  describe('on click of the collapsible view', () => {
+    it('should show the Reply Help panel', async () => {
+      fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
+  })
+
+  it('should add the text (*Required) for the message body text field', async () => {
+    expect(screen.getByText('Message (Required)')).toBeTruthy()
   })
 
   describe('on click of save (draft)', () => {
