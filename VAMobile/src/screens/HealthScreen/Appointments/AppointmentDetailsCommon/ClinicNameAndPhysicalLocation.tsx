@@ -5,7 +5,7 @@ import { TFunction } from 'i18next'
 
 import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes } from 'store/api/types'
 import { VATheme } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 
@@ -46,17 +46,13 @@ function clinicPhysicalLocation(attributes: AppointmentAttributes, theme: VAThem
 function ClinicNameAndPhysicalLocation({ attributes }: ClinicNameAndPhysicalLocationProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { appointmentType, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
 
-  if (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') {
-    return (
-      <>
-        {clinicName(attributes, theme)}
-        {clinicPhysicalLocation(attributes, theme, t)}
-      </>
-    )
-  }
-  return <></>
+  return (
+    <>
+      {clinicName(attributes, theme)}
+      {clinicPhysicalLocation(attributes, theme, t)}
+    </>
+  )
 }
 
 export default ClinicNameAndPhysicalLocation
