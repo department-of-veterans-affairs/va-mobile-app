@@ -198,6 +198,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     isReplyDraft,
     navigateTo,
     sendMessage,
+    setReplyTriageError,
   ])
 
   const getMessageData = (): SecureMessagingFormData => {
