@@ -33,9 +33,6 @@ const saveDraft = async ({ messageID, replyID, messageData }: SaveDraftParameter
  */
 export const useSaveDraft = () => {
   const queryClient = useQueryClient()
-  //   showSnackBar(messages.successMsg, dispatch, undefined, true, false, true) show snack bar on success or failure with retry on failure
-  // invalidate folder messages query if in Edit draft screen for the draft folder or if in the reply messageor start new message screen and save draft is pressed
-  // logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime, messageData.category)) add this one to the onSuccess in screen
   return useMutation({
     mutationFn: saveDraft,
     onSuccess: async () => {

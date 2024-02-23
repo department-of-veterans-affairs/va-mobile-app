@@ -36,7 +36,6 @@ import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -567,7 +566,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
-    dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
     dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())

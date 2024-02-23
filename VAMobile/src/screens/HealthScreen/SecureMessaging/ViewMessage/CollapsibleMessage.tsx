@@ -1,8 +1,8 @@
-import React, { Ref } from 'react'
+import React, { Ref, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
-import { useSelector } from 'react-redux'
 
+import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
 import {
   AccordionCollapsible,
   AccordionCollapsibleProps,
@@ -13,13 +13,10 @@ import {
   VAIcon,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { getLinkifiedText } from 'utils/secureMessaging'
 
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
@@ -38,12 +35,23 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const launchLink = useExternalLink()
-  const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
-  const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const [fetchMessageWithAttachment, setFetchMessageWithAttachment] = useState(false)
+  const [fetchFile, setFetchFile] = useState(false)
+  const [fileToGet, setFile] = useState({} as SecureMessagingAttachment)
+  const {
+    data: messageWithAttachmentData,
+    isLoading: loadingAttachments,
+    isError: messageWithAttachmentError,
+  } = useMessage(message.messageId, {
+    enabled: fetchMessageWithAttachment,
+  })
+  const { isFetched: attachmentFetched, isPending: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
+    enabled: fetchFile,
+  })
+
+  const messageToUse = messageWithAttachmentData?.data.attributes || message
+  const { attachment, hasAttachments, attachments, senderName, sentDate, body } = messageToUse
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
@@ -57,14 +65,15 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
     if (expandedValue && attachmentBoolean && !attachments?.length) {
-      dispatch(
-        getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true),
-      )
+      setFetchMessageWithAttachment(true)
     }
   }
 
-  const onPressAttachment = async (file: SecureMessagingAttachment, key: string): Promise<void> => {
-    dispatch(downloadFileAttachment(file, key))
+  const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
+    if (!attachmentFetched && !attachmentFetchPending) {
+      setFile(file)
+      setFetchFile(true)
+    }
   }
 
   function getBody() {
@@ -104,7 +113,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
                     formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                     a11yValue={t('listPosition', { position: index + 1, total: attachments.length })}
-                    onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                    onPress={() => onPressAttachment(a)}
                   />
                 </Box>
               ))}
@@ -151,12 +160,10 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     </Box>
   )
 
-  const loadMessageError = messageIDsOfError?.includes(message.messageId)
-
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: loadMessageError ? errorContent : getExpandedContent(),
+    expandedContent: messageWithAttachmentError ? errorContent : getExpandedContent(),
     collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
     noBorder: true,

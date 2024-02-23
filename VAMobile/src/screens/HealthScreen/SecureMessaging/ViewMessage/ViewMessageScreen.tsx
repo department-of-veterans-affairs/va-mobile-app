@@ -114,7 +114,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     isError: threadError,
     isLoading: loadingThread,
     isFetched: threadFetched,
-  } = useThread(messageID, {
+  } = useThread(messageID, true, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {

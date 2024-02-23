@@ -8,20 +8,23 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user message thread based on original message ID
  */
-const getThread = async (messageID: number): Promise<SecureMessagingThreadGetData | undefined> => {
+const getThread = async (
+  messageID: number,
+  excludeProvidedMessage: boolean,
+): Promise<SecureMessagingThreadGetData | undefined> => {
   return get<SecureMessagingThreadGetData>(
-    `/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=true`,
+    `/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`,
   )
 }
 
 /**
  * Returns a query for a user message thread based on original message ID
  */
-export const useThread = (messageID: number, options?: { enabled?: boolean }) => {
+export const useThread = (messageID: number, excludeProvidedMessage: boolean, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: [secureMessagingKeys.thread, messageID],
-    queryFn: () => getThread(messageID),
+    queryKey: [secureMessagingKeys.thread, messageID, excludeProvidedMessage],
+    queryFn: () => getThread(messageID, excludeProvidedMessage),
     meta: {
       errorName: 'getThread: Service error',
     },

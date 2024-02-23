@@ -35,7 +35,7 @@ import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -426,10 +426,11 @@ export function useMessageWithSignature(
  * @param message - the message to be validated
  * @returns boolean if the message is valid
  */
-export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
-  return (message: string): boolean => {
+export function useValidateMessageWithSignature(): (
+  message: string,
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+) => boolean {
+  return (message: string, signature: SecureMessagingSignatureDataAttributes | undefined): boolean => {
     let isMessageBlank = !!message
     if (signature && signature.includeSignature) {
       isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`

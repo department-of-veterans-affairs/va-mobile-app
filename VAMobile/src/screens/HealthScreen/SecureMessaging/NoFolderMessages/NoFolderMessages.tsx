@@ -7,19 +7,15 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { SegmentedControlIndexes } from 'constants/secureMessaging'
-import { updateSecureMessagingTab } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 function NoFolderMessages() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigateTo('SecureMessaging')
   }
 

@@ -1066,27 +1066,18 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
+  vama_sm_save_draft: (messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
       },
     }
   },
-  vama_sm_send_message: (
-    totalTime: number,
-    actionTime: number,
-    messageCategory: CategoryTypes,
-    replyToID: number | undefined,
-  ): Event => {
+  vama_sm_send_message: (messageCategory: CategoryTypes, replyToID: number | undefined): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
         replyToID,
       },
