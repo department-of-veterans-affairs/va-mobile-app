@@ -61,7 +61,6 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
-  console.log(foldersData)
   useEffect(() => {
     if (inboxFetched && inboxError && isErrorObject(errorDetails)) {
       setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, errorDetails))
