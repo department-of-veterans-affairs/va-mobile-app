@@ -98,14 +98,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    error: recipientsError,
+    isError: recipientsError,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
   const {
     data: signature,
     isFetched: signatureFetched,
-    error: signatureError,
+    isError: signatureError,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
