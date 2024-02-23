@@ -43,6 +43,7 @@ import {
   ProviderName,
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
+import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
@@ -134,7 +135,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           </Box>
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
-
+          <ClinicNameAndPhysicalLocation attributes={attributes} />
           <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
           <PreferredDateAndTime attributes={attributes} />
