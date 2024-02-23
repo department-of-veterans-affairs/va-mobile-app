@@ -3,8 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import { downloadFileAttachment } from 'store/slices'
+import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 
@@ -16,19 +15,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
-  }
-})
-
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    downloadFileAttachment: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
   }
 })
 
@@ -81,10 +67,5 @@ context('MessageCard', () => {
   it('clicking on Only use messages for non-urgent needs should open largePanel', () => {
     fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
     expect(mockNavigationSpy).toHaveBeenCalled()
-  })
-
-  it('clicking on attachment should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'testAttachment (1 MB)' }))
-    expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
   })
 })

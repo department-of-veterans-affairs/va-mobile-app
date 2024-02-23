@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import * as api from 'store/api'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { updateSecureMessagingTab } from 'store/slices'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
@@ -78,12 +77,9 @@ context('SecureMessaging', () => {
     render(<SecureMessaging {...mockNavProps()} />)
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
   describe('when user is not authorized for secure messaging', () => {
     it('should display NotEnrolledSM component', () => {
+      initializeTestInstance()
       expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy()
     })
   })
@@ -91,49 +87,12 @@ context('SecureMessaging', () => {
   describe('when common error occurs', () => {
     it('should render the error component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(
-          `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`,
-          expect.anything(),
-        )
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
+        .calledWith(`/v0/messaging/health/folders`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
-    })
-  })
-
-  describe('when loading messages error occurs', () => {
-    it('should render the loading messages error component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(
-          `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`,
-          expect.anything(),
-        )
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-      expect(
-        screen.getByText(
-          "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('877-327-0022')).toBeTruthy()
-    })
-  })
-
-  describe('on click of a segmented control tab', () => {
-    it('should call updateSecureMessagingTab', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByText('Folders'))
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
+      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
 })

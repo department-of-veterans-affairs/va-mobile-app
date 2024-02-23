@@ -53,7 +53,6 @@ import {
   useAttachments,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
-  useError,
   useMessageWithSignature,
   useRouteNavigation,
   useTheme,
@@ -96,10 +95,18 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     error: sendMessageErrorDetails,
   } = useSendMessage()
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
-  const { data: recipients, isFetched: hasLoadedRecipients } = useMessageRecipients({
+  const {
+    data: recipients,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+  } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
-  const { data: signature, isFetched: signatureFetched } = useMessageSignature({
+  const {
+    data: signature,
+    isFetched: signatureFetched,
+    error: signatureError,
+  } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
   const [to, setTo] = useState('')
@@ -205,7 +212,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
+  if (recipientsError || signatureError) {
     return (
       <FullScreenSubtask
         title={t('secureMessaging.startNewMessage')}
