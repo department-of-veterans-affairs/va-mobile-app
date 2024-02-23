@@ -1,39 +1,15 @@
 import React from 'react'
 
-import { StackScreenProps } from '@react-navigation/stack'
-
-import { RootNavStackParamList } from 'App'
-
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { initialDirectDepositState, updateBankInfo } from 'store/slices'
-import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
+import { PaymentAccountData } from 'api/types'
+import { DirectDepositErrors } from 'constants/errors'
+import * as api from 'store/api'
+import { context, fireEvent, mockNavProps, render, screen, waitFor, when } from 'testUtils'
 
 import EditDirectDepositScreen from './EditDirectDepositScreen'
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateBankInfo: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    finishEditBankInfo: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 context('EditDirectDepositScreen', () => {
-  let props: StackScreenProps<RootNavStackParamList, 'EditDirectDeposit'>
-
-  const initializeTestInstance = (saving = false, bankInfoUpdated = false, invalidRoutingNumberError = false) => {
-    props = mockNavProps(
+  const initializeTestInstance = () => {
+    const props = mockNavProps(
       {},
       {
         goBack: jest.fn(),
@@ -43,27 +19,11 @@ context('EditDirectDepositScreen', () => {
       { params: { displayTitle: 'Edit Direct Deposit' } },
     )
 
-    render(<EditDirectDepositScreen {...props} />, {
-      preloadedState: {
-        directDeposit: {
-          ...initialDirectDepositState,
-          saving,
-          bankInfoUpdated: bankInfoUpdated,
-          invalidRoutingNumberError: invalidRoutingNumberError,
-        },
-      },
-    })
+    render(<EditDirectDepositScreen {...props} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
-  })
-
-  describe('when saving is set to true', () => {
-    it('should show loading screen', () => {
-      initializeTestInstance(true)
-      expect(screen.getByText('Saving your direct deposit information...')).toBeTruthy()
-    })
   })
 
   describe('when user enters a routing number', () => {
@@ -90,7 +50,13 @@ context('EditDirectDepositScreen', () => {
   })
 
   describe('when content is valid', () => {
-    it('should call updateBankInfo when save is pressed', () => {
+    it('should call updateBankInfo when save is pressed', async () => {
+      const bankData = {
+        financialInstitutionRoutingNumber: '053100300',
+        financialInstitutionName: 'Bank',
+        accountNumber: '12345678901234567',
+        accountType: 'Checking',
+      } as PaymentAccountData
       fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
       fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
       fireEvent.press(screen.getByTestId('accountType'))
@@ -98,13 +64,11 @@ context('EditDirectDepositScreen', () => {
       fireEvent.press(screen.getByText('Done'))
       fireEvent.press(screen.getByTestId('checkBox'))
       fireEvent.press(screen.getByText('Save'))
-      expect(updateBankInfo).toBeCalledWith(
-        '12345678901234567',
-        '053100300',
-        'Checking',
-        { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' },
-        ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
-      )
+      when(api.put as jest.Mock)
+        .calledWith(`/v0/payment-information/benefits`, bankData)
+        .mockResolvedValue('success')
+      expect(screen.getByText('Saving your direct deposit information...')).toBeTruthy()
+      await waitFor(() => expect(api.put as jest.Mock).toBeCalledWith(`/v0/payment-information/benefits`, bankData))
     })
   })
 
@@ -119,21 +83,46 @@ context('EditDirectDepositScreen', () => {
     })
   })
 
-  describe('when bankInfoUpdated is true', () => {
-    it('should call navigations go back function', () => {
-      initializeTestInstance(false, true)
-      expect(props.navigation.goBack).toBeCalled()
-    })
-  })
-
   describe('when invalidRoutingNumberError is true', () => {
-    it('should show alert box', () => {
-      initializeTestInstance(false, true, true)
-      expect(
-        screen.getByText(
-          "We couldn't find a bank linked to this routing number. Please check your bank's 9-digit routing number and enter again.",
-        ),
-      ).toBeTruthy()
+    it('should show alert box', async () => {
+      initializeTestInstance()
+      const bankData = {
+        financialInstitutionRoutingNumber: '053100300',
+        financialInstitutionName: 'Bank',
+        accountNumber: '12345678901234567',
+        accountType: 'Checking',
+      } as PaymentAccountData
+      fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
+      fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
+      fireEvent.press(screen.getByTestId('accountType'))
+      fireEvent.press(screen.getByText('Checking'))
+      fireEvent.press(screen.getByText('Done'))
+      fireEvent.press(screen.getByTestId('checkBox'))
+      fireEvent.press(screen.getByText('Save'))
+      when(api.put as jest.Mock)
+        .calledWith(`/v0/payment-information/benefits`, bankData)
+        .mockRejectedValue({
+          json: {
+            errors: [
+              {
+                meta: {
+                  messages: [
+                    {
+                      key: DirectDepositErrors.INVALID_ROUTING_NUMBER,
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        })
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We couldn't find a bank linked to this routing number. Please check your bank's 9-digit routing number and enter again.",
+          ),
+        ).toBeTruthy(),
+      )
     })
   })
 })

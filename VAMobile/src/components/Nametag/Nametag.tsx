@@ -1,21 +1,21 @@
 import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState } from 'store/slices'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
-  const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0

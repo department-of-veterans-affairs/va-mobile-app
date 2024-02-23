@@ -4,17 +4,12 @@ import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDisabilityRating } from 'api/disabilityRating'
+import { useServiceHistory } from 'api/militaryService'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, completeSync, logInDemoMode } from 'store/slices'
-import {
-  DisabilityRatingState,
-  MilitaryServiceState,
-  checkForDowntimeErrors,
-  getDisabilityRating,
-  getServiceHistory,
-} from 'store/slices'
+import { AuthState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
@@ -34,21 +29,18 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<
-    RootState,
-    MilitaryServiceState
-  >((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<
-    RootState,
-    DisabilityRatingState
-  >((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
   })
   // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
-
+  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime && loggedIn,
+  })
+  const { isFetched: useDisabilityRatingFetched } = useDisabilityRating({
+    enabled: userAuthorizedServices?.disabilityRating && drNotInDowntime && loggedIn,
+  })
   const [displayMessage, setDisplayMessage] = useState('')
 
   useEffect(() => {
@@ -60,33 +52,6 @@ function SyncScreen({}: SyncScreenProps) {
       dispatch(logInDemoMode())
     }
   }, [dispatch, demoMode, loggedIn])
-
-  useEffect(() => {
-    if (loggedIn) {
-      if (
-        !loadingUserAuthorizedServices &&
-        userAuthorizedServices?.militaryServiceHistory &&
-        !militaryHistoryLoaded &&
-        !militaryHistoryLoading &&
-        mhNotInDowntime
-      ) {
-        dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
-        dispatch(getDisabilityRating())
-      }
-    }
-  }, [
-    dispatch,
-    loggedIn,
-    loadingUserAuthorizedServices,
-    userAuthorizedServices?.militaryServiceHistory,
-    disabilityRatingLoaded,
-    disabilityRatingLoading,
-    drNotInDowntime,
-    mhNotInDowntime,
-    militaryHistoryLoaded,
-    militaryHistoryLoading,
-  ])
 
   useEffect(() => {
     if (syncing) {
@@ -101,8 +66,10 @@ function SyncScreen({}: SyncScreenProps) {
 
     const finishSyncingMilitaryHistory =
       !mhNotInDowntime ||
-      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
-    const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || useServiceHistoryFetched))
+    const finishSyncingDisabilityRating =
+      !drNotInDowntime ||
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }
@@ -111,10 +78,10 @@ function SyncScreen({}: SyncScreenProps) {
     loggedIn,
     loggingOut,
     loadingUserAuthorizedServices,
-    militaryHistoryLoaded,
-    userAuthorizedServices?.militaryServiceHistory,
+    useServiceHistoryFetched,
+    userAuthorizedServices,
     t,
-    disabilityRatingLoaded,
+    useDisabilityRatingFetched,
     drNotInDowntime,
     mhNotInDowntime,
     syncing,

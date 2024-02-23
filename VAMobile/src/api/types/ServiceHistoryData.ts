@@ -34,12 +34,15 @@ export type ServiceData = {
 
 export type ServiceHistoryData = Array<ServiceData>
 
+export type ServiceHistoryAttributes = {
+  serviceHistory: ServiceHistoryData
+  mostRecentBranch?: string
+}
+
 export type MilitaryServiceHistoryData = {
   data: {
     type: string
     id: string
-    attributes: {
-      serviceHistory: ServiceHistoryData
-    }
+    attributes: ServiceHistoryAttributes
   }
 }
