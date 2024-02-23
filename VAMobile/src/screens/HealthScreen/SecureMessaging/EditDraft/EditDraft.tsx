@@ -117,7 +117,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const { attachmentFileToAdd } = route.params
 
   const messageID = Number(route.params?.messageID)
-  console.log(messageID)
   const {
     data: messageDraftData,
     isLoading: loadingMessage,
