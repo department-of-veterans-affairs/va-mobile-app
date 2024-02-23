@@ -1,4 +1,4 @@
-import { CategoryTypes } from 'store/api'
+import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
 /**

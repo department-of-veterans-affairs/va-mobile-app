@@ -8,6 +8,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
 import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import {
@@ -27,12 +28,6 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  SecureMessagingFolderList,
-  SecureMessagingMessageList,
-} from 'store/api/types'
 import theme from 'styles/themes/standardTheme'
 import {
   getFormattedMessageTime,

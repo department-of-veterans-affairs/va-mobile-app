@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
+import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import {
   AccordionCollapsible,
   AccordionCollapsibleProps,
@@ -13,7 +14,6 @@ import {
   VAIcon,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'

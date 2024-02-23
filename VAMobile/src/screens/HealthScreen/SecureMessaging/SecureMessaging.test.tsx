@@ -2,25 +2,12 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import * as api from 'store/api'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { updateSecureMessagingTab } from 'store/slices'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
-
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateSecureMessagingTab: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
@@ -74,8 +61,8 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('SecureMessaging', () => {
-  const initializeTestInstance = () => {
-    render(<SecureMessaging {...mockNavProps()} />)
+  const initializeTestInstance = (queriesData?: QueriesData) => {
+    render(<SecureMessaging {...mockNavProps()} />, { queriesData: queriesData })
   }
 
   beforeEach(() => {
@@ -131,9 +118,54 @@ context('SecureMessaging', () => {
 
   describe('on click of a segmented control tab', () => {
     it('should call updateSecureMessagingTab', () => {
-      initializeTestInstance()
+      const queriesData: QueriesData = [
+        {
+          queryKey: secureMessagingKeys.folders,
+          data: [
+            {
+              attributes: {
+                folderId: 0,
+                name: 'Inbox',
+                count: 12,
+                unreadCount: 3,
+                systemFolder: true,
+              },
+            },
+            {
+              attributes: {
+                folderId: -2,
+                name: 'Drafts',
+                count: 3,
+                unreadCount: 0,
+                systemFolder: true,
+              },
+            },
+            {
+              attributes: {
+                folderId: -1,
+                name: 'Sent',
+                count: 5,
+                unreadCount: 0,
+                systemFolder: true,
+              },
+            },
+            {
+              attributes: {
+                folderId: -3,
+                name: 'Deleted',
+                count: 1,
+                unreadCount: 0,
+                systemFolder: true,
+              },
+            },
+          ],
+        },
+      ]
+      initializeTestInstance(queriesData)
       fireEvent.press(screen.getByText('Folders'))
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
+      expect(screen.getByText('Drafts')).toBeTruthy()
+      expect(screen.getByText('Sent')).toBeTruthy()
+      expect(screen.getByText('Trash')).toBeTruthy()
     })
   })
 })

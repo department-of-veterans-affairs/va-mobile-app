@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { CategoryTypeFields, SecureMessagingFormData } from 'api/types'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
-import { SecureMessagingFormData } from 'store/api'
-import { CategoryTypeFields } from 'store/api/types'
 import { context, render } from 'testUtils'
 import { useDestructiveActionSheetProps } from 'utils/hooks'
 
