@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
+import { ServiceData, ServiceHistoryData } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -20,37 +21,30 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
 function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProps) {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>(
-    (s) => s.militaryService,
-  )
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
   } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const {
+    data: militaryServiceHistoryAttributes,
+    isLoading: loadingServiceHistory,
+    isError: useServiceHistoryError,
+  } = useServiceHistory({ enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime })
+  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
-
-  useEffect(() => {
-    if (needsDataLoad && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
-      dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
-    }
-  }, [dispatch, needsDataLoad, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -83,14 +77,14 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     mx: theme.dimensions.gutter,
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
-    ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
+    testID: t('militaryInformation.incorrectServiceInfo'),
     onPress: onIncorrectService,
     textDecoration: 'underline',
     textDecorationColor: 'link',
   }
 
-  const errorCheck = useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError
-  const loadingCheck = loading || loadingUserAuthorizedServices
+  const errorCheck = useServiceHistoryError || getUserAuthorizedServicesError
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
   return (
     <FeatureLandingTemplate

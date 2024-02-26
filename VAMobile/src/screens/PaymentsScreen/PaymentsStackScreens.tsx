@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { PaymentsData } from 'api/types'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 
 import PaymentIssue from './PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
@@ -16,7 +17,7 @@ export type PaymentsStackParamList = {
   HowToUpdateDirectDeposit: undefined
   PaymentHistory: undefined
   PaymentDetails: {
-    paymentID: string
+    payment: PaymentsData
   }
   PaymentIssue: undefined
   PaymentMissing: undefined
