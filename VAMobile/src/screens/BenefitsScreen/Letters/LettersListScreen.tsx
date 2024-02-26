@@ -50,14 +50,10 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
   const navigateTo = useRouteNavigation()
 
-  const onBenefitSummary = () => {
-    navigateTo('BenefitSummaryServiceVerificationLetter')
-  }
-
   const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
-        return onBenefitSummary()
+        return navigateTo('BenefitSummaryServiceVerificationLetter')
       case LetterTypeConstants.serviceVerification:
         return navigateTo('GenericLetter', {
           header: letterName,
