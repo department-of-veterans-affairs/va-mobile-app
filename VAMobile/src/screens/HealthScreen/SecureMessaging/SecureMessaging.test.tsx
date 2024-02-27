@@ -74,7 +74,19 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 
 context('SecureMessaging', () => {
   const initializeTestInstance = () => {
-    render(<SecureMessaging {...mockNavProps()} />)
+    render(
+      <SecureMessaging
+        {...mockNavProps(
+          undefined,
+          {
+            navigate: jest.fn(),
+            setOptions: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: { activeTab: 0 } },
+        )}
+      />,
+    )
   }
 
   describe('when user is not authorized for secure messaging', () => {
