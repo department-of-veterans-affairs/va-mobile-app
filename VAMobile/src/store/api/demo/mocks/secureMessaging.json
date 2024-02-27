@@ -1505,6 +1505,117 @@
       }
     }
   },
+  "/v0/messaging/health/folders/-3": {
+    "data": {
+      "id": "-3",
+      "type": "folders",
+      "attributes": {
+        "folderId": -3,
+        "name": "Trash",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/-3/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
+  "/v0/messaging/health/folders/690824": {
+    "data": {
+      "id": "690824",
+      "type": "folders",
+      "attributes": {
+        "folderId": 690824,
+        "name": "Test",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/690824/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
+  "/v0/messaging/health/folders/1937904": {
+    "data": {
+      "id": "1937904",
+      "type": "folders",
+      "attributes": {
+        "folderId": 1937904,
+        "name": "Trash",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/1937904/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
   "/v0/messaging/health/messages/2113141": {
     "data": {
       "id": "2113141",

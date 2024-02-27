@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
@@ -60,9 +61,12 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
-  useEffect(() => {
-    setSecureMessagingTab(activeTab)
-  }, [activeTab])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSecureMessagingTab(activeTab)
+    }, [activeTab, route]),
+  )
 
   useEffect(() => {
     if (inboxFetched && inboxError && isErrorObject(errorDetails)) {
