@@ -11,10 +11,10 @@ import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
+  ActivityButton,
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
-  LargeNavButton,
   Nametag,
   SimpleList,
   SimpleListItemObj,
@@ -199,32 +199,29 @@ export function HomeScreen({}: HomeScreenProps) {
         <EncourageUpdateAlert />
         <Nametag />
         {Number(upcomingAppointmentsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('appointments')}`}
-              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
-              onPress={() => Linking.openURL('vamobile://appointments')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-            />
-          </Box>
-        )}
-        {Number(prescriptionStatusCount.isRefillable) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('prescription.title')}`}
-              subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
-              onPress={() => Linking.openURL('vamobile://prescriptions')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('appointments')}
+              subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+              deepLink={'appointments'}
             />
           </Box>
         )}
         {Number(activeClaimsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('claims.title')}`}
-              subText={`(${activeClaimsCount} ${t('open')})`}
-              onPress={() => Linking.openURL('vamobile://claims')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('claims.title')}
+              subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+              deepLink={'claims'}
+            />
+          </Box>
+        )}
+        {prescriptionStatusCount.isRefillable > 0 && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('prescription.title')}
+              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
+              deepLink={'prescriptions'}
             />
           </Box>
         )}
