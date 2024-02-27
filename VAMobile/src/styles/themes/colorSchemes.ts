@@ -165,7 +165,7 @@ export const lightTheme = {
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
-    activityButton: colors.primaryDarker,
+    activityButton: DSColors.primaryDarker,
   },
   buttonText: {
     buttonPrimary: colors.white,
