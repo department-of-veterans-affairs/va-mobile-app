@@ -14,17 +14,11 @@ type ClinicNameAndPhysicalLocationProps = {
 }
 
 function clinicName(attributes: AppointmentAttributes, theme: VATheme) {
-  const { friendlyLocationName, healthcareService } = attributes || ({} as AppointmentAttributes)
+  const { friendlyLocationName } = attributes || ({} as AppointmentAttributes)
   if (friendlyLocationName && friendlyLocationName?.length > 1) {
     return (
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
         {friendlyLocationName}
-      </TextView>
-    )
-  } else if (healthcareService && healthcareService?.length > 1) {
-    return (
-      <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-        {healthcareService}
       </TextView>
     )
   }
