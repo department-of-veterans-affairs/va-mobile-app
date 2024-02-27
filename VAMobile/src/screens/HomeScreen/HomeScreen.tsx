@@ -219,12 +219,11 @@ export function HomeScreen({}: HomeScreenProps) {
           </Box>
         )}
         {!!unreadMessageCount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
               title={`${t('messages')}`}
               subText={`${unreadMessageCount} ${t('unread')}`}
-              onPress={() => Linking.openURL('vamobile://messages')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+              deepLink={'messages'}
             />
           </Box>
         )}
