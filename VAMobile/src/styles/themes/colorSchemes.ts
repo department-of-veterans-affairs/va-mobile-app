@@ -1,3 +1,5 @@
+import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import colors from './VAColors'
 
 export const primaryTextColor = colors.grayDark
@@ -107,6 +109,7 @@ export const lightTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    activityButton: colors.white,
   },
   text: {
     footerButton: colors.primary,
@@ -145,6 +148,7 @@ export const lightTheme = {
     textWithIconButtonInactive: colors.gray,
     veteranStatus: colors.white,
     webviewTitle: colors.base,
+    activityButton: colors.white,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -160,6 +164,7 @@ export const lightTheme = {
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
+    activityButton: colors.primaryDarker,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -303,6 +308,7 @@ export const darkTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    activityButton: colors.black,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
@@ -339,6 +345,7 @@ export const darkTheme = {
     textWithIconButtonInactive: colors.grayLight,
     veteranStatus: colors.white,
     webviewTitle: colors.white,
+    activityButton: colors.black,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
@@ -354,6 +361,7 @@ export const darkTheme = {
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.darkmodeBorder,
+    activityButton: DSColors.uswdsBlueVivid30,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,

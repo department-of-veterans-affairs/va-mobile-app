@@ -7,7 +7,7 @@ import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
 export const ColorSchemeConstantType: {
   none: ColorSchemeTypes
@@ -42,6 +42,14 @@ export const getTheme = (): VATheme => {
 const fontSizes = {
   ActionBar: {
     fontSize: 20,
+    lineHeight: 30,
+  },
+  ActivityButtonSubtext: {
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  BitterHeading: {
+    fontSize: 22,
     lineHeight: 30,
   },
   BitterBoldHeading: {
@@ -135,6 +143,8 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
+    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont(
@@ -209,6 +219,8 @@ let theme: VATheme = {
   },
 
   fontSizes: {
+    ActivityButtonSubtext: fontSizes.ActivityButtonSubtext,
+    BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     ClaimPhase: fontSizes.ClaimPhase,
     HelperText: fontSizes.HelperText,
