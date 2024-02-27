@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Linking, Pressable } from 'react-native'
+import { Linking, Pressable, ViewStyle } from 'react-native'
 
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -26,10 +26,14 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
   }
 
+  const pressableStyles: ViewStyle = {
+    flexDirection: 'row',
+  }
+
   return (
     <Box {...boxProps}>
       <Pressable
-        style={{ flexDirection: 'row' }}
+        style={pressableStyles}
         onPress={() => Linking.openURL(`vamobile://${deepLink}`)}
         accessible={true}
         accessibilityRole={'button'}
