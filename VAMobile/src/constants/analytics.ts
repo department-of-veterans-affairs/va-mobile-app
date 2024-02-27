@@ -717,12 +717,11 @@ export const Events = {
       },
     }
   },
-  vama_login_start: (isSIS = true, isBiometric = false): Event => {
+  vama_login_start: (isSIS = false): Event => {
     return {
       name: 'vama_login_start',
       params: {
         sis: isSIS.toString(),
-        login_start_biometric: isBiometric.toString(),
       },
     }
   },

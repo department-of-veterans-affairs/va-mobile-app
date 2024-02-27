@@ -26,7 +26,7 @@ export const useStartAuth = (): (() => Promise<void>) => {
   const { codeChallenge } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const startAuth = async () => {
-    dispatch(sendLoginStartAnalytics(false))
+    dispatch(sendLoginStartAnalytics())
     const iOS = isIOS()
     try {
       const callbackUrl = await startAuthSession(codeChallenge || '')
