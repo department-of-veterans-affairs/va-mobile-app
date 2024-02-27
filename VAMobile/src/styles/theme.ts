@@ -70,6 +70,7 @@ export type VATextColors = {
   textWithIconButtonInactive: string
   veteranStatus: string
   webviewTitle: string
+  crisisLineButton: string
   activityButton: string
 }
 

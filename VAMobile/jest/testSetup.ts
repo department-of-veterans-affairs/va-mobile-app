@@ -74,16 +74,14 @@ jest.mock('../src/utils/waygateConfig', () => {
   let original = jest.requireActual('../src/utils/waygateConfig')
   return {
     ...original,
-    waygateEnabled: jest
-      .fn()
-      .mockReturnValue({
-        enabled: true,
-        errorMsgTitle: undefined,
-        errorMsgBody: undefined,
-        appUpdateButton: false,
-        allowFunction: false,
-        denyAccess: false,
-      }),
+    waygateEnabled: jest.fn().mockReturnValue({
+      enabled: true,
+      errorMsgTitle: undefined,
+      errorMsgBody: undefined,
+      appUpdateButton: false,
+      allowFunction: false,
+      denyAccess: false,
+    }),
     waygateNativeAlert: jest.fn().mockReturnValue(true),
     screenContentAllowed: jest.fn().mockReturnValue(true),
   }
