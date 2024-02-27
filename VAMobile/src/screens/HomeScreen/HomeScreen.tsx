@@ -190,7 +190,6 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Nametag />
         {Number(upcomingAppointmentsCount) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
@@ -231,6 +230,7 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
+        <Nametag screen={'Home'} />
         {!!ratingData?.combinedDisabilityRating && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>

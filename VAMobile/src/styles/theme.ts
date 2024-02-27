@@ -68,6 +68,7 @@ export type VATextColors = {
   textWithIconButton: string
   textWithIconButtonInactive: string
   veteranStatus: string
+  veteranStatusHome: string
   webviewTitle: string
   crisisLineButton: string
 }
@@ -172,6 +173,7 @@ export type VABackgroundColors = {
   tagYellow: string
   tagGreen: string
   veteranStatus: string
+  veteranStatusHome: string
 }
 
 export type VABorderColors = {

@@ -45,6 +45,7 @@ export const lightTheme = {
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
+    veteranStatusHome: colors.white,
   },
   border: {
     primary: colors.grayLight,
@@ -146,6 +147,7 @@ export const lightTheme = {
     textWithIconButton: colors.primary,
     textWithIconButtonInactive: colors.gray,
     veteranStatus: colors.white,
+    veteranStatusHome: DSColors.base,
     webviewTitle: colors.base,
     crisisLineButton: colors.white,
   },
@@ -242,6 +244,7 @@ export const darkTheme = {
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
+    veteranStatusHome: colors.darkmodeGrayWarmDark,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -341,6 +344,7 @@ export const darkTheme = {
     textWithIconButton: colors.darkmodeLightBlue,
     textWithIconButtonInactive: colors.grayLight,
     veteranStatus: colors.white,
+    veteranStatusHome: DSColors.grayLightest,
     webviewTitle: colors.white,
     crisisLineButton: colors.black,
   },
