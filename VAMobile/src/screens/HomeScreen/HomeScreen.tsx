@@ -190,7 +190,7 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Nametag />
-        {Number(upcomingAppointmentsCount) > 0 && (
+        {!!upcomingAppointmentsCount && (
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
               title={t('appointments')}
@@ -199,7 +199,7 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {Number(activeClaimsCount) > 0 && (
+        {!!activeClaimsCount && (
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
               title={t('claims.title')}
@@ -208,7 +208,7 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {prescriptionStatusCount.isRefillable > 0 && (
+        {!!prescriptionStatusCount.isRefillable && (
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
               title={t('prescription.title')}
@@ -221,7 +221,7 @@ export function HomeScreen({}: HomeScreenProps) {
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
               title={`${t('messages')}`}
-              subText={`${unreadMessageCount} ${t('unread')}`}
+              subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
               deepLink={'messages'}
             />
           </Box>
