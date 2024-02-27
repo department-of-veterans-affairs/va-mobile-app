@@ -78,7 +78,7 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={() => navigateTo('SecureMessaging')}
+          onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

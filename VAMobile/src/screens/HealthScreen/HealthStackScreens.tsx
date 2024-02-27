@@ -41,7 +41,9 @@ export type HealthStackParamList = WebviewStackParams & {
     appointmentID: string
   }
   Messages: undefined
-  SecureMessaging: undefined
+  SecureMessaging: {
+    activeTab: number
+  }
   Inbox: {
     messageID: number
   }

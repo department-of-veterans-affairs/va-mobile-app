@@ -186,7 +186,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         onSuccess: () => {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-          navigateTo('SecureMessaging')
+          navigateTo('SecureMessaging', { activeTab: 1 })
         },
       }
       const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
@@ -491,7 +491,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   ]
 
   const onGoToInbox = (): void => {
-    navigateTo('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const onMessageSendOrSave = (): void => {

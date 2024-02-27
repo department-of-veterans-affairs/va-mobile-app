@@ -31,11 +31,11 @@ import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
-function SecureMessaging({ navigation }: SecureMessagingScreen) {
+function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
+  const { activeTab } = route.params
   const [secureMessagingTab, setSecureMessagingTab] = useState(0)
   const [termsAndConditionError, setTermsAndConditionError] = useState(false)
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
@@ -60,6 +60,9 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+  useEffect(() => {
+    setSecureMessagingTab(activeTab)
+  }, [activeTab])
 
   useEffect(() => {
     if (inboxFetched && inboxError && isErrorObject(errorDetails)) {

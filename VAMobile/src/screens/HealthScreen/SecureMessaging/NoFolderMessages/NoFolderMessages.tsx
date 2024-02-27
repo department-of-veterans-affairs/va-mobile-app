@@ -16,7 +16,7 @@ function NoFolderMessages() {
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    navigateTo('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const scrollStyles: ViewStyle = {
