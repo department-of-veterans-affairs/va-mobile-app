@@ -63,7 +63,7 @@ jobs:
 
   matrix-e2e-android:
     if: github.event.inputs.tests_to_run != ''
-    runs-on: macos-latest-xl
+    runs-on: macos-14-xlarge
     strategy:
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
