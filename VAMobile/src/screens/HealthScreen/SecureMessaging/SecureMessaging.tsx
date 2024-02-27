@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -65,7 +65,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   useFocusEffect(
     React.useCallback(() => {
       setSecureMessagingTab(activeTab)
-    }, [activeTab, route]),
+    }, [activeTab]),
   )
 
   useEffect(() => {
