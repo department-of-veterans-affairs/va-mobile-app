@@ -1,11 +1,19 @@
-import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics } from 'store/slices/authSlice'
+import { useSelector } from 'react-redux'
+
 import { RootState } from 'store'
+import {
+  AuthState,
+  cancelWebLogin,
+  handleTokenCallbackUrl,
+  sendLoginFailedAnalytics,
+  sendLoginStartAnalytics,
+} from 'store/slices/authSlice'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { startAuthSession } from 'utils/rnAuthSesson'
+
 import { useAppDispatch } from '.'
-import { useSelector } from 'react-redux'
 
 /**
  * Launches the native auth implementation and navigates to VA.gov login. For iOS,

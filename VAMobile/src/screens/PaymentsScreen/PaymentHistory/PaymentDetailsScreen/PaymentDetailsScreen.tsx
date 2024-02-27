@@ -1,41 +1,28 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect } from 'react'
+import { Pressable } from 'react-native'
+
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, FeatureLandingTemplate, TextArea, TextView, TextViewProps } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentState, getPayment } from 'store/slices'
-import { PaymentsAttributeData } from 'store/api'
-import { PaymentsStackParamList } from '../../PaymentsStackScreens'
-import { Pressable } from 'react-native'
-import { RootState } from 'store'
 import { formatDateUtc } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
 function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) {
-  const { paymentID } = route.params
+  const { payment } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const placeHolder = t('noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
-  const { payment } = useSelector<RootState, PaymentState>((state) => state.payments)
-  const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)
-
-  useEffect(() => {
-    dispatch(getPayment(paymentID))
-  }, [dispatch, paymentID])
-
-  if (!payment) {
-    return <></>
-  }
+  const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes
 
   const verifyHasAccountNumber = (accountNumber: string | null): boolean => {
     if (!accountNumber) {
@@ -50,14 +37,16 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
     textDecorationColor: 'link',
     color: 'link',
     accessibilityRole: 'link',
-    ...testIdProps(t('payments.ifIAmMissingPayemt')),
   }
 
   const isDirectDeposit = paymentMethod === DIRECT_DEPOSIT
   const hasAcccountInfo = verifyHasAccountNumber(account)
 
   return (
-    <FeatureLandingTemplate backLabel={t('history.title')} backLabelOnPress={navigation.goBack} title={t('paymentDetails.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('history.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('paymentDetails.title')}>
       <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -98,7 +87,6 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
             onPress={() => {
               navigateTo('PaymentIssue')
             }}
-            {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))}
             testID="paymentInfoIncorrectTestID"
             accessibilityRole="link"
             accessible={true}>

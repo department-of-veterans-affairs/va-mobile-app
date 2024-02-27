@@ -1,9 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { TFunction } from 'i18next'
+import { contains, filter, indexBy, sortBy } from 'underscore'
+
+import { Events, UserAnalytics } from 'constants/analytics'
+import { AppThunk } from 'store'
+import { PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getTextForRefillStatus } from 'utils/prescriptions'
 
 import * as api from '../api'
 import {
   APIError,
   PrescriptionData,
+  PrescriptionStatusCountData,
   PrescriptionTrackingInfo,
   PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
@@ -12,18 +23,10 @@ import {
   PrescriptionsPaginationData,
   RefillRequestSummaryItems,
   ScreenIDTypes,
-  TabCounts,
   get,
   put,
 } from '../api'
-import { AppThunk } from 'store'
-import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
-import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
@@ -51,8 +54,9 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
   refillRequestSummaryItems: RefillRequestSummaryItems
-  tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
+  prescriptionStatusCount: PrescriptionStatusCountData
+  prescriptionFirstRetrieval: boolean
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -68,23 +72,27 @@ export const initialPrescriptionState: PrescriptionState = {
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   refillRequestSummaryItems: [],
-  tabCounts: {},
   prescriptionsNeedLoad: true,
+  prescriptionStatusCount: {} as PrescriptionStatusCountData,
+  prescriptionFirstRetrieval: true,
 }
 
 export const loadAllPrescriptions =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchStartLoadAllPrescriptions())
 
     const params = {
       'page[number]': '1',
       'page[size]': ALL_RX_PAGE_SIZE.toString(),
-      sort: 'prescription_name', // Parameters are snake case for the back end
+      sort: 'refill_status', // Parameters are snake case for the back end
     }
 
     try {
       const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+      if (getState().prescriptions.prescriptionFirstRetrieval && allData?.meta?.prescriptionStatusCount) {
+        await logAnalyticsEvent(Events.vama_hs_rx_count(allData.meta.prescriptionStatusCount.isRefillable || 0))
+      }
       dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -96,31 +104,22 @@ export const loadAllPrescriptions =
   }
 
 export const filterAndSortPrescriptions =
-  (filters: string[], tab: string, sort: string, ascending: boolean): AppThunk =>
+  (filters: string[], sort: string, ascending: boolean, t: TFunction): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartFilterAndSortPrescriptions())
 
     const state = getState()
-    let prescriptionsToSort: PrescriptionsList = []
-
-    // Start with the prefiltered lists based on the current tab
-    switch (tab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        prescriptionsToSort = state.prescriptions.prescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.PENDING:
-        prescriptionsToSort = state.prescriptions.pendingPrescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.TRACKING:
-        prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
-        break
-    }
+    const prescriptionsToSort = state.prescriptions.prescriptions || []
 
     let filteredList: PrescriptionsList = []
 
     // If there are no filters, don't filter the list
-    if (filters && filters[0] === '') {
+    if (filters[0] === '') {
       filteredList = [...prescriptionsToSort]
+    } else if (filters[0] === RefillStatusConstants.PENDING) {
+      filteredList = state.prescriptions.pendingPrescriptions || []
+    } else if (filters[0] === RefillStatusConstants.TRACKING) {
+      filteredList = state.prescriptions.shippedPrescriptions || []
     } else {
       // Apply the custom filter by
       filteredList = filter(prescriptionsToSort, (prescription) => {
@@ -132,7 +131,6 @@ export const filterAndSortPrescriptions =
 
     // Sort the list
     switch (sort) {
-      case PrescriptionSortOptionConstants.FACILITY_NAME:
       case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
       case PrescriptionSortOptionConstants.REFILL_REMAINING:
         sortedList = sortBy(filteredList, (a) => {
@@ -142,6 +140,11 @@ export const filterAndSortPrescriptions =
       case PrescriptionSortOptionConstants.REFILL_DATE:
         sortedList = sortBy(filteredList, (a) => {
           return new Date(a.attributes.refillDate || 0)
+        })
+        break
+      case PrescriptionSortOptionConstants.REFILL_STATUS:
+        sortedList = sortBy(filteredList, (a) => {
+          return getTextForRefillStatus(a.attributes[sort] as api.RefillStatus, t)
         })
         break
     }
@@ -214,7 +217,10 @@ const prescriptionSlice = createSlice({
     dispatchStartGetPrescriptions: (state) => {
       state.loadingHistory = true
     },
-    dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
+    dispatchFinishGetPrescriptions: (
+      state,
+      action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>,
+    ) => {
       const { prescriptionData } = action.payload
       const { data: prescriptions, meta } = prescriptionData || ({} as PrescriptionsGetData)
       const prescriptionsById = indexBy(prescriptions || [], 'id')
@@ -232,7 +238,10 @@ const prescriptionSlice = createSlice({
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = true
     },
-    dispatchFinishRequestRefills: (state, action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>) => {
+    dispatchFinishRequestRefills: (
+      state,
+      action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>,
+    ) => {
       const { refillRequestSummaryItems } = action.payload
       // RefillScreen
       state.submittingRequestRefills = false
@@ -262,7 +271,10 @@ const prescriptionSlice = createSlice({
     dispatchStartGetTrackingInfo: (state) => {
       state.loadingTrackingInfo = true
     },
-    dispatchFinishGetTrackingInfo: (state, action: PayloadAction<{ trackingInfo?: Array<PrescriptionTrackingInfo>; error?: APIError }>) => {
+    dispatchFinishGetTrackingInfo: (
+      state,
+      action: PayloadAction<{ trackingInfo?: Array<PrescriptionTrackingInfo>; error?: APIError }>,
+    ) => {
       const { trackingInfo, error } = action.payload
       state.trackingInfo = trackingInfo
       state.error = error
@@ -271,8 +283,11 @@ const prescriptionSlice = createSlice({
     dispatchStartLoadAllPrescriptions: (state) => {
       state.loadingHistory = true
     },
-    dispatchFinishLoadAllPrescriptions: (state, action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>) => {
-      const { allPrescriptions } = action.payload
+    dispatchFinishLoadAllPrescriptions: (
+      state,
+      action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>,
+    ) => {
+      const { allPrescriptions, error } = action.payload
 
       const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
 
@@ -289,7 +304,10 @@ const prescriptionSlice = createSlice({
           shippedPrescriptions.push(prescription)
         }
 
-        if (prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS || prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED) {
+        if (
+          prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS ||
+          prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED
+        ) {
           pendingPrescriptions.push(prescription)
         }
 
@@ -309,15 +327,11 @@ const prescriptionSlice = createSlice({
       state.refillablePrescriptions = refillablePrescriptions
 
       state.loadingHistory = false
-      state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionPagination = { ...meta.pagination }
+      state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
-
-      state.tabCounts = {
-        '0': prescriptions?.length,
-        '1': pendingPrescriptions.length,
-        '2': shippedPrescriptions.length,
-      }
+      state.prescriptionFirstRetrieval = !!error
     },
     dispatchStartFilterAndSortPrescriptions: (state) => {
       state.loadingHistory = true

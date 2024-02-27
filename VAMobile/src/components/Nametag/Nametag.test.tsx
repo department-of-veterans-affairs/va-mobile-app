@@ -1,14 +1,16 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
+import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { BranchesOfServiceConstants, ServiceHistoryAttributes } from 'api/types'
+import { QueriesData, context, render } from 'testUtils'
+
 import Nametag from './Nametag'
-import { InitialState } from 'store/slices'
-import { BranchesOfServiceConstants } from 'store/api/types'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -16,7 +18,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
@@ -44,36 +46,16 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('Nametag', () => {
-  const renderWithBranch = (mostRecentBranch: string) => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-        militaryService: {
-          ...InitialState.militaryService,
-          mostRecentBranch,
-          serviceHistory: [
-            {
-              branchOfService: 'United States Air Force',
-              beginDate: '1998-09-01',
-              endDate: '2000-01-01',
-              formattedBeginDate: 'September 01, 1998',
-              formattedEndDate: 'January 01, 2000',
-              characterOfDischarge: 'Honorable',
-              honorableServiceIndicator: 'Y',
-            },
-          ],
-        },
-        disabilityRating: {
-          ...InitialState.disabilityRating,
-          ratingData: {
-            combinedDisabilityRating: 100,
-            combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            individualRatings: [],
-          },
+  const renderWithBranch = (serviceHistory: ServiceHistoryAttributes) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: militaryServiceHistoryKeys.serviceHistory,
+        data: {
+          ...serviceHistory,
         },
       },
-    })
+    ]
+    render(<Nametag />, { queriesData })
   }
 
   beforeEach(() => {
@@ -82,37 +64,30 @@ context('Nametag', () => {
 
   for (const branch of Object.values(BranchesOfServiceConstants)) {
     it(`displays correct icon and text for ${branch}`, () => {
-      renderWithBranch(branch)
+      const serviceHistoryMock: ServiceHistoryAttributes = {
+        serviceHistory: [
+          {
+            branchOfService: branch,
+            beginDate: '1993-06-04',
+            endDate: '1995-07-10',
+            formattedBeginDate: 'June 04, 1993',
+            formattedEndDate: 'July 10, 1995',
+            characterOfDischarge: 'Honorable',
+            honorableServiceIndicator: 'Y',
+          },
+        ],
+        mostRecentBranch: branch,
+      }
+      renderWithBranch(serviceHistoryMock)
       expect(screen.getByTestId(branch)).toBeTruthy()
       expect(screen.getByRole('button', { name: branch })).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: branch }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
     })
   }
 
-  it('navigates on button press', () => {
-    renderWithBranch('United States Air Force')
-    fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
-  })
-
   it('does not display branch when service history is empty', () => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-        militaryService: {
-          ...InitialState.militaryService,
-          serviceHistory: [],
-        },
-      },
-    })
-    expect(screen.queryByRole('button')).toBeFalsy()
-  })
-
-  it('does not display branch when militaryService is absent', () => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    renderWithBranch({} as ServiceHistoryAttributes)
     expect(screen.queryByRole('button')).toBeFalsy()
   })
 })

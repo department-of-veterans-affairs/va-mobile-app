@@ -666,6 +666,14 @@
         "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
         "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
         "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      },
+      "prescriptionStatusCount": {
+        "active": 24,
+        "discontinued": 1,
+        "expired": 4,
+        "transferred": 1,
+        "unknown": 1,
+        "total": 31
       }
     }
   },

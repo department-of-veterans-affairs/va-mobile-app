@@ -1,8 +1,17 @@
+import { Asset } from 'react-native-image-picker'
+
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { DateTime } from 'luxon'
 import { chain, find, map } from 'underscore'
 
-import * as api from '../api'
+import { SnackbarMessages } from 'components/SnackBar'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DocumentTypes526 } from 'constants/documentTypes'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppThunk } from 'store'
+import { contentTypes } from 'store/api/api'
 import {
   AppealData,
   ClaimData,
@@ -17,22 +26,19 @@ import {
   FILE_REQUEST_STATUS,
   ScreenIDTypes,
 } from 'store/api/types'
-import { Asset } from 'react-native-image-picker'
-import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DocumentTypes526 } from 'constants/documentTypes'
-import { Events, UserAnalytics } from 'constants/analytics'
-
-import { SnackbarMessages } from 'components/SnackBar'
-import { contentTypes } from 'store/api/api'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { getCommonErrorFromAPIError } from 'utils/errors'
+import {
+  getAnalyticsTimers,
+  logAnalyticsEvent,
+  logNonFatalErrorToFirebase,
+  setAnalyticsUserProperty,
+} from 'utils/analytics'
 import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { registerReviewEvent } from 'utils/inAppReviews'
+
+import * as api from '../api'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export type ClaimsAndAppealsListType = {
   [key in ClaimType]: ClaimsAndAppealsList
@@ -61,6 +67,9 @@ export type ClaimsAndAppealsState = {
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
   cancelLoadingDetailScreen?: AbortController // abortController to canceling loading of claim(getClaim) and appeal(getAppeal) detail screens
+  preloadComplete: boolean
+  activeClaimsCount: number
+  claimsFirstRetrieval: boolean
 }
 
 const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
@@ -98,6 +107,9 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
     CLOSED: initialPaginationState,
   },
   cancelLoadingDetailScreen: undefined,
+  preloadComplete: false,
+  activeClaimsCount: 0,
+  claimsFirstRetrieval: true,
 }
 
 const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
@@ -110,6 +122,7 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
       currentPage: 1,
       perPage: DEFAULT_PAGE_SIZE,
     },
+    activeClaimsCount: 0,
   },
 }
 
@@ -128,6 +141,7 @@ const getLoadedClaimsAndAppeals = (
   claimType: ClaimType,
   latestPage: number,
   pageSize: number,
+  activeClaimsCount: number,
 ) => {
   const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
   // do we have the claimsAndAppeals?
@@ -140,6 +154,7 @@ const getLoadedClaimsAndAppeals = (
           perPage: pageSize,
           totalEntries: paginationMetaData[claimType].totalEntries,
         },
+        activeClaimsCount,
         dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
       },
     } as api.ClaimsAndAppealsGetData
@@ -161,9 +176,27 @@ export const prefetchClaimsAndAppeals =
       let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
       let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
 
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-      const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
-      const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
+      const {
+        claimsAndAppealsMetaPagination,
+        loadedClaimsAndAppeals: loadedItems,
+        activeClaimsCount,
+      } = getState().claimsAndAppeals
+      const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
+        loadedItems,
+        claimsAndAppealsMetaPagination,
+        ClaimTypeConstants.ACTIVE,
+        1,
+        DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
+      )
+      const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
+        loadedItems,
+        claimsAndAppealsMetaPagination,
+        ClaimTypeConstants.CLOSED,
+        1,
+        DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
+      )
 
       if (activeLoadedClaimsAndAppeals) {
         activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
@@ -185,7 +218,9 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
-      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
+      dispatch(
+        dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }),
+      )
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `prefetchClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
@@ -199,7 +234,7 @@ export const prefetchClaimsAndAppeals =
  * Redux action to get all claims and appeals
  */
 export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
@@ -208,9 +243,20 @@ export const getClaimsAndAppeals =
     try {
       let claimsAndAppeals
       const isActive = claimType === ClaimTypeConstants.ACTIVE
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
-      if (loadedClaimsAndAppeals) {
+      const {
+        claimsAndAppealsMetaPagination,
+        loadedClaimsAndAppeals: loadedItems,
+        activeClaimsCount,
+      } = getState().claimsAndAppeals
+      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
+        loadedItems,
+        claimsAndAppealsMetaPagination,
+        claimType,
+        page,
+        DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
+      )
+      if (!forceRefetch && loadedClaimsAndAppeals) {
         claimsAndAppeals = loadedClaimsAndAppeals
       } else {
         claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -220,6 +266,9 @@ export const getClaimsAndAppeals =
         })
       }
 
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
+      }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -250,7 +299,15 @@ export const getClaim =
 
       if (singleClaim?.data) {
         const attributes = singleClaim.data.attributes
-        await logAnalyticsEvent(Events.vama_claim_details_open(id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled))
+        await logAnalyticsEvent(
+          Events.vama_claim_details_open(
+            id,
+            attributes.claimType,
+            attributes.phase,
+            attributes.phaseChangeDate || '',
+            attributes.dateFiled,
+          ),
+        )
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
@@ -330,12 +387,20 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>, evidenceMethod: 'file' | 'photo'): AppThunk =>
+  (
+    claimID: string,
+    messages: SnackbarMessages,
+    request: ClaimEventData,
+    files: Array<Asset> | Array<DocumentPickerResponse>,
+    evidenceMethod: 'file' | 'photo',
+  ): AppThunk =>
   async (dispatch) => {
     const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files, evidenceMethod))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartFileUpload())
-    await logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, evidenceMethod))
+    await logAnalyticsEvent(
+      Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, evidenceMethod),
+    )
     try {
       if (files.length > 1) {
         const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
@@ -350,7 +415,10 @@ export const uploadFileToClaim =
           }),
         )
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, payload as unknown as api.Params)
+        await api.post<ClaimDocUploadData>(
+          `/v0/claim/${claimID}/documents/multi-image`,
+          payload as unknown as api.Params,
+        )
       } else {
         const formData = new FormData()
         const fileToUpload = files[0]
@@ -384,16 +452,24 @@ export const uploadFileToClaim =
         formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
         formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
 
-        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
+        await api.post<ClaimDocUploadData>(
+          `/v0/claim/${claimID}/documents`,
+          formData as unknown as api.Params,
+          contentTypes.multipart,
+        )
       }
-      await logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, evidenceMethod))
+      await logAnalyticsEvent(
+        Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, evidenceMethod),
+      )
 
       dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
       showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `uploadFileToClaim: ${claimsAndAppealsNonFatalErrorString}`)
-        await logAnalyticsEvent(Events.vama_claim_upload_fail(claimID, request.trackedItemId || null, request.type, evidenceMethod))
+        await logAnalyticsEvent(
+          Events.vama_claim_upload_fail(claimID, request.trackedItemId || null, request.type, evidenceMethod),
+        )
         dispatch(dispatchFinishFileUpload({ error }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
@@ -410,9 +486,11 @@ export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
 /**
  * Redux action to track when a user is on step 3 of claims and has a file request
  */
-export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_claim_file_request())
-}
+export const sendClaimStep3FileRequestAnalytics =
+  (claimID: string): AppThunk =>
+  async () => {
+    await logAnalyticsEvent(Events.vama_claim_file_request(claimID))
+  }
 
 // creates the documents array after submitting a file request
 const createFileRequestDocumentsArray = (
@@ -455,15 +533,22 @@ const claimsAndAppealsSlice = createSlice({
       state.loadingClaimsAndAppeals = true
     },
 
-    dispatchFinishPrefetchGetClaimsAndAppeals: (state, action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>) => {
+    dispatchFinishPrefetchGetClaimsAndAppeals: (
+      state,
+      action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>,
+    ) => {
       const { active, closed, error } = action.payload
       const activeData = active || emptyClaimsAndAppealsGetData
       const closedData = closed || emptyClaimsAndAppealsGetData
       const activeMetaErrors = activeData?.meta?.errors || []
       const closedMetaErrors = closedData?.meta?.errors || []
       const activeAndClosedMetaErrors = [...activeMetaErrors, ...closedMetaErrors]
-      const claimsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
-      const appealsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+      const claimsServiceError = !!activeAndClosedMetaErrors?.find(
+        (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+      )
+      const appealsServiceError = !!activeAndClosedMetaErrors?.find(
+        (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+      )
       const curLoadedActive = state.loadedClaimsAndAppeals.ACTIVE
       const curLoadedClosed = state.loadedClaimsAndAppeals.CLOSED
       const activeList = sortByLatestDate(activeData?.data || [])
@@ -476,22 +561,37 @@ const claimsAndAppealsSlice = createSlice({
       state.finishedLoadingClaimsAndAppeals = true
       state.claimsAndAppealsByClaimType.ACTIVE = activeList
       state.claimsAndAppealsByClaimType.CLOSED = closedList
-      state.claimsAndAppealsMetaPagination.ACTIVE = activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
-      state.claimsAndAppealsMetaPagination.CLOSED = closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
-      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList)
-      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList)
+      state.claimsAndAppealsMetaPagination.ACTIVE =
+        activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
+      state.claimsAndAppealsMetaPagination.CLOSED =
+        closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
+      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore
+        ? curLoadedActive
+        : curLoadedActive.concat(activeList)
+      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore
+        ? curLoadedClosed
+        : curLoadedClosed.concat(closedList)
+      state.activeClaimsCount = activeData?.meta.activeClaimsCount
+      state.preloadComplete = true
     },
 
     dispatchStartGetAllClaimsAndAppeals: (state) => {
       state.loadingClaimsAndAppeals = true
     },
 
-    dispatchFinishAllClaimsAndAppeals: (state, action: PayloadAction<{ claimType: ClaimType; claimsAndAppeals?: ClaimsAndAppealsGetData; error?: Error }>) => {
+    dispatchFinishAllClaimsAndAppeals: (
+      state,
+      action: PayloadAction<{ claimType: ClaimType; claimsAndAppeals?: ClaimsAndAppealsGetData; error?: Error }>,
+    ) => {
       const { claimType, claimsAndAppeals, error } = action.payload
 
       const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
-      const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
-      const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+      const claimsServiceError = !!claimsAndAppealsMetaErrors?.find(
+        (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+      )
+      const appealsServiceError = !!claimsAndAppealsMetaErrors?.find(
+        (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+      )
       const curLoadedClaimsAndAppeals = state.loadedClaimsAndAppeals[claimType]
       const claimsAndAppealsList = sortByLatestDate(claimsAndAppeals?.data || [])
 
@@ -500,8 +600,13 @@ const claimsAndAppealsSlice = createSlice({
       state.error = error
       state.loadingClaimsAndAppeals = false
       state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
-      state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
-      state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      state.claimsAndAppealsMetaPagination[claimType] =
+        claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
+      state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore
+        ? curLoadedClaimsAndAppeals
+        : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
+      state.claimsFirstRetrieval = !!error
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
@@ -555,13 +660,20 @@ const claimsAndAppealsSlice = createSlice({
 
     dispatchFinishFileUpload: (
       state,
-      action: PayloadAction<{ error?: Error; eventDescription?: string; files?: Array<Asset> | Array<DocumentPickerResponse>; request?: ClaimEventData }>,
+      action: PayloadAction<{
+        error?: Error
+        eventDescription?: string
+        files?: Array<Asset> | Array<DocumentPickerResponse>
+        request?: ClaimEventData
+      }>,
     ) => {
       const { error, eventDescription, files, request } = action.payload
 
       if (state.claim && !error) {
         const dateUploadedString = DateTime.local().toISO()
-        const indexOfRequest = state.claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
+        const indexOfRequest = state.claim.attributes.eventsTimeline.findIndex(
+          (el) => el.description === eventDescription,
+        )
         state.claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
         state.claim.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
 

@@ -1,16 +1,15 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect } from 'react'
 
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+import { useServiceHistory } from 'api/militaryService'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -21,10 +20,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
-  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const dispatch = useAppDispatch()
+  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
+  })
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -35,24 +35,17 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
-    // Get the service history to populate the profile banner
-    if (userAuthorizedServices?.militaryServiceHistory) {
-      dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
-    }
   }
 
-  useEffect(() => {
-    // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
-      dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
-    }
-  }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
-
-  const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
+  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} testID="profileID">
+    <ChildTemplate
+      title={t('profile.title')}
+      backLabel={t('home.title')}
+      backLabelOnPress={navigation.goBack}
+      testID="profileID">
       {errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
@@ -75,7 +68,10 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       ) : (
         <>
           <NameTag />
-          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box
+            mt={theme.dimensions.contentMarginTop}
+            mb={theme.dimensions.standardMarginBetween}
+            mx={theme.dimensions.gutter}>
             {userAuthorizedServices?.userProfileUpdate && (
               <>
                 <LargeNavButton

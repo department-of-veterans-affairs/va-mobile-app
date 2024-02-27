@@ -1,22 +1,24 @@
-import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { createStackNavigator } from '@react-navigation/stack'
+
 import { PhoneData, PhoneType } from 'api/types'
-import { Waygate } from 'utils/waygateConfig'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { Waygate } from 'utils/waygateConfig'
+
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
-import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
-import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
-import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
+import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
+import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
+import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
+import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
+import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
-import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
-import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
@@ -50,17 +52,77 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 
 export const getHomeScreens = () => {
   return [
-    <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'VeteranStatus'} name="VeteranStatus" component={VeteranStatusScreen} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'GenderIdentity'} name="GenderIdentity" component={GenderIdentityScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'InAppRecruitment'} name="InAppRecruitment" component={InAppRecruitmentScreen} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'WaygateEdit'} name="WaygateEdit" component={WaygateEditScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen
+      key={'VeteransCrisisLine'}
+      name="VeteransCrisisLine"
+      component={VeteransCrisisLineScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'VeteranStatus'}
+      name="VeteranStatus"
+      component={VeteranStatusScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'PreferredName'}
+      name="PreferredName"
+      component={PreferredNameScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'EditPhoneNumber'}
+      name="EditPhoneNumber"
+      component={EditPhoneNumberScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'EditEmail'}
+      name="EditEmail"
+      component={EditEmailScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'GenderIdentity'}
+      name="GenderIdentity"
+      component={GenderIdentityScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'HowDoIUpdate'}
+      name="HowDoIUpdate"
+      component={HowDoIUpdateScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'HowWillYou'}
+      name="HowWillYou"
+      component={HowWillYouScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'InAppRecruitment'}
+      name="InAppRecruitment"
+      component={InAppRecruitmentScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'IncorrectServiceInfo'}
+      name="IncorrectServiceInfo"
+      component={IncorrectServiceInfo}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'WaygateEdit'}
+      name="WaygateEdit"
+      component={WaygateEditScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'WhatToKnow'}
+      name="WhatToKnow"
+      component={WhatToKnowScreen}
+      options={LARGE_PANEL_OPTIONS}
+    />,
   ]
 }

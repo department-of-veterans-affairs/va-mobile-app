@@ -1,26 +1,26 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
 import { LetterTypeConstants, LetterTypes } from 'store/api/types'
-import { initialLettersState, downloadLetter } from 'store/slices'
+import { downloadLetter, initialLettersState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
 import GenericLetter from './GenericLetter'
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
   return {
-    ...actual,
-    downloadLetter: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
+    ...jest.requireActual<typeof import('store/slices')>('store/slices'),
+    downloadLetter: jest.fn(() => ({ type: '', payload: '' })),
   }
 })
 
 context('GenericLetter', () => {
-  const initializeTestInstance = (downloading = false, letterType: LetterTypes = LetterTypeConstants.commissary, hasDownloadError = false) => {
+  const initializeTestInstance = (
+    downloading = false,
+    letterType: LetterTypes = LetterTypeConstants.commissary,
+    hasDownloadError = false,
+  ) => {
     const props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
     render(<GenericLetter {...props} />, {
       preloadedState: {
@@ -73,7 +73,9 @@ context('GenericLetter', () => {
   describe('when the letter type is service verification', () => {
     it('should display an alert box', () => {
       initializeTestInstance(false, LetterTypeConstants.serviceVerification)
-      expect(screen.getByText('You can now use your Benefit Summary letter instead of this Service Verification letter.')).toBeTruthy()
+      expect(
+        screen.getByText('You can now use your Benefit Summary letter instead of this Service Verification letter.'),
+      ).toBeTruthy()
     })
   })
 })

@@ -1,15 +1,24 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
+import {
+  Box,
+  ClickForActionLink,
+  ClickToCallPhoneNumber,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
@@ -30,11 +39,11 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
     }
 
     const clickToRedirectProps: LinkButtonProps = {
-      displayedText: t('appealDetails.visitVAGov'),
+      displayedText: t('goToVAGov'),
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: a11yLabelVA(t('appealDetails.visitVAGov')),
+      a11yLabel: a11yLabelVA(t('goToVAGov')),
     }
 
     return (
@@ -43,7 +52,7 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
           {t('appealDetails.viewMoreDetails')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
+          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.goToVAGovA11yHint'))} />
         </Box>
       </Box>
     )

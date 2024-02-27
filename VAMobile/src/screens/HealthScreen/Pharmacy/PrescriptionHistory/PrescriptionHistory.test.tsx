@@ -1,19 +1,19 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { render, context, mockNavProps } from 'testUtils'
-import PrescriptionHistory from './PrescriptionHistory'
-import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
+import { PrescriptionsGetData } from 'store/api'
 import { initialPrescriptionState } from 'store/slices'
-import { PrescriptionHistoryTabConstants } from 'store/api/types'
+import { context, mockNavProps, render } from 'testUtils'
 
+import PrescriptionHistory from './PrescriptionHistory'
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -30,12 +30,11 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+        userProfileUpdate: true,
+      },
+    }),
   }
 })
-
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -58,7 +57,8 @@ const prescriptionData: PrescriptionsGetData = {
         stationNumber: '979',
         isRefillable: false,
         isTrackable: false,
-        instructions: 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
+        instructions:
+          'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
       },
     },
     {
@@ -102,7 +102,8 @@ const prescriptionData: PrescriptionsGetData = {
         stationNumber: '979',
         isRefillable: false,
         isTrackable: false,
-        instructions: 'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
+        instructions:
+          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
       },
     },
     {
@@ -124,7 +125,8 @@ const prescriptionData: PrescriptionsGetData = {
         stationNumber: '979',
         isRefillable: false,
         isTrackable: false,
-        instructions: 'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
+        instructions:
+          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
       },
     },
     {
@@ -245,6 +247,12 @@ const prescriptionData: PrescriptionsGetData = {
       totalPages: 7,
       totalEntries: 63,
     },
+    prescriptionStatusCount: {
+      active: 4,
+      discontinued: 4,
+      transferred: 1,
+      total: 9,
+    },
   },
   links: {
     self: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
@@ -256,19 +264,10 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
-    const props = mockNavProps(
-      undefined,
-      {
-        setParams: jest.fn(),
-        setOptions: jest.fn(),
-      },
-      { params: { startingTab } },
-    )
-
+  const initializeTestInstance = (includeTransferred = false) => {
     const data = prescriptionData.data
 
-    render(<PrescriptionHistory {...props} />, {
+    render(<PrescriptionHistory {...mockNavProps()} />, {
       preloadedState: {
         prescriptions: {
           ...initialPrescriptionState,
@@ -304,11 +303,6 @@ context('PrescriptionHistory', () => {
           prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
-          tabCounts: {
-            '0': 8,
-            '1': 4,
-            '2': 3,
-          },
         },
       },
     })
@@ -321,7 +315,11 @@ context('PrescriptionHistory', () => {
   describe('Initializes correctly', () => {
     it('should show the names and instructions of prescriptions and StartRefillRequest button', () => {
       expect(screen.getByText('ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
-      expect(screen.getByText('TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
+      expect(
+        screen.getByText(
+          'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
       expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy()
@@ -333,12 +331,6 @@ context('PrescriptionHistory', () => {
     it('should show the alert for transferred prescriptions', () => {
       initializeTestInstance(true)
       expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
-    })
-  })
-  describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-    it('should not show StartRefillRequest button', () => {
-      initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
-      expect(screen.queryByRole('button', { name: 'Start refill request' })).toBeFalsy()
     })
   })
 })

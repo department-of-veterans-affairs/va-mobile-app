@@ -1,8 +1,13 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { useNavigation } from '@react-navigation/native'
+
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect } from 'react'
 
+import { useDisabilityRating } from 'api/disabilityRating'
+import { IndividualRatingData } from 'api/types'
 import {
   Box,
   ChildTemplate,
@@ -20,50 +25,52 @@ import {
   TextView,
   TextViewProps,
 } from 'components'
-import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
-import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
+import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useDowntime, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 function DisabilityRatingsScreen() {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
+
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
+  const {
+    data: ratingData,
+    isLoading: loading,
+    isError: useDisabilityRatingError,
+  } = useDisabilityRating({
+    enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
+  })
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
-
-  useEffect(() => {
-    // Get the disability rating data if not loaded already
-    if (screenContentAllowed('WG_DisabilityRatings') && needsDataLoad && drNotInDowntime) {
-      dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
-    }
-  }, [dispatch, needsDataLoad, drNotInDowntime])
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
 
-    const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
+    const decisionText = t('disabilityRatingDetails.serviceConnected', {
+      yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No',
+    })
     // must check only for null or undefined. 0 is a valid rating
-    const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
+    const percentageText =
+      ratingPercentage !== undefined && ratingPercentage !== null
+        ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
+        : ''
     const formattedEffectiveDateText =
       effectiveDate !== undefined && effectiveDate !== null
-        ? t('disabilityRatingDetails.effectiveDate', { dateEffective: DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy') })
+        ? t('disabilityRatingDetails.effectiveDate', {
+            dateEffective: DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy'),
+          })
         : ''
 
     let textLines: Array<TextLine> = []
@@ -100,7 +107,9 @@ function DisabilityRatingsScreen() {
   const getCombinedTotalSection = () => {
     // must check only for null or undefined. 0 is a valid rating
     const combinedPercentText =
-      totalCombinedRating !== undefined && totalCombinedRating !== null ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+      totalCombinedRating !== undefined && totalCombinedRating !== null
+        ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
+        : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
@@ -131,7 +140,11 @@ function DisabilityRatingsScreen() {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
+          <TextView
+            variant="MobileBodyBold"
+            accessibilityRole="header"
+            selectable={false}
+            accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -159,7 +172,11 @@ function DisabilityRatingsScreen() {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')} paragraphSpacing={true}>
+          <TextView
+            variant="MobileBody"
+            selectable={false}
+            accessibilityLabel={t('claimDetails.callVA.a11yLabel')}
+            paragraphSpacing={true}>
             {t('claimDetails.callVA')}
           </TextView>
         </Box>
@@ -185,11 +202,13 @@ function DisabilityRatingsScreen() {
     accessibilityRole: 'header',
   }
 
-  const errorCheck = useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)
-
   return (
-    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
-      {errorCheck ? (
+    <ChildTemplate
+      backLabel={t('benefits.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('disabilityRatingDetails.title')}
+      testID="disabilityRatingTestID">
+      {useDisabilityRatingError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
       ) : loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
@@ -199,7 +218,11 @@ function DisabilityRatingsScreen() {
         <>
           <Box>{getCombinedTotalSection()}</Box>
           <Box mb={condensedMarginBetween}>
-            <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
+            <DefaultList
+              items={individualRatings}
+              title={t('disabilityRatingDetails.individualTitle')}
+              selectable={true}
+            />
           </Box>
           <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
           <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>

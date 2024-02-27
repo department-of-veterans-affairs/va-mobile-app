@@ -1,19 +1,24 @@
 import React from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { mockNavProps, render } from 'testUtils'
-import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import { PhoneData, PhoneType } from 'api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { mockNavProps, render } from 'testUtils'
+
+import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 
 describe('EditPhoneNumberScreen', () => {
-  let props: any
+  let props: StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
   const phoneType: PhoneType = 'HOME'
   const phoneData: PhoneData = {
     id: 0,
     areaCode: '858',
     phoneNumber: '1234567',
     countryCode: '1',
-    phoneType
+    phoneType,
   }
 
   const renderWithData = (data?: PhoneData) => {
@@ -28,11 +33,10 @@ describe('EditPhoneNumberScreen', () => {
         params: {
           displayTitle: 'Home phone',
           phoneData,
-          ...data
+          ...data,
         },
       },
     )
-    
 
     render(<EditPhoneNumberScreen {...props} />)
   }
@@ -83,7 +87,7 @@ describe('EditPhoneNumberScreen', () => {
 
   describe('when the phone number is saved', () => {
     it('navigates back to the previous screen', async () => {
-      fireEvent.press((screen.getByRole('button', { name: 'Save' })))
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       await waitFor(() => expect(props.navigation.goBack).toBeCalled())
     })
   })
@@ -93,7 +97,7 @@ describe('EditPhoneNumberScreen', () => {
       const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
       fireEvent.changeText(phoneNumberInput, '')
-      fireEvent.press((screen.getByRole('button', { name: 'Save' })))
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       expect(screen.getByText('Check your phone number')).toBeTruthy()
       expect(screen.getByText('Enter a valid phone number')).toBeTruthy()
     })

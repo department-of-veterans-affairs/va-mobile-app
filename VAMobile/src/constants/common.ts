@@ -1,5 +1,6 @@
-import { Events } from './analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
+
+import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
 
@@ -58,3 +59,4 @@ export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
 export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'
+export const DESCENDING = 'descending'

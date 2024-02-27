@@ -1,11 +1,20 @@
-import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
-import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView, VATextInput } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import {
+  Box,
+  ButtonDecoratorType,
+  FullScreenSubtask,
+  SimpleList,
+  SimpleListItemObj,
+  TextView,
+  VATextInput,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
 
 type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEdit'>
@@ -23,6 +32,8 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
   const [typeOverride, setTypeOverride] = useState(wg.type)
   const [errorMsgTitleOverride, setErrorMsgTitleOverride] = useState(wg.errorMsgTitle)
   const [errorMsgBodyOverride, setErrorMsgBodyOverride] = useState(wg.errorMsgBody)
+  const [errorMsgBodyV2Override, setErrorMsgBodyV2Override] = useState(wg.errorMsgBodyV2)
+  const [errorPhoneNumberOverride, setErrorPhoneNumber] = useState(wg.errorPhoneNumber)
 
   useEffect(() => {
     if (onSaveClicked) {
@@ -31,9 +42,22 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
       wg.type = typeOverride
       wg.errorMsgTitle = errorMsgTitleOverride
       wg.errorMsgBody = errorMsgBodyOverride
+      wg.errorMsgBodyV2 = errorMsgBodyV2Override
+      wg.errorPhoneNumber = errorPhoneNumberOverride
       navigation.goBack()
     }
-  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, typeOverride, errorMsgTitleOverride, errorMsgBodyOverride])
+  }, [
+    onSaveClicked,
+    navigation,
+    wg,
+    enabledOverride,
+    appUpdateButtonOverride,
+    typeOverride,
+    errorMsgTitleOverride,
+    errorMsgBodyOverride,
+    errorMsgBodyV2Override,
+    errorPhoneNumberOverride,
+  ])
 
   const toggleItems: SimpleListItemObj[] = [
     {
@@ -89,6 +113,24 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
           testID="AFErrorMsgBodyTestID"
           onChange={(val) => {
             setErrorMsgBodyOverride(val)
+          }}
+        />
+        <TextView variant="MobileBodyBold">errorMsgBodyV2</TextView>
+        <VATextInput
+          inputType="none"
+          value={errorMsgBodyV2Override}
+          testID="AFErrorMsgBodyV2TestID"
+          onChange={(val) => {
+            setErrorMsgBodyV2Override(val)
+          }}
+        />
+        <TextView variant="MobileBodyBold">errorPhoneNumber</TextView>
+        <VATextInput
+          inputType="none"
+          value={errorPhoneNumberOverride}
+          testID="AFErrorPhoneNumberTestID"
+          onChange={(val) => {
+            setErrorPhoneNumber(val)
           }}
         />
       </Box>

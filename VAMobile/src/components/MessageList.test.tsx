@@ -1,12 +1,14 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { InlineTextWithIconsProps, MessageListItemObj, TextLine } from 'components'
 import { context, render } from 'testUtils'
+
 import MessageList from './MessageList'
-import { MessageListItemObj, InlineTextWithIconsProps, TextLine } from 'components'
 
 context('MessageList', () => {
-  let onPressSpy = jest.fn(() => {})
+  const onPressSpy = jest.fn(() => {})
 
   beforeEach(() => {
     const items = [
@@ -65,7 +67,9 @@ context('MessageList', () => {
 
   it('should generate correct testId with icon accessibility labels if no testId provided in props', () => {
     expect(screen.getByTestId('Unread: test2-sender Has attachment test2-subject-line')).toBeTruthy()
-    expect(screen.getByTestId('test3-recipient test3-sent-item-with-read-tag Recipient has read your message')).toBeTruthy()
+    expect(
+      screen.getByTestId('test3-recipient test3-sent-item-with-read-tag Recipient has read your message'),
+    ).toBeTruthy()
   })
 
   it('should render Read tag for read sent message', () => {

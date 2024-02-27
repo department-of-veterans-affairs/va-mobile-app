@@ -1,21 +1,29 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
-import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { NAMESPACE } from 'constants/namespaces'
-import { PaymentsStackParamList } from '../PaymentsStackScreens'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
+
+import { useBankData } from 'api/directDeposit'
+import {
+  Box,
+  ClickToCallPhoneNumber,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextLine,
+  TextView,
+} from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useCallback } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+
+import { PaymentsStackParamList } from '../PaymentsStackScreens'
 
 type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
 
@@ -23,22 +31,17 @@ type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'Direct
  * Screen for displaying direct deposit information and help numbers
  */
 function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
-  const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
-
+  const {
+    data: directDepositData,
+    isLoading: loading,
+    isError: useBankDataError,
+  } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
+  const bankData = directDepositData?.data.attributes?.paymentAccount
   const { gutter, contentMarginBottom } = theme.dimensions
-
-  useFocusEffect(
-    useCallback(() => {
-      if (screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime) {
-        dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
-      }
-    }, [dispatch, ddNotInDowntime]),
-  )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
@@ -55,7 +58,9 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
         textLines.push({ text: t('directDeposit.accountType', { accountType: bankData.accountType }) })
       }
 
-      if ([bankData.financialInstitutionName, bankData.accountNumber, bankData.accountType].filter(Boolean).length === 0) {
+      if (
+        [bankData.financialInstitutionName, bankData.accountNumber, bankData.accountType].filter(Boolean).length === 0
+      ) {
         textLines.push({ text: t('directDeposit.addBankAccountInformation') })
       }
     } else {
@@ -67,16 +72,21 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
         textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
         onPress: () => {
-          navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })
+          navigateTo('EditDirectDeposit', {
+            displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title'),
+          })
         },
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]
   }
 
-  if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
+  if (useBankDataError) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('directDeposit.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -84,16 +94,26 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('directDeposit.title')}>
         <LoadingComponent text={t('directDeposit.loading')} />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')} testID="DirectDepositEditAccount">
+    <FeatureLandingTemplate
+      backLabel={t('payments.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('directDeposit.title')}
+      testID="DirectDepositEditAccount">
       <Box mx={gutter}>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
+        <TextView
+          variant="MobileBody"
+          mb={theme.dimensions.standardMarginBetween}
+          accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>

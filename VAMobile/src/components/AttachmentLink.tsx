@@ -1,8 +1,10 @@
+import React, { FC } from 'react'
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
+
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+
 import Box from './Box'
-import React, { FC } from 'react'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 
@@ -24,7 +26,14 @@ export type AttachmentLinkProps = {
 /**
  * A common component for an attachment link display. Can be used to show file attachments in a message thread.
  */
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({
+  name,
+  formattedSize,
+  formattedSizeA11y,
+  onPress,
+  a11yHint,
+  a11yValue,
+}) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {

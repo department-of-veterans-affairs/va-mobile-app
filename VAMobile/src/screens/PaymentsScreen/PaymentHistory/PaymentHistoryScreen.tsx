@@ -1,20 +1,31 @@
-import { Pressable } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { isEmpty, map } from 'underscore'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps } from 'components'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { map } from 'underscore'
+
+import { usePayments } from 'api/payments'
+import { PaymentsData } from 'api/types'
+import {
+  Box,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TextView,
+  TextViewProps,
+  VAModalPicker,
+  VAModalPickerProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentState, getPayments } from 'store/slices'
-import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
-import { PaymentsStackParamList } from '../PaymentsStackScreens'
-import { RootState } from 'store'
-import { deepCopyObject } from 'utils/common'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getGroupedPayments } from 'utils/payments'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+
+import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
@@ -22,16 +33,13 @@ type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'Payme
 function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const hasError = useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)
   const { standardMarginBetween, gutter } = theme.dimensions
-  const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
-  const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
-  const noPayments = availableYears.length === 0
-
+  const [page, setPage] = useState(1)
   const [yearPickerOption, setYearPickerOption] = useState<yearsDatePickerOption>()
   const [pickerOptions, setpickerOptions] = useState<Array<yearsDatePickerOption>>([])
+  const { data: payments, isLoading: loading, isError: hasError } = usePayments(yearPickerOption?.label, page)
+  const noPayments = payments?.meta.availableYears?.length === 0
 
   type yearsDatePickerOption = {
     label: string
@@ -40,26 +48,39 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   }
 
   const getPickerOptions = useCallback((): Array<yearsDatePickerOption> => {
-    return map(availableYears, (item) => {
-      const year = item.toString()
-      return {
-        label: year,
-        value: year,
-        a11yLabel: year,
-      }
-    })
-  }, [availableYears])
+    if (payments?.meta.availableYears) {
+      return map(payments.meta.availableYears, (item) => {
+        const year = item.toString()
+        return {
+          label: year,
+          value: year,
+          a11yLabel: year,
+        }
+      })
+    }
+    return []
+  }, [payments])
+
+  useEffect(() => {
+    if (pickerOptions.length === 0 && getPickerOptions().length > 0) {
+      setpickerOptions(getPickerOptions())
+    }
+  }, [payments?.meta.availableYears, getPickerOptions, pickerOptions])
+
+  useEffect(() => {
+    setYearPickerOption(pickerOptions[0])
+  }, [pickerOptions])
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
     if (curSelectedRange) {
       setYearPickerOption(curSelectedRange)
-      fetchPayments(1, curSelectedRange.value)
+      setPage(1)
     }
   }
 
-  const onPaymentPress = (paymentID: string): void => {
-    navigateTo('PaymentDetails', { paymentID })
+  const onPaymentPress = (payment: PaymentsData): void => {
+    navigateTo('PaymentDetails', { payment })
   }
 
   const textViewProps: TextViewProps = {
@@ -68,7 +89,6 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     textDecorationColor: 'link',
     color: 'link',
     accessibilityRole: 'link',
-    ...testIdProps(t('payments.ifIAmMissingPayemt')),
   }
 
   const pickerProps: VAModalPickerProps = {
@@ -80,63 +100,47 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   }
 
   const getPaymentsData = (): ReactNode => {
-    const noCurrentPayments = !currentPagePayments || isEmpty(currentPagePayments)
-
-    if (noCurrentPayments) {
+    if (payments?.data.length === 0 || !payments?.paymentsByDate || !payments.meta.pagination) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
           <></>
         </Box>
       )
     }
-    return getGroupedPayments(newCurrentPagePayments, theme, { t }, onPaymentPress, true, currentPagePagination)
-  }
-
-  const fetchPayments = (requestedPage?: number, year?: string) => {
-    // request the next page
-    dispatch(getPayments(year, requestedPage, ScreenIDTypesConstants.PAYMENTS_SCREEN_ID))
+    return getGroupedPayments(payments.paymentsByDate, theme, { t }, onPaymentPress, true, payments.meta.pagination)
   }
 
   // Render pagination for payments
   const renderPagination = (): ReactNode => {
-    const page = currentPagePagination?.currentPage || 1
-    const year = yearPickerOption?.value
     const paginationProps: PaginationProps = {
       onNext: () => {
-        fetchPayments(page + 1, year)
+        setPage(page + 1)
       },
       onPrev: () => {
-        fetchPayments(page - 1, year)
+        setPage(page - 1)
       },
-      totalEntries: currentPagePagination?.totalEntries || 0,
-      pageSize: currentPagePagination?.perPage || 0,
+      totalEntries: payments?.meta.pagination?.totalEntries || 0,
+      pageSize: payments?.meta.pagination?.perPage || 0,
       page,
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
   }
 
-  useEffect(() => {
-    // if payments exists grab the latest year first page. Prevents from refetching the latest year first page if it does exists.
-    const year = !noPayments ? availableYears[0] : undefined
-    !hasError && fetchPayments(1, year)
-  }, [hasError]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    setpickerOptions(getPickerOptions())
-  }, [availableYears, getPickerOptions])
-
-  useEffect(() => {
-    setYearPickerOption(pickerOptions[0])
-  }, [pickerOptions])
-
   if (hasError) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -144,7 +148,10 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <LoadingComponent text={t('payments.loading')} />
       </FeatureLandingTemplate>
     )
@@ -152,28 +159,32 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   if (noPayments) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <NoPaymentsScreen />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')} testID="paymentHistoryTestID">
-      <Box {...testIdProps('', false, 'payments-page')}>
-        <Box mx={gutter} mb={standardMarginBetween}>
-          <Pressable
-            onPress={() => navigateTo('PaymentMissing')}
-            accessibilityRole="link"
-            accessible={true}
-            {...testIdProps(t('payments.ifIAmMissingPayemt'))}
-            testID="missingPaymentsTestID">
-            <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
-          </Pressable>
-        </Box>
-        <Box mx={gutter} mb={standardMarginBetween}>
-          <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
-        </Box>
+    <FeatureLandingTemplate
+      backLabel={t('payments.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('history.title')}
+      testID="paymentHistoryTestID">
+      <Box mx={gutter} mb={standardMarginBetween}>
+        <Pressable
+          onPress={() => navigateTo('PaymentMissing')}
+          accessibilityRole="link"
+          accessible={true}
+          testID="missingPaymentsTestID">
+          <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
+        </Pressable>
+      </Box>
+      <Box mx={gutter} mb={standardMarginBetween}>
+        <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
       </Box>
       {getPaymentsData()}
       {renderPagination()}

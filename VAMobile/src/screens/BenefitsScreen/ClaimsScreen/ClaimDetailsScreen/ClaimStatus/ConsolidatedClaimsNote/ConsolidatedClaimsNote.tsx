@@ -1,10 +1,11 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { useTheme } from 'utils/hooks'
 
 type ConsolidatedClaimsNoteProps = StackScreenProps<BenefitsStackParamList, 'ConsolidatedClaimsNote'>

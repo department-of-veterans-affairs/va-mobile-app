@@ -1,7 +1,8 @@
-import { $Dictionary } from 'i18next/typescript/helpers'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-import { DateTime, DateTimeFormatOptions } from 'luxon'
+
 import { TFunction } from 'i18next'
+import { $Dictionary } from 'i18next/typescript/helpers'
+import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 /**
  * Returns the formatted phone number
@@ -97,7 +98,10 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
  * @returns Returns datetime as: Month DD, YYYY, HH:MM PM TIMEZONE
  */
 export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, { month: 'long', timeZoneName: 'short' })
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, {
+    month: 'long',
+    timeZoneName: 'short',
+  })
 }
 
 /**

@@ -1,21 +1,21 @@
-import { useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
-
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
-import { Pressable, PressableProps } from 'react-native'
-import { RootState } from 'store'
-import { UserAnalytics } from 'constants/analytics'
-import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps } from 'react-native'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
+import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
-  const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
@@ -25,7 +25,9 @@ export const Nametag: FC = () => {
 
   useEffect(() => {
     if (personalInfo) {
-      setAnalyticsUserProperty(UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false))
+      setAnalyticsUserProperty(
+        UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false),
+      )
     }
   }, [personalInfo])
 
@@ -79,7 +81,11 @@ export const Nametag: FC = () => {
         <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
           <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView textTransform="capitalize" mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0} variant="BitterBoldHeading" color="primaryContrast">
+            <TextView
+              textTransform="capitalize"
+              mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
+              variant="BitterBoldHeading"
+              color="primaryContrast">
               {fullName}
             </TextView>
             {accessToMilitaryInfo && (

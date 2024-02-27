@@ -6,7 +6,8 @@ import { loginToDemoMode, openVeteransCrisisLine } from './utils'
 export const VCLConstants = {
   HEADING_TEXT: 'Veterans Crisis Line',
   SUBHEADING_TEXT: 'We’re here anytime, day or night – 24/7',
-  MESSAGE_TEXT: "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
+  MESSAGE_TEXT:
+    "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
   PHONE_LINK_TEXT: 'Call 988 and select 1',
   TEXT_MESSAGE_LINK_TEXT: 'Text 838255',
   CHAT_LINK_TEXT: 'Start a confidential chat',

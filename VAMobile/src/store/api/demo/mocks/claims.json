@@ -470,8 +470,8 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 1,
-          "totalEntries": 1
+          "totalPages": 5,
+          "totalEntries": 42
         }
       },
       "links": {
@@ -534,9 +534,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Low back strain (New)"
-        ],
+        "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -874,9 +872,7 @@
           "name": "mobile.claims_and_appeals.claim.type",
           "value": 1,
           "sampleRate": 1,
-          "tags": [
-            "type:Compensation"
-          ],
+          "tags": ["type:Compensation"],
           "metadata": null
         }
       }
@@ -901,9 +897,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Low back strain (New)"
-        ],
+        "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -1241,9 +1235,7 @@
           "name": "mobile.claims_and_appeals.claim.type",
           "value": 1,
           "sampleRate": 1,
-          "tags": [
-            "type:Compensation"
-          ],
+          "tags": ["type:Compensation"],
           "metadata": null
         }
       }
@@ -1268,10 +1260,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Hearing loss (New)",
-          " ringing in ears (New)"
-        ],
+        "contentionList": ["Hearing loss (New)", " ringing in ears (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -1463,9 +1452,7 @@
           "name": "mobile.claims_and_appeals.claim.type",
           "value": 1,
           "sampleRate": 1,
-          "tags": [
-            "type:Compensation"
-          ],
+          "tags": ["type:Compensation"],
           "metadata": null
         }
       }
@@ -1490,10 +1477,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "hearing loss (Increase)",
-          " kidney removal of (New)"
-        ],
+        "contentionList": ["hearing loss (Increase)", " kidney removal of (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -3741,10 +3725,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Asthma, bronchial (Increase)",
-          "hypertension (New)"
-        ],
+        "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -3788,10 +3769,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Asthma, bronchial (Increase)",
-          "hypertension (New)"
-        ],
+        "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -3821,9 +3799,7 @@
       "id": "2221530",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221530"
-        ],
+        "appealIds": ["2221530"],
         "active": true,
         "alerts": [
           {
@@ -3937,10 +3913,12 @@
             "date": "2021-03-09"
           }
         ],
-        "evidence": [{
-          "description": "test",
-          "data": "test,"
-        }],
+        "evidence": [
+          {
+            "description": "test",
+            "data": "test,"
+          }
+        ],
         "incompleteHistory": true,
         "issues": [
           {
@@ -3965,15 +3943,13 @@
         "updated": "2021-12-03T13:39:54-05:00"
       }
     }
-  }, 
+  },
   "/v0/appeal/2221531": {
     "data": {
       "id": "2221531",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221531"
-        ],
+        "appealIds": ["2221531"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4007,14 +3983,12 @@
       }
     }
   },
-    "/v0/appeal/2221532": {
+  "/v0/appeal/2221532": {
     "data": {
       "id": "2221532",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221532"
-        ],
+        "appealIds": ["2221532"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4058,9 +4032,7 @@
       "id": "2221533",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221533"
-        ],
+        "appealIds": ["2221533"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4094,14 +4066,12 @@
       }
     }
   },
-    "/v0/appeal/2221534": {
+  "/v0/appeal/2221534": {
     "data": {
       "id": "2221534",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221534"
-        ],
+        "appealIds": ["2221534"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4138,14 +4108,12 @@
       }
     }
   },
-    "/v0/appeal/2221535": {
+  "/v0/appeal/2221535": {
     "data": {
       "id": "2221535",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221535"
-        ],
+        "appealIds": ["2221535"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4179,23 +4147,23 @@
       }
     }
   },
-    "/v0/appeal/2221536": {
+  "/v0/appeal/2221536": {
     "data": {
       "id": "2221536",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221536"
-        ],
+        "appealIds": ["2221536"],
         "active": true,
-        "alerts": [          {
+        "alerts": [
+          {
             "type": "form9_needed",
             "details": {
               "date": "2021-02-24",
               "type": "video",
               "location": "Louisville regional office"
             }
-          }],
+          }
+        ],
         "aod": false,
         "aoj": "vba",
         "description": "Service connection, ureteral stricture, and 2 others",
@@ -4225,14 +4193,12 @@
       }
     }
   },
-    "/v0/appeal/2221537": {
+  "/v0/appeal/2221537": {
     "data": {
       "id": "2221537",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221537"
-        ],
+        "appealIds": ["2221537"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4261,14 +4227,12 @@
       }
     }
   },
-    "/v0/appeal/2221538": {
+  "/v0/appeal/2221538": {
     "data": {
       "id": "2221538",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221538"
-        ],
+        "appealIds": ["2221538"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4302,14 +4266,12 @@
       }
     }
   },
-    "/v0/appeal/2221539": {
+  "/v0/appeal/2221539": {
     "data": {
       "id": "2221539",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221539"
-        ],
+        "appealIds": ["2221539"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4341,14 +4303,12 @@
       }
     }
   },
-    "/v0/appeal/2221540": {
+  "/v0/appeal/2221540": {
     "data": {
       "id": "2221540",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221540"
-        ],
+        "appealIds": ["2221540"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4382,14 +4342,12 @@
       }
     }
   },
-    "/v0/appeal/2221541": {
+  "/v0/appeal/2221541": {
     "data": {
       "id": "2221541",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221541"
-        ],
+        "appealIds": ["2221541"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4413,10 +4371,12 @@
         "status": {
           "type": "decision_in_progress",
           "details": {
-            "issues": [{
-              "disposition": "Type1",
-              "description": "Service connection"
-            }]
+            "issues": [
+              {
+                "disposition": "Type1",
+                "description": "Service connection"
+              }
+            ]
           }
         },
         "type": "legacyAppeal",
@@ -4424,14 +4384,12 @@
       }
     }
   },
-    "/v0/appeal/2221542": {
+  "/v0/appeal/2221542": {
     "data": {
       "id": "2221542",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221542"
-        ],
+        "appealIds": ["2221542"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4467,14 +4425,12 @@
       }
     }
   },
-    "/v0/appeal/2221543": {
+  "/v0/appeal/2221543": {
     "data": {
       "id": "2221543",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221543"
-        ],
+        "appealIds": ["2221543"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4513,14 +4469,12 @@
       }
     }
   },
-    "/v0/appeal/2221544": {
+  "/v0/appeal/2221544": {
     "data": {
       "id": "2221544",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221544"
-        ],
+        "appealIds": ["2221544"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4559,14 +4513,12 @@
       }
     }
   },
-    "/v0/appeal/2221545": {
+  "/v0/appeal/2221545": {
     "data": {
       "id": "2221545",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221545"
-        ],
+        "appealIds": ["2221545"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4605,14 +4557,12 @@
       }
     }
   },
-    "/v0/appeal/2221546": {
+  "/v0/appeal/2221546": {
     "data": {
       "id": "2221546",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221546"
-        ],
+        "appealIds": ["2221546"],
         "active": true,
         "alerts": [
           {
@@ -4672,14 +4622,12 @@
       }
     }
   },
-    "/v0/appeal/2221547": {
+  "/v0/appeal/2221547": {
     "data": {
       "id": "2221547",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221547"
-        ],
+        "appealIds": ["2221547"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4718,14 +4666,12 @@
       }
     }
   },
-    "/v0/appeal/2221548": {
+  "/v0/appeal/2221548": {
     "data": {
       "id": "2221548",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221548"
-        ],
+        "appealIds": ["2221548"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4764,14 +4710,12 @@
       }
     }
   },
-    "/v0/appeal/2221549": {
+  "/v0/appeal/2221549": {
     "data": {
       "id": "2221549",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221531"
-        ],
+        "appealIds": ["2221531"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4810,14 +4754,12 @@
       }
     }
   },
-    "/v0/appeal/2221550": {
+  "/v0/appeal/2221550": {
     "data": {
       "id": "2221550",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221550"
-        ],
+        "appealIds": ["2221550"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4851,14 +4793,12 @@
       }
     }
   },
-    "/v0/appeal/2221551": {
+  "/v0/appeal/2221551": {
     "data": {
       "id": "2221551",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221551"
-        ],
+        "appealIds": ["2221551"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4885,10 +4825,12 @@
             "date": "2021-02-24",
             "type": "video",
             "location": "Louisville regional office",
-            "issues": [{
-              "disposition": "remand",
-              "description": "service connection"
-            }]
+            "issues": [
+              {
+                "disposition": "remand",
+                "description": "service connection"
+              }
+            ]
           }
         },
         "type": "appeal",
@@ -4896,14 +4838,12 @@
       }
     }
   },
-    "/v0/appeal/2221552": {
+  "/v0/appeal/2221552": {
     "data": {
       "id": "2221552",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221552"
-        ],
+        "appealIds": ["2221552"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4942,14 +4882,12 @@
       }
     }
   },
-    "/v0/appeal/2221553": {
+  "/v0/appeal/2221553": {
     "data": {
       "id": "2221553",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221531"
-        ],
+        "appealIds": ["2221531"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -4976,10 +4914,12 @@
             "date": "2021-02-24",
             "type": "video",
             "location": "Louisville regional office",
-            "issues": [{
-              "disposition": "remand",
-              "description": "service connection"
-            }]
+            "issues": [
+              {
+                "disposition": "remand",
+                "description": "service connection"
+              }
+            ]
           }
         },
         "type": "legacyAppeal",
@@ -4987,14 +4927,12 @@
       }
     }
   },
-    "/v0/appeal/2221554": {
+  "/v0/appeal/2221554": {
     "data": {
       "id": "2221554",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221554"
-        ],
+        "appealIds": ["2221554"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5033,14 +4971,12 @@
       }
     }
   },
-    "/v0/appeal/2221555": {
+  "/v0/appeal/2221555": {
     "data": {
       "id": "2221555",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221555"
-        ],
+        "appealIds": ["2221555"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5074,14 +5010,12 @@
       }
     }
   },
-    "/v0/appeal/2221556": {
+  "/v0/appeal/2221556": {
     "data": {
       "id": "2221556",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221556"
-        ],
+        "appealIds": ["2221556"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5106,13 +5040,16 @@
           "type": "post_bva_dta_decision",
           "details": {
             "bvaDecisionDate": "2021-02-24",
-            "issues": [{
-              "disposition": "allowed",
-              "description": "service connection"
-            }, {
-              "disposition": "denied",
-              "description": "service connection"
-            }]
+            "issues": [
+              {
+                "disposition": "allowed",
+                "description": "service connection"
+              },
+              {
+                "disposition": "denied",
+                "description": "service connection"
+              }
+            ]
           }
         },
         "type": "legacyAppeal",
@@ -5120,14 +5057,12 @@
       }
     }
   },
-    "/v0/appeal/2221557": {
+  "/v0/appeal/2221557": {
     "data": {
       "id": "2221557",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221557"
-        ],
+        "appealIds": ["2221557"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5152,7 +5087,7 @@
           "type": "bva_decision_effectuation",
           "details": {
             "bvaDecisionDate": "2021-02-24",
-            "aojDecisionDate": "2021-02-20",
+            "aojDecisionDate": "2021-02-20"
           }
         },
         "type": "legacyAppeal",
@@ -5160,14 +5095,12 @@
       }
     }
   },
-    "/v0/appeal/2221558": {
+  "/v0/appeal/2221558": {
     "data": {
       "id": "2221558",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221558"
-        ],
+        "appealIds": ["2221558"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5211,9 +5144,7 @@
       "id": "2221559",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221559"
-        ],
+        "appealIds": ["2221559"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5253,14 +5184,12 @@
       }
     }
   },
-   "/v0/appeal/2221560": {
+  "/v0/appeal/2221560": {
     "data": {
       "id": "2221560",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221560"
-        ],
+        "appealIds": ["2221560"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5299,14 +5228,12 @@
       }
     }
   },
-   "/v0/appeal/2221561": {
+  "/v0/appeal/2221561": {
     "data": {
       "id": "2221561",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221561"
-        ],
+        "appealIds": ["2221561"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5345,14 +5272,12 @@
       }
     }
   },
-   "/v0/appeal/2221562": {
+  "/v0/appeal/2221562": {
     "data": {
       "id": "2221562",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221562"
-        ],
+        "appealIds": ["2221562"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5376,7 +5301,7 @@
         "status": {
           "type": "sc_decision",
           "details": {
-            "date": "2021-02-24",
+            "date": "2021-02-24"
           }
         },
         "type": "supplementalClaim",
@@ -5384,14 +5309,12 @@
       }
     }
   },
-   "/v0/appeal/2221563": {
+  "/v0/appeal/2221563": {
     "data": {
       "id": "2221563",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221563"
-        ],
+        "appealIds": ["2221563"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5435,9 +5358,7 @@
       "id": "2221564",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221564"
-        ],
+        "appealIds": ["2221564"],
         "active": true,
         "alerts": [],
         "aod": false,
@@ -5481,9 +5402,7 @@
       "id": "2221565",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221565"
-        ],
+        "appealIds": ["2221565"],
         "active": true,
         "alerts": [],
         "aod": false,

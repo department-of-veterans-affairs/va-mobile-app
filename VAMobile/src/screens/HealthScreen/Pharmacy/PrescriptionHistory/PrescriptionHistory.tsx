@@ -1,12 +1,15 @@
-import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { StackScreenProps } from '@react-navigation/stack'
-import { find } from 'underscore'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { useFocusEffect } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { find } from 'underscore'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   Box,
   BoxProps,
@@ -23,116 +26,49 @@ import {
   MultiTouchCardProps,
   Pagination,
   PaginationProps,
-  TabBar,
-  TabBarProps,
-  TabsValuesType,
   TextView,
   VAIcon,
   VAIconProps,
 } from 'components'
+import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+import { Events } from 'constants/analytics'
+import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import {
   DowntimeFeatureTypeConstants,
-  PrescriptionHistoryTabConstants,
-  PrescriptionHistoryTabs,
   PrescriptionSortOptionConstants,
   PrescriptionSortOptions,
   PrescriptionsList,
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
-import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import getEnv from 'utils/env'
+import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFocusEffect } from '@react-navigation/native'
+import { getFilterArgsForFilter } from 'utils/prescriptions'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
+import { PrescriptionListItem } from '../PrescriptionCommon'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
-import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
-import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
-// Delay custom screen reader announcements so they don't cut off native announcements
-const announcementDelay = 1000
-
 const sortByOptions = [
-  { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
   { display: 'prescriptions.sort.fillDate', value: PrescriptionSortOptionConstants.REFILL_DATE },
   { display: 'prescriptions.sort.medication', value: PrescriptionSortOptionConstants.PRESCRIPTION_NAME },
   { display: 'prescriptions.sort.refills', value: PrescriptionSortOptionConstants.REFILL_REMAINING },
+  { display: 'prescriptions.sort.status', value: PrescriptionSortOptionConstants.REFILL_STATUS },
 ]
-
-const filterOptions = {
-  all: [
-    {
-      display: 'prescription.filter.all',
-      value: '',
-    },
-    {
-      display: 'prescription.history.tag.active',
-      value: RefillStatusConstants.ACTIVE,
-    },
-    {
-      display: 'prescription.history.tag.active.hold',
-      value: RefillStatusConstants.HOLD,
-    },
-    {
-      display: 'prescription.history.tag.active.parked',
-      value: RefillStatusConstants.ACTIVE_PARKED,
-    },
-    {
-      display: 'prescription.history.tag.active.inProgress',
-      value: RefillStatusConstants.REFILL_IN_PROCESS,
-    },
-    {
-      display: 'prescription.history.tag.active.submitted',
-      value: RefillStatusConstants.SUBMITTED,
-    },
-    {
-      display: 'prescription.history.tag.discontinued',
-      value: RefillStatusConstants.DISCONTINUED,
-    },
-    {
-      display: 'prescription.history.tag.expired',
-      value: RefillStatusConstants.EXPIRED,
-    },
-    {
-      display: 'prescription.history.tag.transferred',
-      value: RefillStatusConstants.TRANSFERRED,
-    },
-    {
-      display: 'prescription.history.tag.unknown',
-      value: RefillStatusConstants.UNKNOWN,
-    },
-  ],
-  pending: [
-    {
-      display: 'prescription.filter.all',
-      value: '',
-    },
-    {
-      display: 'prescription.history.tag.active.inProgress',
-      value: RefillStatusConstants.REFILL_IN_PROCESS,
-    },
-    {
-      display: 'prescription.history.tag.active.submitted',
-      value: RefillStatusConstants.SUBMITTED,
-    },
-  ],
-}
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
@@ -142,32 +78,39 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     filteredPrescriptions: prescriptions,
     prescriptions: allPrescriptions,
     loadingHistory,
-    tabCounts,
     prescriptionsNeedLoad,
+    prescriptionStatusCount,
+    pendingPrescriptions,
+    shippedPrescriptions,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+  } = useAuthorizedServices()
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const startingTab = route?.params?.startingTab
+  const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
 
   const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
-  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-  const [selectedSortOn, setSelectedSortOn] = useState(ASCENDING)
+  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(
+    PrescriptionSortOptionConstants.REFILL_STATUS,
+  )
 
   const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
-  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(
+    PrescriptionSortOptionConstants.REFILL_STATUS,
+  )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
-
-  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
     if (hasTransferred) {
@@ -176,11 +119,16 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }, [hasTransferred])
 
   useEffect(() => {
-    if (startingTab) {
-      onTabChange(startingTab)
-      navigation.setParams({ startingTab: undefined })
+    if (startingFilter) {
+      setPage(1)
+      setSelectedFilter(startingFilter)
+      setFilterToUse(startingFilter)
+      setSelectedSortBy(PrescriptionSortOptionConstants.REFILL_STATUS)
+      setSortByToUse(PrescriptionSortOptionConstants.REFILL_STATUS)
+      setSortOnToUse(ASCENDING)
+      navigation.setParams({ startingFilter: undefined })
     }
-  }, [startingTab, navigation])
+  }, [startingFilter, navigation, selectedFilter, selectedSortBy])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
   // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
@@ -188,8 +136,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
-    dispatch(filterAndSortPrescriptions(filters, currentTab, sortByToUse, sortOnToUse === ASCENDING))
-  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse, allPrescriptions])
+    dispatch(filterAndSortPrescriptions(filters, sortByToUse, sortOnToUse === ASCENDING, t))
+  }, [dispatch, filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
@@ -199,17 +147,72 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (screenContentAllowed('WG_PrescriptionHistory') && prescriptionsNeedLoad && userAuthorizedServices?.prescriptions && !prescriptionInDowntime) {
+      if (
+        screenContentAllowed('WG_PrescriptionHistory') &&
+        prescriptionsNeedLoad &&
+        userAuthorizedServices?.prescriptions &&
+        !prescriptionInDowntime
+      ) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
       }
     }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
   )
 
+  const filterOptions = [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+      count: allPrescriptions?.length || 0,
+    },
+    {
+      display: 'prescription.history.tag.active',
+      value: RefillStatusConstants.ACTIVE,
+      count: prescriptionStatusCount.active || 0,
+      additionalLabelText: [t('prescription.history.tag.active.helpText')],
+    },
+    {
+      display: 'prescription.history.tag.discontinued',
+      value: RefillStatusConstants.DISCONTINUED,
+      count: prescriptionStatusCount.discontinued || 0,
+    },
+    {
+      display: 'prescription.history.tag.expired',
+      value: RefillStatusConstants.EXPIRED,
+      count: prescriptionStatusCount.expired || 0,
+    },
+    {
+      display: 'prescription.history.tag.pending',
+      value: RefillStatusConstants.PENDING,
+      count: pendingPrescriptions?.length || 0,
+      additionalLabelText: [t('prescription.history.tag.pending.helpText')],
+    },
+    {
+      display: 'prescription.history.tag.tracking',
+      value: RefillStatusConstants.TRACKING,
+      count: shippedPrescriptions?.length || 0,
+      additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
+    },
+    {
+      display: 'prescription.history.tag.transferred',
+      value: RefillStatusConstants.TRANSFERRED,
+      count: prescriptionStatusCount.transferred || 0,
+    },
+    {
+      display: 'prescription.history.tag.unknown',
+      value: RefillStatusConstants.UNKNOWN,
+      count: prescriptionStatusCount.unknown || 0,
+    },
+  ]
+
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -217,7 +220,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (hasError || getUserAuthorizedServicesError) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -225,7 +232,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (!userAuthorizedServices?.prescriptions) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
         <PrescriptionHistoryNotAuthorized />
       </FeatureLandingTemplate>
     )
@@ -233,55 +244,26 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (loadingHistory || loadingUserAuthorizedServices) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FeatureLandingTemplate>
     )
   }
 
-  if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
+  if (!allPrescriptions?.length) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
         <PrescriptionHistoryNoPrescriptions />
       </FeatureLandingTemplate>
     )
-  }
-
-  const tabs: TabsValuesType = [
-    {
-      value: PrescriptionHistoryTabConstants.ALL,
-      title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
-      testID: 'prescriptionAllCountTestID',
-    },
-    {
-      value: PrescriptionHistoryTabConstants.PENDING,
-      title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
-      testID: 'prescriptionPendingCountTestID',
-    },
-    {
-      value: PrescriptionHistoryTabConstants.TRACKING,
-      title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
-      testID: 'prescriptionTrackingCountTestID',
-    },
-  ]
-
-  const onTabChange = (newTab: string) => {
-    setFilterToUse('')
-    setSelectedFilter('')
-    setCurrentTab(newTab)
-    setPage(1)
-
-    if (newTab === PrescriptionHistoryTabConstants.PENDING) {
-      logAnalyticsEvent(Events.vama_rx_pendingtab())
-    } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
-      logAnalyticsEvent(Events.vama_rx_trackingtab())
-    }
-  }
-
-  const tabProps: TabBarProps = {
-    tabs,
-    onChange: onTabChange,
-    selected: currentTab,
   }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
@@ -304,7 +286,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
-            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              minHeight={theme.dimensions.touchableMinHeight}
+              pt={5}>
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
@@ -377,7 +365,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
       page,
-      tab: currentTab,
     }
 
     return <Pagination {...paginationProps} />
@@ -391,112 +378,63 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return getTranslation(display?.display || '', t)
   }
 
-  const sortByRadioOptions = sortByOptions.map((option) => {
+  const modalSortByOptions = sortByOptions.map((option) => {
     return {
       value: option.value,
       labelKey: getTranslation(option.display, t),
     }
   })
 
-  const announceAfterDelay = (announcement: string) => {
-    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
-  }
+  const modalFilterOptions = filterOptions.map((option) => {
+    const labelKey = `${getTranslation(option.display, t)} (${option.count})`
+    let a11yLabel = labelKey
+    if (option.additionalLabelText) {
+      a11yLabel += ` ${a11yLabelVA(option.additionalLabelText[0])}.`
+    }
 
-  const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
+    return {
+      value: option.value,
+      labelKey,
+      additionalLabelText: option.additionalLabelText,
+      a11yLabel,
+    }
+  })
 
-  const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
-
-  const sortProps: RadioGroupModalProps = {
+  const modalProps: RadioGroupModalProps = {
     groups: [
       {
-        items: sortByRadioOptions,
+        items: modalFilterOptions,
+        onSetOption: (newFilter: string) => {
+          setSelectedFilter(newFilter as RefillStatus | '')
+        },
+        selectedValue: selectedFilter,
+        title: t('prescription.filter.by'),
+      },
+      {
+        items: modalSortByOptions,
         onSetOption: (newSortBy: string) => {
           setSelectedSortBy(newSortBy as PrescriptionSortOptions | '')
         },
         selectedValue: selectedSortBy,
         title: t('prescriptions.sort.by'),
       },
-      {
-        items: sortOrderRadioOptions,
-        onSetOption: (newSortOn: string) => {
-          setSelectedSortOn(newSortOn)
-        },
-        selectedValue: selectedSortOn,
-        title: t('prescriptions.sort.order'),
-      },
     ],
-    buttonText: sortButtonText,
-    buttonA11yLabel: sortButtonText, // so Android reads button text
-    buttonA11yHint: t('prescription.filter.sort.a11y'),
-    buttonTestID: 'openSortTestID',
-    headerText: t('prescription.filter.sort'),
-    topRightButtonText: t('reset'),
-    topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
-    topRightButtonTestID: 'resetSortTestID',
-    testID: 'sortListTestID',
-    onConfirm: () => {
-      setSortOnToUse(selectedSortOn)
-      setSortByToUse(selectedSortBy)
-      logAnalyticsEvent(Events.vama_rx_sort_sel(selectedSortBy))
-    },
-    onUpperRightAction: () => {
-      setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-      setSelectedSortOn(ASCENDING)
-      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-      const direction = t('prescriptions.sort.atoz.a11y')
-      announceAfterDelay(t('prescriptions.resetAnnouncementWithDirection', { value, direction }))
-    },
-    onCancel: () => {
-      setSelectedSortBy(sortByToUse)
-      setSelectedSortOn(sortOnToUse)
-    },
-    onShowAnalyticsFn: () => {
-      logAnalyticsEvent(Events.vama_rx_sort())
-    },
-  }
-
-  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.pending : filterOptions.all
-
-  const filterRadioOptions = filterOptionsForTab.map((option) => {
-    return {
-      value: option.value,
-      labelKey: getTranslation(option.display, t),
-    }
-  })
-
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
-
-  const filterProps: RadioGroupModalProps = {
-    groups: [
-      {
-        items: filterRadioOptions,
-        onSetOption: (newFilter: string) => {
-          setSelectedFilter(newFilter as RefillStatus | '')
-        },
-        selectedValue: selectedFilter,
-      },
-    ],
-    buttonText: filterButtonText,
-    buttonA11yLabel: filterButtonText, // so Android reads button text
-    buttonA11yHint: t('prescription.filter.by.a11y'),
-    buttonTestID: 'openFilterTestID',
-    headerText: t('prescription.filter.status'),
-    topRightButtonText: t('reset'),
-    topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
-    topRightButtonTestID: 'resetFilterTestID',
-    testID: 'filterListTestID',
-    onConfirm: () => {
+    buttonText: t('filterAndSort'),
+    buttonA11yLabel: t('filterAndSort'), // so Android reads button text
+    buttonA11yHint: t('prescription.modal.a11yHint'),
+    buttonTestID: 'openFilterAndSortTestID',
+    headerText: t('filterAndSort'),
+    onApply: () => {
       setPage(1)
       setFilterToUse(selectedFilter)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
-    },
-    onUpperRightAction: () => {
-      setSelectedFilter('')
-      announceAfterDelay(t('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
+      setSortByToUse(selectedSortBy)
+      setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter, selectedSortBy))
     },
     onCancel: () => {
-      setSelectedFilter(filterToUse)
+      logAnalyticsEvent(Events.vama_rx_filter_cancel())
     },
+    testID: 'ModalTestID',
     onShowAnalyticsFn: () => {
       logAnalyticsEvent(Events.vama_rx_filter())
     },
@@ -513,34 +451,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     testID: 'filterSortWrapperBoxTestID',
   }
 
-  const filterWrapperProps: BoxProps = {
-    borderBottomWidth: 1,
-    borderColor: 'primary',
-  }
-
   const hasNoItems = prescriptions?.length === 0
-
-  const getInstructions = () => {
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return t('prescriptions.header.helper.all')
-      case PrescriptionHistoryTabConstants.PENDING:
-        return t('prescriptions.header.helper.pending')
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return t('prescriptions.header.helper.tracking')
-    }
-  }
-
-  const getInstructionA11y = () => {
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return a11yLabelVA(t('prescriptions.header.helper.all'))
-      case PrescriptionHistoryTabConstants.PENDING:
-        return a11yLabelVA(t('prescriptions.header.helper.pending'))
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return t('prescriptions.header.helper.tracking')
-    }
-  }
 
   const getTransferAlert = () => {
     if (!hasTransferred) {
@@ -560,10 +471,15 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))} paragraphSpacing={true}>
+          <TextView
+            mt={theme.dimensions.standardMarginBetween}
+            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
+            paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
+          <TextView
+            paragraphSpacing={true}
+            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -583,10 +499,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }
 
   const getRequestRefillButton = () => {
-    if (currentTab !== PrescriptionHistoryTabConstants.ALL) {
-      return <></>
-    }
-
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button label={t('prescription.history.startRefillRequest')} onPress={() => navigateTo('RefillScreenModal')} />
@@ -594,32 +506,71 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getHistoryListHeader = () => {
-    switch (currentTab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        return t('prescription.history.list.title.all', { count: prescriptions?.length })
-      case PrescriptionHistoryTabConstants.PENDING:
-        return t('prescription.history.list.title.pending', { count: prescriptions?.length })
-      case PrescriptionHistoryTabConstants.TRACKING:
-        return t('prescription.history.list.title.tracking', { count: prescriptions?.length })
+  const prescriptionListTitle = () => {
+    const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
+    const keys = {
+      count: prescriptions?.length,
+      filter: getDisplayForValue(filterOptions, filterToUse),
+      sort: sortUppercase[0].toLowerCase() + sortUppercase.slice(1),
     }
+
+    if (selectedFilter === RefillStatusConstants.PENDING) {
+      return t('prescription.history.list.title.pending', keys)
+    } else if (selectedFilter === RefillStatusConstants.TRACKING) {
+      return t('prescription.history.list.title.tracking', keys)
+    } else {
+      return t('prescription.history.list.title', keys)
+    }
+  }
+
+  const prescriptionListDescription = () => {
+    if (selectedFilter === RefillStatusConstants.PENDING) {
+      return t('prescription.history.list.header.pending')
+    } else if (selectedFilter === RefillStatusConstants.TRACKING) {
+      return t('prescription.history.list.header.tracking')
+    } else {
+      return t('prescription.history.list.header')
+    }
+  }
+
+  const filterModal = () => {
+    return (
+      <Box {...filterContainerProps}>
+        <Box mr={8} mb={10}>
+          <RadioGroupModal {...modalProps} />
+        </Box>
+      </Box>
+    )
   }
 
   const getContent = () => {
     if (hasNoItems) {
-      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} isFiltered={!!filterToUse} />
+      return (
+        <>
+          {filterModal()}
+          <PrescriptionHistoryNoMatches isFiltered={!!filterToUse} />
+        </>
+      )
     } else {
       return (
         <>
-          {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
-              {getInstructions()}
+            <TextView
+              mt={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.condensedMarginBetween}
+              variant={'MobileBodyBold'}>
+              {prescriptionListTitle()}
             </TextView>
-            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {getHistoryListHeader()}
+            <TextView
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HelperText'}
+              accessibilityLabel={a11yLabelVA(prescriptionListDescription())}>
+              {prescriptionListDescription()}
             </TextView>
           </Box>
+
+          {filterModal()}
+
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
@@ -652,17 +603,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       title={t('prescription.title')}
       testID="PrescriptionHistory">
       {getRequestRefillButton()}
-      <TabBar {...tabProps} />
-      <Box {...filterWrapperProps}>
-        <Box {...filterContainerProps}>
-          <Box mr={8} mb={10}>
-            <RadioGroupModal {...filterProps} />
-          </Box>
-          <Box mb={10}>
-            <RadioGroupModal {...sortProps} />
-          </Box>
-        </Box>
-      </Box>
+      {getTransferAlert()}
       {getContent()}
     </FeatureLandingTemplate>
   )

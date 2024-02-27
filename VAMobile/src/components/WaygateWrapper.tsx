@@ -1,17 +1,20 @@
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useIsFocused, useNavigationState } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { useIsFocused, useNavigationState } from '@react-navigation/native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
-import { a11yLabelID } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
+import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 
 export type WaygateWrapperProps = {
   /** the waygate name to check for */
@@ -40,17 +43,26 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       logAnalyticsEvent(Events.vama_af_updated())
       openAppStore()
     }
-
+    const errorMsgBodyV2 = fixedWhiteSpaceString(waygate.errorMsgBodyV2)
+    const text = errorMsgBodyV2.length > 0 ? errorMsgBodyV2 : waygate.errorMsgBody
+    const phoneNumber =
+      waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <AlertBox
           border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
           title={waygate.errorMsgTitle}
-          text={waygate.errorMsgBody}
+          titleA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
+          text={text}
+          textA11yLabel={a11yLabelVA(text || '')}
           focusOnError={false}
           testId="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
-            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
+            <ClickToCallPhoneNumber
+              displayedText={displayedTextPhoneNumber(phoneNumber)}
+              phone={phoneNumber}
+              a11yLabel={a11yLabelID(phoneNumber)}
+            />
           </Box>
           {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
         </AlertBox>
@@ -59,7 +71,8 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
   }
 
   const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
-  const showAlertBox = waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
+  const showAlertBox =
+    waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
 
   useEffect(() => {
     if (showAlertBox && !bypassAlertBox) {

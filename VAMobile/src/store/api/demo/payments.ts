@@ -1,7 +1,8 @@
-import { DemoStore } from './store'
-import { Params } from '..'
-import { PaymentsGetData } from '../types'
+import { PaymentsGetData } from 'api/types'
 import { getFormattedDate } from 'utils/formattingUtils'
+
+import { Params } from '..'
+import { DemoStore } from './store'
 
 type PaymentsPageNumber = '1' & '2'
 type PaymentsYearNumber = '2017' | '2016'
@@ -27,5 +28,7 @@ export type PaymentsDemoReturnTypes = undefined | PaymentsGetData
 export const getPaymentsHistory = (store: DemoStore, params: Params, endpoint: string): PaymentsGetData => {
   const page = params['page[number]'] || '1'
   const year = params.startDate ? getFormattedDate(params.startDate.toString(), 'yyyy') : '2017'
-  return store[endpoint as keyof PaymenDemoStore][year as PaymentsYearNumber][page as PaymentsPageNumber] as PaymentsGetData
+  return store[endpoint as keyof PaymenDemoStore][year as PaymentsYearNumber][
+    page as PaymentsPageNumber
+  ] as PaymentsGetData
 }

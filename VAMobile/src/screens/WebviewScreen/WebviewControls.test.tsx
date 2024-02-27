@@ -1,8 +1,11 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import WebviewControls from './WebviewControls'
+
 import Mock = jest.Mock
 
 context('WebviewControls', () => {

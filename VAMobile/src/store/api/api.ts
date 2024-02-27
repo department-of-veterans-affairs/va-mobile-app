@@ -1,8 +1,12 @@
+import _ from 'underscore'
+
+import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
-import { transform } from './demo/store'
-import _ from 'underscore'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+
+import { transform } from './demo/store'
 
 const { API_ROOT } = getEnv()
 
@@ -162,6 +166,7 @@ const call = async function <T>(
       let json
       let text
       if (response.headers.get('Content-Type')?.startsWith('application/json')) {
+        logAnalyticsEvent(Events.vama_error_json_resp(endpoint, response.status))
         json = await response.json()
         const vamfBody = json?.errors?.[0].source?.vamfBody
 
@@ -194,11 +199,20 @@ const call = async function <T>(
   }
 }
 
-export const get = async function <T>(endpoint: string, params: Params = {}, abortSignal?: AbortSignal): Promise<T | undefined> {
+export const get = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
   return call<T>('GET', endpoint, params, undefined, abortSignal)
 }
 
-export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes, abortSignal?: AbortSignal): Promise<T | undefined> {
+export const post = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  contentType?: ContentTypes,
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
   return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 
