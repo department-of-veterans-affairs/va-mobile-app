@@ -1,0 +1,65 @@
+import React, { FC } from 'react'
+import { Linking, Pressable } from 'react-native'
+
+import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { useTheme } from 'utils/hooks'
+
+interface ActivityButtonProps {
+  /** Text for header */
+  title: string
+  /** Text for activity information */
+  subText: string
+  /** Deep link to navigate to, excluding the prefix */
+  deepLink: string
+}
+
+/**
+ * Home screen activity button
+ */
+const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: ActivityButtonProps) => {
+  const theme = useTheme()
+
+  const boxProps: BoxProps = {
+    borderRadius: 8,
+    py: theme.dimensions.cardPadding,
+    px: theme.dimensions.buttonPadding,
+    backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
+  }
+
+  return (
+    <Box {...boxProps}>
+      <Pressable
+        style={{ flexDirection: 'row' }}
+        onPress={() => Linking.openURL(`vamobile://${deepLink}`)}
+        accessible={true}
+        accessibilityRole={'button'}
+        testID={title}>
+        <Box flex={1}>
+          <Box
+            flexDirection={'row'}
+            flexWrap={'wrap'}
+            mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
+            <TextView variant="BitterHeading">{title}</TextView>
+          </Box>
+          {!!subText && (
+            <Box flexDirection={'row'}>
+              <Box flex={1}>
+                <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
+              </Box>
+              <VAIcon
+                width={24}
+                height={24}
+                name="RightArrowInCircle"
+                fill={theme.colors.icon.activityButton}
+                fill2={theme.colors.icon.transparent}
+                ml={theme.dimensions.listItemDecoratorMarginLeft}
+              />
+            </Box>
+          )}
+        </Box>
+      </Pressable>
+    </Box>
+  )
+}
+
+export default ActivityButton
