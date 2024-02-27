@@ -1604,6 +1604,11 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.2.0.tgz#952f747134b2dfbd8ac53d6015176c23bd32df68"
   integrity sha512-/jo8QZgY6t/5LvLS4CQrk0v59z1XHe3GIu8xV4lXshvL/lfqYQBKuSxNJtr8oXaqe2M3lgMr0KZry4duhKV2Pg==
 
+"@department-of-veterans-affairs/mobile-tokens@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.5.1.tgz#afb4d38cd2bfa49cb61a244ae356cc6efdb379c3"
+  integrity sha512-IWaYMenb0m8/FCI719Woknr5RO9x5iys0Isgk0ytJJzZZXNOnbmArb8y2zgztFMwPjA5maAj7INgA+YbwbFH+w==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
