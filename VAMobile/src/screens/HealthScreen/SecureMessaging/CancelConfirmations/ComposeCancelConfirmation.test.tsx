@@ -81,7 +81,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', () => {
         discardButtonSpy!()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
       })
     })
 
