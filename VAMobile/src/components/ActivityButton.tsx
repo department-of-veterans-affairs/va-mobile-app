@@ -26,18 +26,19 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     py: theme.dimensions.cardPadding,
     px: theme.dimensions.buttonPadding,
     backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
-    ...Platform.select({
-      ios: {
-        shadowColor: colors.black,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 8,
-        shadowColor: colors.black,
-      },
-    }),
+    style: {
+      shadowColor: colors.black,
+      ...Platform.select({
+        ios: {
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+        },
+        android: {
+          elevation: 8,
+        },
+      }),
+    },
   }
 
   const pressableStyles: ViewStyle = {
