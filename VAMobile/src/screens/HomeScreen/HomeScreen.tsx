@@ -153,15 +153,6 @@ export function HomeScreen({}: HomeScreenProps) {
     })
   }
 
-  const onCoronaVirusFAQ = () => {
-    dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigateTo('Webview', {
-      url: WEBVIEW_URL_CORONA_FAQ,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('webview.covidUpdates.loading'),
-    })
-  }
-
   const buttonDataList: Array<SimpleListItemObj> = [
     { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
@@ -169,7 +160,6 @@ export function HomeScreen({}: HomeScreenProps) {
       onPress: onFacilityLocator,
       testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('covid19Updates.title'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
   ]
 
   const profileIconProps: VAIconProps = {
