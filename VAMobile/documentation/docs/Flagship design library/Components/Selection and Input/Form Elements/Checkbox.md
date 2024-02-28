@@ -31,6 +31,7 @@ Allows users to select one or more items from a list. Checkboxes are an easily u
 
 ## Accessibility considerations
 * Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/form/checkbox/#accessibility-considerations)
+* Screenreaders should announce the name, role, and state of each checkbox.
 
 ## Code usage
 Link to Storybook coming soon

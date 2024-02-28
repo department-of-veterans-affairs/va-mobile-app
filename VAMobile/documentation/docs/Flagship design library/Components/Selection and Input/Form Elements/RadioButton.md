@@ -21,6 +21,7 @@ Radio buttons allow users to select exactly one choice from a group.
 
 ## Accessibility considerations
 * Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/form/checkbox/#accessibility-considerations)
+* Screenreaders should announce the name, role, and state of each checkbox.
 
 ## Code usage
 Link to Storybook coming soon
