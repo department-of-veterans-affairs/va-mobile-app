@@ -186,7 +186,7 @@ export const getInbox =
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
 
       if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount) {
-        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox?.data.attributes.unreadCount))
+        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox.data.attributes.unreadCount))
       }
 
       dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
