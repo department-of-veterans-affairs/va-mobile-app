@@ -3,9 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
-import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import { ErrorsState, MilitaryServiceState, initialErrorsState, initialMilitaryServiceState } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { BranchesOfServiceConstants, ServiceHistoryAttributes } from 'api/types'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 import MilitaryInformationScreen from './index'
 
@@ -61,17 +61,19 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('MilitaryInformationScreen', () => {
-  const serviceHistoryMock = [
-    {
-      branchOfService: BranchesOfServiceConstants.MarineCorps,
-      beginDate: '1993-06-04',
-      endDate: '1995-07-10',
-      formattedBeginDate: 'June 04, 1993',
-      formattedEndDate: 'July 10, 1995',
-      characterOfDischarge: 'Honorable',
-      honorableServiceIndicator: 'Y',
-    },
-  ]
+  const serviceHistoryMock: ServiceHistoryAttributes = {
+    serviceHistory: [
+      {
+        branchOfService: BranchesOfServiceConstants.MarineCorps,
+        beginDate: '1993-06-04',
+        endDate: '1995-07-10',
+        formattedBeginDate: 'June 04, 1993',
+        formattedEndDate: 'July 10, 1995',
+        characterOfDischarge: 'Honorable',
+        honorableServiceIndicator: 'Y',
+      },
+    ],
+  }
   const props = mockNavProps(
     {},
     {
@@ -80,21 +82,16 @@ context('MilitaryInformationScreen', () => {
       addListener: jest.fn(),
     },
   )
-  const initializeTestInstance = (
-    errorsState: ErrorsState = initialErrorsState,
-    serviceHistory = serviceHistoryMock,
-  ) => {
-    render(<MilitaryInformationScreen {...props} />, {
-      preloadedState: {
-        militaryService: {
-          ...initialMilitaryServiceState,
-          serviceHistory,
-          mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          needDataLoad: true,
-        } as MilitaryServiceState,
-        errors: errorsState,
+  const initializeTestInstance = (serviceHistory = serviceHistoryMock) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: militaryServiceHistoryKeys.serviceHistory,
+        data: {
+          ...serviceHistory,
+        },
       },
-    })
+    ]
+    render(<MilitaryInformationScreen {...props} />, { queriesData })
   }
 
   describe('when military service history authorization is false', () => {
@@ -109,25 +106,9 @@ context('MilitaryInformationScreen', () => {
   describe('when service history is empty', () => {
     it('should render NoMilitaryInformationAccess', async () => {
       await waitFor(() => {
-        initializeTestInstance(initialErrorsState, [])
+        initializeTestInstance({} as ServiceHistoryAttributes)
       })
       expect(screen.getByText("We can't access your military information")).toBeTruthy()
-    })
-  })
-
-  describe('when service history is not empty and military service history authorization is true', () => {
-    it('should not render NoMilitaryInformationAccess', async () => {
-      await waitFor(() => {
-        initializeTestInstance(initialErrorsState, [{} as ServiceData])
-      })
-      expect(screen.queryByText("We can't access your military information")).toBeFalsy()
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance()
-      expect(screen.getByText('Loading your military information...')).toBeTruthy()
     })
   })
 
@@ -135,6 +116,7 @@ context('MilitaryInformationScreen', () => {
     await waitFor(() => {
       initializeTestInstance()
     })
+    expect(screen.queryByText("We can't access your military information")).toBeFalsy()
     expect(screen.getByText('Period of service')).toBeTruthy()
     expect(screen.getByText('United States Marine Corps')).toBeTruthy()
     expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy()

@@ -1,17 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { TFunction } from 'i18next'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 
 import { Events, UserAnalytics } from 'constants/analytics'
 import { AppThunk } from 'store'
-import {
-  PrescriptionHistoryTabConstants,
-  PrescriptionRefillData,
-  PrescriptionSortOptionConstants,
-  RefillStatusConstants,
-} from 'store/api/types'
+import { PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getTextForRefillStatus } from 'utils/prescriptions'
 
 import * as api from '../api'
 import {
@@ -26,7 +23,6 @@ import {
   PrescriptionsPaginationData,
   RefillRequestSummaryItems,
   ScreenIDTypes,
-  TabCounts,
   get,
   put,
 } from '../api'
@@ -58,7 +54,6 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
   refillRequestSummaryItems: RefillRequestSummaryItems
-  tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
   prescriptionStatusCount: PrescriptionStatusCountData
   prescriptionFirstRetrieval: boolean
@@ -77,7 +72,6 @@ export const initialPrescriptionState: PrescriptionState = {
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   refillRequestSummaryItems: [],
-  tabCounts: {},
   prescriptionsNeedLoad: true,
   prescriptionStatusCount: {} as PrescriptionStatusCountData,
   prescriptionFirstRetrieval: true,
@@ -91,7 +85,7 @@ export const loadAllPrescriptions =
     const params = {
       'page[number]': '1',
       'page[size]': ALL_RX_PAGE_SIZE.toString(),
-      sort: 'prescription_name', // Parameters are snake case for the back end
+      sort: 'refill_status', // Parameters are snake case for the back end
     }
 
     try {
@@ -110,31 +104,22 @@ export const loadAllPrescriptions =
   }
 
 export const filterAndSortPrescriptions =
-  (filters: string[], tab: string, sort: string, ascending: boolean): AppThunk =>
+  (filters: string[], sort: string, ascending: boolean, t: TFunction): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartFilterAndSortPrescriptions())
 
     const state = getState()
-    let prescriptionsToSort: PrescriptionsList = []
-
-    // Start with the prefiltered lists based on the current tab
-    switch (tab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        prescriptionsToSort = state.prescriptions.prescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.PENDING:
-        prescriptionsToSort = state.prescriptions.pendingPrescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.TRACKING:
-        prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
-        break
-    }
+    const prescriptionsToSort = state.prescriptions.prescriptions || []
 
     let filteredList: PrescriptionsList = []
 
     // If there are no filters, don't filter the list
-    if (filters && filters[0] === '') {
+    if (filters[0] === '') {
       filteredList = [...prescriptionsToSort]
+    } else if (filters[0] === RefillStatusConstants.PENDING) {
+      filteredList = state.prescriptions.pendingPrescriptions || []
+    } else if (filters[0] === RefillStatusConstants.TRACKING) {
+      filteredList = state.prescriptions.shippedPrescriptions || []
     } else {
       // Apply the custom filter by
       filteredList = filter(prescriptionsToSort, (prescription) => {
@@ -146,7 +131,6 @@ export const filterAndSortPrescriptions =
 
     // Sort the list
     switch (sort) {
-      case PrescriptionSortOptionConstants.FACILITY_NAME:
       case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
       case PrescriptionSortOptionConstants.REFILL_REMAINING:
         sortedList = sortBy(filteredList, (a) => {
@@ -156,6 +140,11 @@ export const filterAndSortPrescriptions =
       case PrescriptionSortOptionConstants.REFILL_DATE:
         sortedList = sortBy(filteredList, (a) => {
           return new Date(a.attributes.refillDate || 0)
+        })
+        break
+      case PrescriptionSortOptionConstants.REFILL_STATUS:
+        sortedList = sortBy(filteredList, (a) => {
+          return getTextForRefillStatus(a.attributes[sort] as api.RefillStatus, t)
         })
         break
     }
@@ -343,12 +332,6 @@ const prescriptionSlice = createSlice({
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
       state.prescriptionFirstRetrieval = !!error
-
-      state.tabCounts = {
-        '0': prescriptions?.length,
-        '1': pendingPrescriptions.length,
-        '2': shippedPrescriptions.length,
-      }
     },
     dispatchStartFilterAndSortPrescriptions: (state) => {
       state.loadingHistory = true
