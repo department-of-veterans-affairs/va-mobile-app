@@ -70,7 +70,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
       snackBar?.hideAll()
       showSnackBar(t('claimLetters.download.error'), dispatch, fetchInfoAgain, false, true, true)
     }
-  }, [downloadLetterError, downloadLetterErrorDetails, snackBar, fetchInfoAgain, isErrorObject, dispatch, t])
+  }, [downloadLetterError, downloadLetterErrorDetails, fetchInfoAgain, dispatch, t])
 
   const letterButtons = decisionLetters.map((letter, index) => {
     const { typeDescription, receivedAt } = letter.attributes
