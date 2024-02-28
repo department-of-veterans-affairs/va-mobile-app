@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import _ from 'underscore'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useInboxData } from 'api/secureMessaging'
+import { useFolders } from 'api/secureMessaging'
+import { SecureMessagingFolderList } from 'api/types'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { loadAllPrescriptions } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -44,10 +48,21 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: inboxData } = useInboxData(false, {
+  const { data: foldersData, isFetched: smFetch } = useFolders({
     enabled: isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
-  const unreadCount = inboxData?.data.attributes.unreadCount
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    if (smFetch) {
+      const folders = foldersData?.data || ([] as SecureMessagingFolderList)
+      _.forEach(folders, (folder) => {
+        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+          setUnreadCount(folder.attributes.unreadCount)
+        }
+      })
+    }
+  }, [smFetch, foldersData])
 
   const onPharmacy = () => {
     // always reload to ensure freshness

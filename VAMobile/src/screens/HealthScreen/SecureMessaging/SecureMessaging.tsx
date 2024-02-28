@@ -8,7 +8,7 @@ import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFolderMessages, useFolders, useInboxData } from 'api/secureMessaging'
+import { useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { Events } from 'constants/analytics'
@@ -41,10 +41,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const [termsAndConditionError, setTermsAndConditionError] = useState(false)
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: inboxData } = useInboxData(false, {
-    enabled: screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime,
-  })
-  const { data: foldersData, isError: foldersError } = useFolders({
+  const {
+    data: foldersData,
+    isError: foldersError,
+    isFetched: smFetch,
+  } = useFolders({
     enabled: screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
   const {
@@ -55,12 +56,23 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     enabled: screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
-  const inboxUnreadCount = inboxData?.data.attributes.unreadCount
+  const [inboxUnreadCount, setInboxUnreadCount] = useState(0)
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
 
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+
+  useEffect(() => {
+    if (smFetch) {
+      const foldersList = foldersData?.data || ([] as SecureMessagingFolderList)
+      _.forEach(foldersList, (folder) => {
+        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+          setInboxUnreadCount(folder.attributes.unreadCount)
+        }
+      })
+    }
+  }, [smFetch, foldersData])
 
   useFocusEffect(
     React.useCallback(() => {

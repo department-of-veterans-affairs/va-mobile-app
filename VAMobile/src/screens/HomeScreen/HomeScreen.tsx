@@ -6,9 +6,11 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { DateTime } from 'luxon'
+import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useInboxData } from 'api/secureMessaging'
+import { useFolders } from 'api/secureMessaging'
+import { SecureMessagingFolderList } from 'api/types'
 import {
   Box,
   CategoryLanding,
@@ -23,6 +25,7 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -76,7 +79,7 @@ export function HomeScreen({}: HomeScreenProps) {
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { isFetched: smPrefetch } = useInboxData(true, {
+  const { data: foldersData, isFetched: smPrefetch } = useFolders({
     enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
   })
 
@@ -85,6 +88,17 @@ export function HomeScreen({}: HomeScreenProps) {
       dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
     }
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
+
+  useEffect(() => {
+    if (smPrefetch) {
+      const folders = foldersData?.data || ([] as SecureMessagingFolderList)
+      _.forEach(folders, (folder) => {
+        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+          logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
+        }
+      })
+    }
+  }, [smPrefetch, foldersData])
 
   useEffect(() => {
     if (
