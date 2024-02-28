@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
-import { Linking, Pressable, ViewStyle } from 'react-native'
+import { Linking, Platform, Pressable, ViewStyle } from 'react-native'
 
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
+
+import colors from '../styles/themes/VAColors'
 
 interface ActivityButtonProps {
   /** Text for header */
@@ -24,6 +26,18 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     py: theme.dimensions.cardPadding,
     px: theme.dimensions.buttonPadding,
     backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.black,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+        shadowColor: colors.black,
+      },
+    }),
   }
 
   const pressableStyles: ViewStyle = {
