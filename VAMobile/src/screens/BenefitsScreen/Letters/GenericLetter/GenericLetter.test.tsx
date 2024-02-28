@@ -9,15 +9,9 @@ import { context, mockNavProps, render } from 'testUtils'
 import GenericLetter from './GenericLetter'
 
 jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
   return {
-    ...actual,
-    downloadLetter: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
+    ...jest.requireActual<typeof import('store/slices')>('store/slices'),
+    downloadLetter: jest.fn(() => ({ type: '', payload: '' })),
   }
 })
 

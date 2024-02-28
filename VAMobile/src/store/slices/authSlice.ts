@@ -101,6 +101,7 @@ Call postLoggedIn to finish login setup on the BE, Success is empty and we don't
 
 const postLoggedIn = async () => {
   try {
+    await logAnalyticsEvent(Events.vama_login_success(true))
     await api.post('/v0/user/logged-in')
   } catch (error) {
     if (isErrorObject(error)) {
@@ -211,7 +212,7 @@ export const setPKCEParams = (): AppThunk => async (dispatch) => {
 export const loginStart =
   (syncing: boolean): AppThunk =>
   async (dispatch) => {
-    dispatch(sendLoginStartAnalytics())
+    dispatch(sendLoginStartAnalytics(false))
     dispatch(dispatchStartAuthLogin(syncing))
   }
 
@@ -581,6 +582,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
   console.debug('startBiometricsLogin: starting')
+  dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
     refreshToken = await retrieveRefreshToken()
@@ -674,7 +676,6 @@ export const handleTokenCallbackUrl =
         }).toString(),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success(true))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
       postLoggedIn()
@@ -701,9 +702,11 @@ export const sendLoginFailedAnalytics =
     await logAnalyticsEvent(Events.vama_login_fail(error, true))
   }
 
-export const sendLoginStartAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_login_start(true))
-}
+export const sendLoginStartAnalytics =
+  (biometric: boolean): AppThunk =>
+  async () => {
+    await logAnalyticsEvent(Events.vama_login_start(true, biometric))
+  }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
   await clearCookies()
