@@ -21,7 +21,7 @@ import { useTheme } from 'utils/hooks'
 
 import {
   generateA11yValue,
-  generateInputTestID,
+  generateInputA11yLabel,
   getInputWrapperProps,
   removeInputErrorMessage,
   renderInputError,
@@ -169,7 +169,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'picker')
+  const inputA11yLabel = generateInputA11yLabel(labelKey, isRequiredField, helperTextKey, error, t, 'picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -201,7 +201,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
 
     return (
-      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)} {...parentProps}>
+      <Pressable onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
         {content}
       </Pressable>
     )
