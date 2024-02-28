@@ -16,10 +16,10 @@ Allows users to select one or more items from a list. Checkboxes are an easily u
 
 ### Group
 
-### Master component
+#### Master component
 <iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/mAMh8vyVgsevAOungfvGN6/%5BNEW%5D-Checkbox-%26-Radio-Buttons?type=design&node-id=1509-7094&mode=design&t=iS5TS46EHWCYCjWn-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
 
-### Examples
+#### Examples
 <iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/mAMh8vyVgsevAOungfvGN6/%5BNEW%5D-Checkbox-%26-Radio-Buttons?type=design&node-id=1509-7095&mode=design&t=iS5TS46EHWCYCjWn-4" allowfullscreen></iframe>
 
 ## Usage
