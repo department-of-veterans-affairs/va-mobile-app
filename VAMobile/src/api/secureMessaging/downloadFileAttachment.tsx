@@ -10,14 +10,15 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user message signature
  */
-const downloadFileAttachment = async (file: SecureMessagingAttachment): Promise<void | undefined> => {
+const downloadFileAttachment = async (file: SecureMessagingAttachment): Promise<boolean | undefined> => {
   const filePath = await downloadFile('GET', file.link, file.filename)
   if (filePath) {
-    return await FileViewer.open(filePath, {
+    await FileViewer.open(filePath, {
       onDismiss: async (): Promise<void> => {
         await unlinkFile(filePath)
       },
     })
+    return true
   }
 }
 
