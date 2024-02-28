@@ -40,7 +40,6 @@ import {
 } from 'store/slices'
 import { AnalyticsState, SecureMessagingState } from 'store/slices'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -61,7 +60,7 @@ import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/Sandbo
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
