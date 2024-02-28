@@ -161,16 +161,11 @@ Mocking libraries and functions are done through [jest mocks](https://jestjs.io/
 One of the most commonly mocked parts of the app are hooks related to things like navigation, theme, and alerts. This is done by creating a spy object at the top of the file that will then be set in the jest mocks to allow it to be used within the tests.
 
 ```tsx
-let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
-  }
-})
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => ({
+  ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
+  useRouteNavigation: () => mockNavigationSpy,
+}))
 ```
 
 This block of code will mock the entirety of the hooks util file using the original implementations except for the useRouteNavigation hook, which is instead returning a spy object that the unit test can use to verify it was called with the correct arguments.
@@ -196,23 +191,13 @@ expect(navigateToPaymentMissingSpy).toHaveBeenCalled()
 Components will often make API calls which can be mocked via the redux actions that call them.
 
 ```tsx
-import { downloadLetter } from 'store/slices'
-
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    downloadLetter: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+jest.mock('store/slices', () => ({
+  ...jest.requireActual<typeof import('store/slices')>('store/slices'),
+  downloadLetter: jest.fn(() => ({ type: '', payload: '' })),
+}))
 ```
 
-This imports the `downloadLetter` action from the letters slice responsible for handling downloading letters and mocks it to do nothing. This will let the unit test validate it has been called without the test itself trying to actually download anything.
+This mocks the `downloadLetter` action from the letters slice responsible for downloading letters, to do nothing. This will let the unit test validate it has been called without the test itself trying to actually download anything.
 
 ```tsx
 // Do something that triggers downloading of a letter with some set of options
