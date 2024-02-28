@@ -58,6 +58,10 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
+  const fetchInfoAgain = () => {
+    queryClient.invalidateQueries({ queryKey: decisionLettersKeys.decisionLetters })
+  }
+
   useEffect(() => {
     if (downloadLetterError && downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
       if (!snackBar) {
