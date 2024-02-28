@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { SecureMessagingFolderGetData, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { SecureMessagingFoldersGetData } from 'api/types'
 import * as api from 'store/api'
 import { loadAllPrescriptions } from 'store/slices'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
@@ -71,16 +71,33 @@ context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-  const inboxData: SecureMessagingFolderGetData = {
-    data: {
-      id: '1',
-      type: 'hah',
-      attributes: {
-        folderId: 1,
-        name: 'inbox',
-        count: 22,
-        unreadCount: 13,
-        systemFolder: true,
+  const inboxData: SecureMessagingFoldersGetData = {
+    data: [
+      {
+        id: '1',
+        type: 'hah',
+        attributes: {
+          folderId: 1,
+          name: 'Inbox',
+          count: 22,
+          unreadCount: 13,
+          systemFolder: true,
+        },
+      },
+    ],
+    links: {
+      self: '1',
+      first: '1',
+      prev: '1',
+      next: '1',
+      last: '1',
+    },
+    meta: {
+      pagination: {
+        currentPage: 1,
+        perPage: 1,
+        totalPages: 1,
+        totalEntries: 1,
       },
     },
   }
@@ -172,7 +189,7 @@ context('HealthScreen', () => {
 
   it('should render messagesCountTag with the correct count number', async () => {
     when(api.get as jest.Mock)
-      .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}`)
+      .calledWith('/v0/messaging/health/folders')
       .mockResolvedValue(inboxData)
     initializeTestInstance()
     await waitFor(() => expect(screen.getByText('13')).toBeTruthy())
