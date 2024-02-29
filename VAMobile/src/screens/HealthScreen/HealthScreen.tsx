@@ -54,13 +54,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
-    if (smFetch) {
-      const folders = foldersData?.data || ([] as SecureMessagingFolderList)
-      _.forEach(folders, (folder) => {
-        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
-          setUnreadCount(folder.attributes.unreadCount)
+    if (smFetch && foldersData) {
+      const inboxFolder = foldersData.data.find(folder => folder.attributes.name === FolderNameTypeConstants.inbox)
+       if (inboxFolder) {
+          setUnreadCount(inboxFolder.attributes.unreadCount)
         }
-      })
     }
   }, [smFetch, foldersData])
 
