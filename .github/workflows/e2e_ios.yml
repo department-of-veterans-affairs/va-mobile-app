@@ -216,7 +216,7 @@ jobs:
 
       - name: Inform Slack of success
         id: post_success
-        if: ${{!failure()}} && github.event_name == 'schedule'
+        if: ${{ success() }} && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
