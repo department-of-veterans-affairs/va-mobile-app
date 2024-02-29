@@ -10,7 +10,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * deletes a user's message based on `message id` field
  */
-const deleteMessage = async ({ messageID }: DeleteMessageParameters) => {
+const deleteMessage = ({ messageID }: DeleteMessageParameters) => {
   return del(`/v0/messaging/health/messages/${messageID}`)
 }
 
