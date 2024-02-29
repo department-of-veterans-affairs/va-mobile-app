@@ -8,7 +8,7 @@ import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { secureMessagingKeys } from './queryKeys'
 
 /**
- * Fetch user message signature
+ * Fetch user attachment
  */
 const downloadFileAttachment = async (file: SecureMessagingAttachment): Promise<boolean | undefined> => {
   const filePath = await downloadFile('GET', file.link, file.filename)
@@ -23,7 +23,7 @@ const downloadFileAttachment = async (file: SecureMessagingAttachment): Promise<
 }
 
 /**
- * Returns a query for a user message signature
+ * Returns a query for a user attachment
  */
 export const useDownloadFileAttachment = (file: SecureMessagingAttachment, options?: { enabled?: boolean }) => {
   return useQuery({

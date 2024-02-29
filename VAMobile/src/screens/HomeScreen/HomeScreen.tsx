@@ -91,11 +91,10 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (smFetch && foldersData) {
-      const inboxFolder = foldersData.data.find(folder => folder.attributes.name === FolderNameTypeConstants.inbox)
-       if (inboxFolder) {
-    
-logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
-        }
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      if (inboxFolder) {
+        logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
+      }
     }
   }, [smPrefetch, foldersData])
 

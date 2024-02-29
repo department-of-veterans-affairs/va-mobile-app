@@ -61,10 +61,6 @@ const sendMessage = async ({ messageData, replyToID, uploads }: SendMessageParam
  */
 export const useSendMessage = () => {
   const queryClient = useQueryClient()
-  //   showSnackBar(messages.successMsg, dispatch, undefined, true, false, true) show snack bar on success or failure with retry on failure
-  // logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime, messageData.category, replyToID)) add this one to the onSuccess in screen
-  //const isReplyWithTriageError = replyToID && hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
-  //!isReplyWithTriageError && showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
   return useMutation({
     mutationFn: sendMessage,
     onSuccess: async () => {
