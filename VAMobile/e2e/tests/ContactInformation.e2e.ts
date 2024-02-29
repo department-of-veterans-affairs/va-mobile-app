@@ -409,7 +409,7 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  /*validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
+  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
@@ -460,5 +460,4 @@ describe(':ios: Contact Info Screen', () => {
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
-*/
 })
