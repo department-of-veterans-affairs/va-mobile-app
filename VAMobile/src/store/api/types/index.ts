@@ -1,7 +1,5 @@
 export * from './UserData'
 export * from './DecisionLettersData'
-export * from './LettersData'
-export * from './LetterBeneficiaryData'
 export * from './AppointmentData'
 export * from './ClaimsAndAppealsData'
 export * from './Errors'

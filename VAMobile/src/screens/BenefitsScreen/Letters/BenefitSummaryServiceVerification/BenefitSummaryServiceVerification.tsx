@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
@@ -7,6 +7,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
+import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
+import { LetterBenefitInformation, LetterTypeConstants, LettersDownloadParams } from 'api/types'
 import {
   BasicError,
   Box,
@@ -26,18 +28,12 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import {
-  BenefitSummaryAndServiceVerificationLetterOptions,
-  LetterBenefitInformation,
-  LetterTypeConstants,
-} from 'store/api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
+import { DemoState } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()
@@ -50,9 +46,32 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<
 function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError, loadingLetterBeneficiaryData } =
-    useSelector<RootState, LettersState>((state) => state.letters)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const [downloadLetter, setDownloadLetter] = useState(false)
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
+    enabled: screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter'),
+  })
+  const lettersOptions: LettersDownloadParams = {
+    militaryService: false,
+    serviceConnectedDisabilities: false,
+    serviceConnectedEvaluation: false,
+    nonServiceConnectedPension: letterBeneficiaryData?.benefitInformation.hasNonServiceConnectedPension || false,
+    monthlyAward: false,
+    unemployable: letterBeneficiaryData?.benefitInformation.hasIndividualUnemployabilityGranted || false,
+    specialMonthlyCompensation: letterBeneficiaryData?.benefitInformation.hasSpecialMonthlyCompensation || false,
+    adaptedHousing: letterBeneficiaryData?.benefitInformation.hasAdaptedHousing || false,
+    chapter35Eligibility: false,
+    deathResultOfDisability: letterBeneficiaryData?.benefitInformation.hasDeathResultOfDisability || false,
+    survivorsAward:
+      letterBeneficiaryData?.benefitInformation.hasSurvivorsIndemnityCompensationAward ||
+      letterBeneficiaryData?.benefitInformation.hasSurvivorsPensionAward ||
+      false,
+  }
+  const {
+    isLoading: downloading,
+    isError: letterDownloadError,
+    refetch: refetchLetter,
+  } = useDownloadLetter(LetterTypeConstants.benefitSummary, demoMode, lettersOptions, { enabled: downloadLetter })
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -60,14 +79,8 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
   const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(true)
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
-  useEffect(() => {
-    if (screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter')) {
-      dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
-    }
-  }, [dispatch])
-
   const getListOfMilitaryService = (): React.ReactNode => {
-    return map(mostRecentServices, (periodOfService, index) => {
+    return map(letterBeneficiaryData?.mostRecentServices || [], (periodOfService, index) => {
       const militaryServiceInfoList: Array<DefaultListItemObj> = [
         {
           textLines: [
@@ -109,7 +122,13 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
         },
       ]
       return (
-        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
+        <Box
+          key={index}
+          mb={
+            (letterBeneficiaryData?.mostRecentServices?.length || 0) - 1 === index
+              ? 0
+              : theme.dimensions.standardMarginBetween
+          }>
           <DefaultList items={militaryServiceInfoList} title={t('letters.benefitService.militaryServiceInformation')} />
         </Box>
       )
@@ -205,15 +224,17 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
   }
 
   const onViewLetter = (): void => {
-    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-      militaryService: includeMilitaryServiceInfoToggle,
-      monthlyAward: monthlyAwardToggle,
-      serviceConnectedEvaluation: combinedServiceRatingToggle,
-      chapter35Eligibility: disabledDueToServiceToggle,
-      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-    }
+    lettersOptions.militaryService = includeMilitaryServiceInfoToggle
+    lettersOptions.monthlyAward = monthlyAwardToggle
+    lettersOptions.serviceConnectedEvaluation = combinedServiceRatingToggle
+    lettersOptions.chapter35Eligibility = disabledDueToServiceToggle
+    lettersOptions.serviceConnectedDisabilities = atLeastOneServiceDisabilityToggle
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    if (downloadLetter) {
+      refetchLetter()
+    } else {
+      setDownloadLetter(true)
+    }
   }
 
   const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
