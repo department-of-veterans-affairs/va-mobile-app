@@ -162,7 +162,7 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the secure messaging button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByText('Messages'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
     })
