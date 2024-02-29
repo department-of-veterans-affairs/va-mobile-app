@@ -141,7 +141,7 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the prescriptions button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       initializeTestInstance(true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
