@@ -12,7 +12,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Sends a message
  */
-const sendMessage = async ({ messageData, replyToID, uploads }: SendMessageParameters) => {
+const sendMessage = ({ messageData, replyToID, uploads }: SendMessageParameters) => {
   let postData: FormData | SecureMessagingFormData = messageData
   if (uploads && uploads.length !== 0) {
     const formData = new FormData()
