@@ -12,7 +12,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Sends a message
  */
-const sendMessage = async ({ messageData, replyToID, uploads }: SendMessageParameters) => {
+const sendMessage = ({ messageData, replyToID, uploads }: SendMessageParameters) => {
   let postData: FormData | SecureMessagingFormData = messageData
   if (uploads && uploads.length !== 0) {
     const formData = new FormData()
@@ -47,13 +47,11 @@ const sendMessage = async ({ messageData, replyToID, uploads }: SendMessageParam
     })
     postData = formData
   }
-  const response = await post<SecureMessagingMessageData>(
+  return post<SecureMessagingMessageData>(
     replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
     postData as unknown as Params,
-    uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+    uploads?.length !== 0 ? contentTypes.multipart : undefined,
   )
-
-  return response
 }
 
 /**
@@ -63,7 +61,7 @@ export const useSendMessage = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: sendMessage,
-    onSuccess: async () => {
+    onSuccess: () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       registerReviewEvent()
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })

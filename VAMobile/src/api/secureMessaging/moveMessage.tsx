@@ -10,7 +10,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Moves a user's message from one folder to another
  */
-const moveMessage = async ({ messageID, newFolderID }: MoveMessageParameters) => {
+const moveMessage = ({ messageID, newFolderID }: MoveMessageParameters) => {
   return patch(`/v0/messaging/health/messages/${messageID}/move`, {
     folder_id: newFolderID,
   } as unknown as Params)
@@ -23,7 +23,7 @@ export const useMoveMessage = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: moveMessage,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
     },
     onError: (error) => {

@@ -8,7 +8,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user message thread based on original message ID
  */
-const getThread = async (
+const getThread = (
   messageID: number,
   excludeProvidedMessage: boolean,
 ): Promise<SecureMessagingThreadGetData | undefined> => {

@@ -8,17 +8,13 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user folder messages
  */
-const getFolderMessages = async (
+const getFolderMessages = (
   folderID: number,
   page: number,
 ): Promise<SecureMessagingFolderMessagesGetData | undefined> => {
-  const response = await get<SecureMessagingFolderMessagesGetData>(
-    `/v0/messaging/health/folders/${folderID}/messages`,
-    {
-      page: page.toString(),
-    } as Params,
-  )
-  return response
+  return get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
+    page: page.toString(),
+  } as Params)
 }
 
 /**
