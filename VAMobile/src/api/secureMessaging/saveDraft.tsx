@@ -12,20 +12,14 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Creates or updates a user's draft message depending on whether the `message id` field is present
  */
-const saveDraft = async ({ messageID, replyID, messageData }: SaveDraftParameters) => {
-  let response
+const saveDraft = ({ messageID, replyID, messageData }: SaveDraftParameters) => {
+  const url = replyID ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+
   if (messageID) {
-    const url = replyID
-      ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}`
-      : `/v0/messaging/health/message_drafts/${messageID}`
-    response = await put<SecureMessagingSaveDraftData>(url, messageData as unknown as Params)
-  } else {
-    const url = replyID
-      ? `/v0/messaging/health/message_drafts/${replyID}/replydraft`
-      : '/v0/messaging/health/message_drafts'
-    response = await post<SecureMessagingSaveDraftData>(url, messageData as unknown as Params)
+    return put<SecureMessagingSaveDraftData>(`${url}/${messageID}`, messageData as unknown as Params)
   }
-  return response
+
+  return post<SecureMessagingSaveDraftData>(url, messageData as unknown as Params)
 }
 
 /**
