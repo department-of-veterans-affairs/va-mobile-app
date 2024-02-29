@@ -8,7 +8,7 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user folders
  */
-const getFolders = async (): Promise<SecureMessagingFoldersGetData | undefined> => {
+const getFolders = (): Promise<SecureMessagingFoldersGetData | undefined> => {
   return get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
 }
 
