@@ -5,13 +5,14 @@ import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BackgroundVariant, Box, ColorVariant, TextView, VAIcon } from 'components'
+import { BackgroundVariant, BorderColorVariant, Box, ColorVariant, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState } from 'store/slices'
+import { DisabilityRatingState, LettersState, MilitaryServiceState } from 'store/slices'
 import { setAnalyticsUserProperty } from 'utils/analytics'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 interface NametagProps {
@@ -21,6 +22,8 @@ interface NametagProps {
 
 export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
@@ -39,6 +42,8 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   const fullName = personalInfo?.fullName
 
   const branch = mostRecentBranch || ''
+  const disRating = !!ratingData?.combinedDisabilityRating
+  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
 
   let showVeteranStatus = false
   serviceHistory.forEach((service) => {
@@ -126,45 +131,78 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   } else if (screen === 'Home') {
     return (
       <Box>
-        <Pressable {...pressableProps}>
-          <Box
-            pl={theme.dimensions.buttonPadding}
-            backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant}
-            minHeight={82}
-            display="flex"
-            justifyContent="center"
-            mb={theme.dimensions.standardMarginBetween}
-            pr={theme.dimensions.cardPadding}
-            mx={theme.dimensions.gutter}
-            borderRadius={8}
-            flex={1}>
-            <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row" alignItems="center">
-              {getBranchSeal()}
-              <Box ml={theme.dimensions.cardPadding} flex={1}>
-                <TextView
-                  textTransform="capitalize"
-                  variant="MobileBody"
-                  color={theme.colors.text.veteranStatusHome as ColorVariant}>
-                  {branch}
-                </TextView>
-                {showVeteranStatus && (
-                  <Box flexDirection={'row'} alignItems={'center'}>
-                    <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                      {t('veteranStatus.proofOf')}
+        <Box flex={1}>
+          {accessToMilitaryInfo && (
+            <Pressable {...pressableProps}>
+              <Box
+                pl={theme.dimensions.buttonPadding}
+                backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant}
+                minHeight={82}
+                display="flex"
+                justifyContent="center"
+                mb={theme.dimensions.standardMarginBetween}
+                pr={theme.dimensions.buttonPadding}
+                mx={theme.dimensions.condensedMarginBetween}
+                borderRadius={8}
+                flex={1}>
+                <Box py={theme.dimensions.buttonPadding} display="flex" flexDirection="row" alignItems="center">
+                  {getBranchSeal()}
+                  <Box ml={theme.dimensions.buttonPadding} flex={1}>
+                    <TextView variant={'VeteranStatusBranch'} pb={4}>
+                      {branch}
                     </TextView>
+                    {showVeteranStatus && (
+                      <Box flexDirection={'row'} alignItems={'center'}>
+                        <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                          {t('veteranStatus.proofOf')}
+                        </TextView>
+                      </Box>
+                    )}
                   </Box>
-                )}
+                  <VAIcon
+                    name={'ChevronRight'}
+                    fill={theme.colors.icon.contrast}
+                    width={theme.dimensions.chevronListItemWidth}
+                    height={theme.dimensions.chevronListItemHeight}
+                    ml={theme.dimensions.listItemDecoratorMarginLeft}
+                  />
+                </Box>
               </Box>
-              <VAIcon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.contrast}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-              />
+            </Pressable>
+          )}
+        </Box>
+        <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant}>
+          {disRating && (
+            <Box
+              pt={theme.dimensions.standardMarginBetween}
+              pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
+              pl={theme.dimensions.standardMarginBetween}>
+              <TextView variant={'VeteranStatusBranch'}>{t('disabilityRating.title')}</TextView>
+              <TextView
+                variant={
+                  'NametagNumber'
+                }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
+              <TextView variant={'VeteranStatusProof'}>{t('disabilityRating.serviceConnected')}</TextView>
             </Box>
-          </Box>
-        </Pressable>
+          )}
+          {monthlyPay && disRating && (
+            <Box
+              mx={theme.dimensions.standardMarginBetween}
+              my={theme.dimensions.condensedMarginBetween}
+              borderWidth={1}
+              borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+            />
+          )}
+          {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+            <Box pl={theme.dimensions.standardMarginBetween} pb={theme.dimensions.standardMarginBetween}>
+              <TextView variant={'VeteranStatusBranch'}>{t('monthlyCompensationPayment')}</TextView>
+              <TextView
+                variant={
+                  'NametagNumber'
+                }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+            </Box>
+          )}
+        </Box>
       </Box>
     )
   } else {

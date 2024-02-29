@@ -225,19 +225,12 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
+        <Box pt={theme.dimensions.formMarginBetween}>
+          <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} variant={'AboutYou'}>
+            {t('aboutYou')}
+          </TextView>
+        </Box>
         <Nametag screen={'Home'} />
-        {!!ratingData?.combinedDisabilityRating && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
-            <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
-          </Box>
-        )}
-        {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
-            <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
-          </Box>
-        )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
