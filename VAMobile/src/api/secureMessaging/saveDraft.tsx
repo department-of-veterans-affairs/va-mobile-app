@@ -29,7 +29,7 @@ export const useSaveDraft = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: saveDraft,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       registerReviewEvent()
