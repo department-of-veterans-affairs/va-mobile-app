@@ -23,7 +23,7 @@ export const useMoveMessage = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: moveMessage,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
     },
     onError: (error) => {
