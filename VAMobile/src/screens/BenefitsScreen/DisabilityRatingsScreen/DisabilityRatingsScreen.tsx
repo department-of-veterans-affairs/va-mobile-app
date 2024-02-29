@@ -73,30 +73,10 @@ function DisabilityRatingsScreen() {
           })
         : ''
 
-    let textLines: Array<TextLine> = []
-
-    if (percentageText) {
-      textLines.push({
-        text: percentageText,
-        variant: 'MobileBodyBold',
-      })
-    }
-
-    textLines = [
-      ...textLines,
-      {
-        text: capitalizeFirstLetter(diagnosticText),
-      },
-      {
-        text: decisionText,
-      },
-    ]
-
-    if (formattedEffectiveDateText) {
-      textLines.push({
-        text: formattedEffectiveDateText,
-      })
-    }
+    const textLines: Array<TextLine> = []
+    percentageText && textLines.push({ text: percentageText, variant: 'MobileBodyBold' })
+    textLines.push({ text: capitalizeFirstLetter(diagnosticText) }, { text: decisionText })
+    formattedEffectiveDateText && textLines.push({ text: formattedEffectiveDateText })
 
     return {
       textLines,
