@@ -129,7 +129,7 @@ context('HealthScreen', () => {
     })
 
     describe('feature enabled', () => {
-      it('does not display prescriptions button if feature toggle enabled', async () => {
+      it('does not display prescriptions button if feature toggle enabled', () => {
         initializeTestInstance(true)
         expect(screen.getByText('Appointments')).toBeTruthy()
         expect(screen.getByText('Messages')).toBeTruthy()
