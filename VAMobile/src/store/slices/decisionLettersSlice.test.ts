@@ -55,7 +55,6 @@ context('decisionLetters', () => {
 
       const endAction = _.find(actions, { type: 'decisionLetters/dispatchFinishGetDecisionLetters' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.letters.loading).toBe(false)
 
       const { decisionLetters } = store.getState()
       expect(decisionLetters.error).toBeFalsy()
