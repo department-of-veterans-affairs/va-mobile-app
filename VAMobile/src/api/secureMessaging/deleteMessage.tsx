@@ -21,7 +21,7 @@ export const useDeleteMessage = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deleteMessage,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
     },
     onError: (error) => {
