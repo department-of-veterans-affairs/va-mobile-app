@@ -129,7 +129,7 @@ context('HealthScreen', () => {
     })
 
     describe('feature enabled', () => {
-      it('does not display prescriptions button if feature toggle enabled', async () => {
+      it('does not display prescriptions button if feature toggle enabled', () => {
         initializeTestInstance(true)
         expect(screen.getByText('Appointments')).toBeTruthy()
         expect(screen.getByText('Messages')).toBeTruthy()
@@ -141,13 +141,13 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the prescriptions button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       initializeTestInstance(true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
-    it('should reload rx data if data is present', async () => {
+    it('should reload rx data if data is present', () => {
       initializeTestInstance(true, false)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
@@ -162,7 +162,7 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the secure messaging button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByText('Messages'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
     })
