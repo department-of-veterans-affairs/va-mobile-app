@@ -89,7 +89,7 @@ export function useComposeCancelConfirmation(): [
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
-          navigateTo('SecureMessaging', { activeTab: origin === 'Compose' ? 0 : origin === 'Draft' ? 1 : 0 })
+          navigateTo('SecureMessaging', { activeTab: origin === 'Draft' ? 1 : 0 })
         }
       }
 
