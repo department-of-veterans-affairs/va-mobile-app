@@ -184,8 +184,7 @@ export const getInbox =
       //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
-
-      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount) {
+      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes) {
         await logAnalyticsEvent(Events.vama_hs_sm_count(inbox.data.attributes.unreadCount))
       }
 
