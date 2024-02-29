@@ -147,7 +147,7 @@ context('HealthScreen', () => {
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
-    it('should reload rx data if data is present', async () => {
+    it('should reload rx data if data is present', () => {
       initializeTestInstance(true, false)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
