@@ -9,6 +9,7 @@ import {
   DefaultList,
   DefaultListItemObj,
   LabelTagTypeConstants,
+  LoadingComponent,
   Pagination,
   PaginationProps,
   TextLine,
@@ -32,7 +33,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const navigateTo = useRouteNavigation()
   const [page, setPage] = useState(1)
   const [previousClaimType, setClaimType] = useState(claimType)
-  const { data: claimsAndAppealsListPayload } = useClaimsAndAppeals(claimType, page)
+  const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
@@ -106,6 +107,10 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
 
   if (claimsAndAppeals?.length === 0) {
     return <NoClaimsAndAppeals claimType={claimType} />
+  }
+
+  if (loadingClaimsAndAppeals) {
+    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })

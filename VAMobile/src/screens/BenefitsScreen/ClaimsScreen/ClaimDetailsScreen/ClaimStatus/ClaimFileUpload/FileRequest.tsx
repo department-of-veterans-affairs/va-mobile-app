@@ -8,7 +8,16 @@ import { map } from 'underscore'
 
 import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
-import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import {
+  Box,
+  ChildTemplate,
+  ErrorComponent,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -25,7 +34,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
-  const { data: claim, isError: claimError } = useClaim(claimID)
+  const { data: claim, isError: claimError, isLoading: loadingClaim } = useClaim(claimID)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
@@ -89,6 +98,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       testID="fileRequestPageTestID">
       {claimError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
+      ) : loadingClaim ? (
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : (
         <Box mb={contentMarginBottom}>
           <TextView
