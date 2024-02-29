@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { SaveDraftParameters, SecureMessagingSaveDraftData } from 'api/types'
+import { SaveDraftParameters, SecureMessagingSaveDraftData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { Params, post, put } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
@@ -33,6 +33,9 @@ export const useSaveDraft = () => {
     mutationFn: saveDraft,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
+      queryClient.invalidateQueries({
+        queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+      })
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       registerReviewEvent()
     },

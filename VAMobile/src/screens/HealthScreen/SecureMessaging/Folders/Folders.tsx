@@ -102,7 +102,6 @@ function Folders({}: FoldersProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { data: foldersData, isLoading: loadingFolders } = useFolders()
-  const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const onFolderPress = (folderID: number, folderName: string): void => {
     const folder = (): string => {
       switch (folderID) {
@@ -129,8 +128,8 @@ function Folders({}: FoldersProps) {
   return (
     <VAScrollView {...testIdProps('', false, 'Folders-page')}>
       <Box>
-        {getSystemFolders(folders || [], theme, t, onFolderPress)}
-        {getUserFolders(folders || [], theme, t, onFolderPress)}
+        {getSystemFolders(foldersData?.data || [], theme, t, onFolderPress)}
+        {getUserFolders(foldersData?.data || [], theme, t, onFolderPress)}
       </Box>
     </VAScrollView>
   )

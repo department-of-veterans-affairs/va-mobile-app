@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFolderMessages } from 'api/secureMessaging'
-import { SecureMessagingMessageList, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
@@ -22,7 +22,6 @@ function Inbox({}: InboxProps) {
     SecureMessagingSystemFolderIdConstants.INBOX,
     page,
   )
-  const inboxMessages = inboxMessagesData?.data || ([] as SecureMessagingMessageList)
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
   const onInboxMessagePress = (messageID: number): void => {
@@ -30,7 +29,7 @@ function Inbox({}: InboxProps) {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
-      messagesLeft: inboxMessages.length,
+      messagesLeft: inboxMessagesData?.data?.length,
     })
   }
 
@@ -38,7 +37,7 @@ function Inbox({}: InboxProps) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
-  if (!inboxMessages?.length) {
+  if (!inboxMessagesData?.data?.length) {
     return <NoInboxMessages />
   }
 
@@ -58,7 +57,12 @@ function Inbox({}: InboxProps) {
   return (
     <Box>
       <MessageList
-        items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)}
+        items={getMessagesListItems(
+          inboxMessagesData?.data || [],
+          t,
+          onInboxMessagePress,
+          FolderNameTypeConstants.inbox,
+        )}
         title={t('secureMessaging.inbox')}
       />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>

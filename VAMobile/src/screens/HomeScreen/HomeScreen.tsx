@@ -6,11 +6,9 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { DateTime } from 'luxon'
-import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFolders } from 'api/secureMessaging'
-import { SecureMessagingFolderList } from 'api/types'
 import {
   Box,
   CategoryLanding,
@@ -90,10 +88,10 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
-    if (smFetch && foldersData) {
+    if (smPrefetch && foldersData) {
       const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
       if (inboxFolder) {
-        logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
+        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
       }
     }
   }, [smPrefetch, foldersData])

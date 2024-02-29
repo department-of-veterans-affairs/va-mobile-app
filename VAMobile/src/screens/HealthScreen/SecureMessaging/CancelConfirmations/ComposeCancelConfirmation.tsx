@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useQueryClient } from '@tanstack/react-query'
-
-import { secureMessagingKeys, useSaveDraft } from 'api/secureMessaging'
+import { useSaveDraft } from 'api/secureMessaging'
 import { SaveDraftParameters, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
@@ -36,7 +34,6 @@ export function useComposeCancelConfirmation(): [
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
   const [isDiscarded, setIsDiscarded] = useState(false)
-  const queryClient = useQueryClient()
   const { mutate: saveDraft } = useSaveDraft()
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -64,9 +61,6 @@ export function useComposeCancelConfirmation(): [
             onSuccess: () => {
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
               logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
-              queryClient.invalidateQueries({
-                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
-              })
               navigateTo('SecureMessaging', { activeTab: 1 })
               navigateTo('FolderMessages', {
                 folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
