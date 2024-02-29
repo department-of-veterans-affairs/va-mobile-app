@@ -65,7 +65,7 @@ export const useSendMessage = () => {
   //!isReplyWithTriageError && showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
   return useMutation({
     mutationFn: sendMessage,
-    onSuccess: async () => {
+    onSuccess: () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       registerReviewEvent()
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
