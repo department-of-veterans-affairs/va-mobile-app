@@ -103,13 +103,13 @@ export const removeInputErrorMessage = (
 }
 
 /**
- * Creates the a11yLabel for the picker component
+ * Creates the a11yLabel for the picker and text input components
  *
  * When labelKey exists: label will start with 't(labelKey) t(testIDSuffixKey)'
- * When labelKey does not exist: label will start with the t(testIDSuffixKey) (which is 'picker' or 'text input')
+ * When labelKey does not exist: label will start with the t(testIDSuffixKey) which is 'picker' or 'text input'
  * When isRequiredField is true: label will contain the word 'required' after the prefix
  * When helperTextKey exists: label will contain the translated helper text
- * When error exists: label will end with the error with the word 'error' at the end of it
+ * When error exists: label will end with the error followed by the word 'error'
  */
 export const generateInputA11yLabel = (
   labelKey: string | undefined,
