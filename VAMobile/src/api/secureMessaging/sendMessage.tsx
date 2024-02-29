@@ -47,13 +47,11 @@ const sendMessage = async ({ messageData, replyToID, uploads }: SendMessageParam
     })
     postData = formData
   }
-  const response = await post<SecureMessagingMessageData>(
+  return post<SecureMessagingMessageData>(
     replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
     postData as unknown as Params,
-    uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+    uploads?.length !== 0 ? contentTypes.multipart : undefined,
   )
-
-  return response
 }
 
 /**
