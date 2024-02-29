@@ -90,13 +90,12 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
-    if (smPrefetch) {
-      const folders = foldersData?.data || ([] as SecureMessagingFolderList)
-      _.forEach(folders, (folder) => {
-        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
-          logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
+    if (smFetch && foldersData) {
+      const inboxFolder = foldersData.data.find(folder => folder.attributes.name === FolderNameTypeConstants.inbox)
+       if (inboxFolder) {
+    
+logAnalyticsEvent(Events.vama_hs_sm_count(folder.attributes.unreadCount))
         }
-      })
     }
   }, [smPrefetch, foldersData])
 
