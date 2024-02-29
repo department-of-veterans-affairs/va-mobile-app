@@ -51,6 +51,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     isLoading: downloading,
     isError: downloadLetterError,
     error: downloadLetterErrorDetails,
+    refetch: refetchLetter,
   } = useDownloadDecisionLetter(letterID, demoMode, {
     enabled: letterID.length > 0,
   })
@@ -88,7 +89,11 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
     const onPress = () => {
       logAnalyticsEvent(Events.vama_ddl_letter_view())
-      setLetterID(letter.id)
+      if (letterID === letter.id) {
+        refetchLetter()
+      } else {
+        setLetterID(letter.id)
+      }
     }
 
     const letterButton = {
