@@ -3,11 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import _ from 'underscore'
-
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFolders } from 'api/secureMessaging'
-import { SecureMessagingFolderList } from 'api/types'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
