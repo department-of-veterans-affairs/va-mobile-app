@@ -37,6 +37,8 @@ A button draws attention to important actions with a large selectable surface.
 * **Use primary for the most important action**. Use the primary button for the most important action that you want the user to take on the page, or in a section.
 * **Use secondary for non-primary actions**. Use secondary buttons for any actions that need to be downplayed against other actions on the page, or in a section.
 * **Use destructive for actions that have serious consequences**. Use destructive buttons for any actions that cannot be reversed and may result in data loss.
+    * Don't rely on the red color alone to communicate the destructive nature of the action. Always ensure the button text clearly communicates what will happen.
+    * Since destructive buttons have serious consequences, always add friction before completing the action. This can be in the form of a native confirmation message (alert or action sheet) in the mobile app or a modal on web.
 * **Choosing between colors**
     * In most cases, use the default (blue) color.
 	* If the default (blue) color will not work (i.e. insufficient color contrast), you may use the base (gray) button.
@@ -70,5 +72,5 @@ A button draws attention to important actions with a large selectable surface.
 
 ## Differences with VADS
 * The Base button style exists due to mobile app specific needs in dark mode. For example: The v3 Alert component has a colored background for each variation. While working on dark mode, the mobile app team found that the Default button style did not meet color contrast requirements and clashed with the background colors. For this reason, we created a new Base button style that's based on a USWDS Base button style.
-* The Destructive button style is currently used in the mobile app to cancel an appointment or remove contact information. The mobile design system team is currently investigating whether this button is required or could be replaced with the Default or Base button style.
+* The Destructive button style is currently used in the mobile app to cancel an appointment or remove contact information. The mobile design system team presented to the Design System Council in February 2024 and this button will be added to the larger VA Design System.
 * In Storybook, a White button style is available for use on the Login page. The mobile app team is working to remove this button in the app. Once it is removed in the app, it will be removed from Storybook. It's currently not included in this documentation or Figma to prevent designers from using it in the future.
