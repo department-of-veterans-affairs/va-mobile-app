@@ -78,8 +78,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
