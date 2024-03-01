@@ -175,6 +175,7 @@ export type AppointmentAttributes = {
   patientEmail?: string
   bestTimeToCall?: Array<string>
   vetextId: string
+  physicalLocation?: string
 }
 
 export type AppointmentData = {

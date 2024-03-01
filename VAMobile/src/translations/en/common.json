@@ -209,6 +209,7 @@
   "appointments.canceled.whoCanceled.you": "You",
   "appointments.claimExam": "Claim exam",
   "appointments.claimExam.explanationText": "This appointment is for disability rating purposes only. It doesn't include treatment. If you have medical evidence to support your claim, bring copies to this appointment.",
+  "appointments.clinicLocation": "Clinic location: {{ physicalLocation }}",
   "appointments.confirmed": "Confirmed",
   "appointments.errorText": "We're having trouble getting your appointments. Refresh this screen or try again later.",
   "appointments.inPersonVA.canceledTitle": "Canceled in-person appointment",
