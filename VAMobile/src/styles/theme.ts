@@ -113,6 +113,7 @@ export type VAIconColors = {
   tagInfoIcon: string
   transparent: string
   activityButton: string
+  veteranStatusHomeArrow: string
 }
 
 export type VATypographyThemeVariants = {

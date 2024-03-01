@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BackgroundVariant, BorderColorVariant, Box, ColorVariant, TextView, VAIcon } from 'components'
+import { BackgroundVariant, BorderColorVariant, Box, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -30,6 +30,12 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const fullName = personalInfo?.fullName
+  const branch = mostRecentBranch || ''
+  const disRating = !!ratingData?.combinedDisabilityRating
+  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
+  const homeScreen = screen === 'Home'
+  const profileScreen = screen === 'Profile'
 
   useEffect(() => {
     if (personalInfo) {
@@ -38,12 +44,6 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
       )
     }
   }, [personalInfo])
-
-  const fullName = personalInfo?.fullName
-
-  const branch = mostRecentBranch || ''
-  const disRating = !!ratingData?.combinedDisabilityRating
-  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
 
   let showVeteranStatus = false
   serviceHistory.forEach((service) => {
@@ -54,8 +54,8 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
-      width: screen === 'Home' ? 40 : 50,
-      height: screen === 'Home' ? 40 : 50,
+      width: homeScreen ? 40 : 50,
+      height: homeScreen ? 40 : 50,
     }
 
     switch (branch) {
@@ -76,14 +76,14 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
     accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
     accessibilityLabel:
-      accessToMilitaryInfo && screen === 'Profile'
+      accessToMilitaryInfo && profileScreen
         ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}`
-        : accessToMilitaryInfo && screen === 'Home'
+        : accessToMilitaryInfo && homeScreen
           ? `${branch} ${t('veteranStatus.proofOf')}`
           : undefined,
   }
 
-  if (screen === 'Profile') {
+  if (profileScreen) {
     return (
       <Pressable {...pressableProps}>
         <Box
@@ -128,10 +128,10 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
         </Box>
       </Pressable>
     )
-  } else if (screen === 'Home') {
+  } else if (homeScreen) {
     return (
       <Box>
-        <Box flex={1}>
+        <Box>
           {accessToMilitaryInfo && (
             <Pressable {...pressableProps}>
               <Box
@@ -143,8 +143,7 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
                 mb={theme.dimensions.standardMarginBetween}
                 pr={theme.dimensions.buttonPadding}
                 mx={theme.dimensions.condensedMarginBetween}
-                borderRadius={8}
-                flex={1}>
+                borderRadius={8}>
                 <Box py={theme.dimensions.buttonPadding} display="flex" flexDirection="row" alignItems="center">
                   {getBranchSeal()}
                   <Box ml={theme.dimensions.buttonPadding} flex={1}>
@@ -159,13 +158,15 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
                       </Box>
                     )}
                   </Box>
-                  <VAIcon
-                    name={'ChevronRight'}
-                    fill={theme.colors.icon.contrast}
-                    width={theme.dimensions.chevronListItemWidth}
-                    height={theme.dimensions.chevronListItemHeight}
-                    ml={theme.dimensions.listItemDecoratorMarginLeft}
-                  />
+                  {showVeteranStatus && (
+                    <VAIcon
+                      name={'ChevronRight'}
+                      fill={theme.colors.icon.veteranStatusHomeArrow}
+                      width={theme.dimensions.chevronListItemWidth}
+                      height={theme.dimensions.chevronListItemHeight}
+                      ml={theme.dimensions.listItemDecoratorMarginLeft}
+                    />
+                  )}
                 </Box>
               </Box>
             </Pressable>

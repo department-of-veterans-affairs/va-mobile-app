@@ -112,6 +112,7 @@ export const lightTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.white,
+    veteranStatusHomeArrow: DSColors.base,
   },
   text: {
     footerButton: colors.primary,
@@ -316,6 +317,7 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.black,
+    veteranStatusHomeArrow: DSColors.grayLightest,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
