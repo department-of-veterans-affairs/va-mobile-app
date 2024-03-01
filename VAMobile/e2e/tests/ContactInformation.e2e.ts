@@ -1,4 +1,5 @@
 import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openContactInfo, openProfile } from './utils'
 
@@ -162,6 +163,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   it(addressType + ': verify contact info is displayed when saved', async () => {
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
+    await setTimeout(5000)
     await expect(element(by.text(addressType + ' address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
@@ -433,6 +435,7 @@ describe(':ios: Contact Info Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await setTimeout(5000)
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
@@ -447,6 +450,7 @@ describe(':ios: Contact Info Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await setTimeout(5000)
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
