@@ -1,6 +1,5 @@
 ---
 title: Link
-draft: true
 ---
 
 A link is a navigation element that can appear alone, inline (embedded), or in a group with other links. A link can trigger a download, but in general links go to internal or external pages when clicked.
