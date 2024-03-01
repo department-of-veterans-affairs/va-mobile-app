@@ -87,6 +87,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
       text === 'At Northport VA Medical Center' ||
       text === 'At Nashville VA Medical Center'
     ) {
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
     }
 
@@ -108,7 +109,11 @@ export async function apppointmentVerification(pastAppointment = false) {
     if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     }
@@ -127,15 +132,24 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - Onsite appt', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     }
@@ -179,16 +193,25 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Home appt', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -258,15 +281,24 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed claim exam', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -333,15 +365,24 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -435,15 +476,24 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -557,15 +607,24 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Past 3 months')).atIndex(1).tap()
+      } else {
+        await element(by.text('Past 3 months')).atIndex(0).tap()
+      }
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     } else {
@@ -615,7 +674,7 @@ beforeAll(async () => {
     .withTimeout(10000)
 })
 
-describe('Appointments Screen Expansion', () => {
+describe(':ios: Appointments Screen Expansion', () => {
   apppointmentVerification()
   apppointmentVerification(true)
 })
