@@ -195,7 +195,10 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
             />
           )}
           {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-            <Box pl={theme.dimensions.standardMarginBetween} pb={theme.dimensions.standardMarginBetween}>
+            <Box
+              pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
+              pl={theme.dimensions.standardMarginBetween}
+              pb={theme.dimensions.standardMarginBetween}>
               <TextView variant={'VeteranStatusBranch'}>{t('monthlyCompensationPayment')}</TextView>
               <TextView
                 variant={
