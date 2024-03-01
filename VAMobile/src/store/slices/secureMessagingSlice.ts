@@ -788,6 +788,7 @@ const secureMessagingSlice = createSlice({
 
     dispatchStartGetInbox: (state) => {
       state.hasLoadedInbox = false
+      state.loading = true
     },
 
     dispatchFinishGetInbox: (
@@ -799,6 +800,7 @@ const secureMessagingSlice = createSlice({
       state.hasLoadedInbox = true
       state.error = error
       state.inboxFirstRetrieval = !!error
+      state.loading = false
     },
 
     dispatchStartListFolders: (state) => {
