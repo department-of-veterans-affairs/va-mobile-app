@@ -1,9 +1,11 @@
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
 import LottieView from 'lottie-react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
 import { useTheme } from 'utils/hooks'
 
@@ -35,6 +37,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   inlineSpinner,
 }) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -76,18 +79,13 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
           {getSpinner()}
         </Box>
       ) : inlineSpinner ? (
-        <Box
-          justifyContent="center"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.contentMarginTop}
-          mb={theme.dimensions.contentMarginBottom}
-          alignItems={'center'}>
-          {getSpinner()}
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
-              {text}
-            </TextView>
+        <Box flexDirection="row" alignItems="center">
+          <Box accessible={true} accessibilityLabel={t('loading')}>
+            {getSpinner()}
           </Box>
+          <TextView ml={theme.dimensions.condensedMarginBetween} variant="HelperText" accessibilityLabel={a11yLabel}>
+            {text}
+          </TextView>
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>

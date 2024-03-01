@@ -79,7 +79,7 @@ function MessageCard({ message }: MessageCardProps) {
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.contentMarginTop}
           mb={theme.dimensions.contentMarginBottom}>
-          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} />
         </Box>
       )
     } else if (attachments?.length) {
