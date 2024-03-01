@@ -87,6 +87,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
   it(addressType + ': verify action sheet for cancel', async () => {
     await element(by.text('Cancel')).tap()
+    await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
@@ -215,6 +216,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text('Cancel')).tap()
+    await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
@@ -228,6 +230,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
 
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
     await element(by.text('Cancel')).tap()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
   })
@@ -258,6 +261,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await setTimeout(2000)
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
       .toBeVisible()
@@ -277,6 +281,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await setTimeout(2000)
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
       .toBeVisible()
@@ -294,6 +299,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
       .scroll(100, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
+    await setTimeout(2000)
     await expect(element(by.text('Remove your ' + type + '?'))).toExist()
     await expect(
       element(
@@ -315,6 +321,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
 
   it('should remove the ' + type + ' and verify it has been removed', async () => {
     await element(by.text('Remove ' + type)).tap()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.REMOVE_REMOVE_TEXT)).tap()
     await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
       .toBeVisible()
@@ -353,6 +360,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
+    await setTimeout(2000)
     await expect(
       element(
         by.id(addressType + ' address 19-21 Carrer de na Maria Pla Andorra la Vella, Andorra la Vella, AD500 Andorra'),
@@ -383,6 +391,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
+    await setTimeout(2000)
     await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
   })
 }
