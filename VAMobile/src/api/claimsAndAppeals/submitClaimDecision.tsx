@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { ClaimDecisionResponseData } from 'api/types'
+import { ClaimData, ClaimDecisionResponseData } from 'api/types'
 import { post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
@@ -20,9 +20,13 @@ const submitClaimDecision = (claimID: string) => {
  */
 export const useSubmitClaimDecision = (claimID: string) => {
   const queryClient = useQueryClient()
+  const claimData = queryClient.getQueryData([claimsAndAppealsKeys.claim, claimID]) as ClaimData
+  claimData.attributes.waiverSubmitted = true
+
   return useMutation({
     mutationFn: submitClaimDecision,
     onSuccess: () => {
+      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
       queryClient.invalidateQueries({ queryKey: [claimsAndAppealsKeys.claim, claimID] })
     },
     onError: (error) => {

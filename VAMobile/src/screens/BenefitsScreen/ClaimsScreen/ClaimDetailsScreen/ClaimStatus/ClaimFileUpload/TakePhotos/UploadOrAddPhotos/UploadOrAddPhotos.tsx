@@ -51,11 +51,15 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const showActionSheetWithOptions = useShowActionSheet()
   const { claimID, request: originalRequest, firstImageResponse } = route.params
   const { data: claim } = useClaim(claimID)
-  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(claimID)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
+  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
+    claimID,
+    originalRequest,
+    imagesList,
+  )
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),

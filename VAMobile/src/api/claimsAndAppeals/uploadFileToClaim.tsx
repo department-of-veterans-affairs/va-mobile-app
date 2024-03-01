@@ -1,8 +1,18 @@
 import { Asset } from 'react-native-image-picker'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
+import { find, map } from 'underscore'
 
-import { ClaimDocUploadData, UploadFileToClaimParamaters } from 'api/types'
+import {
+  ClaimData,
+  ClaimDocUploadData,
+  ClaimEventData,
+  ClaimEventDocumentData,
+  FILE_REQUEST_STATUS,
+  UploadFileToClaimParamaters,
+} from 'api/types'
+import { DocumentTypes526 } from 'constants/documentTypes'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, contentTypes, post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -70,12 +80,31 @@ const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamat
 /**
  * Returns a mutation for Uploading a File to Claim
  */
-export const useUploadFileToClaim = (claimID: string) => {
+export const useUploadFileToClaim = (
+  claimID: string,
+  request: ClaimEventData,
+  files: Array<Asset> | Array<DocumentPickerResponse> | undefined,
+) => {
   const queryClient = useQueryClient()
+  const dateUploadedString = DateTime.local().toISO()
+  const claimData = queryClient.getQueryData([claimsAndAppealsKeys.claim, claimID]) as ClaimData
+  const indexOfRequest = claimData.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
+  if (request.phase) {
+    claimData.attributes.eventsTimeline[indexOfRequest].uploaded = true
+    claimData.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
+    claimData.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
+      files || [],
+      request?.trackedItemId || undefined,
+      request?.documentType || '',
+      dateUploadedString,
+    )
+    claimData.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
+  }
 
   return useMutation({
     mutationFn: uploadFileToClaim,
     onSuccess: async () => {
+      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
       queryClient.invalidateQueries({ queryKey: [claimsAndAppealsKeys.claim, claimID] })
     },
     onError: (error) => {
@@ -83,5 +112,34 @@ export const useUploadFileToClaim = (claimID: string) => {
         logNonFatalErrorToFirebase(error, 'uploadFileToClaim: Service error')
       }
     },
+  })
+}
+
+const createFileRequestDocumentsArray = (
+  files: Array<Asset> | Array<DocumentPickerResponse>,
+  trackedItemId: number | undefined,
+  documentType: string,
+  uploadDate: string,
+): Array<ClaimEventDocumentData> => {
+  return map(files, (item) => {
+    let name: string | undefined
+
+    if ('fileSize' in item) {
+      name = item.fileName
+    } else if ('size' in item) {
+      name = item.name
+    }
+
+    const fileType = find(DocumentTypes526, (type) => {
+      return type.value === documentType
+    })
+
+    return {
+      trackedItemId,
+      fileType: fileType ? fileType.label : '',
+      filename: name,
+      documentType,
+      uploadDate,
+    } as ClaimEventDocumentData
   })
 }

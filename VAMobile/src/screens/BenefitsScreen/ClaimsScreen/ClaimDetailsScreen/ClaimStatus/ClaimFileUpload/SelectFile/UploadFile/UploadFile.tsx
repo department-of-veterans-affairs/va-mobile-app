@@ -33,11 +33,15 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const theme = useTheme()
   const { claimID, request: originalRequest, fileUploaded } = route.params
   const { data: claim } = useClaim(claimID)
-  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(claimID)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
+  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
+    claimID,
+    originalRequest,
+    filesList,
+  )
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
