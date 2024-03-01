@@ -15,7 +15,7 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--default-with-icon)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default-with-icon&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-### Additional links
+### Additional variants
 * [Attachment](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--attachment&viewMode=story)
 * [Calendar](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--calendar&viewMode=story)
 * [Directions](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--directions&viewMode=story)
@@ -71,3 +71,10 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 ## Related
 * [Link - VA Design System](https://design.va.gov/components/link/)
 * [Link - USWDS](https://designsystem.digital.gov/components/link/)
+
+----------
+
+## Differences with VADS
+* The Base button style exists due to mobile app specific needs in dark mode. For example: The v3 Alert component has a colored background for each variation. While working on dark mode, the mobile app team found that the Default link style did not meet color contrast requirements and clashed with the background colors. For this reason, we created a new Base button style that's similar to a USWDS Base button style.
+* In Storybook, variants are available for content-specific links (add to calendar, get directions, etc). These variants were created to include the onPress logic for app teams. This allows the component to always display a native confirmation message when needed.
+* Currently, the Link component does not support inline links. In the future, a Paragraph component will be created for inline links to support proper text wrapping and accessibility in React Native.
