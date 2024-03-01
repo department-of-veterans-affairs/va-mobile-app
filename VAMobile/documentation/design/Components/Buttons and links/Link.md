@@ -16,7 +16,7 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default-with-icon&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Additional links
-* Attachment
+* [Attachment](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--attachment&viewMode=story)
 * [Calendar](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--calendar&viewMode=story)
 * [Directions](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--directions&viewMode=story)
 * [External link](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--external-link&viewMode=story)
@@ -44,21 +44,22 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 		* **Links open in a full panel** if the content is within the app.
 		* **Links open in a webview** if the content is not within the app and the user does not need a separate sign in to access the content.
 	* **Links open another app**
-		* **Links open in the browser app** if the user needs to sign in to access the content. When leaving the app, always use a native alert to warn the user.
-		* **Links launch another app** if the user is taking an action such as making a phone call, getting directions, or downloading a file. When leaving the app, always use a [confirmation message](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages) (native alert or action sheet) to warn the user.
+		* **Links open in the [browser app](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--external-link&viewMode=story)** if the user needs to sign in to access the content. Before leaving the app, always use a native alert to warn the user. Once confirmed, open the default browser app.
+		* **Links launch another app** if the user is taking an action such as making a phone call, getting directions, or downloading a file. Before leaving the app, consider using a [confirmation message](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages) (such as a native alert or action sheet) to warn the user.
+			* Attachment: Display the attachment in the app with the ability to download to their device.
+			* [Calendar](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--calendar&viewMode=story): Display the event information to allow the user to review and confirm before adding to their calendar. Once confirmed, add to the default calendar app.
+			* [Directions](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--directions&viewMode=story): Display an Action Sheet to allow the user to select their preferred maps app (Apple Maps, Google Maps, etc.). Once selected, open the maps app with their destination.
+			* [Phone](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--phone&viewMode=story): Display an Action Sheet to allow the user to confirm the phone call. Once confirmed, open the default phone app.
+			* [Phone TTY](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--phone-tty&viewMode=story): Display an Action Sheet to allow user to confirm the TTY call. Once confirmed, open the default phone app.
+			* [Text](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--text&viewMode=story): Open the default messages app.
 
 ### Choosing between variations
-* **Choosing between usage types**
-    * Links may be used as **standalone components** or **inline links**.
-    * If used as an inline link, select the “inline” variation to ensure the height of the link matches the height of the body copy.
 * **Choosing between colors**
     * In most cases, use the **default (blue)** color.
     * If the default (blue) color will not work (i.e. insufficient color contrast), you may use the **base (gray)** link.
 
 ## Code usage
-Add links to Storybook when available
-
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--default)
 
 ## Content considerations
 * Refer to the [VA Design System for content considerations](https://design.va.gov/components/link/#content-considerations)
