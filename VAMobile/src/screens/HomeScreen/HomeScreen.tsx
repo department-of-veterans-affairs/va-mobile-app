@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -15,10 +16,12 @@ import {
   CategoryLanding,
   EncourageUpdateAlert,
   LargeNavButton,
+  LoadingComponent,
   Nametag,
   SimpleList,
   SimpleListItemObj,
   TextView,
+  VAIcon,
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
@@ -77,12 +80,19 @@ export function HomeScreen({}: HomeScreenProps) {
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { prescriptionStatusCount, loadingHistory: loadingPrescriptions } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
+  const { activeClaimsCount, loadingClaimsAndAppeals } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
+  const { loading: loadingInbox } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { preloadComplete: apptsPrefetch, loading: loadingAppointments } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
   )
@@ -186,51 +196,98 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
+  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
+  const hasActivity =
+    !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
         <Nametag />
-        {Number(upcomingAppointmentsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('appointments')}`}
-              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
-              onPress={() => Linking.openURL('vamobile://appointments')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-            />
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('activity')}
+          </TextView>
+          <Box mx={theme.dimensions.condensedMarginBetween}>
+            {activityLoading ? (
+              <LoadingComponent
+                spinnerWidth={24}
+                spinnerHeight={24}
+                text={t('activity.loading')}
+                inlineSpinner={true}
+                spinnerColor={theme.colors.icon.inlineSpinner}
+              />
+            ) : !hasActivity ? (
+              <>
+                <Box flexDirection="row" alignItems="center" mb={theme.dimensions.standardMarginBetween}>
+                  <VAIcon
+                    accessible={true}
+                    accessibilityLabel={t('success')}
+                    name={'CircleCheckMark'}
+                    fill={Colors.green}
+                    fill2={theme.colors.icon.transparent}
+                  />
+                  <TextView ml={theme.dimensions.condensedMarginBetween} variant="HomeScreen">
+                    {t('noActivity')}
+                  </TextView>
+                </Box>
+                <TextView
+                  variant="ActivityFooter"
+                  accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
+                  {t('activity.informationNotIncluded')}
+                </TextView>
+              </>
+            ) : (
+              <>
+                {Number(upcomingAppointmentsCount) > 0 && (
+                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                    <LargeNavButton
+                      title={`${t('appointments')}`}
+                      subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
+                      onPress={() => Linking.openURL('vamobile://appointments')}
+                      borderWidth={theme.dimensions.buttonBorderWidth}
+                    />
+                  </Box>
+                )}
+                {Number(activeClaimsCount) > 0 && (
+                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                    <LargeNavButton
+                      title={`${t('claims.title')}`}
+                      subText={`(${activeClaimsCount} ${t('open')})`}
+                      onPress={() => Linking.openURL('vamobile://claims')}
+                      borderWidth={theme.dimensions.buttonBorderWidth}
+                    />
+                  </Box>
+                )}
+                {!!unreadMessageCount && (
+                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                    <LargeNavButton
+                      title={`${t('messages')}`}
+                      subText={`${unreadMessageCount} ${t('unread')}`}
+                      onPress={() => Linking.openURL('vamobile://messages')}
+                      borderWidth={theme.dimensions.buttonBorderWidth}
+                    />
+                  </Box>
+                )}
+                {Number(prescriptionStatusCount.isRefillable) > 0 && (
+                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                    <LargeNavButton
+                      title={`${t('prescription.title')}`}
+                      subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
+                      onPress={() => Linking.openURL('vamobile://prescriptions')}
+                      borderWidth={theme.dimensions.buttonBorderWidth}
+                    />
+                  </Box>
+                )}
+              </>
+            )}
           </Box>
-        )}
-        {Number(prescriptionStatusCount.isRefillable) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('prescription.title')}`}
-              subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
-              onPress={() => Linking.openURL('vamobile://prescriptions')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-            />
-          </Box>
-        )}
-        {Number(activeClaimsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('claims.title')}`}
-              subText={`(${activeClaimsCount} ${t('open')})`}
-              onPress={() => Linking.openURL('vamobile://claims')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-            />
-          </Box>
-        )}
-        {!!unreadMessageCount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('messages')}`}
-              subText={`${unreadMessageCount} ${t('unread')}`}
-              onPress={() => Linking.openURL('vamobile://messages')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-            />
-          </Box>
-        )}
+        </Box>
         {!!ratingData?.combinedDisabilityRating && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
