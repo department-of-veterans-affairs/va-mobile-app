@@ -77,13 +77,13 @@ context('HomeScreen', () => {
 
   it('displays prescriptions module when there are active prescriptions', () => {
     initializeTestInstance(2)
-    expect(screen.getByRole('button', { name: 'Prescriptions' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: '2 ready to refill' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Prescriptions' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 ready to refill' })).toBeTruthy()
   })
 
   it('navigates to prescriptions screen when prescriptions module is tapped', () => {
     initializeTestInstance(2)
-    fireEvent.press(screen.getByRole('button', { name: 'Prescriptions' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Prescriptions' }))
     expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
   })
 
@@ -94,13 +94,13 @@ context('HomeScreen', () => {
 
   it('displays claims module when there are active claims', () => {
     initializeTestInstance(0, 2)
-    expect(screen.getByRole('button', { name: 'Claims' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: '2 active' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 active' })).toBeTruthy()
   })
 
   it('navigates to claims history screen when claims module is tapped', () => {
     initializeTestInstance(0, 2)
-    fireEvent.press(screen.getByRole('button', { name: 'Claims' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Claims' }))
     expect(Linking.openURL).toBeCalledWith('vamobile://claims')
   })
 
