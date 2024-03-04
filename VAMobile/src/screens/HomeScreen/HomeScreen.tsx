@@ -208,21 +208,21 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {!!prescriptionStatusCount.isRefillable && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={t('prescription.title')}
-              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
-              deepLink={'prescriptions'}
-            />
-          </Box>
-        )}
         {!!unreadMessageCount && (
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
               title={`${t('messages')}`}
               subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
               deepLink={'messages'}
+            />
+          </Box>
+        )}
+        {!!prescriptionStatusCount.isRefillable && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('prescription.title')}
+              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
+              deepLink={'prescriptions'}
             />
           </Box>
         )}
