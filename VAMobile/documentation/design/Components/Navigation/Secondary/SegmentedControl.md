@@ -29,7 +29,7 @@ A segmented control consists of a horizontal set of 2-4 segments, each of which 
 - To provide closely related choices that affect an object, state, or view. For example, a segmented control can help people select options, switch between views, or sort elements.
 
 ### When to consider something else
-- If you need to group content that is dissimilar (use Tabs instead).
+- If you need to group content that is dissimilar.
 - If you need to enable actions — such as adding, removing, or editing content.
 - If it needs to be accompanied by any other controls or a title if used in the top navigation bar.
 
@@ -40,7 +40,7 @@ A segmented control consists of a horizontal set of 2-4 segments, each of which 
 ### Instances of this component in production
 - Claims uses an Active/Closed segmented control to filter claims by status.
 - Appointments uses an Upcoming/Past segmented control to filter appointments by type.
-- Claims also uses a segmented control to show the Status/Details of claims. This is not an appropriate use of this component since it groups content that is dissimilar. In this case, a Tabs component should be used instead.
+- Claims also uses a segmented control to show the Status/Details of claims. This is not an appropriate use of this component since it groups content that is dissimilar. In this case, a different component should be considered.
 
 ## Code usage
 [Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)

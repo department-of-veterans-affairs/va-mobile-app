@@ -12,9 +12,8 @@ import { LettersListScreen } from './index'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
   return {
-    ...original,
+    ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -25,64 +24,16 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
     ...original,
     useAuthorizedServices: jest
       .fn()
-      .mockReturnValue({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      })
-      .mockReturnValueOnce({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: false,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      }),
+      .mockReturnValue({ status: 'success', data: { lettersAndDocuments: true } })
+      .mockReturnValueOnce({ status: 'success', data: { lettersAndDocuments: false } }),
   }
 })
 
 jest.mock('store/slices/', () => {
   const actual = jest.requireActual('store/slices')
-  const letters = jest.requireActual('store/slices').initialLettersState
   return {
     ...actual,
-    getLetters: jest.fn(() => {
-      return {
-        type: '',
-        payload: {
-          ...letters,
-        },
-      }
-    }),
+    getLetters: jest.fn(() => ({ type: '', payload: { ...actual.initialLettersState } })),
   }
 })
 
@@ -133,18 +84,14 @@ context('LettersListScreen', () => {
         .mockResolvedValue({ data: { attributes: { letters: lettersList } } })
     }
 
-    const storeVals = {
-      ...InitialState,
-      letters: { ...initialLettersState, loading },
-    }
-
-    if (lettersList) {
-      storeVals.letters.letters = lettersList
-    }
-
     render(<LettersListScreen {...mockNavProps()} />, {
       preloadedState: {
-        ...storeVals,
+        ...InitialState,
+        letters: {
+          ...initialLettersState,
+          ...(lettersList ? { letters: lettersList } : {}),
+          loading,
+        },
       },
     })
   }

@@ -1,14 +1,8 @@
 import { TFunction } from 'i18next'
 
 import { LabelTagTypeConstants } from 'components/LabelTag'
-import {
-  PrescriptionSortOptionConstants,
-  PrescriptionSortOptions,
-  RefillStatus,
-  RefillStatusConstants,
-} from 'store/api/types'
+import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 
-import { ASCENDING } from '../constants/common'
 import { a11yLabelVA } from './a11yLabel'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
@@ -38,49 +32,6 @@ export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
   }
 }
 
-export const getSortOrderOptionsForSortBy = (sortBy: PrescriptionSortOptions | '', t: TFunction) => {
-  switch (sortBy) {
-    case PrescriptionSortOptionConstants.FACILITY_NAME:
-    case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
-      return [
-        {
-          value: ASCENDING,
-          labelKey: t('prescriptions.sort.atoz'),
-          a11yLabel: t('prescriptions.sort.atoz.a11y'),
-        },
-        {
-          value: '',
-          labelKey: t('prescriptions.sort.ztoa'),
-          a11yLabel: t('prescriptions.sort.ztoa.a11y'),
-        },
-      ]
-    case PrescriptionSortOptionConstants.REFILL_DATE:
-      return [
-        {
-          value: ASCENDING,
-          labelKey: t('prescriptions.sort.old.oldToNew'),
-        },
-        {
-          value: '',
-          labelKey: t('prescriptions.sort.old.newToOld'),
-        },
-      ]
-    case PrescriptionSortOptionConstants.REFILL_REMAINING:
-      return [
-        {
-          value: '',
-          labelKey: t('prescriptions.sort.low.highToLow'),
-        },
-        {
-          value: ASCENDING,
-          labelKey: t('prescriptions.sort.low.lowToHigh'),
-        },
-      ]
-  }
-
-  return []
-}
-
 /**
  * Some filter values from the front end map to multiple values on the back end. This util provides the translation
  * from value selected on the front end to the param sent to the API
@@ -88,11 +39,10 @@ export const getSortOrderOptionsForSortBy = (sortBy: PrescriptionSortOptions | '
  */
 export const getFilterArgsForFilter = (filter: string) => {
   switch (filter) {
+    case RefillStatusConstants.ACTIVE:
+      return ['active', 'activeParked', 'hold', 'providerHold', 'refillinprocess', 'submitted']
     case RefillStatusConstants.DISCONTINUED:
       return ['discontinued', 'discontinuedByProvider', 'discontinuedEdit']
-    case RefillStatusConstants.HOLD:
-    case RefillStatusConstants.PROVIDER_HOLD:
-      return ['hold', 'providerHold']
   }
 
   return [filter]

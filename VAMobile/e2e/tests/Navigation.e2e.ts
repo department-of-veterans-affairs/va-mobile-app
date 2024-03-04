@@ -61,9 +61,7 @@ const navigationDic = {
     [['Messages', 'Folders'], 'My folders'],
     [['Messages', 'Drafts (3)'], 'Drafts'],
     ['Prescriptions', 'Prescriptions'],
-    [['Prescriptions', 'Get prescription details'], 'ACETAMINOPHEN 325MG TAB'],
-    [['Prescriptions', 'Pending (8)'], 'Pending refills (8)'],
-    [['Prescriptions', 'Tracking (3)'], 'Refills with tracking information (3)'],
+    [['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
     ['V\ufeffA vaccine records', 'VA vaccines'],
     [['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
   ],
@@ -238,12 +236,12 @@ const navigateToPage = async (key, navigationDicValue) => {
         .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(100, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      await waitFor(element(by.label('ADEFOVIR DIPIVOXIL 10MG TAB.')))
+      await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
         .whileElement(by.id('PrescriptionHistory'))
         .scroll(50, 'down')
-    } else if (subNavigationArray.slice(-1)[0] === 'Submitted July 17, 2008') {
-      await waitFor(element(by.text('Submitted July 17, 2008')))
+    } else if (subNavigationArray.slice(-1)[0] === 'Submitted June 12, 2008') {
+      await waitFor(element(by.text('Submitted June 12, 2008')))
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')

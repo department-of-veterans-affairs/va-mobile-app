@@ -26,24 +26,15 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
   const { data: userAuthorizedServices } = useAuthorizedServices()
-
-  const onViewLetters = () => {
-    navigateTo('LettersList')
-  }
+  const { MAILING_ADDRESS } = profileAddressOptions
 
   const onEditAddress = () => {
     logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
-    navigateTo('EditAddress', {
-      displayTitle: t('contactInformation.mailingAddress'),
-      addressType: profileAddressOptions.MAILING_ADDRESS,
-    })
+    navigateTo('EditAddress', { displayTitle: t('contactInformation.mailingAddress'), addressType: MAILING_ADDRESS })
   }
 
-  const addressData: Array<addressDataField> = [
-    { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onEditAddress },
-  ]
+  const addressData: Array<addressDataField> = [{ addressType: MAILING_ADDRESS, onPress: onEditAddress }]
 
   return (
     <FeatureLandingTemplate
@@ -69,7 +60,7 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
           </TextView>
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
             <Button
-              onPress={onViewLetters}
+              onPress={() => navigateTo('LettersList')}
               label={t('letters.overview.viewLetters')}
               a11yHint={t('letters.overview.viewLetters.hint')}
             />

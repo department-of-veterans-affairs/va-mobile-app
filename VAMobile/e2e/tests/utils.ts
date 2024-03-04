@@ -62,7 +62,7 @@ export async function loginToDemoMode(skipOnboarding = true) {
     ).tap()
     await element(by.text('Dismiss')).tap()
   } catch (e) {}
-  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
+  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
@@ -335,6 +335,10 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
+    await waitFor(element(by.text('Remote Config')))
+      .toBeVisible()
+      .whileElement(by.id('developerScreenTestID'))
+      .scroll(200, 'down')
     await element(by.text('Remote Config')).tap()
   }
   await waitFor(element(by.text(AFFeature)))
@@ -381,6 +385,10 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
+  await waitFor(element(by.text('Remote Config')))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(200, 'down')
   await element(by.text('Remote Config')).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
