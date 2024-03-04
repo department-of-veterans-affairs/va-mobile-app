@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -11,10 +10,10 @@ import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
+  ActivityButton,
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
-  LargeNavButton,
   Nametag,
   SimpleList,
   SimpleListItemObj,
@@ -32,8 +31,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
-  DisabilityRatingState,
-  LettersState,
   PrescriptionState,
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
@@ -43,7 +40,6 @@ import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slic
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -79,8 +75,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
@@ -179,59 +173,48 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Nametag />
-        {Number(upcomingAppointmentsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('appointments')}`}
-              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
-              onPress={() => Linking.openURL('vamobile://appointments')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+        {!!upcomingAppointmentsCount && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('appointments')}
+              subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+              deepLink={'appointments'}
             />
           </Box>
         )}
-        {Number(prescriptionStatusCount.isRefillable) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('prescription.title')}`}
-              subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
-              onPress={() => Linking.openURL('vamobile://prescriptions')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+        {!!activeClaimsCount && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('claims.title')}
+              subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+              deepLink={'claims'}
             />
           </Box>
         )}
-        {Number(activeClaimsCount) > 0 && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
-              title={`${t('claims.title')}`}
-              subText={`(${activeClaimsCount} ${t('open')})`}
-              onPress={() => Linking.openURL('vamobile://claims')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+        {!!prescriptionStatusCount.isRefillable && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('prescription.title')}
+              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
+              deepLink={'prescriptions'}
             />
           </Box>
         )}
         {!!unreadMessageCount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <LargeNavButton
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
               title={`${t('messages')}`}
-              subText={`${unreadMessageCount} ${t('unread')}`}
-              onPress={() => Linking.openURL('vamobile://messages')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+              subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+              deepLink={'messages'}
             />
           </Box>
         )}
-        {!!ratingData?.combinedDisabilityRating && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
-            <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
-          </Box>
-        )}
-        {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
-            <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
-          </Box>
-        )}
+        <Box pt={theme.dimensions.formMarginBetween}>
+          <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} variant={'AboutYou'}>
+            {t('aboutYou')}
+          </TextView>
+        </Box>
+        <Nametag screen={'Home'} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
