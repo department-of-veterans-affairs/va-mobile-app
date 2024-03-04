@@ -65,6 +65,7 @@ jobs:
     if: github.event.inputs.tests_to_run != ''
     runs-on: macos-latest-xl
     strategy:
+      fail-fast: false
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
 
@@ -250,6 +251,7 @@ jobs:
     if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_run != ''
     needs: matrix-e2e-android
     strategy:
+      fail-fast: false
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}     
     name: Update testRail Results
