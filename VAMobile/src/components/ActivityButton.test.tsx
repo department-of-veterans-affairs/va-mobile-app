@@ -13,12 +13,12 @@ context('ActivityButton', () => {
   })
 
   it('renders title and subtext', () => {
-    expect(screen.getByRole('button', { name: 'Claims' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: '5 active' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '5 active' })).toBeTruthy()
   })
 
   it('navigates to deep link when tapped', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'Claims' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Claims' }))
     expect(Linking.openURL).toBeCalledWith('vamobile://claims')
   })
 })
