@@ -4,13 +4,7 @@ import { screen } from '@testing-library/react-native'
 
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import {
-  ErrorsState,
-  initialAuthState,
-  initialErrorsState,
-  initialMilitaryServiceState,
-  initializeErrorsByScreenID,
-} from 'store/slices'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 import ProfileScreen from './ProfileScreen'
@@ -55,10 +49,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('ProfileScreen', () => {
-  const initializeTestInstance = (
-    militaryInformationLoading = false,
-    errorState: ErrorsState = initialErrorsState,
-  ): void => {
+  const initializeTestInstance = (errorState: ErrorsState = initialErrorsState): void => {
     const props = mockNavProps(undefined, {
       setOptions: jest.fn(),
       navigate: jest.fn(),
@@ -67,8 +58,6 @@ context('ProfileScreen', () => {
 
     render(<ProfileScreen {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
-        militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
         errors: errorState,
       },
     })
@@ -76,20 +65,12 @@ context('ProfileScreen', () => {
 
   describe('when userProfileUpdate is false, true would not work since mockReturnValueOnce would not work like the other screens so confirm true with demo mode', () => {
     it('it should only render military info and settings', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-      expect(screen.queryByText('Personal information')).toBeFalsy()
-      expect(screen.queryByText('Contact information')).toBeFalsy()
-      expect(screen.getByText('Military information')).toBeTruthy()
-      expect(screen.getByText('Settings')).toBeTruthy()
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
+      initializeTestInstance()
       expect(screen.getByText('Loading your profile...')).toBeTruthy()
+      await waitFor(() => expect(screen.queryByText('Personal information')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText('Contact information')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Military information')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Settings')).toBeTruthy())
     })
   })
 
@@ -102,7 +83,7 @@ context('ProfileScreen', () => {
         ...initialErrorsState,
         errorsByScreenID,
       }
-      initializeTestInstance(undefined, errorState)
+      initializeTestInstance(errorState)
 
       expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })

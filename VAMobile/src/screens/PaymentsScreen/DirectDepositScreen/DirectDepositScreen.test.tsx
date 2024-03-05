@@ -2,10 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { DirectDepositState, ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import DirectDepositScreen from './index'
 
@@ -18,75 +16,76 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('DirectDepositScreen', () => {
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
-    const directDeposit: DirectDepositState = {
-      loading,
-      saving: false,
+const mockData = {
+  data: {
+    type: 'checking',
+    id: '1',
+    attributes: {
       paymentAccount: {
         accountNumber: '******1234',
         accountType: 'Savings',
         financialInstitutionName: 'BoA',
         financialInstitutionRoutingNumber: '12341234123',
       },
-      bankInfoUpdated: false,
-      invalidRoutingNumberError: false,
-    }
+    },
+  },
+}
 
-    render(<DirectDepositScreen {...mockNavProps()} />, {
-      preloadedState: {
-        directDeposit,
-        errors: errorsState,
+const noData = {
+  data: {
+    type: null,
+    id: null,
+    attributes: {
+      paymentAccount: {
+        accountNumber: null,
+        accountType: null,
+        financialInstitutionName: null,
+        financialInstitutionRoutingNumber: null,
       },
-    })
+    },
+  },
+}
+
+context('DirectDepositScreen', () => {
+  const initializeTestInstance = () => {
+    render(<DirectDepositScreen {...mockNavProps()} />)
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', () => {
-      initializeTestInstance(true)
-      expect(screen.getByText('Loading your direct deposit information...')).toBeTruthy()
-    })
-  })
-
   describe('when there is bank data', () => {
-    it('should display the button with the given bank data', () => {
-      expect(screen.getByText('Account')).toBeTruthy()
-      expect(screen.getByText('BoA')).toBeTruthy()
-      expect(screen.getByText('******1234')).toBeTruthy()
-      expect(screen.getByText('Savings account')).toBeTruthy()
+    it('should display the button with the given bank data and call navigation anvigate when info is clicked', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockResolvedValue(mockData)
+      initializeTestInstance()
+      expect(screen.getByText('Loading your direct deposit information...')).toBeTruthy()
+      await waitFor(() => expect(screen.getByText('Account')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('BoA')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('******1234')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Savings account')).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account')))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' }),
+      )
     })
   })
 
   describe('when there is no bank data', () => {
-    it('should render the button with the text Add your bank account information', () => {
-      render(<DirectDepositScreen {...mockNavProps()} />)
-      expect(screen.getByText('Add your bank account information')).toBeTruthy()
-    })
-  })
-
-  describe('when bank info is clicked', () => {
-    it('should call navigation navigate', () => {
-      fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account'))
-      expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
+    it('should render the button with the text Add your bank account information', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockResolvedValue(noData)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('Add your bank account information')).toBeTruthy())
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-      initializeTestInstance(false, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    it('should render error component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockRejectedValue('failure')
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
 })

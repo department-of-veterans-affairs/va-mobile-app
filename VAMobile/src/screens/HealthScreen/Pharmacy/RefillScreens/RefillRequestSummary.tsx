@@ -21,7 +21,7 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
+import { PrescriptionsList, RefillStatusConstants } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -214,7 +214,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType={ButtonVariants.Secondary}

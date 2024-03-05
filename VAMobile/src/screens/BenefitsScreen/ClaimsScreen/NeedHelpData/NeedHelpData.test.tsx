@@ -30,11 +30,11 @@ context('NeedHelpData', () => {
       screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
     ).toBeTruthy()
     expect(screen.getByText('800-827-1000')).toBeTruthy()
-    expect(screen.queryByText('To review more details about your appeal, visit VA.gov:')).toBeFalsy()
-    expect(screen.queryByText('Visit VA.gov')).toBeFalsy()
+    expect(screen.queryByText('To review more details about your appeal, go to VA.gov.')).toBeFalsy()
+    expect(screen.queryByText('Go to VA.gov')).toBeFalsy()
     initializeTestInstance(true)
-    expect(screen.getByText('To review more details about your appeal, visit VA.gov:')).toBeTruthy()
-    expect(screen.getByText('Visit VA.gov')).toBeTruthy()
+    expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy()
+    expect(screen.getByText('Go to VA.gov')).toBeTruthy()
   })
 
   it('should launch external link on click of the number', () => {
@@ -45,7 +45,7 @@ context('NeedHelpData', () => {
   describe('when isAppeal is true', () => {
     it('should launch external link on click of the url', () => {
       initializeTestInstance(true)
-      fireEvent.press(screen.getByRole('link', { name: 'Visit VA.gov' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Go to VA.gov' }))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
