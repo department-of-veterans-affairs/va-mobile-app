@@ -84,7 +84,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
           {getBody()}
-          {true && (
+          {loadingAttachments && !attachments?.length && attachmentBoolean && (
             <Box
               mx={theme.dimensions.gutter}
               mt={theme.dimensions.contentMarginTop}
