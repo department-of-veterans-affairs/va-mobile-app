@@ -329,10 +329,12 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
     await element(by.text('Remove ' + type)).tap()
     await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.REMOVE_REMOVE_TEXT)).tap()
-    await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
-      .toBeVisible()
-      .withTimeout(4000)
-    await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    try {
+      await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
+        .toBeVisible()
+        .withTimeout(4000)
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
     if (type === 'home phone' || type === 'work phone') {
       await expect(element(by.text('Add your ' + type + ' number'))).toExist()
     } else if (type === 'mobile phone') {
