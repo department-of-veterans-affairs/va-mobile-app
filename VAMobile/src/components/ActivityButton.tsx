@@ -51,7 +51,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
         style={pressableStyles}
         onPress={() => Linking.openURL(`vamobile://${deepLink}`)}
         accessible={true}
-        accessibilityRole={'button'}
+        accessibilityRole={'link'}
         testID={title}>
         <Box flex={1}>
           <Box
