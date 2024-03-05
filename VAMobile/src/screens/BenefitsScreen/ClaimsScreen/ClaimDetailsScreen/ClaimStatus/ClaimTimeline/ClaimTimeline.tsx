@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { ClaimAttributesData } from 'api/types'
 import { AlertBox, Box } from 'components'
@@ -20,10 +22,16 @@ export type ClaimTimelineProps = {
 function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const count = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
+  const [count, setCount] = useState(0)
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
+
+  useFocusEffect(
+    useCallback(() => {
+      setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
+    }, [attributes]),
+  ) //force a rerender due to react query updating data
 
   return (
     <Box>
