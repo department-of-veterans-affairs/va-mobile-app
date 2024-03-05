@@ -74,7 +74,7 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
 
   const pressableProps: PressableProps = {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
+    accessibilityRole: accessToMilitaryInfo ? 'link' : undefined,
     accessibilityLabel:
       accessToMilitaryInfo && profileScreen
         ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}`
