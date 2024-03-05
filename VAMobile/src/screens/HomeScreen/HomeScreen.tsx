@@ -15,10 +15,12 @@ import {
   CategoryLanding,
   EncourageUpdateAlert,
   LargeNavButton,
+  LoadingComponent,
   Nametag,
   SimpleList,
   SimpleListItemObj,
   TextView,
+  VAIcon,
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
@@ -34,6 +36,7 @@ import {
   ClaimsAndAppealsState,
   DisabilityRatingState,
   LettersState,
+  MilitaryServiceState,
   PrescriptionState,
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
@@ -79,8 +82,15 @@ export function HomeScreen({}: HomeScreenProps) {
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { loading: loadingServiceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
+    (state) => state.militaryService,
+  )
+  const { letterBeneficiaryData, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
+    (state) => state.letters,
+  )
+  const { ratingData, loading: loadingDisabilityRating } = useSelector<RootState, DisabilityRatingState>(
+    (state) => state.disabilityRating,
+  )
   const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
@@ -175,11 +185,16 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
+  const loadingAboutYou = loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
+  const hasAboutYouInfo =
+    !!ratingData?.combinedDisabilityRating ||
+    !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
+    !!mostRecentBranch
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Nametag />
         {Number(upcomingAppointmentsCount) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
@@ -220,18 +235,58 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {!!ratingData?.combinedDisabilityRating && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
-            <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
-          </Box>
-        )}
-        {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
-            <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
-          </Box>
-        )}
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('aboutYou')}
+          </TextView>
+          {loadingAboutYou ? (
+            <Box mx={theme.dimensions.condensedMarginBetween}>
+              <LoadingComponent
+                spinnerWidth={24}
+                spinnerHeight={24}
+                text={t('aboutYou.loading')}
+                inlineSpinner={true}
+                spinnerColor={theme.colors.icon.inlineSpinner}
+              />
+            </Box>
+          ) : !hasAboutYouInfo ? (
+            <Box
+              flexDirection="row"
+              alignItems="center"
+              mx={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.standardMarginBetween}>
+              <VAIcon
+                accessible={true}
+                accessibilityLabel={t('error')}
+                name={'ExclamationCircle'}
+                fill={theme.colors.icon.homeScreenError}
+              />
+              <TextView ml={theme.dimensions.condensedMarginBetween} variant="HomeScreen">
+                {t('aboutYou.noInformation')}
+              </TextView>
+            </Box>
+          ) : (
+            <>
+              <Nametag />
+              {!!ratingData?.combinedDisabilityRating && (
+                <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                  <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
+                  <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
+                </Box>
+              )}
+              {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+                <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+                  <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
+                  <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                </Box>
+              )}
+            </>
+          )}
+        </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
