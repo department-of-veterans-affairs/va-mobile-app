@@ -164,6 +164,11 @@ export async function validateAddresses(addressID: string, addressType: string) 
   it(addressType + ': verify contact info is displayed when saved', async () => {
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
+    try {
+      await setTimeout(5000)
+      await expect(element(by.text(addressType + ' address saved'))).toExist()
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
   })
 
   it('verify that the ' + addressType + ' address has been updated', async () => {
@@ -258,6 +263,14 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    try {
+      await setTimeout(2000)
+      await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+      await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
+        .toBeVisible()
+        .withTimeout(4000)
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
   })
 
   it(phoneType + ': verify user can remove the extension', async () => {
@@ -272,6 +285,14 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    try {
+      await setTimeout(2000)
+      await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+      await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)))
+        .toBeVisible()
+        .withTimeout(4000)
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
   })
 }
 
@@ -429,6 +450,11 @@ describe(':ios: Contact Info Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    try {
+      await setTimeout(5000)
+      await expect(element(by.text('Email address saved'))).toExist()
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
   })
 
   it('should update the email address and remove the +', async () => {
@@ -441,6 +467,11 @@ describe(':ios: Contact Info Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    try {
+      await setTimeout(5000)
+      await expect(element(by.text('Email address saved'))).toExist()
+      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    } catch (ex) {}
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
   })
 
