@@ -103,7 +103,6 @@ export const useUploadFileToClaim = (
     mutationFn: uploadFileToClaim,
     onSuccess: async () => {
       queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
-      queryClient.invalidateQueries({ queryKey: [claimsAndAppealsKeys.claim, claimID] })
     },
     onError: (error) => {
       if (isErrorObject(error)) {

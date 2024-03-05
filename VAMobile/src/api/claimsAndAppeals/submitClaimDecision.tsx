@@ -27,7 +27,6 @@ export const useSubmitClaimDecision = (claimID: string) => {
     mutationFn: submitClaimDecision,
     onSuccess: () => {
       queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
-      queryClient.invalidateQueries({ queryKey: [claimsAndAppealsKeys.claim, claimID] })
     },
     onError: (error) => {
       if (isErrorObject(error)) {
