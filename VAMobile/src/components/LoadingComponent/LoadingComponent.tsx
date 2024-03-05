@@ -24,6 +24,8 @@ export type LoadingComponentProps = {
   spinnerWidth?: number
   /** Hex string to set the spinner color*/
   spinnerColor?: string
+  /** Override VAScrollView style */
+  scrollViewStyle?: ViewStyle
 }
 
 /**A common component to show a loading spinner */
@@ -35,6 +37,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   spinnerWidth,
   spinnerColor,
   inlineSpinner,
+  scrollViewStyle,
 }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -42,6 +45,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
+    ...scrollViewStyle,
   }
 
   const spinnerStyle: ViewStyle = {
