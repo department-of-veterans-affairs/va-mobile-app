@@ -109,6 +109,8 @@ export const lightTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    inlineSpinner: DSColors.primary,
+    homeScreenError: DSColors.secondaryDark,
   },
   text: {
     footerButton: colors.primary,
@@ -148,6 +150,7 @@ export const lightTheme = {
     veteranStatus: colors.white,
     webviewTitle: colors.base,
     crisisLineButton: colors.white,
+    homeScreen: DSColors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -306,6 +309,8 @@ export const darkTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    inlineSpinner: DSColors.uswdsBlueVivid30,
+    homeScreenError: DSColors.uswdsRedVivid40,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
@@ -343,6 +348,7 @@ export const darkTheme = {
     veteranStatus: colors.white,
     webviewTitle: colors.white,
     crisisLineButton: colors.black,
+    homeScreen: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
