@@ -11,6 +11,7 @@ import { DateTime } from 'luxon'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   ActivityButton,
+  AnnouncementBanner,
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
@@ -222,6 +223,12 @@ export function HomeScreen({}: HomeScreenProps) {
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('learnAboutPACT')}
+            link={'www.va.gov/resources/the-pact-act-and-your-va-benefits/'}
+          />
         </Box>
       </Box>
     </CategoryLanding>
