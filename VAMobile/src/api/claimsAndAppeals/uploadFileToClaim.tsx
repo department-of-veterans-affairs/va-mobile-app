@@ -89,17 +89,15 @@ export const useUploadFileToClaim = (
   const dateUploadedString = DateTime.local().toISO()
   const claimData = queryClient.getQueryData([claimsAndAppealsKeys.claim, claimID]) as ClaimData
   const indexOfRequest = claimData.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-  if (request.phase) {
-    claimData.attributes.eventsTimeline[indexOfRequest].uploaded = true
-    claimData.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
-    claimData.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
-      files || [],
-      request?.trackedItemId || undefined,
-      request?.documentType || '',
-      dateUploadedString,
-    )
-    claimData.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
-  }
+  claimData.attributes.eventsTimeline[indexOfRequest].uploaded = true
+  claimData.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
+  claimData.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
+    files || [],
+    request?.trackedItemId || undefined,
+    request?.documentType || '',
+    dateUploadedString,
+  )
+  claimData.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
 
   return useMutation({
     mutationFn: uploadFileToClaim,
