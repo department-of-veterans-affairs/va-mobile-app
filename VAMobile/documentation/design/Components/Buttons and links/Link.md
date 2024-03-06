@@ -46,7 +46,7 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 	* **Links open another app**
 		* **Links open in the [browser app](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--external-link&viewMode=story)** if the user needs to sign in to access the content. Before leaving the app, always use a native alert to warn the user. Once confirmed, open the default browser app.
 		* **Links launch another app** if the user is taking an action such as making a phone call, getting directions, or downloading a file. Before leaving the app, consider using a [confirmation message](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages) (such as a native alert or action sheet) to warn the user.
-			* Attachment: Display the attachment in the app with the ability to download to their device.
+			* [Attachment](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--attachment&viewMode=story): Display the attachment in the app with the ability to download to their device.
 			* [Calendar](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--calendar&viewMode=story): Display the event information to allow the user to review and confirm before adding to their calendar. Once confirmed, add to the default calendar app.
 			* [Directions](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--directions&viewMode=story): Display an Action Sheet to allow the user to select their preferred maps app (Apple Maps, Google Maps, etc.). Once selected, open the maps app with their destination.
 			* [Phone](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--phone&viewMode=story): Display an Action Sheet to allow the user to confirm the phone call. Once confirmed, open the default phone app.
@@ -59,7 +59,7 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
     * If the default (blue) color will not work (i.e. insufficient color contrast), you may use the **base (gray)** link.
 
 ## Code usage
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--default)
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--docs)
 
 ## Content considerations
 * Refer to the [VA Design System for content considerations](https://design.va.gov/components/link/#content-considerations)
@@ -75,6 +75,6 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 ----------
 
 ## Differences with VADS
-* The Base button style exists due to mobile app specific needs in dark mode. For example: The v3 Alert component has a colored background for each variation. While working on dark mode, the mobile app team found that the Default link style did not meet color contrast requirements and clashed with the background colors. For this reason, we created a new Base button style that's similar to a USWDS Base button style.
+* The Base link style exists due to mobile app specific needs in dark mode. For example: The v3 Alert component has a colored background for each variation. While working on dark mode, the mobile app team found that the Default link style did not meet color contrast requirements and clashed with the background colors. For this reason, we created a new Base style that's similar to a USWDS Base style.
 * In Storybook, variants are available for content-specific links (add to calendar, get directions, etc). These variants were created to include the onPress logic for app teams. This allows the component to always display a native confirmation message when needed.
 * Currently, the Link component does not support inline links. In the future, a Paragraph component will be created for inline links to support proper text wrapping and accessibility in React Native.
