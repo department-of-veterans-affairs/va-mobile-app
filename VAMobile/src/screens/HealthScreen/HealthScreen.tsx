@@ -11,11 +11,10 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { loadAllPrescriptions } from 'store/slices'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -41,17 +40,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onPharmacy = () => {
-    // always reload to ensure freshness
-    dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    navigateTo('PrescriptionHistory')
-  }
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
     navigateTo('Webview', {
@@ -89,7 +82,7 @@ export function HealthScreen({}: HealthScreenProps) {
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
-            onPress={onPharmacy}
+            onPress={() => navigateTo('PrescriptionHistory')}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}

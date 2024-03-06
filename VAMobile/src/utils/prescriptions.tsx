@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next'
 
+import { RefillStatus, RefillStatusConstants } from 'api/types'
 import { LabelTagTypeConstants } from 'components/LabelTag'
-import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 
 import { a11yLabelVA } from './a11yLabel'
 

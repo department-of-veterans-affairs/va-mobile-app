@@ -1,34 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { filter } from 'underscore'
+
+import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
+import { PrescriptionsList } from 'api/types'
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import SelectionList from 'components/SelectionList'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
-import {
-  PrescriptionState,
-  dispatchClearLoadingRequestRefills,
-  dispatchSetPrescriptionsNeedLoad,
-  loadAllPrescriptions,
-  requestRefills,
-} from 'store/slices/prescriptionSlice'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
-  useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useDowntime,
-  usePrevious,
   useRouteNavigation,
   useTheme,
 } from 'utils/hooks'
@@ -40,9 +32,9 @@ import NoRefills from './NoRefills'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
-export function RefillScreen({ navigation }: RefillScreenProps) {
+export function RefillScreen({ navigation, route }: RefillScreenProps) {
+  const { refillRequestSummaryItems } = route.params
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const submitRefillAlert = useDestructiveActionSheet()
@@ -56,32 +48,37 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } =
-    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const refillable = refillablePrescriptions || []
-  const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
+  const {
+    data: prescriptionData,
+    isLoading: loadingHistory,
+    isFetched: prescriptionsFetched,
+  } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime })
+  const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
+  const [prescriptionsToRefill, setPrescriptionsToRefill] = useState<PrescriptionsList>([])
+  const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
+    return prescription.attributes.isRefillable
+  })
 
-  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
-  useFocusEffect(
-    React.useCallback(() => {
-      if (screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime) {
-        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
-      }
-    }, [dispatch, prescriptionInDowntime]),
-  )
+  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefills } = useRequestRefills()
+
+  const refillable = refillablePrescriptions || []
 
   useEffect(() => {
-    if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
-      navigateTo('RefillRequestSummary')
+    if (prescriptionsFetched && prescriptionData?.data) {
+      setAllPrescriptions(prescriptionData.data)
     }
-  }, [navigateTo, submittingRequestRefills, prevLoadingRequestRefills])
+  }, [prescriptionsFetched, prescriptionData])
+
+  useEffect(() => {
+    if (refillRequestSummaryItems) {
+      navigateTo('RefillRequestSummary', refillRequestSummaryItems)
+    }
+  }, [navigateTo, refillRequestSummaryItems])
 
   const scrollViewRef = useRef<ScrollView>(null)
 
   useBeforeNavBackListener(navigation, (e) => {
     if (selectedPrescriptionsCount === 0) {
-      dispatch(dispatchSetPrescriptionsNeedLoad())
-      dispatch(dispatchClearLoadingRequestRefills())
       return
     }
     e.preventDefault()
@@ -96,8 +93,6 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
         {
           text: t('cancelRequest'),
           onPress: () => {
-            dispatch(dispatchSetPrescriptionsNeedLoad())
-            dispatch(dispatchClearLoadingRequestRefills())
             navigation.dispatch(e.data.action)
           },
         },
@@ -106,13 +101,14 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
   })
 
   const onSubmitPressed = () => {
-    const prescriptionsToRefill: PrescriptionsList = []
+    const prescriptionList: PrescriptionsList = []
     Object.values(selectedValues).forEach((isSelected, index) => {
       if (isSelected) {
-        prescriptionsToRefill.push(refillable[index])
+        prescriptionList.push(refillable[index])
       }
     })
-    const prescriptionIds = prescriptionsToRefill.map((prescription) => prescription.id)
+    const prescriptionIds = prescriptionList.map((prescription) => prescription.id)
+    setPrescriptionsToRefill(prescriptionList)
     logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
     submitRefillAlert({
       title:
@@ -134,7 +130,8 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
               : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-            dispatch(requestRefills(prescriptionsToRefill))
+            requestRefill(prescriptionsToRefill)
+            navigateTo('RefillRequestSummary')
           },
         },
       ],
