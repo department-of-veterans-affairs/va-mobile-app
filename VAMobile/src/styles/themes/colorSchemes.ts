@@ -112,6 +112,7 @@ export const lightTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.white,
+    announcementBanner: DSColors.primary,
     veteranStatusHomeArrow: DSColors.base,
   },
   text: {
@@ -155,6 +156,7 @@ export const lightTheme = {
     webviewTitle: colors.base,
     crisisLineButton: colors.white,
     activityButton: colors.white,
+    announcementBanner: DSColors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -171,6 +173,7 @@ export const lightTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
     activityButton: DSColors.primaryDarker,
+    announcementBanner: colors.white,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -317,6 +320,7 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.black,
+    announcementBanner: DSColors.uswdsBlueVivid30,
     veteranStatusHomeArrow: DSColors.grayLightest,
   },
   text: {
@@ -358,6 +362,7 @@ export const darkTheme = {
     webviewTitle: colors.white,
     crisisLineButton: colors.black,
     activityButton: colors.black,
+    announcementBanner: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
@@ -374,6 +379,7 @@ export const darkTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.darkmodeBorder,
     activityButton: DSColors.uswdsBlueVivid30,
+    announcementBanner: colors.darkmodeGrayWarmDark,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,
