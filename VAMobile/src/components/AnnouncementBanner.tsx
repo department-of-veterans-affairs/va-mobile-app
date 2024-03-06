@@ -17,10 +17,9 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
   const theme = useTheme()
 
   const boxProps: BoxProps = {
-    borderRadius: 8,
     py: theme.dimensions.cardPadding,
     px: theme.dimensions.buttonPadding,
-    backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
+    backgroundColor: theme.colors.buttonBackground.announcementBanner as BackgroundVariant,
   }
 
   const pressableStyles: ViewStyle = {
@@ -35,8 +34,19 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
         accessible={true}
         accessibilityRole={'button'}
         testID={title}>
-        {/* Continue here */}
-        <Box />
+        <Box flexDirection={'row'} flex={1}>
+          <Box flex={1}>
+            <TextView variant="AnnouncementBannerTitle">{title}</TextView>
+          </Box>
+          <VAIcon
+            width={24}
+            height={24}
+            name={'CircleExternalLink'}
+            fill={theme.colors.icon.announcementBanner}
+            fill2={theme.colors.icon.transparent}
+            ml={theme.dimensions.listItemDecoratorMarginLeft}
+          />
+        </Box>
       </Pressable>
     </Box>
   )
