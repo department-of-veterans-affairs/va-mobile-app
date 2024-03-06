@@ -32,7 +32,7 @@ beforeAll(async () => {
 })
 
 describe('Home Screen', () => {
-  it('should enable AF use case 3', async () => {
+  it(':android: should enable AF use case 3', async () => {
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
@@ -50,7 +50,7 @@ describe('Home Screen', () => {
     await verifyAF(undefined, 'AllowFunction', undefined)
   })
 
-  it('should disable AF use case 3', async () => {
+  it(':android: should disable AF use case 3', async () => {
     await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
   })
 
