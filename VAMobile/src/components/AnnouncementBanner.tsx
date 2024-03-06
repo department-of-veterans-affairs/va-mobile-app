@@ -17,9 +17,22 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
   const theme = useTheme()
 
   const boxProps: BoxProps = {
-    py: theme.dimensions.cardPadding,
-    px: theme.dimensions.buttonPadding,
+    py: theme.dimensions.formMarginBetween,
+    px: theme.dimensions.cardPadding,
     backgroundColor: theme.colors.buttonBackground.announcementBanner as BackgroundVariant,
+    style: {
+      shadowColor: colors.black,
+      ...Platform.select({
+        ios: {
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.2,
+          shadowRadius: 8,
+        },
+        android: {
+          elevation: 8,
+        },
+      }),
+    },
   }
 
   const pressableStyles: ViewStyle = {
