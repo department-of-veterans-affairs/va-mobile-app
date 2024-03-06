@@ -35,15 +35,14 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
       const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (
-        <>
+        <Box key={index}>
           <Box
             display="flex"
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
             flexWrap="wrap"
-            mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}
-            key={index}>
+            mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}>
             <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
               <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
               <TextView
@@ -60,7 +59,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
             a11yHint={t('remove.a11yHint', { content: fileName })}
             buttonType={ButtonVariants.Destructive}
           />
-        </>
+        </Box>
       )
     })
   }
