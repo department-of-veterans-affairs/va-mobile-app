@@ -116,7 +116,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'BenefitsTab',
                   state: {
-                    routes: [{ name: 'Benefits' }, ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []), { name: 'ClaimsHistory' }],
+                    routes: [
+                      { name: 'Benefits' },
+                      ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
+                      { name: 'ClaimsHistoryScreen' },
+                    ],
                   },
                 },
               ],
