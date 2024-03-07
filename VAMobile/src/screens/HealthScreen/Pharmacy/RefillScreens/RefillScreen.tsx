@@ -4,10 +4,11 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { MutateOptions } from '@tanstack/react-query'
 import { filter } from 'underscore'
 
 import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
-import { PrescriptionsList } from 'api/types'
+import { PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import SelectionList from 'components/SelectionList'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
@@ -130,8 +131,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
             logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-            requestRefill(prescriptionsToRefill)
-            navigateTo('RefillRequestSummary')
+            const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
+              onSettled(data) {
+                if (data) {
+                  navigateTo('RefillRequestSummary', data)
+                }
+              },
+            }
+            requestRefill(prescriptionsToRefill, mutateOptions)
           },
         },
       ],
