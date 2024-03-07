@@ -53,7 +53,6 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   })
   const {
     isLoading: downloading,
-    isError: downloadLetterError,
     error: downloadLetterErrorDetails,
     refetch: refetchLetter,
   } = useDownloadDecisionLetter(letterID, demoMode, {
@@ -64,23 +63,14 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
   useEffect(() => {
-    if (downloadLetterError && downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
+    if (downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
       if (!snackBar) {
         logAnalyticsEvent(Events.vama_snackbar_null('ClaimLetters view letter'))
       }
       snackBar?.hideAll()
-      showSnackBar(
-        t('claimLetters.download.error'),
-        dispatch,
-        () => {
-          queryClient.invalidateQueries({ queryKey: decisionLettersKeys.decisionLetters })
-        },
-        false,
-        true,
-        true,
-      )
+      showSnackBar(t('claimLetters.download.error'), dispatch, fetchInfoAgain, false, true, true)
     }
-  }, [downloadLetterError, downloadLetterErrorDetails, queryClient, dispatch, t])
+  }, [downloadLetterErrorDetails, queryClient, dispatch, t])
 
   const letterButtons = decisionLetters.map((letter, index) => {
     const { typeDescription, receivedAt } = letter.attributes
