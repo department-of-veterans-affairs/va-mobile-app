@@ -14,6 +14,7 @@ export type VAButtonBackgroundColors = {
   brandedPrimary: string
   brandedPrimaryActive: string
   overFlowMenuButton: string
+  activityButton: string
 }
 
 export type VAButtonBorderColors = {
@@ -70,6 +71,7 @@ export type VATextColors = {
   veteranStatus: string
   webviewTitle: string
   crisisLineButton: string
+  activityButton: string
   homeScreen: string
   activityFooter: string
 }
@@ -110,13 +112,16 @@ export type VAIconColors = {
   radioDisabled: string
   tagInfoIcon: string
   transparent: string
+  activityButton: string
   inlineSpinner: string
 }
 
 export type VATypographyThemeVariants = {
   ActionBar: string
+  ActivityButtonSubtext: string
   ActivityFooter: string
   BitterBoldHeading: string
+  BitterHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
   HomeScreen: string
@@ -285,6 +290,8 @@ export type VATheme = {
     altBold: string
   }
   fontSizes: {
+    ActivityButtonSubtext: VAFontSizes
+    BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
     ClaimPhase: VAFontSizes
     HelperText: VAFontSizes

@@ -49,19 +49,6 @@ context('HomeScreen', () => {
     expect(screen.getByText('About VA')).toBeTruthy()
     expect(screen.getByText('Contact VA')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Find a VA location' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'COVID-19 updates' })).toBeTruthy()
-  })
-
-  describe('when VA COVID-19 updates is pressed', () => {
-    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'COVID-19 updates' }))
-      const expectNavArgs = {
-        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-        displayTitle: 'va.gov',
-        loadingMessage: 'Loading VA COVID-19 updates...',
-      }
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
-    })
   })
 
   describe('when the find VA location link is clicked', () => {
@@ -77,13 +64,13 @@ context('HomeScreen', () => {
 
   it('displays prescriptions module when there are active prescriptions', () => {
     initializeTestInstance(2)
-    expect(screen.getByText('Prescriptions')).toBeTruthy()
-    expect(screen.getByText('(2 active)')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Prescriptions' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 ready to refill' })).toBeTruthy()
   })
 
   it('navigates to prescriptions screen when prescriptions module is tapped', () => {
     initializeTestInstance(2)
-    fireEvent.press(screen.getByText('Prescriptions'))
+    fireEvent.press(screen.getByRole('link', { name: 'Prescriptions' }))
     expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
   })
 
@@ -94,13 +81,13 @@ context('HomeScreen', () => {
 
   it('displays claims module when there are active claims', () => {
     initializeTestInstance(0, 2)
-    expect(screen.getByText('Claims')).toBeTruthy()
-    expect(screen.getByText('(2 open)')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 active' })).toBeTruthy()
   })
 
   it('navigates to claims history screen when claims module is tapped', () => {
     initializeTestInstance(0, 2)
-    fireEvent.press(screen.getByText('Claims'))
+    fireEvent.press(screen.getByRole('link', { name: 'Claims' }))
     expect(Linking.openURL).toBeCalledWith('vamobile://claims')
   })
 

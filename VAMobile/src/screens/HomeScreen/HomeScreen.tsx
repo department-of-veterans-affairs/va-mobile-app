@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -12,6 +11,7 @@ import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
+  ActivityButton,
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
@@ -43,7 +43,6 @@ import {
 } from 'store/slices'
 import { AnalyticsState, SecureMessagingState } from 'store/slices'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -64,7 +63,7 @@ import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/Sandbo
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -163,15 +162,6 @@ export function HomeScreen({}: HomeScreenProps) {
     })
   }
 
-  const onCoronaVirusFAQ = () => {
-    dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigateTo('Webview', {
-      url: WEBVIEW_URL_CORONA_FAQ,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('webview.covidUpdates.loading'),
-    })
-  }
-
   const buttonDataList: Array<SimpleListItemObj> = [
     { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
@@ -179,7 +169,6 @@ export function HomeScreen({}: HomeScreenProps) {
       onPress: onFacilityLocator,
       testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('covid19Updates.title'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
   ]
 
   const profileIconProps: VAIconProps = {
@@ -244,43 +233,41 @@ export function HomeScreen({}: HomeScreenProps) {
               </>
             ) : (
               <>
-                {Number(upcomingAppointmentsCount) > 0 && (
-                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-                    <LargeNavButton
-                      title={`${t('appointments')}`}
-                      subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
-                      onPress={() => Linking.openURL('vamobile://appointments')}
-                      borderWidth={theme.dimensions.buttonBorderWidth}
+                {!!upcomingAppointmentsCount && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('appointments')}
+                      subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                      deepLink={'appointments'}
                     />
                   </Box>
                 )}
-                {Number(activeClaimsCount) > 0 && (
-                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-                    <LargeNavButton
-                      title={`${t('claims.title')}`}
-                      subText={`(${activeClaimsCount} ${t('open')})`}
-                      onPress={() => Linking.openURL('vamobile://claims')}
-                      borderWidth={theme.dimensions.buttonBorderWidth}
+                {!!activeClaimsCount && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('claims.title')}
+                      subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                      deepLink={'claims'}
                     />
                   </Box>
                 )}
                 {!!unreadMessageCount && (
-                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-                    <LargeNavButton
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
                       title={`${t('messages')}`}
-                      subText={`${unreadMessageCount} ${t('unread')}`}
-                      onPress={() => Linking.openURL('vamobile://messages')}
-                      borderWidth={theme.dimensions.buttonBorderWidth}
+                      subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                      deepLink={'messages'}
                     />
                   </Box>
                 )}
-                {Number(prescriptionStatusCount.isRefillable) > 0 && (
-                  <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-                    <LargeNavButton
-                      title={`${t('prescription.title')}`}
-                      subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
-                      onPress={() => Linking.openURL('vamobile://prescriptions')}
-                      borderWidth={theme.dimensions.buttonBorderWidth}
+                {!!prescriptionStatusCount.isRefillable && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('prescription.title')}
+                      subText={t('prescriptions.activityButton.subText', {
+                        count: prescriptionStatusCount.isRefillable,
+                      })}
+                      deepLink={'prescriptions'}
                     />
                   </Box>
                 )}
