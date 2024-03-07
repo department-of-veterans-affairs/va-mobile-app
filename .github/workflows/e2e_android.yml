@@ -70,8 +70,8 @@ jobs:
         with:
           ref: ${{ github.ref }}
       - name: Base SHA
-         id: base-sha
-         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
+        id: base-sha
+        run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
       - name: Get file difference
         id: changed_files
         uses: tj-actions/changed-files@v35
