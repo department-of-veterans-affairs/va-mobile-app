@@ -78,8 +78,7 @@ jobs:
       - name: Generate testing matrix
         id: testing_matrix
         run: |
-          resp="${{ steps.changed_files.outputs.all_modified_files}}" | jq '(.[] | contains("Login")) |= "LoginScreen"' 
-          echo "$resp"
+          echo "${{ steps.changed_files.outputs.all_modified_files}} | jq '(.[] | contains("Login")) |= "LoginScreen"'" 
 
   # matrix-e2e-android:
   #   if: github.event.inputs.tests_to_run != ''
