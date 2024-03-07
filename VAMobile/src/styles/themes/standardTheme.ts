@@ -54,7 +54,7 @@ const fontSizes = {
   },
   BitterHeading: {
     fontSize: 22,
-    lineHeight: 30,
+    lineHeight: 24,
   },
   BitterBoldHeading: {
     fontSize: 26,

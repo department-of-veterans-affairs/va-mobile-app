@@ -121,7 +121,7 @@ export const linking: LinkingOptions<any> = {
                     routes: [
                       { name: 'Benefits' },
                       ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
-                      { name: 'ClaimsHistory' },
+                      { name: 'ClaimsHistoryScreen' },
                     ],
                   },
                 },

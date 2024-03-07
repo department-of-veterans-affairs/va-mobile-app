@@ -209,6 +209,15 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
+        {!!prescriptionStatusCount.isRefillable && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('prescription.title')}
+              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
+              deepLink={'prescriptions'}
+            />
+          </Box>
+        )}
         <Box pt={theme.dimensions.formMarginBetween}>
           <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} variant={'AboutYou'}>
             {t('aboutYou')}
