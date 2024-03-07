@@ -53,7 +53,7 @@ jobs:
 
   matrix-e2e-ios:
     if: github.event.inputs.tests_to_run != ''
-    runs-on: macos-latest-xl
+    runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -135,7 +135,7 @@ jobs:
   e2e-ios:
     if: always() && github.event.inputs.tests_to_run == ''
     needs: start_slack_thread
-    runs-on: macos-latest-xl
+    runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -216,7 +216,7 @@ jobs:
 
       - name: Inform Slack of success
         id: post_success
-        if: ${{!failure()}} && github.event_name == 'schedule'
+        if: ${{ success() }} && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \

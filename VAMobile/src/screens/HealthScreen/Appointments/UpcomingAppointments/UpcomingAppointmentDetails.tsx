@@ -56,6 +56,7 @@ import {
   ProviderName,
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
+import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -403,7 +404,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           {renderAtHomeVideoConnectAppointmentData()}
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
-
+          <ClinicNameAndPhysicalLocation attributes={attributes} />
           <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
           {renderAtlasVideoConnectAppointmentData()}

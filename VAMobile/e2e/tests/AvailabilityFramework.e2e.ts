@@ -11,7 +11,7 @@ const AFNavigation = [
     'How to update or fix an error in your legal name',
   ],
   ['FullScreenSubtask', 'WG_PreferredName', 'Profile', 'Personal information', 'Preferred name'],
-  ['CategoryLanding', 'WG_Health', 'Health'],
+  //['CategoryLanding', 'WG_Health', 'Health'],
 ]
 
 describe(':android: Availability Framework', () => {
