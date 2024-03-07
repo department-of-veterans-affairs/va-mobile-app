@@ -5,38 +5,38 @@ draft: true
 
 Alerts are an in-content way to keep users informed of important and sometimes time-sensitive changes.
 
-### Examples
+## Examples
 
-#### Informational
+### Informational
 Add Figma links and embed Storybook
 
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-#### Success
+### Success
 Add Figma links and embed Storybook
 
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-#### Warning
+### Warning
 Add Figma links and embed Storybook
 
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-#### Error
+### Error
 Add Figma links and embed Storybook
 
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 
-### Usage
+## Usage
 
 [Refer to the VA Design System for usage guidance](https://design.va.gov/components/alert)
 
-#### When to use Alert
+### When to use Alert
 * **To notify users about the status of the system**
     * **System status messages**. An alert may be a notification that keeps people informed of the status of the system and may or may not require the user to respond. Such notifications may be errors, warnings, and general updates.
     * **In-application system status**. An exception to the above is providing information to the user, unprompted, about a problem with a particular application. These [system status messages](https://design.va.gov/content-style-guide/error-messages/system) typically use an error or warning variation and do not require user action.
@@ -49,7 +49,7 @@ Add Figma links and embed Storybook
 * **Engagement messages that nudge the user to enter or update data**. [Engagement messages](https://design.va.gov/content-style-guide/error-messages/engagement) typically use the informational variation and ask the user to take an action.
 * **Mobile app only: Unprompted and in-page alerts**. On the website, consider the [Alert - Expandable](https://design.va.gov/components/alert-expandable) component to draw attention to important information on the page that is not a response to user feedback. On the mobile app, use the expandable variation of the Alert component.
 
-#### When to consider something else
+### When to consider something else
 On the mobile app, always consider a native component before using an in-content Alert.
 * **Action Sheet**. When the user takes an action in which the system needs to **clarify their intent**, use an [action sheet](https://developer.apple.com/design/human-interface-guidelines/action-sheets) (for both iOS and Android) to **offer the user a choice in how to proceed**.
 * **Alert/dialogue**. When the user chooses to do something that has **serious consequences**, use a native modal [alert](https://developer.apple.com/design/human-interface-guidelines/alerts) (for iOS) or [dialogue](https://m3.material.io/components/dialogs/overview) (for Android) to present the user with critical information related to that action.
@@ -63,20 +63,20 @@ On the website and mobile app, do not use the Alert component for:
 * **Destructive actions**. If an action will result in destroying a user’s work (for example, deleting an application) use a more intrusive pattern, such as a confirmation [modal](https://design.va.gov/components/modal) dialogue on the website or a native alert on the mobile app, to allow the user to confirm that this action is what they want.
 * **Clarifying background information**. Use the [Additional info](https://design.va.gov/components/additional-info) component when clarifying outcomes for an input or a form question as well as providing background information. Keep in mind that Alert - Expandable should warrant an alert and be used sparingly. The value of any type of alert is diminished if the page is littered with alerts of equal weight.
 
-#### Choosing between variations
+### Choosing between variations
 * Use standard alerts for most use cases.
 * Use expandable alerts when the information is not a response to user feedback.
 * Use dismissible alerts when the content is informational and not specific to the user or their interaction. For example, displaying “what’s new” content in the app.
 
-#### Placement
+### Placement
 * Alerts always appear near the top of the screen
 
-#### Content considerations
+## Content considerations
 * The [VA Design System's content considerations for alerts](https://design.va.gov/components/alert#content-considerations) are appropriate for the mobile app with the following addition:
     * VA no longer says, “Please” in alerts when making a request of the user.
 * The VA Design System also includes guidance on how to write error alerts. In particular, the section on [style and tone](https://design.va.gov/patterns/help-users-to/recover-from-errors#style-and-tone) provides help on how to write clear and conversational alerts.
 
-##### Accessibility considerations
+## Accessibility considerations
 * Alerts should only be used when appropriate to do so. Do not use Alerts when a native alert would be best (i.e. native alert, dialogue, action sheet, snackbar, etc.).
 * When using a screen reader, the Alert should announce itself as an alert with an indication of its role / importance (i.e. error, warning, informational, etc.).
 * Alerts that have expanded / closed states must be announced by a screen reader.
@@ -86,9 +86,9 @@ On the website and mobile app, do not use the Alert component for:
 * Focusable elements within an Alert should include: heading, body copy, phone numbers, and buttons.
 * [accessibilityLabel](https://reactnative.dev/docs/accessibility#accessibilitylabel) and [accessibilityLabelledBy](https://reactnative.dev/docs/accessibility#accessibilitylabelledby-android) should be used where appropriate.
 
-### Code usage
+## Code usage
 Link to Storybook coming soon
 
-### Related
+## Related
 * [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)
 * [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Alerts%20and%20Progress/Snackbar)

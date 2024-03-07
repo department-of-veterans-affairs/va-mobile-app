@@ -669,9 +669,14 @@
       },
       "prescriptionStatusCount": {
         "active": 24,
+        "isRefillable": 10,
         "discontinued": 1,
         "expired": 4,
+        "historical": 3,
+        "pending": 8,
         "transferred": 1,
+        "submitted": 0,
+        "hold": 1,
         "unknown": 1,
         "total": 31
       }

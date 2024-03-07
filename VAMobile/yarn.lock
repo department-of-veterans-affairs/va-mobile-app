@@ -2164,7 +2164,12 @@
   version "18.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/perf/-/perf-18.9.0.tgz#0f30c60d75abc5b4f287ab0feffd459113221979"
   integrity sha512-Fkt87mRgpvaFTXnt/R06aaMIZotYINYMZ8NX/2ZsE/WFfII2udiD5s43ix+ICobQVxSQO80V4aHGnGDb2x/4xA==
-
+  
+"@react-native-firebase/dynamic-links@^18.8.0":
+  version "18.8.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/dynamic-links/-/dynamic-links-18.8.0.tgz#4304f859ed6a310db9472795ab95ccb107b45827"
+  integrity sha512-tTUV24psIx6J+qU15pHkDMo0gHioT3Pi4P5z9P2odCbsoS1fSMsZ86AolwVJPTLRs7IJ3j3cEWzx7ocpvktoNQ==
+  
 "@react-native-firebase/remote-config@18.9.0":
   version "18.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-18.9.0.tgz#60b46ba3833569452ea74ee2bafc61b8a703eafd"
@@ -2302,10 +2307,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@reduxjs/toolkit@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.1.0.tgz#b613226669557080d5d683f3dbbd95462f94b965"
-  integrity sha512-nfJ/b4ZhzUevQ1ZPKjlDL6CMYxO4o7ZL7OSsvSOxzT/EN11LsBDgTqP7aedHtBrFSVoK7oTP1SbMWUwGb30NLg==
+"@reduxjs/toolkit@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.1.tgz#3dce4906fb33da9e0122468ef21438dd7f2277a9"
+  integrity sha512-8CREoqJovQW/5I4yvvijm/emUiCCmcs4Ev4XPWd4mizSO+dD3g5G6w34QK5AGeNrSH7qM8Fl66j4vuV7dpOdkw==
   dependencies:
     immer "^10.0.3"
     redux "^5.0.1"

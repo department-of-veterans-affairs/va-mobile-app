@@ -8,21 +8,6 @@ import { QueriesData, context, render } from 'testUtils'
 
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 
-const mockNavigationSpy = jest.fn()
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
-
 context('DisabilityRatingsScreen', () => {
   const ratingDataMock = {
     combinedDisabilityRating: 70,

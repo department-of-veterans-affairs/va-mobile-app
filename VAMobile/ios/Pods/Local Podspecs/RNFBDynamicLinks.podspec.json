@@ -1,0 +1,34 @@
+{
+  "name": "RNFBDynamicLinks",
+  "version": "18.8.0",
+  "description": "React Native Firebase - Dynamic Links",
+  "summary": "A well tested feature rich Firebase implementation for React Native, supporting iOS & Android.",
+  "homepage": "http://invertase.io/oss/react-native-firebase",
+  "license": "Apache-2.0",
+  "authors": "Invertase Limited",
+  "source": {
+    "git": "https://github.com/invertase/react-native-firebase.git",
+    "tag": "v18.8.0"
+  },
+  "social_media_url": "http://twitter.com/invertaseio",
+  "platforms": {
+    "ios": "11.0",
+    "osx": "10.13"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "dependencies": {
+    "React-Core": [
+
+    ],
+    "RNFBApp": [
+
+    ],
+    "Firebase/DynamicLinks": [
+      "10.19.0"
+    ],
+    "GoogleUtilities/AppDelegateSwizzler": [
+
+    ]
+  },
+  "static_framework": false
+}
