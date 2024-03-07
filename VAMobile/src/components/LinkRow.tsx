@@ -5,8 +5,11 @@ import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
+  /** Text for row */
   title: string
+  /** Optional Accessibility label for text */
   titleA11yLabel?: string
+  /** Function called when pressed */
   onPress: () => void
 }
 const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }) => {
