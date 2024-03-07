@@ -44,7 +44,11 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [letterID, setLetterID] = useState<string>('')
-  const { data: decisionLettersData, isLoading: loading } = useDecisionLetters({
+  const {
+    data: decisionLettersData,
+    isLoading: loading,
+    refetch: fetchInfoAgain,
+  } = useDecisionLetters({
     enabled: screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime,
   })
   const {
@@ -58,10 +62,6 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   // This screen is reachable from two different screens, so adjust back button label
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
-
-  const fetchInfoAgain = () => {
-    queryClient.invalidateQueries({ queryKey: decisionLettersKeys.decisionLetters })
-  }
 
   useEffect(() => {
     if (downloadLetterError && downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
