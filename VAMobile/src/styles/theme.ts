@@ -70,6 +70,7 @@ export type VATextColors = {
   veteranStatus: string
   webviewTitle: string
   crisisLineButton: string
+  homeScreen: string
 }
 
 export type VAIconColors = {
@@ -108,6 +109,7 @@ export type VAIconColors = {
   radioDisabled: string
   tagInfoIcon: string
   transparent: string
+  linkRow: string
 }
 
 export type VATypographyThemeVariants = {
@@ -115,6 +117,8 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
+  HomeScreen: string
+  HomeScreenHeader: string
   HelperText: string
   HelperTextBold: string
   LabelTag: string
@@ -172,6 +176,7 @@ export type VABackgroundColors = {
   tagYellow: string
   tagGreen: string
   veteranStatus: string
+  linkRow: string
 }
 
 export type VABorderColors = {

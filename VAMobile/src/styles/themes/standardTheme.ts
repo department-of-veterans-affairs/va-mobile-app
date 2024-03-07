@@ -7,7 +7,7 @@ import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
 export const ColorSchemeConstantType: {
   none: ColorSchemeTypes
@@ -54,6 +54,14 @@ const fontSizes = {
   },
   DescriptiveBackButton: {
     fontSize: 16,
+    lineHeight: 22,
+  },
+  HomeScreen: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  HomeScreenHeader: {
+    fontSize: 18,
     lineHeight: 22,
   },
   HelperText: {
@@ -144,6 +152,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
+    HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
+    HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
