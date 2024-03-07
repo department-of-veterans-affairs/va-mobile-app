@@ -15,7 +15,6 @@ import {
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
-  LargeNavButton,
   LoadingComponent,
   Nametag,
   SimpleList,
