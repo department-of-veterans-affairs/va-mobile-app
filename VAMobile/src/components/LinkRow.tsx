@@ -5,9 +5,9 @@ import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
-  /** Text for row */
+  /** Text for row title */
   title: string
-  /** Optional Accessibility label for text */
+  /** Optional Accessibility label for title */
   titleA11yLabel?: string
   /** Function called when pressed */
   onPress: () => void
