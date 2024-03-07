@@ -70,8 +70,8 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
-        accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
-        {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
+        accessibilityLabel={`${t('fillDate')} ${dateA11yLabel}.`}>
+        {`${t('fillDate')}: ${dateMMddyyyy}`}
       </TextView>
       <TextView
         variant={'HelperText'}

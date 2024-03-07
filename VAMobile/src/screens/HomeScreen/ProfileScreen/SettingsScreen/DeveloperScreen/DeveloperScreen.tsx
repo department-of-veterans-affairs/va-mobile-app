@@ -125,7 +125,8 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('debug.title')}>
+      title={t('debug.title')}
+      testID="developerScreenTestID">
       <Box>
         <TextArea>
           <Button onPress={() => navigateTo('Sandbox')} label={'Sandbox'} />

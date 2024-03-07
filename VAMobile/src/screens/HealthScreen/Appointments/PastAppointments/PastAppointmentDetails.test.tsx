@@ -73,7 +73,7 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Blind Rehabilitation Center' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Provider not noted' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'VA Long Beach Healthcare System' })).toBeTruthy()
+    expect(screen.getAllByRole('header', { name: 'VA Long Beach Healthcare System' })).toBeTruthy()
     expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
     expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
     expect(screen.queryByText('Get directions')).toBeFalsy()

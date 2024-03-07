@@ -16,24 +16,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const authorizedServicesMockData = {
-  appeals: true,
-  appointments: true,
-  claims: true,
-  decisionLetters: true,
-  directDepositBenefits: true,
-  directDepositBenefitsUpdate: true,
-  disabilityRating: true,
-  genderIdentity: true,
-  lettersAndDocuments: true,
-  militaryServiceHistory: true,
-  paymentHistory: true,
-  preferredName: true,
-  prescriptions: true,
-  scheduleAppointments: true,
-  secureMessaging: true,
-  userProfileUpdate: true,
-}
+const authorizedServicesMockData = { lettersAndDocuments: true }
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
   return {
@@ -47,10 +30,8 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 
 context('LettersOverviewScreen', () => {
   const initializeTestInstance = (isAuthorized = true) => {
-    const props = mockNavProps()
     authorizedServicesMockData.lettersAndDocuments = isAuthorized
-
-    render(<LettersOverviewScreen {...props} />)
+    render(<LettersOverviewScreen {...mockNavProps()} />)
   }
 
   beforeEach(() => {
