@@ -230,12 +230,19 @@ export function HomeScreen({}: HomeScreenProps) {
               pt={theme.dimensions.standardMarginBetween}
               pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
               pl={theme.dimensions.standardMarginBetween}>
-              <TextView variant={'VeteranStatusBranch'}>{t('disabilityRating.title')}</TextView>
               <TextView
+                accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                variant={'VeteranStatusBranch'}>
+                {t('disabilityRating.title')}
+              </TextView>
+              <TextView
+                accessible={false}
                 variant={
                   'NametagNumber'
                 }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
-              <TextView variant={'VeteranStatusProof'}>{t('disabilityRating.serviceConnected')}</TextView>
+              <TextView accessible={false} variant={'VeteranStatusProof'}>
+                {t('disabilityRating.serviceConnected')}
+              </TextView>
             </Box>
           )}
           {monthlyPay && disRating && (
@@ -251,8 +258,13 @@ export function HomeScreen({}: HomeScreenProps) {
               pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
               pl={theme.dimensions.standardMarginBetween}
               pb={theme.dimensions.standardMarginBetween}>
-              <TextView variant={'VeteranStatusBranch'}>{t('monthlyCompensationPayment')}</TextView>
               <TextView
+                accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+                variant={'VeteranStatusBranch'}>
+                {t('monthlyCompensationPayment')}
+              </TextView>
+              <TextView
+                accessible={false}
                 variant={
                   'NametagNumber'
                 }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
