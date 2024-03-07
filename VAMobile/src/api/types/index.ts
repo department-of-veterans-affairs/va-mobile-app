@@ -1,4 +1,5 @@
 export * from './AddressData'
+export * from './AppointmentData'
 export * from './ContactInformation'
 export * from './DemographicsData'
 export * from './DirectDepositData'
