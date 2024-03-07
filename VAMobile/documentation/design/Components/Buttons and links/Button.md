@@ -9,25 +9,25 @@ A button draws attention to important actions with a large selectable surface.
 ### Default
 
 #### Primary
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-606&mode=design&t=CNVVTHmCkOFHUVbq-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 #### Secondary
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--secondary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--secondary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-607&mode=design&t=CNVVTHmCkOFHUVbq-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Base
 
 #### Primary
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-595&mode=design&t=CNVVTHmCkOFHUVbq-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 #### Secondary
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base-secondary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base-secondary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-596&mode=design&t=CNVVTHmCkOFHUVbq-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base-secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Destructive
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--destructive)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--destructive)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-586&mode=design&t=CNVVTHmCkOFHUVbq-4)
 <iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--destructive&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ## Usage

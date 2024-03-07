@@ -43,6 +43,7 @@
     "@react-native-firebase/analytics": "^18.7.3",
     "@react-native-firebase/app": "^18.7.3",
     "@react-native-firebase/crashlytics": "^18.7.3",
+    "@react-native-firebase/dynamic-links": "^18.8.0",
     "@react-native-firebase/perf": "^18.7.3",
     "@react-native-firebase/remote-config": "18.7.3",
     "@react-navigation/bottom-tabs": "^6.5.12",

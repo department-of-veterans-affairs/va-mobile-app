@@ -1,15 +1,15 @@
 {
-  "testRunner" : {
+  "testRunner": {
     "$0": "jest",
     "args": {
-        "config": "detoxconfig.js"
+      "config": "detoxconfig.js"
     },
     "jest": {
-        "setupTimeout": 300000,
-        "reportSpecs": false,
-        "reportWorkerAssign": false
+      "setupTimeout": 300000,
+      "reportSpecs": false,
+      "reportWorkerAssign": false
     }
-  }, 
+  },
   "skipLegacyWorkersInjection": true,
   "apps": {
     "ios": {
@@ -27,7 +27,7 @@
     "simulator": {
       "type": "ios.simulator",
       "device": {
-        "type": "iPhone 14 Pro Max"
+        "type": "iPhone 15 Pro Max"
       }
     },
     "emulator": {
