@@ -8,7 +8,7 @@ import { decisionLettersKeys } from './queryKeys'
 /**
  * Fetch user decision letters
  */
-const getDecisionLetters = async (): Promise<DecisionLettersGetData | undefined> => {
+const getDecisionLetters = (): Promise<DecisionLettersGetData | undefined> => {
   return get<DecisionLettersGetData>('/v0/claims/decision-letters')
 }
 
