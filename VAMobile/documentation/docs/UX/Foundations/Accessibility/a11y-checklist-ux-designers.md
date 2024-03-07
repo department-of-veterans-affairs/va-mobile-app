@@ -33,8 +33,8 @@ A minimum contrast between two colors is necessary so that a user can perceive b
 ## **Target size**
 When targets are small, it is difficult for users with hand tremors and those who have difficulty with fine motor movement to activate them accurately. Providing sufficient size, or sufficient spacing between targets, will reduce the likelihood of accidentally activating the wrong control.
 
-- [ ] Ensure that the size of the target for pointer inputs is at least 24 by 24 CSS pixels, except when:
-  * The target does not overlap any other target and has a target offset of at least 24 CSS pixels to every adjacent target
+- [ ] Ensure that the size of the target for pointer inputs is at least 44 by 44 CSS pixels, except when:
+  * The target does not overlap any other target and has a target offset of at least 44 CSS pixels to every adjacent target
   * The interaction can be achieved through a different control on the same screen
   * The target is in a sentence, or is in a bulleted or numbered list, or its’ size is otherwise constrained by the line-height of non-target text
 <br />
