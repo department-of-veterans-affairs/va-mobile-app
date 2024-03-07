@@ -162,9 +162,9 @@ context('StartNewMessage', () => {
       ).toBeTruthy()
     })
 
-    describe('on click of the go to inbox button', () => {
+    describe('on click of the go to inbox link', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
-        fireEvent.press(screen.getByText('Go to inbox'))
+        fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })

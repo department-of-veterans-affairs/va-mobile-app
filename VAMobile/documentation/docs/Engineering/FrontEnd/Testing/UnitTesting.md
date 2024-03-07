@@ -85,9 +85,9 @@ expect(textView[8].props.children).toEqual('If you have questions about the stat
 &#9989; Instead, focus on tests that check important functionality:
 
 ```tsx
-describe('on click of the "Go to inbox" button', () => {
+describe('on click of the "Go to inbox" link', () => {
   it('calls useRouteNavigation and updateSecureMessagingTab', () => {
-    fireEvent.press(screen.getByText('Go to inbox'))
+    fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
     expect(navigate).toHaveBeenCalled()
     expect(updateSecureMessagingTab).toHaveBeenCalled()
   })
