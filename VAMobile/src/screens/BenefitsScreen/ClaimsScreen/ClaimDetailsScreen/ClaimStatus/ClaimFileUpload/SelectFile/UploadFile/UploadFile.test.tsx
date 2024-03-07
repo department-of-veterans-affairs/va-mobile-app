@@ -67,7 +67,7 @@ context('UploadFile', () => {
   it('initializes correctly', () => {
     expect(screen.getByRole('header', { name: 'Upload files' })).toBeTruthy()
     expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
-    expect(screen.getByTestId('Document type picker required')).toBeTruthy()
+    expect(screen.getByLabelText('Document type picker required')).toBeTruthy()
     expect(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) ')).toBeTruthy()
     expect(screen.getByText('Submit file')).toBeTruthy()
   })
