@@ -86,13 +86,13 @@ context('Nametag', () => {
     it(`displays correct icon and text for ${branch}`, () => {
       renderWithBranch(branch)
       expect(screen.getByTestId(branch)).toBeTruthy()
-      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
+      expect(screen.getByRole('link', { name: branch })).toBeTruthy()
     })
   }
 
   it('navigates on button press', () => {
     renderWithBranch('United States Air Force')
-    fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
+    fireEvent.press(screen.getByRole('link', { name: 'United States Air Force' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
   })
 
@@ -106,7 +106,7 @@ context('Nametag', () => {
         },
       },
     })
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 
   it('does not display branch when militaryService is absent', () => {
@@ -115,6 +115,6 @@ context('Nametag', () => {
         ...InitialState,
       },
     })
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 })

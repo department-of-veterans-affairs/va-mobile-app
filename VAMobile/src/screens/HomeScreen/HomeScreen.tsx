@@ -12,6 +12,8 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import {
   ActivityButton,
   AnnouncementBanner,
+  BackgroundVariant,
+  BorderColorVariant,
   Box,
   CategoryLanding,
   EncourageUpdateAlert,
@@ -32,6 +34,8 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
+  DisabilityRatingState,
+  LettersState,
   PrescriptionState,
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
@@ -41,6 +45,7 @@ import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slic
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -87,6 +92,10 @@ export function HomeScreen({}: HomeScreenProps) {
     (state) => state.secureMessaging,
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
+  const disRating = !!ratingData?.combinedDisabilityRating
+  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
@@ -192,15 +201,6 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {!!prescriptionStatusCount.isRefillable && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={t('prescription.title')}
-              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
-              deepLink={'prescriptions'}
-            />
-          </Box>
-        )}
         {!!unreadMessageCount && (
           <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <ActivityButton
@@ -210,12 +210,68 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
+        {!!prescriptionStatusCount.isRefillable && (
+          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <ActivityButton
+              title={t('prescription.title')}
+              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
+              deepLink={'prescriptions'}
+            />
+          </Box>
+        )}
         <Box pt={theme.dimensions.formMarginBetween}>
           <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} variant={'AboutYou'}>
             {t('aboutYou')}
           </TextView>
         </Box>
         <Nametag screen={'Home'} />
+        <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant}>
+          {disRating && (
+            <Box
+              pt={theme.dimensions.standardMarginBetween}
+              pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
+              pl={theme.dimensions.standardMarginBetween}>
+              <TextView
+                accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                variant={'VeteranStatusBranch'}>
+                {t('disabilityRating.title')}
+              </TextView>
+              <TextView
+                accessible={false}
+                variant={
+                  'NametagNumber'
+                }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
+              <TextView accessible={false} variant={'VeteranStatusProof'}>
+                {t('disabilityRating.serviceConnected')}
+              </TextView>
+            </Box>
+          )}
+          {monthlyPay && disRating && (
+            <Box
+              mx={theme.dimensions.standardMarginBetween}
+              my={theme.dimensions.condensedMarginBetween}
+              borderWidth={1}
+              borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+            />
+          )}
+          {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+            <Box
+              pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
+              pl={theme.dimensions.standardMarginBetween}
+              pb={theme.dimensions.standardMarginBetween}>
+              <TextView
+                accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+                variant={'VeteranStatusBranch'}>
+                {t('monthlyCompensationPayment')}
+              </TextView>
+              <TextView
+                accessible={false}
+                variant={
+                  'NametagNumber'
+                }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+            </Box>
+          )}
+        </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
