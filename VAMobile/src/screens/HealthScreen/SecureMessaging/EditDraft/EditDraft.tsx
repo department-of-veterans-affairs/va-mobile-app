@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import {
@@ -494,7 +494,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>
       )

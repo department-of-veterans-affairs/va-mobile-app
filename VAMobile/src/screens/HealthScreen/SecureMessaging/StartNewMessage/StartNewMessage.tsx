@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import {
@@ -389,7 +389,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
-          <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
     }
