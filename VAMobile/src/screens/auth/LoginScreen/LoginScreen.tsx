@@ -132,7 +132,7 @@ function LoginScreen() {
                 mr={theme.dimensions.textIconMargin}>
                 {t('findLocation.title')}
               </TextView>
-              <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />
+              <VAIcon testID="CheveronRight" name="ChevronRight" fill="#FFF" width={10} height={15} />
             </Box>
           </Pressable>
         </Box>
