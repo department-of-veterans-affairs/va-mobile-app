@@ -2,9 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { PrescriptionsGetData } from 'store/api'
-import { initialPrescriptionState } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { PrescriptionsGetData } from 'api/types'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import PrescriptionHistory from './PrescriptionHistory'
 
@@ -271,48 +271,8 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const initializeTestInstance = (includeTransferred = false) => {
-    const data = prescriptionData.data
-
-    render(<PrescriptionHistory {...mockNavProps()} />, {
-      preloadedState: {
-        prescriptions: {
-          ...initialPrescriptionState,
-          prescriptions: data,
-          filteredPrescriptions: data,
-          pendingPrescriptions: data,
-          shippedPrescriptions: data,
-          transferredPrescriptions: includeTransferred
-            ? [
-                {
-                  id: '2000434908349',
-                  type: 'Prescription',
-                  attributes: {
-                    refillStatus: 'transferred',
-                    refillSubmitDate: '2021-07-15T18:50:27.000Z',
-                    refillDate: '2021-08-04T04:00:00.000Z',
-                    refillRemaining: 8,
-                    facilityName: 'SLC10 TEST LAB',
-                    orderedDate: '2021-05-09T04:00:00.000Z',
-                    quantity: 30,
-                    expirationDate: '2022-05-10T04:00:00.000Z',
-                    prescriptionNumber: '3636697',
-                    prescriptionName: 'ADEFOVIR DIPIVOXIL 10MG TAB',
-                    dispensedDate: null,
-                    stationNumber: '979',
-                    isRefillable: false,
-                    isTrackable: false,
-                    instructions: 'TAKE ONE TABLET EVERY DAY FOR 30 DAYS',
-                  },
-                },
-              ]
-            : [],
-          prescriptionPagination: prescriptionData.meta.pagination,
-          prescriptionsNeedLoad: false,
-          loadingHistory: false,
-        },
-      },
-    })
+  const initializeTestInstance = () => {
+    render(<PrescriptionHistory {...mockNavProps()} />)
   }
 
   beforeEach(() => {
@@ -320,24 +280,30 @@ context('PrescriptionHistory', () => {
   })
 
   describe('Initializes correctly', () => {
-    it('should show the names and instructions of prescriptions and StartRefillRequest button', () => {
-      expect(screen.getByText('ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
-      expect(
-        screen.getByText(
-          'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
-      expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy()
-      expect(screen.queryByText("We can't refill some of your prescriptions in the app")).toBeFalsy()
-    })
-  })
-
-  describe('when there is a transferred prescription', () => {
-    it('should show the alert for transferred prescriptions', () => {
-      initializeTestInstance(true)
-      expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
+    it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
+      const params = {
+        'page[number]': '1',
+        'page[size]': '5000',
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(prescriptionData)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy(),
+      )
     })
   })
 })

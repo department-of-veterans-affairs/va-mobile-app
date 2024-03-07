@@ -5,9 +5,10 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { MutateOptions } from '@tanstack/react-query'
 
 import { useRequestRefills } from 'api/prescriptions'
-import { RefillStatusConstants } from 'api/types'
+import { PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -102,9 +103,13 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               // Call refill request so its starts the loading screen and then go to the modal
               if (!prescriptionInDowntime) {
                 logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-                requestRefill([prescription])
+                const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
+                  onSettled(data) {
+                    navigateTo('RefillScreenModal', data)
+                  },
+                }
+                requestRefill([prescription], mutateOptions)
               }
-              navigateTo('RefillScreenModal')
             },
           },
         ],
