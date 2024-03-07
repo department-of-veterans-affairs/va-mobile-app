@@ -15,9 +15,8 @@ import {
   CategoryLanding,
   EncourageUpdateAlert,
   LargeNavButton,
+  LinkRow,
   Nametag,
-  SimpleList,
-  SimpleListItemObj,
   TextView,
   VAIconProps,
 } from 'components'
@@ -139,10 +138,6 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
-  const onContactVA = () => {
-    navigateTo('ContactVA')
-  }
-
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -151,15 +146,6 @@ export function HomeScreen({}: HomeScreenProps) {
       loadingMessage: t('webview.valocation.loading'),
     })
   }
-
-  const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
-    {
-      text: t('findLocation.title'),
-      onPress: onFacilityLocator,
-      testId: a11yLabelVA(t('findLocation.title')),
-    },
-  ]
 
   const profileIconProps: VAIconProps = {
     name: 'ProfileSelected',
@@ -232,13 +218,22 @@ export function HomeScreen({}: HomeScreenProps) {
             <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
           </Box>
         )}
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-            {t('aboutVA')}
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('vaResources')}
           </TextView>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <SimpleList items={buttonDataList} />
+          <Box mx={theme.dimensions.condensedMarginBetween}>
+            <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
+            <LinkRow
+              title={t('findLocation.title')}
+              titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
+              onPress={onFacilityLocator}
+            />
+          </Box>
         </Box>
       </Box>
     </CategoryLanding>
