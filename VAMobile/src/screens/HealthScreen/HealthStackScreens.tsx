@@ -35,7 +35,7 @@ export type HealthStackParamList = WebviewStackParams & {
   ConfirmContactInfo: undefined
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
-    appointmentID: string
+    appointment: AppointmentData
   }
   AppointmentCancellationConfirmation: {
     cancelID: string

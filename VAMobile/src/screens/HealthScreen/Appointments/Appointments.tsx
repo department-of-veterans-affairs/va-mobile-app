@@ -9,14 +9,13 @@ import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { AppointmentsErrorServiceTypesConstants } from 'api/types'
+import { AppointmentsDateRange, AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { AppointmentsDateRange } from 'store/slices/appointmentsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntime, useTheme } from 'utils/hooks'
@@ -170,7 +169,15 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
           <></>
         )}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === 1 && <PastAppointments />}
+          {selectedTab === 1 && (
+            <PastAppointments
+              appointmentsData={apptsData}
+              setPage={setPage}
+              loading={loadingAppointments}
+              setDateRange={setDateRange}
+              setTimeFrame={setTimeFrame}
+            />
+          )}
           {selectedTab === 0 && (
             <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
           )}

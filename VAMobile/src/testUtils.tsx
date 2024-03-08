@@ -16,7 +16,6 @@ import { RootState } from 'store'
 import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
-import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import decisionLettersReducer from 'store/slices/decisionLettersSlice'
@@ -86,7 +85,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       demo: demoReducer as any,
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
-      appointments: appointmentsReducer as any,
       claimsAndAppeals: claimsAndAppealsReducer as any,
       decisionLetters: decisionLettersReducer as any,
       letters: lettersReducer as any,
