@@ -81,7 +81,7 @@ jobs:
       - name: Generate testing matrix
         id: testing_matrix
         run: |
-          echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
+          echo "${{fromJson(steps.changed_files.outputs.all_changed_and_modified_files)}}"
           resp=${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | contains("Login")) |= "LoginScreen"' 
           echo "$resp"
   # matrix-e2e-android:
