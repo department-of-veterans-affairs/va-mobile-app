@@ -237,10 +237,11 @@ export function HomeScreen({}: HomeScreenProps) {
               </TextView>
               <TextView
                 accessible={false}
+                importantForAccessibility={'no'}
                 variant={
                   'NametagNumber'
                 }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
-              <TextView accessible={false} variant={'VeteranStatusProof'}>
+              <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
                 {t('disabilityRating.serviceConnected')}
               </TextView>
             </Box>
@@ -265,6 +266,7 @@ export function HomeScreen({}: HomeScreenProps) {
               </TextView>
               <TextView
                 accessible={false}
+                importantForAccessibility={'no'}
                 variant={
                   'NametagNumber'
                 }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>

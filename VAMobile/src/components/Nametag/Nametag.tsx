@@ -47,11 +47,13 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
       showVeteranStatus = true
     }
   })
+  showVeteranStatus = false
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
       width: homeScreen ? 40 : 50,
       height: homeScreen ? 40 : 50,
+      preventScaling: true,
     }
 
     switch (branch) {
@@ -68,15 +70,19 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
     }
   }
 
+  let accLabel
+  if (!accessToMilitaryInfo) {
+    accLabel = undefined
+  } else if (profileScreen) {
+    accLabel = showVeteranStatus ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}` : `${fullName} ${branch}`
+  } else if (homeScreen) {
+    accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
+  }
+
   const pressableProps: PressableProps = {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : undefined,
-    accessibilityLabel:
-      accessToMilitaryInfo && profileScreen
-        ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}`
-        : accessToMilitaryInfo && homeScreen
-          ? `${branch} ${t('veteranStatus.proofOf')}`
-          : undefined,
+    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
+    accessibilityLabel: accLabel,
   }
 
   if (profileScreen) {
