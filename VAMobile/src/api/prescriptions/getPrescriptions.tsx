@@ -17,7 +17,7 @@ import { prescriptionKeys } from './queryKeys'
 /**
  * Fetch user prescriptions
  */
-const getPrescriptions = async (): Promise<PrescriptionsGetData | undefined> => {
+const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
   const params = {
     'page[number]': '1',
     'page[size]': '5000',
