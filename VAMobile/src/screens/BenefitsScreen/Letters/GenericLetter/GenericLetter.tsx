@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -11,8 +10,6 @@ import { LetterTypeConstants, LettersDownloadParams } from 'api/types'
 import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import { DemoState } from 'store/slices/demoSlice'
 import { testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
@@ -24,7 +21,6 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
   const theme = useTheme()
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const [downloadLetter, setDownloadLetter] = useState(false)
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { data: letterBeneficiaryData } = useLetterBeneficiaryData()
   const lettersOptions: LettersDownloadParams = {
     militaryService: false,
@@ -46,7 +42,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(letterType, demoMode, lettersOptions, { enabled: downloadLetter })
+  } = useDownloadLetter(letterType, lettersOptions, { enabled: downloadLetter })
 
   const onViewLetter = () => {
     if (downloadLetter) {

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { LetterTypes, LettersDownloadParams } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
+import store from 'store'
 import { Params } from 'store/api'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
@@ -20,11 +21,10 @@ const { API_ROOT } = getEnv()
  */
 const downloadLetter = async (
   letterType: LetterTypes,
-  demoMode: boolean,
   lettersOption: LettersDownloadParams,
 ): Promise<boolean | undefined> => {
   const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
-  const filePath = demoMode
+  const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, lettersOption as unknown as Params)
     : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, lettersOption as unknown as Params, 3)
   if (filePath) {
@@ -41,14 +41,13 @@ const downloadLetter = async (
  */
 export const useDownloadLetter = (
   letterType: LetterTypes,
-  demoMode: boolean,
   lettersOption: LettersDownloadParams,
   options?: { enabled?: boolean },
 ) => {
   return useQuery({
     ...options,
     queryKey: [lettersKeys.downloadLetter, letterType, lettersOption],
-    queryFn: () => downloadLetter(letterType, demoMode, lettersOption),
+    queryFn: () => downloadLetter(letterType, lettersOption),
     meta: {
       errorName: 'downloadLetter: Service error',
     },

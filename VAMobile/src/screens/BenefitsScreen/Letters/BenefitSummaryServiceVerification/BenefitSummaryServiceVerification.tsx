@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -27,8 +26,6 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import { DemoState } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp } from 'utils/accessibility'
 import getEnv from 'utils/env'
@@ -46,7 +43,6 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<
 function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [downloadLetter, setDownloadLetter] = useState(false)
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
     enabled: screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter'),
@@ -71,7 +67,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(LetterTypeConstants.benefitSummary, demoMode, lettersOptions, { enabled: downloadLetter })
+  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions, { enabled: downloadLetter })
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
