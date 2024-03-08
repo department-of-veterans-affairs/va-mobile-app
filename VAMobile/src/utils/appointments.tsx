@@ -167,7 +167,7 @@ export const getAppointmentTypeIcon = (
 /**
  * Returns list of appointments
  *
- * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
+ * @param appointments - list of appointments unsorted
  * @param theme - type VATheme, the theme object to set some properties
  * @param translate - function, the translate function
  * @param onAppointmentPress - function, the function that will be triggered on appointment press
@@ -177,17 +177,17 @@ export const getAppointmentTypeIcon = (
  * @returns list of appointments
  */
 export const getGroupedAppointments = (
-  appointmentsByYear: AppointmentsGroupedByYear,
+  appointments: AppointmentsList,
   theme: VATheme,
   translations: { t: TFunction },
   onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
-  if (!appointmentsByYear) {
+  if (!appointments) {
     return <></>
   }
-
+  const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointments)
   const sortedYears = _.keys(appointmentsByYear).sort()
   if (isReverseSort) {
     sortedYears.reverse()
@@ -218,6 +218,24 @@ export const getGroupedAppointments = (
       )
     })
   })
+}
+
+export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
+  const appointmentsByYear: AppointmentsGroupedByYear = {}
+
+  // Group appointments by year, resulting object is { year: [ list of appointments for year ] }
+  const initialAppointmentsByYear = _.groupBy(appointmentsList || [], (appointment) => {
+    return getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
+  })
+
+  // Group appointments by year by month next, resulting object is { year: { month1: [ list for month1 ], month2: [ list for month2 ] } }
+  _.each(initialAppointmentsByYear, (listOfAppointmentsInYear, year) => {
+    appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): number => {
+      return new Date(appointment.attributes.startDateUtc).getUTCMonth()
+    })
+  })
+
+  return appointmentsByYear
 }
 
 /**

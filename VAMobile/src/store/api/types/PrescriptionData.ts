@@ -1,4 +1,4 @@
-import { AppointmentPhone } from './AppointmentData'
+import { AppointmentPhone } from 'api/types'
 
 export type PrescriptionSortOptions = 'refillDate' | 'prescriptionName' | 'refillRemaining' | 'refillStatus'
 
