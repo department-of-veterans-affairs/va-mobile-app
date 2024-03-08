@@ -26,9 +26,10 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
+import { showSnackBar } from 'utils/common'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -41,6 +42,7 @@ type AppointmentCancellationInfoProps = {
 function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }: AppointmentCancellationInfoProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
 
   const { attributes } = (appointment || {}) as AppointmentData
@@ -157,6 +159,16 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
         const mutateOptions = {
           onSuccess: () => {
             goBack()
+            showSnackBar(t('appointments.appointmentCanceled'), dispatch, undefined, true, false, true)
+            logAnalyticsEvent(
+              Events.vama_appt_cancel(
+                false,
+                appointment?.id,
+                getAppointmentAnalyticsStatus(attributes),
+                attributes.appointmentType.toString(),
+                getAppointmentAnalyticsDays(attributes),
+              ),
+            )
           },
         }
         cancelAppointment(cancelId, mutateOptions)

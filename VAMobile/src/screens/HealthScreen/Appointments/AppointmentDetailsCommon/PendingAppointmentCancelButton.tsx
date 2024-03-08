@@ -10,7 +10,8 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -28,6 +29,7 @@ function PendingAppointmentCancelButton({
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
 
   const { cancelId, status } = attributes || ({} as AppointmentAttributes)
@@ -47,6 +49,16 @@ function PendingAppointmentCancelButton({
         const mutateOptions = {
           onSuccess: () => {
             goBack()
+            showSnackBar(t('appointments.requestCanceled'), dispatch, undefined, true, false, true)
+            logAnalyticsEvent(
+              Events.vama_appt_cancel(
+                true,
+                appointmentID,
+                getAppointmentAnalyticsStatus(attributes),
+                attributes.appointmentType.toString(),
+                getAppointmentAnalyticsDays(attributes),
+              ),
+            )
           },
         }
         cancelAppointment(cancelId, mutateOptions)

@@ -23,11 +23,6 @@ const cancelAppointment = (cancelID: string) => {
 export const useCancelAppointment = (currentPage: number) => {
   const queryClient = useQueryClient()
 
-  //put below in onSuccess when using in screen
-  //logAnalyticsEvent(Events.vama_appt_cancel(!!isPendingAppointment, appointmentID, status, type, days_to_apt))
-  // TODO refactor translation to work in store
-  //const successText = isPendingAppointment ? 'Request canceled' : 'Appointment canceled'
-  //showSnackBar(successText, dispatch, undefined, true, false, true)
   return useMutation({
     mutationFn: cancelAppointment,
     onSettled: () => {
