@@ -47,7 +47,6 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
       showVeteranStatus = true
     }
   })
-  showVeteranStatus = false
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
