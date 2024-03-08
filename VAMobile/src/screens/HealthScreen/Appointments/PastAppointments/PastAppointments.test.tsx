@@ -255,7 +255,7 @@ context('PastAppointments', () => {
 
   describe('when the dropdown value is updated', () => {
     it('should call getAppointmentsInDateRange', () => {
-      fireEvent.press(screen.getByTestId('getDateRangeTestID picker'))
+      fireEvent.press(screen.getByTestId('getDateRangeTestID'))
       fireEvent.press(
         screen.getByAccessibilityValue({
           text: '2 of 6',

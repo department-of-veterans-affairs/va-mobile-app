@@ -14,14 +14,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { Events } from 'constants/analytics'
-import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 import {
   generateA11yValue,
-  generateInputTestID,
+  generateInputA11yLabel,
   getInputWrapperProps,
   removeInputErrorMessage,
   renderInputError,
@@ -169,7 +169,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'picker')
+  const inputA11yLabel = generateInputA11yLabel(labelKey, isRequiredField, helperTextKey, error, t, 'picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -201,7 +201,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
 
     return (
-      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)} {...parentProps}>
+      <Pressable onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
         {content}
       </Pressable>
     )
@@ -215,11 +215,12 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       disabled,
       accessibilityRole: 'button',
       accessible: true,
+      accessibilityLabel: getTranslation(buttonText || '', t),
       accessibilityState: disabled ? { disabled: true } : { disabled: false },
     }
 
     return (
-      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))}>
+      <TouchableWithoutFeedback {...props}>
         <Box
           pr={theme.dimensions.headerButtonSpacing}
           height={theme.dimensions.headerHeight}
@@ -252,14 +253,14 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const cancelButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    ...testIdProps(cancelLabel),
+    accessibilityLabel: cancelLabel,
     ...a11yHintProp(t('cancel.picker.a11yHint')),
   }
 
   const confirmButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    ...testIdProps(confirmLabel),
+    accessibilityLabel: confirmLabel,
     ...a11yHintProp(t('done.picker.a11yHint')),
   }
 

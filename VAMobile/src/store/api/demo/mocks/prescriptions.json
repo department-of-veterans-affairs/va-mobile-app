@@ -668,12 +668,12 @@
         "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
       },
       "prescriptionStatusCount": {
-        "active": 1,
+        "active": 24,
         "isRefillable": 10,
         "discontinued": 1,
         "expired": 4,
         "historical": 3,
-        "pending": 1,
+        "pending": 8,
         "transferred": 1,
         "submitted": 0,
         "hold": 1,
