@@ -32,7 +32,7 @@ export const useRequestRefills = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: requestRefills,
-    onMutate: async () => {
+    onMutate: () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     },
     onSuccess(data, variables) {
@@ -40,7 +40,7 @@ export const useRequestRefills = () => {
       logAnalyticsEvent(Events.vama_rx_refill_success(prescriptionIds))
       queryClient.invalidateQueries({ queryKey: prescriptionKeys.prescriptions })
     },
-    onError: async (error, variables) => {
+    onError: (error, variables) => {
       const prescriptionIds = variables.map((prescription) => prescription.id)
       logAnalyticsEvent(Events.vama_rx_refill_fail(prescriptionIds))
       if (isErrorObject(error)) {

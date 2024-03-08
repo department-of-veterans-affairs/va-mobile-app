@@ -1,6 +1,7 @@
 import { TFunction } from 'i18next'
+import { contains, filter as filterFunction, sortBy } from 'underscore'
 
-import { RefillStatus, RefillStatusConstants } from 'api/types'
+import { PrescriptionSortOptionConstants, PrescriptionsList, RefillStatus, RefillStatusConstants } from 'api/types'
 import { LabelTagTypeConstants } from 'components/LabelTag'
 
 import { a11yLabelVA } from './a11yLabel'
@@ -137,4 +138,63 @@ export const getStatusDefinitionTextForRefillStatus = (
         a11yLabel: '',
       }
   }
+}
+
+export const filterAndSortPrescriptions = (
+  prescrptions: PrescriptionsList,
+  filters: string[],
+  sort: string,
+  ascending: boolean,
+  t: TFunction,
+): PrescriptionsList => {
+  let filteredList: PrescriptionsList = []
+  // If there are no filters, don't filter the list
+  if (filters[0] === '') {
+    filteredList = [...prescrptions]
+  } else if (filters[0] === RefillStatusConstants.PENDING) {
+    filteredList = filterFunction(prescrptions, (prescription) => {
+      return (
+        prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS ||
+        prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED
+      )
+    })
+  } else if (filters[0] === RefillStatusConstants.TRACKING) {
+    filteredList = filterFunction(prescrptions, (prescription) => {
+      return prescription.attributes.isTrackable
+    })
+  } else {
+    // Apply the custom filter by
+    filteredList = filterFunction(prescrptions, (prescription) => {
+      return contains(filters, prescription.attributes.refillStatus)
+    })
+  }
+
+  let sortedList: PrescriptionsList = []
+
+  // Sort the list
+  switch (sort) {
+    case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
+    case PrescriptionSortOptionConstants.REFILL_REMAINING:
+      sortedList = sortBy(filteredList, (a) => {
+        return a.attributes[sort]
+      })
+      break
+    case PrescriptionSortOptionConstants.REFILL_DATE:
+      sortedList = sortBy(filteredList, (a) => {
+        return new Date(a.attributes.refillDate || 0)
+      })
+      break
+    case PrescriptionSortOptionConstants.REFILL_STATUS:
+      sortedList = sortBy(filteredList, (a) => {
+        return getTextForRefillStatus(a.attributes[sort] as RefillStatus, t)
+      })
+      break
+  }
+
+  // For descending order, reverse the list
+  if (!ascending) {
+    sortedList.reverse()
+  }
+
+  return sortedList
 }

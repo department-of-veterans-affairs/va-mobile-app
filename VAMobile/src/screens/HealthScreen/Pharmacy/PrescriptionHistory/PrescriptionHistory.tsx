@@ -8,7 +8,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { filter, find } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { filterAndSortPrescriptions, usePrescriptions } from 'api/prescriptions'
+import { usePrescriptions } from 'api/prescriptions'
 import {
   PrescriptionData,
   PrescriptionSortOptionConstants,
@@ -48,7 +48,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getFilterArgsForFilter } from 'utils/prescriptions'
+import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
