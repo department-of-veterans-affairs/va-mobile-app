@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
 
+import { AppointmentsGetData } from 'api/types'
+
 import { Params } from '../api'
-import { AppointmentsGetData } from '../types'
 import { DemoStore } from './store'
 
 /**

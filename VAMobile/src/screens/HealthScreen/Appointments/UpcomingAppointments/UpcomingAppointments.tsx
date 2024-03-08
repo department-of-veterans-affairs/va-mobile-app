@@ -21,10 +21,6 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const onUpcomingAppointmentPress = (appointment: AppointmentData): void => {
-    navigateTo('UpcomingAppointmentDetails', { appointment })
-  }
-
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
@@ -46,6 +42,10 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
     totalEntries: 0,
   }
   const { currentPage, perPage, totalEntries } = pagination
+  const onUpcomingAppointmentPress = (appointment: AppointmentData): void => {
+    navigateTo('UpcomingAppointmentDetails', { appointment: appointment, page: currentPage })
+  }
+
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(currentPage + 1)

@@ -4,17 +4,18 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import {
   AppointmentAttributes,
   AppointmentData,
+  AppointmentStatus,
+  AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
-} from 'store/api'
-import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+} from 'api/types'
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'

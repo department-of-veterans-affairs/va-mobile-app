@@ -2,7 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { UseMutateFunction } from '@tanstack/react-query'
 
+import {
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentTypeConstants,
+  AppointmentTypeToA11yLabel,
+} from 'api/types'
 import {
   Box,
   ClickForActionLink,
@@ -14,34 +22,26 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  AppointmentAttributes,
-  AppointmentData,
-  AppointmentLocation,
-  AppointmentTypeConstants,
-  AppointmentTypeToA11yLabel,
-} from 'store/api/types'
-import { cancelAppointment } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type AppointmentCancellationInfoProps = {
   appointment?: AppointmentData
-  goBack?: () => void
+  goBack: () => void
+  cancelAppointment: UseMutateFunction<unknown, Error, string, unknown>
 }
 
-function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInfoProps) {
+function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }: AppointmentCancellationInfoProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
-  const dispatch = useAppDispatch()
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
@@ -153,16 +153,14 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
           'confirm',
         ),
       )
-      dispatch(
-        cancelAppointment(
-          cancelId,
-          appointment?.id,
-          undefined,
-          getAppointmentAnalyticsStatus(attributes),
-          appointmentType.toString(),
-          getAppointmentAnalyticsDays(attributes),
-        ),
-      )
+      if (cancelId) {
+        const mutateOptions = {
+          onSuccess: () => {
+            goBack()
+          },
+        }
+        cancelAppointment(cancelId, mutateOptions)
+      }
     }
 
     confirmAlert({

@@ -2,26 +2,31 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { UseMutateFunction } from '@tanstack/react-query'
 
+import { AppointmentAttributes, AppointmentStatusConstants } from 'api/types'
 import { Box } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes } from 'store/api'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
-import { cancelAppointment } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
-import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
   appointmentID?: string
+  goBack: () => void
+  cancelAppointment: UseMutateFunction<unknown, Error, string, unknown>
 }
 
-function PendingAppointmentCancelButton({ attributes, appointmentID }: PendingAppointmentCancelButtonProps) {
+function PendingAppointmentCancelButton({
+  attributes,
+  appointmentID,
+  cancelAppointment,
+  goBack,
+}: PendingAppointmentCancelButtonProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
 
@@ -38,16 +43,14 @@ function PendingAppointmentCancelButton({ attributes, appointmentID }: PendingAp
           'confirm',
         ),
       )
-      dispatch(
-        cancelAppointment(
-          cancelId,
-          appointmentID,
-          true,
-          getAppointmentAnalyticsStatus(attributes),
-          attributes.appointmentType.toString(),
-          getAppointmentAnalyticsDays(attributes),
-        ),
-      )
+      if (cancelId) {
+        const mutateOptions = {
+          onSuccess: () => {
+            goBack()
+          },
+        }
+        cancelAppointment(cancelId, mutateOptions)
+      }
     }
 
     const onCancel = () => {

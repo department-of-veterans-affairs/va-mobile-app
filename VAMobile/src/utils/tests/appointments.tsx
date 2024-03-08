@@ -7,7 +7,7 @@ import {
   AppointmentPractitioner,
   AppointmentStatusConstants,
   AppointmentTypeConstants,
-} from 'store/api/types'
+} from 'api/types'
 
 export const defaultAppointmentAddress: AppointmentAddress = {
   street: '5901 East 7th Street',
