@@ -1,0 +1,1 @@
+../../../FirebaseDynamicLinks/FirebaseCore/Extension/FIRAppInternal.h
