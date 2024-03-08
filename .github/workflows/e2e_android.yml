@@ -77,12 +77,13 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           dir_names: true
+          json: true
           # base_sha: "${{ steps.base-sha.outputs.sha }}"
       - name: Generate testing matrix
         id: testing_matrix
         run: |
-          echo "${{fromJson(steps.changed_files.outputs.all_changed_and_modified_files)}}"
-          resp=${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | contains("Login")) |= "LoginScreen"' 
+          echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
+          resp=${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | contains(work)) 
           echo "$resp"
   # matrix-e2e-android:
   #   if: github.event.inputs.tests_to_run != ''
