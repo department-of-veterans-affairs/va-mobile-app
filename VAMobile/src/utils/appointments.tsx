@@ -179,7 +179,7 @@ export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
   translations: { t: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
@@ -234,7 +234,7 @@ export const getGroupedAppointments = (
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
   translations: { t: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  onAppointmentPress: (appointment: AppointmentData) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
@@ -252,7 +252,7 @@ const getListItemsForAppointments = (
     listItems.push({
       textLines,
       a11yValue,
-      onPress: () => onAppointmentPress(appointment.id),
+      onPress: () => onAppointmentPress(appointment),
       a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })
