@@ -83,7 +83,7 @@ jobs:
         id: testing_matrix
         run: |
           echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
-          resp=${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | contains("workflows")) 
+          resp=${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | contains(["workflows"]))' 
           echo "$resp"
   # matrix-e2e-android:
   #   if: github.event.inputs.tests_to_run != ''
