@@ -62,7 +62,7 @@ import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/Sandbo
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
-const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -281,10 +281,7 @@ export function HomeScreen({}: HomeScreenProps) {
           <SimpleList items={buttonDataList} />
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <AnnouncementBanner
-            title={t('learnAboutPACT')}
-            link={'www.va.gov/resources/the-pact-act-and-your-va-benefits/'}
-          />
+          <AnnouncementBanner title={t('learnAboutPACT')} link={LINK_URL_ABOUT_PACT_ACT} />
         </Box>
       </Box>
     </CategoryLanding>
