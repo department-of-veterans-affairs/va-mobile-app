@@ -10,6 +10,7 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
   Box,
@@ -103,6 +104,7 @@ export function HomeScreen({}: HomeScreenProps) {
     (state) => state.secureMessaging,
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
@@ -186,7 +188,8 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
-  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
+  const activityLoading =
+    loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
   const hasActivity =
     !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
 
@@ -225,11 +228,13 @@ export function HomeScreen({}: HomeScreenProps) {
                     {t('noActivity')}
                   </TextView>
                 </Box>
-                <TextView
-                  variant="ActivityFooter"
-                  accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
-                  {t('activity.informationNotIncluded')}
-                </TextView>
+                {personalInfo?.hasFacilityTransitioningToCerner && (
+                  <TextView
+                    variant="ActivityFooter"
+                    accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
+                    {t('activity.informationNotIncluded')}
+                  </TextView>
+                )}
               </>
             ) : (
               <>
