@@ -329,7 +329,7 @@ context('PrescriptionHistory', () => {
       ).toBeTruthy()
       expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Start refill request' })).toBeTruthy()
       expect(screen.queryByText("We can't refill some of your prescriptions in the app")).toBeFalsy()
     })
   })
