@@ -220,7 +220,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
