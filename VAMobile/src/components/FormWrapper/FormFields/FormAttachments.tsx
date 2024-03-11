@@ -1,6 +1,5 @@
 import React, { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
@@ -36,52 +35,33 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
       const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (
-        <Box
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          flexWrap="wrap"
-          mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}
-          key={index}>
-          <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
-            <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-            <TextView
-              variant="MobileBodyBold"
-              ml={theme.dimensions.textIconMargin}
-              accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
-              {text}
-            </TextView>
-          </Box>
-
-          <Pressable
-            onPress={() => (removeOnPress ? removeOnPress(attachment) : {})}
-            accessible={true}
-            accessibilityRole="link"
-            accessibilityHint={t('remove.a11yHint', { content: fileName })}
-            accessibilityLabel={t('remove')}>
-            <Box display="flex" flexDirection="row" alignItems="center" minHeight={theme.dimensions.touchableMinHeight}>
-              <VAIcon name="Remove" {...iconProps} />
+        <Box key={index}>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            flexWrap="wrap"
+            mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}>
+            <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
+              <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
               <TextView
-                variant="HelperText"
+                variant="MobileBodyBold"
                 ml={theme.dimensions.textIconMargin}
-                color="link"
-                textDecoration="underline"
-                textDecorationColor="link">
-                {t('remove')}
+                accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
+                {text}
               </TextView>
             </Box>
-          </Pressable>
+          </Box>
+          <Button
+            onPress={() => removeOnPress?.(attachment)}
+            label={t('remove')}
+            a11yHint={t('remove.a11yHint', { content: fileName })}
+            buttonType={ButtonVariants.Destructive}
+          />
         </Box>
       )
     })
-  }
-
-  const iconProps = {
-    width: 16,
-    height: 16,
-    fill: 'link',
-    fill2: theme.colors.icon.transparent,
   }
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
