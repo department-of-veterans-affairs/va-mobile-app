@@ -214,14 +214,13 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             ) : !hasActivity ? (
               <>
-                <Box flexDirection="row" alignItems="center" mb={theme.dimensions.standardMarginBetween}>
-                  <VAIcon
-                    accessible={true}
-                    accessibilityLabel={t('success')}
-                    name={'CircleCheckMark'}
-                    fill={Colors.green}
-                    fill2={theme.colors.icon.transparent}
-                  />
+                <Box
+                  flexDirection="row"
+                  alignItems="center"
+                  mb={theme.dimensions.standardMarginBetween}
+                  accessible={true}
+                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')})}`}>
+                  <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
                   <TextView ml={theme.dimensions.condensedMarginBetween} variant="HomeScreen">
                     {t('noActivity')}
                   </TextView>

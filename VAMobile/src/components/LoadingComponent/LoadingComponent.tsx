@@ -83,11 +83,13 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
           {getSpinner()}
         </Box>
       ) : inlineSpinner ? (
-        <Box flexDirection="row" alignItems="center">
-          <Box accessible={true} accessibilityLabel={t('loading')}>
-            {getSpinner()}
-          </Box>
-          <TextView ml={theme.dimensions.condensedMarginBetween} variant="HelperText" accessibilityLabel={a11yLabel}>
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          accessible={true}
+          accessibilityLabel={`${t('loadingComponent.spinner.a11y')} ${a11yLabel || text}`}>
+          {getSpinner()}
+          <TextView ml={theme.dimensions.condensedMarginBetween} variant="HelperText">
             {text}
           </TextView>
         </Box>
