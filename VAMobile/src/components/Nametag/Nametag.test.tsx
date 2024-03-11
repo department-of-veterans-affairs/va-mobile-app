@@ -47,7 +47,7 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 
 context('Nametag', () => {
   const renderWithBranch = (mostRecentBranch: string) => {
-    render(<Nametag />, {
+    render(<Nametag screen="Profile" />, {
       preloadedState: {
         ...InitialState,
         militaryService: {
@@ -86,18 +86,18 @@ context('Nametag', () => {
     it(`displays correct icon and text for ${branch}`, () => {
       renderWithBranch(branch)
       expect(screen.getByTestId(branch)).toBeTruthy()
-      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
+      expect(screen.getByRole('link', { name: branch })).toBeTruthy()
     })
   }
 
   it('navigates on button press', () => {
     renderWithBranch('United States Air Force')
-    fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
+    fireEvent.press(screen.getByRole('link', { name: 'United States Air Force' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
   })
 
   it('does not display branch when service history is empty', () => {
-    render(<Nametag />, {
+    render(<Nametag screen="Profile" />, {
       preloadedState: {
         ...InitialState,
         militaryService: {
@@ -106,15 +106,15 @@ context('Nametag', () => {
         },
       },
     })
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 
   it('does not display branch when militaryService is absent', () => {
-    render(<Nametag />, {
+    render(<Nametag screen="Profile" />, {
       preloadedState: {
         ...InitialState,
       },
     })
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 })

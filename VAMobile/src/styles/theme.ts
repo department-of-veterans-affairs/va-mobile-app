@@ -69,6 +69,8 @@ export type VATextColors = {
   textWithIconButton: string
   textWithIconButtonInactive: string
   veteranStatus: string
+  veteranStatusBranch: string
+  veteranStatusProof: string
   webviewTitle: string
   crisisLineButton: string
   activityButton: string
@@ -114,9 +116,11 @@ export type VAIconColors = {
   activityButton: string
   inlineSpinner: string
   homeScreenError: string
+  veteranStatusHomeArrow: string
 }
 
 export type VATypographyThemeVariants = {
+  AboutYou: string
   ActionBar: string
   ActivityButtonSubtext: string
   BitterBoldHeading: string
@@ -132,6 +136,7 @@ export type VATypographyThemeVariants = {
   MobileBodyBold: string
   MobileBodyLink: string
   MobileBodyTight: string
+  NametagNumber: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
@@ -140,6 +145,8 @@ export type VATypographyThemeVariants = {
   UnreadMessagesTag: string
   VAHeader: string
   VASelector: string
+  VeteranStatusBranch: string
+  VeteranStatusProof: string
   webviewTitle: string
 }
 
@@ -182,9 +189,11 @@ export type VABackgroundColors = {
   tagYellow: string
   tagGreen: string
   veteranStatus: string
+  veteranStatusHome: string
 }
 
 export type VABorderColors = {
+  aboutYou: string
   primary: string
   secondary: string
   informational: string
