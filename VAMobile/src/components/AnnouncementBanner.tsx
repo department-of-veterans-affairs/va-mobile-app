@@ -9,8 +9,10 @@ import colors from '../styles/themes/VAColors'
 interface AnnouncementBannerProps {
   /** Text for announcement title */
   title: string
-  /** link to navigate to, excluding the prefix */
+  /** External link used */
   link: string
+  /** Optional accessibilityLabel */
+  a11yLabel?: string
 }
 
 const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: AnnouncementBannerProps) => {

@@ -281,7 +281,11 @@ export function HomeScreen({}: HomeScreenProps) {
           <SimpleList items={buttonDataList} />
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <AnnouncementBanner title={t('learnAboutPACT')} link={LINK_URL_ABOUT_PACT_ACT} />
+          <AnnouncementBanner
+            title={t('learnAboutPACT')}
+            link={LINK_URL_ABOUT_PACT_ACT}
+            a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
+          />
         </Box>
       </Box>
     </CategoryLanding>
