@@ -276,14 +276,21 @@ export function HomeScreen({}: HomeScreenProps) {
               flexDirection="row"
               alignItems="center"
               mx={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}>
+              mb={theme.dimensions.standardMarginBetween}
+              accessible={true}
+              accessibilityRole={'text'}
+              accessibilityLabel={t('aboutYou.error') + t('aboutYou.noInformation')}>
               <VAIcon
-                accessible={true}
-                accessibilityLabel={t('error')}
+                accessible={false}
+                importantForAccessibility="no"
                 name={'ExclamationCircle'}
                 fill={theme.colors.icon.homeScreenError}
               />
-              <TextView ml={theme.dimensions.condensedMarginBetween} variant="HomeScreen">
+              <TextView
+                ml={theme.dimensions.condensedMarginBetween}
+                variant="HomeScreen"
+                accessible={false}
+                importantForAccessibility="no">
                 {t('aboutYou.noInformation')}
               </TextView>
             </Box>
