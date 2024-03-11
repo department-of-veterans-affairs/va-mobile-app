@@ -58,6 +58,7 @@ const secureMessagingNonFatalErrorString = 'Secure Messaging Service Error'
 export type SecureMessagingState = {
   loading: boolean
   loadingInbox: boolean
+  loadingInboxData: boolean
   loadingFolders: boolean
   loadingAttachments: boolean
   loadingFile: boolean
@@ -102,6 +103,7 @@ export type SecureMessagingState = {
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
   loadingInbox: false,
+  loadingInboxData: false,
   loadingFolders: false,
   loadingFile: false,
   loadingFileKey: undefined,
@@ -788,7 +790,7 @@ const secureMessagingSlice = createSlice({
 
     dispatchStartGetInbox: (state) => {
       state.hasLoadedInbox = false
-      state.loading = true
+      state.loadingInboxData = true
     },
 
     dispatchFinishGetInbox: (
@@ -800,7 +802,7 @@ const secureMessagingSlice = createSlice({
       state.hasLoadedInbox = true
       state.error = error
       state.inboxFirstRetrieval = !!error
-      state.loading = false
+      state.loadingInboxData = false
     },
 
     dispatchStartListFolders: (state) => {

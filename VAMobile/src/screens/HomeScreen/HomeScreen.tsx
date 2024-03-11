@@ -85,7 +85,9 @@ export function HomeScreen({}: HomeScreenProps) {
     (state) => state.claimsAndAppeals,
   )
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loading: loadingInbox } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { preloadComplete: apptsPrefetch, loading: loadingAppointments } = useSelector<RootState, AppointmentsState>(
