@@ -500,12 +500,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getRequestRefillButton = () => {
     return (
-      <Box
-        accessibilityRole="link"
-        accessibilityLabel={t('prescription.history.startRefillRequest')}
-        accessible={true}
-        importantForAccessibility={'yes'}>
-        <Box mx={theme.dimensions.buttonPadding} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+      <Box accessibilityRole="link" accessibilityLabel={t('prescription.history.startRefillRequest')} accessible={true}>
+        <Box mx={theme.dimensions.buttonPadding} importantForAccessibility={'no-hide-descendants'}>
           <Button
             label={t('prescription.history.startRefillRequest')}
             onPress={() => navigateTo('RefillScreenModal')}
