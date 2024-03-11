@@ -493,7 +493,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error"
           scrollViewRef={scrollViewRef}>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} mr="auto">
             <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>

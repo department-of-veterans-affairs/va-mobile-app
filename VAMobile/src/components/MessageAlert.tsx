@@ -89,7 +89,9 @@ const MessageAlert: FC<MessageAlertProps> = ({
           accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
-        <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+        <Box mr="auto">
+          <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+        </Box>
       </AlertBox>
     </Box>
   ) : (
