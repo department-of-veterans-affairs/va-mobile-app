@@ -18,12 +18,33 @@ jest.mock('utils/hooks', () => {
 })
 
 context('Nametag', () => {
-  const renderWithBranch = (serviceHistory: ServiceHistoryAttributes) => {
-    const queriesData: QueriesData = [
-      {
-        queryKey: militaryServiceHistoryKeys.serviceHistory,
-        data: {
-          ...serviceHistory,
+  const renderWithBranch = (mostRecentBranch: string) => {
+    render(<Nametag screen="Profile" />, {
+      preloadedState: {
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          mostRecentBranch,
+          serviceHistory: [
+            {
+              branchOfService: 'United States Air Force',
+              beginDate: '1998-09-01',
+              endDate: '2000-01-01',
+              formattedBeginDate: 'September 01, 1998',
+              formattedEndDate: 'January 01, 2000',
+              characterOfDischarge: 'Honorable',
+              honorableServiceIndicator: 'Y',
+            },
+          ],
+        },
+        disabilityRating: {
+          ...InitialState.disabilityRating,
+          ratingData: {
+            combinedDisabilityRating: 100,
+            combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
+            legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
+            individualRatings: [],
+          },
         },
       },
     ]
@@ -52,14 +73,35 @@ context('Nametag', () => {
       }
       renderWithBranch(serviceHistoryMock)
       expect(screen.getByTestId(branch)).toBeTruthy()
-      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
-      fireEvent.press(screen.getByRole('button', { name: branch }))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
+      expect(screen.getByRole('link', { name: branch })).toBeTruthy()
     })
   }
 
+  it('navigates on button press', () => {
+    renderWithBranch('United States Air Force')
+    fireEvent.press(screen.getByRole('link', { name: 'United States Air Force' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
+  })
+
   it('does not display branch when service history is empty', () => {
-    renderWithBranch({} as ServiceHistoryAttributes)
-    expect(screen.queryByRole('button')).toBeFalsy()
+    render(<Nametag screen="Profile" />, {
+      preloadedState: {
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          serviceHistory: [],
+        },
+      },
+    })
+    expect(screen.queryByRole('link')).toBeFalsy()
+  })
+
+  it('does not display branch when militaryService is absent', () => {
+    render(<Nametag screen="Profile" />, {
+      preloadedState: {
+        ...InitialState,
+      },
+    })
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 })

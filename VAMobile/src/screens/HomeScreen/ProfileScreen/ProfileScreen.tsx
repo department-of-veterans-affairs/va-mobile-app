@@ -72,9 +72,14 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
             />
           </Box>
         </Box>
+      ) : loadingCheck ? (
+        <Box>
+          <NameTag screen={'Profile'} />
+          <LoadingComponent text={t('profile.loading')} />
+        </Box>
       ) : (
         <>
-          <NameTag />
+          <NameTag screen={'Profile'} />
           <Box
             mt={theme.dimensions.contentMarginTop}
             mb={theme.dimensions.standardMarginBetween}
