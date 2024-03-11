@@ -26,7 +26,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.2,
+          shadowOpacity: 0.4,
           shadowRadius: 8,
         },
         android: {
@@ -46,15 +46,15 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
         style={pressableStyles}
         onPress={() => launchExternalLink(link)}
         accessible={true}
-        accessibilityRole={'button'}
+        accessibilityRole={'link'}
         testID={title}>
         <Box flexDirection={'row'} flex={1}>
           <Box flex={1}>
             <TextView variant="AnnouncementBannerTitle">{title}</TextView>
           </Box>
           <VAIcon
-            width={24}
-            height={24}
+            width={28}
+            height={28}
             name={'CircleExternalLink'}
             fill={theme.colors.icon.announcementBanner}
             fill2={theme.colors.icon.transparent}

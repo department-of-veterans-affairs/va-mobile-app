@@ -54,7 +54,7 @@ const fontSizes = {
   },
   AnnouncementBannerTitle: {
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 22,
   },
   BitterHeading: {
     fontSize: 22,
