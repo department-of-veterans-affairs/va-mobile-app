@@ -40,6 +40,10 @@ export const getTheme = (): VATheme => {
 }
 
 const fontSizes = {
+  AboutYou: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
   ActionBar: {
     fontSize: 20,
     lineHeight: 30,
@@ -92,6 +96,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
+  NametagNumbers: {
+    fontSize: 36,
+    lineHeight: 43,
+  },
   SnackBarBtnText: {
     fontSize: 16,
     lineHeight: 24,
@@ -129,6 +137,10 @@ const fontSizes = {
     fontSize: 12,
     lineHeight: 12,
   },
+  veteranStatus: {
+    fontSize: 16,
+    lineHeight: 18,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -154,6 +166,7 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
+    AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
@@ -174,6 +187,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
     MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
+    NametagNumber: buildFont('Bitter-Regular', fontSizes.NametagNumbers, scheme.text.veteranStatusBranch),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
@@ -186,6 +200,12 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
+    VeteranStatusBranch: buildFont(
+      'SourceSansPro-Regular',
+      fontSizes.ActivityButtonSubtext,
+      scheme.text.veteranStatusBranch,
+    ),
+    VeteranStatusProof: buildFont('SourceSansPro-Regular', fontSizes.veteranStatus, scheme.text.veteranStatusProof),
     webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
   }
 }
