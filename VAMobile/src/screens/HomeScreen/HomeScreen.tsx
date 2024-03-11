@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -14,6 +15,7 @@ import {
   BackgroundVariant,
   BorderColorVariant,
   Box,
+  BoxProps,
   CategoryLanding,
   EncourageUpdateAlert,
   Nametag,
@@ -41,6 +43,7 @@ import {
 } from 'store/slices'
 import { AnalyticsState, SecureMessagingState } from 'store/slices'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -178,6 +181,22 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
+  const boxProps: BoxProps = {
+    style: {
+      shadowColor: colors.black,
+      ...Platform.select({
+        ios: {
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.4,
+          shadowRadius: 8,
+        },
+        android: {
+          elevation: 8,
+        },
+      }),
+    },
+  }
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
@@ -224,7 +243,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </TextView>
         </Box>
         <Nametag screen={'Home'} />
-        <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant}>
+        <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
           {disRating && (
             <Box
               pt={theme.dimensions.standardMarginBetween}
