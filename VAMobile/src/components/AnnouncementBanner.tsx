@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { Linking, Platform, Pressable, ViewStyle } from 'react-native'
+import { Platform, Pressable, ViewStyle } from 'react-native'
 
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
-import { useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 
 import colors from '../styles/themes/VAColors'
 
@@ -15,6 +15,7 @@ interface AnnouncementBannerProps {
 
 const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: AnnouncementBannerProps) => {
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
 
   const boxProps: BoxProps = {
     py: theme.dimensions.formMarginBetween,
@@ -43,7 +44,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
     <Box {...boxProps}>
       <Pressable
         style={pressableStyles}
-        onPress={() => Linking.openURL(`https://${link}`)}
+        onPress={() => launchExternalLink(link)}
         accessible={true}
         accessibilityRole={'button'}
         testID={title}>
