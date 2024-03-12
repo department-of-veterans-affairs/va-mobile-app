@@ -136,6 +136,10 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
   const { timeFrame } = datePickerOption
 
+  if (loading) {
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
+  }
+
   if (!appointmentsData) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
@@ -144,9 +148,6 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     )
   }
 
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
   const pagination = appointmentsData.meta?.pagination || {
