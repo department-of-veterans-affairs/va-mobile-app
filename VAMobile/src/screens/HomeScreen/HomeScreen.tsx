@@ -41,6 +41,7 @@ import {
   ClaimsAndAppealsState,
   DisabilityRatingState,
   LettersState,
+  MilitaryServiceState,
   PrescriptionState,
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
@@ -83,30 +84,34 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { prescriptionStatusCount, loadingHistory: loadingPrescriptions } = useSelector<RootState, PrescriptionState>(
-    (state) => state.prescriptions,
-  )
-  const { activeClaimsCount, loadingClaimsAndAppeals } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const {
+    prescriptionStatusCount,
+    loadingHistory: loadingPrescriptions,
+    prescriptionFirstRetrieval: rxPrefetch,
+  } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  const {
+    activeClaimsCount,
+    loadingClaimsAndAppeals,
+    claimsFirstRetrieval: claimsPrefetch,
+  } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
+  const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
+  const {
+    preloadComplete: apptsPrefetch,
+    loading: loadingAppointments,
+    upcomingAppointmentsCount,
+  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { loading: loadingServiceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
+    (state) => state.militaryService,
   )
-  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { preloadComplete: apptsPrefetch, loading: loadingAppointments } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
+  const { letterBeneficiaryData, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
+    (state) => state.letters,
   )
-  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
-  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
-    (state) => state.prescriptions,
-  )
-  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
+  const { ratingData, loading: loadingDisabilityRating } = useSelector<RootState, DisabilityRatingState>(
+    (state) => state.disabilityRating,
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
@@ -195,13 +200,19 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
+  const loadingAboutYou = loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
+  const hasAboutYouInfo =
+    !!ratingData?.combinedDisabilityRating ||
+    !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
+    !!mostRecentBranch
+
   const boxProps: BoxProps = {
     style: {
       shadowColor: colors.black,
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
+          shadowOpacity: 0.15,
           shadowRadius: 8,
         },
         android: {
@@ -302,68 +313,109 @@ export function HomeScreen({}: HomeScreenProps) {
             )}
           </Box>
         </Box>
-        <Box pt={theme.dimensions.formMarginBetween}>
-          <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} variant={'AboutYou'}>
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
             {t('aboutYou')}
           </TextView>
-        </Box>
-        <Nametag screen={'Home'} />
-        <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
-          {disRating && (
+          {loadingAboutYou ? (
+            <Box mx={theme.dimensions.condensedMarginBetween}>
+              <LoadingComponent
+                spinnerWidth={24}
+                spinnerHeight={24}
+                text={t('aboutYou.loading')}
+                inlineSpinner={true}
+                spinnerColor={theme.colors.icon.inlineSpinner}
+              />
+            </Box>
+          ) : !hasAboutYouInfo ? (
             <Box
-              pt={theme.dimensions.standardMarginBetween}
-              pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
-              pl={theme.dimensions.standardMarginBetween}>
-              <TextView
-                accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
-                variant={'VeteranStatusBranch'}>
-                {t('disabilityRating.title')}
-              </TextView>
-              <TextView
+              flexDirection="row"
+              alignItems="center"
+              mx={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.standardMarginBetween}
+              accessible={true}
+              accessibilityRole={'text'}
+              accessibilityLabel={t('aboutYou.error') + t('aboutYou.noInformation')}>
+              <VAIcon
                 accessible={false}
-                importantForAccessibility={'no'}
-                variant={
-                  'NametagNumber'
-                }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
-              <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                {t('disabilityRating.serviceConnected')}
+                importantForAccessibility="no"
+                name={'ExclamationCircle'}
+                fill={theme.colors.icon.homeScreenError}
+              />
+              <TextView
+                ml={theme.dimensions.condensedMarginBetween}
+                variant="HomeScreen"
+                accessible={false}
+                importantForAccessibility="no">
+                {t('aboutYou.noInformation')}
               </TextView>
             </Box>
+          ) : (
+            <>
+              <Nametag screen={'Home'} />
+              <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
+                {disRating && (
+                  <Box
+                    pt={theme.dimensions.standardMarginBetween}
+                    pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
+                    pl={theme.dimensions.standardMarginBetween}>
+                    <TextView
+                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                      variant={'VeteranStatusBranch'}>
+                      {t('disabilityRating.title')}
+                    </TextView>
+                    <TextView
+                      accessible={false}
+                      importantForAccessibility={'no'}
+                      variant={
+                        'NametagNumber'
+                      }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
+                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
+                      {t('disabilityRating.serviceConnected')}
+                    </TextView>
+                  </Box>
+                )}
+                {monthlyPay && disRating && (
+                  <Box
+                    mx={theme.dimensions.standardMarginBetween}
+                    my={theme.dimensions.condensedMarginBetween}
+                    borderWidth={1}
+                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+                  />
+                )}
+                {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+                  <Box
+                    pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
+                    pl={theme.dimensions.standardMarginBetween}
+                    pb={theme.dimensions.standardMarginBetween}>
+                    <TextView
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+                      variant={'VeteranStatusBranch'}>
+                      {t('monthlyCompensationPayment')}
+                    </TextView>
+                    <TextView
+                      accessible={false}
+                      importantForAccessibility={'no'}
+                      variant={
+                        'NametagNumber'
+                      }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                  </Box>
+                )}
+              </Box>
+            </>
           )}
-          {monthlyPay && disRating && (
-            <Box
-              mx={theme.dimensions.standardMarginBetween}
-              my={theme.dimensions.condensedMarginBetween}
-              borderWidth={1}
-              borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-            />
-          )}
-          {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-            <Box
-              pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
-              pl={theme.dimensions.standardMarginBetween}
-              pb={theme.dimensions.standardMarginBetween}>
-              <TextView
-                accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
-                variant={'VeteranStatusBranch'}>
-                {t('monthlyCompensationPayment')}
-              </TextView>
-              <TextView
-                accessible={false}
-                importantForAccessibility={'no'}
-                variant={
-                  'NametagNumber'
-                }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
-            </Box>
-          )}
-        </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-            {t('aboutVA')}
-          </TextView>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <SimpleList items={buttonDataList} />
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
+              {t('aboutVA')}
+            </TextView>
+          </Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <SimpleList items={buttonDataList} />
+          </Box>
         </Box>
       </Box>
     </CategoryLanding>

@@ -112,8 +112,9 @@ export const lightTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.white,
-    veteranStatusHomeArrow: DSColors.base,
     inlineSpinner: DSColors.primary,
+    homeScreenError: DSColors.secondaryDark,
+    veteranStatusHomeArrow: DSColors.base,
   },
   text: {
     footerButton: colors.primary,
@@ -157,7 +158,6 @@ export const lightTheme = {
     crisisLineButton: colors.white,
     activityButton: colors.white,
     homeScreen: DSColors.base,
-    activityFooter: DSColors.gray,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -320,8 +320,9 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.black,
-    veteranStatusHomeArrow: DSColors.grayLightest,
     inlineSpinner: DSColors.uswdsBlueVivid30,
+    homeScreenError: DSColors.uswdsRedVivid40,
+    veteranStatusHomeArrow: DSColors.grayLightest,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
@@ -363,7 +364,6 @@ export const darkTheme = {
     crisisLineButton: colors.black,
     activityButton: colors.black,
     homeScreen: DSColors.grayLightest,
-    activityFooter: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

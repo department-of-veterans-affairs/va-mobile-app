@@ -87,9 +87,16 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
           flexDirection="row"
           alignItems="center"
           accessible={true}
-          accessibilityLabel={`${t('loadingComponent.spinner.a11y')} ${a11yLabel || text}`}>
-          {getSpinner()}
-          <TextView ml={theme.dimensions.condensedMarginBetween} variant="HelperText">
+          accessibilityRole="text"
+          accessibilityLabel={a11yLabel ? a11yLabel : text}>
+          <Box accessible={false} importantForAccessibility="no">
+            {getSpinner()}
+          </Box>
+          <TextView
+            ml={theme.dimensions.condensedMarginBetween}
+            variant="HelperText"
+            accessible={false}
+            importantForAccessibility="no">
             {text}
           </TextView>
         </Box>
