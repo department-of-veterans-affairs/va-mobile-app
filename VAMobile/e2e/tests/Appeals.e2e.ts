@@ -1,3 +1,5 @@
+import { getTimeZone } from 'react-native-localize'
+
 import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
@@ -18,9 +20,9 @@ export const AppealsIdConstants = {
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
 export async function getDateWithTimeZone(dateString: string) {
-  const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
-  const dateUTC = date.toLocal()
-  const dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
+  const timeZone = getTimeZone()
+  const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: timeZone })
+  const dateTime = date.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
   return dateTime
 }
 
