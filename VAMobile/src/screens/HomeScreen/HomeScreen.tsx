@@ -121,7 +121,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
+  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {

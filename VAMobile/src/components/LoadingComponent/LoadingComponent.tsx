@@ -1,11 +1,9 @@
 import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
 import LottieView from 'lottie-react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
 import { useTheme } from 'utils/hooks'
 
@@ -40,7 +38,6 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   scrollViewStyle,
 }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
