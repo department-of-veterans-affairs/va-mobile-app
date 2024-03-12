@@ -11,6 +11,7 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
@@ -84,6 +85,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
+
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+
   const {
     prescriptionStatusCount,
     loadingHistory: loadingPrescriptions,
@@ -255,13 +260,16 @@ export function HomeScreen({}: HomeScreenProps) {
                   alignItems="center"
                   mb={theme.dimensions.standardMarginBetween}
                   accessible={true}
-                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')})}`}>
+                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
                   <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
-                  <TextView ml={theme.dimensions.condensedMarginBetween} variant="HomeScreen">
+                  <TextView
+                    importantForAccessibility={'no'}
+                    ml={theme.dimensions.condensedMarginBetween}
+                    variant="HomeScreen">
                     {t('noActivity')}
                   </TextView>
                 </Box>
-                {personalInfo?.hasFacilityTransitioningToCerner && (
+                {!!cernerFacilities.length && (
                   <TextView
                     variant="ActivityFooter"
                     accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
