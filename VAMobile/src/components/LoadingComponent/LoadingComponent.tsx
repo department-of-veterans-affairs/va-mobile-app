@@ -77,17 +77,21 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
         </Box>
       ) : inlineSpinner ? (
         <Box
-          justifyContent="center"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.contentMarginTop}
-          mb={theme.dimensions.contentMarginBottom}
-          alignItems={'center'}>
-          {getSpinner()}
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
-              {text}
-            </TextView>
+          flexDirection="row"
+          alignItems="center"
+          accessible={true}
+          accessibilityRole="text"
+          accessibilityLabel={a11yLabel ? a11yLabel : text}>
+          <Box accessible={false} importantForAccessibility="no">
+            {getSpinner()}
           </Box>
+          <TextView
+            ml={theme.dimensions.condensedMarginBetween}
+            variant="HelperText"
+            accessible={false}
+            importantForAccessibility="no">
+            {text}
+          </TextView>
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>
