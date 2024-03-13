@@ -266,7 +266,7 @@ export function HomeScreen({}: HomeScreenProps) {
             ) : (
               <>
                 {!!upcomingAppointmentsCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                  <Box mb={theme.dimensions.condensedMarginBetween}>
                     <ActivityButton
                       title={t('appointments')}
                       subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
@@ -275,7 +275,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
                 {!!activeClaimsCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                  <Box mb={theme.dimensions.condensedMarginBetween}>
                     <ActivityButton
                       title={t('claims.title')}
                       subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
@@ -284,7 +284,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
                 {!!unreadMessageCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                  <Box mb={theme.dimensions.condensedMarginBetween}>
                     <ActivityButton
                       title={`${t('messages')}`}
                       subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
@@ -293,7 +293,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
                 {!!prescriptionStatusCount.isRefillable && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                  <Box mb={theme.dimensions.condensedMarginBetween}>
                     <ActivityButton
                       title={t('prescription.title')}
                       subText={t('prescriptions.activityButton.subText', {
@@ -401,32 +401,6 @@ export function HomeScreen({}: HomeScreenProps) {
                 )}
               </Box>
             </>
-          )}
-          {monthlyPay && disRating && (
-            <Box
-              mx={theme.dimensions.standardMarginBetween}
-              my={theme.dimensions.condensedMarginBetween}
-              borderWidth={1}
-              borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-            />
-          )}
-          {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-            <Box
-              pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
-              pl={theme.dimensions.standardMarginBetween}
-              pb={theme.dimensions.standardMarginBetween}>
-              <TextView
-                accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
-                variant={'VeteranStatusBranch'}>
-                {t('monthlyCompensationPayment')}
-              </TextView>
-              <TextView
-                accessible={false}
-                importantForAccessibility={'no'}
-                variant={
-                  'NametagNumber'
-                }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
-            </Box>
           )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
