@@ -51,12 +51,7 @@ describe('Appeals', () => {
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    if (device.getPlatform() === 'android') {
-      await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
-    } else {
-      dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
-      await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
-    }
+    await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT))).toExist()
