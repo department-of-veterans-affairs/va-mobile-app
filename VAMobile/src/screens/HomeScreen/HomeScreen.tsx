@@ -236,7 +236,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Box mt={theme.dimensions.condensedMarginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
@@ -279,10 +279,7 @@ export function HomeScreen({}: HomeScreenProps) {
               )}
             </Box>
           ) : (
-            <Box
-              gap={theme.dimensions.condensedMarginBetween}
-              mx={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}>
+            <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
               {!!upcomingAppointmentsCount && (
                 <ActivityButton
                   title={t('appointments')}
