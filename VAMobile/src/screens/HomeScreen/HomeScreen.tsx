@@ -7,9 +7,12 @@ import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
   BackgroundVariant,
@@ -81,10 +84,30 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+
+  const {
+    prescriptionStatusCount,
+    loadingHistory: loadingPrescriptions,
+    prescriptionFirstRetrieval: rxPrefetch,
+  } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  const {
+    activeClaimsCount,
+    loadingClaimsAndAppeals,
+    claimsFirstRetrieval: claimsPrefetch,
+  } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
+  const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
+  const {
+    preloadComplete: apptsPrefetch,
+    loading: loadingAppointments,
+    upcomingAppointmentsCount,
+  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { loading: loadingServiceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
     (state) => state.militaryService,
   )
@@ -94,19 +117,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const { ratingData, loading: loadingDisabilityRating } = useSelector<RootState, DisabilityRatingState>(
     (state) => state.disabilityRating,
   )
-  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
-  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
-    (state) => state.prescriptions,
-  )
-  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
+  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
@@ -199,46 +213,100 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
+  const activityLoading =
+    loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
+  const hasActivity =
+    !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        {!!upcomingAppointmentsCount && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={t('appointments')}
-              subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
-              deepLink={'appointments'}
-            />
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('activity')}
+          </TextView>
+          <Box mx={theme.dimensions.condensedMarginBetween}>
+            {activityLoading ? (
+              <LoadingComponent
+                spinnerWidth={24}
+                spinnerHeight={24}
+                text={t('activity.loading')}
+                inlineSpinner={true}
+                spinnerColor={theme.colors.icon.inlineSpinner}
+              />
+            ) : !hasActivity ? (
+              <>
+                <Box
+                  flexDirection="row"
+                  alignItems="center"
+                  mb={theme.dimensions.standardMarginBetween}
+                  accessible={true}
+                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
+                  <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
+                  <TextView
+                    importantForAccessibility={'no'}
+                    ml={theme.dimensions.condensedMarginBetween}
+                    variant="HomeScreen">
+                    {t('noActivity')}
+                  </TextView>
+                </Box>
+                {!!cernerFacilities.length && (
+                  <TextView
+                    variant="ActivityFooter"
+                    accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
+                    {t('activity.informationNotIncluded')}
+                  </TextView>
+                )}
+              </>
+            ) : (
+              <>
+                {!!upcomingAppointmentsCount && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('appointments')}
+                      subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                      deepLink={'appointments'}
+                    />
+                  </Box>
+                )}
+                {!!activeClaimsCount && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('claims.title')}
+                      subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                      deepLink={'claims'}
+                    />
+                  </Box>
+                )}
+                {!!unreadMessageCount && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={`${t('messages')}`}
+                      subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                      deepLink={'messages'}
+                    />
+                  </Box>
+                )}
+                {!!prescriptionStatusCount.isRefillable && (
+                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+                    <ActivityButton
+                      title={t('prescription.title')}
+                      subText={t('prescriptions.activityButton.subText', {
+                        count: prescriptionStatusCount.isRefillable,
+                      })}
+                      deepLink={'prescriptions'}
+                    />
+                  </Box>
+                )}
+              </>
+            )}
           </Box>
-        )}
-        {!!activeClaimsCount && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={t('claims.title')}
-              subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
-              deepLink={'claims'}
-            />
-          </Box>
-        )}
-        {!!unreadMessageCount && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={`${t('messages')}`}
-              subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
-              deepLink={'messages'}
-            />
-          </Box>
-        )}
-        {!!prescriptionStatusCount.isRefillable && (
-          <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <ActivityButton
-              title={t('prescription.title')}
-              subText={t('prescriptions.activityButton.subText', { count: prescriptionStatusCount.isRefillable })}
-              deepLink={'prescriptions'}
-            />
-          </Box>
-        )}
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}

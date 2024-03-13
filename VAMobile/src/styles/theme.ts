@@ -75,6 +75,7 @@ export type VATextColors = {
   crisisLineButton: string
   activityButton: string
   homeScreen: string
+  activityFooter: string
 }
 
 export type VAIconColors = {
@@ -124,6 +125,7 @@ export type VATypographyThemeVariants = {
   AboutYou: string
   ActionBar: string
   ActivityButtonSubtext: string
+  ActivityFooter: string
   BitterBoldHeading: string
   BitterHeading: string
   ClaimPhase: string
