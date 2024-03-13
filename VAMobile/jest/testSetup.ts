@@ -149,6 +149,7 @@ jest.mock('react-native-localize', () => {
   return {
     getLocales: jest.fn(),
     findBestLanguageTag: jest.fn(() => ['en']),
+    getTimeZone: jest.fn(),
   }
 })
 
