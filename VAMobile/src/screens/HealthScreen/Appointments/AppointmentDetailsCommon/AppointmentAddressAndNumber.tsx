@@ -148,13 +148,14 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     }
 
     return (
-      <>
-        {headerText && (
+      headerText && (
+        <>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {headerText}
+            {t('locationName')}
           </TextView>
-        )}
-      </>
+          <TextView>{headerText}</TextView>
+        </>
+      )
     )
   }
 

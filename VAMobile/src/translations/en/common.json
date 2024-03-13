@@ -797,6 +797,7 @@
   "loaGate.readMore.or": "or",
   "loaGate.readMore.p1": "We’ll verify your identity through a secure process from ID.me or Login.gov. This trusted partner provides the strongest identity verification system available.",
   "loaGate.readMore.p2": "To complete the process on your smartphone, you’ll need these items:",
+  "locationName": "Location name",
   "login": "Login",
   "logout.confirm.text": "Sign out?",
   "logout.title": "Sign out",
