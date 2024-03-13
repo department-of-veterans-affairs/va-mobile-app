@@ -2,7 +2,7 @@ import React, { FC, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Link } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -82,7 +82,9 @@ const MessageAlert: FC<MessageAlertProps> = ({
           accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
-        <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+        <Box mr="auto">
+          <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+        </Box>
       </AlertBox>
     </Box>
   ) : (

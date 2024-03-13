@@ -110,7 +110,7 @@ context('StartNewMessage', () => {
           ),
         ).toBeTruthy(),
       )
-      await waitFor(() => fireEvent.press(screen.getByText('Go to inbox')))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 }))
     })
   })

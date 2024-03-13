@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -48,7 +48,7 @@ function NoFolderMessages() {
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>
-            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </Box>
       </VAScrollView>

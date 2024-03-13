@@ -4,7 +4,7 @@ import { Pressable, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
@@ -541,8 +541,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error"
           scrollViewRef={scrollViewRef}>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <Box mt={theme.dimensions.standardMarginBetween} mr="auto">
+            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>
       )

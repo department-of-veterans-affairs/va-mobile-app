@@ -13,8 +13,8 @@ This ticket is to control for all the requirements for the upcoming release befo
 This ticket should be complete by {{ env.vaDueDate }}
 ## Release Checklist
 
-- [ ] What's new content (App Store)
-- [ ] What's new content (In app/Alert Box)
+- [ ] What's new content (App Store) - *required*
+- [ ] What's new content (In app/Alert Box) - *optional*
 - [ ] Content updates
 
 ## Sign-offs: 
@@ -27,15 +27,18 @@ This ticket should be complete by {{ env.vaDueDate }}
 <!-- Automated value, do not change -->
 {{ env.versionNumber }}
 
-## What's New content (App Store)
+## What's New content (App Store) - *required*
 <!-- Define the content for the What's New sections of the app stores here -->
-You can now [describe xyz new feature(s)]. We’ve also [enhanced or improved abc] and fixed a few bugs.
+If there aren't any new features, use standard messaging: We added general improvements and fixed a few bugs.
 
-Or if there aren't any new features use standard messaging: We added general improvements and fixed a few bugs.
+If there are new features or major changes we want to announce, work with Content to finalize copy.
 
-## What's New content (In App/Alert Box)
+## What's New content (In App/Alert Box) - *optional*
 <!-- Define the content for the What's New alert box here -->
+If we use the in-app What's New alert box, the copy should be the same as what is being used for the App Store What's New section.
+
 All changes should be coordinated with Engineering Team.
+
 
 ## App Store content changes?
 All changes should be made to the files in the repo and not directly to the stores. 

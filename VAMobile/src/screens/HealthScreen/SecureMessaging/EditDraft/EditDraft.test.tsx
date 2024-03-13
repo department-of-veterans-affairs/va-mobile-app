@@ -178,7 +178,7 @@ context('EditDraft', () => {
       initializeTestInstance()
       expect(screen.getByText('Loading your draft...')).toBeTruthy()
       await waitFor(() => expect(screen.getByText("We can't match you with a provider")).toBeTruthy())
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
     })
   })
