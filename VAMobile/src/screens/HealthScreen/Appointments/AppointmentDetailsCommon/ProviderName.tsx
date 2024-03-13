@@ -25,7 +25,6 @@ function ProviderName({ attributes }: ProviderNameProps) {
     phoneOnly,
     serviceCategoryName,
   } = attributes || ({} as AppointmentAttributes)
-  console.log('in ProviderName component', { practitioner, healthcareProvider })
 
   if (
     phoneOnly ||
