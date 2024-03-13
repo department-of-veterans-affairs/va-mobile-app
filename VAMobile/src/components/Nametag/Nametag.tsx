@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -24,7 +24,6 @@ export const Nametag = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const fullName = personalInfo?.fullName
   const branch = mostRecentBranch || ''
 
   useEffect(() => {
