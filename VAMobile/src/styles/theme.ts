@@ -114,6 +114,8 @@ export type VAIconColors = {
   tagInfoIcon: string
   transparent: string
   activityButton: string
+  inlineSpinner: string
+  homeScreenError: string
   veteranStatusHomeArrow: string
   linkRow: string
 }
