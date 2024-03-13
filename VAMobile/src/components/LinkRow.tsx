@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { Pressable } from 'react-native'
+import { Pressable, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { BackgroundVariant, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
@@ -12,27 +12,25 @@ type LinkRowProps = {
   /** Function called when pressed */
   onPress: () => void
 }
-const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }) => {
+const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowProps) => {
   const theme = useTheme()
 
-  const boxProps: BoxProps = {
+  const pressableStyle: ViewStyle = {
     borderRadius: 8,
-    p: theme.dimensions.buttonPadding,
+    padding: theme.dimensions.buttonPadding,
     backgroundColor: theme.colors.background.linkRow as BackgroundVariant,
-    mb: theme.dimensions.condensedMarginBetween,
+    marginBottom: theme.dimensions.condensedMarginBetween,
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 
   return (
-    <Box {...boxProps}>
-      <Pressable onPress={onPress} accessible={true} accessibilityRole={'link'}>
-        <Box flex={1} flexDirection={'row'} alignItems="center">
-          <TextView flex={1} variant={'HomeScreen'} accessibilityLabel={titleA11yLabel}>
-            {title}
-          </TextView>
-          <VAIcon width={14} height={14} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
-        </Box>
-      </Pressable>
-    </Box>
+    <Pressable style={pressableStyle} onPress={onPress} accessible={true} accessibilityRole={'link'}>
+      <TextView flex={1} width={'100%'} variant={'HomeScreen'} accessibilityLabel={titleA11yLabel}>
+        {title}
+      </TextView>
+      <VAIcon width={14} height={14} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
+    </Pressable>
   )
 }
 
