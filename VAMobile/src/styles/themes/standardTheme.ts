@@ -178,8 +178,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.DescriptiveBackButton,
       scheme.text.descriptiveBackButton,
     ),
-    HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
-    HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
