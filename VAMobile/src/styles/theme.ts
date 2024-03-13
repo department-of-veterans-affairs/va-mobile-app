@@ -75,6 +75,7 @@ export type VATextColors = {
   crisisLineButton: string
   activityButton: string
   homeScreen: string
+  profileScreen: string
   activityFooter: string
 }
 
@@ -140,6 +141,7 @@ export type VATypographyThemeVariants = {
   MobileBodyLink: string
   MobileBodyTight: string
   NametagNumber: string
+  ProfileScreenHeader: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string

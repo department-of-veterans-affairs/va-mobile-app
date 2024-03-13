@@ -160,6 +160,7 @@ export const lightTheme = {
     crisisLineButton: colors.white,
     activityButton: colors.white,
     homeScreen: DSColors.base,
+    profileScreen: DSColors.base,
     activityFooter: DSColors.gray,
   },
   buttonBackground: {
@@ -369,6 +370,7 @@ export const darkTheme = {
     crisisLineButton: colors.black,
     activityButton: colors.black,
     homeScreen: DSColors.grayLightest,
+    profileScreen: DSColors.grayLightest,
     activityFooter: DSColors.grayLightest,
   },
   buttonBackground: {

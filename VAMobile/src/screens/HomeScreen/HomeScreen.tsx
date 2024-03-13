@@ -350,7 +350,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <>
-              <Nametag screen={'Home'} />
+              <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {disRating && (
                   <Box

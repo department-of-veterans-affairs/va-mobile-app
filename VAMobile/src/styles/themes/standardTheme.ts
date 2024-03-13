@@ -80,6 +80,10 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 22,
   },
+  ProfileScreenHeader: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
   HelperText: {
     fontSize: 16,
     lineHeight: 24,
@@ -182,6 +186,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
     HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
+    ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
