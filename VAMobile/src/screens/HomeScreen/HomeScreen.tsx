@@ -244,8 +244,8 @@ export function HomeScreen({}: HomeScreenProps) {
             accessibilityRole="header">
             {t('activity')}
           </TextView>
-          <Box mx={theme.dimensions.condensedMarginBetween}>
-            {activityLoading ? (
+          {activityLoading ? (
+            <Box mx={theme.dimensions.standardMarginBetween}>
               <LoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
@@ -253,73 +253,68 @@ export function HomeScreen({}: HomeScreenProps) {
                 inlineSpinner={true}
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
-            ) : !hasActivity ? (
-              <>
-                <Box
-                  flexDirection="row"
-                  alignItems="center"
-                  mb={theme.dimensions.standardMarginBetween}
-                  accessible={true}
-                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                  <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
-                  <TextView
-                    importantForAccessibility={'no'}
-                    ml={theme.dimensions.condensedMarginBetween}
-                    variant="HomeScreen">
-                    {t('noActivity')}
-                  </TextView>
-                </Box>
-                {!!cernerFacilities.length && (
-                  <TextView
-                    variant="ActivityFooter"
-                    accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
-                    {t('activity.informationNotIncluded')}
-                  </TextView>
-                )}
-              </>
-            ) : (
-              <>
-                {!!upcomingAppointmentsCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-                    <ActivityButton
-                      title={t('appointments')}
-                      subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
-                      deepLink={'appointments'}
-                    />
-                  </Box>
-                )}
-                {!!activeClaimsCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-                    <ActivityButton
-                      title={t('claims.title')}
-                      subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
-                      deepLink={'claims'}
-                    />
-                  </Box>
-                )}
-                {!!unreadMessageCount && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-                    <ActivityButton
-                      title={`${t('messages')}`}
-                      subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
-                      deepLink={'messages'}
-                    />
-                  </Box>
-                )}
-                {!!prescriptionStatusCount.isRefillable && (
-                  <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-                    <ActivityButton
-                      title={t('prescription.title')}
-                      subText={t('prescriptions.activityButton.subText', {
-                        count: prescriptionStatusCount.isRefillable,
-                      })}
-                      deepLink={'prescriptions'}
-                    />
-                  </Box>
-                )}
-              </>
-            )}
-          </Box>
+            </Box>
+          ) : !hasActivity ? (
+            <Box mx={theme.dimensions.standardMarginBetween}>
+              <Box
+                flexDirection="row"
+                alignItems="center"
+                mb={theme.dimensions.standardMarginBetween}
+                accessible={true}
+                accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
+                <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
+                <TextView
+                  importantForAccessibility={'no'}
+                  ml={theme.dimensions.condensedMarginBetween}
+                  variant="HomeScreen">
+                  {t('noActivity')}
+                </TextView>
+              </Box>
+              {!!cernerFacilities.length && (
+                <TextView
+                  variant="ActivityFooter"
+                  accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
+                  {t('activity.informationNotIncluded')}
+                </TextView>
+              )}
+            </Box>
+          ) : (
+            <Box
+              gap={theme.dimensions.condensedMarginBetween}
+              mx={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.standardMarginBetween}>
+              {!!upcomingAppointmentsCount && (
+                <ActivityButton
+                  title={t('appointments')}
+                  subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                  deepLink={'appointments'}
+                />
+              )}
+              {!!activeClaimsCount && (
+                <ActivityButton
+                  title={t('claims.title')}
+                  subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                  deepLink={'claims'}
+                />
+              )}
+              {!!unreadMessageCount && (
+                <ActivityButton
+                  title={`${t('messages')}`}
+                  subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                  deepLink={'messages'}
+                />
+              )}
+              {!!prescriptionStatusCount.isRefillable && (
+                <ActivityButton
+                  title={t('prescription.title')}
+                  subText={t('prescriptions.activityButton.subText', {
+                    count: prescriptionStatusCount.isRefillable,
+                  })}
+                  deepLink={'prescriptions'}
+                />
+              )}
+            </Box>
+          )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
           <TextView
@@ -330,7 +325,7 @@ export function HomeScreen({}: HomeScreenProps) {
             {t('aboutYou')}
           </TextView>
           {loadingAboutYou ? (
-            <Box mx={theme.dimensions.condensedMarginBetween}>
+            <Box mx={theme.dimensions.standardMarginBetween}>
               <LoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
@@ -343,7 +338,7 @@ export function HomeScreen({}: HomeScreenProps) {
             <Box
               flexDirection="row"
               alignItems="center"
-              mx={theme.dimensions.condensedMarginBetween}
+              mx={theme.dimensions.standardMarginBetween}
               mb={theme.dimensions.standardMarginBetween}
               accessible={true}
               accessibilityRole={'text'}
