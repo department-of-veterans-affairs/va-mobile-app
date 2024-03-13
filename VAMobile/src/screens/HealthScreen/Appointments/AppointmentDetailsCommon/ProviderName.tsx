@@ -25,15 +25,19 @@ function ProviderName({ attributes }: ProviderNameProps) {
     phoneOnly,
     serviceCategoryName,
   } = attributes || ({} as AppointmentAttributes)
+  console.log('in ProviderName component', { practitioner, healthcareProvider })
 
   if (
     phoneOnly ||
     (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
   ) {
     return (
-      <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-        {healthcareProvider ? healthcareProvider : t('appointments.noProvider')}
-      </TextView>
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('upcomingAppointmentDetails.provider')}
+        </TextView>
+        <TextView>{healthcareProvider || t('appointments.noProvider')}</TextView>
+      </Box>
     )
   }
 
