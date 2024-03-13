@@ -505,8 +505,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getRequestRefillButton = () => {
     return (
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button label={t('prescription.history.startRefillRequest')} onPress={() => navigateTo('RefillScreenModal')} />
+      <Box accessibilityRole="link" accessibilityLabel={t('prescription.history.startRefillRequest')} accessible={true}>
+        <Box mx={theme.dimensions.buttonPadding} importantForAccessibility={'no-hide-descendants'}>
+          <Button
+            label={t('prescription.history.startRefillRequest')}
+            onPress={() => navigateTo('RefillScreenModal')}
+          />
+        </Box>
       </Box>
     )
   }
