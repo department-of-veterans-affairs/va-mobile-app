@@ -43,7 +43,6 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<
 function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [downloadLetter, setDownloadLetter] = useState(false)
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
     enabled: screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter'),
   })
@@ -67,7 +66,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions, { enabled: downloadLetter })
+  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions, { enabled: false })
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -225,12 +224,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     lettersOptions.serviceConnectedEvaluation = combinedServiceRatingToggle
     lettersOptions.chapter35Eligibility = disabledDueToServiceToggle
     lettersOptions.serviceConnectedDisabilities = atLeastOneServiceDisabilityToggle
-
-    if (downloadLetter) {
-      refetchLetter()
-    } else {
-      setDownloadLetter(true)
-    }
+    refetchLetter()
   }
 
   const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData

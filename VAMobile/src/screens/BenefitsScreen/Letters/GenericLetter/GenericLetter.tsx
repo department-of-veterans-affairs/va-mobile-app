@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -20,7 +20,6 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { header, description, letterType, descriptionA11yLabel } = route.params
-  const [downloadLetter, setDownloadLetter] = useState(false)
   const { data: letterBeneficiaryData } = useLetterBeneficiaryData()
   const lettersOptions: LettersDownloadParams = {
     militaryService: false,
@@ -42,14 +41,10 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(letterType, lettersOptions, { enabled: downloadLetter })
+  } = useDownloadLetter(letterType, lettersOptions, { enabled: false })
 
   const onViewLetter = () => {
-    if (downloadLetter) {
-      refetchLetter()
-    } else {
-      setDownloadLetter(true)
-    }
+    refetchLetter()
   }
 
   const letterDetails = (
