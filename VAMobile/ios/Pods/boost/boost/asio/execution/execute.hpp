@@ -2,7 +2,7 @@
 // execution/execute.hpp
 // ~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2021 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2023 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,6 +16,9 @@
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
 
 #include <boost/asio/detail/config.hpp>
+
+#if !defined(BOOST_ASIO_NO_DEPRECATED)
+
 #include <boost/asio/detail/type_traits.hpp>
 #include <boost/asio/execution/detail/as_invocable.hpp>
 #include <boost/asio/execution/detail/as_receiver.hpp>
@@ -30,7 +33,8 @@ namespace boost {
 namespace asio {
 namespace execution {
 
-/// A customisation point that executes a function on an executor.
+/// (Deprecated: Use @c execute member function.) A customisation point that
+/// executes a function on an executor.
 /**
  * The name <tt>execution::execute</tt> denotes a customisation point object.
  *
@@ -54,7 +58,8 @@ namespace execution {
  */
 inline constexpr unspecified execute = unspecified;
 
-/// A type trait that determines whether a @c execute expression is well-formed.
+/// (Deprecated.) A type trait that determines whether an @c execute expression
+/// is well-formed.
 /**
  * Class template @c can_execute is a trait that is derived from
  * @c true_type if the expression <tt>execution::execute(std::declval<T>(),
@@ -88,7 +93,7 @@ void submit_helper(BOOST_ASIO_MOVE_ARG(S) s, BOOST_ASIO_MOVE_ARG(R) r);
 } // namespace execution
 } // namespace asio
 } // namespace boost
-namespace asio_execution_execute_fn {
+namespace boost_asio_execution_execute_fn {
 
 using boost::asio::conditional;
 using boost::asio::decay;
@@ -249,25 +254,25 @@ struct static_instance
 template <typename T>
 const T static_instance<T>::instance = {};
 
-} // namespace asio_execution_execute_fn
+} // namespace boost_asio_execution_execute_fn
 namespace boost {
 namespace asio {
 namespace execution {
 namespace {
 
-static BOOST_ASIO_CONSTEXPR const asio_execution_execute_fn::impl&
-  execute = asio_execution_execute_fn::static_instance<>::instance;
+static BOOST_ASIO_CONSTEXPR const boost_asio_execution_execute_fn::impl&
+  execute = boost_asio_execution_execute_fn::static_instance<>::instance;
 
 } // namespace
 
-typedef asio_execution_execute_fn::impl execute_t;
+typedef boost_asio_execution_execute_fn::impl execute_t;
 
 template <typename T, typename F>
 struct can_execute :
   integral_constant<bool,
-    asio_execution_execute_fn::call_traits<
+    boost_asio_execution_execute_fn::call_traits<
       execute_t, T, void(F)>::overload !=
-        asio_execution_execute_fn::ill_formed>
+        boost_asio_execution_execute_fn::ill_formed>
 {
 };
 
@@ -285,5 +290,7 @@ constexpr bool can_execute_v = can_execute<T, F>::value;
 #endif // defined(GENERATING_DOCUMENTATION)
 
 #include <boost/asio/detail/pop_options.hpp>
+
+#endif // !defined(BOOST_ASIO_NO_DEPRECATED)
 
 #endif // BOOST_ASIO_EXECUTION_EXECUTE_HPP

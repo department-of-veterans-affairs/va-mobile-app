@@ -1,6 +1,7 @@
 // Boost.Geometry (aka GGL, Generic Geometry Library)
 
 // Copyright (c) 2007-2012 Barend Gehrels, Amsterdam, the Netherlands.
+// Copyright (c) 2023 Adam Wulkiewicz, Lodz, Poland.
 
 // This file was modified by Oracle on 2020-2021.
 // Modifications copyright (c) 2020-2021, Oracle and/or its affiliates.
@@ -14,7 +15,8 @@
 #define BOOST_GEOMETRY_ALGORITHMS_DETAIL_OVERLAY_COPY_SEGMENT_POINT_HPP
 
 
-#include <boost/array.hpp>
+#include <array>
+
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/size.hpp>
@@ -30,8 +32,7 @@
 #include <boost/geometry/core/tags.hpp>
 #include <boost/geometry/geometries/concepts/check.hpp>
 #include <boost/geometry/util/range.hpp>
-#include <boost/geometry/views/closeable_view.hpp>
-#include <boost/geometry/views/reversible_view.hpp>
+#include <boost/geometry/views/detail/closed_clockwise_view.hpp>
 
 
 namespace boost { namespace geometry
@@ -60,20 +61,14 @@ struct copy_segment_point_range
             SegmentIdentifier const& seg_id, signed_size_type offset,
             PointOut& point)
     {
-        typedef typename closeable_view
-        <
-            Range const,
-            closure<Range>::value
-        >::type cview_type;
+        using view_type = detail::closed_clockwise_view
+            <
+                Range const,
+                closure<Range>::value,
+                Reverse ? counterclockwise : clockwise
+            >;
 
-        typedef typename reversible_view
-        <
-            cview_type const,
-            Reverse ? iterate_reverse : iterate_forward
-        >::type rview_type;
-
-        cview_type cview(range);
-        rview_type view(cview);
+        view_type view(range);
 
         std::size_t const segment_count = boost::size(view) - 1;
         signed_size_type const target = circular_offset(segment_count, seg_id.segment_index, offset);
@@ -120,7 +115,7 @@ struct copy_segment_point_box
             SegmentIdentifier const& seg_id, signed_size_type offset,
             PointOut& point)
     {
-        boost::array<typename point_type<Box>::type, 4> bp;
+        std::array<typename point_type<Box>::type, 4> bp;
         assign_box_corners_oriented<Reverse>(box, bp);
 
         signed_size_type const target = circular_offset(4, seg_id.segment_index, offset);

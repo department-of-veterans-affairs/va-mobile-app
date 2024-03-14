@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,12 @@ class fbvector;
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace folly {
+
+namespace detail {
+inline void* thunk_return_nullptr() {
+  return nullptr;
+}
+} // namespace detail
 
 template <class T, class Allocator>
 class fbvector {
@@ -462,7 +468,7 @@ class fbvector {
   // uninitialized_copy
 
   // it is possible to add an optimization for the case where
-  // It = move(T*) and IsRelocatable<T> and Is0Initiailizable<T>
+  // It = move(T*) and IsRelocatable<T> and Is0Initializeable<T>
 
   // wrappers
   template <typename It>
@@ -610,7 +616,7 @@ class fbvector {
   //  second exception being thrown. This is a known and unavoidable
   //  deficiency. In lieu of a strong exception guarantee, relocate_undo does
   //  the next best thing: it provides a weak exception guarantee by
-  //  destorying the new data, but leaving the old data in an indeterminate
+  //  destroying the new data, but leaving the old data in an indeterminate
   //  state. Note that that indeterminate state will be valid, since the
   //  old data has not been destroyed; it has merely been the source of a
   //  move, which is required to leave the source in a valid state.
@@ -981,26 +987,15 @@ class fbvector {
         xallocx(p, newCapacityBytes, 0, 0) == newCapacityBytes) {
       impl_.z_ += newCap - oldCap;
     } else {
-      T* newB; // intentionally uninitialized
-      if (!catch_exception(
-              [&] {
-                newB = M_allocate(newCap);
-                return true;
-              },
-              [&] { //
-                return false;
-              })) {
+      T* newB = static_cast<T*>(catch_exception(
+          [&] { return M_allocate(newCap); }, //
+          &detail::thunk_return_nullptr));
+      if (!newB) {
         return;
       }
       if (!catch_exception(
-              [&] {
-                M_relocate(newB);
-                return true;
-              },
-              [&] {
-                M_deallocate(newB, newCap);
-                return false;
-              })) {
+              [&] { return M_relocate(newB), true; },
+              [&] { return M_deallocate(newB, newCap), false; })) {
         return;
       }
       if (impl_.b_) {

@@ -1,11 +1,11 @@
 #ifndef BOOST_QVM_VEC_OPERATIONS_HPP_INCLUDED
 #define BOOST_QVM_VEC_OPERATIONS_HPP_INCLUDED
 
-/// Copyright (c) 2008-2021 Emil Dotchevski and Reverge Studios, Inc.
-/// Copyright (c) 2019 agate-pris
+// Copyright 2008-2022 Emil Dotchevski and Reverge Studios, Inc.
+// Copyright 2019 agate-pris
 
-/// Distributed under the Boost Software License, Version 1.0. (See accompanying
-/// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/qvm/detail/vec_assign.hpp>
 #include <boost/qvm/vec_operations2.hpp>
@@ -102,7 +102,7 @@ qvm_detail
     }
 
 template <class R,class A>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_vec<R>::value && is_vec<A>::value &&
     vec_traits<R>::dim==vec_traits<A>::dim &&
@@ -117,7 +117,7 @@ convert_to( A const & a )
 ////////////////////////////////////////////////
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==3 && vec_traits<B>::dim==3,
@@ -126,20 +126,20 @@ cross( A const & a, B const & b )
     {
     typedef typename deduce_vec2<A,B,3>::type R;
     R r;
-    vec_traits<R>::template write_element<0>(r)=
+    write_vec_element<0>(r,
         vec_traits<A>::template read_element<1>(a)*vec_traits<B>::template read_element<2>(b)-
-        vec_traits<A>::template read_element<2>(a)*vec_traits<B>::template read_element<1>(b);
-    vec_traits<R>::template write_element<1>(r)=
+        vec_traits<A>::template read_element<2>(a)*vec_traits<B>::template read_element<1>(b));
+    write_vec_element<1>(r,
         vec_traits<A>::template read_element<2>(a)*vec_traits<B>::template read_element<0>(b)-
-        vec_traits<A>::template read_element<0>(a)*vec_traits<B>::template read_element<2>(b);
-    vec_traits<R>::template write_element<2>(r)=
+        vec_traits<A>::template read_element<0>(a)*vec_traits<B>::template read_element<2>(b));
+    write_vec_element<2>(r,
         vec_traits<A>::template read_element<0>(a)*vec_traits<B>::template read_element<1>(b)-
-        vec_traits<A>::template read_element<1>(a)*vec_traits<B>::template read_element<0>(b);
+        vec_traits<A>::template read_element<1>(a)*vec_traits<B>::template read_element<0>(b));
     return r;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==2 && vec_traits<B>::dim==2,
@@ -156,7 +156,7 @@ cross( A const & a, B const & b )
 ////////////////////////////////////////////////
 
 template <class A,class B,class Cmp>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim,
@@ -186,8 +186,12 @@ qvm_detail
 
         public:
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_vec<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -210,7 +214,7 @@ vec_traits< qvm_detail::zero_vec_<T,Dim> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_vector const & )
         {
@@ -220,7 +224,7 @@ vec_traits< qvm_detail::zero_vec_<T,Dim> >
         }
 
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element_idx( int i, this_vector const & )
         {
@@ -238,7 +242,7 @@ deduce_vec<qvm_detail::zero_vec_<T,Dim>,D>
     };
 
 template <class T,int Dim>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::zero_vec_<T,Dim> const &
 zero_vec()
     {
@@ -246,7 +250,7 @@ zero_vec()
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value,
     void>::type
@@ -271,7 +275,7 @@ qvm_detail
         public:
 
         template <class T>
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         vector_scalar_cast_ &
         operator=( T const & x )
             {
@@ -279,8 +283,12 @@ qvm_detail
             return *this;
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_vec<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -303,7 +311,7 @@ vec_traits< qvm_detail::vector_scalar_cast_<OriginalType,Scalar> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_vector const & x )
         {
@@ -313,7 +321,7 @@ vec_traits< qvm_detail::vector_scalar_cast_<OriginalType,Scalar> >
         }
 
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element_idx( int i, this_vector const & x )
         {
@@ -331,7 +339,7 @@ deduce_vec<qvm_detail::vector_scalar_cast_<OriginalType,Scalar>,D>
     };
 
 template <class Scalar,class T>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::vector_scalar_cast_<T,Scalar> const &
 scalar_cast( T const & x, typename qvm_detail::scalar_cast_vector_filter<is_vec<T>::value>::type=0 )
     {
@@ -352,7 +360,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_scalar<B>::value &&
     !qvm_detail::div_eq_vs_defined<vec_traits<A>::dim>::value,
@@ -360,7 +368,7 @@ typename enable_if_c<
 operator/=( A & a, B b )
     {
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<A>::write_element_idx(i,a)/=b;
+        write_vec_element_idx(i,a,vec_traits<A>::read_element_idx(i,a)/b);
     return a;
     }
 
@@ -378,7 +386,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_scalar<B>::value &&
     !qvm_detail::div_vs_defined<vec_traits<A>::dim>::value,
@@ -388,7 +396,7 @@ operator/( A const & a, B b )
     typedef typename deduce_vec2<A,B,vec_traits<A>::dim>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=vec_traits<A>::read_element_idx(i,a)/b;
+        write_vec_element_idx(i,r,vec_traits<A>::read_element_idx(i,a)/b);
     return r;
     }
 
@@ -406,7 +414,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -435,7 +443,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -463,7 +471,7 @@ qvm_detail
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value &&
     !qvm_detail::mag_sqr_v_defined<vec_traits<A>::dim>::value,
@@ -494,7 +502,7 @@ qvm_detail
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value &&
     !qvm_detail::mag_v_defined<vec_traits<A>::dim>::value,
@@ -508,7 +516,7 @@ mag( A const & a )
         T x=vec_traits<A>::read_element_idx(i,a);
         m+=x*x;
         }
-    return sqrt<T>(m);
+    return sqrt(m);
     }
 
 ////////////////////////////////////////////////
@@ -525,7 +533,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -534,7 +542,7 @@ typename enable_if_c<
 operator-=( A & a, B const & b )
     {
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<A>::write_element_idx(i,a)-=vec_traits<B>::read_element_idx(i,b);
+        write_vec_element_idx(i,a,vec_traits<A>::read_element_idx(i,a)-vec_traits<B>::read_element_idx(i,b));
     return a;
     }
 
@@ -552,7 +560,7 @@ qvm_detail
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value &&
     !qvm_detail::minus_v_defined<vec_traits<A>::dim>::value,
@@ -562,7 +570,7 @@ operator-( A const & a )
     typedef typename deduce_vec<A>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=-vec_traits<A>::read_element_idx(i,a);
+        write_vec_element_idx(i,r,-vec_traits<A>::read_element_idx(i,a));
     return r;
     }
 
@@ -580,7 +588,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -591,7 +599,7 @@ operator-( A const & a, B const & b )
     typedef typename deduce_vec2<A,B,vec_traits<A>::dim>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=vec_traits<A>::read_element_idx(i,a)-vec_traits<B>::read_element_idx(i,b);
+        write_vec_element_idx(i,r,vec_traits<A>::read_element_idx(i,a)-vec_traits<B>::read_element_idx(i,b));
     return r;
     }
 
@@ -609,7 +617,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_scalar<B>::value &&
     !qvm_detail::mul_eq_vs_defined<vec_traits<A>::dim>::value,
@@ -617,7 +625,7 @@ typename enable_if_c<
 operator*=( A & a, B b )
     {
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<A>::write_element_idx(i,a)*=b;
+        write_vec_element_idx(i,a,vec_traits<A>::read_element_idx(i,a)*b);
     return a;
     }
 
@@ -635,7 +643,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_scalar<B>::value &&
     !qvm_detail::mul_vs_defined<vec_traits<A>::dim>::value,
@@ -645,7 +653,7 @@ operator*( A const & a, B b )
     typedef typename deduce_vec2<A,B,vec_traits<A>::dim>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=vec_traits<A>::read_element_idx(i,a)*b;
+        write_vec_element_idx(i,r,vec_traits<A>::read_element_idx(i,a)*b);
     return r;
     }
 
@@ -663,7 +671,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_scalar<A>::value && is_vec<B>::value &&
     !qvm_detail::mul_sv_defined<vec_traits<B>::dim>::value,
@@ -673,7 +681,7 @@ operator*( A a, B const & b )
     typedef typename deduce_vec2<A,B,vec_traits<B>::dim>::type R;
     R r;
     for( int i=0; i!=vec_traits<B>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=a*vec_traits<B>::read_element_idx(i,b);
+        write_vec_element_idx(i,r,a*vec_traits<B>::read_element_idx(i,b));
     return r;
     }
 
@@ -691,7 +699,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -719,7 +727,7 @@ qvm_detail
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value &&
     !qvm_detail::normalize_v_defined<vec_traits<A>::dim>::value,
@@ -735,16 +743,16 @@ normalized( A const & a )
         }
     if( m==scalar_traits<T>::value(0) )
         BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-    T rm=scalar_traits<T>::value(1)/sqrt<T>(m);
+    T rm=scalar_traits<T>::value(1)/sqrt(m);
     typedef typename deduce_vec<A>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=vec_traits<A>::read_element_idx(i,a)*rm;
+        write_vec_element_idx(i,r,vec_traits<A>::read_element_idx(i,a)*rm);
     return r;
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value &&
     !qvm_detail::normalize_v_defined<vec_traits<A>::dim>::value,
@@ -760,9 +768,9 @@ normalize( A & a )
         }
     if( m==scalar_traits<T>::value(0) )
         BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-    T rm=scalar_traits<T>::value(1)/sqrt<T>(m);
+    T rm=scalar_traits<T>::value(1)/sqrt(m);
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<A>::write_element_idx(i,a)*=rm;
+        write_vec_element_idx(i,a,vec_traits<A>::read_element_idx(i,a)*rm);
     }
 
 ////////////////////////////////////////////////
@@ -779,7 +787,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -788,7 +796,7 @@ typename enable_if_c<
 operator+=( A & a, B const & b )
     {
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<A>::write_element_idx(i,a)+=vec_traits<B>::read_element_idx(i,b);
+        write_vec_element_idx(i,a,vec_traits<A>::read_element_idx(i,a)+vec_traits<B>::read_element_idx(i,b));
     return a;
     }
 
@@ -806,7 +814,7 @@ qvm_detail
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_vec<A>::value && is_vec<B>::value &&
     vec_traits<A>::dim==vec_traits<B>::dim &&
@@ -817,7 +825,7 @@ operator+( A const & a, B const & b )
     typedef typename deduce_vec2<A,B,vec_traits<A>::dim>::type R;
     R r;
     for( int i=0; i!=vec_traits<A>::dim; ++i )
-        vec_traits<R>::write_element_idx(i,r)=vec_traits<A>::read_element_idx(i,a)+vec_traits<B>::read_element_idx(i,b);
+        write_vec_element_idx(i,r,vec_traits<A>::read_element_idx(i,a)+vec_traits<B>::read_element_idx(i,b));
     return r;
     }
 
@@ -837,7 +845,7 @@ qvm_detail
         public:
 
         template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         vref_ &
         operator=( R const & x )
             {
@@ -845,8 +853,12 @@ qvm_detail
             return *this;
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_vec<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -854,11 +866,75 @@ qvm_detail
             return r;
             }
         };
+
+    template <class V,bool WriteElementRef=vec_write_element_ref<V>::value>
+    struct vref_write_traits;
+
+    template <class V>
+    struct
+    vref_write_traits<V,true>
+        {
+        typedef typename vec_traits<V>::scalar_type scalar_type;
+        typedef qvm_detail::vref_<V> this_vector;
+        static int const dim=vec_traits<V>::dim;
+
+        template <int I>
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        scalar_type &
+        write_element( this_vector & x )
+            {
+            BOOST_QVM_STATIC_ASSERT(I>=0);
+            BOOST_QVM_STATIC_ASSERT(I<dim);
+            return vec_traits<V>::template write_element<I>(reinterpret_cast<V &>(x));
+            }
+
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        scalar_type &
+        write_element_idx( int i, this_vector & x )
+            {
+            BOOST_QVM_ASSERT(i>=0);
+            BOOST_QVM_ASSERT(i<dim);
+            return vec_traits<V>::write_element_idx(i,reinterpret_cast<V &>(x));
+            }
+        };
+
+    template <class V>
+    struct
+    vref_write_traits<V,false>
+        {
+        typedef typename vec_traits<V>::scalar_type scalar_type;
+        typedef qvm_detail::vref_<V> this_vector;
+        static int const dim=vec_traits<V>::dim;
+
+        template <int I>
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        void
+        write_element( this_vector & x, scalar_type s )
+            {
+            BOOST_QVM_STATIC_ASSERT(I>=0);
+            BOOST_QVM_STATIC_ASSERT(I<dim);
+            vec_traits<V>::template write_element<I>(reinterpret_cast<V &>(x), s);
+            }
+
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        void
+        write_element_idx( int i, this_vector & x, scalar_type s )
+            {
+            BOOST_QVM_ASSERT(i>=0);
+            BOOST_QVM_ASSERT(i<dim);
+            vec_traits<V>::write_element_idx(i,reinterpret_cast<V &>(x), s);
+            }
+        };
     }
 
 template <class V>
 struct
-vec_traits< qvm_detail::vref_<V> >
+vec_traits< qvm_detail::vref_<V> >:
+    qvm_detail::vref_write_traits<V>
     {
     typedef typename vec_traits<V>::scalar_type scalar_type;
     typedef qvm_detail::vref_<V> this_vector;
@@ -866,7 +942,7 @@ vec_traits< qvm_detail::vref_<V> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_vector const & x )
         {
@@ -875,35 +951,14 @@ vec_traits< qvm_detail::vref_<V> >
         return vec_traits<V>::template read_element<I>(reinterpret_cast<V const &>(x));
         }
 
-    template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
-    scalar_type &
-    write_element( this_vector & x )
-        {
-        BOOST_QVM_STATIC_ASSERT(I>=0);
-        BOOST_QVM_STATIC_ASSERT(I<dim);
-        return vec_traits<V>::template write_element<I>(reinterpret_cast<V &>(x));
-        }
-
-    static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element_idx( int i, this_vector const & x )
         {
         BOOST_QVM_ASSERT(i>=0);
         BOOST_QVM_ASSERT(i<dim);
         return vec_traits<V>::read_element_idx(i,reinterpret_cast<V const &>(x));
-        }
-
-    static
-    BOOST_QVM_INLINE_CRITICAL
-    scalar_type &
-    write_element_idx( int i, this_vector & x )
-        {
-        BOOST_QVM_ASSERT(i>=0);
-        BOOST_QVM_ASSERT(i<dim);
-        return vec_traits<V>::write_element_idx(i,reinterpret_cast<V &>(x));
         }
     };
 
@@ -915,7 +970,7 @@ deduce_vec<qvm_detail::vref_<V>,D>
     };
 
 template <class V>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_vec<V>::value,
     qvm_detail::vref_<V> const &>::type
@@ -925,7 +980,7 @@ vref( V const & a )
     }
 
 template <class V>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_vec<V>::value,
     qvm_detail::vref_<V> &>::type

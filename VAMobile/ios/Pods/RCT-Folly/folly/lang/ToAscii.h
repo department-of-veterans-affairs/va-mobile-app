@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,13 +124,13 @@ extern template to_ascii_table<10, to_ascii_alphabet_upper>::data_type_ const
 extern template to_ascii_table<16, to_ascii_alphabet_upper>::data_type_ const
     to_ascii_table<16, to_ascii_alphabet_upper>::data;
 
-template <uint64_t Base, typename I>
+template <uint64_t Base, typename Int>
 struct to_ascii_powers {
-  static constexpr size_t size_(I v) {
+  static constexpr size_t size_(Int v) {
     return 1 + (v < Base ? 0 : size_(v / Base));
   }
-  static constexpr size_t const size = size_(~I(0));
-  using data_type_ = c_array<I, size>;
+  static constexpr size_t const size = size_(~Int(0));
+  using data_type_ = c_array<Int, size>;
   static constexpr data_type_ data_() {
     data_type_ result{};
     for (size_t i = 0; i < size; ++i) {
@@ -141,12 +141,12 @@ struct to_ascii_powers {
   // @lint-ignore CLANGTIDY
   static data_type_ const data;
 };
-template <uint64_t Base, typename I>
-constexpr size_t const to_ascii_powers<Base, I>::size;
-template <uint64_t Base, typename I>
+template <uint64_t Base, typename Int>
+constexpr size_t const to_ascii_powers<Base, Int>::size;
+template <uint64_t Base, typename Int>
 alignas(hardware_constructive_interference_size)
-    typename to_ascii_powers<Base, I>::data_type_ const
-    to_ascii_powers<Base, I>::data = to_ascii_powers<Base, I>::data_();
+    typename to_ascii_powers<Base, Int>::data_type_ const
+    to_ascii_powers<Base, Int>::data = to_ascii_powers<Base, Int>::data_();
 
 extern template to_ascii_powers<8, uint64_t>::data_type_ const
     to_ascii_powers<8, uint64_t>::data;
@@ -221,7 +221,8 @@ FOLLY_ALWAYS_INLINE size_t to_ascii_size_clzll(uint64_t v) {
   }
 
   //  blog2r is approx 1 / log<2>(Base), used in log change-of-base just below
-  constexpr auto const blog2r = 8. / constexpr_log2(constexpr_pow(Base, 8));
+  constexpr auto const blog2m = constexpr_log2(constexpr_pow(Base, 8));
+  constexpr auto const blog2r = 8. / double(blog2m);
 
   //  vlogb is approx log<Base>(v) = log<2>(v) / log<2>(Base)
   auto const vlogb = vlog2 * size_t(blog2r * 256) / 256;
@@ -327,16 +328,16 @@ FOLLY_ALWAYS_INLINE size_t to_ascii_with_route(char (&out)[N], uint64_t v) {
 //
 //  In base 10, u64 requires at most 20 bytes, u32 at most 10, u16 at most 5,
 //  and u8 at most 3.
-template <uint64_t Base, typename I>
+template <uint64_t Base, typename Int>
 FOLLY_INLINE_VARIABLE constexpr size_t to_ascii_size_max =
-    detail::to_ascii_powers<Base, I>::size;
+    detail::to_ascii_powers<Base, Int>::size;
 
 //  to_ascii_size_max_decimal
 //
 //  An alias to to_ascii_size_max<10>.
-template <typename I>
+template <typename Int>
 FOLLY_INLINE_VARIABLE constexpr size_t to_ascii_size_max_decimal =
-    to_ascii_size_max<10, I>;
+    to_ascii_size_max<10, Int>;
 
 //  to_ascii_size
 //
@@ -412,7 +413,7 @@ size_t to_ascii_upper(char (&out)[N], uint64_t v) {
 //
 //  An alias to to_ascii<10, false>.
 //
-//  async-signals-afe
+//  async-signal-safe
 inline size_t to_ascii_decimal(char* outb, char const* oute, uint64_t v) {
   return to_ascii_lower<10>(outb, oute, v);
 }

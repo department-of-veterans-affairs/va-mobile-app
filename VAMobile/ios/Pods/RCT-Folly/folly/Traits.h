@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <limits>
 #include <memory>
@@ -48,6 +49,42 @@ using bool_constant = std::integral_constant<bool, B>;
 
 template <std::size_t I>
 using index_constant = std::integral_constant<std::size_t, I>;
+
+//  always_false
+//
+//  A variable template that is always false but requires template arguments to
+//  be provided (which are then ignored). This is useful in very specific cases
+//  where we want type-dependent expressions to defer static_assert's.
+//
+//  A common use-case is for exhaustive constexpr if branches:
+//
+//    template <typename T>
+//    void foo(T value) {
+//      if constexpr (std::is_integral_v<T>) foo_integral(value);
+//      else if constexpr (std::is_same_v<T, std::string>) foo_string(value);
+//      else static_assert(always_false<T>, "Unsupported type");
+//    }
+//
+//  If we had used static_assert(false), then this would always fail to compile,
+//  even if foo is never instantiated!
+//
+//  Another use case is if a template that is expected to always be specialized
+//  is erroneously instantiated with the base template.
+//
+//    template <typename T>
+//    struct Foo {
+//      static_assert(always_false<T>, "Unsupported type");
+//    };
+//    template <>
+//    struct Foo<int> {};
+//
+//    Foo<int> a;         // fine
+//    Foo<std::string> b; // fails! And you get a nice (custom) error message
+//
+//  This is similar to leaving the base template undefined but we get a nicer
+//  compiler error message with static_assert.
+template <typename...>
+FOLLY_INLINE_VARIABLE constexpr bool always_false = false;
 
 namespace detail {
 
@@ -588,6 +625,27 @@ FOLLY_INLINE_VARIABLE constexpr bool is_transparent_v =
 template <typename T>
 struct is_transparent : bool_constant<is_transparent_v<T>> {};
 
+namespace detail {
+template <typename T>
+using sizeof_t = decltype(sizeof(T));
+} // namespace detail
+
+//  is_complete_v
+//  is_complete
+//
+//  A trait to test if the provided type T is a complete type or not.
+//  See https://en.cppreference.com/w/cpp/language/type.
+//
+//  If is_complete_v<T> is used (possibly cv-ref qualified), then the type T
+//  must always be incomplete. That is, it's not safe to instantiate
+//  is_complete_v<T> on a forward-declared class type T and then again after the
+//  class T is defined. Doing so would be an ODR violation for is_complete_v.
+template <typename T>
+FOLLY_INLINE_VARIABLE constexpr bool is_complete_v =
+    Disjunction<is_detected<detail::sizeof_t, T>, std::is_function<T>>::value;
+template <typename T>
+struct is_complete : bool_constant<is_complete_v<T>> {};
+
 } // namespace folly
 
 /**
@@ -865,5 +923,73 @@ struct make_unsigned<uint128_t> {
   using type = uint128_t;
 };
 #endif // FOLLY_HAVE_INT128_T
+
+namespace traits_detail {
+template <std::size_t>
+struct uint_bits_t_ {};
+template <>
+struct uint_bits_t_<8> : type_t_<std::uint8_t> {};
+template <>
+struct uint_bits_t_<16> : type_t_<std::uint16_t> {};
+template <>
+struct uint_bits_t_<32> : type_t_<std::uint32_t> {};
+template <>
+struct uint_bits_t_<64> : type_t_<std::uint64_t> {};
+#if FOLLY_HAVE_INT128_T
+template <>
+struct uint_bits_t_<128> : type_t_<uint128_t> {};
+#endif // FOLLY_HAVE_INT128_T
+} // namespace traits_detail
+
+template <std::size_t bits>
+using uint_bits_t = _t<traits_detail::uint_bits_t_<bits>>;
+
+template <std::size_t lg_bits>
+using uint_bits_lg_t = uint_bits_t<(1u << lg_bits)>;
+
+template <std::size_t bits>
+using int_bits_t = make_signed_t<uint_bits_t<bits>>;
+
+template <std::size_t lg_bits>
+using int_bits_lg_t = make_signed_t<uint_bits_lg_t<lg_bits>>;
+
+#if FOLLY_HAS_BUILTIN(__type_pack_element)
+template <std::size_t I, typename... Ts>
+using type_pack_element_t = __type_pack_element<I, Ts...>;
+#else
+namespace traits_detail {
+
+template <std::size_t I, typename T>
+struct indexed_type : std::integral_constant<std::size_t, I> {
+  using type = T;
+};
+
+template <std::size_t I, typename... Ts>
+struct type_pack_element_impl {
+ private:
+  template <typename>
+  struct set;
+
+  template <std::size_t... Is>
+  struct set<std::index_sequence<Is...>> : indexed_type<Is, Ts>... {};
+
+  template <typename T>
+  inline static std::enable_if<true, T> impl(indexed_type<I, T>);
+
+  inline static std::enable_if<false> impl(...);
+
+ public:
+  using type = decltype(impl(set<std::index_sequence_for<Ts...>>{}));
+};
+
+template <std::size_t I, typename... Ts>
+using type_pack_element = typename type_pack_element_impl<I, Ts...>::type;
+
+} // namespace traits_detail
+
+template <std::size_t I, typename... Ts>
+using type_pack_element_t =
+    typename traits_detail::type_pack_element<I, Ts...>::type;
+#endif
 
 } // namespace folly

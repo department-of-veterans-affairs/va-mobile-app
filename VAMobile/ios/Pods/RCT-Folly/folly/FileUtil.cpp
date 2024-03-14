@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,8 @@ int dupNoInt(int fd) {
   return int(wrapNoInt(dup, fd));
 }
 
-int dup2NoInt(int oldfd, int newfd) {
-  return int(wrapNoInt(dup2, oldfd, newfd));
+int dup2NoInt(int oldFd, int newFd) {
+  return int(wrapNoInt(dup2, oldFd, newFd));
 }
 
 int fdatasyncNoInt(int fd) {

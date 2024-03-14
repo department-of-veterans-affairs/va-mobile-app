@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,6 +92,10 @@
  */
 
 #pragma once
+
+#ifdef _WIN32
+#error Subprocess is not supported on Windows.
+#endif
 
 #include <signal.h>
 #include <sys/types.h>
@@ -253,10 +257,11 @@ class FOLLY_EXPORT SubprocessSpawnError : public SubprocessError {
  */
 class Subprocess {
  public:
-  static const int CLOSE = -1;
+  // removed CLOSE = -1
   static const int PIPE = -2;
   static const int PIPE_IN = -3;
   static const int PIPE_OUT = -4;
+  static const int DEV_NULL = -5;
 
   /**
    * See Subprocess::Options::dangerousPostForkPreExecCallback() for usage.
@@ -506,7 +511,7 @@ class Subprocess {
 #endif
   };
 
-  // Non-copiable, but movable
+  // Non-copyable, but movable
   Subprocess(const Subprocess&) = delete;
   Subprocess& operator=(const Subprocess&) = delete;
   Subprocess(Subprocess&&) = default;
@@ -906,7 +911,7 @@ class Subprocess {
   /**
    * The child's pipes are logically separate from the process metadata
    * (they may even be kept alive by the child's descendants).  This call
-   * lets you manage the pipes' lifetime separetely from the lifetime of the
+   * lets you manage the pipes' lifetime separately from the lifetime of the
    * child process.
    *
    * After this call, the Subprocess instance will have no knowledge of
@@ -952,6 +957,9 @@ class Subprocess {
       char** argv,
       char** env,
       const Options& options) const;
+
+  // Closes fds inherited from parent in child process
+  static void closeInheritedFds(const Options::FdMap& fdActions);
 
   /**
    * Read from the error pipe, and throw SubprocessSpawnError if the child

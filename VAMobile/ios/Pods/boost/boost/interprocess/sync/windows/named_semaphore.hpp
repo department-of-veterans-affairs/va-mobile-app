@@ -24,7 +24,6 @@
 #include <boost/interprocess/creation_tags.hpp>
 #include <boost/interprocess/permissions.hpp>
 #include <boost/interprocess/detail/interprocess_tester.hpp>
-#include <boost/interprocess/detail/posix_time_types_wrk.hpp>
 #include <boost/interprocess/sync/windows/named_sync.hpp>
 #include <boost/interprocess/sync/windows/winapi_semaphore_wrapper.hpp>
 
@@ -62,7 +61,7 @@ class winapi_named_semaphore
    void post();
    void wait();
    bool try_wait();
-   bool timed_wait(const boost::posix_time::ptime &abs_time);
+   template<class TimePoint> bool timed_wait(const TimePoint &abs_time);
 
    static bool remove(const char *name);
    static bool remove(const wchar_t *name);
@@ -82,19 +81,19 @@ class winapi_named_semaphore
          : m_sem_wrapper(sem_wrapper), m_sem_count(sem_cnt)
       {}
 
-      virtual std::size_t get_data_size() const
+      virtual std::size_t get_data_size() const BOOST_OVERRIDE
       {  return sizeof(sem_count_t);   }
 
-      virtual const void *buffer_with_final_data_to_file()
+      virtual const void *buffer_with_final_data_to_file() BOOST_OVERRIDE
       {  return &m_sem_count; }
 
-      virtual const void *buffer_with_init_data_to_file()
+      virtual const void *buffer_with_init_data_to_file() BOOST_OVERRIDE
       {  return &m_sem_count; }
 
-      virtual void *buffer_to_store_init_data_from_file()
+      virtual void *buffer_to_store_init_data_from_file() BOOST_OVERRIDE
       {  return &m_sem_count; }
 
-      virtual bool open(create_enum_t, const char *id_name)
+      virtual bool open(create_enum_t, const char *id_name) BOOST_OVERRIDE
       {
          std::string aux_str  = "Global\\bipc.sem.";
          aux_str += id_name;
@@ -107,7 +106,7 @@ class winapi_named_semaphore
             , winapi_semaphore_wrapper::MaxCount, sem_perm, created);
       }
 
-      virtual bool open(create_enum_t, const wchar_t *id_name)
+      virtual bool open(create_enum_t, const wchar_t *id_name) BOOST_OVERRIDE
       {
          std::wstring aux_str  = L"Global\\bipc.sem.";
          aux_str += id_name;
@@ -120,12 +119,12 @@ class winapi_named_semaphore
             , winapi_semaphore_wrapper::MaxCount, sem_perm, created);
       }
 
-      virtual void close()
+      virtual void close() BOOST_OVERRIDE
       {
          m_sem_wrapper.close();
       }
 
-      virtual ~named_sem_callbacks()
+      virtual ~named_sem_callbacks() BOOST_OVERRIDE
       {}
 
       private:
@@ -206,7 +205,8 @@ inline bool winapi_named_semaphore::try_wait()
    return m_sem_wrapper.try_wait();
 }
 
-inline bool winapi_named_semaphore::timed_wait(const boost::posix_time::ptime &abs_time)
+template<class TimePoint>
+inline bool winapi_named_semaphore::timed_wait(const TimePoint &abs_time)
 {
    return m_sem_wrapper.timed_wait(abs_time);
 }

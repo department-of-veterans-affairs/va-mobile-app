@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ struct NetworkSocket {
 #ifdef _WIN32
   using native_handle_type = SOCKET;
   static constexpr native_handle_type invalid_handle_value = INVALID_SOCKET;
-#elif defined(__XROS__) || defined(__EMSCRIPTEN__)
+#elif defined(__EMSCRIPTEN__)
   using native_handle_type = void*;
   static constexpr native_handle_type invalid_handle_value = nullptr;
 #else

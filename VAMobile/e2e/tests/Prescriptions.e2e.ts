@@ -302,7 +302,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text('Delivery service: USPS'))).toExist()
   })
 
-  it('verify tracking link for UPS works', async () => {
+  it(':android: verify tracking link for UPS works', async () => {
     await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).tap()
     await element(by.text('Ok')).tap()
     await setTimeout(5000)

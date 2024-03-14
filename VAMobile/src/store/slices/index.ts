@@ -12,7 +12,6 @@ import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
 
-import { initialDecisionLettersState } from './decisionLettersSlice'
 import { initialPrescriptionState } from './prescriptionSlice'
 
 export * from './accessibilitySlice'
@@ -30,7 +29,6 @@ export * from './settingsSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
-  decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
   claimsAndAppeals: initialClaimsAndAppealsState,
