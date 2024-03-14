@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@
 
 #if FOLLY_HAVE_GROUP_VARINT
 
-#if FOLLY_SSE >= 3
+#if FOLLY_SSE >= 4
 #include <nmmintrin.h>
 namespace folly {
 namespace detail {
@@ -199,7 +199,7 @@ class GroupVarint<uint32_t> : public detail::GroupVarintBase<uint32_t> {
     return decode_simple(p, dest, dest + 1, dest + 2, dest + 3);
   }
 
-#if FOLLY_SSE >= 3
+#if FOLLY_SSE >= 4
   /**
    * Just like the non-SSSE3 decode below, but with the additional constraint
    * that we must be able to read at least 17 bytes from the input pointer, p.
@@ -226,23 +226,15 @@ class GroupVarint<uint32_t> : public detail::GroupVarintBase<uint32_t> {
         _mm_load_si128((const __m128i*)detail::groupVarintSSEMasks[key].data());
     __m128i r = _mm_shuffle_epi8(val, mask);
 
-    // Extracting 32 bits at a time out of an XMM register is a SSE4 feature
-#if FOLLY_SSE >= 4
     *a = uint32_t(_mm_extract_epi32(r, 0));
     *b = uint32_t(_mm_extract_epi32(r, 1));
     *c = uint32_t(_mm_extract_epi32(r, 2));
     *d = uint32_t(_mm_extract_epi32(r, 3));
-#else /* !__SSE4__ */
-    *a = _mm_extract_epi16(r, 0) + (_mm_extract_epi16(r, 1) << 16);
-    *b = _mm_extract_epi16(r, 2) + (_mm_extract_epi16(r, 3) << 16);
-    *c = _mm_extract_epi16(r, 4) + (_mm_extract_epi16(r, 5) << 16);
-    *d = _mm_extract_epi16(r, 6) + (_mm_extract_epi16(r, 7) << 16);
-#endif /* __SSE4__ */
 
     return p + detail::groupVarintLengths[key];
   }
 
-#else /* !__SSSE3__ */
+#else // FOLLY_SSE >= 4
   static const char* decode(
       const char* p, uint32_t* a, uint32_t* b, uint32_t* c, uint32_t* d) {
     return decode_simple(p, a, b, c, d);
@@ -251,7 +243,7 @@ class GroupVarint<uint32_t> : public detail::GroupVarintBase<uint32_t> {
   static const char* decode(const char* p, uint32_t* dest) {
     return decode_simple(p, dest);
   }
-#endif /* __SSSE3__ */
+#endif // FOLLY_SSE >= 4
 
  private:
   static uint8_t key(uint32_t x) {

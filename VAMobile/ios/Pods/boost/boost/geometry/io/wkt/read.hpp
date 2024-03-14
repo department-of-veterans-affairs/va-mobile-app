@@ -1,14 +1,13 @@
 // Boost.Geometry (aka GGL, Generic Geometry Library)
 
-// Copyright (c) 2007-2012 Barend Gehrels, Amsterdam, the Netherlands.
+// Copyright (c) 2007-2022 Barend Gehrels, Amsterdam, the Netherlands.
 // Copyright (c) 2008-2012 Bruno Lalande, Paris, France.
 // Copyright (c) 2009-2012 Mateusz Loskot, London, UK.
-// Copyright (c) 2017 Adam Wulkiewicz, Lodz, Poland.
+// Copyright (c) 2017-2023 Adam Wulkiewicz, Lodz, Poland.
 // Copyright (c) 2020 Baidyanath Kundu, Haldia, India
 
-// This file was modified by Oracle on 2014-2020.
-// Modifications copyright (c) 2014-2020 Oracle and/or its affiliates.
-
+// This file was modified by Oracle on 2014-2021.
+// Modifications copyright (c) 2014-2021 Oracle and/or its affiliates.
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 
 // Parts of Boost.Geometry are redesigned from Geodan's Geographic Library
@@ -24,14 +23,13 @@
 #include <cstddef>
 #include <string>
 
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/tokenizer.hpp>
-
-#include <boost/algorithm/string.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/size.hpp>
 #include <boost/range/value_type.hpp>
+#include <boost/tokenizer.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <boost/geometry/algorithms/assign.hpp>
@@ -44,12 +42,14 @@
 #include <boost/geometry/core/exception.hpp>
 #include <boost/geometry/core/exterior_ring.hpp>
 #include <boost/geometry/core/geometry_id.hpp>
+#include <boost/geometry/core/geometry_types.hpp>
 #include <boost/geometry/core/interior_rings.hpp>
 #include <boost/geometry/core/mutable_range.hpp>
 #include <boost/geometry/core/point_type.hpp>
 #include <boost/geometry/core/tag.hpp>
 #include <boost/geometry/core/tags.hpp>
 
+#include <boost/geometry/geometries/adapted/boost_variant.hpp> // For consistency with other functions
 #include <boost/geometry/geometries/concepts/check.hpp>
 
 #include <boost/geometry/io/wkt/detail/prefix.hpp>
@@ -59,6 +59,8 @@
 #include <boost/geometry/strategies/io/spherical.hpp>
 
 #include <boost/geometry/util/coordinate_cast.hpp>
+#include <boost/geometry/util/range.hpp>
+#include <boost/geometry/util/sequence.hpp>
 #include <boost/geometry/util/type_traits.hpp>
 
 namespace boost { namespace geometry
@@ -113,19 +115,26 @@ private :
 namespace detail { namespace wkt
 {
 
-typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+inline auto make_tokenizer(std::string const& wkt)
+{
+    using separator = boost::char_separator<char>;
+    using tokenizer = boost::tokenizer<separator>;
+    const tokenizer tokens(wkt, separator(" \n\t\r", ",()"));
+    return tokens;
+}
 
 template <typename Point,
           std::size_t Dimension = 0,
           std::size_t DimensionCount = geometry::dimension<Point>::value>
 struct parsing_assigner
 {
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              Point& point,
                              std::string const& wkt)
     {
-        typedef typename coordinate_type<Point>::type coordinate_type;
+        using coordinate_type = typename coordinate_type<Point>::type;
 
         // Stop at end of tokens, or at "," ot ")"
         bool finished = (it == end || *it == "," || *it == ")");
@@ -163,8 +172,9 @@ struct parsing_assigner
 template <typename Point, std::size_t DimensionCount>
 struct parsing_assigner<Point, DimensionCount, DimensionCount>
 {
-    static inline void apply(tokenizer::iterator&,
-                             tokenizer::iterator const&,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator&,
+                             TokenizerIterator const&,
                              Point&,
                              std::string const&)
     {
@@ -222,9 +232,9 @@ template <typename Point>
 struct container_inserter
 {
     // Version with output iterator
-    template <typename OutputIterator>
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator, typename OutputIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              OutputIterator out)
     {
@@ -254,10 +264,8 @@ template <typename Geometry,
           closure_selector Closure = closure<Geometry>::value>
 struct stateful_range_appender
 {
-    typedef typename geometry::point_type<Geometry>::type point_type;
-
     // NOTE: Geometry is a reference
-    inline void append(Geometry geom, point_type const& point, bool)
+    inline void append(Geometry geom, typename geometry::point_type<Geometry>::type const& point, bool)
     {
         geometry::append(geom, point);
     }
@@ -266,13 +274,13 @@ struct stateful_range_appender
 template <typename Geometry>
 struct stateful_range_appender<Geometry, open>
 {
-    typedef typename geometry::point_type<Geometry>::type point_type;
-    typedef typename boost::range_size
+    using point_type = typename geometry::point_type<Geometry>::type;
+    using size_type = typename boost::range_size
         <
             typename util::remove_cptrref<Geometry>::type
-        >::type size_type;
+        >::type;
 
-    BOOST_STATIC_ASSERT(( util::is_ring<Geometry>::value ));
+    BOOST_STATIC_ASSERT((util::is_ring<Geometry>::value));
 
     inline stateful_range_appender()
         : pt_index(0)
@@ -286,11 +294,10 @@ struct stateful_range_appender<Geometry, open>
         if (pt_index == 0)
         {
             first_point = point;
-            //should_append = true;
         }
         else
         {
-            // NOTE: if there is not enough Points, they're always appended
+            // NOTE: if there are not enough Points, they're always appended
             should_append
                 = is_next_expected
                 || pt_index < core_detail::closure::minimum_ring_size<open>::value
@@ -308,10 +315,10 @@ private:
     static inline bool disjoint(point_type const& p1, point_type const& p2)
     {
         // TODO: pass strategy
-        typedef typename strategies::io::services::default_strategy
+        using strategy_type = typename strategies::io::services::default_strategy
             <
                 point_type
-            >::type strategy_type;
+            >::type;
 
         return detail::disjoint::disjoint_point_point(p1, p2, strategy_type());
     }
@@ -324,10 +331,11 @@ private:
 template <typename Geometry>
 struct container_appender
 {
-    typedef typename geometry::point_type<Geometry>::type point_type;
+    using point_type = typename geometry::point_type<Geometry>::type;
 
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              Geometry out)
     {
@@ -363,8 +371,9 @@ struct container_appender
 template <typename P>
 struct point_parser
 {
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              P& point)
     {
@@ -378,8 +387,9 @@ struct point_parser
 template <typename Geometry>
 struct linestring_parser
 {
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              Geometry& geometry)
     {
@@ -391,8 +401,9 @@ struct linestring_parser
 template <typename Ring>
 struct ring_parser
 {
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              Ring& ring)
     {
@@ -413,11 +424,12 @@ struct ring_parser
 template <typename Polygon>
 struct polygon_parser
 {
-    typedef typename ring_return_type<Polygon>::type ring_return_type;
-    typedef container_appender<ring_return_type> appender;
+    using ring_return_type = typename ring_return_type<Polygon>::type;
+    using appender = container_appender<ring_return_type>;
 
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              Polygon& poly)
     {
@@ -438,13 +450,7 @@ struct polygon_parser
             {
                 typename ring_type<Polygon>::type ring;
                 appender::apply(it, end, wkt, ring);
-                traits::push_back
-                    <
-                        typename std::remove_reference
-                        <
-                            typename traits::interior_mutable_type<Polygon>::type
-                        >::type
-                    >::apply(interior_rings(poly), ring);
+                range::push_back(geometry::interior_rings(poly), std::move(ring));
             }
 
             if (it != end && *it == ",")
@@ -459,7 +465,8 @@ struct polygon_parser
 };
 
 
-inline bool one_of(tokenizer::iterator const& it,
+template <typename TokenizerIterator>
+inline bool one_of(TokenizerIterator const& it,
                    std::string const& value,
                    bool& is_present)
 {
@@ -471,7 +478,8 @@ inline bool one_of(tokenizer::iterator const& it,
     return false;
 }
 
-inline bool one_of(tokenizer::iterator const& it,
+template <typename TokenizerIterator>
+inline bool one_of(TokenizerIterator const& it,
                    std::string const& value,
                    bool& present1,
                    bool& present2)
@@ -486,8 +494,9 @@ inline bool one_of(tokenizer::iterator const& it,
 }
 
 
-inline void handle_empty_z_m(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+template <typename TokenizerIterator>
+inline void handle_empty_z_m(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              bool& has_empty,
                              bool& has_z,
                              bool& has_m)
@@ -513,21 +522,36 @@ inline void handle_empty_z_m(tokenizer::iterator& it,
     }
 }
 
+
+template <typename Geometry, typename Tag = typename geometry::tag<Geometry>::type>
+struct dimension
+    : geometry::dimension<Geometry>
+{};
+
+// TODO: For now assume the dimension of the first type defined for GC
+//       This should probably be unified for all algorithms
+template <typename Geometry>
+struct dimension<Geometry, geometry_collection_tag>
+    : geometry::dimension
+        <
+            typename util::sequence_front
+                <
+                    typename traits::geometry_types<Geometry>::type
+                >::type
+        >
+{};
+
+
 /*!
 \brief Internal, starts parsing
-\param tokens boost tokens, parsed with separator " " and keeping separator "()"
-\param geometry string to compare with first token
+\param geometry_name string to compare with first token
 */
-template <typename Geometry>
-inline bool initialize(tokenizer const& tokens,
-                       std::string const& geometry_name,
+template <typename Geometry, typename TokenizerIterator>
+inline bool initialize(TokenizerIterator& it,
+                       TokenizerIterator const& end,
                        std::string const& wkt,
-                       tokenizer::iterator& it,
-                       tokenizer::iterator& end)
+                       std::string const& geometry_name)
 {
-    it = tokens.begin();
-    end = tokens.end();
-
     if (it == end || ! boost::iequals(*it++, geometry_name))
     {
         BOOST_THROW_EXCEPTION(read_wkt_exception(std::string("Should start with '") + geometry_name + "'", wkt));
@@ -539,11 +563,11 @@ inline bool initialize(tokenizer const& tokens,
 
 // Silence warning C4127: conditional expression is constant
 #if defined(_MSC_VER)
-#pragma warning(push)  
-#pragma warning(disable : 4127)  
+#pragma warning(push)
+#pragma warning(disable : 4127)
 #endif
 
-    if (has_z && dimension<Geometry>::type::value < 3)
+    if (has_z && dimension<Geometry>::value < 3)
     {
         BOOST_THROW_EXCEPTION(read_wkt_exception("Z only allowed for 3 or more dimensions", wkt));
     }
@@ -554,11 +578,10 @@ inline bool initialize(tokenizer const& tokens,
 
     if (has_empty)
     {
-        check_end(it, end, wkt);
         return false;
     }
     // M is ignored at all.
-    
+
     return true;
 }
 
@@ -570,12 +593,24 @@ struct geometry_parser
     {
         geometry::clear(geometry);
 
-        tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-        tokenizer::iterator it, end;
-        if (initialize<Geometry>(tokens, PrefixPolicy::apply(), wkt, it, end))
+        auto const tokens{make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+
+        apply(it, end, wkt, geometry);
+
+        check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             Geometry& geometry)
+    {
+        if (initialize<Geometry>(it, end, wkt, PrefixPolicy::apply()))
         {
             Parser<Geometry>::apply(it, end, wkt, geometry);
-            check_end(it, end, wkt);
         }
     }
 };
@@ -588,9 +623,22 @@ struct multi_parser
     {
         traits::clear<MultiGeometry>::apply(geometry);
 
-        tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-        tokenizer::iterator it, end;
-        if (initialize<MultiGeometry>(tokens, PrefixPolicy::apply(), wkt, it, end))
+        auto const tokens{make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+
+        apply(it, end, wkt, geometry);
+
+        check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             MultiGeometry& geometry)
+    {
+        if (initialize<MultiGeometry>(it, end, wkt, PrefixPolicy::apply()))
         {
             handle_open_parenthesis(it, end, wkt);
 
@@ -611,16 +659,15 @@ struct multi_parser
 
             handle_close_parenthesis(it, end, wkt);
         }
-
-        check_end(it, end, wkt);
     }
 };
 
 template <typename P>
 struct noparenthesis_point_parser
 {
-    static inline void apply(tokenizer::iterator& it,
-                             tokenizer::iterator const& end,
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
                              std::string const& wkt,
                              P& point)
     {
@@ -635,10 +682,22 @@ struct multi_point_parser
     {
         traits::clear<MultiGeometry>::apply(geometry);
 
-        tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-        tokenizer::iterator it, end;
+        auto const tokens{make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
 
-        if (initialize<MultiGeometry>(tokens, PrefixPolicy::apply(), wkt, it, end))
+        apply(it, end, wkt, geometry);
+
+        check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             MultiGeometry& geometry)
+    {
+        if (initialize<MultiGeometry>(it, end, wkt, PrefixPolicy::apply()))
         {
             handle_open_parenthesis(it, end, wkt);
 
@@ -674,8 +733,6 @@ struct multi_point_parser
 
             handle_close_parenthesis(it, end, wkt);
         }
-
-        check_end(it, end, wkt);
     }
 };
 
@@ -693,10 +750,22 @@ struct box_parser
 {
     static inline void apply(std::string const& wkt, Box& box)
     {
+        auto const tokens{make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+
+        apply(it, end, wkt, box);
+
+        check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             Box& box)
+    {
         bool should_close = false;
-        tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-        tokenizer::iterator it = tokens.begin();
-        tokenizer::iterator end = tokens.end();
         if (it != end && boost::iequals(*it, "POLYGON"))
         {
             ++it;
@@ -719,7 +788,7 @@ struct box_parser
             BOOST_THROW_EXCEPTION(read_wkt_exception("Should start with 'POLYGON' or 'BOX'", wkt));
         }
 
-        typedef typename point_type<Box>::type point_type;
+        using point_type = typename point_type<Box>::type;
         std::vector<point_type> points;
         container_inserter<point_type>::apply(it, end, wkt, std::back_inserter(points));
 
@@ -727,7 +796,6 @@ struct box_parser
         {
             handle_close_parenthesis(it, end, wkt);
         }
-        check_end(it, end, wkt);
 
         unsigned int index = 0;
         std::size_t n = boost::size(points);
@@ -763,12 +831,24 @@ struct segment_parser
 {
     static inline void apply(std::string const& wkt, Segment& segment)
     {
-        tokenizer tokens(wkt, boost::char_separator<char>(" ", ",()"));
-        tokenizer::iterator it = tokens.begin();
-        tokenizer::iterator end = tokens.end();
-        if (it != end &&
-            (boost::iequals(*it, "SEGMENT")
-            || boost::iequals(*it, "LINESTRING") ))
+        auto const tokens{make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+
+        apply(it, end, wkt, segment);
+
+        check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             Segment& segment)
+    {
+        if (it != end
+            && (boost::iequals(*it, prefix_segment::apply())
+                || boost::iequals(*it, prefix_linestring::apply())))
         {
             ++it;
         }
@@ -777,11 +857,9 @@ struct segment_parser
             BOOST_THROW_EXCEPTION(read_wkt_exception("Should start with 'LINESTRING' or 'SEGMENT'", wkt));
         }
 
-        typedef typename point_type<Segment>::type point_type;
+        using point_type = typename point_type<Segment>::type;
         std::vector<point_type> points;
         container_inserter<point_type>::apply(it, end, wkt, std::back_inserter(points));
-
-        check_end(it, end, wkt);
 
         if (boost::size(points) == 2)
         {
@@ -792,7 +870,149 @@ struct segment_parser
         {
             BOOST_THROW_EXCEPTION(read_wkt_exception("Segment should have 2 points", wkt));
         }
+    }
+};
 
+
+struct dynamic_move_assign
+{
+    template <typename DynamicGeometry, typename Geometry>
+    static void apply(DynamicGeometry& dynamic_geometry, Geometry & geometry)
+    {
+        dynamic_geometry = std::move(geometry);
+    }
+};
+
+struct dynamic_move_emplace_back
+{
+    template <typename GeometryCollection, typename Geometry>
+    static void apply(GeometryCollection& geometry_collection, Geometry & geometry)
+    {
+        traits::emplace_back<GeometryCollection>::apply(geometry_collection, std::move(geometry));
+    }
+};
+
+template
+<
+    typename Geometry,
+    template <typename, typename> class ReadWkt,
+    typename AppendPolicy
+>
+struct dynamic_readwkt_caller
+{
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             Geometry& geometry)
+    {
+        static const char* tag_point = prefix_point::apply();
+        static const char* tag_linestring = prefix_linestring::apply();
+        static const char* tag_polygon = prefix_polygon::apply();
+
+        static const char* tag_multi_point = prefix_multipoint::apply();
+        static const char* tag_multi_linestring = prefix_multilinestring::apply();
+        static const char* tag_multi_polygon = prefix_multipolygon::apply();
+
+        static const char* tag_segment = prefix_segment::apply();
+        static const char* tag_box = prefix_box::apply();
+        static const char* tag_gc = prefix_geometrycollection::apply();
+
+        if (boost::iequals(*it, tag_point))
+        {
+            parse_geometry<util::is_point>(tag_point, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_multi_point))
+        {
+            parse_geometry<util::is_multi_point>(tag_multi_point, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_segment))
+        {
+            parse_geometry<util::is_segment>(tag_segment, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_linestring))
+        {
+            parse_geometry<util::is_linestring>(tag_linestring, it, end, wkt, geometry, false)
+            || parse_geometry<util::is_segment>(tag_linestring, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_multi_linestring))
+        {
+            parse_geometry<util::is_multi_linestring>(tag_multi_linestring, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_box))
+        {
+            parse_geometry<util::is_box>(tag_box, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_polygon))
+        {
+            parse_geometry<util::is_polygon>(tag_polygon, it, end, wkt, geometry, false)
+            || parse_geometry<util::is_ring>(tag_polygon, it, end, wkt, geometry, false)
+            || parse_geometry<util::is_box>(tag_polygon, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_multi_polygon))
+        {
+            parse_geometry<util::is_multi_polygon>(tag_multi_polygon, it, end, wkt, geometry);
+        }
+        else if (boost::iequals(*it, tag_gc))
+        {
+            parse_geometry<util::is_geometry_collection>(tag_gc, it, end, wkt, geometry);
+        }
+        else
+        {
+            BOOST_THROW_EXCEPTION(read_wkt_exception(
+                "Should start with geometry's type, for example 'POINT', 'LINESTRING', 'POLYGON'",
+                wkt));
+        }
+    }
+
+private:
+    template
+    <
+        template <typename> class UnaryPred,
+        typename TokenizerIterator,
+        typename Geom = typename util::sequence_find_if
+            <
+                typename traits::geometry_types<Geometry>::type, UnaryPred
+            >::type,
+        std::enable_if_t<! std::is_void<Geom>::value, int> = 0
+    >
+    static bool parse_geometry(const char * ,
+                               TokenizerIterator& it,
+                               TokenizerIterator const& end,
+                               std::string const& wkt,
+                               Geometry& geometry,
+                               bool = true)
+    {
+        Geom g;
+        ReadWkt<Geom, typename tag<Geom>::type>::apply(it, end, wkt, g);
+        AppendPolicy::apply(geometry, g);
+        return true;
+    }
+
+    template
+    <
+        template <typename> class UnaryPred,
+        typename TokenizerIterator,
+        typename Geom = typename util::sequence_find_if
+            <
+                typename traits::geometry_types<Geometry>::type, UnaryPred
+            >::type,
+        std::enable_if_t<std::is_void<Geom>::value, int> = 0
+    >
+    static bool parse_geometry(const char * name,
+                               TokenizerIterator& ,
+                               TokenizerIterator const& ,
+                               std::string const& wkt,
+                               Geometry& ,
+                               bool throw_on_misfit = true)
+    {
+        if (throw_on_misfit)
+        {
+            std::string msg = std::string("Unable to store '") + name + "' in this geometry";
+            BOOST_THROW_EXCEPTION(read_wkt_exception(msg, wkt));
+        }
+
+        return false;
     }
 };
 
@@ -804,12 +1024,12 @@ struct segment_parser
 namespace dispatch
 {
 
-template <typename Tag, typename Geometry>
+template <typename Geometry, typename Tag = typename tag<Geometry>::type>
 struct read_wkt {};
 
 
 template <typename Point>
-struct read_wkt<point_tag, Point>
+struct read_wkt<Point, point_tag>
     : detail::wkt::geometry_parser
         <
             Point,
@@ -820,7 +1040,7 @@ struct read_wkt<point_tag, Point>
 
 
 template <typename L>
-struct read_wkt<linestring_tag, L>
+struct read_wkt<L, linestring_tag>
     : detail::wkt::geometry_parser
         <
             L,
@@ -830,7 +1050,7 @@ struct read_wkt<linestring_tag, L>
 {};
 
 template <typename Ring>
-struct read_wkt<ring_tag, Ring>
+struct read_wkt<Ring, ring_tag>
     : detail::wkt::geometry_parser
         <
             Ring,
@@ -840,7 +1060,7 @@ struct read_wkt<ring_tag, Ring>
 {};
 
 template <typename Geometry>
-struct read_wkt<polygon_tag, Geometry>
+struct read_wkt<Geometry, polygon_tag>
     : detail::wkt::geometry_parser
         <
             Geometry,
@@ -851,7 +1071,7 @@ struct read_wkt<polygon_tag, Geometry>
 
 
 template <typename MultiGeometry>
-struct read_wkt<multi_point_tag, MultiGeometry>
+struct read_wkt<MultiGeometry, multi_point_tag>
     : detail::wkt::multi_point_parser
             <
                 MultiGeometry,
@@ -860,7 +1080,7 @@ struct read_wkt<multi_point_tag, MultiGeometry>
 {};
 
 template <typename MultiGeometry>
-struct read_wkt<multi_linestring_tag, MultiGeometry>
+struct read_wkt<MultiGeometry, multi_linestring_tag>
     : detail::wkt::multi_parser
             <
                 MultiGeometry,
@@ -870,7 +1090,7 @@ struct read_wkt<multi_linestring_tag, MultiGeometry>
 {};
 
 template <typename MultiGeometry>
-struct read_wkt<multi_polygon_tag, MultiGeometry>
+struct read_wkt<MultiGeometry, multi_polygon_tag>
     : detail::wkt::multi_parser
             <
                 MultiGeometry,
@@ -882,15 +1102,88 @@ struct read_wkt<multi_polygon_tag, MultiGeometry>
 
 // Box (Non-OGC)
 template <typename Box>
-struct read_wkt<box_tag, Box>
+struct read_wkt<Box, box_tag>
     : detail::wkt::box_parser<Box>
 {};
 
 // Segment (Non-OGC)
 template <typename Segment>
-struct read_wkt<segment_tag, Segment>
+struct read_wkt<Segment, segment_tag>
     : detail::wkt::segment_parser<Segment>
 {};
+
+
+template <typename DynamicGeometry>
+struct read_wkt<DynamicGeometry, dynamic_geometry_tag>
+{
+    static inline void apply(std::string const& wkt, DynamicGeometry& dynamic_geometry)
+    {
+        auto tokens{detail::wkt::make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+        if (it == end)
+        {
+            BOOST_THROW_EXCEPTION(read_wkt_exception(
+                "Should start with geometry's type, for example 'POINT', 'LINESTRING', 'POLYGON'",
+                wkt));
+        }
+
+        detail::wkt::dynamic_readwkt_caller
+            <
+                DynamicGeometry, dispatch::read_wkt, detail::wkt::dynamic_move_assign
+            >::apply(it, end, wkt, dynamic_geometry);
+
+        detail::wkt::check_end(it, end, wkt);
+    }
+};
+
+
+template <typename Geometry>
+struct read_wkt<Geometry, geometry_collection_tag>
+{
+    static inline void apply(std::string const& wkt, Geometry& geometry)
+    {
+        range::clear(geometry);
+
+        auto tokens{detail::wkt::make_tokenizer(wkt)};
+        auto it = tokens.begin();
+        auto const end = tokens.end();
+
+        apply(it, end, wkt, geometry);
+
+        detail::wkt::check_end(it, end, wkt);
+    }
+
+    template <typename TokenizerIterator>
+    static inline void apply(TokenizerIterator& it,
+                             TokenizerIterator const& end,
+                             std::string const& wkt,
+                             Geometry& geometry)
+    {
+        if (detail::wkt::initialize<Geometry>(it, end, wkt,
+                detail::wkt::prefix_geometrycollection::apply()))
+        {
+            detail::wkt::handle_open_parenthesis(it, end, wkt);
+
+            // Stop at ")"
+            while (it != end && *it != ")")
+            {
+                detail::wkt::dynamic_readwkt_caller
+                    <
+                        Geometry, dispatch::read_wkt, detail::wkt::dynamic_move_emplace_back
+                    >::apply(it, end, wkt, geometry);
+
+                if (it != end && *it == ",")
+                {
+                    // Skip "," after geometry is parsed
+                    ++it;
+                }
+            }
+
+            detail::wkt::handle_close_parenthesis(it, end, wkt);
+        }
+    }
+};
 
 
 } // namespace dispatch
@@ -909,7 +1202,7 @@ template <typename Geometry>
 inline void read_wkt(std::string const& wkt, Geometry& geometry)
 {
     geometry::concepts::check<Geometry>();
-    dispatch::read_wkt<typename tag<Geometry>::type, Geometry>::apply(wkt, geometry);
+    dispatch::read_wkt<Geometry>::apply(wkt, geometry);
 }
 
 /*!
@@ -925,7 +1218,7 @@ inline Geometry from_wkt(std::string const& wkt)
 {
     Geometry geometry;
     geometry::concepts::check<Geometry>();
-    dispatch::read_wkt<typename tag<Geometry>::type, Geometry>::apply(wkt, geometry);
+    dispatch::read_wkt<Geometry>::apply(wkt, geometry);
     return geometry;
 }
 

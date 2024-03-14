@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { AppealData } from 'api/types'
@@ -55,12 +56,15 @@ context('AppealDetailsScreen', () => {
 
   describe('when the selected tab is status', () => {
     it('should display the AppealStatus component', async () => {
+      const date = DateTime.fromISO('2018-01-19T10:20:42-05:00')
+      const dateTime = date.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
       renderWithData({
         ...appealData,
         type: 'appeal',
       })
       await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Status' })))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Up to date as of ' + dateTime)).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Submitted')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Review past events')).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy())

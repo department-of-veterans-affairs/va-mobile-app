@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,24 +26,24 @@ namespace folly {
 // a and b are equivalent objects, we return b to make
 // sorting stable.
 // See http://stepanovpapers.com/notes.pdf for details.
-template <typename T>
-constexpr T constexpr_max(T a) {
-  return a;
-}
 template <typename T, typename... Ts>
-constexpr T constexpr_max(T a, T b, Ts... ts) {
-  return b < a ? constexpr_max(a, ts...) : constexpr_max(b, ts...);
+constexpr T constexpr_max(T a, Ts... ts) {
+  T list[] = {ts..., a}; // 0-length arrays are illegal
+  for (auto i = 0u; i < sizeof...(Ts); ++i) {
+    a = list[i] < a ? a : list[i];
+  }
+  return a;
 }
 
 // When a and b are equivalent objects, we return a to
 // make sorting stable.
-template <typename T>
-constexpr T constexpr_min(T a) {
-  return a;
-}
 template <typename T, typename... Ts>
-constexpr T constexpr_min(T a, T b, Ts... ts) {
-  return b < a ? constexpr_min(b, ts...) : constexpr_min(a, ts...);
+constexpr T constexpr_min(T a, Ts... ts) {
+  T list[] = {ts..., a}; // 0-length arrays are illegal
+  for (auto i = 0u; i < sizeof...(Ts); ++i) {
+    a = list[i] < a ? list[i] : a;
+  }
+  return a;
 }
 
 template <typename T, typename Less>
@@ -240,7 +240,7 @@ constexpr T constexpr_sub_overflow_clamped(T a, T b) {
 //
 // Float NaNs are converted to 0 in integral type.
 //
-// Here's some comparision with static_cast<>:
+// Here's some comparison with static_cast<>:
 // (with FB-internal gcc-5-glibc-2.23 toolchain)
 //
 // static_cast<int32_t>(NaN) = 6
@@ -313,7 +313,7 @@ constexpr float kClampCastLowerBoundFloatToInt32F = -2147483520.0f;
 constexpr float kClampCastUpperBoundFloatToInt32F = 2147483520.0f;
 constexpr float kClampCastUpperBoundFloatToUInt32F = 4294967040.0f;
 
-// This works the same as constexpr_clamp, but the comparision are done in Src
+// This works the same as constexpr_clamp, but the comparison are done in Src
 // to prevent any implicit promotions.
 template <typename D, typename S>
 constexpr D constexpr_clamp_cast_helper(S src, S sl, S su, D dl, D du) {

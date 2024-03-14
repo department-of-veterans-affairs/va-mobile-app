@@ -2,7 +2,7 @@
 // system_executor.hpp
 // ~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2003-2021 Christopher M. Kohlhoff (chris at kohlhoff dot com)
+// Copyright (c) 2003-2023 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -47,8 +47,8 @@ public:
 
 #if !defined(GENERATING_DOCUMENTATION)
 private:
-  friend struct asio_require_fn::impl;
-  friend struct asio_prefer_fn::impl;
+  friend struct boost_asio_require_fn::impl;
+  friend struct boost_asio_prefer_fn::impl;
 #endif // !defined(GENERATING_DOCUMENTATION)
 
   /// Obtain an executor with the @c blocking.possibly property.
@@ -178,7 +178,7 @@ private:
 
 #if !defined(GENERATING_DOCUMENTATION)
 private:
-  friend struct asio_query_fn::impl;
+  friend struct boost_asio_query_fn::impl;
   friend struct boost::asio::execution::detail::blocking_t<0>;
   friend struct boost::asio::execution::detail::mapping_t<0>;
   friend struct boost::asio::execution::detail::outstanding_work_t<0>;
@@ -315,20 +315,7 @@ public:
     return false;
   }
 
-#if !defined(GENERATING_DOCUMENTATION)
-private:
-  friend struct asio_execution_execute_fn::impl;
-#endif // !defined(GENERATING_DOCUMENTATION)
-
   /// Execution function.
-  /**
-   * Do not call this function directly. It is intended for use with the
-   * execution::execute customisation point.
-   *
-   * For example:
-   * @code boost::asio::system_executor ex;
-   * execution::execute(ex, my_function_object); @endcode
-   */
   template <typename Function>
   void execute(BOOST_ASIO_MOVE_ARG(Function) f) const
   {

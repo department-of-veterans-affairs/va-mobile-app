@@ -10,10 +10,7 @@
 #include <boost/core/nvp.hpp>
 #include <boost/histogram/detail/square.hpp>
 #include <boost/histogram/fwd.hpp> // for mean<>
-#include <boost/throw_exception.hpp>
-#include <cassert>
-#include <stdexcept>
-#include <type_traits>
+#include <type_traits>             // for std::integral_constant, std::common_type
 
 namespace boost {
 namespace histogram {
@@ -110,7 +107,12 @@ public:
 
   bool operator!=(const mean& rhs) const noexcept { return !operator==(rhs); }
 
-  /// Return how many samples were accumulated.
+  /** Return how many samples were accumulated.
+
+    count() should be used to check whether value() and variance() are defined,
+    see documentation of value() and variance(). count() can be used to compute
+    the variance of the mean by dividing variance() by count().
+  */
   const_reference count() const noexcept { return sum_; }
 
   /** Return mean value of accumulated samples.

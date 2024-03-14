@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -208,10 +208,6 @@ makeDismissedGuard(F&& f) noexcept(
 
 namespace detail {
 
-#if defined(FOLLY_EXCEPTION_COUNT_USE_CXA_GET_GLOBALS) || \
-    defined(FOLLY_EXCEPTION_COUNT_USE_GETPTD) ||          \
-    defined(FOLLY_EXCEPTION_COUNT_USE_STD)
-
 /**
  * ScopeGuard used for executing a function when leaving the current scope
  * depending on the presence of a new uncaught exception.
@@ -273,8 +269,6 @@ operator+(ScopeGuardOnSuccess, FunctionType&& fn) {
       false>(std::forward<FunctionType>(fn));
 }
 
-#endif // native uncaught_exception() supported
-
 /**
  * Internal use for the macro SCOPE_EXIT below
  */
@@ -290,18 +284,89 @@ ScopeGuardImpl<typename std::decay<FunctionType>::type, true> operator+(
 
 } // namespace folly
 
+//  SCOPE_EXIT
+//
+//  Example:
+//
+//      /* open scope */ {
+//
+//        some_resource_t resource;
+//        some_resource_init(resource);
+//        SCOPE_EXIT { some_resource_fini(resource); };
+//
+//        if (!cond)
+//          throw 0; // the cleanup happens at end of the scope
+//        else
+//          return; // the cleanup happens at end of the scope
+//
+//        use_some_resource(resource); // may throw; cleanup will happen
+//
+//      } /* close scope */
+//
+//  The code in the braces passed to SCOPE_EXIT executes at the end of the
+//  containing scope as if the code is the content of the destructor of an
+//  object instantiated at the point of the SCOPE_EXIT, where the destructor
+//  reference-captures all local variables it uses.
+//
+//  The cleanup code - the code in the braces passed to SCOPE_EXIT - always
+//  executes at the end of the scope, regardless of whether the scope exits
+//  normally or erroneously as if via the throw statement.
+//
+//  Caution: Suitable for coroutine functions only when the cleanup code does
+//  not use captured references to thread-local objects. Recall that there is
+//  no assumption that coroutines resume from co-await, co-yield, or co-return
+//  in the same thread as the one in which they suspend.
+//
+//  Caution: May not execute if the scope exits erroneously but stack unwinding
+//  is skipped, or if the scope does not exit at all such as with std::abort or
+//  setcontext, which fibers use.
 #define SCOPE_EXIT                               \
   auto FB_ANONYMOUS_VARIABLE(SCOPE_EXIT_STATE) = \
       ::folly::detail::ScopeGuardOnExit() + [&]() noexcept
 
-#if defined(FOLLY_EXCEPTION_COUNT_USE_CXA_GET_GLOBALS) || \
-    defined(FOLLY_EXCEPTION_COUNT_USE_GETPTD) ||          \
-    defined(FOLLY_EXCEPTION_COUNT_USE_STD)
+//  SCOPE_FAIL
+//
+//  Like SCOPE_EXIT, but the code in the braces only executes when the
+//  containing scope exits erroneously, as-if via the throw statement.
+//
+//  May be useful in situations where the caller requests a resource where
+//  initializations of the resource is multi-step and may fail.
+//
+//  Example:
+//
+//      some_resource_t resource;
+//      some_resource_init(resource);
+//      SCOPE_FAIL { some_resource_fini(resource); };
+//
+//      if (do_throw)
+//        throw 0; // the cleanup happens at the end of the scope
+//      else
+//        return resource; // the cleanup does not happen
+//
+//  Warning: Not suitable for coroutine functions.
 #define SCOPE_FAIL                               \
   auto FB_ANONYMOUS_VARIABLE(SCOPE_FAIL_STATE) = \
       ::folly::detail::ScopeGuardOnFail() + [&]() noexcept
 
+//  SCOPE_SUCCESS
+//
+//  Like SCOPE_EXIT, but the code in the braces only executes when the
+//  containing scope exits successfully, not as-if via the throw statement.
+//
+//  In a sense, the opposite of SCOPE_FAIL.
+//
+//  Example:
+//
+//      folly::stop_watch<> watch;
+//      SCOPE_FAIL { log_failure(watch.elapsed(); };
+//      SCOPE_SUCCESS { log_success(watch.elapsed(); };
+//
+//      if (do_throw)
+//        throw 0; // the cleanup does not happen; log failure
+//      else
+//        return; // the cleanup happens at the end of the scope; log success
+//
+//  Warning: Not suitable for coroutine functions.
 #define SCOPE_SUCCESS                               \
   auto FB_ANONYMOUS_VARIABLE(SCOPE_SUCCESS_STATE) = \
       ::folly::detail::ScopeGuardOnSuccess() + [&]()
-#endif // native uncaught_exception() supported

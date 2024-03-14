@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -390,7 +390,7 @@ std::string prettyPrint(double val, PrettyType type, bool addSpace) {
           buf,
           sizeof buf,
           "%.4g%s%s",
-          (suffixes[i].val ? (val / suffixes[i].val) : val),
+          (suffixes[i].val != 0. ? (val / suffixes[i].val) : val),
           (addSpace ? " " : ""),
           suffixes[i].suffix);
       return std::string(buf);
@@ -434,8 +434,8 @@ double prettyToDouble(
         "Unable to parse suffix \"", *prettyString, "\""));
   }
   prettyString->advance(size_t(longestPrefixLen));
-  return suffixes[bestPrefixId].val ? value * suffixes[bestPrefixId].val
-                                    : value;
+  return suffixes[bestPrefixId].val != 0. ? value * suffixes[bestPrefixId].val
+                                          : value;
 }
 
 double prettyToDouble(folly::StringPiece prettyString, const PrettyType type) {

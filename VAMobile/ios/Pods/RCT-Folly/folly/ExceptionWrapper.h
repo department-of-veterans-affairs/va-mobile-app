@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ namespace folly {
 //! convenience and high performance use cases. `make_exception_wrapper` is
 //! templated on derived type, allowing us to rethrow the exception properly for
 //! users that prefer convenience. These explicitly named exception types can
-//! therefore be handled without any peformance penalty. `exception_wrapper` is
+//! therefore be handled without any performance penalty. `exception_wrapper` is
 //! also flexible enough to accept any type. If a caught exception is not of an
 //! explicitly named type, then `std::exception_ptr` is used to preserve the
 //! exception state. For performance sensitive applications, the accessor
@@ -470,6 +470,9 @@ class exception_wrapper final {
   //! \pre `bool(*this)`
   [[noreturn]] void throw_exception() const;
 
+  //! Terminates the process with the wrapped expression.
+  [[noreturn]] void terminate_with() const noexcept { throw_exception(); }
+
   //! Throws the wrapped expression nested into another exception.
   //! \pre `bool(*this)`
   //! \param ex Exception in *this will be thrown nested into ex;
@@ -528,7 +531,7 @@ class exception_wrapper final {
   //! \endcode
   //! In the above example, any exception _not_ derived from `std::exception`
   //!     will be propagated. To specify a catch-all clause, pass a lambda that
-  //!     takes a C-style elipses, as in:
+  //!     takes a C-style ellipses, as in:
   //! \code
   //! ew.handle(/*...* /, [](...) { /* handle unknown exception */ } )
   //! \endcode

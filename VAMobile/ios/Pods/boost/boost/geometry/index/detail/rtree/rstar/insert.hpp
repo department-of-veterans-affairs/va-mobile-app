@@ -4,8 +4,9 @@
 //
 // Copyright (c) 2011-2015 Adam Wulkiewicz, Lodz, Poland.
 //
-// This file was modified by Oracle on 2019-2020.
-// Modifications copyright (c) 2019-2020 Oracle and/or its affiliates.
+// This file was modified by Oracle on 2019-2023.
+// Modifications copyright (c) 2019-2023 Oracle and/or its affiliates.
+// Contributed and/or modified by Vissarion Fysikopoulos, on behalf of Oracle
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 //
 // Use, modification and distribution is subject to the Boost Software License,
@@ -19,7 +20,13 @@
 
 #include <boost/core/ignore_unused.hpp>
 
+#include <boost/geometry/algorithms/centroid.hpp>
+#include <boost/geometry/algorithms/detail/comparable_distance/interface.hpp>
+
 #include <boost/geometry/index/detail/algorithms/content.hpp>
+#include <boost/geometry/index/detail/rtree/node/concept.hpp>
+#include <boost/geometry/index/detail/rtree/node/node_elements.hpp>
+#include <boost/geometry/index/detail/rtree/visitors/insert.hpp>
 
 namespace boost { namespace geometry { namespace index {
 
@@ -33,14 +40,12 @@ struct comparable_distance
 {
     typedef typename geometry::comparable_distance_result
         <
-            Point1, Point2, 
-            decltype(std::declval<Strategy>().comparable_distance(
-                        std::declval<Point1>(), std::declval<Point2>()))
+            Point1, Point2, Strategy
         >::type result_type;
 
     static inline result_type call(Point1 const& p1, Point2 const& p2, Strategy const& s)
     {
-        return geometry::comparable_distance(p1, p2, s.comparable_distance(p1, p2));
+        return geometry::comparable_distance(p1, p2, s);
     }
 };
 
@@ -103,9 +108,12 @@ public:
         BOOST_GEOMETRY_INDEX_ASSERT(elements.size() == elements_count, "unexpected elements number");
         BOOST_GEOMETRY_INDEX_ASSERT(0 < reinserted_elements_count, "wrong value of elements to reinsert");
 
+        auto const& strategy = index::detail::get_strategy(parameters);
+
         // calculate current node's center
         point_type node_center;
-        geometry::centroid(rtree::elements(*parent)[current_child_index].first, node_center);
+        geometry::centroid(rtree::elements(*parent)[current_child_index].first, node_center,
+                           strategy);
 
         // fill the container of centers' distances of children from current node's center
         typedef typename index::detail::rtree::container_from_elements_type<
@@ -116,14 +124,13 @@ public:
         sorted_elements_type sorted_elements;
         // If constructor is used instead of resize() MS implementation leaks here
         sorted_elements.reserve(elements_count);                                                         // MAY THROW, STRONG (V, E: alloc, copy)
-        
-        auto const& strategy = index::detail::get_strategy(parameters);
 
         for ( typename elements_type::const_iterator it = elements.begin() ;
               it != elements.end() ; ++it )
         {
             point_type element_center;
-            geometry::centroid( rtree::element_indexable(*it, translator), element_center);
+            geometry::centroid(rtree::element_indexable(*it, translator), element_center,
+                               strategy);
             sorted_elements.push_back(std::make_pair(
                 comparable_distance_pp::call(node_center, element_center, strategy),
                 *it));                                                                                  // MAY THROW (V, E: copy)
@@ -181,7 +188,7 @@ private:
     {
         return d1.first < d2.first;
     }
-    
+
     template <typename Distance, typename El>
     static inline bool distances_dsc(
         std::pair<Distance, El> const& d1,
@@ -458,7 +465,7 @@ struct level_insert<InsertIndex, Value, MembersHolder, true>
         base::traverse(*this, n);                                                                       // MAY THROW (V, E: alloc, copy, N: alloc)
 
         BOOST_GEOMETRY_INDEX_ASSERT(0 < base::m_level, "illegal level value, level shouldn't be the root level for 0 < InsertIndex");
-        
+
         if ( base::m_traverse_data.current_level == base::m_level - 1 )
         {
             base::handle_possible_reinsert_or_split_of_root(n);                                         // MAY THROW (E: alloc, copy, N: alloc)
@@ -474,7 +481,7 @@ struct level_insert<InsertIndex, Value, MembersHolder, true>
         BOOST_GEOMETRY_INDEX_ASSERT(base::m_level == base::m_traverse_data.current_level ||
                                     base::m_level == (std::numeric_limits<size_t>::max)(),
                                     "unexpected level");
-        
+
         rtree::elements(n).push_back(base::m_element);                                                  // MAY THROW, STRONG (V: alloc, copy)
 
         base::handle_possible_split(n);                                                                 // MAY THROW (V: alloc, copy, N: alloc)
@@ -532,7 +539,7 @@ struct level_insert<0, Value, MembersHolder, true>
         rtree::elements(n).push_back(base::m_element);                                                  // MAY THROW, STRONG (V: alloc, copy)
 
         base::handle_possible_reinsert_or_split_of_root(n);                                             // MAY THROW (V: alloc, copy, N: alloc)
-        
+
         base::recalculate_aabb_if_necessary(n);
     }
 };
@@ -594,7 +601,7 @@ public:
             visitors::insert<Element, MembersHolder, insert_default_tag> ins_v(
                 m_root, m_leafs_level, m_element, m_parameters, m_translator, m_allocators, m_relative_level);
 
-            rtree::apply_visitor(ins_v, *m_root); 
+            rtree::apply_visitor(ins_v, *m_root);
         }
     }
 
@@ -619,7 +626,7 @@ public:
             visitors::insert<Element, MembersHolder, insert_default_tag> ins_v(
                 m_root, m_leafs_level, m_element, m_parameters, m_translator, m_allocators, m_relative_level);
 
-            rtree::apply_visitor(ins_v, *m_root); 
+            rtree::apply_visitor(ins_v, *m_root);
         }
     }
 
