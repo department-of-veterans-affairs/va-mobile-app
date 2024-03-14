@@ -22,10 +22,9 @@ import {
   BoxProps,
   CategoryLanding,
   EncourageUpdateAlert,
+  LinkRow,
   LoadingComponent,
   Nametag,
-  SimpleList,
-  SimpleListItemObj,
   TextView,
   VAIcon,
   VAIconProps,
@@ -170,10 +169,6 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
-  const onContactVA = () => {
-    navigateTo('ContactVA')
-  }
-
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -182,15 +177,6 @@ export function HomeScreen({}: HomeScreenProps) {
       loadingMessage: t('webview.valocation.loading'),
     })
   }
-
-  const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
-    {
-      text: t('findLocation.title'),
-      onPress: onFacilityLocator,
-      testId: a11yLabelVA(t('findLocation.title')),
-    },
-  ]
 
   const profileIconProps: VAIconProps = {
     name: 'ProfileSelected',
@@ -357,7 +343,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <>
-              <Nametag screen={'Home'} />
+              <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {disRating && (
                   <Box
@@ -409,13 +395,22 @@ export function HomeScreen({}: HomeScreenProps) {
               </Box>
             </>
           )}
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-              {t('aboutVA')}
-            </TextView>
-          </Box>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <SimpleList items={buttonDataList} />
+        </Box>
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('vaResources')}
+          </TextView>
+          <Box mx={theme.dimensions.condensedMarginBetween}>
+            <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
+            <LinkRow
+              title={t('findLocation.title')}
+              titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
+              onPress={onFacilityLocator}
+            />
           </Box>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>

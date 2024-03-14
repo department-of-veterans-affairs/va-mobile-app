@@ -77,6 +77,7 @@ export type VATextColors = {
   activityButton: string
   announcementBanner: string
   homeScreen: string
+  profileScreen: string
   activityFooter: string
 }
 
@@ -120,7 +121,7 @@ export type VAIconColors = {
   announcementBanner: string
   inlineSpinner: string
   homeScreenError: string
-  veteranStatusHomeArrow: string
+  linkRow: string
 }
 
 export type VATypographyThemeVariants = {
@@ -143,6 +144,7 @@ export type VATypographyThemeVariants = {
   MobileBodyLink: string
   MobileBodyTight: string
   NametagNumber: string
+  ProfileScreenHeader: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
@@ -196,6 +198,7 @@ export type VABackgroundColors = {
   tagGreen: string
   veteranStatus: string
   veteranStatusHome: string
+  linkRow: string
 }
 
 export type VABorderColors = {
@@ -293,6 +296,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    linkRowChevronPaddingRight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number

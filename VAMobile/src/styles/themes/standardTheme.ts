@@ -84,6 +84,10 @@ const fontSizes = {
     fontSize: 18,
     lineHeight: 22,
   },
+  ProfileScreenHeader: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
   HelperText: {
     fontSize: 16,
     lineHeight: 24,
@@ -187,10 +191,11 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.DescriptiveBackButton,
       scheme.text.descriptiveBackButton,
     ),
-    HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
-    HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
+    HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
+    HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
+    ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
@@ -250,6 +255,7 @@ let theme: VATheme = {
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
     fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
