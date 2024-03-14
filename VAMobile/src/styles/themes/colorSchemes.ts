@@ -113,6 +113,8 @@ export const lightTheme = {
     transparent: colors.transparent,
     activityButton: colors.white,
     announcementBanner: DSColors.primary,
+    inlineSpinner: DSColors.primary,
+    homeScreenError: DSColors.secondaryDark,
     veteranStatusHomeArrow: DSColors.base,
   },
   text: {
@@ -157,6 +159,7 @@ export const lightTheme = {
     crisisLineButton: colors.white,
     activityButton: colors.white,
     announcementBanner: DSColors.base,
+    homeScreen: DSColors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -321,6 +324,8 @@ export const darkTheme = {
     transparent: colors.transparent,
     activityButton: colors.black,
     announcementBanner: DSColors.uswdsBlueVivid30,
+    inlineSpinner: DSColors.uswdsBlueVivid30,
+    homeScreenError: DSColors.uswdsRedVivid40,
     veteranStatusHomeArrow: DSColors.grayLightest,
   },
   text: {
@@ -363,6 +368,7 @@ export const darkTheme = {
     crisisLineButton: colors.black,
     activityButton: colors.black,
     announcementBanner: DSColors.grayLightest,
+    homeScreen: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
