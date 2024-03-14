@@ -1,6 +1,7 @@
 // Boost.Geometry
 
 // Copyright (c) 2018 Adeel Ahmad, Islamabad, Pakistan.
+// Copyright (c) 2023 Adam Wulkiewicz, Lodz, Poland.
 
 // Contributed and/or modified by Adeel Ahmad, as part of Google Summer of Code 2018 program.
 
@@ -36,6 +37,7 @@
 
 #include <boost/geometry/util/condition.hpp>
 #include <boost/geometry/util/math.hpp>
+#include <boost/geometry/util/precise_math.hpp>
 #include <boost/geometry/util/series_expansion.hpp>
 #include <boost/geometry/util/normalize_spheroidal_coordinates.hpp>
 
@@ -51,16 +53,20 @@ namespace boost { namespace geometry { namespace math {
 template<typename T>
 inline T difference_angle(T const& x, T const& y, T& e)
 {
-    T t, d = math::sum_error(std::remainder(-x, T(360)), std::remainder(y, T(360)), t);
+    auto res1 = boost::geometry::detail::precise_math::two_sum(
+        std::remainder(-x, T(360)), std::remainder(y, T(360)));
 
-    normalize_azimuth<degree, T>(d);
+    normalize_azimuth<degree, T>(res1[0]);
 
     // Here y - x = d + t (mod 360), exactly, where d is in (-180,180] and
     // abs(t) <= eps (eps = 2^-45 for doubles).  The only case where the
     // addition of t takes the result outside the range (-180,180] is d = 180
     // and t > 0.  The case, d = -180 + eps, t = -eps, can't happen, since
     // sum_error would have returned the exact result in such a case (i.e., given t = 0).
-    return math::sum_error(d == 180 && t > 0 ? -180 : d, t, e);
+    auto res2 = boost::geometry::detail::precise_math::two_sum(
+        res1[0] == 180 && res1[1] > 0 ? -180 : res1[0], res1[1]);
+    e = res2[1];
+    return res2[0];
 }
 
 }}} // namespace boost::geometry::math
@@ -262,8 +268,8 @@ public:
             CT sin_sigma2 = sin_beta2;
             CT cos_sigma2 = cos_alpha2 * cos_beta2;
 
-            CT sigma12 = std::atan2((std::max)(c0, cos_sigma1 * sin_sigma2 - sin_sigma1 * cos_sigma2),
-                                                   cos_sigma1 * cos_sigma2 + sin_sigma1 * sin_sigma2);
+            sigma12 = std::atan2((std::max)(c0, cos_sigma1 * sin_sigma2 - sin_sigma1 * cos_sigma2),
+                                                cos_sigma1 * cos_sigma2 + sin_sigma1 * sin_sigma2);
 
             CT dummy;
             meridian_length(n, ep2, sigma12, sin_sigma1, cos_sigma1, dn1,
@@ -276,7 +282,7 @@ public:
             {
                 if (sigma12 < c3 * tiny)
                 {
-                    sigma12  = m12x = s12x = c0;
+                    sigma12 = m12x = s12x = c0;
                 }
 
                 m12x *= b;
@@ -376,7 +382,7 @@ public:
                         cos_alpha1 / sin_alpha1 > cos_alpha1b / sin_alpha1b))
                     {
                         sin_alpha1b = sin_alpha1;
-                        cos_alpha1b = cos_alpha1;   
+                        cos_alpha1b = cos_alpha1;
                     }
                     else if (v < c0 && (iteration > max_iterations ||
                              cos_alpha1 / sin_alpha1 < cos_alpha1a / sin_alpha1a))

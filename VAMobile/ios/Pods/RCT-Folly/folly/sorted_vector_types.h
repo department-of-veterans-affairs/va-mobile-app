@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -594,8 +594,9 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     return std::equal_range(begin(), end(), key, key_comp());
   }
 
-  // Nothrow as long as swap() on the Compare type is nothrow.
-  void swap(sorted_vector_set& o) {
+  void swap(sorted_vector_set& o) noexcept(
+      IsNothrowSwappable<Compare>::value&& noexcept(
+          std::declval<Container&>().swap(o.m_.cont_))) {
     using std::swap; // Allow ADL for swap(); fall back to std::swap().
     Compare& a = m_;
     Compare& b = o.m_;
@@ -878,7 +879,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
   const_iterator end() const { return m_.cont_.end(); }
   reverse_iterator rbegin() { return m_.cont_.rbegin(); }
   reverse_iterator rend() { return m_.cont_.rend(); }
+  const_reverse_iterator crbegin() const { return m_.cont_.crbegin(); }
   const_reverse_iterator rbegin() const { return m_.cont_.rbegin(); }
+  const_reverse_iterator crend() const { return m_.cont_.crend(); }
   const_reverse_iterator rend() const { return m_.cont_.rend(); }
 
   void clear() { return m_.cont_.clear(); }

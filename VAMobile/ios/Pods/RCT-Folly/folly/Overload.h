@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 #include <type_traits>
 #include <utility>
 
+#include <folly/Portability.h>
 #include <folly/Traits.h>
 #include <folly/functional/Invoke.h>
 
@@ -69,8 +70,11 @@ decltype(auto) overload(Cases&&... cases) {
 
 namespace overload_detail {
 FOLLY_CREATE_MEMBER_INVOKER(valueless_by_exception, valueless_by_exception);
+FOLLY_PUSH_WARNING
+FOLLY_MSVC_DISABLE_WARNING(4003) /* not enough arguments to macro */
 FOLLY_CREATE_FREE_INVOKER(visit, visit);
 FOLLY_CREATE_FREE_INVOKER(apply_visitor, apply_visitor);
+FOLLY_POP_WARNING
 } // namespace overload_detail
 
 /*
@@ -95,6 +99,28 @@ decltype(auto) variant_match(Variant&& variant, Cases&&... cases) {
       overload_detail::apply_visitor>;
   return invoker{}(
       overload(std::forward<Cases>(cases)...), std::forward<Variant>(variant));
+}
+
+template <typename R, typename Variant, typename... Cases>
+R variant_match(Variant&& variant, Cases&&... cases) {
+  auto f = [&](auto&& v) -> R {
+#if __cpp_if_constexpr >= 201606L
+    if constexpr (std::is_void<R>::value) {
+      overload(std::forward<Cases>(cases)...)(v);
+    } else {
+      return overload(std::forward<Cases>(cases)...)(v);
+    }
+#else
+    return static_cast<R>(overload(std::forward<Cases>(cases)...)(v));
+#endif
+  };
+  using invoker = std::conditional_t<
+      folly::Conjunction<
+          is_invocable<overload_detail::valueless_by_exception, Variant>,
+          is_invocable<overload_detail::visit, decltype(f), Variant>>::value,
+      overload_detail::visit,
+      overload_detail::apply_visitor>;
+  return invoker{}(f, std::forward<Variant>(variant));
 }
 
 } // namespace folly

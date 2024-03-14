@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -517,6 +517,17 @@ class ValueContainerPolicy : public BasePolicy<
   using Item = typename Super::Item;
   using ItemIter = typename Super::ItemIter;
   using Value = typename Super::Value;
+  using KeyEqual = typename Super::KeyEqual;
+  using Hasher = typename Super::Hasher;
+  using Mapped = typename Super::Mapped;
+
+  static constexpr bool kDefaultConstructIsNoexcept =
+      Super::kDefaultConstructIsNoexcept;
+  static constexpr bool kAllocIsAlwaysEqual = Super::kAllocIsAlwaysEqual;
+  static constexpr bool kEnableItemIteration = Super::kEnableItemIteration;
+  static constexpr bool kContinuousCapacity = Super::kContinuousCapacity;
+  static constexpr auto isAvalanchingHasher = Super::isAvalanchingHasher;
+  static constexpr bool kSwapIsNoexcept = Super::kSwapIsNoexcept;
 
  private:
   using ByteAlloc = typename Super::ByteAlloc;

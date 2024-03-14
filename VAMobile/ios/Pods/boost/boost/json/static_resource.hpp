@@ -14,11 +14,12 @@
 #include <boost/json/memory_resource.hpp>
 #include <cstddef>
 
-BOOST_JSON_NS_BEGIN
+namespace boost {
+namespace json {
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 4275) // non dll-interface class used as base for dll-interface class 
+#pragma warning(disable: 4275) // non dll-interface class used as base for dll-interface class
 #endif
 
 //----------------------------------------------------------
@@ -39,7 +40,7 @@ BOOST_JSON_NS_BEGIN
 \n
     @par Example
 
-    This parses a JSON into a value which uses a local
+    This parses a JSON text into a value which uses a local
     stack buffer, then prints the result.
 
     @code
@@ -65,7 +66,7 @@ BOOST_JSON_NS_BEGIN
 class BOOST_JSON_CLASS_DECL
     static_resource final
     : public memory_resource
-{   
+{
     void* p_;
     std::size_t n_;
     std::size_t size_;
@@ -238,6 +239,7 @@ struct is_deallocate_trivial<
     static constexpr bool value = true;
 };
 
-BOOST_JSON_NS_END
+} // namespace json
+} // namespace boost
 
 #endif

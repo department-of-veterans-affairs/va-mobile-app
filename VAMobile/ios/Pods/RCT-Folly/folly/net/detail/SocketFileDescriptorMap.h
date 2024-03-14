@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ struct SocketFileDescriptorMap {
 
   static SOCKET fdToSocket(int fd) noexcept;
   static int socketToFd(SOCKET sock) noexcept;
-#elif defined(__XROS__) || defined(__EMSCRIPTEN__)
+#elif defined(__EMSCRIPTEN__)
   static int close(int fd) noexcept;
   static int close(void* sock) noexcept;
 

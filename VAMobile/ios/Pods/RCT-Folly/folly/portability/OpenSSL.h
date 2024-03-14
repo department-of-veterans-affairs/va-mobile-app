@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,10 @@
 #include <folly/Portability.h>
 
 #include <openssl/opensslv.h>
+
+// The OpenSSL public header that describes build time configuration and
+// availability (or lack of availability) of certain optional ciphers.
+#include <openssl/opensslconf.h>
 
 #include <openssl/asn1.h>
 #include <openssl/bio.h>
@@ -60,6 +64,14 @@
   (OPENSSL_VERSION_NUMBER >= 0x1000200fL && \
    OPENSSL_VERSION_NUMBER < 0x10100000L)
 #define FOLLY_OPENSSL_IS_110 (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+// OPENSSL_VERSION_{MAJOR,MINOR} only introduced in 3.0, so need to
+// test if they are defined first
+#if defined(OPENSSL_VERSION_MAJOR) && defined(OPENSSL_VERSION_MINOR)
+#define FOLLY_OPENSSL_IS_30X \
+  OPENSSL_VERSION_MAJOR == 3 && OPENSSL_VERSION_MINOR == 0
+#else
+#define FOLLY_OPENSSL_IS_30X 0
+#endif
 
 // Defined according to version number description in
 // https://www.openssl.org/docs/man1.1.1/man3/OPENSSL_VERSION_NUMBER.html
@@ -91,11 +103,25 @@
 #define FOLLY_OPENSSL_HAS_ALPN 0
 #endif
 
-// OpenSSL 1.1.1 and above have TLS 1.3 support
+/**
+ * OpenSSL 1.1.1 specific checks.
+ */
 #if OPENSSL_VERSION_NUMBER >= 0x1010100fL
+
+// TLS 1.3 was introduced in OpenSSL 1.1.1
 #define FOLLY_OPENSSL_HAS_TLS13 1
+
+// OpenSSL 1.1.1 introduced several new ciphers and digests. Unless they are
+// explicitly compiled out, they are assumed to be present
+#if !defined(OPENSSL_NO_BLAKE2)
+#define FOLLY_OPENSSL_HAS_BLAKE2B 1
+#else
+#define FOLLY_OPENSSL_HAS_BLAKE2B 0
+#endif
+
 #else
 #define FOLLY_OPENSSL_HAS_TLS13 0
+#define FOLLY_OPENSSL_HAS_BLAKE2B 0
 #endif
 
 #if FOLLY_OPENSSL_IS_110 && \

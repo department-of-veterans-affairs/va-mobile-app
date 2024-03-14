@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -247,12 +247,27 @@ struct SharedMutexToken {
     DEFERRED_SHARED,
   };
 
-  Type type_;
-  uint16_t slot_;
+  Type type_{};
+  uint16_t slot_{};
+
+  constexpr SharedMutexToken() = default;
+
+  explicit operator bool() const { return type_ != Type::INVALID; }
 };
 
+#ifndef FOLLY_SHARED_MUTEX_MAX_SPIN_DEFAULT
+#define FOLLY_SHARED_MUTEX_MAX_SPIN_DEFAULT 2
+#endif
+
+#ifndef FOLLY_SHARED_MUTEX_MAX_YIELD_DEFAULT
+#define FOLLY_SHARED_MUTEX_MAX_YIELD_DEFAULT 1
+#endif
+
 struct SharedMutexPolicyDefault {
-  static constexpr bool block_immediately = false;
+  static constexpr uint32_t max_spin_count =
+      FOLLY_SHARED_MUTEX_MAX_SPIN_DEFAULT;
+  static constexpr uint32_t max_soft_yield_count =
+      FOLLY_SHARED_MUTEX_MAX_YIELD_DEFAULT;
   static constexpr bool track_thread_id = false;
   static constexpr bool skip_annotate_rwlock = false;
 };
@@ -336,13 +351,11 @@ class SharedMutexImpl : std::conditional_t<
                             shared_mutex_detail::ThreadIdOwnershipTracker,
                             shared_mutex_detail::NopOwnershipTracker> {
  private:
-  static constexpr bool BlockImmediately = Policy::block_immediately;
   static constexpr bool AnnotateForThreadSanitizer =
       kIsSanitizeThread && !ReaderPriority && !Policy::skip_annotate_rwlock;
-  static constexpr bool TrackThreadId = Policy::track_thread_id;
 
   typedef std::conditional_t<
-      TrackThreadId,
+      Policy::track_thread_id,
       shared_mutex_detail::ThreadIdOwnershipTracker,
       shared_mutex_detail::NopOwnershipTracker>
       OwnershipTrackerBase;
@@ -909,11 +922,8 @@ class SharedMutexImpl : std::conditional_t<
   static constexpr uint32_t kNumSharedToStartDeferring = 2;
 
   // The typical number of spins that a thread will wait for a state
-  // transition.  There is no bound on the number of threads that can wait
-  // for a writer, so we are pretty conservative here to limit the chance
-  // that we are starving the writer of CPU.  Each spin is 6 or 7 nanos,
-  // almost all of which is in the pause instruction.
-  static constexpr uint32_t kMaxSpinCount = !BlockImmediately ? 1000 : 2;
+  // transition.
+  static constexpr uint32_t kMaxSpinCount = Policy::max_spin_count;
 
   // The maximum number of soft yields before falling back to futex.
   // If the preemption heuristic is activated we will fall back before
@@ -921,7 +931,7 @@ class SharedMutexImpl : std::conditional_t<
   // to getrusage, with checks of the goal at each step).  Soft yields
   // aren't compatible with deterministic execution under test (unlike
   // futexWaitUntil, which has a capricious but deterministic back end).
-  static constexpr uint32_t kMaxSoftYieldCount = !BlockImmediately ? 1000 : 0;
+  static constexpr uint32_t kMaxSoftYieldCount = Policy::max_soft_yield_count;
 
   // If AccessSpreader assigns indexes from 0..k*n-1 on a system where some
   // level of the memory hierarchy is symmetrically divided into k pieces
@@ -1093,12 +1103,12 @@ class SharedMutexImpl : std::conditional_t<
       if ((state & goal) == 0) {
         return true;
       }
-      asm_volatile_pause();
-      ++spinCount;
-      if (UNLIKELY(spinCount >= kMaxSpinCount)) {
+      if (UNLIKELY(spinCount == kMaxSpinCount)) {
         return ctx.canBlock() &&
             yieldWaitForZeroBits(state, goal, waitMask, ctx);
       }
+      asm_volatile_pause();
+      ++spinCount;
     }
   }
 
@@ -1319,7 +1329,7 @@ class SharedMutexImpl : std::conditional_t<
     assert(state < state + kIncrHasS);
   }
 
-  // It is straightfoward to make a token-less lock_shared() and
+  // It is straightforward to make a token-less lock_shared() and
   // unlock_shared() either by making the token-less version always use
   // INLINE_SHARED mode or by removing the token version.  Supporting
   // deferred operation for both types is trickier than it appears, because

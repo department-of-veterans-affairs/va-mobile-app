@@ -42,22 +42,19 @@ inline bool is_simple_ring(Ring const& ring, Strategy const& strategy)
 {
     simplicity_failure_policy policy;
     return ! boost::empty(ring)
-        && ! detail::is_valid::has_duplicates
-                <
-                    Ring, geometry::closure<Ring>::value
-                >::apply(ring, policy, strategy);
+        && ! detail::is_valid::has_duplicates<Ring>::apply(ring, policy, strategy);
 }
 
 template <typename InteriorRings, typename Strategy>
 inline bool are_simple_interior_rings(InteriorRings const& interior_rings,
                                       Strategy const& strategy)
 {
-    auto const end = boost::end(interior_rings);
-    return std::find_if(boost::begin(interior_rings), end,
-                        [&](auto const& r)
-                        {
-                            return ! is_simple_ring(r, strategy);
-                        }) == end; // non-simple ring not found
+    return std::all_of(boost::begin(interior_rings),
+                       boost::end(interior_rings),
+                       [&](auto const& r)
+                       {
+                           return is_simple_ring(r, strategy);
+                       }); // non-simple ring not found
     // allow empty ring
 }
 
@@ -119,12 +116,11 @@ struct is_simple<MultiPolygon, multi_polygon_tag>
     template <typename Strategy>
     static inline bool apply(MultiPolygon const& multipolygon, Strategy const& strategy)
     {
-        auto const end = boost::end(multipolygon);
-        return std::find_if(boost::begin(multipolygon), end,
-                [&](auto const& po) {
-                    return ! detail::is_simple::is_simple_polygon(po, strategy);
-                }) == end; // non-simple polygon not found
-                // allow empty multi-polygon
+        return std::none_of(boost::begin(multipolygon), boost::end(multipolygon),
+                            [&](auto const& po) {
+                                return ! detail::is_simple::is_simple_polygon(po, strategy);
+                            }); // non-simple polygon not found
+                                // allow empty multi-polygon
     }
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -264,10 +264,9 @@ inline bool atDelim(const char* s, StringPiece sp) {
 
 // These are used to short-circuit internalSplit() in the case of
 // 1-character strings.
-inline char delimFront(char c) {
+inline char delimFront(char) {
   // This one exists only for compile-time; it should never be called.
   std::abort();
-  return c;
 }
 inline char delimFront(StringPiece s) {
   assert(!s.empty() && s.start() != nullptr);
@@ -556,7 +555,7 @@ void humanify(const String1& input, String2& output) {
   // hexlify doubles a string's size; backslashify can potentially
   // explode it by 4x.  Now, the printable range of the ascii
   // "spectrum" is around 95 out of 256 values, so a "random" binary
-  // string should be around 60% unprintable.  We use a 50% hueristic
+  // string should be around 60% unprintable.  We use a 50% heuristic
   // here, so if a string is 60% unprintable, then we just use hex
   // output.  Otherwise we backslash.
   //
