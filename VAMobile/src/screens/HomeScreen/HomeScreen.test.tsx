@@ -3,6 +3,7 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { initialPrescriptionState } from 'store/slices'
 import { initialClaimsAndAppealsState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
@@ -24,6 +25,21 @@ jest.mock('utils/remoteConfig')
 context('HomeScreen', () => {
   const initializeTestInstance = (refillablePrescriptionsCount?: number, activeClaimsCount?: number) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+    const queriesData = [
+      {
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: null,
+          hasFacilityTransitioningToCerner: false,
+        },
+      },
+    ]
     render(<HomeScreen {...props} />, {
       preloadedState: {
         prescriptions: {
@@ -37,6 +53,7 @@ context('HomeScreen', () => {
           activeClaimsCount: activeClaimsCount || 0,
         },
       },
+      queriesData,
     })
   }
 
