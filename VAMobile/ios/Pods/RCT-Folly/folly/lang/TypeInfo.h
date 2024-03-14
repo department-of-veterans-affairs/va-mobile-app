@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@
 #if FOLLY_HAS_RTTI
 #define FOLLY_TYPE_INFO_OF(...) (&typeid(__VA_ARGS__))
 #else
-#define FOLLY_TYPE_INFO_OF(...) (static_cast<std::type_info const*>(nullptr))
+#define FOLLY_TYPE_INFO_OF(...) \
+  ((sizeof(__VA_ARGS__)), static_cast<std::type_info const*>(nullptr))
 #endif
 
 namespace folly {

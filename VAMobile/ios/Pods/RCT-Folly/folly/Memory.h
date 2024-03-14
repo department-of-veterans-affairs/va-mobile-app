@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,26 +42,12 @@
 
 namespace folly {
 
-/// allocateBytes and deallocateBytes work like a checkedMalloc/free pair,
-/// but take advantage of sized deletion when available
-inline void* allocateBytes(size_t n) {
-  return ::operator new(n);
-}
-
-inline void deallocateBytes(void* p, size_t n) {
-#if __cpp_sized_deallocation
-  return ::operator delete(p, n);
-#else
-  (void)n;
-  return ::operator delete(p);
-#endif
-}
-
-#if _POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600 ||   \
-    (defined(__ANDROID__) && (__ANDROID_API__ > 16)) ||     \
-    (defined(__APPLE__) &&                                  \
-     (__MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6 ||      \
-      __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_0)) || \
+#if (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L) || \
+    (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600) ||         \
+    (defined(__ANDROID__) && (__ANDROID_API__ > 16)) ||         \
+    (defined(__APPLE__) &&                                      \
+     (__MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6 ||          \
+      __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_3_0)) ||     \
     defined(__FreeBSD__) || defined(__wasm32__)
 
 inline void* aligned_malloc(size_t size, size_t align) {
@@ -118,7 +104,7 @@ void rawOverAlignedImpl(Alloc const& alloc, size_t n, void*& raw) {
   static_assert(
       sizeof(BaseType) == kBaseAlign && alignof(BaseType) == kBaseAlign, "");
 
-#if __cpp_sized_deallocation
+#if defined(__cpp_sized_deallocation)
   if (kCanBypass && kAlign == kBaseAlign) {
     // until std::allocator uses sized deallocation, it is worth the
     // effort to bypass it when we are able
@@ -357,7 +343,7 @@ std::weak_ptr<T> to_weak_ptr(const std::shared_ptr<T>& ptr) {
   return ptr;
 }
 
-#if __GLIBCXX__
+#if defined(__GLIBCXX__)
 namespace detail {
 void weak_ptr_set_stored_ptr(std::weak_ptr<void>& w, void* ptr);
 
@@ -396,10 +382,13 @@ template struct GenerateWeakPtrInternalsAccessor<
  */
 template <typename T, typename U>
 std::weak_ptr<U> to_weak_ptr_aliasing(const std::shared_ptr<T>& r, U* ptr) {
-#if __GLIBCXX__
+#if defined(__GLIBCXX__)
   std::weak_ptr<void> wv(r);
   detail::weak_ptr_set_stored_ptr(wv, ptr);
+  FOLLY_PUSH_WARNING
+  FOLLY_GCC_DISABLE_WARNING("-Wstrict-aliasing")
   return reinterpret_cast<std::weak_ptr<U>&&>(wv);
+  FOLLY_POP_WARNING
 #else
   return std::shared_ptr<U>(r, ptr);
 #endif
@@ -429,17 +418,38 @@ std::shared_ptr<remove_cvref_t<T>> copy_to_shared_ptr(T&& t) {
   return std::make_shared<remove_cvref_t<T>>(static_cast<T&&>(t));
 }
 
+/**
+ *  copy_through_unique_ptr
+ *
+ *  If the argument is nonnull, allocates a copy of its pointee.
+ */
+template <typename T>
+std::unique_ptr<T> copy_through_unique_ptr(const std::unique_ptr<T>& t) {
+  static_assert(
+      !std::is_polymorphic<T>::value || std::is_final<T>::value,
+      "possibly slicing");
+  return t ? std::make_unique<T>(*t) : nullptr;
+}
+
 //  erased_unique_ptr
 //
 //  A type-erased smart-ptr with unique ownership to a heap-allocated object.
 using erased_unique_ptr = std::unique_ptr<void, void (*)(void*)>;
+
+namespace detail {
+// for erased_unique_ptr with types that specialize default_delete
+template <typename T>
+void erased_unique_ptr_delete(void* ptr) {
+  std::default_delete<T>()(static_cast<T*>(ptr));
+}
+} // namespace detail
 
 //  to_erased_unique_ptr
 //
 //  Converts an owning pointer to an object to an erased_unique_ptr.
 template <typename T>
 erased_unique_ptr to_erased_unique_ptr(T* const ptr) noexcept {
-  return {ptr, detail::thunk::ruin<T>};
+  return {ptr, detail::erased_unique_ptr_delete<T>};
 }
 
 //  to_erased_unique_ptr
@@ -744,12 +754,18 @@ class allocator_delete : private std::remove_reference<Alloc>::type {
  * allocate_unique, like std::allocate_shared but for std::unique_ptr
  */
 template <typename T, typename Alloc, typename... Args>
-std::unique_ptr<T, allocator_delete<Alloc>> allocate_unique(
-    Alloc const& alloc, Args&&... args) {
-  using traits = std::allocator_traits<Alloc>;
+std::unique_ptr<
+    T,
+    allocator_delete<
+        typename std::allocator_traits<Alloc>::template rebind_alloc<T>>>
+allocate_unique(Alloc const& alloc, Args&&... args) {
+  using TAlloc =
+      typename std::allocator_traits<Alloc>::template rebind_alloc<T>;
+
+  using traits = std::allocator_traits<TAlloc>;
   struct DeferCondDeallocate {
     bool& cond;
-    Alloc& copy;
+    TAlloc& copy;
     T* p;
     ~DeferCondDeallocate() {
       if (FOLLY_UNLIKELY(!cond)) {
@@ -757,7 +773,7 @@ std::unique_ptr<T, allocator_delete<Alloc>> allocate_unique(
       }
     }
   };
-  auto copy = alloc;
+  auto copy = TAlloc(alloc);
   auto const p = traits::allocate(copy, 1);
   {
     bool constructed = false;
@@ -765,7 +781,7 @@ std::unique_ptr<T, allocator_delete<Alloc>> allocate_unique(
     traits::construct(copy, p, static_cast<Args&&>(args)...);
     constructed = true;
   }
-  return {p, allocator_delete<Alloc>(std::move(copy))};
+  return {p, allocator_delete<TAlloc>(std::move(copy))};
 }
 
 struct SysBufferDeleter {

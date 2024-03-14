@@ -1,5 +1,4 @@
 export * from './UserData'
-export * from './DecisionLettersData'
 export * from './AppointmentData'
 export * from './ClaimsAndAppealsData'
 export * from './Errors'

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,9 +83,10 @@ json_pointer::json_pointer(std::vector<std::string> tokens) noexcept
 
 // private, static
 bool json_pointer::unescape(std::string& str) {
-  char const* end = &str[str.size()];
-  char* out = &str.front();
-  char const* decode = out;
+  char* out = &str[0];
+  char const* begin = out;
+  char const* end = begin + str.size();
+  char const* decode = begin;
   while (decode < end) {
     if (*decode != '~') {
       *out++ = *decode++;
@@ -106,7 +107,7 @@ bool json_pointer::unescape(std::string& str) {
     }
     decode += 2;
   }
-  str.resize(out - &str.front());
+  str.resize(out - begin);
   return true;
 }
 

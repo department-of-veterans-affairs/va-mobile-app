@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,31 +24,24 @@
 #include <folly/Preprocessor.h>
 #include <folly/lang/CArray.h>
 
-#if __GNUC__ && !__clang__ && FOLLY_SANITIZE_ADDRESS
-//  gcc+asan has a bug that discards sections when using `static` below
-#define FOLLY_DETAIL_SAFE_CHECK_LINKAGE
-#else
-#define FOLLY_DETAIL_SAFE_CHECK_LINKAGE static
-#endif
-
-#define FOLLY_DETAIL_SAFE_CHECK_IMPL(d, p, expr, expr_s, ...)             \
+#define FOLLY_DETAIL_SAFE_CHECK_IMPL(d, p, u, expr, ...)                  \
   do {                                                                    \
     if ((!d || ::folly::kIsDebug || ::folly::kIsSanitize) &&              \
         !static_cast<bool>(expr)) {                                       \
-      FOLLY_DETAIL_SAFE_CHECK_LINKAGE constexpr auto                      \
-          __folly_detail_safe_assert_fun = __func__;                      \
-      FOLLY_DETAIL_SAFE_CHECK_LINKAGE constexpr ::folly::detail::         \
-          safe_assert_arg __folly_detail_safe_assert_arg{                 \
-              FOLLY_PP_STRINGIZE(expr_s),                                 \
+      static constexpr auto __folly_detail_safe_assert_fun = __func__;    \
+      static constexpr ::folly::detail::safe_assert_arg                   \
+          __folly_detail_safe_assert_arg{                                 \
+              u ? nullptr : #expr,                                        \
               __FILE__,                                                   \
               __LINE__,                                                   \
               __folly_detail_safe_assert_fun,                             \
               ::folly::detail::safe_assert_msg_types<                     \
                   decltype(::folly::detail::safe_assert_msg_types_seq_of( \
                       __VA_ARGS__))>::value.data};                        \
-      ::folly::detail::safe_assert_terminate<p>(                          \
-          __folly_detail_safe_assert_arg FOLLY_PP_DETAIL_APPEND_VA_ARG(   \
-              __VA_ARGS__));                                              \
+      constexpr ::folly::detail::safe_assert_terminate_w<p>               \
+          __folly_detail_safe_assert_terminate_w{                         \
+              __folly_detail_safe_assert_arg};                            \
+      __folly_detail_safe_assert_terminate_w(__VA_ARGS__);                \
     }                                                                     \
   } while (false)
 
@@ -65,8 +58,7 @@
 //  multi-thread-safe
 //  async-signal-safe
 #define FOLLY_SAFE_CHECK(expr, ...) \
-  FOLLY_DETAIL_SAFE_CHECK_IMPL(     \
-      0, 0, (expr), FOLLY_PP_STRINGIZE(expr), __VA_ARGS__)
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(0, 0, 0, expr, __VA_ARGS__)
 
 //  FOLLY_SAFE_DCHECK
 //
@@ -77,19 +69,47 @@
 //  multi-thread-safe
 //  async-signal-safe
 #define FOLLY_SAFE_DCHECK(expr, ...) \
-  FOLLY_DETAIL_SAFE_CHECK_IMPL(      \
-      1, 0, (expr), FOLLY_PP_STRINGIZE(expr), __VA_ARGS__)
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(1, 0, 0, expr, __VA_ARGS__)
 
 //  FOLLY_SAFE_PCHECK
 //
-//  Equivalent to FOLLY_SAFE_CHECK but includes errno in the context information
-//  printed to stderr.
+//  Equivalent to FOLLY_SAFE_CHECK but includes errno in the contextual
+//  information printed to stderr.
 //
 //  multi-thread-safe
 //  async-signal-safe
 #define FOLLY_SAFE_PCHECK(expr, ...) \
-  FOLLY_DETAIL_SAFE_CHECK_IMPL(      \
-      0, 1, (expr), FOLLY_PP_STRINGIZE(expr), __VA_ARGS__)
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(0, 1, 0, expr, __VA_ARGS__)
+
+//  FOLLY_SAFE_DPCHECK
+//
+//  Equivalent to FOLLY_SAFE_DCHECK but includes errno in the contextual
+//  information printed to stderr.
+//
+//  multi-thread-safe
+//  async-signal-safe
+#define FOLLY_SAFE_DPCHECK(expr, ...) \
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(1, 1, 0, expr, __VA_ARGS__)
+
+//  FOLLY_SAFE_FATAL
+//
+//  Equivalent to FOLLY_SAFE_CHECK(false, ...) but excludes any failing
+//  expression from the contextual information printed to stderr.
+//
+//  multi-thread-safe
+//  async-signal-safe
+#define FOLLY_SAFE_FATAL(...) \
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(0, 0, 1, false, __VA_ARGS__)
+
+//  FOLLY_SAFE_DFATAL
+//
+//  Equivalent to FOLLY_SAFE_DCHECK(false, ...) but excludes any failing
+//  expression from the contextual information printed to stderr.
+//
+//  multi-thread-safe
+//  async-signal-safe
+#define FOLLY_SAFE_DFATAL(...) \
+  FOLLY_DETAIL_SAFE_CHECK_IMPL(1, 0, 1, false, __VA_ARGS__)
 
 namespace folly {
 namespace detail {
@@ -144,11 +164,19 @@ template <bool P>
 [[noreturn]] FOLLY_COLD FOLLY_NOINLINE void safe_assert_terminate(
     safe_assert_arg const* arg, ...) noexcept; // the true backing function
 
-template <bool P, typename... A>
-[[noreturn]] FOLLY_ERASE void safe_assert_terminate(
-    safe_assert_arg const& arg, A... a) noexcept {
-  safe_assert_terminate<P>(&arg, safe_assert_msg_cast_one(a)...);
-}
+template <bool P>
+struct safe_assert_terminate_w {
+  safe_assert_arg const& arg;
+
+  FOLLY_ERASE constexpr safe_assert_terminate_w(
+      safe_assert_arg const& arg_) noexcept
+      : arg{arg_} {}
+
+  template <typename... A>
+  [[noreturn]] FOLLY_ERASE void operator()(A... a) const noexcept {
+    safe_assert_terminate<P>(&arg, safe_assert_msg_cast_one(a)...);
+  }
+};
 
 } // namespace detail
 } // namespace folly

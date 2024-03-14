@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -137,7 +137,8 @@ class PackedSyncPtr {
 } FOLLY_PACK_ATTR;
 
 static_assert(
-    std::is_pod<PackedSyncPtr<void>>::value,
+    std::is_standard_layout<PackedSyncPtr<void>>::value &&
+        std::is_trivial<PackedSyncPtr<void>>::value,
     "PackedSyncPtr must be kept a POD type.");
 static_assert(
     sizeof(PackedSyncPtr<void>) == 8,
