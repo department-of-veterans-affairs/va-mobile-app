@@ -55,8 +55,8 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
             <TextView variant="AnnouncementBannerTitle">{title}</TextView>
           </Box>
           <VAIcon
-            width={28}
-            height={28}
+            width={24}
+            height={24}
             name={'CircleExternalLink'}
             fill={theme.colors.icon.announcementBanner}
             fill2={theme.colors.icon.transparent}
