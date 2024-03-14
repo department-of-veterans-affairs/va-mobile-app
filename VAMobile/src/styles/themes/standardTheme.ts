@@ -52,6 +52,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
+  ActivityFooter: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
   BitterHeading: {
     fontSize: 22,
     lineHeight: 24,
@@ -165,6 +169,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
+    ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
