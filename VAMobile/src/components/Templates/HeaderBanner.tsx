@@ -61,6 +61,8 @@ export type HeaderBannerProps = {
   menuViewActions?: MenuViewActionsType
   /** bypass divider marginbottom */
   dividerMarginBypass?: boolean
+  /** adds shadow to bottom of banner, default no shadow */
+  shadow?: boolean
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({
@@ -70,6 +72,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   divider: bannerDivider,
   menuViewActions,
   dividerMarginBypass,
+  shadow: bannerShadow,
 }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -162,18 +165,20 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
-    style: {
-      shadowColor: colors.black,
-      ...Platform.select({
-        ios: {
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
-        },
-        android: {
-          elevation: 8,
-        },
-      }),
-    },
+    style: bannerShadow
+      ? {
+          shadowColor: colors.black,
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.1,
+            },
+            android: {
+              elevation: 8,
+            },
+          }),
+        }
+      : null,
   }
 
   const commonBoxProps: BoxProps = {

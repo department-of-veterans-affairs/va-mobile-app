@@ -65,6 +65,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
           icon: headerButton.icon,
         }
       : undefined,
+    shadow: true,
   }
 
   const subtitleProps: TextViewProps = {
