@@ -241,6 +241,7 @@ let theme: VATheme = {
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
     fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
