@@ -125,6 +125,7 @@ export const Nametag = () => {
                   fill={theme.colors.icon.linkRow}
                   width={theme.dimensions.chevronListItemWidth}
                   height={theme.dimensions.chevronListItemHeight}
+                  preventScaling={true}
                   ml={theme.dimensions.listItemDecoratorMarginLeft}
                 />
               )}
