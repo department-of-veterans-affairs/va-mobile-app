@@ -160,6 +160,7 @@ export const lightTheme = {
     activityButton: colors.white,
     announcementBanner: DSColors.base,
     homeScreen: DSColors.base,
+    activityFooter: DSColors.gray,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -369,6 +370,7 @@ export const darkTheme = {
     activityButton: colors.black,
     announcementBanner: DSColors.grayLightest,
     homeScreen: DSColors.grayLightest,
+    activityFooter: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
