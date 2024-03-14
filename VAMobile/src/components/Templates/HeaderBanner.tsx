@@ -178,7 +178,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
             },
           }),
         }
-      : null,
+      : undefined,
   }
 
   const commonBoxProps: BoxProps = {
