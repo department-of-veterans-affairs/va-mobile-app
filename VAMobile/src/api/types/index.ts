@@ -1,6 +1,7 @@
 export * from './AddressData'
 export * from './AppointmentData'
 export * from './ContactInformation'
+export * from './DecisionLettersData'
 export * from './DemographicsData'
 export * from './DirectDepositData'
 export * from './DisabilityRatingData'
