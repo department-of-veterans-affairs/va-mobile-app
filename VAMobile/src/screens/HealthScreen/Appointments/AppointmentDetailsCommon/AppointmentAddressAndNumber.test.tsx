@@ -59,8 +59,9 @@ describe('AppointmentAddressAndNumber', () => {
   })
 
   describe('when the appointmentType is VA_VIDEO_CONNECT_ONSITE', () => {
-    it('displays the healthcareService', () => {
+    it('displays "Location name" header and healthcareService', () => {
       renderWithProps({ appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE })
+      expect(screen.getByRole('header', { name: 'Location name' })).toBeTruthy()
       expect(screen.getByText(healthcareService)).toBeTruthy()
     })
   })
