@@ -168,9 +168,9 @@ context('StartNewMessage', () => {
       ).toBeTruthy()
     })
 
-    describe('on click of the go to inbox button', () => {
+    describe('on click of the go to inbox link', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
-        fireEvent.press(screen.getByText('Go to inbox'))
+        fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
@@ -217,7 +217,7 @@ context('StartNewMessage', () => {
     it('should add the text (*Required) for the subject line field', () => {
       fireEvent.press(screen.getByTestId('picker'))
       fireEvent.press(screen.getByTestId('General'))
-      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByLabelText('Done'))
       expect(screen.getByText('Subject (Required)')).toBeTruthy()
     })
   })
@@ -231,7 +231,7 @@ context('StartNewMessage', () => {
     it('should ask for confirmation if any field filled in', () => {
       fireEvent.press(screen.getByTestId('picker'))
       fireEvent.press(screen.getByTestId('General'))
-      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByLabelText('Done'))
       fireEvent.press(screen.getByText('Cancel'))
       expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
@@ -257,10 +257,10 @@ context('StartNewMessage', () => {
     it('should call saveDraft', () => {
       fireEvent.press(screen.getByTestId('to field'))
       fireEvent.press(screen.getByTestId('Doctor 1'))
-      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByLabelText('Done'))
       fireEvent.press(screen.getByTestId('picker'))
       fireEvent.press(screen.getByTestId('Appointment'))
-      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByLabelText('Done'))
       fireEvent.changeText(screen.getByTestId('message field'), 'test')
       fireEvent.press(screen.getByText('Save'))
       expect(saveDraft).toHaveBeenCalled()

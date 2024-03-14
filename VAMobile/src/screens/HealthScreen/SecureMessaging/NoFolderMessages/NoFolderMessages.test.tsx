@@ -49,9 +49,9 @@ context('NoFolderMessages', () => {
     expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
   })
 
-  describe('on click of the go to inbox button', () => {
+  describe('on click of the go to inbox link', () => {
     it('should call updateSecureMessagingTab and useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
       expect(updateSecureMessagingTab).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
