@@ -56,6 +56,10 @@ const fontSizes = {
     fontSize: 14,
     lineHeight: 22,
   },
+  AnnouncementBannerTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
   BitterHeading: {
     fontSize: 22,
     lineHeight: 24,
@@ -174,6 +178,11 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
+    AnnouncementBannerTitle: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.AnnouncementBannerTitle,
+      scheme.text.announcementBanner,
+    ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
@@ -261,6 +270,7 @@ let theme: VATheme = {
 
   fontSizes: {
     ActivityButtonSubtext: fontSizes.ActivityButtonSubtext,
+    AnnouncementBannerTitle: fontSizes.AnnouncementBannerTitle,
     BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     ClaimPhase: fontSizes.ClaimPhase,
