@@ -57,6 +57,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
           <VAIcon
             width={24}
             height={24}
+            preventScaling={true}
             name={'CircleExternalLink'}
             fill={theme.colors.icon.announcementBanner}
             fill2={theme.colors.icon.transparent}
