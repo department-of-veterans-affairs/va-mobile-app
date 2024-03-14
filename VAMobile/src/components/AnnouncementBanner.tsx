@@ -28,7 +28,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
+          shadowOpacity: 0.15,
           shadowRadius: 8,
         },
         android: {
