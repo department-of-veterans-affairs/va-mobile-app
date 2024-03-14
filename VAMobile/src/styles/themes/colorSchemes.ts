@@ -115,7 +115,7 @@ export const lightTheme = {
     activityButton: colors.white,
     inlineSpinner: DSColors.primary,
     homeScreenError: DSColors.secondaryDark,
-    veteranStatusHomeArrow: DSColors.base,
+    veteranStatusHomeArrow: DSColors.primary,
     linkRow: DSColors.base,
   },
   text: {
@@ -327,7 +327,7 @@ export const darkTheme = {
     activityButton: colors.black,
     inlineSpinner: DSColors.uswdsBlueVivid30,
     homeScreenError: DSColors.uswdsRedVivid40,
-    veteranStatusHomeArrow: DSColors.grayLightest,
+    veteranStatusHomeArrow: DSColors.uswdsBlueVivid30,
     linkRow: DSColors.grayLightest,
   },
   text: {
