@@ -118,7 +118,6 @@ export type VAIconColors = {
   activityButton: string
   inlineSpinner: string
   homeScreenError: string
-  veteranStatusHomeArrow: string
   linkRow: string
 }
 
@@ -293,6 +292,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    linkRowChevronPaddingRight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number

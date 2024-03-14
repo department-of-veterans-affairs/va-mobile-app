@@ -122,7 +122,7 @@ export const Nametag = () => {
               {showVeteranStatus && (
                 <VAIcon
                   name={'ChevronRight'}
-                  fill={theme.colors.icon.veteranStatusHomeArrow}
+                  fill={theme.colors.icon.linkRow}
                   width={theme.dimensions.chevronListItemWidth}
                   height={theme.dimensions.chevronListItemHeight}
                   ml={theme.dimensions.listItemDecoratorMarginLeft}
