@@ -58,6 +58,18 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
+  const displayName = (
+    <Box>
+      <TextView
+        mx={theme.dimensions.condensedMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
+        textTransform="capitalize"
+        variant="ProfileScreenHeader">
+        {fullName}
+      </TextView>
+    </Box>
+  )
+
   return (
     <ChildTemplate
       title={t('profile.title')}
@@ -80,29 +92,13 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         </Box>
       ) : loadingCheck ? (
         <Box>
-          <Box>
-            <TextView
-              mx={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}
-              textTransform="capitalize"
-              variant="ProfileScreenHeader">
-              {fullName}
-            </TextView>
-          </Box>
+          {displayName}
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>
-          <Box>
-            <TextView
-              mx={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}
-              textTransform="capitalize"
-              variant="ProfileScreenHeader">
-              {fullName}
-            </TextView>
-          </Box>
+          {displayName}
           <NameTag />
           <Box
             mt={theme.dimensions.contentMarginTop}
