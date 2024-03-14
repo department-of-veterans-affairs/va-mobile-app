@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,6 +103,7 @@
 #include <cassert>
 #include <cctype>
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <limits>
 #include <stdexcept>
@@ -113,10 +114,12 @@
 
 #include <double-conversion/double-conversion.h> // V8 JavaScript implementation
 
+#include <folly/CPortability.h>
 #include <folly/Demangle.h>
 #include <folly/Expected.h>
 #include <folly/FBString.h>
 #include <folly/Likely.h>
+#include <folly/Portability.h>
 #include <folly/Range.h>
 #include <folly/Traits.h>
 #include <folly/Unit.h>
@@ -147,11 +150,11 @@ enum class ConversionCode : unsigned char {
   NUM_ERROR_CODES, // has to be the last entry
 };
 
-struct ConversionErrorBase : std::range_error {
+struct FOLLY_EXPORT ConversionErrorBase : std::range_error {
   using std::range_error::range_error;
 };
 
-class ConversionError : public ConversionErrorBase {
+class FOLLY_EXPORT ConversionError : public ConversionErrorBase {
  public:
   ConversionError(const std::string& str, ConversionCode code)
       : ConversionErrorBase(str), code_(code) {}
@@ -641,6 +644,8 @@ toAppend(
       1); // max trailing padding zeros
   char buffer[256];
   StringBuilder builder(buffer, sizeof(buffer));
+  FOLLY_PUSH_WARNING
+  FOLLY_CLANG_DISABLE_WARNING("-Wcovered-switch-default")
   switch (mode) {
     case DoubleToStringConverter::SHORTEST:
       conv.ToShortest(value, &builder);
@@ -657,6 +662,7 @@ toAppend(
       conv.ToPrecision(value, int(numDigits), &builder);
       break;
   }
+  FOLLY_POP_WARNING
   const size_t length = size_t(builder.position());
   builder.Finalize();
   result->append(buffer, length);
@@ -788,7 +794,7 @@ typename std::enable_if<
 toAppendDelimStrImpl(const Delimiter& delim, const T& v, const Ts&... vs) {
   // we are really careful here, calling toAppend with just one element does
   // not try to estimate space needed (as we already did that). If we call
-  // toAppend(v, delim, ....) we would do unnecesary size calculation
+  // toAppend(v, delim, ....) we would do unnecessary size calculation
   toAppend(v, detail::getLastElement(vs...));
   toAppend(delim, detail::getLastElement(vs...));
   toAppendDelimStrImpl(delim, vs...);
@@ -837,7 +843,7 @@ void toAppend(const pid_t a, Tgt* res) {
 #endif
 
 /**
- * Special version of the call that preallocates exaclty as much memory
+ * Special version of the call that preallocates exactly as much memory
  * as need for arguments to be stored in target. This means we are
  * not doing exponential growth when we append. If you are using it
  * in a loop you are aiming at your foot with a big perf-destroying
@@ -1186,6 +1192,9 @@ typename std::enable_if<
         !std::is_same<Tgt, Src>::value,
     Expected<Tgt, ConversionCode>>::type
 convertTo(const Src& value) noexcept {
+  if (FOLLY_UNLIKELY(std::isinf(value))) {
+    return static_cast<Tgt>(value);
+  }
   if /* constexpr */ (
       std::numeric_limits<Tgt>::max() < std::numeric_limits<Src>::max()) {
     if (value > std::numeric_limits<Tgt>::max()) {
@@ -1478,7 +1487,7 @@ inline
 /**
  * tryTo/to that take the strings by pointer so the caller gets information
  * about how much of the string was consumed by the conversion. These do not
- * check for trailing whitepsace.
+ * check for trailing whitespace.
  */
 template <class Tgt>
 Expected<Tgt, detail::ParseToError<Tgt>> tryTo(StringPiece* src) {

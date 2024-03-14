@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -328,9 +328,10 @@ inline exception_wrapper::exception_wrapper(
 namespace exception_wrapper_detail {
 template <class Ex>
 Ex&& dont_slice(Ex&& ex) {
-  assert(typeid(ex) == typeid(std::decay_t<Ex>) ||
-       !"Dynamic and static exception types don't match. Exception would "
-        "be sliced when storing in exception_wrapper.");
+  assert(
+      (typeid(ex) == typeid(std::decay_t<Ex>)) &&
+      "Dynamic and static exception types don't match. Exception would "
+      "be sliced when storing in exception_wrapper.");
   return std::forward<Ex>(ex);
 }
 } // namespace exception_wrapper_detail
@@ -490,7 +491,7 @@ inline bool exception_wrapper::with_exception_(This& this_, Fn fn_) {
   using from_ex = with_exception_from_ex_;
   using from = conditional_t<std::is_void<Ex>::value, from_fn, from_ex>;
   using type = typename from::template apply<Ex, Fn>;
-  return with_exception_(this_, fn_, tag<type>);
+  return with_exception_(this_, std::move(fn_), tag<type>);
 }
 
 template <class This, class... CatchFns>

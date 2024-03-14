@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,10 @@
 #include <folly/Traits.h>
 #include <folly/Utility.h>
 #include <folly/lang/CustomizationPoint.h>
+
+#define FOLLY_DETAIL_FORWARD_REF(a) static_cast<decltype(a)&&>(a)
+#define FOLLY_DETAIL_FORWARD_BODY(e) \
+  noexcept(noexcept(e))->decltype(e) { return e; }
 
 /**
  *  include or backport:
@@ -389,10 +393,49 @@ struct invoke_traits : detail::invoke_traits_base<I> {
  *
  *  See FOLLY_CREATE_FREE_INVOKER.
  */
-#define FOLLY_CREATE_FREE_INVOKER_SUITE(membername, ...)               \
-  FOLLY_CREATE_FREE_INVOKER(membername##_fn, membername, __VA_ARGS__); \
-  FOLLY_MAYBE_UNUSED FOLLY_INLINE_VARIABLE constexpr membername##_fn   \
-      membername {}
+#define FOLLY_CREATE_FREE_INVOKER_SUITE(funcname, ...)             \
+  FOLLY_CREATE_FREE_INVOKER(funcname##_fn, funcname, __VA_ARGS__); \
+  FOLLY_MAYBE_UNUSED FOLLY_INLINE_VARIABLE constexpr funcname##_fn funcname {}
+
+/***
+ *  FOLLY_CREATE_QUAL_INVOKER
+ *
+ *  Used to create an invoker type bound to a specific free-invocable qualified
+ *  name. It is permitted that the qualification be empty and that the name be
+ *  unqualified in practice. This differs from FOLLY_CREATE_FREE_INVOKER in that
+ *  it is required that the name be in scope and that it is not possible to
+ *  provide a list of namespaces in which to look up the name..
+ */
+#define FOLLY_CREATE_QUAL_INVOKER(classname, funcpath)                 \
+  struct classname {                                                   \
+    template <typename... A>                                           \
+    FOLLY_MAYBE_UNUSED FOLLY_ERASE_HACK_GCC constexpr auto operator()( \
+        A&&... a) const                                                \
+        FOLLY_DETAIL_FORWARD_BODY(funcpath(static_cast<A&&>(a)...))    \
+  }
+
+/***
+ *  FOLLY_CREATE_QUAL_INVOKER_SUITE
+ *
+ *  Used to create an invoker type and associated variable bound to a specific
+ *  free-invocable qualified name.
+ *
+ *  See FOLLY_CREATE_QUAL_INVOKER.
+ */
+#define FOLLY_CREATE_QUAL_INVOKER_SUITE(name, funcpath) \
+  FOLLY_CREATE_QUAL_INVOKER(name##_fn, funcpath);       \
+  FOLLY_MAYBE_UNUSED FOLLY_INLINE_VARIABLE constexpr name##_fn name {}
+
+/***
+ *  FOLLY_INVOKE_QUAL
+ *
+ *  An invoker expression resulting in an invocable which, when invoked, invokes
+ *  the free-invocable qualified name with the given arguments.
+ */
+#define FOLLY_INVOKE_QUAL(funcpath)                    \
+  [](auto&&... __folly_param_a)                        \
+      FOLLY_CXX17_CONSTEXPR FOLLY_DETAIL_FORWARD_BODY( \
+          funcpath(FOLLY_DETAIL_FORWARD_REF(__folly_param_a)...))
 
 /***
  *  FOLLY_CREATE_MEMBER_INVOKER
@@ -460,6 +503,36 @@ struct invoke_traits : detail::invoke_traits_base<I> {
   FOLLY_CREATE_MEMBER_INVOKER(membername##_fn, membername);          \
   FOLLY_MAYBE_UNUSED FOLLY_INLINE_VARIABLE constexpr membername##_fn \
       membername {}
+
+/***
+ *  FOLLY_INVOKE_MEMBER
+ *
+ *  An invoker expression resulting in an invocable which, when invoked, invokes
+ *  the member on the object with the given arguments.
+ *
+ *  Example:
+ *
+ *    FOLLY_INVOKE_MEMBER(find)(map, key)
+ *
+ *  Equivalent to:
+ *
+ *    map.find(key)
+ *
+ *  But also equivalent to:
+ *
+ *    std::invoke(FOLLY_INVOKE_MEMBER(find), map, key)
+ *
+ *  As an implementation detail, the resulting callable is a lambda. This has
+ *  two observable consequences.
+ *  * Since C++17 only, lambda invocations may be marked constexpr.
+ *  * Since C++20 only, lambda definitions may appear in an unevaluated context,
+ *    namely, in an operand to decltype, noexcept, sizeof, or typeid.
+ */
+#define FOLLY_INVOKE_MEMBER(membername)                 \
+  [](auto&& __folly_param_o, auto&&... __folly_param_a) \
+      FOLLY_CXX17_CONSTEXPR FOLLY_DETAIL_FORWARD_BODY(  \
+          FOLLY_DETAIL_FORWARD_REF(__folly_param_o)     \
+              .membername(FOLLY_DETAIL_FORWARD_REF(__folly_param_a)...))
 
 /***
  *  FOLLY_CREATE_STATIC_MEMBER_INVOKER

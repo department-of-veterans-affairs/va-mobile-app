@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 #endif
 
 namespace folly {
-namespace tcpinfo {
+namespace detail {
 
 /**
  *
@@ -222,5 +222,5 @@ union tcp_cc_info {
 };
 #endif
 
-} // namespace tcpinfo
+} // namespace detail
 } // namespace folly

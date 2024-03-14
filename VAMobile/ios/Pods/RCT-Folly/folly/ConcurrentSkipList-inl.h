@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -287,11 +287,11 @@ class NodeRecycler<
       // correctness.
       std::lock_guard<MicroSpinLock> g(lock_);
       ret = refs_.fetch_add(-1, std::memory_order_acq_rel);
-      if (ret == 0) {
-        // When refs_ reachs 0, it is safe to remove all the current nodes
-        // in the recycler, as we already acquired the lock here so no more
-        // new nodes can be added, even though new accessors may be added
-        // after this.
+      if (ret == 1) {
+        // When releasing the last reference, it is safe to remove all the
+        // current nodes in the recycler, as we already acquired the lock here
+        // so no more new nodes can be added, even though new accessors may be
+        // added after this.
         newNodes.swap(nodes_);
         dirty_.store(false, std::memory_order_relaxed);
       }
