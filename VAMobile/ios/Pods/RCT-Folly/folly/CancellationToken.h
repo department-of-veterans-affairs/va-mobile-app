@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ using CancellationStateTokenPtr =
     std::unique_ptr<CancellationState, CancellationStateTokenDeleter>;
 using CancellationStateSourcePtr =
     std::unique_ptr<CancellationState, CancellationStateSourceDeleter>;
+template <typename...>
+struct WithDataTag;
 } // namespace detail
 
 // A CancellationToken is an object that can be passed into an function or
@@ -201,6 +203,10 @@ class CancellationSource {
 
   friend bool operator==(
       const CancellationSource& a, const CancellationSource& b) noexcept;
+
+  template <typename... Data, typename... Args>
+  static std::pair<CancellationSource, std::tuple<Data...>*> create(
+      detail::WithDataTag<Data...>, Args&&...);
 
  private:
   explicit CancellationSource(

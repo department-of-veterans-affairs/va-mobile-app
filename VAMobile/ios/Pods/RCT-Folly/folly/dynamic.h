@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +60,6 @@
 #include <utility>
 #include <vector>
 
-#include <boost/operators.hpp>
-
 #include <folly/Expected.h>
 #include <folly/Range.h>
 #include <folly/Traits.h>
@@ -85,7 +83,7 @@ using detect_construct_string = decltype(std::string(
     FOLLY_DECLVAL(T const&).data(), FOLLY_DECLVAL(T const&).size()));
 }
 
-struct dynamic : private boost::operators<dynamic> {
+struct dynamic {
   enum Type {
     NULLT,
     ARRAY,
@@ -222,14 +220,32 @@ struct dynamic : private boost::operators<dynamic> {
   /*
    * "Deep" equality comparison.  This will compare all the way down
    * an object or array, and is potentially expensive.
+   *
+   * NOTE: Implicit conversion will be done between ints and doubles, so numeric
+   * equality will apply between those cases. Other dynamic value comparisons of
+   * different types will always return false.
    */
-  bool operator==(dynamic const& o) const;
+  friend bool operator==(dynamic const& a, dynamic const& b);
+  friend bool operator!=(dynamic const& a, dynamic const& b) {
+    return !(a == b);
+  }
 
   /*
    * For all types except object this returns the natural ordering on
    * those types.  For objects, we throw TypeError.
+   *
+   * NOTE: Implicit conversion will be done between ints and doubles, so numeric
+   * ordering will apply between those cases. Other dynamic value comparisons of
+   * different types will maintain consistent ordering within a binary run.
    */
-  bool operator<(dynamic const& o) const;
+  friend bool operator<(dynamic const& a, dynamic const& b);
+  friend bool operator>(dynamic const& a, dynamic const& b) { return b < a; }
+  friend bool operator<=(dynamic const& a, dynamic const& b) {
+    return !(b < a);
+  }
+  friend bool operator>=(dynamic const& a, dynamic const& b) {
+    return !(a < b);
+  }
 
   /*
    * General operators.
@@ -250,6 +266,44 @@ struct dynamic : private boost::operators<dynamic> {
   dynamic& operator^=(dynamic const&);
   dynamic& operator++();
   dynamic& operator--();
+
+  friend dynamic operator+(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) += b);
+  }
+  friend dynamic operator-(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) -= b);
+  }
+  friend dynamic operator*(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) *= b);
+  }
+  friend dynamic operator/(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) /= b);
+  }
+  friend dynamic operator%(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) %= b);
+  }
+  friend dynamic operator|(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) |= b);
+  }
+  friend dynamic operator&(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) &= b);
+  }
+  friend dynamic operator^(dynamic const& a, dynamic const& b) {
+    return std::move(copy(a) ^= b);
+  }
+
+  friend dynamic operator+(dynamic&& a, dynamic const& b) {
+    return std::move(a += b);
+  }
+
+  dynamic operator++(int) {
+    auto self = *this;
+    return ++*this, self;
+  }
+  dynamic operator--(int) {
+    auto self = *this;
+    return --*this, self;
+  }
 
   /*
    * Assignment from other dynamics.  Because of the implicit conversion
@@ -619,6 +673,16 @@ struct dynamic : private boost::operators<dynamic> {
   void resize(std::size_t n, dynamic const& = nullptr);
 
   /*
+   * If this is an array, an object, or a string, reserves the requested
+   * capacity in the underlying container.  Otherwise throws TypeError.
+   *
+   * May invalidate iterators, and does not give any additional guarantees on
+   * iterator invalidation on subsequent insertions; the only purpose is for
+   * optimization.
+   */
+  void reserve(std::size_t capacity);
+
+  /*
    * Inserts the supplied key-value pair to an object, or throws if
    * it's not an object. If the key already exists, insert will overwrite the
    * value, i.e., similar to insert_or_assign.
@@ -627,6 +691,30 @@ struct dynamic : private boost::operators<dynamic> {
    */
   template <class K, class V>
   IfNotIterator<K, void> insert(K&&, V&& val);
+
+  /**
+   * Inserts an element into an object constructed in-place with the given args
+   * if there is no existing element with the key, or throws if it's not an
+   * object. Returns a pair consisting of an iterator to the inserted element,
+   * or the already existing element if no insertion happened, and a bool
+   * denoting whether the insertion took place.
+   *
+   * Invalidates iterators.
+   */
+  template <class... Args>
+  std::pair<item_iterator, bool> emplace(Args&&... args);
+
+  /**
+   * Inserts an element into an object with the given key and value constructed
+   * in-place with the given args if there is no existing element with the key,
+   * or throws if it's not an object. Returns a pair consisting of an iterator
+   * to the inserted element, or the already existing element if no insertion
+   * happened, and a bool denoting whether the insertion took place.
+   *
+   * Invalidates iterators.
+   */
+  template <class K, class... Args>
+  std::pair<item_iterator, bool> try_emplace(K&& key, Args&&... args);
 
   /*
    * Inserts the supplied value into array, or throw if not array
@@ -725,9 +813,14 @@ struct dynamic : private boost::operators<dynamic> {
 
   /*
    * Get a hash code.  This function is called by a std::hash<>
-   * specialization, also.
+   * specialization.
    *
-   * Throws TypeError if this is an object, array, or null.
+   * Note: an int64_t and double will both produce the same hash if they are
+   * numerically equal before rounding. So the int64_t 2 will have the same hash
+   * as the double 2.0. But no double will intentionally hash to the hash of a
+   * value that only when rounded will compare as equal. E.g. No double will
+   * intentionally hash to the hash of INT64_MAX (2^63 - 1) given that a double
+   * cannot represent this value.
    */
   std::size_t hash() const;
 

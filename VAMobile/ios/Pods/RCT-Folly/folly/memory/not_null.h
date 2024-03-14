@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,6 @@ class not_null_base : protected guaranteed_not_null_provider {
   /* implicit */ not_null_base(std::nullptr_t) = delete;
 
   not_null_base(const not_null_base& nn) = default;
-  not_null_base(not_null_base& nn) = default;
   not_null_base(not_null_base&& nn) = default;
 
   template <

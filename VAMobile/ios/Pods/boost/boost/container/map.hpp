@@ -46,7 +46,6 @@
 #include <boost/intrusive/detail/minimal_less_equal_header.hpp>//less, equal
 // other
 #include <boost/static_assert.hpp>
-#include <boost/core/no_exceptions_support.hpp>
 // std
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
@@ -964,6 +963,14 @@ class map
 
    #endif   // !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
+   //! <b>Effects</b>: If present, erases the element in the container with key equivalent to x.
+   //!
+   //! <b>Returns</b>: Returns the number of erased elements (0/1).
+   //!
+   //! <b>Complexity</b>: log(size()) + count(k)
+   BOOST_CONTAINER_FORCEINLINE size_type erase(const key_type& x)
+      { return this->base_t::erase_unique(x); }
+
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Erases the element pointed to by p.
@@ -975,13 +982,6 @@ class map
    //! <b>Complexity</b>: Amortized constant time
    iterator erase(const_iterator p) BOOST_NOEXCEPT_OR_NOTHROW;
 
-   //! <b>Effects</b>: Erases all elements in the container with key equivalent to x.
-   //!
-   //! <b>Returns</b>: Returns the number of erased elements.
-   //!
-   //! <b>Complexity</b>: log(size()) + count(k)
-   size_type erase(const key_type& x) BOOST_NOEXCEPT_OR_NOTHROW;
-
    //! <b>Effects</b>: Erases all the elements in the range [first, last).
    //!
    //! <b>Returns</b>: Returns last.
@@ -989,7 +989,9 @@ class map
    //! <b>Complexity</b>: log(size())+N where N is the distance from first to last.
    iterator erase(const_iterator first, const_iterator last) BOOST_NOEXCEPT_OR_NOTHROW;
 
-   #endif
+   #else
+   using base_t::erase;
+   #endif   //   #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Removes the first element in the container with key equivalent to k.
    //!

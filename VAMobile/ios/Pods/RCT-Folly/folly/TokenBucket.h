@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -275,13 +275,15 @@ class BasicDynamicTokenBucket {
       : bucket_(zeroTime) {}
 
   /**
-   * Copy constructor.
+   * Copy constructor and copy assignment operator.
    *
    * Thread-safe. (Copy constructors of derived classes may not be thread-safe
    * however.)
    */
-  BasicDynamicTokenBucket(const BasicDynamicTokenBucket& other) noexcept
-      : bucket_(other.bucket_) {}
+  BasicDynamicTokenBucket(const BasicDynamicTokenBucket& other) noexcept =
+      default;
+  BasicDynamicTokenBucket& operator=(
+      const BasicDynamicTokenBucket& other) noexcept = default;
 
   /**
    * Re-initialize token bucket.

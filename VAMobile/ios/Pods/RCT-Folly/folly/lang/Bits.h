@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@
 
 namespace folly {
 
-#if __cpp_lib_bit_cast
+#ifdef __cpp_lib_bit_cast
 
 using std::bit_cast;
 
@@ -332,7 +332,10 @@ FOLLY_PUSH_WARNING
 FOLLY_CLANG_DISABLE_WARNING("-Wpacked")
 FOLLY_PACK_PUSH
 template <class T>
-struct Unaligned<T, typename std::enable_if<std::is_pod<T>::value>::type> {
+struct Unaligned<
+    T,
+    typename std::enable_if<
+        std::is_standard_layout<T>::value && std::is_trivial<T>::value>::type> {
   Unaligned() = default; // uninitialized
   /* implicit */ Unaligned(T v) : value(v) {}
   T value;

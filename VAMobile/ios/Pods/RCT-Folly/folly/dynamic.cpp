@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,25 +67,25 @@ TypeError::TypeError(
 #define FB_DYNAMIC_APPLY(type, apply) \
   do {                                \
     switch ((type)) {                 \
-      case NULLT:                     \
+      case dynamic::NULLT:            \
         apply(std::nullptr_t);        \
         break;                        \
-      case ARRAY:                     \
-        apply(Array);                 \
+      case dynamic::ARRAY:            \
+        apply(dynamic::Array);        \
         break;                        \
-      case BOOL:                      \
+      case dynamic::BOOL:             \
         apply(bool);                  \
         break;                        \
-      case DOUBLE:                    \
+      case dynamic::DOUBLE:           \
         apply(double);                \
         break;                        \
-      case INT64:                     \
+      case dynamic::INT64:            \
         apply(int64_t);               \
         break;                        \
-      case OBJECT:                    \
-        apply(ObjectImpl);            \
+      case dynamic::OBJECT:           \
+        apply(dynamic::ObjectImpl);   \
         break;                        \
-      case STRING:                    \
+      case dynamic::STRING:           \
         apply(std::string);           \
         break;                        \
       default:                        \
@@ -94,31 +94,40 @@ TypeError::TypeError(
     }                                 \
   } while (0)
 
-bool dynamic::operator<(dynamic const& o) const {
-  if (UNLIKELY(type_ == OBJECT || o.type_ == OBJECT)) {
-    throw_exception<TypeError>("object", type_);
+bool operator<(dynamic const& a, dynamic const& b) {
+  constexpr auto obj = dynamic::OBJECT;
+  if (UNLIKELY(a.type_ == obj || b.type_ == obj)) {
+    auto type = a.type_ == obj ? b.type_ : b.type_ == obj ? a.type_ : obj;
+    throw_exception<TypeError>("object", type);
   }
-  if (type_ != o.type_) {
-    return type_ < o.type_;
+  if (a.type_ != b.type_) {
+    if (a.isNumber() && b.isNumber()) {
+      // The only isNumber() types are double and int64 - so guaranteed one will
+      // be double and one will be int.
+      return a.isInt() ? a.asInt() < b.asDouble() : a.asDouble() < b.asInt();
+    }
+
+    return a.type_ < b.type_;
   }
 
-#define FB_X(T) return CompareOp<T>::comp(*getAddress<T>(), *o.getAddress<T>())
-  FB_DYNAMIC_APPLY(type_, FB_X);
+#define FB_X(T) \
+  return dynamic::CompareOp<T>::comp(*a.getAddress<T>(), *b.getAddress<T>())
+  FB_DYNAMIC_APPLY(a.type_, FB_X);
 #undef FB_X
 }
 
-bool dynamic::operator==(dynamic const& o) const {
-  if (type() != o.type()) {
-    if (isNumber() && o.isNumber()) {
-      auto& integ = isInt() ? *this : o;
-      auto& doubl = isInt() ? o : *this;
+bool operator==(dynamic const& a, dynamic const& b) {
+  if (a.type() != b.type()) {
+    if (a.isNumber() && b.isNumber()) {
+      auto& integ = a.isInt() ? a : b;
+      auto& doubl = a.isInt() ? b : a;
       return integ.asInt() == doubl.asDouble();
     }
     return false;
   }
 
-#define FB_X(T) return *getAddress<T>() == *o.getAddress<T>();
-  FB_DYNAMIC_APPLY(type_, FB_X);
+#define FB_X(T) return *a.getAddress<T>() == *b.getAddress<T>();
+  FB_DYNAMIC_APPLY(a.type_, FB_X);
 #undef FB_X
 }
 
@@ -281,6 +290,26 @@ dynamic::iterator dynamic::erase(const_iterator first, const_iterator last) {
       arr.begin() + (first - arr.begin()), arr.begin() + (last - arr.begin()));
 }
 
+namespace {
+
+//  UBSAN traps on casts from floating-point to integral types when the
+//  floating-point value at runtime is outside of the representable range of the
+//  interal type. This is normally helpful for catching bugs. But the goal here
+//  is to test at runtime whether the floating-point value could roundtrip via
+//  the integral type back to the floating-point type unchanged. For this, UBSAN
+//  must be suppressed. It is possibleto emulate such tests, but emulation is
+//  slower.
+template <typename D, typename S>
+FOLLY_DISABLE_SANITIZERS D static_cast_nosan(S s) {
+  return static_cast<D>(s);
+}
+template <typename D, typename S>
+FOLLY_ERASE D static_cast_unchecked(S s) {
+  return kIsSanitize ? static_cast_nosan<D>(s) : static_cast<D>(s);
+}
+
+} // namespace
+
 std::size_t dynamic::hash() const {
   switch (type()) {
     case NULLT:
@@ -300,8 +329,18 @@ std::size_t dynamic::hash() const {
       return static_cast<std::size_t>(folly::hash::hash_range(begin(), end()));
     case INT64:
       return std::hash<int64_t>()(getInt());
-    case DOUBLE:
-      return std::hash<double>()(getDouble());
+    case DOUBLE: {
+      double valueAsDouble = getDouble();
+      int64_t valueAsDoubleAsInt =
+          static_cast_unchecked<int64_t>(valueAsDouble);
+      // Given that we do implicit conversion in operator==, have identical
+      // values hash the same to keep behavior consistent, but leave others use
+      // double hashing to avoid restricting the hash range unnecessarily.
+      if (double(valueAsDoubleAsInt) == valueAsDouble) {
+        return std::hash<int64_t>()(valueAsDoubleAsInt);
+      }
+      return std::hash<double>()(valueAsDouble);
+    }
     case BOOL:
       return std::hash<bool>()(getBool());
     case STRING:
@@ -473,6 +512,18 @@ const dynamic* dynamic::get_ptr(json_pointer const& jsonPtr) const& {
       return nullptr;
   }
   assume_unreachable();
+}
+
+void dynamic::reserve(std::size_t capacity) {
+  if (auto* ar = get_nothrow<Array>()) {
+    ar->reserve(capacity);
+  } else if (auto* obj = get_nothrow<ObjectImpl>()) {
+    obj->reserve(capacity);
+  } else if (auto* str = get_nothrow<std::string>()) {
+    str->reserve(capacity);
+  } else {
+    throw_exception<TypeError>("array/object/string", type());
+  }
 }
 
 //////////////////////////////////////////////////////////////////////
