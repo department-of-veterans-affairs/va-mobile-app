@@ -55,7 +55,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     isFetched: prescriptionsFetched,
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
-  const [prescriptionsToRefill, setPrescriptionsToRefill] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.isRefillable
   })
@@ -109,7 +108,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       }
     })
     const prescriptionIds = prescriptionList.map((prescription) => prescription.id)
-    setPrescriptionsToRefill(prescriptionList)
     logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
     submitRefillAlert({
       title:
@@ -138,7 +136,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
                 }
               },
             }
-            requestRefill(prescriptionsToRefill, mutateOptions)
+            requestRefill(prescriptionList, mutateOptions)
           },
         },
       ],
