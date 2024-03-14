@@ -1,10 +1,10 @@
 #ifndef BOOST_QVM_QUAT_OPERATIONS
 #define BOOST_QVM_QUAT_OPERATIONS
 
-/// Copyright (c) 2008-2021 Emil Dotchevski and Reverge Studios, Inc.
+// Copyright 2008-2022 Emil Dotchevski and Reverge Studios, Inc.
 
-/// Distributed under the Boost Software License, Version 1.0. (See accompanying
-/// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/qvm/detail/quat_assign.hpp>
 #include <boost/qvm/deduce_quat.hpp>
@@ -15,6 +15,7 @@
 #include <boost/qvm/error.hpp>
 #include <boost/qvm/throw_exception.hpp>
 #include <string>
+#include <cmath>
 
 namespace boost { namespace qvm {
 
@@ -68,7 +69,7 @@ to_string( A const & a )
 ////////////////////////////////////////////////
 
 template <class A,class B,class Cmp>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     bool>::type
@@ -90,8 +91,8 @@ cmp( A const & a, B const & b, Cmp f )
         quat_traits<B>::template read_element<2>(b),
         quat_traits<B>::template read_element<3>(b)
         };
-    int i;
-    for( i=0; i!=4; ++i )
+    int i=0;
+    for( ; i!=4; ++i )
         if( !f(q1[i],q2[i]) )
             break;
     if( i==4 )
@@ -105,22 +106,22 @@ cmp( A const & a, B const & b, Cmp f )
 ////////////////////////////////////////////////
 
 template <class R,class A>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_quat<R>::value && is_quat<A>::value,
     R>::type
 convert_to( A const & a )
     {
     R r;
-    quat_traits<R>::template write_element<0>(r) = quat_traits<A>::template read_element<0>(a);
-    quat_traits<R>::template write_element<1>(r) = quat_traits<A>::template read_element<1>(a);
-    quat_traits<R>::template write_element<2>(r) = quat_traits<A>::template read_element<2>(a);
-    quat_traits<R>::template write_element<3>(r) = quat_traits<A>::template read_element<3>(a);
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a));
+    write_quat_element<1>(r,quat_traits<A>::template read_element<1>(a));
+    write_quat_element<2>(r,quat_traits<A>::template read_element<2>(a));
+    write_quat_element<3>(r,quat_traits<A>::template read_element<3>(a));
     return r;
     }
 
 template <class R,class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<R>::value && is_mat<A>::value &&
     mat_traits<A>::rows==3 && mat_traits<A>::cols==3,
@@ -138,38 +139,38 @@ convert_to( A const & a )
     if( mat[0][0]+mat[1][1]+mat[2][2] > scalar_traits<T>::value(0) )
         {
         T t = mat[0][0] + mat[1][1] + mat[2][2] + scalar_traits<T>::value(1);
-        T s = (scalar_traits<T>::value(1)/sqrt<T>(t))/2;
-        quat_traits<R>::template write_element<0>(r)=s*t;
-        quat_traits<R>::template write_element<1>(r)=(mat[2][1]-mat[1][2])*s;
-        quat_traits<R>::template write_element<2>(r)=(mat[0][2]-mat[2][0])*s;
-        quat_traits<R>::template write_element<3>(r)=(mat[1][0]-mat[0][1])*s;
+        T s = (scalar_traits<T>::value(1)/sqrt(t))/2;
+        write_quat_element<0>(r,s*t);
+        write_quat_element<1>(r,(mat[2][1]-mat[1][2])*s);
+        write_quat_element<2>(r,(mat[0][2]-mat[2][0])*s);
+        write_quat_element<3>(r,(mat[1][0]-mat[0][1])*s);
         }
     else if( mat[0][0]>mat[1][1] && mat[0][0]>mat[2][2] )
         {
         T t = mat[0][0] - mat[1][1] - mat[2][2] + scalar_traits<T>::value(1);
-        T s = (scalar_traits<T>::value(1)/sqrt<T>(t))/2;
-        quat_traits<R>::template write_element<0>(r)=(mat[2][1]-mat[1][2])*s;
-        quat_traits<R>::template write_element<1>(r)=s*t;
-        quat_traits<R>::template write_element<2>(r)=(mat[1][0]+mat[0][1])*s;
-        quat_traits<R>::template write_element<3>(r)=(mat[0][2]+mat[2][0])*s;
+        T s = (scalar_traits<T>::value(1)/sqrt(t))/2;
+        write_quat_element<0>(r,(mat[2][1]-mat[1][2])*s);
+        write_quat_element<1>(r,s*t);
+        write_quat_element<2>(r,(mat[1][0]+mat[0][1])*s);
+        write_quat_element<3>(r,(mat[0][2]+mat[2][0])*s);
         }
     else if( mat[1][1]>mat[2][2] )
         {
         T t = - mat[0][0] + mat[1][1] - mat[2][2] + scalar_traits<T>::value(1);
-        T s = (scalar_traits<T>::value(1)/sqrt<T>(t))/2;
-        quat_traits<R>::template write_element<0>(r)=(mat[0][2]-mat[2][0])*s;
-        quat_traits<R>::template write_element<1>(r)=(mat[1][0]+mat[0][1])*s;
-        quat_traits<R>::template write_element<2>(r)=s*t;
-        quat_traits<R>::template write_element<3>(r)=(mat[2][1]+mat[1][2])*s;
+        T s = (scalar_traits<T>::value(1)/sqrt(t))/2;
+        write_quat_element<0>(r,(mat[0][2]-mat[2][0])*s);
+        write_quat_element<1>(r,(mat[1][0]+mat[0][1])*s);
+        write_quat_element<2>(r,s*t);
+        write_quat_element<3>(r,(mat[2][1]+mat[1][2])*s);
         }
     else
         {
         T t = - mat[0][0] - mat[1][1] + mat[2][2] + scalar_traits<T>::value(1);
-        T s = (scalar_traits<T>::value(1)/sqrt<T>(t))/2;
-        quat_traits<R>::template write_element<0>(r)=(mat[1][0]-mat[0][1])*s;
-        quat_traits<R>::template write_element<1>(r)=(mat[0][2]+mat[2][0])*s;
-        quat_traits<R>::template write_element<2>(r)=(mat[2][1]+mat[1][2])*s;
-        quat_traits<R>::template write_element<3>(r)=s*t;
+        T s = (scalar_traits<T>::value(1)/sqrt(t))/2;
+        write_quat_element<0>(r,(mat[1][0]-mat[0][1])*s);
+        write_quat_element<1>(r,(mat[0][2]+mat[2][0])*s);
+        write_quat_element<2>(r,(mat[2][1]+mat[1][2])*s);
+        write_quat_element<3>(r,s*t);
         }
     return r;
     }
@@ -177,7 +178,7 @@ convert_to( A const & a )
 ////////////////////////////////////////////////
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value,
     deduce_quat<A> >::type
@@ -185,10 +186,10 @@ conjugate( A const & a )
     {
     typedef typename deduce_quat<A>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=quat_traits<A>::template read_element<0>(a);
-    quat_traits<R>::template write_element<1>(r)=-quat_traits<A>::template read_element<1>(a);
-    quat_traits<R>::template write_element<2>(r)=-quat_traits<A>::template read_element<2>(a);
-    quat_traits<R>::template write_element<3>(r)=-quat_traits<A>::template read_element<3>(a);
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a));
+    write_quat_element<1>(r,-quat_traits<A>::template read_element<1>(a));
+    write_quat_element<2>(r,-quat_traits<A>::template read_element<2>(a));
+    write_quat_element<3>(r,-quat_traits<A>::template read_element<3>(a));
     return r;
     }
 
@@ -207,8 +208,12 @@ qvm_detail
 
         public:
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -227,9 +232,9 @@ quat_traits< qvm_detail::identity_quat_<T> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
-    read_element( this_quaternion const & x )
+    read_element( this_quaternion const & )
         {
         BOOST_QVM_STATIC_ASSERT(I>=0);
         BOOST_QVM_STATIC_ASSERT(I<4);
@@ -237,9 +242,9 @@ quat_traits< qvm_detail::identity_quat_<T> >
         }
 
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
-    read_element_idx( int i, this_quaternion const & x )
+    read_element_idx( int i, this_quaternion const & )
         {
         BOOST_QVM_ASSERT(i>=0);
         BOOST_QVM_ASSERT(i<4);
@@ -262,7 +267,7 @@ deduce_quat2< qvm_detail::identity_quat_<T>, qvm_detail::identity_quat_<T> >
     };
 
 template <class T>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::identity_quat_<T> const &
 identity_quat()
     {
@@ -270,7 +275,7 @@ identity_quat()
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -279,10 +284,10 @@ set_identity( A & a )
     typedef typename quat_traits<A>::scalar_type T;
     T const zero=scalar_traits<T>::value(0);
     T const one=scalar_traits<T>::value(1);
-    quat_traits<A>::template write_element<0>(a) = one;
-    quat_traits<A>::template write_element<1>(a) = zero;
-    quat_traits<A>::template write_element<2>(a) = zero;
-    quat_traits<A>::template write_element<3>(a) = zero;
+    write_quat_element<0>(a,one);
+    write_quat_element<1>(a,zero);
+    write_quat_element<2>(a,zero);
+    write_quat_element<3>(a,zero);
     }
 
 ////////////////////////////////////////////////
@@ -301,7 +306,7 @@ qvm_detail
         public:
 
         template <class T>
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         quaternion_scalar_cast_ &
         operator=( T const & x )
             {
@@ -309,8 +314,12 @@ qvm_detail
             return *this;
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -332,7 +341,7 @@ quat_traits< qvm_detail::quaternion_scalar_cast_<OriginalType,Scalar> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
@@ -342,7 +351,7 @@ quat_traits< qvm_detail::quaternion_scalar_cast_<OriginalType,Scalar> >
         }
 
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element_idx( int i, this_quaternion const & x )
         {
@@ -353,7 +362,7 @@ quat_traits< qvm_detail::quaternion_scalar_cast_<OriginalType,Scalar> >
     };
 
 template <class Scalar,class T>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::quaternion_scalar_cast_<T,Scalar> const &
 scalar_cast( T const & x, typename qvm_detail::scalar_cast_quaternion_filter<is_quat<T>::value>::type=0 )
     {
@@ -363,21 +372,21 @@ scalar_cast( T const & x, typename qvm_detail::scalar_cast_quaternion_filter<is_
 ////////////////////////////////////////////////
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_scalar<B>::value,
     A &>::type
 operator/=( A & a, B b )
     {
-    quat_traits<A>::template write_element<0>(a)/=b;
-    quat_traits<A>::template write_element<1>(a)/=b;
-    quat_traits<A>::template write_element<2>(a)/=b;
-    quat_traits<A>::template write_element<3>(a)/=b;
+    write_quat_element<0>(a,quat_traits<A>::template read_element<0>(a)/b);
+    write_quat_element<1>(a,quat_traits<A>::template read_element<1>(a)/b);
+    write_quat_element<2>(a,quat_traits<A>::template read_element<2>(a)/b);
+    write_quat_element<3>(a,quat_traits<A>::template read_element<3>(a)/b);
     return a;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_scalar<B>::value,
     deduce_quat2<A,B> >::type
@@ -385,15 +394,15 @@ operator/( A const & a, B b )
     {
     typedef typename deduce_quat2<A,B>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r) = quat_traits<A>::template read_element<0>(a)/b;
-    quat_traits<R>::template write_element<1>(r) = quat_traits<A>::template read_element<1>(a)/b;
-    quat_traits<R>::template write_element<2>(r) = quat_traits<A>::template read_element<2>(a)/b;
-    quat_traits<R>::template write_element<3>(r) = quat_traits<A>::template read_element<3>(a)/b;
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a)/b);
+    write_quat_element<1>(r,quat_traits<A>::template read_element<1>(a)/b);
+    write_quat_element<2>(r,quat_traits<A>::template read_element<2>(a)/b);
+    write_quat_element<3>(r,quat_traits<A>::template read_element<3>(a)/b);
     return r;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     deduce_scalar<typename quat_traits<A>::scalar_type,typename quat_traits<B>::scalar_type> >::type
@@ -415,7 +424,7 @@ dot( A const & a, B const & b )
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     bool>::type
@@ -429,7 +438,7 @@ operator==( A const & a, B const & b )
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value,
     deduce_quat<A> >::type
@@ -446,15 +455,15 @@ inverse( A const & a )
         BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
     TA rm=scalar_traits<TA>::value(1)/m2;
     R r;
-    quat_traits<R>::template write_element<0>(r) = aa*rm;
-    quat_traits<R>::template write_element<1>(r) = -ab*rm;
-    quat_traits<R>::template write_element<2>(r) = -ac*rm;
-    quat_traits<R>::template write_element<3>(r) = -ad*rm;
+    write_quat_element<0>(r,aa*rm);
+    write_quat_element<1>(r,-ab*rm);
+    write_quat_element<2>(r,-ac*rm);
+    write_quat_element<3>(r,-ad*rm);
     return r;
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     typename quat_traits<A>::scalar_type>::type
@@ -469,7 +478,7 @@ mag_sqr( A const & a )
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     typename quat_traits<A>::scalar_type>::type
@@ -480,25 +489,25 @@ mag( A const & a )
     T y=quat_traits<A>::template read_element<1>(a);
     T z=quat_traits<A>::template read_element<2>(a);
     T w=quat_traits<A>::template read_element<3>(a);
-    return sqrt<T>(x*x+y*y+z*z+w*w);
+    return sqrt(x*x+y*y+z*z+w*w);
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if<
     msvc_parse_bug_workaround::quats<A,B>,
     A &>::type
 operator-=( A & a, B const & b )
     {
-    quat_traits<A>::template write_element<0>(a)-=quat_traits<B>::template read_element<0>(b);
-    quat_traits<A>::template write_element<1>(a)-=quat_traits<B>::template read_element<1>(b);
-    quat_traits<A>::template write_element<2>(a)-=quat_traits<B>::template read_element<2>(b);
-    quat_traits<A>::template write_element<3>(a)-=quat_traits<B>::template read_element<3>(b);
+    write_quat_element<0>(a,quat_traits<A>::template read_element<0>(a)-quat_traits<B>::template read_element<0>(b));
+    write_quat_element<1>(a,quat_traits<A>::template read_element<1>(a)-quat_traits<B>::template read_element<1>(b));
+    write_quat_element<2>(a,quat_traits<A>::template read_element<2>(a)-quat_traits<B>::template read_element<2>(b));
+    write_quat_element<3>(a,quat_traits<A>::template read_element<3>(a)-quat_traits<B>::template read_element<3>(b));
     return a;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     deduce_quat2<A,B> >::type
@@ -506,15 +515,15 @@ operator-( A const & a, B const & b )
     {
     typedef typename deduce_quat2<A,B>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=quat_traits<A>::template read_element<0>(a)-quat_traits<B>::template read_element<0>(b);
-    quat_traits<R>::template write_element<1>(r)=quat_traits<A>::template read_element<1>(a)-quat_traits<B>::template read_element<1>(b);
-    quat_traits<R>::template write_element<2>(r)=quat_traits<A>::template read_element<2>(a)-quat_traits<B>::template read_element<2>(b);
-    quat_traits<R>::template write_element<3>(r)=quat_traits<A>::template read_element<3>(a)-quat_traits<B>::template read_element<3>(b);
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a)-quat_traits<B>::template read_element<0>(b));
+    write_quat_element<1>(r,quat_traits<A>::template read_element<1>(a)-quat_traits<B>::template read_element<1>(b));
+    write_quat_element<2>(r,quat_traits<A>::template read_element<2>(a)-quat_traits<B>::template read_element<2>(b));
+    write_quat_element<3>(r,quat_traits<A>::template read_element<3>(a)-quat_traits<B>::template read_element<3>(b));
     return r;
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value,
     deduce_quat<A> >::type
@@ -522,15 +531,15 @@ operator-( A const & a )
     {
     typedef typename deduce_quat<A>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=-quat_traits<A>::template read_element<0>(a);
-    quat_traits<R>::template write_element<1>(r)=-quat_traits<A>::template read_element<1>(a);
-    quat_traits<R>::template write_element<2>(r)=-quat_traits<A>::template read_element<2>(a);
-    quat_traits<R>::template write_element<3>(r)=-quat_traits<A>::template read_element<3>(a);
+    write_quat_element<0>(r,-quat_traits<A>::template read_element<0>(a));
+    write_quat_element<1>(r,-quat_traits<A>::template read_element<1>(a));
+    write_quat_element<2>(r,-quat_traits<A>::template read_element<2>(a));
+    write_quat_element<3>(r,-quat_traits<A>::template read_element<3>(a));
     return r;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if<
     msvc_parse_bug_workaround::quats<A,B>,
     A &>::type
@@ -546,29 +555,29 @@ operator*=( A & a, B const & b )
     TB const bb=quat_traits<B>::template read_element<1>(b);
     TB const bc=quat_traits<B>::template read_element<2>(b);
     TB const bd=quat_traits<B>::template read_element<3>(b);
-    quat_traits<A>::template write_element<0>(a) = aa*ba - ab*bb - ac*bc - ad*bd;
-    quat_traits<A>::template write_element<1>(a) = aa*bb + ab*ba + ac*bd - ad*bc;
-    quat_traits<A>::template write_element<2>(a) = aa*bc + ac*ba + ad*bb - ab*bd;
-    quat_traits<A>::template write_element<3>(a) = aa*bd + ad*ba + ab*bc - ac*bb;
+    write_quat_element<0>(a,aa*ba - ab*bb - ac*bc - ad*bd);
+    write_quat_element<1>(a,aa*bb + ab*ba + ac*bd - ad*bc);
+    write_quat_element<2>(a,aa*bc + ac*ba + ad*bb - ab*bd);
+    write_quat_element<3>(a,aa*bd + ad*ba + ab*bc - ac*bb);
     return a;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_scalar<B>::value,
     A &>::type
 operator*=( A & a, B b )
     {
-    quat_traits<A>::template write_element<0>(a)*=b;
-    quat_traits<A>::template write_element<1>(a)*=b;
-    quat_traits<A>::template write_element<2>(a)*=b;
-    quat_traits<A>::template write_element<3>(a)*=b;
+    write_quat_element<0>(a, quat_traits<A>::template read_element<0>(a)*b);
+    write_quat_element<1>(a, quat_traits<A>::template read_element<1>(a)*b);
+    write_quat_element<2>(a, quat_traits<A>::template read_element<2>(a)*b);
+    write_quat_element<3>(a, quat_traits<A>::template read_element<3>(a)*b);
     return a;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     deduce_quat2<A,B> >::type
@@ -586,15 +595,15 @@ operator*( A const & a, B const & b )
     TB const bc=quat_traits<B>::template read_element<2>(b);
     TB const bd=quat_traits<B>::template read_element<3>(b);
     R r;
-    quat_traits<R>::template write_element<0>(r) = aa*ba - ab*bb - ac*bc - ad*bd;
-    quat_traits<R>::template write_element<1>(r) = aa*bb + ab*ba + ac*bd - ad*bc;
-    quat_traits<R>::template write_element<2>(r) = aa*bc + ac*ba + ad*bb - ab*bd;
-    quat_traits<R>::template write_element<3>(r) = aa*bd + ad*ba + ab*bc - ac*bb;
+    write_quat_element<0>(r,aa*ba - ab*bb - ac*bc - ad*bd);
+    write_quat_element<1>(r,aa*bb + ab*ba + ac*bd - ad*bc);
+    write_quat_element<2>(r,aa*bc + ac*ba + ad*bb - ab*bd);
+    write_quat_element<3>(r,aa*bd + ad*ba + ab*bc - ac*bb);
     return r;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c2<
     is_quat<A>::value && is_scalar<B>::value,
     deduce_quat2<A,B> >::type
@@ -602,15 +611,15 @@ operator*( A const & a, B b )
     {
     typedef typename deduce_quat2<A,B>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=quat_traits<A>::template read_element<0>(a)*b;
-    quat_traits<R>::template write_element<1>(r)=quat_traits<A>::template read_element<1>(a)*b;
-    quat_traits<R>::template write_element<2>(r)=quat_traits<A>::template read_element<2>(a)*b;
-    quat_traits<R>::template write_element<3>(r)=quat_traits<A>::template read_element<3>(a)*b;
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a)*b);
+    write_quat_element<1>(r,quat_traits<A>::template read_element<1>(a)*b);
+    write_quat_element<2>(r,quat_traits<A>::template read_element<2>(a)*b);
+    write_quat_element<3>(r,quat_traits<A>::template read_element<3>(a)*b);
     return r;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     bool>::type
@@ -624,7 +633,7 @@ operator!=( A const & a, B const & b )
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value,
     deduce_quat<A> >::type
@@ -638,18 +647,18 @@ normalized( A const & a )
     T const m2=a0*a0+a1*a1+a2*a2+a3*a3;
     if( m2==scalar_traits<typename quat_traits<A>::scalar_type>::value(0) )
         BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-    T const rm=scalar_traits<T>::value(1)/sqrt<T>(m2);
+    T const rm=scalar_traits<T>::value(1)/sqrt(m2);
     typedef typename deduce_quat<A>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=a0*rm;
-    quat_traits<R>::template write_element<1>(r)=a1*rm;
-    quat_traits<R>::template write_element<2>(r)=a2*rm;
-    quat_traits<R>::template write_element<3>(r)=a3*rm;
+    write_quat_element<0>(r,a0*rm);
+    write_quat_element<1>(r,a1*rm);
+    write_quat_element<2>(r,a2*rm);
+    write_quat_element<3>(r,a3*rm);
     return r;
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -663,29 +672,29 @@ normalize( A & a )
     T const m2=a0*a0+a1*a1+a2*a2+a3*a3;
     if( m2==scalar_traits<typename quat_traits<A>::scalar_type>::value(0) )
         BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-    T const rm=scalar_traits<T>::value(1)/sqrt<T>(m2);
-    quat_traits<A>::template write_element<0>(a)*=rm;
-    quat_traits<A>::template write_element<1>(a)*=rm;
-    quat_traits<A>::template write_element<2>(a)*=rm;
-    quat_traits<A>::template write_element<3>(a)*=rm;
+    T const rm=scalar_traits<T>::value(1)/sqrt(m2);
+    write_quat_element<0>(a,quat_traits<A>::template read_element<0>(a)*rm);
+    write_quat_element<1>(a,quat_traits<A>::template read_element<1>(a)*rm);
+    write_quat_element<2>(a,quat_traits<A>::template read_element<2>(a)*rm);
+    write_quat_element<3>(a,quat_traits<A>::template read_element<3>(a)*rm);
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if<
     msvc_parse_bug_workaround::quats<A,B>,
     A &>::type
 operator+=( A & a, B const & b )
     {
-    quat_traits<A>::template write_element<0>(a)+=quat_traits<B>::template read_element<0>(b);
-    quat_traits<A>::template write_element<1>(a)+=quat_traits<B>::template read_element<1>(b);
-    quat_traits<A>::template write_element<2>(a)+=quat_traits<B>::template read_element<2>(b);
-    quat_traits<A>::template write_element<3>(a)+=quat_traits<B>::template read_element<3>(b);
+    write_quat_element<0>(a,quat_traits<A>::template read_element<0>(a)+quat_traits<B>::template read_element<0>(b));
+    write_quat_element<1>(a,quat_traits<A>::template read_element<1>(a)+quat_traits<B>::template read_element<1>(b));
+    write_quat_element<2>(a,quat_traits<A>::template read_element<2>(a)+quat_traits<B>::template read_element<2>(b));
+    write_quat_element<3>(a,quat_traits<A>::template read_element<3>(a)+quat_traits<B>::template read_element<3>(b));
     return a;
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_quat<B>::value,
     deduce_quat2<A,B> >::type
@@ -693,35 +702,62 @@ operator+( A const & a, B const & b )
     {
     typedef typename deduce_quat2<A,B>::type R;
     R r;
-    quat_traits<R>::template write_element<0>(r)=quat_traits<A>::template read_element<0>(a)+quat_traits<B>::template read_element<0>(b);
-    quat_traits<R>::template write_element<1>(r)=quat_traits<A>::template read_element<1>(a)+quat_traits<B>::template read_element<1>(b);
-    quat_traits<R>::template write_element<2>(r)=quat_traits<A>::template read_element<2>(a)+quat_traits<B>::template read_element<2>(b);
-    quat_traits<R>::template write_element<3>(r)=quat_traits<A>::template read_element<3>(a)+quat_traits<B>::template read_element<3>(b);
+    write_quat_element<0>(r,quat_traits<A>::template read_element<0>(a)+quat_traits<B>::template read_element<0>(b));
+    write_quat_element<1>(r,quat_traits<A>::template read_element<1>(a)+quat_traits<B>::template read_element<1>(b));
+    write_quat_element<2>(r,quat_traits<A>::template read_element<2>(a)+quat_traits<B>::template read_element<2>(b));
+    write_quat_element<3>(r,quat_traits<A>::template read_element<3>(a)+quat_traits<B>::template read_element<3>(b));
     return r;
     }
 
 template <class A,class B,class C>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
+typename lazy_enable_if_c<
+    is_quat<A>::value && is_quat<B>::value && is_scalar<C>::value,
+    deduce_quat2<A,B> >::type
+slerp360( A const & a, B const & b, C t )
+    {
+    typedef typename deduce_quat2<A,B>::type R;
+    typedef typename quat_traits<R>::scalar_type TR;
+    TR const one = scalar_traits<TR>::value(1);
+    TR const threshold = one - one / scalar_traits<TR>::value(2000); //0.9995
+    TR const dp = dot(a,b);
+    TR const abs_dp = abs(dp);
+    if( abs_dp > threshold )
+        return a*(one-t) + b*t;
+    TR const th = acos(dp);
+    TR const invsinth = one / sin(th);
+    return a * (sin(th * (one-t)) * invsinth) + b * (sin(th * t) * invsinth);
+    }
+
+template <class A,class B,class C>
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
+typename lazy_enable_if_c<
+    is_quat<A>::value && is_quat<B>::value && is_scalar<C>::value,
+    deduce_quat2<A,B> >::type
+slerp180( A const & a, B const & b, C t )
+    {
+    typedef typename deduce_quat2<A,B>::type R;
+    typedef typename quat_traits<R>::scalar_type TR;
+    TR const one = scalar_traits<TR>::value(1);
+    TR const threshold = one - one / scalar_traits<TR>::value(2000); //0.9995
+    TR const dp = dot(a,b);
+    TR const abs_dp = abs(dp);
+    if( abs_dp > threshold )
+        return a*(one-t)*sign(dp) + b*t;
+    TR const th = acos(abs_dp);
+    TR const invsinth = one / sin(th);
+    return a * (sin(th * (one-t)) * invsinth * sign(dp)) + b * (sin(th * t) * invsinth);
+    }
+
+template <class A,class B,class C>
+BOOST_QVM_DEPRECATED("please use slerp180 or slerp360")
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename lazy_enable_if_c<
     is_quat<A>::value && is_quat<B>::value && is_scalar<C>::value,
     deduce_quat2<A,B> >::type
 slerp( A const & a, B const & b, C t )
     {
-    typedef typename deduce_quat2<A,B>::type R;
-    typedef typename quat_traits<R>::scalar_type TR;
-    TR const one = scalar_traits<TR>::value(1);
-    TR dp = dot(a,b);
-    TR sc=one;
-    if( dp < one )
-        {
-        TR const theta = acos<TR>(dp);
-        TR const invsintheta = one/sin<TR>(theta);
-        TR const scale = sin<TR>(theta*(one-t)) * invsintheta;
-        TR const invscale = sin<TR>(theta*t) * invsintheta * sc;
-        return a*scale + b*invscale;
-        }
-    else
-        return normalized(a+(b-a)*t);
+    return slerp360(a, b, t);
     }
 
 ////////////////////////////////////////////////
@@ -740,7 +776,7 @@ qvm_detail
         public:
 
         template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         qref_ &
         operator=( R const & x )
             {
@@ -748,13 +784,58 @@ qvm_detail
             return *this;
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
             assign(r,*this);
             return r;
+            }
+        };
+
+    template <class Q,bool WriteElementRef=quat_write_element_ref<Q>::value>
+    struct qref_write_traits;
+
+    template <class Q>
+    struct
+    qref_write_traits<Q,true>
+        {
+        typedef typename quat_traits<Q>::scalar_type scalar_type;
+        typedef qvm_detail::qref_<Q> this_quaternion;
+
+        template <int I>
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        scalar_type &
+        write_element( this_quaternion & x )
+            {
+            BOOST_QVM_STATIC_ASSERT(I>=0);
+            BOOST_QVM_STATIC_ASSERT(I<4);
+            return quat_traits<Q>::template write_element<I>(reinterpret_cast<Q &>(x));
+            }
+        };
+
+    template <class Q>
+    struct
+    qref_write_traits<Q,false>
+        {
+        typedef typename quat_traits<Q>::scalar_type scalar_type;
+        typedef qvm_detail::qref_<Q> this_quaternion;
+
+        template <int I>
+        static
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
+        void
+        write_element( this_quaternion & x, scalar_type s )
+            {
+            BOOST_QVM_STATIC_ASSERT(I>=0);
+            BOOST_QVM_STATIC_ASSERT(I<4);
+            quat_traits<Q>::template write_element<I>(reinterpret_cast<Q &>(x), s);
             }
         };
     }
@@ -764,31 +845,21 @@ struct quat_traits;
 
 template <class Q>
 struct
-quat_traits< qvm_detail::qref_<Q> >
+quat_traits< qvm_detail::qref_<Q> >:
+    qvm_detail::qref_write_traits<Q>
     {
     typedef typename quat_traits<Q>::scalar_type scalar_type;
     typedef qvm_detail::qref_<Q> this_quaternion;
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
         BOOST_QVM_STATIC_ASSERT(I>=0);
         BOOST_QVM_STATIC_ASSERT(I<4);
         return quat_traits<Q>::template read_element<I>(reinterpret_cast<Q const &>(x));
-        }
-
-    template <int I>
-    static
-    BOOST_QVM_INLINE_CRITICAL
-    scalar_type &
-    write_element( this_quaternion & x )
-        {
-        BOOST_QVM_STATIC_ASSERT(I>=0);
-        BOOST_QVM_STATIC_ASSERT(I<4);
-        return quat_traits<Q>::template write_element<I>(reinterpret_cast<Q &>(x));
         }
     };
 
@@ -800,7 +871,7 @@ deduce_quat< qvm_detail::qref_<Q> >
     };
 
 template <class Q>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_quat<Q>::value,
     qvm_detail::qref_<Q> const &>::type
@@ -810,7 +881,7 @@ qref( Q const & a )
     }
 
 template <class Q>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 typename enable_if_c<
     is_quat<Q>::value,
     qvm_detail::qref_<Q> &>::type
@@ -834,8 +905,12 @@ qvm_detail
 
         public:
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -854,9 +929,9 @@ quat_traits< qvm_detail::zero_q_<T> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
-    read_element( this_quaternion const & x )
+    read_element( this_quaternion const & )
         {
         BOOST_QVM_STATIC_ASSERT(I>=0);
         BOOST_QVM_STATIC_ASSERT(I<4);
@@ -864,9 +939,9 @@ quat_traits< qvm_detail::zero_q_<T> >
         }
 
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
-    read_element_idx( int i, this_quaternion const & x )
+    read_element_idx( int i, this_quaternion const & )
         {
         BOOST_QVM_ASSERT(i>=0);
         BOOST_QVM_ASSERT(i<4);
@@ -875,7 +950,7 @@ quat_traits< qvm_detail::zero_q_<T> >
     };
 
 template <class T>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::zero_q_<T> const &
 zero_quat()
     {
@@ -883,7 +958,7 @@ zero_quat()
     }
 
 template <class A>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -891,10 +966,10 @@ set_zero( A & a )
     {
     typedef typename quat_traits<A>::scalar_type T;
     T const zero=scalar_traits<T>::value(0);
-    quat_traits<A>::template write_element<0>(a) = zero;
-    quat_traits<A>::template write_element<1>(a) = zero;
-    quat_traits<A>::template write_element<2>(a) = zero;
-    quat_traits<A>::template write_element<3>(a) = zero;
+    write_quat_element<0>(a,zero);
+    write_quat_element<1>(a,zero);
+    write_quat_element<2>(a,zero);
+    write_quat_element<3>(a,zero);
     }
 
 ////////////////////////////////////////////////
@@ -910,7 +985,7 @@ qvm_detail
         scalar_type a[4];
 
         template <class Angle>
-        BOOST_QVM_INLINE
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE
         rot_quat_( V const & axis, Angle angle )
             {
             scalar_type const x=vec_traits<V>::template read_element<0>(axis);
@@ -919,17 +994,21 @@ qvm_detail
             scalar_type const m2=x*x+y*y+z*z;
             if( m2==scalar_traits<scalar_type>::value(0) )
                 BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-            scalar_type const rm=scalar_traits<scalar_type>::value(1)/sqrt<scalar_type>(m2);
+            scalar_type const rm=scalar_traits<scalar_type>::value(1)/sqrt(m2);
             angle/=2;
-            scalar_type const s=sin<Angle>(angle);
-            a[0] = cos<Angle>(angle);
+            scalar_type const s=sin(angle);
+            a[0] = cos(angle);
             a[1] = rm*x*s;
             a[2] = rm*y*s;
             a[3] = rm*z*s;
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -948,7 +1027,7 @@ quat_traits< qvm_detail::rot_quat_<V> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
@@ -966,7 +1045,7 @@ deduce_quat< qvm_detail::rot_quat_<V> >
     };
 
 template <class A,class Angle>
-BOOST_QVM_INLINE
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE
 typename enable_if_c<
     is_vec<A>::value && vec_traits<A>::dim==3,
     qvm_detail::rot_quat_<A> >::type
@@ -976,7 +1055,7 @@ rot_quat( A const & axis, Angle angle )
     }
 
 template <class A,class B,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value &&
     is_vec<B>::value && vec_traits<B>::dim==3,
@@ -987,7 +1066,7 @@ set_rot( A & a, B const & axis, Angle angle )
     }
 
 template <class A,class B,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value &&
     is_vec<B>::value && vec_traits<B>::dim==3,
@@ -1006,13 +1085,17 @@ qvm_detail
     struct
     rotx_quat_
         {
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         rotx_quat_()
             {
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -1033,7 +1116,7 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & )
             {
@@ -1047,11 +1130,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return sin<T>(angle/2);
+            return sin(angle/2);
             }
         };
 
@@ -1061,11 +1144,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return cos<T>(angle/2);
+            return cos(angle/2);
             }
         };
     }
@@ -1079,7 +1162,7 @@ quat_traits< qvm_detail::rotx_quat_<Angle> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
@@ -1104,7 +1187,7 @@ deduce_quat2< qvm_detail::rotx_quat_<Angle>, qvm_detail::rotx_quat_<Angle> >
     };
 
 template <class Angle>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::rotx_quat_<Angle> const &
 rotx_quat( Angle const & angle )
     {
@@ -1112,7 +1195,7 @@ rotx_quat( Angle const & angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1122,7 +1205,7 @@ set_rotx( A & a, Angle angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1140,13 +1223,17 @@ qvm_detail
     struct
     roty_quat_
         {
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         roty_quat_()
             {
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -1167,7 +1254,7 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & )
             {
@@ -1181,11 +1268,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return sin<T>(angle/2);
+            return sin(angle/2);
             }
         };
 
@@ -1195,11 +1282,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return cos<T>(angle/2);
+            return cos(angle/2);
             }
         };
     }
@@ -1213,7 +1300,7 @@ quat_traits< qvm_detail::roty_quat_<Angle> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
@@ -1238,7 +1325,7 @@ deduce_quat2< qvm_detail::roty_quat_<Angle>, qvm_detail::roty_quat_<Angle> >
     };
 
 template <class Angle>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::roty_quat_<Angle> const &
 roty_quat( Angle const & angle )
     {
@@ -1246,7 +1333,7 @@ roty_quat( Angle const & angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1256,7 +1343,7 @@ set_roty( A & a, Angle angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1274,13 +1361,17 @@ qvm_detail
     struct
     rotz_quat_
         {
-        BOOST_QVM_INLINE_TRIVIAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         rotz_quat_()
             {
             }
 
-        template <class R>
-        BOOST_QVM_INLINE_TRIVIAL
+        template <class R
+#if __cplusplus >= 201103L
+            , class = typename enable_if<is_quat<R> >::type
+#endif
+        >
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
         operator R() const
             {
             R r;
@@ -1301,7 +1392,7 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & )
             {
@@ -1315,11 +1406,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return sin<T>(angle/2);
+            return sin(angle/2);
             }
         };
 
@@ -1329,11 +1420,11 @@ qvm_detail
         {
         template <class T>
         static
-        BOOST_QVM_INLINE_CRITICAL
+        BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
         T
         get( T const & angle )
             {
-            return cos<T>(angle/2);
+            return cos(angle/2);
             }
         };
     }
@@ -1347,7 +1438,7 @@ quat_traits< qvm_detail::rotz_quat_<Angle> >
 
     template <int I>
     static
-    BOOST_QVM_INLINE_CRITICAL
+    BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_CRITICAL
     scalar_type
     read_element( this_quaternion const & x )
         {
@@ -1372,7 +1463,7 @@ deduce_quat2< qvm_detail::rotz_quat_<Angle>, qvm_detail::rotz_quat_<Angle> >
     };
 
 template <class Angle>
-BOOST_QVM_INLINE_TRIVIAL
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_TRIVIAL
 qvm_detail::rotz_quat_<Angle> const &
 rotz_quat( Angle const & angle )
     {
@@ -1380,7 +1471,7 @@ rotz_quat( Angle const & angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1390,7 +1481,7 @@ set_rotz( A & a, Angle angle )
     }
 
 template <class A,class Angle>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value,
     void>::type
@@ -1400,7 +1491,7 @@ rotate_z( A & a, Angle angle )
     }
 
 template <class A,class B>
-BOOST_QVM_INLINE_OPERATIONS
+BOOST_QVM_CONSTEXPR BOOST_QVM_INLINE_OPERATIONS
 typename enable_if_c<
     is_quat<A>::value && is_vec<B>::value && vec_traits<B>::dim==3,
     typename quat_traits<A>::scalar_type>::type
@@ -1416,23 +1507,24 @@ axis_angle( A const & a, B & b )
         T const m2=a0*a0+a1*a1+a2*a2+a3*a3;
         if( m2==scalar_traits<T>::value(0) )
             BOOST_QVM_THROW_EXCEPTION(zero_magnitude_error());
-        T const s=sqrt<T>(m2);
+        T const s=sqrt(m2);
         a0/=s;
         a1/=s;
         a2/=s;
         a3/=s;
         }
-    if( T s=sqrt<T>(1-a0*a0) )
+    if( T s=sqrt(1-a0*a0) )
         {
-        vec_traits<B>::template write_element<0>(b) = a1/s;
-        vec_traits<B>::template write_element<1>(b) = a2/s;
-        vec_traits<B>::template write_element<2>(b) = a3/s;
+        write_vec_element<0>(b, a1/s);
+        write_vec_element<1>(b, a2/s);
+        write_vec_element<2>(b, a3/s);
         }
     else
         {
         typedef typename vec_traits<B>::scalar_type U;
-        vec_traits<B>::template write_element<0>(b) = scalar_traits<U>::value(1);
-        vec_traits<B>::template write_element<1>(b) = vec_traits<B>::template write_element<2>(b) = scalar_traits<U>::value(0);
+        write_vec_element<0>(b, scalar_traits<U>::value(1));
+        write_vec_element<1>(b, scalar_traits<U>::value(0));
+        write_vec_element<2>(b, scalar_traits<U>::value(0));
         }
     return scalar_traits<T>::value(2) * qvm::acos(a0);
     }
@@ -1456,6 +1548,8 @@ sfinae
     using ::boost::qvm::inverse;
     using ::boost::qvm::mag_sqr;
     using ::boost::qvm::mag;
+    using ::boost::qvm::slerp360;
+    using ::boost::qvm::slerp180;
     using ::boost::qvm::slerp;
     using ::boost::qvm::operator-=;
     using ::boost::qvm::operator-;

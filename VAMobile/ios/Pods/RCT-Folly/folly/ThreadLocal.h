@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ class ThreadLocal {
   }
 
   // may return null
-  FOLLY_ERASE T* getIfExist() const { return tlp_.get(); }
+  FOLLY_ERASE T* get_existing() const { return tlp_.get(); }
 
   T* operator->() const { return get(); }
 

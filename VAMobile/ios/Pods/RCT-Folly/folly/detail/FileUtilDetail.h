@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 #include <cstddef>
 #include <type_traits>
 
+#include <folly/portability/SysTypes.h>
+
 //  Private functions for wrapping file-io against interrupt and partial op
 //  completions.
 //
@@ -29,8 +31,6 @@
 
 namespace folly {
 namespace fileutil_detail {
-
-using ssize_t = std::make_signed_t<size_t>;
 
 // Wrap call to f(args) in loop to retry on EINTR
 template <class F, class... Args>

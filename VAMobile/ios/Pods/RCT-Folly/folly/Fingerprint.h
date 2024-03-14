@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -153,7 +153,7 @@ class Fingerprint {
   constexpr static int size() { return detail::poly_size(BITS); }
 
   /**
-   * Write the computed fingeprint to an array of size() uint64_t's.
+   * Write the computed fingerprint to an array of size() uint64_t's.
    * For Fingerprint<64>,  size()==1; we write 64 bits in out[0]
    * For Fingerprint<96>,  size()==2; we write 64 bits in out[0] and
    *                                  the most significant 32 bits of out[1]

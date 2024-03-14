@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,19 +27,6 @@
 #include <folly/net/TcpInfoTypes.h>
 
 namespace folly {
-namespace tcpinfo {
-
-/**
- * Structure specifying options for TcpInfo::initFromFd.
- */
-struct LookupOptions {
-  // On supported platforms, whether to fetch the name of the  congestion
-  // control algorithm and any information exposed via TCP_CC_INFO.
-  bool getCcInfo{false};
-
-  // On supported platforms, whether to fetch socket buffer utilization.
-  bool getMemInfo{false};
-};
 
 /**
  * Abstraction layer for capturing current TCP and congestion control state.
@@ -113,6 +100,20 @@ struct TcpInfo {
   };
 
   /**
+   * Structure specifying options for TcpInfo::initFromFd.
+   */
+  struct LookupOptions {
+    // On supported platforms, whether to fetch the name of the  congestion
+    // control algorithm and any information exposed via TCP_CC_INFO.
+    bool getCcInfo{false};
+
+    // On supported platforms, whether to fetch socket buffer utilization.
+    bool getMemInfo{false};
+
+    LookupOptions() {}
+  };
+
+  /**
    * Dispatcher that enables calls to ioctl to be intercepted for tests.
    *
    * Also enables ioctl calls to be disabled for unsupported platforms.
@@ -139,7 +140,7 @@ struct TcpInfo {
    */
   static Expected<TcpInfo, std::errc> initFromFd(
       const NetworkSocket& fd,
-      const LookupOptions& options = LookupOptions(),
+      const TcpInfo::LookupOptions& options = TcpInfo::LookupOptions(),
       netops::Dispatcher& netopsDispatcher =
           *netops::Dispatcher::getDefaultInstance(),
       IoctlDispatcher& ioctlDispatcher =
@@ -159,6 +160,7 @@ struct TcpInfo {
   Optional<uint64_t> bytesReceived() const;
   Optional<uint64_t> bytesRetransmitted() const;
   Optional<uint64_t> bytesNotSent() const;
+  Optional<uint64_t> bytesAcked() const;
 
   Optional<uint64_t> packetsSent() const;
   Optional<uint64_t> packetsWithDataSent() const;
@@ -230,7 +232,7 @@ struct TcpInfo {
    */
   template <typename T1, typename T2>
   static size_t constexpr getFieldOffset(T1 T2::*field) {
-    static_assert(std::is_pod<T1>());
+    static_assert(std::is_standard_layout<T1>() && std::is_trivial<T1>());
     constexpr T2 dummy{};
     return size_t(&(dummy.*field)) - size_t(&dummy);
   }
@@ -268,7 +270,11 @@ struct TcpInfo {
 
 #if defined(FOLLY_HAVE_TCP_INFO)
  public:
-  using tcp_info = folly::tcpinfo::tcp_info;
+  using tcp_info = folly::detail::tcp_info;
+
+  TcpInfo() = default;
+  explicit TcpInfo(const tcp_info& tInfo)
+      : tcpInfo(tInfo), tcpInfoBytesRead{sizeof(TcpInfo::tcp_info)} {}
 
   /**
    * Returns pointer containing requested field from tcp_info struct.
@@ -311,7 +317,10 @@ struct TcpInfo {
 
 #if defined(FOLLY_HAVE_TCP_CC_INFO)
  public:
-  using tcp_cc_info = folly::tcpinfo::tcp_cc_info;
+  using tcp_cc_info = folly::detail::tcp_cc_info;
+  using tcp_bbr_info = folly::detail::tcp_bbr_info;
+  using tcpvegas_info = folly::detail::tcpvegas_info;
+  using tcp_dctcp_info = folly::detail::tcp_dctcp_info;
 
   // TCP_CA_NAME_MAX from <net/tcp.h> (Linux) or <netinet/tcp.h> (FreeBSD)
   static constexpr socklen_t kLinuxTcpCaNameMax = 16;
@@ -326,8 +335,7 @@ struct TcpInfo {
    * specifics, use accessors such as bbrBwBitsPerSecond().
    */
   template <typename T1>
-  folly::Optional<uint64_t> getFieldAsOptUInt64(
-      T1 tcpinfo::tcp_bbr_info::*field) const {
+  folly::Optional<uint64_t> getFieldAsOptUInt64(T1 tcp_bbr_info::*field) const {
     if (maybeCcInfo.has_value() && ccNameEnum() == CongestionControlName::BBR) {
       return getFieldAsOptUInt64(maybeCcInfo.value().bbr, field);
     }
@@ -342,7 +350,7 @@ struct TcpInfo {
    */
   template <typename T1>
   folly::Optional<uint64_t> getFieldAsOptUInt64(
-      T1 tcpinfo::tcpvegas_info::*field) const {
+      T1 tcpvegas_info::*field) const {
     if (maybeCcInfo.hasValue() &&
         ccNameEnum() == CongestionControlName::VEGAS) {
       return getFieldAsOptUInt64(maybeCcInfo.value().vegas, field);
@@ -358,7 +366,7 @@ struct TcpInfo {
    */
   template <typename T1>
   const folly::Optional<uint64_t> getFieldAsOptUInt64(
-      T1 tcpinfo::tcp_dctcp_info::*field) const {
+      T1 tcp_dctcp_info::*field) const {
     if (maybeCcInfo.has_value() &&
         (ccNameEnum() == CongestionControlName::DCTCP ||
          ccNameEnum() == CongestionControlName::DCTCP_CUBIC ||
@@ -410,5 +418,4 @@ struct TcpInfo {
   folly::Optional<size_t> maybeRecvBufInUseBytes;
 };
 
-} // namespace tcpinfo
 } // namespace folly

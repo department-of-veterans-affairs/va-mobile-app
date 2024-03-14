@@ -39,11 +39,10 @@
 #include <boost/move/detail/fwd_macros.hpp>
 #endif
 #include <boost/move/detail/move_helpers.hpp>
+#include <boost/move/detail/force_ptr.hpp>
 // intrusive
 #include <boost/intrusive/detail/minimal_pair_header.hpp>      //pair
 #include <boost/intrusive/detail/minimal_less_equal_header.hpp>//less, equal
-//others
-#include <boost/core/no_exceptions_support.hpp>
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
@@ -61,12 +60,16 @@ namespace dtl{
 
 template<class D, class S>
 BOOST_CONTAINER_FORCEINLINE static D &force(S &s)
-{  return *reinterpret_cast<D*>(&s); }
+{  return *move_detail::force_ptr<D*>(&s); }
+
+template<class D, class S>
+BOOST_CONTAINER_FORCEINLINE static const D &force(const S &s)
+{  return *move_detail::force_ptr<const D*>(&s); }
 
 template<class D, class S>
 BOOST_CONTAINER_FORCEINLINE static D force_copy(const S &s)
 {
-   const D *const vp = reinterpret_cast<const D *>(&s);
+   const D *const vp = move_detail::force_ptr<const D *>(&s);
    D ret_val(*vp);
    return ret_val;
 }
@@ -103,7 +106,7 @@ BOOST_CONTAINER_FORCEINLINE static D force_copy(const S &s)
 //!   - The allocator to allocate <code>value_type</code>s (e.g. <i>allocator< std::pair<Key, T> > </i>).
 //!     (in this case <i>sequence_type</i> will be vector<value_type, AllocatorOrContainer>)
 //!   - The SequenceContainer to be used as the underlying <i>sequence_type</i>. It must be a vector-like
-//!     sequence container with random-access iterators..
+//!     sequence container with random-access iterators.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class Key, class T, class Compare = std::less<Key>, class AllocatorOrContainer = new_allocator< std::pair< Key, T> > >
 #else
@@ -1265,14 +1268,14 @@ class flat_map
          (m_flat_tree.erase(dtl::force_copy<impl_const_iterator>(p)));
    }
 
-   //! <b>Effects</b>: Erases all elements in the container with key equivalent to x.
+   //! <b>Effects</b>: If present, erases the element in the container with key equivalent to x.
    //!
-   //! <b>Returns</b>: Returns the number of erased elements.
+   //! <b>Returns</b>: Returns the number of erased elements (0/1).
    //!
    //! <b>Complexity</b>: Logarithmic search time plus erasure time
    //!   linear to the elements with bigger keys.
    BOOST_CONTAINER_FORCEINLINE size_type erase(const key_type& x)
-      { return m_flat_tree.erase(x); }
+      { return m_flat_tree.erase_unique(x); }
 
    //! <b>Effects</b>: Erases all the elements in the range [first, last).
    //!
@@ -1567,6 +1570,14 @@ class flat_map
    //! <b>Throws</b>: If the move assignment throws
    BOOST_CONTAINER_FORCEINLINE void adopt_sequence(ordered_unique_range_t, BOOST_RV_REF(sequence_type) seq)
    {  this->m_flat_tree.adopt_sequence_unique(ordered_unique_range_t(), boost::move(dtl::force<impl_sequence_type>(seq)));  }
+
+   //! <b>Effects</b>: Returns a const view of the underlying sequence.
+   //!
+   //! <b>Complexity</b>: Constant
+   //!
+   //! <b>Throws</b>: Nothing
+   BOOST_CONTAINER_FORCEINLINE const sequence_type & sequence() const BOOST_NOEXCEPT
+   {  return dtl::force<sequence_type>(m_flat_tree.get_sequence_cref());  }
 
    //! <b>Effects</b>: Returns true if x and y are equal
    //!
@@ -2886,9 +2897,7 @@ class flat_multimap
    //! <b>Throws</b>: If secuence_type's move constructor throws 
    BOOST_CONTAINER_ATTRIBUTE_NODISCARD BOOST_CONTAINER_FORCEINLINE
       sequence_type extract_sequence()
-   {
-      return boost::move(dtl::force<sequence_type>(m_flat_tree.get_sequence_ref()));
-   }
+   {  return boost::move(dtl::force<sequence_type>(m_flat_tree.get_sequence_ref()));   }
 
    //! <b>Effects</b>: Discards the internally hold sequence container and adopts the
    //!   one passed externally using the move assignment.
@@ -2909,6 +2918,14 @@ class flat_multimap
    //! <b>Throws</b>: If the move assignment throws
    BOOST_CONTAINER_FORCEINLINE void adopt_sequence(ordered_range_t, BOOST_RV_REF(sequence_type) seq)
    {  this->m_flat_tree.adopt_sequence_equal(ordered_range_t(), boost::move(dtl::force<impl_sequence_type>(seq)));  }
+
+   //! <b>Effects</b>: Returns a const view of the underlying sequence.
+   //!
+   //! <b>Complexity</b>: Constant
+   //!
+   //! <b>Throws</b>: Nothing
+   BOOST_CONTAINER_FORCEINLINE const sequence_type & sequence() const BOOST_NOEXCEPT
+   {  return dtl::force<sequence_type>(m_flat_tree.get_sequence_cref());  }
 
    //! <b>Effects</b>: Returns true if x and y are equal
    //!

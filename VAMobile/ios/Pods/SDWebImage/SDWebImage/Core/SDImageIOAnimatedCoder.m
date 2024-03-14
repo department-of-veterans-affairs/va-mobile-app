@@ -48,6 +48,10 @@ static CGImageRef __nullable SDCGImageCreateMutableCopy(CGImageRef cg_nullable i
     return newImage;
 }
 
+static inline BOOL SDCGImageIs8Bit(CGImageRef cg_nullable image) {
+    return CGImageGetBitsPerComponent(image) == 8;
+}
+
 static inline CGImageRef __nullable SDCGImageCreateCopy(CGImageRef cg_nullable image) {
     if (!image) return nil;
     return SDCGImageCreateMutableCopy(image, CGImageGetBitmapInfo(image));
@@ -209,6 +213,7 @@ static BOOL SDImageIOPNGPluginBuggyNeedWorkaround(void) {
     // See: #3605 FB13322459
     // ImageIO on iOS 17 (17.0~17.2), there is one serious problem on ImageIO PNG plugin. The decode result for indexed color PNG use the wrong CGImageAlphaInfo
     // The returned CGImageAlphaInfo is alpha last, but the actual bitmap data is premultiplied alpha last, which cause many runtime render bug.
+    // The bug only exists on 8-bits indexed color, not about 16-bits
     // So, we do a hack workaround:
     // 1. Decode a indexed color PNG in runtime
     // 2. If the bitmap is premultiplied alpha, then assume it's buggy
@@ -229,7 +234,8 @@ static BOOL SDImageIOPNGPluginBuggyNeedWorkaround(void) {
         NSCParameterAssert(source);
         CGImageRef cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil);
         NSCParameterAssert(cgImage);
-        uint8_t r, g, b, a = 0;
+        uint8_t r, g, b, a;
+        r = g = b = a = 0;
         BOOL success = SDLoadOnePixelBitmapBuffer(cgImage, &r, &g, &b, &a);
         if (!success) {
             isBuggy = NO; // Impossible...
@@ -238,7 +244,7 @@ static BOOL SDImageIOPNGPluginBuggyNeedWorkaround(void) {
                 // Correct value
                 isBuggy = NO;
             } else {
-                SD_LOG("Detected the current OS's ImageIO PNG Decoder is buggy on indexed color PNG. Perform workaround solution...");
+                SD_LOG("%@", @"Detected the current OS's ImageIO PNG Decoder is buggy on indexed color PNG. Perform workaround solution...");
                 isBuggy = YES;
             }
         }
@@ -526,7 +532,7 @@ static BOOL SDImageIOPNGPluginBuggyNeedWorkaround(void) {
     // :)
     CFStringRef uttype = CGImageSourceGetType(source);
     SDImageFormat imageFormat = [NSData sd_imageFormatFromUTType:uttype];
-    if (imageFormat == SDImageFormatPNG && SDImageIOPNGPluginBuggyNeedWorkaround()) {
+    if (imageFormat == SDImageFormatPNG && SDCGImageIs8Bit(imageRef) && SDImageIOPNGPluginBuggyNeedWorkaround()) {
         CGImageRef newImageRef = SDImageIOPNGPluginBuggyCreateWorkaround(imageRef);
         CGImageRelease(imageRef);
         imageRef = newImageRef;

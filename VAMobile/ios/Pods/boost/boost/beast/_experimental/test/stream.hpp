@@ -214,7 +214,7 @@ public:
     : in_(std::move(other.in_))
     , out_(std::move(other.out_))
     {
-        assert(in_->exec.target_type() == typeid(Executor2));
+        BOOST_ASSERT(in_->exec.template target<Executor2>() != nullptr);
         in_->exec = executor_type(*in_->exec.template target<Executor2>());
     }
 
@@ -234,7 +234,7 @@ public:
 
         The stream will be created in a disconnected state.
 
-        @param ioc The `io_context` object that the stream will use to
+        @param context The `io_context` object that the stream will use to
         dispatch handlers for any asynchronous operations.
     */
     template <typename ExecutionContext>
@@ -591,7 +591,7 @@ beast_close_socket(basic_stream<Executor>& s)
 */
 template<class Executor>
 template<class... Args>
-bascic_stream
+basic_stream
 connect(basic_stream& to, Args&&... args);
 
 #else
