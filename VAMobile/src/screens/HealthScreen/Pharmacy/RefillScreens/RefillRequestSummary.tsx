@@ -128,6 +128,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   }
 
   const getRequestSummaryItem = () => {
+    console.debug(refillRequestSummaryItems)
     return refillRequestSummaryItems.map((request, index) => {
       const vaIconProps: VAIconProps = {
         name: request.submitted ? 'CircleCheckMark' : 'Remove',

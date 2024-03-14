@@ -509,7 +509,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <Box mx={theme.dimensions.buttonPadding} importantForAccessibility={'no-hide-descendants'}>
           <Button
             label={t('prescription.history.startRefillRequest')}
-            onPress={() => navigateTo('RefillScreenModal')}
+            onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
           />
         </Box>
       </Box>

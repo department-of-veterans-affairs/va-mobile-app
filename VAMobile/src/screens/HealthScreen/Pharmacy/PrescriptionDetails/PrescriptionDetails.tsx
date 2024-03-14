@@ -105,7 +105,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
                 logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
                 const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
                   onSettled(data) {
-                    navigateTo('RefillScreenModal', data)
+                    navigateTo('RefillScreenModal', { refillRequestSummaryItems: data })
                   },
                 }
                 requestRefill([prescription], mutateOptions)

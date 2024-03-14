@@ -72,7 +72,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   useEffect(() => {
     if (refillRequestSummaryItems) {
-      navigateTo('RefillRequestSummary', refillRequestSummaryItems)
+      navigateTo('RefillRequestSummary', { refillRequestSummaryItems: refillRequestSummaryItems })
     }
   }, [navigateTo, refillRequestSummaryItems])
 
@@ -134,7 +134,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
             const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
               onSettled(data) {
                 if (data) {
-                  navigateTo('RefillRequestSummary', data)
+                  navigateTo('RefillRequestSummary', { refillRequestSummaryItems: data })
                 }
               },
             }
