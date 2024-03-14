@@ -22,6 +22,7 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
     marginBottom: theme.dimensions.condensedMarginBetween,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: theme.dimensions.linkRowChevronPaddingRight,
   }
 
   return (
@@ -29,7 +30,7 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
       <TextView flex={1} width={'100%'} variant={'HomeScreen'} accessibilityLabel={titleA11yLabel}>
         {title}
       </TextView>
-      <VAIcon width={14} height={14} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
+      <VAIcon width={14} height={14} preventScaling={true} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
     </Pressable>
   )
 }
