@@ -64,6 +64,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         mx={theme.dimensions.condensedMarginBetween}
         mb={theme.dimensions.standardMarginBetween}
         textTransform="capitalize"
+        accessibilityRole="header"
         variant="ProfileScreenHeader">
         {fullName}
       </TextView>
