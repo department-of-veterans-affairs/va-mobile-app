@@ -120,7 +120,7 @@ jobs:
         id: testing_matrix
         run: |
           for((i=0; i<=${{steps.mapped_files.outputs.NUMBER_OF_FILES}}; i++)); do
-            testing_matrix="$(echo fromJson(${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}}) | jq 'del(.[0])' )"
+            testing_matrix="$(echo ${{ fromJson(steps.mapped_files.outputs.ARRAY_WITH_DETOX) }} | jq 'del(.[0])' )"
             echo "$testing_matrix"
           done
           echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
