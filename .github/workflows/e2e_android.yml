@@ -87,7 +87,7 @@ jobs:
           echo "$respLength"
           echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
           resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
-            jq --compact-output 'select(contains(["Login"])) += ["LoginScreen"] | 
+            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
@@ -115,15 +115,11 @@ jobs:
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] ')"
           echo "$resp"
-          echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
-      - name: Generate testing matrix
-        id: testing_matrix
-        run: |
-          for((i=0; i<=${{steps.mapped_files.outputs.NUMBER_OF_FILES}}; i++)); do
-            testing_matrix="$(echo ${{ fromJson(steps.mapped_files.outputs.ARRAY_WITH_DETOX) }} | jq 'del(.[0])' )"
+          for((i=0; i<=${respLength}; i++)); do
+            testing_matrix="$(echo ${resp} | jq 'del(.[0])' )"
             echo "$testing_matrix"
           done
-          echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
+          echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo fromJson(${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}}) | jq --arg numberOfFiles ${{steps.mapped_files.outputs.NUMBER_OF_FILES}}" 'del(.[0:($numberOfFiles|tonumber)]) ')"
   #run jq 'unique' to remove dups at the end
   #To change the value of baz to loginScreen(.[] | select(contains("baz", "bar"))) |= "LoginScreen"
