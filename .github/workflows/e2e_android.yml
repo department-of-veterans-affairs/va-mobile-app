@@ -87,7 +87,7 @@ jobs:
           echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
           resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
-            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"]
+            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) contains(["ClaimsAndAppealsListView"]) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
