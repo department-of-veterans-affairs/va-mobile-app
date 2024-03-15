@@ -119,8 +119,10 @@ jobs:
       - name: Generate testing matrix
         id: testing_matrix
         run: |
+          arrayLength = ${{steps.mapped_files.outputs.NUMBER_OF_FILES}}
+          echo $arrayLength
           testing_matrix= "$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | 
-            jq 'del(.[0:${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length'])')"
+            jq 'del(.[0:$arrayLength])')"
           echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
 
   #run jq 'unique' to remove dups at the end
