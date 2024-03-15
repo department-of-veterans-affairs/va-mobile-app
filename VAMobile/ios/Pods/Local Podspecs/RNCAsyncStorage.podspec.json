@@ -16,6 +16,8 @@
     "osx": "10.14"
   },
   "dependencies": {
-    "React-Core": []
+    "React-Core": [
+
+    ]
   }
 }

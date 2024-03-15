@@ -182,8 +182,6 @@ function DisabilityRatingsScreen() {
     accessibilityRole: 'header',
   }
 
-  const errorCheck = useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)
-
   return (
     <ChildTemplate
       backLabel={t('benefits.title')}

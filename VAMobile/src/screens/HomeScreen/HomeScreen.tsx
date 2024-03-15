@@ -15,7 +15,6 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { ServiceHistoryData } from 'api/types'
 import {
   ActivityButton,
   AnnouncementBanner,

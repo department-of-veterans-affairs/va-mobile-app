@@ -13,7 +13,11 @@
     "git": "https://github.com/facebook/react-native.git",
     "tag": "v0.73.5"
   },
-  "preserve_paths": ["package.json", "LICENSE", "LICENSE-docs"],
+  "preserve_paths": [
+    "package.json",
+    "LICENSE",
+    "LICENSE-docs"
+  ],
   "cocoapods_version": ">= 1.10.1",
   "dependencies": {
     "React-Core": [

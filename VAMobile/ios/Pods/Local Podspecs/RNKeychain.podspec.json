@@ -19,6 +19,8 @@
   "source_files": "RNKeychainManager/**/*.{h,m}",
   "preserve_paths": "**/*.js",
   "dependencies": {
-    "React-Core": []
+    "React-Core": [
+
+    ]
   }
 }
