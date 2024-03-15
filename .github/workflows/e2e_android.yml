@@ -119,10 +119,12 @@ jobs:
       - name: Generate testing matrix
         id: testing_matrix
         run: |
-          testing_matrix= "$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | 
-            jq --arg numberOfFiles "${{steps.mapped_files.outputs.NUMBER_OF_FILES}}" 'del(.[0:($numberOfFiles|tonumber)])')"
+          for((i=0; i<=${{steps.mapped_files.outputs.NUMBER_OF_FILES}}; i++)); do
+            testing_matrix="$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | jq 'del(.[0])' )"
+            echo "$testing_matrix"
+          done
           echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
-
+  #testing_matrix="$(echo fromJson(${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}}) | jq --arg numberOfFiles ${{steps.mapped_files.outputs.NUMBER_OF_FILES}}" 'del(.[0:($numberOfFiles|tonumber)]) ')"
   #run jq 'unique' to remove dups at the end
   #To change the value of baz to loginScreen(.[] | select(contains("baz", "bar"))) |= "LoginScreen"
   #select(contains(["baz", "bar"])) +=["LoginScreeest"]
