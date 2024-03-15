@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { AuthParamsLoadingStateTypeConstants } from 'api/types'
 import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'

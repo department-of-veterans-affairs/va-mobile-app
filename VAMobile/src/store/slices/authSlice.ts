@@ -8,10 +8,6 @@ import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { Events, UserAnalytics } from 'constants/analytics'
-import { EnvironmentTypesConstants } from 'constants/common'
-import { AppDispatch, AppThunk } from 'store'
-import * as api from 'store/api'
 import {
   AUTH_STORAGE_TYPE,
   AuthCredentialData,
@@ -21,9 +17,20 @@ import {
   AuthParamsLoadingStateTypes,
   AuthSetAuthorizeRequestParamsPayload,
   LOGIN_PROMPT_TYPE,
-  LoginServiceTypeConstants,
-} from 'store/api/types'
+} from 'api/types'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { EnvironmentTypesConstants } from 'constants/common'
+import { AppDispatch, AppThunk } from 'store'
+import * as api from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import {
+  deviceSupportedBiometrics,
+  getAuthLoginPromptType,
+  isBiometricsPreferred,
+  parseCallbackUrlParams,
+  retrieveRefreshToken,
+  storeRefreshToken,
+} from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
@@ -50,7 +57,6 @@ const {
 let inMemoryRefreshToken: string | undefined
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
-const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
@@ -170,39 +176,6 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
-/**
- * Gets the device supported biometrics
- */
-const deviceSupportedBiometrics = async (): Promise<string> => {
-  const supportedBiometric = await Keychain.getSupportedBiometryType()
-  console.debug(`deviceSupportedBiometrics:${supportedBiometric}`)
-  return supportedBiometric || ''
-}
-
-/**
- * Checks if biometric is preferred
- */
-const isBiometricsPreferred = async (): Promise<boolean> => {
-  try {
-    const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
-    console.debug(`shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY=${value}`)
-    if (value) {
-      const shouldStore = value === AUTH_STORAGE_TYPE.BIOMETRIC
-      console.debug('shouldStoreWithBiometrics: shouldStore with biometrics: ' + shouldStore)
-      return shouldStore
-    } else {
-      console.debug('shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY: no stored preference for auth found')
-    }
-  } catch (e) {
-    logNonFatalErrorToFirebase(e, `isBiometricsPreferred: ${authNonFatalErrorString}`)
-    // if we get an exception here assume there is no preference
-    // and go with the default case, log the error and continue
-    console.error(e)
-  }
-
-  return false
-}
-
 export const setPKCEParams = (): AppThunk => async (dispatch) => {
   dispatch(dispatchStartAuthorizeParams())
   const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
@@ -305,75 +278,6 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   }
 }
 
-/**
- * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
- * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
- */
-const storeRefreshToken = async (
-  refreshToken: string,
-  options: Keychain.Options,
-  storageType: AUTH_STORAGE_TYPE,
-): Promise<void> => {
-  const splitToken = refreshToken.split('.')
-  await Promise.all([
-    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
-    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-  ])
-    .then(async () => {
-      await logAnalyticsEvent(Events.vama_login_token_store(true))
-    })
-    .catch(async () => {
-      await logAnalyticsEvent(Events.vama_login_token_store(false))
-    })
-}
-
-/**
- * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
- */
-const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('retrieveRefreshToken')
-  const result = await Promise.all([
-    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
-  ])
-  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
-
-  if (reconstructedToken) {
-    await logAnalyticsEvent(Events.vama_login_token_get(true))
-  } else {
-    await logAnalyticsEvent(Events.vama_login_token_get(false))
-  }
-
-  return reconstructedToken
-}
-
-type StringMap = { [key: string]: string | undefined }
-const parseCallbackUrlParams = (url: string): { code: string; state?: string } => {
-  const urlParts = url.split('?')
-  const query = urlParts[1]
-  const queryParts = query?.split('&') || []
-
-  const obj: StringMap = {
-    code: undefined,
-    status: undefined,
-  }
-
-  queryParts.forEach((qpRaw) => {
-    const [key, val] = qpRaw.split('=')
-    obj[key] = val
-  })
-
-  if (!obj.code) {
-    throw new Error('invalid callback params')
-  }
-  return {
-    code: obj.code,
-    state: obj.state,
-  }
-}
-
 const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {
@@ -401,26 +305,10 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
   }
 }
 
-/**
- * Checks the SIS feature flag and compares it against the type of refresh token stored
- * @returns if the login service we're using matches the the type of token we have stored
- */
-export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
-  const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
-  return tokenType === LoginServiceTypeConstants.SIS
-}
-
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await clearCookies()
-
-    // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
-    const tokenMatchesService = await refreshTokenMatchesLoginService()
-    if (!tokenMatchesService) {
-      console.debug('refreshAccessToken: Token/service mismatch. Logging out.')
-      return false
-    }
 
     const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
@@ -442,40 +330,12 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   }
 }
 
-export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | undefined> => {
-  try {
-    const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
-
-    if (!hasStoredCredentials) {
-      console.debug('getAuthLoginPromptType: no stored credentials')
-      return LOGIN_PROMPT_TYPE.LOGIN
-    }
-    // we have a credential saved, check if it's saved with biometrics now
-    const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
-    console.debug(`getAuthLoginPromptType: ${value}`)
-    if (value === AUTH_STORAGE_TYPE.BIOMETRIC) {
-      return LOGIN_PROMPT_TYPE.UNLOCK
-    }
-    return LOGIN_PROMPT_TYPE.LOGIN
-  } catch (err) {
-    logNonFatalErrorToFirebase(err, `getAuthLoginPromptType: ${authNonFatalErrorString}`)
-    console.debug('getAuthLoginPromptType: Failed to retrieve type from keychain')
-    console.error(err)
-    return undefined
-  }
-}
-
 export const attemptIntializeAuthWithRefreshToken = async (
   dispatch: AppDispatch,
   refreshToken: string,
 ): Promise<void> => {
   try {
     await clearCookies()
-    const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
-
-    if (!refreshTokenMatchesLoginType) {
-      throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
-    }
 
     const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
@@ -540,24 +400,18 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await clearCookies()
-    const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
+    const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
 
-    if (tokenMatchesServiceType) {
-      const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
-
-      const response = await fetch(AUTH_SIS_REVOKE_URL, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: queryString,
-      })
-      console.debug('logout:', response.status)
-      console.debug('logout:', await response.text())
-    } else {
-      console.debug('logout: login service changed. clearing creds only.')
-    }
+    const response = await fetch(AUTH_SIS_REVOKE_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: queryString,
+    })
+    console.debug('logout:', response.status)
+    console.debug('logout:', await response.text())
   } catch (err) {
     logNonFatalErrorToFirebase(err, `logout: ${authNonFatalErrorString}`)
   } finally {
