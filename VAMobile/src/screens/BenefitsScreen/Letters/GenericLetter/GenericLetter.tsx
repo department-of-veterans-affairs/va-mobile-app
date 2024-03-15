@@ -41,7 +41,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(letterType, lettersOptions, { enabled: false })
+  } = useDownloadLetter(letterType, lettersOptions)
 
   const onViewLetter = () => {
     refetchLetter()

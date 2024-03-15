@@ -66,7 +66,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions, { enabled: false })
+  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)

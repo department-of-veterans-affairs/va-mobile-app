@@ -39,13 +39,9 @@ const downloadLetter = async (
 /**
  * Returns a query for a user letter
  */
-export const useDownloadLetter = (
-  letterType: LetterTypes,
-  lettersOption: LettersDownloadParams,
-  options?: { enabled?: boolean },
-) => {
+export const useDownloadLetter = (letterType: LetterTypes, lettersOption: LettersDownloadParams) => {
   return useQuery({
-    ...options,
+    enabled: false,
     queryKey: [lettersKeys.downloadLetter, letterType, lettersOption],
     queryFn: () => downloadLetter(letterType, lettersOption),
     meta: {
