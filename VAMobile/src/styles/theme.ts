@@ -118,6 +118,7 @@ export type VAIconColors = {
   inlineSpinner: string
   homeScreenError: string
   veteranStatusHomeArrow: string
+  linkRow: string
 }
 
 export type VATypographyThemeVariants = {
@@ -192,6 +193,7 @@ export type VABackgroundColors = {
   tagGreen: string
   veteranStatus: string
   veteranStatusHome: string
+  linkRow: string
 }
 
 export type VABorderColors = {
@@ -289,6 +291,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    linkRowChevronPaddingRight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number

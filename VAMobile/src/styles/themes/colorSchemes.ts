@@ -46,6 +46,7 @@ export const lightTheme = {
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
     veteranStatusHome: colors.white,
+    linkRow: DSColors.grayWarmLight,
   },
   border: {
     aboutYou: DSColors.grayWarmLight,
@@ -115,6 +116,7 @@ export const lightTheme = {
     inlineSpinner: DSColors.primary,
     homeScreenError: DSColors.secondaryDark,
     veteranStatusHomeArrow: DSColors.base,
+    linkRow: DSColors.primary,
   },
   text: {
     footerButton: colors.primary,
@@ -255,6 +257,7 @@ export const darkTheme = {
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
     veteranStatusHome: colors.darkmodeGrayWarmDark,
+    linkRow: colors.darkmodeGrayWarmDark,
   },
   border: {
     aboutYou: colors.darkmodeBorder,
@@ -324,6 +327,7 @@ export const darkTheme = {
     inlineSpinner: DSColors.uswdsBlueVivid30,
     homeScreenError: DSColors.uswdsRedVivid40,
     veteranStatusHomeArrow: DSColors.grayLightest,
+    linkRow: DSColors.uswdsBlueVivid30,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
