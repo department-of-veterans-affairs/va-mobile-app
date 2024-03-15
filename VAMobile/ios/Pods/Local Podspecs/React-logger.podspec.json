@@ -20,8 +20,6 @@
   },
   "header_dir": "logger",
   "dependencies": {
-    "glog": [
-
-    ]
+    "glog": []
   }
 }

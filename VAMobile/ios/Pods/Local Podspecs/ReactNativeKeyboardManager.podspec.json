@@ -17,11 +17,7 @@
   "platforms": {
     "ios": "9.0"
   },
-  "preserve_paths": [
-    "README.md",
-    "package.json",
-    "*.js"
-  ],
+  "preserve_paths": ["README.md", "package.json", "*.js"],
   "source_files": "ios/ReactNativeKeyboardManager/**/*.{h,m}",
   "dependencies": {
     "React-Core": [

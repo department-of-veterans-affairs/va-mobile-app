@@ -142,7 +142,6 @@ describe('AppealsExpanded', () => {
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(300, 'down')
-
       await element(by.id(value)).tap()
       const appealInfo = expectedInformation[i]
       await expect(element(by.text('Appeal for ' + appealInfo[0]))).toExist()

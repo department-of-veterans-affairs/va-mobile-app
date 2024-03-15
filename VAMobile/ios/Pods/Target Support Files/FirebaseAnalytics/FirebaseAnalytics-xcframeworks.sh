@@ -32,8 +32,8 @@ variant_for_slice()
   "FirebaseAnalytics.xcframework/tvos-arm64")
     echo ""
     ;;
-  "FirebaseAnalytics.xcframework/tvos-arm64_x86_64-simulator")
-    echo "simulator"
+  "FirebaseAnalytics.xcframework/macos-arm64_x86_64")
+    echo ""
     ;;
   esac
 }
@@ -53,10 +53,13 @@ archs_for_slice()
   "FirebaseAnalytics.xcframework/macos-arm64_x86_64")
     echo "arm64 x86_64"
     ;;
+  "FirebaseAnalytics.xcframework/ios-arm64")
+    echo "arm64"
+    ;;
   "FirebaseAnalytics.xcframework/tvos-arm64")
     echo "arm64"
     ;;
-  "FirebaseAnalytics.xcframework/tvos-arm64_x86_64-simulator")
+  "FirebaseAnalytics.xcframework/macos-arm64_x86_64")
     echo "arm64 x86_64"
     ;;
   esac

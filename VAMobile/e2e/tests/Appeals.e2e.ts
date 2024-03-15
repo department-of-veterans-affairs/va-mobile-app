@@ -16,7 +16,6 @@ export const AppealsIdConstants = {
   APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
-
 beforeAll(async () => {
   await loginToDemoMode()
   await openBenefits()

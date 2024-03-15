@@ -14,11 +14,7 @@
     "tag": "v0.73.5"
   },
   "source_files": "*.{m}",
-  "preserve_paths": [
-    "package.json",
-    "LICENSE",
-    "LICENSE-docs"
-  ],
+  "preserve_paths": ["package.json", "LICENSE", "LICENSE-docs"],
   "header_dir": "RCTActionSheet",
   "dependencies": {
     "React-Core/RCTActionSheetHeaders": [

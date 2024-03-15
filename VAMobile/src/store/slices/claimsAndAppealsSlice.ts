@@ -166,7 +166,7 @@ const getLoadedClaimsAndAppeals = (
  * Redux action to prefetch claims and appeals
  */
 export const prefetchClaimsAndAppeals =
-  (screenID?: ScreenIDTypes): AppThunk =>
+  (screenID?: ScreenIDTypes, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchClaimsAndAppeals(screenID))))
@@ -198,7 +198,7 @@ export const prefetchClaimsAndAppeals =
         activeClaimsCount,
       )
 
-      if (activeLoadedClaimsAndAppeals) {
+      if (!forceRefetch && activeLoadedClaimsAndAppeals) {
         activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
       } else {
         activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -208,7 +208,7 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
-      if (closedLoadedClaimsAndAppeals) {
+      if (!forceRefetch && closedLoadedClaimsAndAppeals) {
         closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
       } else {
         closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -218,8 +218,16 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && activeClaimsAndAppeals?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_claims_count(activeClaimsAndAppeals.meta.activeClaimsCount))
+      }
+
       dispatch(
-        dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }),
+        dispatchFinishPrefetchGetClaimsAndAppeals({
+          active: activeClaimsAndAppeals,
+          closed: closedClaimsAndAppeals,
+          resetLists: forceRefetch,
+        }),
       )
     } catch (error) {
       if (isErrorObject(error)) {
@@ -264,10 +272,6 @@ export const getClaimsAndAppeals =
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
           showCompleted: isActive ? 'false' : 'true',
         })
-      }
-
-      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta) {
-        await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
       }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
@@ -535,9 +539,14 @@ const claimsAndAppealsSlice = createSlice({
 
     dispatchFinishPrefetchGetClaimsAndAppeals: (
       state,
-      action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>,
+      action: PayloadAction<{
+        active?: ClaimsAndAppealsGetData
+        closed?: ClaimsAndAppealsGetData
+        error?: Error
+        resetLists?: boolean
+      }>,
     ) => {
-      const { active, closed, error } = action.payload
+      const { active, closed, error, resetLists } = action.payload
       const activeData = active || emptyClaimsAndAppealsGetData
       const closedData = closed || emptyClaimsAndAppealsGetData
       const activeMetaErrors = activeData?.meta?.errors || []
@@ -561,18 +570,24 @@ const claimsAndAppealsSlice = createSlice({
       state.finishedLoadingClaimsAndAppeals = true
       state.claimsAndAppealsByClaimType.ACTIVE = activeList
       state.claimsAndAppealsByClaimType.CLOSED = closedList
+      state.claimsFirstRetrieval = !!error
       state.claimsAndAppealsMetaPagination.ACTIVE =
         activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
       state.claimsAndAppealsMetaPagination.CLOSED =
         closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
-      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore
-        ? curLoadedActive
-        : curLoadedActive.concat(activeList)
-      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore
-        ? curLoadedClosed
-        : curLoadedClosed.concat(closedList)
+      if (resetLists) {
+        state.loadedClaimsAndAppeals.ACTIVE = activeList
+        state.loadedClaimsAndAppeals.CLOSED = closedList
+      } else {
+        state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore
+          ? curLoadedActive
+          : curLoadedActive.concat(activeList)
+        state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore
+          ? curLoadedClosed
+          : curLoadedClosed.concat(closedList)
+      }
       state.activeClaimsCount = activeData?.meta.activeClaimsCount
-      state.preloadComplete = true
+      state.preloadComplete = !error
     },
 
     dispatchStartGetAllClaimsAndAppeals: (state) => {
@@ -606,7 +621,6 @@ const claimsAndAppealsSlice = createSlice({
         ? curLoadedClaimsAndAppeals
         : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
       state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
-      state.claimsFirstRetrieval = !!error
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {

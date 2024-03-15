@@ -1145,6 +1145,14 @@ export const Events = {
       },
     }
   },
+  vama_user_call: (status_code: number): Event => {
+    return {
+      name: 'vama_user_call',
+      params: {
+        status_code,
+      },
+    }
+  },
   vama_vaccine_details: (groupName: string): Event => {
     return {
       name: 'vama_vaccine_details',

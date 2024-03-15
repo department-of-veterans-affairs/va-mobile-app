@@ -1,21 +1,22 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps } from 'react-native'
+import { Platform, Pressable, PressableProps } from 'react-native'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-export const Nametag: FC = () => {
+export const Nametag = () => {
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
+  const branch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
@@ -31,9 +32,13 @@ export const Nametag: FC = () => {
     }
   }, [personalInfo])
 
-  const fullName = personalInfo?.fullName
-
-  const branch = mostRecentBranch || ''
+  useEffect(() => {
+    if (personalInfo) {
+      setAnalyticsUserProperty(
+        UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false),
+      )
+    }
+  }, [personalInfo])
 
   let showVeteranStatus = false
   serviceHistory.forEach((service) => {
@@ -44,8 +49,9 @@ export const Nametag: FC = () => {
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
-      width: 50,
-      height: 50,
+      width: 40,
+      height: 40,
+      preventScaling: true,
     }
 
     switch (branch) {
@@ -62,55 +68,78 @@ export const Nametag: FC = () => {
     }
   }
 
+  let accLabel
+  if (!accessToMilitaryInfo) {
+    accLabel = undefined
+  } else {
+    accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
+  }
+
   const pressableProps: PressableProps = {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
-    accessibilityLabel: accessToMilitaryInfo ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}` : undefined,
+    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
+    accessibilityLabel: accLabel,
+  }
+
+  const boxProps: BoxProps = {
+    pl: theme.dimensions.buttonPadding,
+    backgroundColor: theme.colors.background.veteranStatusHome as BackgroundVariant,
+    minHeight: 82,
+    display: 'flex',
+    justifyContent: 'center',
+    mb: theme.dimensions.standardMarginBetween,
+    pr: theme.dimensions.buttonPadding,
+    mx: theme.dimensions.condensedMarginBetween,
+    borderRadius: 8,
+    style: {
+      shadowColor: colors.black,
+      ...Platform.select({
+        ios: {
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.15,
+          shadowRadius: 8,
+        },
+        android: {
+          elevation: 8,
+        },
+      }),
+    },
   }
 
   return (
-    <Pressable {...pressableProps}>
-      <Box
-        width="100%"
-        backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
-        minHeight={85}
-        display="flex"
-        justifyContent="center"
-        mb={theme.dimensions.standardMarginBetween}
-        pr={theme.dimensions.cardPadding}>
-        <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
-          {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
-          <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView
-              textTransform="capitalize"
-              mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
-              variant="BitterBoldHeading"
-              color="primaryContrast">
-              {fullName}
-            </TextView>
-            {accessToMilitaryInfo && (
-              <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">
-                {branch}
-              </TextView>
-            )}
-            {accessToMilitaryInfo && showVeteranStatus && (
-              <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
-                <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                  {t('veteranStatus.proofOf')}
+    <Box>
+      {accessToMilitaryInfo && (
+        <Pressable {...pressableProps}>
+          <Box {...boxProps}>
+            <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
+              {getBranchSeal()}
+              <Box ml={theme.dimensions.buttonPadding} flex={1}>
+                <TextView variant={'VeteranStatusBranch'} pb={4}>
+                  {branch}
                 </TextView>
+                {showVeteranStatus && (
+                  <Box flexDirection={'row'} alignItems={'center'}>
+                    <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                      {t('veteranStatus.proofOf')}
+                    </TextView>
+                  </Box>
+                )}
+              </Box>
+              {showVeteranStatus && (
                 <VAIcon
                   name={'ChevronRight'}
-                  fill={theme.colors.icon.contrast}
+                  fill={theme.colors.icon.linkRow}
                   width={theme.dimensions.chevronListItemWidth}
                   height={theme.dimensions.chevronListItemHeight}
-                  mr={theme.dimensions.listItemDecoratorMarginLeft}
+                  preventScaling={true}
+                  ml={theme.dimensions.listItemDecoratorMarginLeft}
                 />
-              </Box>
-            )}
+              )}
+            </Box>
           </Box>
-        </Box>
-      </Box>
-    </Pressable>
+        </Pressable>
+      )}
+    </Box>
   )
 }
 

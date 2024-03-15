@@ -58,6 +58,7 @@ const secureMessagingNonFatalErrorString = 'Secure Messaging Service Error'
 export type SecureMessagingState = {
   loading: boolean
   loadingInbox: boolean
+  loadingInboxData: boolean
   loadingFolders: boolean
   loadingAttachments: boolean
   loadingFile: boolean
@@ -102,6 +103,7 @@ export type SecureMessagingState = {
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
   loadingInbox: false,
+  loadingInboxData: false,
   loadingFolders: false,
   loadingFile: false,
   loadingFileKey: undefined,
@@ -186,6 +188,10 @@ export const getInbox =
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
       if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes) {
         await logAnalyticsEvent(Events.vama_hs_sm_count(inbox.data.attributes.unreadCount))
+      }
+
+      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount) {
+        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox?.data.attributes.unreadCount))
       }
 
       dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
@@ -787,6 +793,7 @@ const secureMessagingSlice = createSlice({
 
     dispatchStartGetInbox: (state) => {
       state.hasLoadedInbox = false
+      state.loadingInboxData = true
     },
 
     dispatchFinishGetInbox: (
@@ -798,6 +805,7 @@ const secureMessagingSlice = createSlice({
       state.hasLoadedInbox = true
       state.error = error
       state.inboxFirstRetrieval = !!error
+      state.loadingInboxData = false
     },
 
     dispatchStartListFolders: (state) => {

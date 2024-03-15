@@ -16,8 +16,23 @@
 
 #import <Foundation/Foundation.h>
 
+<<<<<<<< HEAD:VAMobile/ios/Pods/FirebaseDynamicLinks/FirebaseDynamicLinks/Sources/FDLURLComponents/FIRDynamicLinkComponentsKeyProvider.h
 @interface FIRDynamicLinkComponentsKeyProvider : NSObject
 
 + (nullable NSString *)APIKey;
+========
+@class FIRComponentContainer;
+
+NS_ASSUME_NONNULL_BEGIN
+
+/// Do not use directly. A placeholder type in order to provide a macro that will warn users of
+/// mis-matched protocols.
+NS_SWIFT_NAME(ComponentType)
+@interface FIRComponentType<__covariant T> : NSObject
+
+/// Do not use directly. A factory method to retrieve an instance that provides a specific
+/// functionality.
++ (T)instanceForProtocol:(Protocol *)protocol inContainer:(FIRComponentContainer *)container;
+>>>>>>>> feature-xl/HomeScreenPersonalization:VAMobile/ios/Pods/FirebaseRemoteConfig/FirebaseCore/Extension/FIRComponentType.h
 
 @end

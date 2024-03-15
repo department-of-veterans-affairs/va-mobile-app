@@ -770,7 +770,6 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-
             "proposedTimes": [
               {
                 "date": "{{now - 63 days short}}",
@@ -941,7 +940,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",

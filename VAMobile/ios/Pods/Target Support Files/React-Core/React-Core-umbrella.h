@@ -84,6 +84,7 @@
 #import "React/RCTRootView.h"
 #import "React/RCTRootViewDelegate.h"
 #import "React/RCTRootViewInternal.h"
+#import "React/RCTRuntimeExecutorFromBridge.h"
 #import "React/RCTTouchEvent.h"
 #import "React/RCTTouchHandler.h"
 #import "React/RCTTurboModuleRegistry.h"

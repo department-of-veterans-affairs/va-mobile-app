@@ -35,6 +35,15 @@ variant_for_slice()
   "GoogleAppMeasurement.xcframework/tvos-arm64_x86_64-simulator")
     echo "simulator"
     ;;
+  "GoogleAppMeasurement.xcframework/macos-arm64_x86_64")
+    echo ""
+    ;;
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-simulator")
+    echo "simulator"
+    ;;
+  "GoogleAppMeasurement.xcframework/ios-arm64")
+    echo ""
+    ;;
   esac
 }
 
@@ -58,6 +67,15 @@ archs_for_slice()
     ;;
   "GoogleAppMeasurement.xcframework/tvos-arm64_x86_64-simulator")
     echo "arm64 x86_64"
+    ;;
+  "GoogleAppMeasurement.xcframework/macos-arm64_x86_64")
+    echo "arm64 x86_64"
+    ;;
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-simulator")
+    echo "arm64 x86_64"
+    ;;
+  "GoogleAppMeasurement.xcframework/ios-arm64")
+    echo "arm64"
     ;;
   esac
 }

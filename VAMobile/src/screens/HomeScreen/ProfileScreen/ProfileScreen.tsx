@@ -5,7 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -29,6 +30,9 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  const { data: personalInfo } = usePersonalInformation()
+  const fullName = personalInfo?.fullName
+
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
    * than checking the needsDataLoad flag because if something went wrong we assume we want to reload all of the necessary data
@@ -39,6 +43,19 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
+
+  const displayName = !!fullName && (
+    <Box>
+      <TextView
+        mx={theme.dimensions.condensedMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
+        textTransform="capitalize"
+        accessibilityRole="header"
+        variant="ProfileScreenHeader">
+        {fullName}
+      </TextView>
+    </Box>
+  )
 
   return (
     <ChildTemplate
@@ -62,11 +79,13 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         </Box>
       ) : loadingCheck ? (
         <Box>
+          {displayName}
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>
+          {displayName}
           <NameTag />
           <Box
             mt={theme.dimensions.contentMarginTop}
