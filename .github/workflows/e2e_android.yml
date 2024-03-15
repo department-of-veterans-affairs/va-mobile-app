@@ -79,12 +79,55 @@ jobs:
           dir_names: true
           json: true
           # base_sha: "${{ steps.base-sha.outputs.sha }}"
+      - name: Get array of mapped files
+        id: mapped_files
+        run: |
+          echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
+          respLength= "$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length')"
+          echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
+          resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
+            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
+            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"]
+            select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) contains(["ClaimsAndAppealsListView"]) += ["Appeals", "AppealsExpanded", "Claims"] |
+            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
+            select(contains(["Letters"])) += ["Letters"] |
+            select(contains(["Appointments"])) += ["Appointments", "AppointmentsExpanded"] |
+            select(contains(["Cerner"]) or contains(["Facilities"])) += Cerner |
+            select(contains(["Pharmacy"])) += ["Prescriptions"] |
+            select(contains(["SecureMessaging"])) += ["Messages"] |
+            select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
+            select(contains(["HealthScreen"])) += ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"] |
+            select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
+            select(contains(["MilitaryInformationScreen"]) or contains(["militaryService"]) or contains(["Nametag"])) += ["MilitaryInformation", "VeteranStatusCard"] |
+            select(contains(["PeronsalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
+            select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
+            select(contains(["VeteranCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
+            select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
+            select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
+            select(contains(["PaymentsScreen"])) += ["Payments", "DirectDeposit"] |
+            select(contains(["SplashScreen"])) += ["Onboarding", "LoginScreen"] |
+            select(contains(["Auth"])) += ["SignIn"] |
+            select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
+            select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
+            unique
+            ')"
+          echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
       - name: Generate testing matrix
         id: testing_matrix
         run: |
-          echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
-          resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq '(.[] | select(contains("work"))) |= "workflow"')"
-          echo "$resp"
+          testing_matrix= "$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | 
+            jq 'del(.[0:${{steps.mapped_files.outputs.NUMBER_OF_FILES}}])')"
+          echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
+
+  #run jq 'unique' to remove dups at the end
+  #To change the value of baz to loginScreen(.[] | select(contains("baz", "bar"))) |= "LoginScreen"
+  #select(contains(["baz", "bar"])) +=["LoginScreeest"]
+  #select(contains(["baz"]) or contains(["test"])) +=["LoginScreeest"]
+  #length (del(.[0:${{length}}]))
   # matrix-e2e-android:
   #   if: github.event.inputs.tests_to_run != ''
   #   runs-on: macos-latest-xl
