@@ -113,9 +113,9 @@ export const lightTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.white,
+    announcementBanner: DSColors.primary,
     inlineSpinner: DSColors.primary,
     homeScreenError: DSColors.secondaryDark,
-    veteranStatusHomeArrow: DSColors.base,
     linkRow: DSColors.primary,
   },
   text: {
@@ -159,7 +159,9 @@ export const lightTheme = {
     webviewTitle: colors.base,
     crisisLineButton: colors.white,
     activityButton: colors.white,
+    announcementBanner: DSColors.base,
     homeScreen: DSColors.base,
+    profileScreen: DSColors.base,
     activityFooter: DSColors.gray,
   },
   buttonBackground: {
@@ -177,6 +179,7 @@ export const lightTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
     activityButton: DSColors.primaryDarker,
+    announcementBanner: colors.white,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -324,9 +327,9 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.black,
+    announcementBanner: DSColors.uswdsBlueVivid30,
     inlineSpinner: DSColors.uswdsBlueVivid30,
     homeScreenError: DSColors.uswdsRedVivid40,
-    veteranStatusHomeArrow: DSColors.grayLightest,
     linkRow: DSColors.uswdsBlueVivid30,
   },
   text: {
@@ -368,7 +371,9 @@ export const darkTheme = {
     webviewTitle: colors.white,
     crisisLineButton: colors.black,
     activityButton: colors.black,
+    announcementBanner: DSColors.grayLightest,
     homeScreen: DSColors.grayLightest,
+    profileScreen: DSColors.grayLightest,
     activityFooter: DSColors.grayLightest,
   },
   buttonBackground: {
@@ -386,6 +391,7 @@ export const darkTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.darkmodeBorder,
     activityButton: DSColors.uswdsBlueVivid30,
+    announcementBanner: colors.darkmodeGrayWarmDark,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,

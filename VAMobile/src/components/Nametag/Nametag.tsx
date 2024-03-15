@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -15,12 +15,7 @@ import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-interface NametagProps {
-  /** string for differentiating visual design between home/profile */
-  screen: string
-}
-
-export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
+export const Nametag = () => {
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
 
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -29,10 +24,7 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const fullName = personalInfo?.fullName
   const branch = mostRecentBranch || ''
-  const homeScreen = screen === 'Home'
-  const profileScreen = screen === 'Profile'
 
   useEffect(() => {
     if (personalInfo) {
@@ -51,8 +43,8 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
-      width: homeScreen ? 40 : 50,
-      height: homeScreen ? 40 : 50,
+      width: 40,
+      height: 40,
       preventScaling: true,
     }
 
@@ -73,9 +65,7 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
   let accLabel
   if (!accessToMilitaryInfo) {
     accLabel = undefined
-  } else if (profileScreen) {
-    accLabel = showVeteranStatus ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}` : `${fullName} ${branch}`
-  } else if (homeScreen) {
+  } else {
     accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
   }
 
@@ -110,89 +100,41 @@ export const Nametag: FC<NametagProps> = ({ screen }: NametagProps) => {
     },
   }
 
-  if (profileScreen) {
-    return (
-      <Pressable {...pressableProps}>
-        <Box
-          width="100%"
-          backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
-          minHeight={85}
-          display="flex"
-          justifyContent="center"
-          mb={theme.dimensions.standardMarginBetween}
-          pr={theme.dimensions.cardPadding}>
-          <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
-            {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
-            <Box ml={theme.dimensions.cardPadding} flex={1}>
-              <TextView
-                textTransform="capitalize"
-                mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
-                variant="BitterBoldHeading"
-                color="primaryContrast">
-                {fullName}
-              </TextView>
-              {accessToMilitaryInfo && (
-                <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">
+  return (
+    <Box>
+      {accessToMilitaryInfo && (
+        <Pressable {...pressableProps}>
+          <Box {...boxProps}>
+            <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
+              {getBranchSeal()}
+              <Box ml={theme.dimensions.buttonPadding} flex={1}>
+                <TextView variant={'VeteranStatusBranch'} pb={4}>
                   {branch}
                 </TextView>
-              )}
-              {accessToMilitaryInfo && showVeteranStatus && (
-                <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
-                  <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                    {t('veteranStatus.proofOf')}
-                  </TextView>
-                  <VAIcon
-                    name={'ChevronRight'}
-                    fill={theme.colors.icon.contrast}
-                    width={theme.dimensions.chevronListItemWidth}
-                    height={theme.dimensions.chevronListItemHeight}
-                    mr={theme.dimensions.listItemDecoratorMarginLeft}
-                  />
-                </Box>
+                {showVeteranStatus && (
+                  <Box flexDirection={'row'} alignItems={'center'}>
+                    <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                      {t('veteranStatus.proofOf')}
+                    </TextView>
+                  </Box>
+                )}
+              </Box>
+              {showVeteranStatus && (
+                <VAIcon
+                  name={'ChevronRight'}
+                  fill={theme.colors.icon.linkRow}
+                  width={theme.dimensions.chevronListItemWidth}
+                  height={theme.dimensions.chevronListItemHeight}
+                  preventScaling={true}
+                  ml={theme.dimensions.listItemDecoratorMarginLeft}
+                />
               )}
             </Box>
           </Box>
-        </Box>
-      </Pressable>
-    )
-  } else if (homeScreen) {
-    return (
-      <Box>
-        {accessToMilitaryInfo && (
-          <Pressable {...pressableProps}>
-            <Box {...boxProps}>
-              <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-                {getBranchSeal()}
-                <Box ml={theme.dimensions.buttonPadding} flex={1}>
-                  <TextView variant={'VeteranStatusBranch'} pb={4}>
-                    {branch}
-                  </TextView>
-                  {showVeteranStatus && (
-                    <Box flexDirection={'row'} alignItems={'center'}>
-                      <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
-                        {t('veteranStatus.proofOf')}
-                      </TextView>
-                    </Box>
-                  )}
-                </Box>
-                {showVeteranStatus && (
-                  <VAIcon
-                    name={'ChevronRight'}
-                    fill={theme.colors.icon.veteranStatusHomeArrow}
-                    width={theme.dimensions.chevronListItemWidth}
-                    height={theme.dimensions.chevronListItemHeight}
-                    ml={theme.dimensions.listItemDecoratorMarginLeft}
-                  />
-                )}
-              </Box>
-            </Box>
-          </Pressable>
-        )}
-      </Box>
-    )
-  } else {
-    return <></>
-  }
+        </Pressable>
+      )}
+    </Box>
+  )
 }
 
 export default Nametag
