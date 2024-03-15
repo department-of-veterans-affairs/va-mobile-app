@@ -84,6 +84,7 @@ jobs:
         run: |
           echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
           respLength="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length')"
+          echo "$respLength"
           echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
           resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
             jq --compact-output 'select(contains(["Login"])) += ["LoginScreen"] | 
@@ -112,15 +113,14 @@ jobs:
             select(contains(["Auth"])) += ["SignIn"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
-            unique')"
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] ')"
           echo "$resp"
           echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
       - name: Generate testing matrix
         id: testing_matrix
         run: |
           testing_matrix= "$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | 
-            jq 'del(.[0:${{steps.mapped_files.outputs.NUMBER_OF_FILES}}])')"
+            jq 'del(.[0:${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length'])')"
           echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
 
   #run jq 'unique' to remove dups at the end
