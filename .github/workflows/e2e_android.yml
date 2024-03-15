@@ -86,7 +86,7 @@ jobs:
           respLength="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length')"
           echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
           resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
-            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
+            jq --compact-output 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
@@ -112,7 +112,8 @@ jobs:
             select(contains(["Auth"])) += ["SignIn"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"]')"
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
+            unique')"
           echo "$resp"
           echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
       - name: Generate testing matrix
