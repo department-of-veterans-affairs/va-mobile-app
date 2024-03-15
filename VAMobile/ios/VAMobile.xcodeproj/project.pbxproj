@@ -26,7 +26,7 @@
 		40F6C1AB266919E300852B10 /* RNAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F6C1AA266919E300852B10 /* RNAuthSession.swift */; };
 		40F6C1AF26691F0900852B10 /* RNAuthSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F6C1AE26691F0900852B10 /* RNAuthSession.m */; };
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
-		4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
+		4B7FD4BB260A985E00BED-4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
 		4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */; };
 		4EF6FBFA2727104E009917AA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6FBF92727104E009917AA /* Colors.xcassets */; };
 		7699B88040F8A987B510C191 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */; };
