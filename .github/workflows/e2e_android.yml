@@ -83,7 +83,7 @@ jobs:
         id: mapped_files
         run: |
           echo "${{steps.changed_files.outputs.all_changed_and_modified_files}}"
-          respLength= "$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length')"
+          respLength="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} | jq 'length')"
           echo "NUMBER_OF_FILES=$respLength" >> "$GITHUB_OUTPUT"
           resp="$(echo ${{steps.changed_files.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
