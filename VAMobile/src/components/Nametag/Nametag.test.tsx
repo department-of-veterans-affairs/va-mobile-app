@@ -19,7 +19,7 @@ jest.mock('utils/hooks', () => {
 
 context('Nametag', () => {
   const renderWithBranch = (mostRecentBranch: string) => {
-    render(<Nametag screen="Profile" />, {
+    render(<Nametag />, {
       preloadedState: {
         ...InitialState,
         militaryService: {
@@ -84,7 +84,7 @@ context('Nametag', () => {
   })
 
   it('does not display branch when service history is empty', () => {
-    render(<Nametag screen="Profile" />, {
+    render(<Nametag />, {
       preloadedState: {
         ...InitialState,
         militaryService: {
@@ -97,7 +97,7 @@ context('Nametag', () => {
   })
 
   it('does not display branch when militaryService is absent', () => {
-    render(<Nametag screen="Profile" />, {
+    render(<Nametag />, {
       preloadedState: {
         ...InitialState,
       },

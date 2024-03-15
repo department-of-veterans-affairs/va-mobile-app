@@ -56,6 +56,10 @@ const fontSizes = {
     fontSize: 14,
     lineHeight: 22,
   },
+  AnnouncementBannerTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
   BitterHeading: {
     fontSize: 22,
     lineHeight: 24,
@@ -77,6 +81,10 @@ const fontSizes = {
     lineHeight: 24,
   },
   HomeScreenHeader: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  ProfileScreenHeader: {
     fontSize: 18,
     lineHeight: 22,
   },
@@ -170,6 +178,11 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
+    AnnouncementBannerTitle: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.AnnouncementBannerTitle,
+      scheme.text.announcementBanner,
+    ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
@@ -182,6 +195,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
     HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
+    ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
@@ -257,6 +271,7 @@ let theme: VATheme = {
 
   fontSizes: {
     ActivityButtonSubtext: fontSizes.ActivityButtonSubtext,
+    AnnouncementBannerTitle: fontSizes.AnnouncementBannerTitle,
     BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     ClaimPhase: fontSizes.ClaimPhase,

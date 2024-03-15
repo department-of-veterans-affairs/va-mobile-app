@@ -20,6 +20,7 @@ import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
+  AnnouncementBanner,
   BackgroundVariant,
   BorderColorVariant,
   Box,
@@ -75,7 +76,7 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
-const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -347,7 +348,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <>
-              <Nametag screen={'Home'} />
+              <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {disRating && (
                   <Box
@@ -416,6 +417,13 @@ export function HomeScreen({}: HomeScreenProps) {
               onPress={onFacilityLocator}
             />
           </Box>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('learnAboutPACT')}
+            link={LINK_URL_ABOUT_PACT_ACT}
+            a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
+          />
         </Box>
       </Box>
     </CategoryLanding>
