@@ -112,9 +112,8 @@ jobs:
             select(contains(["Auth"])) += ["SignIn"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
-            unique
-            ')"
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"]')"
+          echo "$resp"
           echo "ARRAY_WITH_DETOX=$resp" >> "$GITHUB_OUTPUT"
       - name: Generate testing matrix
         id: testing_matrix
