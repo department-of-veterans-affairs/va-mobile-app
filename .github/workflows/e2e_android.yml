@@ -93,7 +93,7 @@ jobs:
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"])) += ["Letters"] |
             select(contains(["Appointments"])) += ["Appointments", "AppointmentsExpanded"] |
-            select(contains(["Cerner"]) or contains(["Facilities"])) += Cerner |
+            select(contains(["Cerner"]) or contains(["Facilities"])) += ["Cerner"] |
             select(contains(["Pharmacy"])) += ["Prescriptions"] |
             select(contains(["SecureMessaging"])) += ["Messages"] |
             select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
