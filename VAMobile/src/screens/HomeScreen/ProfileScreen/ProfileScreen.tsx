@@ -58,7 +58,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
-  const displayName = (
+  const displayName = !!fullName && (
     <Box>
       <TextView
         mx={theme.dimensions.condensedMarginBetween}
