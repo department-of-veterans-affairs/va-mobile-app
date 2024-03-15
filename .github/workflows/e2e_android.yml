@@ -120,7 +120,7 @@ jobs:
         id: testing_matrix
         run: |
           testing_matrix= "$(echo ${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}} | 
-            jq --arg numberOfFiles ${{steps.mapped_files.outputs.NUMBER_OF_FILES}} 'del(.[0:$numberOfFiles])')"
+            jq --arg numberOfFiles ${{steps.mapped_files.outputs.NUMBER_OF_FILES}} 'del(.[0:($numberOfFiles | tonumber)])')"
           echo "test_matrix=$test_matrix" >> "$GITHUB_OUTPUT"
 
   #run jq 'unique' to remove dups at the end
