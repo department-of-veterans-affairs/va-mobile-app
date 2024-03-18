@@ -1,13 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Link } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Box, LargePanel, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { makeLinkAnalytics, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
@@ -21,16 +22,10 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 function VeteransCrisisLineScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
-  const fireAnalyticFn = (): void => {
-    setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
-  }
-
-  const redirectToVeteransCrisisLineLink = (): void => {
-    fireAnalyticFn()
-    launchExternalLink(LINK_URL_VETERANS_CRISIS_LINE)
+  const analyticsWithUserProperty = (protocol: string, url: string) => {
+    return makeLinkAnalytics(protocol, url, () => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl()))
   }
 
   return (
@@ -53,17 +48,16 @@ function VeteransCrisisLineScreen() {
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
-          <TextView
-            variant="MobileBody"
-            color="link"
-            onPress={redirectToVeteransCrisisLineLink}
-            accessibilityRole="link"
-            {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
-            {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}
-            testID="veteransCrisisLineGetMoreResourcesTestID">
-            {t('veteransCrisisLine.urlDisplayed')}
-          </TextView>
+        <Box mt={standardMarginBetween} mr="auto">
+          <Link
+            type="url"
+            url={LINK_URL_VETERANS_CRISIS_LINE}
+            text={t('veteransCrisisLine.urlDisplayed')}
+            a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
+            a11yHint={t('veteransCrisisLine.urlA11yHint')}
+            analytics={analyticsWithUserProperty('https', LINK_URL_VETERANS_CRISIS_LINE)}
+            testID="veteransCrisisLineGetMoreResourcesTestID"
+          />
         </Box>
       </Box>
     </LargePanel>
