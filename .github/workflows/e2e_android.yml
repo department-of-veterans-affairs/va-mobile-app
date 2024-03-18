@@ -87,7 +87,7 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          resp="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
+          resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
@@ -114,8 +114,8 @@ jobs:
             select(contains(["Auth"])) += ["SignIn"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] | unique')"
-          resp_file="$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] | unique')
+          resp_file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
             jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
             select(contains(["DisabilityRating"]) or contains(["disabilityRating"])) += ["DisabilityRating", "VeteranStatusCard"] |
@@ -156,7 +156,7 @@ jobs:
             select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
-            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')"
+            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')
           echo "$resp_file"
           echo "$resp"
           test_matrix = jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique'
