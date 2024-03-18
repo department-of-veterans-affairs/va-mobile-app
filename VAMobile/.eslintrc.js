@@ -21,6 +21,7 @@ module.exports = {
   globals: {
     strapi: true,
   },
+  ignorePatterns: ['jsonFormatting.ts'],
   rules: {
     'tsdoc/syntax': 'warn',
     'no-console': 0,

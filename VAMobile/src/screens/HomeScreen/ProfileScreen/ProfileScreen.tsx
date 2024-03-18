@@ -5,14 +5,12 @@ import { useSelector } from 'react-redux'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, TextView } from 'components'
+import { useServiceHistory } from 'api/militaryService'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -23,13 +21,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
-  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<
-    RootState,
-    MilitaryServiceState
-  >((s) => s.militaryService)
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const dispatch = useAppDispatch()
+  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
+  })
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

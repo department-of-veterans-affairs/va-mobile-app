@@ -1,5 +1,4 @@
 import { by, device, element, expect, waitFor } from 'detox'
-import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
@@ -14,17 +13,9 @@ export const AppealsIdConstants = {
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
   APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
-  APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
+  APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
-export async function getDateWithTimeZone(dateString: string) {
-  const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
-  const dateUTC = date.toLocal()
-  const dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
-  return dateTime
-}
-
-let dateWithTimeZone
 beforeAll(async () => {
   await loginToDemoMode()
   await openBenefits()
@@ -34,6 +25,14 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
     await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID)))
       .toBeVisible()
       .whileElement(by.id('claimsHistoryID'))
@@ -41,12 +40,7 @@ describe('Appeals', () => {
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    if (device.getPlatform() === 'android') {
-      await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
-    } else {
-      dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
-      await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
-    }
+    await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT))).toExist()
@@ -63,12 +57,7 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    if (device.getPlatform() === 'android') {
-      await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
-    } else {
-      dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
-      await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
-    }
+    await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text('Currently on appeal'))).toExist()
     await expect(element(by.text('Service connection, ureteral stricture'))).toExist()
@@ -106,6 +95,6 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
     await element(by.text('Ok')).tap()
     await setTimeout(5000)
-    await device.takeScreenshot('AppealsNeedHelpVisitVAScreen')
+    await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
   })
 })

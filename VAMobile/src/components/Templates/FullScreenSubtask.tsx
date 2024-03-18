@@ -197,7 +197,42 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           </Box>
         )}
         <WaygateWrapper>{children}</WaygateWrapper>
+        <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
+      <WaygateWrapper bypassAlertBox={true}>
+        {primaryContentButtonText && onPrimaryContentButtonPress && (
+          <Box
+            display="flex"
+            flexDirection="row"
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.contentMarginBottom}
+            alignItems={'center'}>
+            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+              <Box ml={theme.dimensions.gutter} flex={1}>
+                <Button
+                  onPress={onSecondaryContentButtonPress}
+                  label={secondaryContentButtonText}
+                  buttonType={ButtonVariants.Secondary}
+                />
+              </Box>
+            )}
+            <Box
+              ml={
+                secondaryContentButtonText && onSecondaryContentButtonPress
+                  ? theme.dimensions.buttonPadding
+                  : theme.dimensions.gutter
+              }
+              mr={theme.dimensions.gutter}
+              flex={1}>
+              <Button
+                onPress={onPrimaryContentButtonPress}
+                label={primaryContentButtonText}
+                testID={primaryButtonTestID}
+              />
+            </Box>
+          </Box>
+        )}
+      </WaygateWrapper>
       <WaygateWrapper bypassAlertBox={true}>
         {primaryContentButtonText && onPrimaryContentButtonPress && (
           <Box

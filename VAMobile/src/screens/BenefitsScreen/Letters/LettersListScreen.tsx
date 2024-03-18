@@ -57,7 +57,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
-        return onBenefitSummary()
+        return navigateTo('BenefitSummaryServiceVerificationLetter')
       case LetterTypeConstants.serviceVerification:
         return navigateTo('GenericLetter', {
           header: letterName,

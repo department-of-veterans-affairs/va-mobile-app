@@ -168,7 +168,7 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-jest.mock('rn-fetch-blob', () => {
+jest.mock('react-native-blob-util', () => {
   return {
     fs: {
       dirs: {

@@ -1,4 +1,4 @@
-import { by, device, element, expect } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
@@ -32,10 +32,14 @@ beforeAll(async () => {
 })
 
 describe('Home Screen', () => {
-  it('should enable AF use case 3', async () => {
+  it(':android: should enable AF use case 3', async () => {
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
+    await waitFor(element(by.text('Remote Config')))
+      .toBeVisible()
+      .whileElement(by.id('developerScreenTestID'))
+      .scroll(200, 'down')
     await element(by.text('Remote Config')).tap()
     await enableAF('WG_Home', 'AllowFunction')
     await device.launchApp({ newInstance: true })
@@ -46,7 +50,7 @@ describe('Home Screen', () => {
     await verifyAF(undefined, 'AllowFunction', undefined)
   })
 
-  it('should disable AF use case 3', async () => {
+  it(':android: should disable AF use case 3', async () => {
     await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
   })
 
@@ -145,9 +149,5 @@ describe('Home Screen', () => {
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-  })
-
-  it('should disable AF use case 3', async () => {
-    await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
   })
 })

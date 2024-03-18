@@ -46,36 +46,16 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('Nametag', () => {
-  const renderWithBranch = (mostRecentBranch: string) => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-        militaryService: {
-          ...InitialState.militaryService,
-          mostRecentBranch,
-          serviceHistory: [
-            {
-              branchOfService: 'United States Air Force',
-              beginDate: '1998-09-01',
-              endDate: '2000-01-01',
-              formattedBeginDate: 'September 01, 1998',
-              formattedEndDate: 'January 01, 2000',
-              characterOfDischarge: 'Honorable',
-              honorableServiceIndicator: 'Y',
-            },
-          ],
-        },
-        disabilityRating: {
-          ...InitialState.disabilityRating,
-          ratingData: {
-            combinedDisabilityRating: 100,
-            combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            individualRatings: [],
-          },
+  const renderWithBranch = (serviceHistory: ServiceHistoryAttributes) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: militaryServiceHistoryKeys.serviceHistory,
+        data: {
+          ...serviceHistory,
         },
       },
-    })
+    ]
+    render(<Nametag />, { queriesData })
   }
 
   beforeEach(() => {
@@ -84,7 +64,21 @@ context('Nametag', () => {
 
   for (const branch of Object.values(BranchesOfServiceConstants)) {
     it(`displays correct icon and text for ${branch}`, () => {
-      renderWithBranch(branch)
+      const serviceHistoryMock: ServiceHistoryAttributes = {
+        serviceHistory: [
+          {
+            branchOfService: branch,
+            beginDate: '1993-06-04',
+            endDate: '1995-07-10',
+            formattedBeginDate: 'June 04, 1993',
+            formattedEndDate: 'July 10, 1995',
+            characterOfDischarge: 'Honorable',
+            honorableServiceIndicator: 'Y',
+          },
+        ],
+        mostRecentBranch: branch,
+      }
+      renderWithBranch(serviceHistoryMock)
       expect(screen.getByTestId(branch)).toBeTruthy()
       expect(screen.getByRole('link', { name: branch })).toBeTruthy()
     })

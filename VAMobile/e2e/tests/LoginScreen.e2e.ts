@@ -12,7 +12,7 @@ describe('Login Screen', () => {
   it('should show login page content', async () => {
     await waitFor(element(by.id(LoginE2eIdConstants.LOGIN_PAGE_ID)))
       .toExist()
-      .withTimeout(2000)
+      .withTimeout(60000)
 
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()

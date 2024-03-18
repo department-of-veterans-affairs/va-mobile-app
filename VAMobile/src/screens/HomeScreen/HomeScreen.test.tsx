@@ -111,4 +111,38 @@ context('HomeScreen', () => {
     initializeTestInstance(0)
     expect(screen.queryByText('Claims')).toBeFalsy()
   })
+
+  it('displays prescriptions module when there are active prescriptions', () => {
+    initializeTestInstance(2)
+    expect(screen.getByRole('link', { name: 'Prescriptions' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 ready to refill' })).toBeTruthy()
+  })
+
+  it('navigates to prescriptions screen when prescriptions module is tapped', () => {
+    initializeTestInstance(2)
+    fireEvent.press(screen.getByRole('link', { name: 'Prescriptions' }))
+    expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
+  })
+
+  it('does not display prescriptions module when there are no active prescriptions', () => {
+    initializeTestInstance(0)
+    expect(screen.queryByText('Prescriptions')).toBeFalsy()
+  })
+
+  it('displays claims module when there are active claims', () => {
+    initializeTestInstance(0, 2)
+    expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '2 active' })).toBeTruthy()
+  })
+
+  it('navigates to claims history screen when claims module is tapped', () => {
+    initializeTestInstance(0, 2)
+    fireEvent.press(screen.getByRole('link', { name: 'Claims' }))
+    expect(Linking.openURL).toBeCalledWith('vamobile://claims')
+  })
+
+  it('does not display claims module when there are no active claims', () => {
+    initializeTestInstance(0)
+    expect(screen.queryByText('Claims')).toBeFalsy()
+  })
 })

@@ -114,7 +114,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
       updateVaOpacity()
       updateTitleShowing()
     }
-  })
+  }, [transition, title, titleShowing])
 
   /**
    * Handles animation effect on the title
@@ -137,7 +137,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  })
+  }, [titleShowing, titleFade])
 
   const zIndex = {
     zIndex: 1,

@@ -3,13 +3,15 @@ sidebar_position: 1
 ---
 
 # Dashboards
-<b>Note:</b> These dashboards are not currently working as intended; VA/OCTO POs on individual Veteran-facing experiences will decide if/how best to refresh them. If you are in need of up-to-date information about the mobile app, please contact the team via #va-mobile-app-analytics on DSVA Slack.
 
 ## Monthly overview
 [Monthly overview dashboard](https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c)
 <iframe width="1200" height="900" src="https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c" frameborder="0" allowfullscreen></iframe>
 
 ## Feature specific boards
+
+<b>Note:</b> These dashboards are not currently working as intended; VA/OCTO POs on individual Veteran-facing experiences will decide if/how best to refresh them. If you are in need of up-to-date information about the mobile app, please contact the team via #va-mobile-app-analytics on DSVA Slack.
+
 As the team builds out dashboards to monitor specific features of the app, they will be aded below.
 
 * [Appointments feature dashboard (MVP)](https://lookerstudio.google.com/u/0/reporting/06c3f64f-fcbd-4c13-adb6-3a9c34503f63/page/p_wtepo1ul5c)

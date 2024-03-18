@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import * as api from 'store/api'
 import { AppealEventData, AppealTypes } from 'store/api/types'
@@ -68,12 +69,15 @@ context('AppealDetailsScreen', () => {
 
   describe('when the selected tab is status', () => {
     it('should display the AppealStatus component', async () => {
+      const date = DateTime.fromISO('2018-01-19T10:20:42-05:00')
+      const dateTime = date.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
       await waitFor(() => {
         mockApiCall()
         initializeTestInstance()
       })
       fireEvent.press(screen.getByRole('tab', { name: 'Status' }))
       expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy()
+      expect(screen.getByText('Up to date as of ' + dateTime)).toBeTruthy()
       expect(screen.getByText('Submitted')).toBeTruthy()
       expect(screen.getByText('Review past events')).toBeTruthy()
       expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy()
@@ -104,8 +108,8 @@ context('AppealDetailsScreen', () => {
         screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
       ).toBeTruthy()
       expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
-      expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'Visit VA.gov' })).toBeTruthy()
+      expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy()
     })
   })
 

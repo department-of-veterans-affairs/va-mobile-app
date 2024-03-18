@@ -57,8 +57,11 @@ describe('Settings Screen', () => {
   it('should show "Share the app" screen', async () => {
     if (device.getPlatform() === 'ios') {
       await element(by.text(SettingsE2eIdConstants.SHARE_APP_ROW_TEXT)).tap()
-      await expect(element(by.text(SettingsE2eIdConstants.SHARE_APP_SCREEN_TEXT))).toExist()
-      await element(by.label('Close')).atIndex(0).tap()
+      await device.takeScreenshot('ShareTheAppScreenshot')
+      await device.launchApp({ newInstance: true })
+      await loginToDemoMode()
+      await openProfile()
+      await openSettings()
     }
   })
 

@@ -4,6 +4,77 @@
       "data": [
         {
           "type": "appointment",
+          "id": "53",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "BOOKED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": false,
+            "startDateLocal": "{{now - 2 days}}",
+            "startDateUtc": "{{now - 2 days utc}}",
+            "minutesDuration": 60,
+            "comment": null,
+            "timeZone": "America/Denver",
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "id": "983GC",
+              "lat": 40.553875,
+              "long": -105.08795,
+              "name": "Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "phone": {
+                "number": "224-1550",
+                "extension": null,
+                "areaCode": "970"
+              },
+              "url": null,
+              "code": null
+            },
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)",
+            "vetextId": null
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b3542400032",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": null,
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 2 days}}",
+            "startDateUtc": "{{now - 2 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center",
+            "physicalLocation": "4100 W Third St, Dayton, OH 45428"
+          }
+        },
+        {
+          "type": "appointment",
           "id": "33",
           "attributes": {
             "appointmentType": "VA",
@@ -40,35 +111,7 @@
             },
             "serviceCategoryName": null,
             "typeOfCare": "Phone consultation",
-            "vetextId": null
-          }
-        },
-        {
-          "id": "8a48e8db6d70a38a016d72b3542400032",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": null,
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 2 days}}",
-            "startDateUtc": "{{now - 2 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": null,
-            "isPending": false,
-            "proposedTimes": null,
-            "typeOfCare": null,
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
           }
         },
@@ -161,85 +204,185 @@
           }
         },
         {
+          "id": "8a48e8db6d70a38a016d72b354240004",
           "type": "appointment",
-          "id": "53",
           "attributes": {
-            "appointmentType": "VA",
-            "status": "BOOKED",
-            "phoneOnly": false,
-            "statusDetail": null,
-            "isCovidVaccine": false,
-            "startDateLocal": "{{now - 2 days}}",
-            "startDateUtc": "{{now - 2 days utc}}",
-            "minutesDuration": 60,
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
             "comment": null,
-            "timeZone": "America/Denver",
-            "healthcareService": "C&P BEV AUDIO FTC",
             "healthcareProvider": null,
-            "reason": null,
+            "healthcareService": null,
             "location": {
-              "id": "983GC",
-              "lat": 40.553875,
-              "long": -105.08795,
-              "name": "Fort Collins VA Clinic",
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
               "address": {
-                "street": "2509 Research Boulevard",
-                "city": "Fort Collins",
-                "state": "CO",
-                "zipCode": "80526-8108"
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
               },
+              "lat": 41.148027,
+              "long": -104.7862575,
               "phone": {
-                "number": "224-1550",
-                "extension": null,
-                "areaCode": "970"
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
               },
               "url": null,
               "code": null
             },
-            "serviceCategoryName": "COMPENSATION & PENSION",
-            "typeOfCare": "Audiology and speech (including hearing aid support)",
-            "vetextId": null
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 15 days}}",
+            "startDateUtc": "{{now - 15 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "{{now - 44 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now - 15 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now - 14 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning", "Afternoon", "Evening"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
           }
         },
         {
+          "id": "8a48912a6d02b0fc016d20b4ccb9001b",
           "type": "appointment",
-          "id": "4",
           "attributes": {
-            "appointmentType": "VA",
-            "status": "BOOKED",
-            "phoneOnly": false,
-            "statusDetail": null,
-            "isCovidVaccine": true,
-            "startDateLocal": "{{now - 32 days}}",
-            "startDateUtc": "{{now - 32 days utc}}",
-            "minutesDuration": 60,
-            "comment": "Please arrive 20 minutes before the start of your appointment",
-            "timeZone": "America/Los_Angeles",
-            "healthcareService": "Blind Rehabilitation Center",
-            "healthcareProvider": null,
-            "reason": null,
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "Vilasini Reddy",
+            "healthcareService": "Test clinic 2",
             "location": {
-              "name": "VA Long Beach Healthcare System",
+              "id": null,
+              "name": "Test clinic 2",
               "address": {
-                "street": "5901 East 7th Street",
-                "city": "Long Beach",
-                "state": "CA",
-                "zipCode": "90822"
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
               },
+              "lat": null,
+              "long": null,
               "phone": {
-                "number": "456-7890",
-                "extension": "",
-                "areaCode": "123"
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
               },
-              "url": "",
-              "code": ""
+              "url": null,
+              "code": null
             },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 33 days}}",
+            "startDateUtc": "{{now - 33 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "{{now - 33 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now - 32 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
             "practitioner": {
               "prefix": "Dr.",
               "firstName": "Larry",
               "middleName": "",
               "lastName": "TestDoctor"
             }
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b354240003",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 88 days}}",
+            "startDateUtc": "{{now - 88 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "{{now - 89 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now - 88 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now - 87 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
           }
         },
         {
@@ -280,6 +423,62 @@
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": false
+          }
+        },
+        {
+          "id": "6a48912a6d02b0fc016d20b4ccb9001d",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 101 days}}",
+            "startDateUtc": "{{now - 101 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "{{now - 101 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now - 100 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
         {
@@ -493,244 +692,6 @@
           }
         },
         {
-          "id": "8a48912a6d02b0fc016d20b4ccb9001b",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 33 days}}",
-            "startDateUtc": "{{now - 33 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY PATIENT",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 33 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 32 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
-          }
-        },
-        {
-          "id": "8a48e8db6d70a38a016d72b354240004",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": {
-              "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
-              },
-              "lat": 41.148027,
-              "long": -104.7862575,
-              "phone": {
-                "areaCode": "307",
-                "number": "778-7550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 15 days}}",
-            "startDateUtc": "{{now - 15 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "New Issue",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 44 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 15 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 14 days short}}",
-                "time": "AM"
-              }
-            ],
-            "typeOfCare": "Primary Care",
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning", "Afternoon", "Evening"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48e8db6d70a38a016d72b354240003",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": {
-              "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
-              },
-              "lat": 41.148027,
-              "long": -104.7862575,
-              "phone": {
-                "areaCode": "307",
-                "number": "778-7550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 88 days}}",
-            "startDateUtc": "{{now - 88 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "New Issue",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 89 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 88 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 87 days short}}",
-                "time": "AM"
-              }
-            ],
-            "typeOfCare": "Primary Care",
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001d",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 101 days}}",
-            "startDateUtc": "{{now - 101 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 101 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 100 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
           "id": "100",
           "type": "appointment",
           "attributes": {
@@ -760,8 +721,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 45 minutes}}",
-            "startDateUtc": "{{now + 45 minutes utc}}",
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Los_Angeles",
@@ -800,8 +761,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 45 minutes}}",
-            "startDateUtc": "{{now + 45 minutes utc}}",
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -812,11 +773,11 @@
 
             "proposedTimes": [
               {
-                "date": "{{now + 63 days short}}",
+                "date": "{{now - 63 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 64 days short}}",
+                "date": "{{now - 64 days short}}",
                 "time": "PM"
               }
             ],
@@ -863,8 +824,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 45 minutes}}",
-            "startDateUtc": "{{now + 45 minutes utc}}",
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -874,11 +835,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 32 days short}}",
+                "date": "{{now - 32 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 33 days short}}",
+                "date": "{{now - 33 days short}}",
                 "time": "PM"
               }
             ],
@@ -919,8 +880,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 5 days}}",
-            "startDateUtc": "{{now + 5 days utc}}",
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -961,8 +922,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 5 days}}",
-            "startDateUtc": "{{now + 5 days utc}}",
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
             "timeZone": "America/New_York",
@@ -1003,8 +964,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 5 days}}",
-            "startDateUtc": "{{now + 5 days utc}}",
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1047,8 +1008,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 6 days}}",
-            "startDateUtc": "{{now + 6 days utc}}",
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1089,8 +1050,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 6 days}}",
-            "startDateUtc": "{{now + 6 days utc}}",
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/New_York",
@@ -1131,8 +1092,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 6 days}}",
-            "startDateUtc": "{{now + 6 days utc}}",
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1175,8 +1136,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 7 days}}",
-            "startDateUtc": "{{now + 7 days utc}}",
+            "startDateLocal": "{{now - 7 days}}",
+            "startDateUtc": "{{now - 7 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1217,8 +1178,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 7 days}}",
-            "startDateUtc": "{{now + 7 days utc}}",
+            "startDateLocal": "{{now - 7 days}}",
+            "startDateUtc": "{{now - 7 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC & AUTO RE-BOOK",
             "timeZone": "America/New_York",
@@ -1259,8 +1220,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 7 days}}",
-            "startDateUtc": "{{now + 7 days utc}}",
+            "startDateLocal": "{{now - 7 days}}",
+            "startDateUtc": "{{now - 7 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1303,8 +1264,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 8 days}}",
-            "startDateUtc": "{{now + 8 days utc}}",
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1345,8 +1306,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 8 days}}",
-            "startDateUtc": "{{now + 8 days utc}}",
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/New_York",
@@ -1387,8 +1348,8 @@
             },
             "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 8 days}}",
-            "startDateUtc": "{{now + 8 days utc}}",
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -1431,8 +1392,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 12 days}}",
-            "startDateUtc": "{{now + 12 days utc}}",
+            "startDateLocal": "{{now - 12 days}}",
+            "startDateUtc": "{{now - 12 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -1455,8 +1416,8 @@
             "location": null,
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 2 days}}",
-            "startDateUtc": "{{now + 2 days utc}}",
+            "startDateLocal": "{{now - 2 days}}",
+            "startDateUtc": "{{now - 2 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -1502,8 +1463,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 3 days}}",
-            "startDateUtc": "{{now + 3 days utc}}",
+            "startDateLocal": "{{now - 3 days}}",
+            "startDateUtc": "{{now - 3 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1549,8 +1510,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 4 days}}",
-            "startDateUtc": "{{now + 4 days utc}}",
+            "startDateLocal": "{{now - 4 days}}",
+            "startDateUtc": "{{now - 4 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1560,15 +1521,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 4 days short}}",
+                "date": "{{now - 4 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 5 days short}}",
+                "date": "{{now - 5 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 6 days short}}",
+                "date": "{{now - 6 days short}}",
                 "time": "AM"
               }
             ],
@@ -1609,8 +1570,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 10 days}}",
-            "startDateUtc": "{{now + 10 days utc}}",
+            "startDateLocal": "{{now - 10 days}}",
+            "startDateUtc": "{{now - 10 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1651,8 +1612,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 10 days}}",
-            "startDateUtc": "{{now + 10 days utc}}",
+            "startDateLocal": "{{now - 10 days}}",
+            "startDateUtc": "{{now - 10 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1673,8 +1634,8 @@
             "phoneOnly": false,
             "statusDetail": null,
             "isCovidVaccine": true,
-            "startDateLocal": "{{now + 25 days}}",
-            "startDateUtc": "{{now + 25 days utc}}",
+            "startDateLocal": "{{now - 25 days}}",
+            "startDateUtc": "{{now - 25 days utc}}",
             "minutesDuration": 60,
             "comment": "Please arrive 20 minutes before the start of your appointment",
             "timeZone": "America/Los_Angeles",
@@ -1714,8 +1675,8 @@
             "phoneOnly": false,
             "statusDetail": null,
             "isCovidVaccine": true,
-            "startDateLocal": "{{now + 25 days}}",
-            "startDateUtc": "{{now + 25 days utc}}",
+            "startDateLocal": "{{now - 25 days}}",
+            "startDateUtc": "{{now - 25 days utc}}",
             "minutesDuration": 60,
             "comment": "Please arrive 20 minutes before the start of your appointment",
             "timeZone": "America/Los_Angeles",
@@ -1776,8 +1737,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1787,15 +1748,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now - 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -1836,8 +1797,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1847,15 +1808,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now - 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -1896,8 +1857,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -1907,15 +1868,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now - 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -1956,8 +1917,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2003,8 +1964,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 100 days}}",
-            "startDateUtc": "{{now + 100 days utc}}",
+            "startDateLocal": "{{now - 100 days}}",
+            "startDateUtc": "{{now - 100 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2050,8 +2011,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 100 days}}",
-            "startDateUtc": "{{now + 100 days utc}}",
+            "startDateLocal": "{{now - 100 days}}",
+            "startDateUtc": "{{now - 100 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2097,8 +2058,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 101 days}}",
-            "startDateUtc": "{{now + 101 days utc}}",
+            "startDateLocal": "{{now - 101 days}}",
+            "startDateUtc": "{{now - 101 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2144,8 +2105,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 101 days}}",
-            "startDateUtc": "{{now + 101 days utc}}",
+            "startDateLocal": "{{now - 101 days}}",
+            "startDateUtc": "{{now - 101 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2191,8 +2152,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 102 days}}",
-            "startDateUtc": "{{now + 102 days utc}}",
+            "startDateLocal": "{{now - 102 days}}",
+            "startDateUtc": "{{now - 102 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2238,8 +2199,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 102 days}}",
-            "startDateUtc": "{{now + 102 days utc}}",
+            "startDateLocal": "{{now - 102 days}}",
+            "startDateUtc": "{{now - 102 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2285,8 +2246,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 103 days}}",
-            "startDateUtc": "{{now + 103 days utc}}",
+            "startDateLocal": "{{now - 103 days}}",
+            "startDateUtc": "{{now - 103 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2332,8 +2293,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 103 days}}",
-            "startDateUtc": "{{now + 103 days utc}}",
+            "startDateLocal": "{{now - 103 days}}",
+            "startDateUtc": "{{now - 103 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2379,8 +2340,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 104 days}}",
-            "startDateUtc": "{{now + 104 days utc}}",
+            "startDateLocal": "{{now - 104 days}}",
+            "startDateUtc": "{{now - 104 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2426,8 +2387,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 104 days}}",
-            "startDateUtc": "{{now + 104 days utc}}",
+            "startDateLocal": "{{now - 104 days}}",
+            "startDateUtc": "{{now - 104 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2473,8 +2434,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 106 days}}",
-            "startDateUtc": "{{now + 106 days utc}}",
+            "startDateLocal": "{{now - 106 days}}",
+            "startDateUtc": "{{now - 106 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2520,8 +2481,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 106 days}}",
-            "startDateUtc": "{{now + 106 days utc}}",
+            "startDateLocal": "{{now - 106 days}}",
+            "startDateUtc": "{{now - 106 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2567,8 +2528,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2578,15 +2539,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now - 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -2627,8 +2588,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now - 87 days}}",
+            "startDateUtc": "{{now - 87 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2638,15 +2599,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now - 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -2687,8 +2648,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now - 95 days}}",
+            "startDateUtc": "{{now - 95 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -2727,8 +2688,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now - 90 days}}",
+            "startDateUtc": "{{now - 90 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2738,11 +2699,11 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now - 16 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now - 17 days short}}",
                 "time": "PM"
               }
             ],
@@ -2783,8 +2744,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now - 90 days}}",
+            "startDateUtc": "{{now - 90 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2794,11 +2755,11 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now - 16 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now - 17 days short}}",
                 "time": "PM"
               }
             ],
@@ -2839,8 +2800,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now - 90 days}}",
+            "startDateUtc": "{{now - 90 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2850,11 +2811,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now - 16 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now - 17 days short}}",
                 "time": "PM"
               }
             ],
@@ -2895,8 +2856,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now - 95 days}}",
+            "startDateUtc": "{{now - 95 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -2906,11 +2867,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now - 16 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now - 17 days short}}",
                 "time": "PM"
               }
             ],
@@ -2951,8 +2912,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now - 95 days}}",
+            "startDateUtc": "{{now - 95 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -2962,11 +2923,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 32 days short}}",
+                "date": "{{now - 32 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 33 days short}}",
+                "date": "{{now - 33 days short}}",
                 "time": "PM"
               }
             ],
@@ -3007,8 +2968,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now - 95 days}}",
+            "startDateUtc": "{{now - 95 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -3145,6 +3106,62 @@
               "middleName": "",
               "lastName": "TestDoctor"
             }
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "",
+            "healthcareService": "Test clinic 2",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "{{now + 16 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 17 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Optometry (routine eye exam)",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
         {
@@ -3458,7 +3475,6 @@
             "typeOfCare": "Mental Health"
           }
         },
-
         {
           "id": "60",
           "type": "appointment",
@@ -3714,7 +3730,6 @@
             "typeOfCare": "Mental Health"
           }
         },
-
         {
           "id": "8a48e2fe7956f4d30179cddf3f3d00aa",
           "type": "appointment",
@@ -3758,6 +3773,91 @@
           }
         },
         {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Confirmed",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 13 days}}",
+            "startDateUtc": "{{now + 13 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
+          "id": "66",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Pending",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 14 days}}",
+            "startDateUtc": "{{now + 14 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
           "id": "8a48e8db6d70a38a016d72b35424000321",
           "type": "appointment",
           "attributes": {
@@ -3769,8 +3869,8 @@
             "location": null,
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 2 days}}",
-            "startDateUtc": "{{now + 2 days utc}}",
+            "startDateLocal": "{{now + 15 days}}",
+            "startDateUtc": "{{now + 15 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -3816,8 +3916,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 3 days}}",
-            "startDateUtc": "{{now + 3 days utc}}",
+            "startDateLocal": "{{now + 16 days}}",
+            "startDateUtc": "{{now + 16 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -3863,8 +3963,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 4 days}}",
-            "startDateUtc": "{{now + 4 days utc}}",
+            "startDateLocal": "{{now + 17 days}}",
+            "startDateUtc": "{{now + 17 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -3891,91 +3991,6 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": "C&P BEV AUDIO FTC",
-            "location": {
-              "id": "983GC",
-              "name": "Fort Collins VA Clinic - Claim - Confirmed",
-              "address": {
-                "street": "2509 Research Boulevard",
-                "city": "Fort Collins",
-                "state": "CO",
-                "zipCode": "80526-8108"
-              },
-              "lat": 40.553875,
-              "long": -105.08795,
-              "phone": {
-                "areaCode": "970",
-                "number": "224-1550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 10 days}}",
-            "startDateUtc": "{{now + 10 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false,
-            "serviceCategoryName": "COMPENSATION & PENSION",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
-          }
-        },
-        {
-          "id": "66",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": "C&P BEV AUDIO FTC",
-            "location": {
-              "id": "983GC",
-              "name": "Fort Collins VA Clinic - Claim - Pending",
-              "address": {
-                "street": "2509 Research Boulevard",
-                "city": "Fort Collins",
-                "state": "CO",
-                "zipCode": "80526-8108"
-              },
-              "lat": 40.553875,
-              "long": -105.08795,
-              "phone": {
-                "areaCode": "970",
-                "number": "224-1550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 10 days}}",
-            "startDateUtc": "{{now + 10 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false,
-            "isPending": true,
-            "serviceCategoryName": "COMPENSATION & PENSION",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
         {
@@ -4090,8 +4105,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 26 days}}",
+            "startDateUtc": "{{now + 26 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4101,15 +4116,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now + 26 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               }
             ],
@@ -4150,8 +4165,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 27 days}}",
+            "startDateUtc": "{{now + 27 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4161,15 +4176,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now + 27 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now + 27 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now + 28 days short}}",
                 "time": "AM"
               }
             ],
@@ -4210,8 +4225,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 28 days}}",
+            "startDateUtc": "{{now + 28 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4221,15 +4236,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now + 28 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now + 28 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now + 28 days short}}",
                 "time": "AM"
               }
             ],
@@ -4270,8 +4285,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 29 days}}",
+            "startDateUtc": "{{now + 29 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4317,8 +4332,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 100 days}}",
-            "startDateUtc": "{{now + 100 days utc}}",
+            "startDateLocal": "{{now + 30 days}}",
+            "startDateUtc": "{{now + 30 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4364,8 +4379,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 100 days}}",
-            "startDateUtc": "{{now + 100 days utc}}",
+            "startDateLocal": "{{now + 31 days}}",
+            "startDateUtc": "{{now + 31 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4411,8 +4426,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 101 days}}",
-            "startDateUtc": "{{now + 101 days utc}}",
+            "startDateLocal": "{{now + 32 days}}",
+            "startDateUtc": "{{now + 32 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4458,8 +4473,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 101 days}}",
-            "startDateUtc": "{{now + 101 days utc}}",
+            "startDateLocal": "{{now + 33 days}}",
+            "startDateUtc": "{{now + 33 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4505,8 +4520,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 102 days}}",
-            "startDateUtc": "{{now + 102 days utc}}",
+            "startDateLocal": "{{now + 34 days}}",
+            "startDateUtc": "{{now + 34 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4552,8 +4567,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 102 days}}",
-            "startDateUtc": "{{now + 102 days utc}}",
+            "startDateLocal": "{{now + 35 days}}",
+            "startDateUtc": "{{now + 35 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4599,8 +4614,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 103 days}}",
-            "startDateUtc": "{{now + 103 days utc}}",
+            "startDateLocal": "{{now + 36 days}}",
+            "startDateUtc": "{{now + 36 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4646,8 +4661,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 103 days}}",
-            "startDateUtc": "{{now + 103 days utc}}",
+            "startDateLocal": "{{now + 37 days}}",
+            "startDateUtc": "{{now + 37 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4693,8 +4708,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 104 days}}",
-            "startDateUtc": "{{now + 104 days utc}}",
+            "startDateLocal": "{{now + 38 days}}",
+            "startDateUtc": "{{now + 38 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4740,8 +4755,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 104 days}}",
-            "startDateUtc": "{{now + 104 days utc}}",
+            "startDateLocal": "{{now + 39 days}}",
+            "startDateUtc": "{{now + 39 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4787,8 +4802,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 106 days}}",
-            "startDateUtc": "{{now + 106 days utc}}",
+            "startDateLocal": "{{now + 40 days}}",
+            "startDateUtc": "{{now + 40 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4834,8 +4849,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 106 days}}",
-            "startDateUtc": "{{now + 106 days utc}}",
+            "startDateLocal": "{{now + 41 days}}",
+            "startDateUtc": "{{now + 41 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4881,8 +4896,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 42 days}}",
+            "startDateUtc": "{{now + 42 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4892,15 +4907,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now + 48 days short}}",
                 "time": "AM"
               }
             ],
@@ -4941,8 +4956,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 87 days}}",
-            "startDateUtc": "{{now + 87 days utc}}",
+            "startDateLocal": "{{now + 43 days}}",
+            "startDateUtc": "{{now + 43 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4952,15 +4967,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 86 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 87 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 88 days short}}",
+                "date": "{{now + 48 days short}}",
                 "time": "AM"
               }
             ],
@@ -5001,8 +5016,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now + 44 days}}",
+            "startDateUtc": "{{now + 44 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -5041,8 +5056,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now + 45 days}}",
+            "startDateUtc": "{{now + 45 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -5052,11 +5067,11 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "PM"
               }
             ],
@@ -5097,8 +5112,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now + 46 days}}",
+            "startDateUtc": "{{now + 46 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -5108,11 +5123,11 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "PM"
               }
             ],
@@ -5153,8 +5168,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": true,
-            "startDateLocal": "{{now + 90 days}}",
-            "startDateUtc": "{{now + 90 days utc}}",
+            "startDateLocal": "{{now + 47 days}}",
+            "startDateUtc": "{{now + 47 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -5164,11 +5179,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "PM"
               }
             ],
@@ -5209,8 +5224,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now + 48 days}}",
+            "startDateUtc": "{{now + 48 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -5220,11 +5235,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
+                "date": "{{now + 46 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 17 days short}}",
+                "date": "{{now + 47 days short}}",
                 "time": "PM"
               }
             ],
@@ -5265,8 +5280,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now + 49 days}}",
+            "startDateUtc": "{{now + 49 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -5276,11 +5291,11 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 32 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 33 days short}}",
+                "date": "{{now + 50 days short}}",
                 "time": "PM"
               }
             ],
@@ -5321,8 +5336,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 95 days}}",
-            "startDateUtc": "{{now + 95 days utc}}",
+            "startDateLocal": "{{now + 50 days}}",
+            "startDateUtc": "{{now + 50 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
