@@ -173,7 +173,7 @@ jobs:
             testing_matrix_file="$(echo ${resp_file} | jq 'del(.[0])' )"
             echo "$testing_matrix_file"
           done
-          test_matrix = "(echo jq  --compact-output '${testing_matrix_file} + ${testing_matrix}')"
+          test_matrix = jq  --argjson a "${testing_matrix_file}" --argjson b "${testing_matrix}" --compact-output '$a + $b'
           echo "TESTING_MATRIX_ARRAY_DIR=$test_matrix" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo ${testing_matrix} | jq --compact-output)"
   #echo "TESTING_MATRIX_ARRAY_DIR=$testing_matrix" >> "$GITHUB_OUTPUT"
