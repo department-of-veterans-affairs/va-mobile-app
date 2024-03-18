@@ -68,6 +68,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           subText={combinedPercentText}
+          testID="test"
         />
         <LargeNavButton
           title={t('claims.title')}

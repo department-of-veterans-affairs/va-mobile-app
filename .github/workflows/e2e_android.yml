@@ -151,14 +151,14 @@ jobs:
             select(contains(["decisionLetters"]) or contains(["DecisionLetters"]) or contains(["claimData"])) += ["Claims"] |
             select(contains(["AuthorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "Letters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
             select(contains(["Notifications"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["ErrorComponent"])) += ["Appeals", "AppealsExpanded", "DisabilityRatings", "Letters", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", VaccineRecords", "ProfileScreen", "ContactInformation", MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Payments"] |
+            select(contains(["ErrorComponent"])) += ["Appeals", "AppealsExpanded", "DisabilityRatings", "Letters", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "VaccineRecords", "ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Payments"] |
             select(contains(["VAModalPicker"])) += ["Appointments", "Messages", "Payments"] |
             select(contains(["RadioGroup"])) += ["PersonalInformationScreen", "ContactInformation"] |
             select(contains(["VATextInput"]) or contains(["WaygateWrapper"])) += ["AvailabilityFramework"] |
             select(contains(["AccordionCollapsible"])) += ["Claims", "Messages"] |
             select(contains(["AlertBox"])) += ["AvailabilityFramework", "Letters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit"] |
             select(contains(["AppVersionAndBuild"])) += ["LoginScreen", "SettingsScreen"] |
-            select(contains(["ClickForActionLink"] or contains(["ClickToCallPhoneNumber"]))) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
+            select(contains(["ClickForActionLink"] or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             select(contains(["CollapsibileAlert"])) += ["Cerner", "Prescriptions", "ContactInformation"] |
             select(contains(["CollapsibleView"])) += ["Appeals", "AppealsExpanded", "Messages", "DirectDeposit"] |
             select(contains(["DefaultList"])) += ["Claims", "DisabilityRattings", "Letters", "ContactInformation", Appointments", "VaccineRecords", "MilitaryInformation", "PersonalInformationScreen", "DirectDeposit", "Prescriptions", "Payments", "SettingsScreen"] |
