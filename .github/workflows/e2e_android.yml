@@ -168,7 +168,7 @@ jobs:
             if [[$test_matrix_index != "Appeals" || $test_matrix_index != "AppealsExpanded" || $test_matrix_index != "Appointments" ||
               $test_matrix_index != "AppointmentsExpanded" || $test_matrix_index != "AvailabilityFramework" || $test_matrix_index != "Cerner"
               $test_matrix_index != "Claims" || $test_matrix_index != "ContactInformation" || $test_matrix_index != "DirectDeposit" ||
-              $test_matrix_index != "DisabilityRating" || $test_matrix_index != "HomeScreen" || $test_matrix_index != "Letters ||
+              $test_matrix_index != "DisabilityRating" || $test_matrix_index != "HomeScreen" || $test_matrix_index != "Letters" ||
               $test_matrix_index != "LoginScreen" || $test_matrix_index != "Messages" || $test_matrix_index != "MilitaryInformation" ||
               $test_matrix_index != "Onboarding" || $test_matrix_index != "Payments" || $test_matrix_index != "PersonalInformationScreen" ||
               $test_matrix_index != "Prescriptions" || $test_matrix_index != "ProfileScreen" || $test_matrix_index != "PushNotifications" ||
