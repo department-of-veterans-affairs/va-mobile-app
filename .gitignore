@@ -120,7 +120,6 @@ coverage
 **/ios/output
 **/ios/vendor
 **/ios/Pods
-**/ios/main.jsbundle.map
 
 # Xcode
 #
