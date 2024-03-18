@@ -31,11 +31,12 @@ function VeteransCrisisLineNumbers() {
   const boxProps: BoxProps = {
     mt: theme.dimensions.standardMarginBetween,
     mr: 'auto',
+    py: theme.dimensions.buttonPadding,
   }
 
   return (
     <>
-      <Box {...boxProps} mt="0">
+      <Box {...boxProps} mt={0}>
         <Link
           type="call"
           phoneNumber={t('988')}
