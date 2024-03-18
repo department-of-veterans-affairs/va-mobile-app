@@ -17,15 +17,7 @@ function VeteransCrisisLineNumbers() {
   const theme = useTheme()
 
   const analyticsWithUserProperty = (protocol: string, url: string) => {
-    const analytics = makeLinkAnalytics(protocol, url)
-
-    return {
-      ...analytics,
-      onPress: () => {
-        setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
-        analytics.onPress()
-      },
-    }
+    return makeLinkAnalytics(protocol, url, () => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl()))
   }
 
   const boxProps: BoxProps = {
