@@ -1,11 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkTypeOptionsConstants } from 'components'
+import { Link } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { makeLinkAnalytics, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -14,52 +15,64 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP } = getEnv()
 function VeteransCrisisLineNumbers() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
-  const fireAnalyticFn = (): void => {
-    setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
+  const analyticsWithUserProperty = (protocol: string, url: string) => {
+    const analytics = makeLinkAnalytics(protocol, url)
+
+    return {
+      ...analytics,
+      onPress: () => {
+        setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
+        analytics.onPress()
+      },
+    }
+  }
+
+  const boxProps: BoxProps = {
+    mt: theme.dimensions.standardMarginBetween,
+    mr: 'auto',
   }
 
   return (
     <>
-      <Box>
-        <ClickToCallPhoneNumber
-          ttyBypass={true}
-          phone={t('988')}
+      <Box {...boxProps} mt="0">
+        <Link
+          type="call"
+          phoneNumber={t('988')}
+          text={t('veteransCrisisLine.crisisCallNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
-          displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-          fireAnalytic={fireAnalyticFn}
+          analytics={analyticsWithUserProperty('tel', t('988'))}
         />
       </Box>
-      <Box mt={standardMarginBetween}>
-        <ClickForActionLink
-          testID="veteransCrisisLineTextNumberTestID"
-          displayedText={t('veteransCrisisLine.textNumberDisplayed')}
+      <Box {...boxProps}>
+        <Link
+          type="text"
+          textNumber={t('838255')}
+          text={t('veteransCrisisLine.textNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.textNumberDisplayed.a11y')}
-          numberOrUrlLink={t('838255')}
-          linkType={LinkTypeOptionsConstants.text}
-          fireAnalytic={fireAnalyticFn}
+          analytics={analyticsWithUserProperty('sms', t('838255'))}
+          testID="veteransCrisisLineTextNumberTestID"
         />
       </Box>
-      <Box mt={standardMarginBetween}>
-        <ClickForActionLink
-          testID="veteransCrisisLineConfidentialChatTestID"
-          displayedText={t('veteransCrisisLine.startConfidentialChat')}
+      <Box {...boxProps}>
+        <Link
+          type="url"
+          url={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
+          text={t('veteransCrisisLine.startConfidentialChat')}
           a11yLabel={t('veteransCrisisLine.startConfidentialChat')}
-          numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
-          linkType={LinkTypeOptionsConstants.url}
-          fireAnalytic={fireAnalyticFn}
-          {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
+          a11yHint={t('veteransCrisisLine.crisisUrlA11yHint')}
+          analytics={analyticsWithUserProperty('https', LINK_URL_VETERANS_CRISIS_LINE_GET_HELP)}
+          testID="veteransCrisisLineConfidentialChatTestID"
         />
       </Box>
-      <Box mt={standardMarginBetween}>
-        <ClickForActionLink
-          testID="veteransCrisisLineHearingLossNumberTestID"
-          displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+      <Box {...boxProps}>
+        <Link
+          type="call TTY"
+          TTYnumber={t('8007994889')}
+          text={t('veteransCrisisLine.hearingLossNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
-          numberOrUrlLink={t('8007994889')}
-          linkType={LinkTypeOptionsConstants.callTTY}
-          fireAnalytic={fireAnalyticFn}
+          analytics={analyticsWithUserProperty('tel', t('8007994889'))}
+          testID="veteransCrisisLineHearingLossNumberTestID"
         />
       </Box>
     </>
