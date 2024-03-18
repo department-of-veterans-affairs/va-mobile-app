@@ -159,7 +159,7 @@ jobs:
             select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')
           echo "$resp_file"
           echo "$resp"
-          test_matrix = jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique'
+          test_matrix =$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
           respLength="$(echo $test_matrix | jq 'length')"
           echo "$respLength"
