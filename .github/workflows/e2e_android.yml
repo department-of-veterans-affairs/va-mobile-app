@@ -163,17 +163,16 @@ jobs:
           echo "$test_matrix"
           respLength="$(echo $test_matrix | jq 'length')"
           echo "$respLength"
-          for((i=0; i<=${respLength}; i++)); do
-            test_matrix_index=test_matrix[i]
-            if [[$test_matrix_index != "Appeals" || $test_matrix_index != "AppealsExpanded" || $test_matrix_index != "Appointments" ||
-              $test_matrix_index != "AppointmentsExpanded" || $test_matrix_index != "AvailabilityFramework" || $test_matrix_index != "Cerner"
-              $test_matrix_index != "Claims" || $test_matrix_index != "ContactInformation" || $test_matrix_index != "DirectDeposit" ||
-              $test_matrix_index != "DisabilityRating" || $test_matrix_index != "HomeScreen" || $test_matrix_index != "Letters" ||
-              $test_matrix_index != "LoginScreen" || $test_matrix_index != "Messages" || $test_matrix_index != "MilitaryInformation" ||
-              $test_matrix_index != "Onboarding" || $test_matrix_index != "Payments" || $test_matrix_index != "PersonalInformationScreen" ||
-              $test_matrix_index != "Prescriptions" || $test_matrix_index != "ProfileScreen" || $test_matrix_index != "PushNotifications" ||
-              $test_matrix_index != "SettingsScreen" || $test_matrix_index != "SignIn" || $test_matrix_index != "VaccineRecords" ||
-              $test_matrix_index != "VeteranCrisisLine" || $test_matrix_index != "VeteranStatusCard" ]]; then
+          for i in $test_matrix; do
+            if [["{i}" != "Appeals" || "{i}" != "AppealsExpanded" || "{i}" != "Appointments" ||
+              "{i}" != "AppointmentsExpanded" || "{i}" != "AvailabilityFramework" || "{i}" != "Cerner"
+              "{i}" != "Claims" || "{i}" != "ContactInformation" || "{i}" != "DirectDeposit" ||
+              "{i}" != "DisabilityRating" || "{i}" != "HomeScreen" || "{i}" != "Letters" ||
+              "{i}" != "LoginScreen" || "{i}" != "Messages" || "{i}" != "MilitaryInformation" ||
+              "{i}" != "Onboarding" || "{i}" != "Payments" || "{i}" != "PersonalInformationScreen" ||
+              "{i}" != "Prescriptions" || "{i}" != "ProfileScreen" || "{i}" != "PushNotifications" ||
+              "{i}" != "SettingsScreen" || "{i}" != "SignIn" || "{i}" != "VaccineRecords" ||
+              "{i}" != "VeteranCrisisLine" || "{i}" != "VeteranStatusCard" ]]; then
                 test_matrix="$(echo ${test_matrix} | jq 'del(.[$i])' )"
             fi
           done
