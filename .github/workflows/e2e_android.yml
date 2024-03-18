@@ -88,8 +88,9 @@ jobs:
         id: testing_matrix
         run: |
           respLength="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length')"
+          echo "${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}"
           resp="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
-            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
+            jq --compact-output 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
@@ -115,18 +116,13 @@ jobs:
             select(contains(["Auth"])) += ["SignIn"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] | unique')"
-          for((i=0; i<=${respLength}; i++)); do
-            testing_matrix="$(echo ${resp} | jq 'del(.[0])' )"
-          done
-          respLength="$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq 'length')"
-          resp_file="$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
-            jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] | 
+            select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
             select(contains(["DisabilityRating"]) or contains(["disabilityRating"])) += ["DisabilityRating", "VeteranStatusCard"] |
             select(contains(["letters"]) or contains(["Letter"]) or contains(["BasicError"])) += ["Letters"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
-            select(contains(["BenefitsScreen"])) += ["BenefitsScreen"] |
+            select(contains(["BenefitsScreen"])) += ["DisabilityRatings", "Claims", "Appeals", "Letters"] |
             select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
             select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
             select(contains(["Prescription"]) or contains(["SelectionList"]) or contains(["MultiTouchCard"]) or contains(["RadioGroupModal"])) += ["Prescriptions"] |
@@ -161,16 +157,12 @@ jobs:
             select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
-            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')"
-          echo "$resp_file"
+            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique')"
           for((i=0; i<=${respLength}; i++)); do
-            testing_matrix_file="$(echo ${resp_file} | jq 'del(.[0])' )"
+            testing_matrix="$(echo ${resp} | jq 'del(.[0])' )"
           done
-          echo "$testing_matrix_file"
           echo "$testing_matrix"
-          test_matrix = jq  --argjson a "${testing_matrix_file}" --argjson b "${testing_matrix}" --compact-output '$a + $b'
-          echo "$test_matrix"
-          echo "TESTING_MATRIX_ARRAY_DIR=$test_matrix" >> "$GITHUB_OUTPUT"
+          echo "TESTING_MATRIX_ARRAY_DIR=$testing_matrix" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo ${testing_matrix} | jq --compact-output)"
   #echo "TESTING_MATRIX_ARRAY_DIR=$testing_matrix" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo fromJson(${{steps.mapped_files.outputs.ARRAY_WITH_DETOX}}) | jq --arg numberOfFiles ${{steps.mapped_files.outputs.NUMBER_OF_FILES}}" 'del(.[0:($numberOfFiles|tonumber)]) ')"
