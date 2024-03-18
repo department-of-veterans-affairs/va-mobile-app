@@ -164,7 +164,7 @@ jobs:
           respLength="$(echo $test_matrix | jq 'length')"
           echo "$respLength"
           for((i=0; i<=${respLength}; i++)); do
-            test_matrix_index=$test_matrix[i]
+            test_matrix_index=test_matrix[i]
             if [[$test_matrix_index != "Appeals" || $test_matrix_index != "AppealsExpanded" || $test_matrix_index != "Appointments" ||
               $test_matrix_index != "AppointmentsExpanded" || $test_matrix_index != "AvailabilityFramework" || $test_matrix_index != "Cerner"
               $test_matrix_index != "Claims" || $test_matrix_index != "ContactInformation" || $test_matrix_index != "DirectDeposit" ||
