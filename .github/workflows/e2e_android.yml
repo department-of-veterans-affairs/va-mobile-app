@@ -87,9 +87,7 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          echo "${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}"
           respLength="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length')"
-          echo "$respLength"
           resp="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
@@ -118,14 +116,10 @@ jobs:
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] | unique')"
-          echo "$resp"
           for((i=0; i<=${respLength}; i++)); do
             testing_matrix="$(echo ${resp} | jq 'del(.[0])' )"
-            echo "$testing_matrix"
           done
-          echo "${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}"
           respLength="$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq 'length')"
-          echo "$respLength"
           resp_file="$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
             jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
@@ -171,9 +165,11 @@ jobs:
           echo "$resp_file"
           for((i=0; i<=${respLength}; i++)); do
             testing_matrix_file="$(echo ${resp_file} | jq 'del(.[0])' )"
-            echo "$testing_matrix_file"
           done
+          echo "$testing_matrix_file"
+          echo "$testing_matrix"
           test_matrix = jq  --argjson a "${testing_matrix_file}" --argjson b "${testing_matrix}" --compact-output '$a + $b'
+          echo "$test_matrix"
           echo "TESTING_MATRIX_ARRAY_DIR=$test_matrix" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo ${testing_matrix} | jq --compact-output)"
   #echo "TESTING_MATRIX_ARRAY_DIR=$testing_matrix" >> "$GITHUB_OUTPUT"
