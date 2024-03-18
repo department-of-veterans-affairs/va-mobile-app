@@ -87,7 +87,6 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          respLength="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length')"
           resp="$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
@@ -158,9 +157,9 @@ jobs:
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
             select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')"
-          echo "$testing_matrix_file"
-          echo "$testing_matrix"
-          test_matrix = jq  --argjson a "${testing_matrix_file}" --argjson b "${testing_matrix}" --compact-output '$a + $b | unique'
+          echo "$resp_file"
+          echo "$resp"
+          test_matrix = jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique'
           echo "$test_matrix"
           respLength="$(echo $test_matrix | jq 'length')"
           echo "$respLength"
