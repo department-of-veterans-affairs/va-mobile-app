@@ -2,7 +2,6 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { PrescriptionHistoryTabConstants } from 'store/api/types'
 import { context, render } from 'testUtils'
 
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'

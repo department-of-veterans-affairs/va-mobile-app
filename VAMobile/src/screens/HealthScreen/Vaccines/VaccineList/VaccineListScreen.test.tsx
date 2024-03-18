@@ -4,7 +4,6 @@ import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
 import * as api from 'store/api'
-import { initialVaccineState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
 
 import VaccineListScreen from './VaccineListScreen'
