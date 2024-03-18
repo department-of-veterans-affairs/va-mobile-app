@@ -7,8 +7,6 @@ import { context, render } from 'testUtils'
 
 import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers'
 
-jest.spyOn(Alert, 'alert')
-
 context('VeteransCrisisLineNumbers', () => {
   beforeEach(() => {
     jest.clearAllMocks()
