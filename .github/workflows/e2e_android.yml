@@ -107,7 +107,7 @@ jobs:
     needs: output_detox_tests_to_run
     strategy:
       matrix:
-        testsuite: ${{needs.output_detox_tests_to_run.outputs.output1}}
+        testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
       - uses: actions/checkout@v3
