@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, LargePanel, TextView, TextViewProps, VABulletList } from 'components'
+import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
@@ -14,17 +14,13 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const bodyTextProps: TextViewProps = {
-    variant: 'MobileBody',
-  }
-
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>
-        <TextView {...bodyTextProps} mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('personalInformation.genderIdentity.whatToKnow.description')}
         </TextView>
         <Box mt={theme.dimensions.formMarginBetween}>
