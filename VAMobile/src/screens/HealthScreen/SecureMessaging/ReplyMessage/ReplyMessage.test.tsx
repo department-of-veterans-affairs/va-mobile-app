@@ -144,7 +144,7 @@ context('ReplyMessage', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance(mockThreads)
   })
 
   describe('on click of the collapsible view', () => {
