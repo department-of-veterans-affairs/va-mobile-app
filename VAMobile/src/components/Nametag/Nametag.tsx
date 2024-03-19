@@ -32,12 +32,9 @@ export const Nametag = () => {
     }
   }, [personalInfo])
 
-  let showVeteranStatus = false
-  serviceHistory?.serviceHistory.forEach((service) => {
-    if (service.honorableServiceIndicator === 'Y') {
-      showVeteranStatus = true
-    }
-  })
+  const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
+    (service) => service.honorableServiceIndicator === 'Y',
+  )
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
