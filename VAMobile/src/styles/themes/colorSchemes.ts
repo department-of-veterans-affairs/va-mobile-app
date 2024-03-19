@@ -1,3 +1,5 @@
+import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import colors from './VAColors'
 
 export const primaryTextColor = colors.grayDark
@@ -15,7 +17,7 @@ export const lightTheme = {
     headerDropShadow: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
-    ctaButton: colors.crisisLineRed,
+    ctaButton: colors.secondaryDark,
     completedPhase: colors.greenDarker,
     currentPhase: colors.primary,
     upcomingPhase: colors.grayLight,
@@ -43,8 +45,11 @@ export const lightTheme = {
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
+    veteranStatusHome: colors.white,
+    linkRow: DSColors.grayWarmLight,
   },
   border: {
+    aboutYou: DSColors.grayWarmLight,
     primary: colors.grayLight,
     secondary: colors.gray,
     informational: colors.primaryAltDark,
@@ -107,6 +112,11 @@ export const lightTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    activityButton: colors.white,
+    announcementBanner: DSColors.primary,
+    inlineSpinner: DSColors.primary,
+    homeScreenError: DSColors.secondaryDark,
+    linkRow: DSColors.primary,
   },
   text: {
     footerButton: colors.primary,
@@ -144,7 +154,15 @@ export const lightTheme = {
     textWithIconButton: colors.primary,
     textWithIconButtonInactive: colors.gray,
     veteranStatus: colors.white,
+    veteranStatusBranch: DSColors.base,
+    veteranStatusProof: DSColors.gray,
     webviewTitle: colors.base,
+    crisisLineButton: colors.white,
+    activityButton: colors.white,
+    announcementBanner: DSColors.base,
+    homeScreen: DSColors.base,
+    profileScreen: DSColors.base,
+    activityFooter: DSColors.gray,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -160,6 +178,8 @@ export const lightTheme = {
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
+    activityButton: DSColors.primaryDarker,
+    announcementBanner: colors.white,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -212,7 +232,7 @@ export const darkTheme = {
     headerDropShadow: colors.black,
     shadow: colors.grayMedium,
     profileBanner: colors.primaryDarker2,
-    ctaButton: colors.crisisLineRed,
+    ctaButton: DSColors.uswdsRedVivid40,
     completedPhase: colors.greenLight,
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
@@ -239,8 +259,11 @@ export const darkTheme = {
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
     veteranStatus: colors.primaryDarker,
+    veteranStatusHome: colors.darkmodeGrayWarmDark,
+    linkRow: colors.darkmodeGrayWarmDark,
   },
   border: {
+    aboutYou: colors.darkmodeBorder,
     primary: colors.darkmodeBorder,
     secondary: colors.darkmodeBorder,
     informational: colors.darkmodeLightBlue,
@@ -303,6 +326,11 @@ export const darkTheme = {
     radioDisabled: colors.grayLightest,
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
+    activityButton: colors.black,
+    announcementBanner: DSColors.uswdsBlueVivid30,
+    inlineSpinner: DSColors.uswdsBlueVivid30,
+    homeScreenError: DSColors.uswdsRedVivid40,
+    linkRow: DSColors.uswdsBlueVivid30,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
@@ -338,7 +366,15 @@ export const darkTheme = {
     textWithIconButton: colors.darkmodeLightBlue,
     textWithIconButtonInactive: colors.grayLight,
     veteranStatus: colors.white,
+    veteranStatusBranch: DSColors.grayLightest,
+    veteranStatusProof: DSColors.grayLightest,
     webviewTitle: colors.white,
+    crisisLineButton: colors.black,
+    activityButton: colors.black,
+    announcementBanner: DSColors.grayLightest,
+    homeScreen: DSColors.grayLightest,
+    profileScreen: DSColors.grayLightest,
+    activityFooter: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
@@ -354,6 +390,8 @@ export const darkTheme = {
     brandedPrimary: colors.primary,
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.darkmodeBorder,
+    activityButton: DSColors.uswdsBlueVivid30,
+    announcementBanner: colors.darkmodeGrayWarmDark,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,

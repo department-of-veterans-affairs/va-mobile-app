@@ -14,6 +14,8 @@ export type VAButtonBackgroundColors = {
   brandedPrimary: string
   brandedPrimaryActive: string
   overFlowMenuButton: string
+  activityButton: string
+  announcementBanner: string
 }
 
 export type VAButtonBorderColors = {
@@ -68,7 +70,15 @@ export type VATextColors = {
   textWithIconButton: string
   textWithIconButtonInactive: string
   veteranStatus: string
+  veteranStatusBranch: string
+  veteranStatusProof: string
   webviewTitle: string
+  crisisLineButton: string
+  activityButton: string
+  announcementBanner: string
+  homeScreen: string
+  profileScreen: string
+  activityFooter: string
 }
 
 export type VAIconColors = {
@@ -107,13 +117,25 @@ export type VAIconColors = {
   radioDisabled: string
   tagInfoIcon: string
   transparent: string
+  activityButton: string
+  announcementBanner: string
+  inlineSpinner: string
+  homeScreenError: string
+  linkRow: string
 }
 
 export type VATypographyThemeVariants = {
+  AboutYou: string
   ActionBar: string
+  ActivityButtonSubtext: string
+  ActivityFooter: string
+  AnnouncementBannerTitle: string
   BitterBoldHeading: string
+  BitterHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
+  HomeScreen: string
+  HomeScreenHeader: string
   HelperText: string
   HelperTextBold: string
   LabelTag: string
@@ -121,6 +143,8 @@ export type VATypographyThemeVariants = {
   MobileBodyBold: string
   MobileBodyLink: string
   MobileBodyTight: string
+  NametagNumber: string
+  ProfileScreenHeader: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
@@ -129,6 +153,8 @@ export type VATypographyThemeVariants = {
   UnreadMessagesTag: string
   VAHeader: string
   VASelector: string
+  VeteranStatusBranch: string
+  VeteranStatusProof: string
   webviewTitle: string
 }
 
@@ -171,9 +197,12 @@ export type VABackgroundColors = {
   tagYellow: string
   tagGreen: string
   veteranStatus: string
+  veteranStatusHome: string
+  linkRow: string
 }
 
 export type VABorderColors = {
+  aboutYou: string
   primary: string
   secondary: string
   informational: string
@@ -267,6 +296,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    linkRowChevronPaddingRight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
@@ -278,6 +308,9 @@ export type VATheme = {
     altBold: string
   }
   fontSizes: {
+    ActivityButtonSubtext: VAFontSizes
+    AnnouncementBannerTitle: VAFontSizes
+    BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
     ClaimPhase: VAFontSizes
     HelperText: VAFontSizes
