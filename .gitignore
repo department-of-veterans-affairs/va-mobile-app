@@ -119,6 +119,7 @@ coverage
 #iOS build
 **/ios/output
 **/ios/vendor
+**/ios/Pods
 
 # Xcode
 #
