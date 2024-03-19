@@ -74,6 +74,8 @@ context('Nametag', () => {
       renderWithBranch(serviceHistoryMock)
       expect(screen.getByTestId(branch)).toBeTruthy()
       expect(screen.getByRole('link', { name: branch })).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: branch }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
     })
   }
 
@@ -84,24 +86,7 @@ context('Nametag', () => {
   })
 
   it('does not display branch when service history is empty', () => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-        militaryService: {
-          ...InitialState.militaryService,
-          serviceHistory: [],
-        },
-      },
-    })
-    expect(screen.queryByRole('link')).toBeFalsy()
-  })
-
-  it('does not display branch when militaryService is absent', () => {
-    render(<Nametag />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    renderWithBranch({} as ServiceHistoryAttributes)
     expect(screen.queryByRole('link')).toBeFalsy()
   })
 })
