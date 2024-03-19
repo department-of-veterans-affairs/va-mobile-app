@@ -72,6 +72,10 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.TESTING_MATRIX }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - name: 'Get Matrix Value'
         id: 'matrix_value'
         run: | 
