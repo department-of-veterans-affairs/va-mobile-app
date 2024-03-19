@@ -1,12 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Link } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { Box, LargePanel, TextView } from 'components'
+import { Box, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { makeLinkAnalytics, setAnalyticsUserProperty } from 'utils/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -23,10 +21,6 @@ function VeteransCrisisLineScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
-
-  const analyticsWithUserProperty = (protocol: string, url: string) => {
-    return makeLinkAnalytics(protocol, url, () => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl()))
-  }
 
   return (
     <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
@@ -48,14 +42,14 @@ function VeteransCrisisLineScreen() {
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={standardMarginBetween} mr="auto">
-          <Link
+        <Box mt={standardMarginBetween}>
+          <LinkWithAnalytics
             type="url"
             url={LINK_URL_VETERANS_CRISIS_LINE}
             text={t('veteransCrisisLine.urlDisplayed')}
             a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
             a11yHint={t('veteransCrisisLine.urlA11yHint')}
-            analytics={analyticsWithUserProperty('https', LINK_URL_VETERANS_CRISIS_LINE)}
+            onPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
             testID="veteransCrisisLineGetMoreResourcesTestID"
           />
         </Box>

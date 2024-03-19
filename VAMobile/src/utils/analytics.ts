@@ -45,19 +45,6 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
   return [totalTime, actionTime, loginTimestamp]
 }
 
-export const makeLinkAnalytics = (providedProtocol: string, providedUrl: string, extraFunction?: () => void) => {
-  const protocolString = providedProtocol.startsWith('http') ? '' : providedProtocol + ':'
-  const url = protocolString + providedUrl
-
-  return {
-    onPress: () => {
-      logAnalyticsEvent(Events.vama_link_click({ url }))
-      extraFunction && extraFunction()
-    },
-    onConfirm: () => logAnalyticsEvent(Events.vama_link_confirm({ url })),
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
   let errorObject: Error = Error()

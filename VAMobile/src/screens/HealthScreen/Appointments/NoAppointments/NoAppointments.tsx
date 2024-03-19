@@ -1,13 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Link } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { Box, TextView } from 'components'
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
-import { makeLinkAnalytics } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -41,13 +38,12 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
         </TextView>
       </Box>
       {showVAGovLink && (
-        <Link
+        <LinkWithAnalytics
           type="url"
           url={LINK_URL_SCHEDULE_APPOINTMENTS}
           text={t('noAppointments.visitVA')}
           a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
           a11yHint={t('mobileBodyLink.a11yHint')}
-          analytics={makeLinkAnalytics('https', LINK_URL_SCHEDULE_APPOINTMENTS)}
         />
       )}
     </Box>
