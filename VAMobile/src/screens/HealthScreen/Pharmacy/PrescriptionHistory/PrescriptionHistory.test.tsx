@@ -248,10 +248,17 @@ const prescriptionData: PrescriptionsGetData = {
       totalEntries: 63,
     },
     prescriptionStatusCount: {
-      active: 4,
-      discontinued: 4,
-      transferred: 1,
-      total: 9,
+      active: 0,
+      isRefillable: 1,
+      discontinued: 0,
+      expired: 0,
+      historical: 0,
+      pending: 0,
+      transferred: 0,
+      submitted: 0,
+      hold: 0,
+      unknown: 0,
+      total: 1,
     },
   },
   links: {
@@ -322,7 +329,7 @@ context('PrescriptionHistory', () => {
       ).toBeTruthy()
       expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Start refill request' })).toBeTruthy()
       expect(screen.queryByText("We can't refill some of your prescriptions in the app")).toBeFalsy()
     })
   })
