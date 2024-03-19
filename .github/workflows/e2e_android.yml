@@ -85,9 +85,7 @@ jobs:
           else
             resp=${{ github.event.inputs.tests_to_run }}
             echo "${{ github.event.inputs.tests_to_run }}"
-            echo="$resp"
-            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-            echo "$matrix"
+            echo "matrix=${{ github.event.inputs.tests_to_run }}" >> "$GITHUB_OUTPUT"
           fi
 
   matrix-e2e-android:
