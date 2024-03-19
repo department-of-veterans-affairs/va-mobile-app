@@ -80,7 +80,7 @@ jobs:
         id: 'matrix_value'
         run: |
           echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-          if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" != '']]; then
+          if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" != "" ]]; then
             echo "TESTING_MATRIX=${{needs.find_detox_tests_to_run.outputs.test_matrix}}" >> "$GITHUB_OUTPUT"
             echo "$TESTING_MATRIX"
           else
