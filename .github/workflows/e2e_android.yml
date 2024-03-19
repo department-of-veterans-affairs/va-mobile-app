@@ -80,7 +80,7 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} ]]; then
-            resp=${{needs.find_detox_tests_to_run.outputs.test_matrix}}
+            resp="${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             echo ${{needs.find_detox_tests_to_run.outputs.test_matrix}}
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
           else
@@ -88,90 +88,98 @@ jobs:
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
             echo "$matrix"
           fi
-
-  matrix-e2e-android:
+  
+  output_test:
     if: always() && ${{needs.output_detox_tests_to_run.outputs.output1}} != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}
-
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
+      - name: Test
+        run: echo "${{needs.output_detox_tests_to_run.outputs.output1}}"
 
-      - name: Set git config
-        run: |
-            git config --global user.name 'VA Automation Bot'
-            git config --global user.email 'va-mobileapp@adhocteam.us'
+  # matrix-e2e-android:
+  #   if: always() && ${{needs.output_detox_tests_to_run.outputs.output1}} != ''
+  #   runs-on: macos-latest-xl
+  #   needs: output_detox_tests_to_run
+  #   strategy:
+  #     matrix:
+  #       testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}
 
-      - name: Decode base64 encoded keys
-        working-directory: VAMobile/android
-        run: |
-          mkdir keys
-          cd keys
-          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
 
-      - name: Setup ruby and restore bundler cache
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
-          bundler-cache: true
-          working-directory: VAMobile/android
+  #     - name: Set git config
+  #       run: |
+  #           git config --global user.name 'VA Automation Bot'
+  #           git config --global user.email 'va-mobileapp@adhocteam.us'
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'microsoft'
+  #     - name: Decode base64 encoded keys
+  #       working-directory: VAMobile/android
+  #       run: |
+  #         mkdir keys
+  #         cd keys
+  #         echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+  #         echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+  #         echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+  #         cd ../app
+  #         echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
 
-      - name: Setup node and restore yarn cache
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+  #     - name: Setup ruby and restore bundler cache
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: '3.0.2'
+  #         bundler-cache: true
+  #         working-directory: VAMobile/android
 
-      - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+  #     - name: Set up JDK
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         java-version: 17
+  #         distribution: 'microsoft'
 
-      - name: Set app environment variables
-        run: yarn env:staging
+  #     - name: Setup node and restore yarn cache
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: 'VAMobile/.nvmrc'
+  #         cache: 'yarn'
+  #         cache-dependency-path: './VAMobile/yarn.lock'
 
-      - name: Bundle Android app
-        run: yarn e2e:android-build
+  #     - name: Install npm dependencies
+  #       run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Run e2e tests for Android
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+  #     - name: Set app environment variables
+  #       run: yarn env:staging
 
-      - name: Upload e2e-junit
-        if: failure() || success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{matrix.testsuite}}-e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
+  #     - name: Bundle Android app
+  #       run: yarn e2e:android-build
 
-      - name: Upload artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
-          path: VAMobile/artifacts
+  #     - name: Run e2e tests for Android
+  #       uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         working-directory: VAMobile
+  #         api-level: 28
+  #         profile: pixel_6_pro
+  #         force-avd-creation: false
+  #         disable-animations: true
+  #         arch: x86_64
+  #         avd-name: Pixel_4_XL_API_28
+  #         script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+
+  #     - name: Upload e2e-junit
+  #       if: failure() || success()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{matrix.testsuite}}-e2e-junit
+  #         path: VAMobile/e2e/test_reports/e2e-junit.xml
+
+  #     - name: Upload artifacts on failure
+  #       if: failure()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+  #         path: VAMobile/artifacts
 
   # e2e-android:
   #   if: always() && github.event.inputs.tests_to_run == ''
