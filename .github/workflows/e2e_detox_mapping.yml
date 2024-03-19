@@ -1,0 +1,139 @@
+#
+# Detox e2e tests in CI
+#
+
+name: '[e2e] Android Detox Test Run'
+
+on:
+  workflow_call:
+      outputs:
+        test_matrix:
+          description: "The matrix output for the e2e tests"
+          value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
+  
+defaults:
+  run:
+    working-directory: VAMobile
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Android Key Store Key Alias
+  ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+  # Android Key Store Key Alias Password
+  ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+  # Android Key Store Key Password
+  ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+  # App ID for Android project in Firebase
+  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  # Filepath for firebase distribution key. Also used by fastlane
+  FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  find_detox_tests_to_run:
+    runs-on: ubuntu-latest
+    outputs: 
+      output1: ${{ steps.testing_matrix.outputs.TESTING_MATRIX }}
+
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Get file difference by directory
+        id: changed_files_dir
+        uses: tj-actions/changed-files@v35
+        with:
+          dir_names: true
+          json: true
+      - name: Get file difference by file name
+        id: changed_files_file_name
+        uses: tj-actions/changed-files@v35
+        with: 
+          json: true
+      - name: Get testing matrix array
+        id: testing_matrix
+        run: |
+          resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
+            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
+            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
+            select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
+            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRating", "VeteranStatusCard"] |
+            select(contains(["Letters"])) += ["Letters"] |
+            select(contains(["Appointments"])) += ["Appointments", "AppointmentsExpanded"] |
+            select(contains(["Cerner"]) or contains(["Facilities"])) += ["Cerner"] |
+            select(contains(["Pharmacy"])) += ["Prescriptions"] |
+            select(contains(["SecureMessaging"])) += ["Messages"] |
+            select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
+            select(contains(["HealthScreen"])) += ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"] |
+            select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
+            select(contains(["MilitaryInformationScreen"]) or contains(["militaryService"]) or contains(["Nametag"])) += ["MilitaryInformation", "VeteranStatusCard"] |
+            select(contains(["PeronsalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
+            select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
+            select(contains(["VeteranCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
+            select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
+            select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
+            select(contains(["PaymentsScreen"])) += ["Payments", "DirectDeposit"] |
+            select(contains(["SplashScreen"])) += ["Onboarding", "LoginScreen"] |
+            select(contains(["Auth"])) += ["SignIn"] |
+            select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "Letters"] |
+            select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
+            select(contains(["OnboardingCarousel"])) += ["Onboarding"] | unique')
+          resp_file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
+            jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
+            select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
+            select(contains(["DisabilityRating"]) or contains(["disabilityRating"])) += ["DisabilityRating", "VeteranStatusCard"] |
+            select(contains(["letters"]) or contains(["Letter"]) or contains(["BasicError"])) += ["Letters"] |
+            select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
+            select(contains(["BenefitsScreen"])) += ["DisabilityRatings", "Claims", "Appeals", "Letters"] |
+            select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
+            select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
+            select(contains(["Prescription"]) or contains(["SelectionList"]) or contains(["MultiTouchCard"]) or contains(["RadioGroupModal"])) += ["Prescriptions"] |
+            select(contains(["SecureMessaging"]) or contains(["InLineTextWithIcons"]) or contains(["Message"]) or contains(["TextLineWithIcon"])) += ["Messages"] |
+            select(contains(["Vaccine"])) += ["VaccineRecords"] |
+            select(contains(["countries"]) or contains(["militaryPostOffices"]) or contains(["militaryStates"]) or contains(["states"]) or contains(["PhoneData"]) or contains(["EmailData"])) += ["HomeScreen"] |
+            select(contains(["ServiceHistoryData"])) += ["MilitaryInformation", "VeteranStatusCard"] |
+            select(contains(["demographics"]) or contains(["PersonalInformation"]) or contains(["UserData"]) or contains(["Demographics"])) += ["PeronalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
+            select(contains(["Settings"])) += ["SettingsScreen"] |
+            select(contains(["Profile"])) += ["ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen"] |
+            select(contains(["HomeScreen"])) += ["ContactVAScreen", "ProfileScreen", "VeteranStatusCard"] |
+            select(contains(["carousel"])) += ["Onboarding"] |
+            select(contains(["Payments"]) or contains(["payment"])) += ["Payments"] |
+            select(contains(["accounts"]) or contains(["DirectDeposit"])) += ["DirectDeposit"] |
+            select(contains(["contactInformation"]) or contains(["AddressData"]) or contains(["ContactInformation"])) += ["ContactInformation", "Letters"] |
+            select(contains(["decisionLetters"]) or contains(["DecisionLetters"]) or contains(["claimData"])) += ["Claims"] |
+            select(contains(["AuthorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "Letters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
+            select(contains(["Notifications"])) += ["SettingsScreen", "PushNotifications"] |
+            select(contains(["ErrorComponent"])) += ["Appeals", "AppealsExpanded", "DisabilityRatings", "Letters", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "VaccineRecords", "ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Payments"] |
+            select(contains(["VAModalPicker"])) += ["Appointments", "Messages", "Payments"] |
+            select(contains(["RadioGroup"])) += ["PersonalInformationScreen", "ContactInformation"] |
+            select(contains(["VATextInput"]) or contains(["WaygateWrapper"])) += ["AvailabilityFramework"] |
+            select(contains(["AccordionCollapsible"])) += ["Claims", "Messages"] |
+            select(contains(["AlertBox"])) += ["AvailabilityFramework", "Letters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit"] |
+            select(contains(["AppVersionAndBuild"])) += ["LoginScreen", "SettingsScreen"] |
+            select(contains(["ClickForActionLink"]) or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"] |
+            select(contains(["CollapsibileAlert"])) += ["Cerner", "Prescriptions", "ContactInformation"] |
+            select(contains(["CollapsibleView"])) += ["Appeals", "AppealsExpanded", "Messages", "DirectDeposit"] |
+            select(contains(["DefaultList"])) += ["Claims", "DisabilityRattings", "Letters", "ContactInformation", "Appointments", "VaccineRecords", "MilitaryInformation", "PersonalInformationScreen", "DirectDeposit", "Prescriptions", "Payments", "SettingsScreen"] |
+            select(contains(["LabelTag"])) += ["Prescriptions", "Messages"] |
+            select(contains(["SimpleList"])) += ["Messages", "Claims", "Appeals", "Letters", "Apppointments", "Prescriptions", "VaccineRecords"] |
+            select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
+            select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
+            select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
+            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] | unique ')
+          echo "$resp_file"
+          echo "$resp"
+          test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
+          echo "$test_matrix"
+          test_matrix=$(echo $test_matrix | jq 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
+          "ContactInformation", "DirectDeposit", "DisabilityRating", "HomeScreen", "Letters", "LoginScreen", "Messages", "MilitaryInformation", "Navigation", "Onboarding", "Payments",
+          "PersonalInformationScreen", "Prescriptions", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords",
+          "VeteransCrisisLine", "VeteranStatusCard")))')
+          echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
