@@ -210,15 +210,22 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
-        <Button
-          onPress={() => {
-            dispatch(dispatchSetPrescriptionsNeedLoad())
-            dispatch(dispatchClearLoadingRequestRefills())
-            navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
-          }}
-          label={t('prescriptions.refillRequestSummary.pendingRefills')}
-          buttonType={ButtonVariants.Secondary}
-        />
+        <Box
+          accessibilityRole="link"
+          accessibilityLabel={t('prescriptions.refillRequestSummary.pendingRefills')}
+          accessible={true}>
+          <Box importantForAccessibility={'no-hide-descendants'}>
+            <Button
+              onPress={() => {
+                dispatch(dispatchSetPrescriptionsNeedLoad())
+                dispatch(dispatchClearLoadingRequestRefills())
+                navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
+              }}
+              label={t('prescriptions.refillRequestSummary.pendingRefills')}
+              buttonType={ButtonVariants.Secondary}
+            />
+          </Box>
+        </Box>
       </Box>
     )
   }

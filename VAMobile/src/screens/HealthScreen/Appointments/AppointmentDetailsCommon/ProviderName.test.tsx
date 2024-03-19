@@ -41,14 +41,16 @@ context('ProviderName', () => {
   describe('when phone Appointment with a healthcare provider', () => {
     it('should render any with healthcare provider', () => {
       initializeTestInstance({ phoneOnly: true, healthcareProvider: 'John Adams' })
-      expect(screen.getByRole('header', { name: 'John Adams' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider' })).toBeTruthy()
+      expect(screen.getByText('John Adams')).toBeTruthy()
     })
   })
 
   describe('when phone Appointment with no healthcare provider', () => {
     it('should render with defaults', () => {
       initializeTestInstance({ phoneOnly: true })
-      expect(screen.getByRole('header', { name: 'Provider not noted' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider' })).toBeTruthy()
+      expect(screen.getByText('Provider not noted')).toBeTruthy()
     })
   })
 
