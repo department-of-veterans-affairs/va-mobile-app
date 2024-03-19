@@ -70,22 +70,23 @@ jobs:
     runs-on: macos-latest-xl
     needs: find_detox_tests_to_run
     outputs: 
-      output1: ${{ steps.matrix_value.outputs.TESTING_MATRIX }}
+      output1: ${{ steps.matrix_value.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
       - name: 'Get Matrix Value'
-        id: 'matrix_value'
+        id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} ]]; then
-            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-            echo "TESTING_MATRIX=${{needs.find_detox_tests_to_run.outputs.test_matrix}}" >> "$GITHUB_OUTPUT"
-            echo "$TESTING_MATRIX"
+            resp=${{needs.find_detox_tests_to_run.outputs.test_matrix}}
+            echo ${{needs.find_detox_tests_to_run.outputs.test_matrix}}
+            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
           else
-            echo "TESTING_MATRIX=$github.event.inputs.test_to_run" >> "$GITHUB_OUTPUT"
-            echo "$TESTING_MATRIX"
+            resp=${{github.event.inputs.tests_to_run}}
+            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+            echo "$matrix"
           fi
 
   matrix-e2e-android:
