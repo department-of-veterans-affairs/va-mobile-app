@@ -1,1 +1,0 @@
-../../../SDWebImageWebPCoder/SDWebImageWebPCoder/Private/SDmetamacros.h
