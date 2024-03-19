@@ -46,17 +46,28 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
                   t('personalInformation.genderIdentity.whatToKnow.whoCanAccess') +
                   t('personalInformation.genderIdentity.whatToKnow.privacy'),
               },
+              {
+                variant: 'MobileBody',
+                boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1'),
+                text: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
+                a11yLabel:
+                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1') +
+                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
+              },
+              {
+                variant: 'MobileBody',
+                boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1'),
+                text: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
+                a11yLabel:
+                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1') +
+                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
+              },
             ]}
             paragraphSpacing={true}
           />
         </Box>
-        {/* <TextView {...bodyTextProps} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-          {t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}
-        </TextView> */}
-        <TextView {...bodyTextProps} paragraphSpacing={true}>
-          {t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}
-        </TextView>
-        <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.privacy')}</TextView>
+
+        {/* <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.privacy')}</TextView> */}
       </Box>
     </LargePanel>
   )
