@@ -79,7 +79,7 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ ${{ github.event_name == 'push' }} ]]; then
+          if [[ ${{ github.event_name == 'push' }} == true ]]; then
             resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
             echo "$resp"
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
@@ -88,18 +88,6 @@ jobs:
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
             echo "$matrix"
           fi
-  
-  output_test:
-    if: always() && ${{needs.output_detox_tests_to_run.outputs.output1}} != ''
-    runs-on: macos-latest-xl
-    needs: output_detox_tests_to_run
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - name: Test
-        run: echo "${{needs.output_detox_tests_to_run.outputs.output1}}"
 
   matrix-e2e-android:
     if: always() && ${{needs.output_detox_tests_to_run.outputs.output1}} != ''
