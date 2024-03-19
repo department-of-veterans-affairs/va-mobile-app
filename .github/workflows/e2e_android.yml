@@ -161,21 +161,10 @@ jobs:
           echo "$resp"
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
-          respLength="$(echo $test_matrix | jq 'length')"
-          echo "$respLength"
-          for i in $test_matrix; do
-            if [["{$i}" != "Appeals" || "{$i}" != "AppealsExpanded" || "{$i}" != "Appointments" ||
-              "{$i}" != "AppointmentsExpanded" || "{$i}" != "AvailabilityFramework" || "{$i}" != "Cerner"
-              "{$i}" != "Claims" || "{$i}" != "ContactInformation" || "{$i}" != "DirectDeposit" ||
-              "{$i}" != "DisabilityRating" || "{$i}" != "HomeScreen" || "{$i}" != "Letters" ||
-              "{$i}" != "LoginScreen" || "{$i}" != "Messages" || "{$i}" != "MilitaryInformation" ||
-              "{$i}" != "Onboarding" || "{$i}" != "Payments" || "{$i}" != "PersonalInformationScreen" ||
-              "{$i}" != "Prescriptions" || "{$i}" != "ProfileScreen" || "{$i}" != "PushNotifications" ||
-              "{$i}" != "SettingsScreen" || "{$i}" != "SignIn" || "{$i}" != "VaccineRecords" ||
-              "{$i}" != "VeteranCrisisLine" || "{$i}" != "VeteranStatusCard" ]]; then
-                test_matrix="$(echo ${test_matrix} | jq 'del(.[$i])' )"
-            fi
-          done
+          test_matrix=$(echo $test_matrix | map(select(. == "Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
+          "ContactInformation", "DirectDeposit", "DisabilityRating", "HomeScreen", "Letters", "LoginScreen", "Messages", "MilitaryInformation", "Navigation", "Onboarding", "Payments",
+          "PersonalInformationScreen", "Prescriptions", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords",
+          "VeteransCrisisLine", "VeteranStatusCard")))
           echo "$test_matrix"
   #echo "TESTING_MATRIX_ARRAY_DIR=$test_matrix" >> "$GITHUB_OUTPUT"
   #testing_matrix="$(echo ${testing_matrix} | jq --compact-output)"
