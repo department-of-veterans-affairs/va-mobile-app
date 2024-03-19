@@ -80,8 +80,8 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} ]]; then
-            resp=${{needs.find_detox_tests_to_run.outputs.test_matrix}}
-            echo ${{needs.find_detox_tests_to_run.outputs.test_matrix}}
+            resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+            echo "$resp"
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
           else
             resp=${{github.event.inputs.tests_to_run}}
