@@ -2,6 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
@@ -56,17 +58,39 @@ context('ProfileScreen', () => {
       addListener: jest.fn(),
     })
 
+    const queriesData = [
+      {
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: null,
+          hasFacilityTransitioningToCerner: false,
+        },
+      },
+      {
+        queryKey: militaryServiceHistoryKeys.serviceHistory,
+        data: {
+          serviceHistory: [],
+        },
+      },
+    ]
+
     render(<ProfileScreen {...props} />, {
       preloadedState: {
         errors: errorState,
       },
+      queriesData,
     })
   }
 
   describe('when userProfileUpdate is false, true would not work since mockReturnValueOnce would not work like the other screens so confirm true with demo mode', () => {
     it('it should only render military info and settings', async () => {
       initializeTestInstance()
-      expect(screen.getByText('Loading your profile...')).toBeTruthy()
       await waitFor(() => expect(screen.queryByText('Personal information')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Contact information')).toBeFalsy())
       await waitFor(() => expect(screen.getByText('Military information')).toBeTruthy())
