@@ -66,7 +66,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    if: always() || github.event.inputs.tests_to_run != '' || ${{needs.find_detox_tests_to_run.outputs.output1}} != ''
+    if: always() || github.event.inputs.tests_to_run != '' || ${{needs.find_detox_tests_to_run.outputs.TESTING_MATRIX}} != ''
     runs-on: macos-latest-xl
     needs: find_detox_tests_to_run
     outputs: 
@@ -78,12 +78,13 @@ jobs:
           ref: ${{ github.ref }}
       - name: 'Get Matrix Value'
         id: 'matrix_value'
-        run: | 
-          if [[ "$github.event.inputs.test_to_run" != '' ]]; then
+        run: |
+          echo "${{needs.find_detox_tests_to_run.outputs.TESTING_MATRIX}}"
+          if [[ $github.event.inputs.test_to_run != '' ]]; then
             echo "TESTING_MATRIX=$github.event.inputs.test_to_run" >> "$GITHUB_OUTPUT"
             echo "$TESTING_MATRIX"
           else
-            echo "TESTING_MATRIX=${{needs.find_detox_tests_to_run.outputs.output1}}" >> "$GITHUB_OUTPUT"
+            echo "TESTING_MATRIX=${{needs.find_detox_tests_to_run.outputs.TESTING_MATRIX}}" >> "$GITHUB_OUTPUT"
             echo "$TESTING_MATRIX"
           fi
 
