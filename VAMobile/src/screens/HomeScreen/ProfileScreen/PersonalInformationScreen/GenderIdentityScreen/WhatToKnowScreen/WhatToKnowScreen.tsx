@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, LargePanel, TextView, TextViewProps } from 'components'
+import { Box, LargePanel, TextView, TextViewProps, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
@@ -24,9 +24,35 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>
-        <TextView {...bodyTextProps} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-          {t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}
+        <TextView {...bodyTextProps} mt={theme.dimensions.condensedMarginBetween}>
+          {t('personalInformation.genderIdentity.whatToKnow.description')}
         </TextView>
+        <Box mt={theme.dimensions.formMarginBetween}>
+          <VABulletList
+            listOfText={[
+              {
+                variant: 'MobileBody',
+                boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1'),
+                text: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
+                a11yLabel:
+                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1') +
+                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
+              },
+              {
+                variant: 'MobileBody',
+                boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.whoCanAccess'),
+                text: t('personalInformation.genderIdentity.whatToKnow.privacy'),
+                a11yLabel:
+                  t('personalInformation.genderIdentity.whatToKnow.whoCanAccess') +
+                  t('personalInformation.genderIdentity.whatToKnow.privacy'),
+              },
+            ]}
+            paragraphSpacing={true}
+          />
+        </Box>
+        {/* <TextView {...bodyTextProps} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          {t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}
+        </TextView> */}
         <TextView {...bodyTextProps} paragraphSpacing={true}>
           {t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}
         </TextView>
