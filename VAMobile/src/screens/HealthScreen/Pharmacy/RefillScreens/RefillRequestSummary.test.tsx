@@ -48,7 +48,7 @@ context('RefillRequestSummary', () => {
           'If you have questions about the status of your refill, contact your provider or local VA pharmacy.',
         ),
       ).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Go to all pending refills' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go to all pending refills' })).toBeTruthy()
     })
   })
 
@@ -90,7 +90,7 @@ context('RefillRequestSummary', () => {
         ] as RefillRequestSummaryItems,
       })
       expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Go to all pending refills' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go to all pending refills' })).toBeTruthy()
       expect(screen.getByText("We didn't get 1 refill requests")).toBeTruthy()
       expect(
         screen.getByText("We're sorry. Something went wrong on our end. Try again or contact your local VA pharmacy."),
