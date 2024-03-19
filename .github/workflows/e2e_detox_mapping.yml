@@ -132,7 +132,7 @@ jobs:
           echo "$resp"
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
-          test_matrix=$(echo $test_matrix | jq 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
+          test_matrix=$(echo $test_matrix | jq --compact-output 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
           "ContactInformation", "DirectDeposit", "DisabilityRating", "HomeScreen", "Letters", "LoginScreen", "Messages", "MilitaryInformation", "Navigation", "Onboarding", "Payments",
           "PersonalInformationScreen", "Prescriptions", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords",
           "VeteransCrisisLine", "VeteranStatusCard")))')
