@@ -11,7 +11,9 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
@@ -40,9 +42,7 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
-  DisabilityRatingState,
   LettersState,
-  MilitaryServiceState,
   PrescriptionState,
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
@@ -85,7 +85,12 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
+  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
+  const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
+  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime,
+  })
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
@@ -109,14 +114,8 @@ export function HomeScreen({}: HomeScreenProps) {
     loading: loadingAppointments,
     upcomingAppointmentsCount,
   } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { loading: loadingServiceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
-    (state) => state.militaryService,
-  )
   const { letterBeneficiaryData, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
     (state) => state.letters,
-  )
-  const { ratingData, loading: loadingDisabilityRating } = useSelector<RootState, DisabilityRatingState>(
-    (state) => state.disabilityRating,
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
@@ -196,7 +195,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const hasAboutYouInfo =
     !!ratingData?.combinedDisabilityRating ||
     !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
-    !!mostRecentBranch
+    !!serviceHistory?.mostRecentBranch
 
   const boxProps: BoxProps = {
     style: {

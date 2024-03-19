@@ -1,29 +1,28 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants } from 'api/types'
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag = () => {
-  const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
+  const { data: serviceHistory } = useServiceHistory()
+  const accessToMilitaryInfo =
+    userAuthorizedServices?.militaryServiceHistory && !!serviceHistory?.serviceHistory?.length
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const branch = mostRecentBranch || ''
+  const branch = serviceHistory?.mostRecentBranch || ''
 
   useEffect(() => {
     if (personalInfo) {
@@ -34,7 +33,7 @@ export const Nametag = () => {
   }, [personalInfo])
 
   let showVeteranStatus = false
-  serviceHistory.forEach((service) => {
+  serviceHistory?.serviceHistory.forEach((service) => {
     if (service.honorableServiceIndicator === 'Y') {
       showVeteranStatus = true
     }
