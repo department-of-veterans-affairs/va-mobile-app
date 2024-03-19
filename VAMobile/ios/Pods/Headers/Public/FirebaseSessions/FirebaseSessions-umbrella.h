@@ -1,1 +1,0 @@
-../../../Target Support Files/FirebaseSessions/FirebaseSessions-umbrella.h
