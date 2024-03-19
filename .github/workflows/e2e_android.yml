@@ -79,15 +79,14 @@ jobs:
       - name: 'Get Matrix Value'
         id: 'matrix_value'
         run: |
-          echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-          if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" != "" ]]; then
+          if [[ ${{ github.event_name == 'push' }} ]]; then
+            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             echo "TESTING_MATRIX=${{needs.find_detox_tests_to_run.outputs.test_matrix}}" >> "$GITHUB_OUTPUT"
             echo "$TESTING_MATRIX"
           else
             echo "TESTING_MATRIX=$github.event.inputs.test_to_run" >> "$GITHUB_OUTPUT"
             echo "$TESTING_MATRIX"
           fi
-
 
   # matrix-e2e-android:
   #   if: github.event.inputs.tests_to_run != ''
