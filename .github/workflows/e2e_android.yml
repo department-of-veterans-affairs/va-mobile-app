@@ -82,6 +82,9 @@ jobs:
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
             resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+          elif [[ ${{ github.event.inputs.tests_to_run }} == '' ]]; then
+            echo "Test"
+            echo "matrix=" >> "$GITHUB_OUTPUT"
           else
             resp="${{ toJson(inputs.tests_to_run) }}"
             echo "$resp"
@@ -91,7 +94,7 @@ jobs:
           fi
     
   matrix-e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != null
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
