@@ -17,9 +17,14 @@ jobs:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock
-      - run: yarn docs
-      - run: npx wait-on http://localhost:3000
+      - name: Setup docs
+        working-directory: VAMobile
+        run: cd VAMobile && yarn docs
+      - name: Wait for port 3000
+        working-directory: VAMobile
+        run: npx wait-on http://localhost:3000
       - name: Run axe
+        working-directory: VAMobile
         run: |
           npm install -g @axe-core/cli
           axe http://localhost:3000/va-mobile-app --exit
