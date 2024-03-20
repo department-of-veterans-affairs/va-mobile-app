@@ -16,7 +16,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
-import { getDirectionsUrl } from 'utils/location'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -102,6 +101,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     }
 
     const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
+    const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
       <>
@@ -117,8 +117,8 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
         )}
         {hasDirectionLink && !isPastAppointment && !isAppointmentCanceled && (
           <LinkWithAnalytics
-            type="url"
-            url={getDirectionsUrl(location)}
+            type="directions"
+            locationData={locationData}
             text={t('directions')}
             a11yLabel={t('directions')}
             a11yHint={t('directions.a11yHint')}
@@ -212,6 +212,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     }
 
     const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
+    const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
       <>
@@ -233,8 +234,8 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
         <Box>
           {hasMappableAddress && (
             <LinkWithAnalytics
-              type="url"
-              url={getDirectionsUrl(location)}
+              type="directions"
+              locationData={locationData}
               text={t('directions')}
               a11yLabel={t('directions')}
               a11yHint={t('directions.a11yHint')}
