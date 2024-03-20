@@ -91,7 +91,7 @@ jobs:
           fi
     
   matrix-e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != null
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
