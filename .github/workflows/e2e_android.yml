@@ -82,15 +82,16 @@ jobs:
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
             resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-          else if [[ "${{ github.event.inputs.tests_to_run }}" == '' ]]; then
-            echo "Test"
-            echo "matrix=" >> "$GITHUB_OUTPUT"
           else
-            resp="${{ toJson(inputs.tests_to_run) }}"
-            echo "$resp"
-            echo "${{ toJson(inputs.tests_to_run) }}"
-            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-            echo "${{ steps.matrix_value.outputs.matrix }}"
+            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+              echo "Test"
+              echo "matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp="${{ toJson(inputs.tests_to_run) }}"
+              echo "$resp"
+              echo "${{ toJson(inputs.tests_to_run) }}"
+              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+            fi
           fi
     
   matrix-e2e-android:
