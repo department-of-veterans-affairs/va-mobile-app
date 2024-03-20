@@ -89,21 +89,9 @@ jobs:
             echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
             echo "${{ steps.matrix_value.outputs.matrix }}"
           fi
-
-  output_test:
-    if: always()
-    runs-on: macos-latest-xl
-    needs: output_detox_tests_to_run
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - name: Test
-        run: echo "${{needs.output_detox_tests_to_run.outputs.output1}}"
     
   matrix-e2e-android:
-    if: always() && ${{needs.output_detox_tests_to_run.outputs.output1}} != ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
