@@ -14,7 +14,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'store/api'
-import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { AppointmentPhone, AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { VATheme } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -26,6 +26,19 @@ import {
 } from './formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
+
+/**
+ * Returns formatted appointment phone number
+ *
+ * @param phone - appointment location phone object
+ *
+ * @returns formatted phone number
+ */
+export const getAppointmentPhoneString = (phone?: AppointmentPhone) => {
+  const { areaCode, number } = phone || {}
+
+  return areaCode && number ? `${areaCode}-${number}` : ''
+}
 
 /**
  * Returns returns the appointment type icon text

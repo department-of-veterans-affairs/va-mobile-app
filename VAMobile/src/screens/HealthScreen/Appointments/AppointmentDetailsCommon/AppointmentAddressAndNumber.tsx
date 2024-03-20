@@ -13,7 +13,7 @@ import {
   AppointmentTypeConstants,
 } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { isAPendingAppointment } from 'utils/appointments'
+import { getAppointmentPhoneString, isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
 
@@ -100,7 +100,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
-    const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
+    const phoneString = getAppointmentPhoneString(phone)
     const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
@@ -211,7 +211,8 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
-    const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
+    const phoneString = getAppointmentPhoneString(phone)
+
     const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
