@@ -301,7 +301,11 @@ export function AuthGuard() {
 
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
-        handleTokenCallbackUrl(event.url)
+        const params = {
+          url: event.url,
+          queryClient: queryClient,
+        }
+        handleTokenCallbackUrl(params)
       }
     }
     const sub = Linking.addEventListener('url', listener)

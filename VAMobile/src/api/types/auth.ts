@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query'
+
 /**
  * Options for which way to store the refresh token
  */
@@ -48,7 +50,14 @@ export type UserAuthSettings = {
   loggingOut: boolean
   shouldStoreWithBiometric: boolean
   syncing: boolean
+  codeVerifier: string
+  codeChallenge: string
 
   authCredentials?: AuthCredentialData
   supportedBiometric?: string
+}
+
+export type handleTokenCallbackParms = {
+  url: string
+  queryClient: QueryClient
 }

@@ -1,8 +1,10 @@
-import { useHandleTokenCallbackUrl } from 'api/auth'
+import { useQueryClient } from '@tanstack/react-query'
+
+import { authKeys, useHandleTokenCallbackUrl } from 'api/auth'
+import { UserAuthSettings } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { pkceAuthorizeParams } from 'utils/oauth'
 import { isIOS } from 'utils/platform'
 import { startAuthSession } from 'utils/rnAuthSesson'
 
@@ -14,14 +16,19 @@ import { startAuthSession } from 'utils/rnAuthSesson'
  */
 export const useStartAuth = (): (() => Promise<void>) => {
   const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
+  const queryClient = useQueryClient()
+  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   const startAuth = async () => {
     await logAnalyticsEvent(Events.vama_login_start(true, false))
     const iOS = isIOS()
     try {
-      const { codeChallenge } = await pkceAuthorizeParams()
-      const callbackUrl = await startAuthSession(codeChallenge || '')
+      const callbackUrl = await startAuthSession(userSettings.codeChallenge)
+      const params = {
+        url: callbackUrl,
+        queryClient: queryClient,
+      }
       if (iOS) {
-        await handleTokenCallbackUrl(callbackUrl)
+        await handleTokenCallbackUrl(params)
       }
     } catch (e) {
       // For iOS, code "000" comes back from the RCT bridge if the user cancelled the log in
