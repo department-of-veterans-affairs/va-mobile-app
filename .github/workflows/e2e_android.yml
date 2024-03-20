@@ -81,6 +81,7 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
+            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "empty_matrix=" >> "$GITHUB_OUTPUT"
             else
@@ -90,13 +91,9 @@ jobs:
             fi
           else
             if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-              echo "Test"
               echo "matrix=" >> "$GITHUB_OUTPUT"
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             else
-              resp="${{ toJson(inputs.tests_to_run) }}"
-              echo "$resp"
-              echo "${{ toJson(inputs.tests_to_run) }}"
               echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
