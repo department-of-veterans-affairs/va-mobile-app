@@ -7,7 +7,7 @@ name: '[e2e] iOS Detox Test Run'
 on:
   push:
     branches:
-      - 'dependabot/**'
+      - develop
   workflow_dispatch:
     inputs:
       tests_to_run:
@@ -61,6 +61,7 @@ jobs:
     needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
+      output2: ${{ steps.matrix_value.outputs.empty_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -70,22 +71,26 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
-            resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+              echo "empty_matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-              echo "Test"
               echo "matrix=" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             else
-              resp="${{ toJson(inputs.tests_to_run) }}"
-              echo "$resp"
-              echo "${{ toJson(inputs.tests_to_run) }}"
               echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
           fi
 
   matrix-e2e-ios:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
@@ -166,7 +171,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-ios:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     needs: start_slack_thread
     runs-on: macos-14-xlarge
     env:
