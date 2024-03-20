@@ -279,6 +279,7 @@ export const loginFinish = async (isError: boolean, queryClient: QueryClient, au
     authCredentials: authCredentials,
     loading: isError,
     loggedIn: !isError,
+    syncing: userSettings.syncing && !isError,
   })
 }
 

@@ -46,7 +46,7 @@ export const useHandleTokenCallbackUrl = () => {
     },
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
-      await loginFinish(true, queryClient, authCredentials)
+      await loginFinish(false, queryClient, authCredentials)
       postLoggedIn()
     },
     onError: async (error) => {
