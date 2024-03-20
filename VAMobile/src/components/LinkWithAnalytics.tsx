@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { useTheme } from 'utils/hooks'
 
 import Box from './Box'
 
@@ -13,6 +14,7 @@ const LinkWithAnalytics = (props: LinkProps) => {
   const { locationData, phoneNumber, textNumber, TTYnumber, url, type } = props
   const eventProps = { locationData, phoneNumber, textNumber, TTYnumber, url, type }
   const definedProps = _.pickBy(eventProps, (prop) => prop !== undefined)
+  const theme = useTheme()
 
   const analytics = {
     onPress: () => logAnalyticsEvent(Events.vama_link_click(definedProps)),
@@ -20,7 +22,7 @@ const LinkWithAnalytics = (props: LinkProps) => {
   }
 
   return (
-    <Box flexDirection={'row'}>
+    <Box flexDirection={'row'} py={theme.dimensions.buttonPadding}>
       <Link analytics={analytics} {...props} />
     </Box>
   )

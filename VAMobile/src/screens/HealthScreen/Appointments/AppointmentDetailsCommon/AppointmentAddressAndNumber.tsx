@@ -1,14 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  TextView,
-} from 'components'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import {
   AppointmentAttributes,
@@ -18,7 +13,6 @@ import {
   AppointmentTypeConstants,
 } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp } from 'utils/accessibility'
 import { isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
@@ -99,13 +93,15 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
     }
 
-    const findYourVALocationProps: LinkButtonProps = {
-      displayedText: t('appointments.inPersonVA.missingAddress.goToVALink'),
-      linkType: LinkTypeOptionsConstants.externalLink,
-      numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+    const findYourVALocationProps: LinkProps = {
+      type: 'url',
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      text: t('appointments.inPersonVA.missingAddress.goToVALink'),
       a11yLabel: a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')),
-      accessibilityHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
+      a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
+
+    const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
 
     return (
       <>
@@ -120,17 +116,17 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
           </TextView>
         )}
         {hasDirectionLink && !isPastAppointment && !isAppointmentCanceled && (
-          <ClickForActionLink
-            displayedText={`${t('directions')}`}
-            a11yLabel={`${t('directions')}`}
-            linkType={'directions'}
-            numberOrUrlLink={getDirectionsUrl(location)}
+          <LinkWithAnalytics
+            type="url"
+            url={getDirectionsUrl(location)}
+            text={t('directions')}
+            a11yLabel={t('directions')}
+            a11yHint={t('directions.a11yHint')}
             testID="directionsTestID"
-            {...a11yHintProp(t('directions.a11yHint'))}
           />
         )}
-        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
-        {!hasFullAddress && !hasPhone && <ClickForActionLink {...findYourVALocationProps} />}
+        {hasPhone && <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />}
+        {!hasFullAddress && !hasPhone && <LinkWithAnalytics {...findYourVALocationProps} />}
       </>
     )
   }
@@ -207,13 +203,15 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       showFacilityLocatorLink = true
     }
 
-    const findYourVALocationProps: LinkButtonProps = {
-      displayedText: t('upcomingAppointmentDetails.findYourVAFacility'),
-      linkType: LinkTypeOptionsConstants.externalLink,
-      numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+    const findYourVALocationProps: LinkProps = {
+      type: 'url',
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      text: t('upcomingAppointmentDetails.findYourVAFacility'),
       a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility')),
-      accessibilityHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
+      a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
+
+    const phoneString = hasPhone ? `${phone!.areaCode}-${phone!.number}` : ''
 
     return (
       <>
@@ -234,18 +232,18 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
         </Box>
         <Box>
           {hasMappableAddress && (
-            <ClickForActionLink
-              displayedText={`${t('directions')}`}
-              a11yLabel={`${t('directions')}`}
-              linkType={'directions'}
-              numberOrUrlLink={getDirectionsUrl(location)}
+            <LinkWithAnalytics
+              type="url"
+              url={getDirectionsUrl(location)}
+              text={t('directions')}
+              a11yLabel={t('directions')}
+              a11yHint={t('directions.a11yHint')}
               testID="directionsTestID"
-              {...a11yHintProp(t('directions.a11yHint'))}
             />
           )}
-          {showFacilityLocatorLink && <ClickForActionLink {...findYourVALocationProps} />}
+          {showFacilityLocatorLink && <LinkWithAnalytics {...findYourVALocationProps} />}
         </Box>
-        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
+        {hasPhone && <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />}
       </>
     )
   }

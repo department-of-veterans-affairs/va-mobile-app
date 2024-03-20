@@ -18,7 +18,6 @@ function VeteransCrisisLineNumbers() {
 
   const boxProps: BoxProps = {
     mt: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.buttonPadding,
   }
 
   return (
