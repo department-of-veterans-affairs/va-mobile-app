@@ -19,7 +19,7 @@ jobs:
           cache-dependency-path: VAMobile/yarn.lock
       - name: Setup docs
         working-directory: VAMobile
-        run: cd VAMobile && yarn docs
+        run: yarn docs
       - name: Wait for port 3000
         working-directory: VAMobile
         run: npx wait-on http://localhost:3000
