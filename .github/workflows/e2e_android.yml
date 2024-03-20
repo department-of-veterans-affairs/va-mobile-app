@@ -71,6 +71,7 @@ jobs:
     needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
+      output2: ${{ steps.matrix_value.outputs.empty_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -80,22 +81,29 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
-            resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+              echo "empty_matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
               echo "Test"
               echo "matrix=" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             else
               resp="${{ toJson(inputs.tests_to_run) }}"
               echo "$resp"
               echo "${{ toJson(inputs.tests_to_run) }}"
               echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
           fi
     
   matrix-e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
@@ -179,7 +187,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     needs: [start_slack_thread, output_detox_tests_to_run]
     runs-on: macos-latest-xl
     steps:
