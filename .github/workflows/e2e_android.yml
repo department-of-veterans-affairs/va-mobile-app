@@ -82,7 +82,7 @@ jobs:
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
             resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
             echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-          elif [[ ${{ github.event.inputs.tests_to_run }} == '' ]]; then
+          else if [[ "${{ github.event.inputs.tests_to_run }}" == '' ]]; then
             echo "Test"
             echo "matrix=" >> "$GITHUB_OUTPUT"
           else
