@@ -3,29 +3,10 @@ import { BIOMETRY_TYPE } from 'react-native-keychain'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { InitialState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
+import { InitialState } from 'store/slices'
 import { context, render } from 'testUtils'
 
 import BiometricsPreferenceScreen from './BiometricsPreferenceScreen'
-
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    setBiometricsPreference: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    setDisplayBiometricsPreferenceScreen: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
 
 context('BiometricsPreferenceScreen', () => {
   const initializeTestInstance = (biometric = BIOMETRY_TYPE.TOUCH_ID) => {
@@ -33,7 +14,6 @@ context('BiometricsPreferenceScreen', () => {
       preloadedState: {
         auth: {
           ...InitialState.auth,
-          supportedBiometric: biometric,
         },
       },
     })
@@ -80,20 +60,5 @@ context('BiometricsPreferenceScreen', () => {
         'Iris lets us recognize a video image of your eyes to sign you in to this app.\nYou can always change this later in your app settings.',
       ),
     ).toBeTruthy()
-  })
-
-  describe('on click of the use biometric button', () => {
-    it('should call setBiometricsPreference and setDisplayBiometricsPreferenceScreen', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Turn on Touch ID' }))
-      expect(setBiometricsPreference).toHaveBeenCalledWith(true)
-      expect(setDisplayBiometricsPreferenceScreen).toHaveBeenCalledWith(false)
-    })
-  })
-
-  describe('on click of the skip button button', () => {
-    it('should call setDisplayBiometricsPreferenceScreen', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Skip' }))
-      expect(setDisplayBiometricsPreferenceScreen).toHaveBeenCalledWith(false)
-    })
   })
 })

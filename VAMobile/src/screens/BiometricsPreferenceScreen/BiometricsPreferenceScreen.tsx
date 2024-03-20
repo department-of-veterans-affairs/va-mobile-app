@@ -1,53 +1,54 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 
+import { useAuthSettings } from 'api/auth'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
-import { testIdProps } from 'utils/accessibility'
+import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'utils/auth'
 import {
   getSupportedBiometricA11yLabel,
   getSupportedBiometricText,
   getSupportedBiometricTranslationTag,
   getTranslation,
 } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
 function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { data: userAuthSettings } = useAuthSettings()
+  const supportedBiometric = userAuthSettings?.supportedBiometric
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
   const biometricsA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
   const bodyText = getTranslation(
     `biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`,
     t,
   )
+  const queryClient = useQueryClient()
 
   const onSkip = (): void => {
-    dispatch(setDisplayBiometricsPreferenceScreen(false))
+    setDisplayBiometricsPreferenceScreen(false, queryClient)
   }
 
   const onUseBiometrics = (): void => {
-    dispatch(setBiometricsPreference(true))
-    dispatch(setDisplayBiometricsPreferenceScreen(false))
+    setBiometricsPreference(true, queryClient)
+    setDisplayBiometricsPreferenceScreen(false, queryClient)
   }
 
   return (
-    <VAScrollView {...testIdProps('Biometrics-preference-page')}>
+    <VAScrollView>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
           variant="BitterBoldHeading"
           accessibilityRole="header"
-          {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
+          accessibilityLabel={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}
+          testID={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
         <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>

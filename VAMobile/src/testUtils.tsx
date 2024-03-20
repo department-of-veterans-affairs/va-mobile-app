@@ -17,7 +17,6 @@ import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
-import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
@@ -80,7 +79,6 @@ export class TrackedStore {
 const getConfiguredStore = (state?: Partial<RootState>) => {
   return configureStore({
     reducer: {
-      auth: authReducer as any,
       accessibility: accessabilityReducer as any,
       demo: demoReducer as any,
       errors: errorReducer as any,

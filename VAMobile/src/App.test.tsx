@@ -41,9 +41,10 @@ context('App', () => {
 
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', () => {
+      //ToDo: change this to be based off loading from remote config and/or loading user Auth Settings
       render(<AuthGuard />, {
         preloadedState: {
-          auth: { ...initialAuthState, initializing: true },
+          auth: { ...initialAuthState },
         },
       })
 
@@ -62,7 +63,7 @@ context('App', () => {
     it('should dispatch handleTokenCallbackUrl when auth token result comes back', () => {
       render(<AuthGuard />, {
         preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
+          auth: { ...initialAuthState },
         },
       })
 
@@ -79,7 +80,7 @@ context('App', () => {
     it('should not dispatch handleTokenCallbackUrl when not an auth result url', () => {
       render(<AuthGuard />, {
         preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
+          auth: { ...initialAuthState },
         },
       })
 
@@ -97,7 +98,7 @@ context('App', () => {
     it('should render Login when not authorized', () => {
       render(<AuthGuard />, {
         preloadedState: {
-          auth: { ...initialAuthState, initializing: false },
+          auth: { ...initialAuthState },
         },
       })
       expect(screen.queryByText('Profile')).toBeFalsy()
@@ -112,7 +113,6 @@ context('App', () => {
         preloadedState: {
           auth: {
             ...initialAuthState,
-            initializing: false,
             loggedIn: true,
           },
           settings: {

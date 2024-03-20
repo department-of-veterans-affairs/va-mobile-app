@@ -3,16 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { useQueryClient } from '@tanstack/react-query'
+
+import { useAuthSettings } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
+import { checkForDowntimeErrors } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
+import { completeSync, loginFinish } from 'utils/auth'
 import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -26,8 +30,11 @@ function SyncScreen({}: SyncScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
-
-  const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
+  const queryClient = useQueryClient()
+  const { data: userAuthSettings } = useAuthSettings()
+  const loggedIn = userAuthSettings?.loggedIn
+  const loggingOut = userAuthSettings?.loggingOut
+  const syncing = userAuthSettings?.syncing
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
@@ -49,9 +56,9 @@ function SyncScreen({}: SyncScreenProps) {
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
-      dispatch(logInDemoMode())
+      loginFinish(false, queryClient)
     }
-  }, [dispatch, demoMode, loggedIn])
+  }, [dispatch, demoMode, loggedIn, queryClient])
 
   useEffect(() => {
     if (syncing) {
@@ -71,7 +78,7 @@ function SyncScreen({}: SyncScreenProps) {
       !drNotInDowntime ||
       (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
-      dispatch(completeSync())
+      completeSync(queryClient)
     }
   }, [
     dispatch,
@@ -85,6 +92,7 @@ function SyncScreen({}: SyncScreenProps) {
     drNotInDowntime,
     mhNotInDowntime,
     syncing,
+    queryClient,
   ])
 
   return (

@@ -58,8 +58,6 @@ context('SettingsScreen', () => {
         ...InitialState,
         auth: {
           ...InitialState.auth,
-          canStoreWithBiometric,
-          supportedBiometric,
         },
         demo: {
           demoMode,

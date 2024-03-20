@@ -20,12 +20,14 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { MutateOptions, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
+import { useAuthSettings, useHandleTokenCallbackUrl, useLogout, usePostLoggedIn, useRefreshAccessToken } from 'api/auth'
 import queryClient from 'api/queryClient'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
+import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { SnackBarConstants } from 'constants/common'
 import { linking } from 'constants/linking'
@@ -46,8 +48,8 @@ import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import store, { RootState } from 'store'
-import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
+import { AnalyticsState, NotificationsState } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -58,7 +60,11 @@ import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { finishInitialize, initializeAuth, processAuthResponse } from 'utils/auth'
+import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
+import { setFileSystemRefreshAccessToken } from 'utils/filesystem'
 import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
@@ -78,7 +84,6 @@ import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/acces
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
 enableScreens(true)
-injectStore(store)
 
 const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
@@ -123,7 +128,6 @@ type RootTabNavParamList = {
 function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
-
   const scheme = useColorScheme()
   setColorScheme(scheme)
 
@@ -187,8 +191,14 @@ function MainApp() {
 
 export function AuthGuard() {
   const dispatch = useAppDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
-    useSelector<RootState, AuthState>((state) => state.auth)
+  const { mutate: logout } = useLogout()
+  const { mutate: refreshAccessToken } = useRefreshAccessToken()
+  const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
+  const { mutate: postLoggedIn } = usePostLoggedIn()
+  setlogout(logout)
+  setRefreshAccessToken(refreshAccessToken)
+  setFileSystemRefreshAccessToken(refreshAccessToken)
+  const { data: userAuthSettings, isLoading: initializing } = useAuthSettings()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -267,19 +277,38 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
+    const mutateOptions: MutateOptions<Response, Error, string, void> = {
+      onSuccess: async (data) => {
+        const authCredentials = await processAuthResponse(data)
+        await finishInitialize(true, queryClient, authCredentials)
+        postLoggedIn()
+      },
+      onError: async (error) => {
+        if (isErrorObject(error)) {
+          console.error(error)
+          logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
+          if (error.status) {
+            await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+          }
+        }
+        await finishInitialize(false, queryClient)
+      },
+    }
     console.debug('AuthGuard: initializing')
-    dispatch(initializeAuth())
+    initializeAuth(dispatch, queryClient, () => {
+      refreshAccessToken(getAccessToken() || '', mutateOptions)
+    })
 
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
-        dispatch(handleTokenCallbackUrl(event.url))
+        handleTokenCallbackUrl(event.url)
       }
     }
     const sub = Linking.addEventListener('url', listener)
     return (): void => {
       sub?.remove()
     }
-  }, [dispatch])
+  }, [dispatch, handleTokenCallbackUrl, refreshAccessToken, postLoggedIn])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -325,7 +354,12 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
+  } else if (
+    userAuthSettings?.syncing &&
+    userAuthSettings?.firstTimeLogin &&
+    userAuthSettings?.canStoreWithBiometric &&
+    userAuthSettings?.displayBiometricsPreferenceScreen
+  ) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
         <Stack.Screen
@@ -335,15 +369,15 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
-  } else if (syncing) {
+  } else if (userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn) {
+    content = <OnboardingCarousel />
+  } else if (userAuthSettings?.syncing) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
       </Stack.Navigator>
     )
-  } else if (firstTimeLogin && loggedIn) {
-    content = <OnboardingCarousel />
-  } else if (loggedIn) {
+  } else if (userAuthSettings?.loggedIn) {
     content = (
       <>
         <AuthedApp />

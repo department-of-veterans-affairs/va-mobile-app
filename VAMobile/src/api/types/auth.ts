@@ -16,18 +16,6 @@ export const LoginServiceTypeConstants: {
   SIS: 'SIS',
 }
 
-export type AuthParamsLoadingStateTypes = 'init' | 'loading' | 'ready'
-
-export const AuthParamsLoadingStateTypeConstants: {
-  INIT: AuthParamsLoadingStateTypes
-  LOADING: AuthParamsLoadingStateTypes
-  READY: AuthParamsLoadingStateTypes
-} = {
-  INIT: 'init',
-  LOADING: 'loading',
-  READY: 'ready',
-}
-
 /**
  * Auth credentials object, what we get back from auth service
  */
@@ -51,30 +39,16 @@ export enum LOGIN_PROMPT_TYPE {
   UNLOCK = 'UNLOCK',
 }
 
-/**
- * Redux payload for AUTH_INITIALIZE action
- */
-export type AuthInitializePayload = {
-  loginPromptType: LOGIN_PROMPT_TYPE
-  authCredentials?: AuthCredentialData
+export type UserAuthSettings = {
   canStoreWithBiometric: boolean
-  shouldStoreWithBiometric: boolean
+  displayBiometricsPreferenceScreen: boolean
+  firstTimeLogin: boolean
+  loading: boolean
   loggedIn: boolean
-}
+  loggingOut: boolean
+  shouldStoreWithBiometric: boolean
+  syncing: boolean
 
-/**
- * Redux payload for AUTH_FINISH_LOGIN action
- */
-export type AuthFinishLoginPayload = {
   authCredentials?: AuthCredentialData
-  error?: Error
-}
-
-/**
- * Redux payload for AUTH_SET_AUTHORIZE_REQUEST_PARAMS action
- */
-export type AuthSetAuthorizeRequestParamsPayload = {
-  codeVerifier: string
-  codeChallenge: string
-  authorizeStateParam: string
+  supportedBiometric?: string
 }

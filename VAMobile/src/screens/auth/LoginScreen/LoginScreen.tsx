@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 
-import { AuthParamsLoadingStateTypeConstants } from 'api/types'
+import { useAuthSettings } from 'api/auth'
 import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { loginStart } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
@@ -24,9 +25,8 @@ import DemoAlert from './DemoAlert'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
-
+  const { data: userAuthSettings } = useAuthSettings()
+  const queryClient = useQueryClient()
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
@@ -35,12 +35,6 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
-
-  useEffect(() => {
-    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
-      dispatch(setPKCEParams())
-    }
-  }, [authParamsLoadingState, dispatch])
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -89,9 +83,9 @@ function LoginScreen() {
 
   const onLoginInit = demoMode
     ? () => {
-        dispatch(loginStart(true))
+        loginStart(true, queryClient)
       }
-    : firstTimeLogin
+    : userAuthSettings?.firstTimeLogin
       ? () => {
           navigateTo('LoaGate')
         }
