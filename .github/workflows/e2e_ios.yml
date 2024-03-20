@@ -51,8 +51,41 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
+  find_detox_tests_to_run:
+    if: ${{github.event_name == 'push'}}
+    uses: ./.github/workflows/e2e_detox_mapping.yml
+  
+  output_detox_tests_to_run:
+    if: always()
+    runs-on: macos-latest-xl
+    needs: find_detox_tests_to_run
+    outputs: 
+      output1: ${{ steps.matrix_value.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: 'Get Matrix Value'
+        id: matrix_value
+        run: |
+          if [[ ${{ github.event_name == 'push' }} == true ]]; then
+            resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+            echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+          else
+            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+              echo "Test"
+              echo "matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp="${{ toJson(inputs.tests_to_run) }}"
+              echo "$resp"
+              echo "${{ toJson(inputs.tests_to_run) }}"
+              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
   matrix-e2e-ios:
-    if: github.event.inputs.tests_to_run != ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
@@ -133,7 +166,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-ios:
-    if: always() && github.event.inputs.tests_to_run == ''
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 == ''
     needs: start_slack_thread
     runs-on: macos-14-xlarge
     env:
@@ -233,7 +266,7 @@ jobs:
           path: VAMobile/artifacts
 
   matrix-send_test_results_to_testrail:
-    if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_run != ''
+    if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
     needs: matrix-e2e-ios
     strategy:
       matrix:
@@ -246,7 +279,7 @@ jobs:
     secrets: inherit
 
   send_test_results_to_testrail:
-    if: always() && github.event.inputs.tests_to_run == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
+    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
     needs: e2e-ios
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
