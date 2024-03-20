@@ -1,0 +1,25 @@
+name: axe-core
+on:
+  pull_request:
+    push:
+      branches:
+        - main
+        - develop
+        - 'release/v**'
+
+jobs:
+  axe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: yarn
+          cache-dependency-path: VAMobile/yarn.lock
+      - run: yarn docs
+      - run: npx wait-on http://localhost:3000
+      - name: Run axe
+        run: |
+          npm install -g @axe-core/cli
+          axe http://localhost:3000/va-mobile-app --exit
