@@ -27,13 +27,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import {
-  AnalyticsState,
-  AppointmentsState,
-  SecureMessagingState,
-  getInbox,
-  prefetchAppointments,
-} from 'store/slices'
+import { AnalyticsState, AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -67,7 +61,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  )
   const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
