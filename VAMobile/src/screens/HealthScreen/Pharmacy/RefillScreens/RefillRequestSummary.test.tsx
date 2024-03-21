@@ -2,36 +2,34 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { RootState } from 'store'
-import { RefillRequestSummaryItems } from 'store/api'
-import { PrescriptionState, initialPrescriptionState } from 'store/slices'
+import { RefillRequestSummaryItems } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 import RefillRequestSummary from './RefillRequestSummary'
 
 context('RefillRequestSummary', () => {
-  const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>) => {
-    const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn(), addListener: jest.fn() })
-    const store: Partial<RootState> = {
-      prescriptions: {
-        ...initialPrescriptionState,
-        ...prescriptionState,
+  const initializeTestInstance = (refillRequestSummaryItems?: RefillRequestSummaryItems) => {
+    const props = mockNavProps(
+      {},
+      { setOptions: jest.fn(), navigate: jest.fn(), addListener: jest.fn() },
+      {
+        params: {
+          refillRequestSummaryItems: refillRequestSummaryItems,
+        },
       },
-    }
-    render(<RefillRequestSummary {...props} />, { preloadedState: store })
+    )
+    render(<RefillRequestSummary {...props} />)
   }
 
   describe('when all request submit successfully', () => {
     it('should display successful summary', () => {
-      initializeTestInstance({
-        refillRequestSummaryItems: [
-          {
-            data: mockData[0],
-            submitted: true,
-          },
-        ] as RefillRequestSummaryItems,
-      })
+      initializeTestInstance([
+        {
+          data: mockData[0],
+          submitted: true,
+        },
+      ] as RefillRequestSummaryItems)
 
       expect(screen.getByText('We got your refill requests')).toBeTruthy()
       expect(screen.getByText('Refill request summary')).toBeTruthy()
@@ -54,14 +52,12 @@ context('RefillRequestSummary', () => {
 
   describe('when all request failed', () => {
     it('should display fail summary', () => {
-      initializeTestInstance({
-        refillRequestSummaryItems: [
-          {
-            data: mockData[0],
-            submitted: false,
-          },
-        ] as RefillRequestSummaryItems,
-      })
+      initializeTestInstance([
+        {
+          data: mockData[0],
+          submitted: false,
+        },
+      ] as RefillRequestSummaryItems)
 
       expect(screen.getByText("We didn't get 1 refill requests")).toBeTruthy()
       expect(
@@ -77,18 +73,16 @@ context('RefillRequestSummary', () => {
 
   describe('when some request succeed and some failed', () => {
     it('should display mix summary', () => {
-      initializeTestInstance({
-        refillRequestSummaryItems: [
-          {
-            data: mockData[0],
-            submitted: true,
-          },
-          {
-            data: mockData[1],
-            submitted: false,
-          },
-        ] as RefillRequestSummaryItems,
-      })
+      initializeTestInstance([
+        {
+          data: mockData[0],
+          submitted: true,
+        },
+        {
+          data: mockData[1],
+          submitted: false,
+        },
+      ] as RefillRequestSummaryItems)
       expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy()
       expect(screen.getByRole('link', { name: 'Go to all pending refills' })).toBeTruthy()
       expect(screen.getByText("We didn't get 1 refill requests")).toBeTruthy()

@@ -11,8 +11,6 @@ import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
 
-import { initialPrescriptionState } from './prescriptionSlice'
-
 export * from './accessibilitySlice'
 export * from './analyticsSlice'
 export * from './authSlice'
@@ -22,7 +20,6 @@ export * from './lettersSlice'
 export * from './notificationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
-export * from './prescriptionSlice'
 export * from './settingsSlice'
 
 export const InitialState: RootState = {
@@ -36,6 +33,5 @@ export const InitialState: RootState = {
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   snackBar: initialSnackBarState,
-  prescriptions: initialPrescriptionState,
   settings: initialSettingsState,
 }

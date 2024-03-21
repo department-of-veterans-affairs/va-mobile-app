@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePrescriptions } from 'api/prescriptions'
 import {
   Box,
   CategoryLanding,
@@ -30,11 +31,9 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import {
   AnalyticsState,
   ClaimsAndAppealsState,
-  PrescriptionState,
   SecureMessagingState,
   getClaimsAndAppeals,
   getInbox,
-  loadAllPrescriptions,
 } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -71,9 +70,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
   )
-  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
-    (state) => state.prescriptions,
-  )
   const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
@@ -89,6 +85,11 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch'),
     },
   )
+
+  const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
+    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
+  })
+
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
@@ -106,10 +107,10 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
-    if (userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
-      dispatch(loadAllPrescriptions())
+    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
     }
-  }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
+  }, [rxPrefetch, prescriptionData])
 
   useEffect(() => {
     if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
@@ -118,7 +119,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])

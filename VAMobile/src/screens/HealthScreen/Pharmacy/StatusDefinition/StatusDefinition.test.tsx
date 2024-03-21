@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { RefillStatus, RefillStatusConstants } from 'store/api/types'
+import { RefillStatus, RefillStatusConstants } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import StatusDefinition from './StatusDefinition'
