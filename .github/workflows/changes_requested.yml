@@ -15,13 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Move to In Progress
-        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        uses: kin/gh-action-move-issue-to-column@1.0
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
-          project_id: 823
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: "In Progress"
-          move_related_issues: true
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          project-name: "VA-Mobile"
+          target-column: "In Progress"
       - name: Remove all existing labels
         uses: actions/github-script@v6
         with:
