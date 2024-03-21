@@ -257,7 +257,7 @@ export const finishInitialize = async (
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
     loggedIn: loggedIn,
-    syncing: userSettings.syncing && loggedIn,
+    syncing: userSettings?.syncing && loggedIn,
     authCredentials: authCredentials,
   })
 }
@@ -279,7 +279,7 @@ export const loginFinish = async (isError: boolean, queryClient: QueryClient, au
     authCredentials: authCredentials,
     loading: isError,
     loggedIn: !isError,
-    syncing: userSettings.syncing && !isError,
+    syncing: userSettings?.syncing && !isError,
   })
 }
 
@@ -330,7 +330,7 @@ export const initializeAuth = async (
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   const { tappedForegroundNotification } = store.getState().notifications
 
-  if (userSettings.loggedIn && tappedForegroundNotification) {
+  if (userSettings?.loggedIn && tappedForegroundNotification) {
     dispatch(dispatchResetTappedForegroundNotification())
     return
   }

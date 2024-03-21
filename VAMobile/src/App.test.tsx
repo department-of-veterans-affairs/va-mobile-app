@@ -3,7 +3,8 @@ import { Linking } from 'react-native'
 
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
+import { authKeys } from 'api/auth'
+import { QueriesData, context, render } from 'testUtils'
 
 import { AuthGuard } from './App'
 
@@ -11,15 +12,6 @@ jest.mock('./utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
   featureEnabled: jest.fn(() => false),
 }))
-
-jest.mock('./store/slices', () => {
-  const original = jest.requireActual('./store/slices')
-  return {
-    ...original,
-    handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
-    initializeAuth: jest.fn(() => ({ type: 'FOO' })),
-  }
-})
 
 jest.mock('react-native-keyboard-manager', () => ({
   setEnable: jest.fn(() => {}),
@@ -40,46 +32,45 @@ context('App', () => {
 
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', () => {
-      //ToDo: change this to be based off loading from remote config and/or loading user Auth Settings
-      render(<AuthGuard />)
+      render(<AuthGuard />, {
+        preloadedState: {
+          settings: {
+            loadingRemoteConfig: true,
+          },
+        },
+      })
 
       expect(screen.getByTestId('Splash-page')).toBeTruthy()
     })
 
-    it('should initilize by registering for linking', () => {
-      render(<AuthGuard />)
-      expect(Linking.addEventListener).toHaveBeenCalled()
-    })
-
-    it('should dispatch handleTokenCallbackUrl when auth token result comes back', () => {
-      render(<AuthGuard />)
-
-      const spy = Linking.addEventListener as jest.Mock
-      const listeners = spy.mock.calls
-      listeners.forEach((k) => {
-        const listener = k[1]
-        listener({ url: 'vamobile://login-success?code=123&state=5434' })
-      })
-      expect(Linking.addEventListener).toHaveBeenCalled()
-      // expect(handleTokenCallbackUrl).toHaveBeenCalled()
-    })
-
-    it('should not dispatch handleTokenCallbackUrl when not an auth result url', () => {
-      render(<AuthGuard />)
-
-      expect(Linking.addEventListener).toHaveBeenCalled()
-      const spy = Linking.addEventListener as jest.Mock
-      const listeners = spy.mock.calls
-      listeners.forEach((k) => {
-        const listener = k[1]
-        listener({ url: 'vamobile://foo?code=123&state=5434' })
-      })
-
-      // expect(handleTokenCallbackUrl).not.toHaveBeenCalled()
-    })
-
     it('should render Login when not authorized', () => {
-      render(<AuthGuard />)
+      const queriesData: QueriesData = [
+        {
+          queryKey: authKeys.settings,
+          data: {
+            canStoreWithBiometric: false,
+            displayBiometricsPreferenceScreen: false,
+            firstTimeLogin: false,
+            loading: false,
+            loggedIn: false,
+            loggingOut: false,
+            shouldStoreWithBiometric: false,
+            supportedBiometric: undefined,
+            syncing: false,
+            codeVerifier: '1',
+            codeChallenge: '2',
+          },
+        },
+      ]
+      render(<AuthGuard />, {
+        preloadedState: {
+          settings: {
+            loadingRemoteConfig: false,
+          },
+        },
+        queriesData: queriesData,
+      })
+      expect(Linking.addEventListener).toHaveBeenCalled()
       expect(screen.queryByText('Profile')).toBeFalsy()
       expect(screen.queryByText('Home')).toBeFalsy()
       expect(screen.queryByText('Benefits')).toBeFalsy()
@@ -88,12 +79,31 @@ context('App', () => {
     })
 
     it('should render AuthedApp when authorized', () => {
+      const queriesData: QueriesData = [
+        {
+          queryKey: authKeys.settings,
+          data: {
+            canStoreWithBiometric: false,
+            displayBiometricsPreferenceScreen: false,
+            firstTimeLogin: false,
+            loading: false,
+            loggedIn: true,
+            loggingOut: false,
+            shouldStoreWithBiometric: false,
+            supportedBiometric: undefined,
+            syncing: false,
+            codeVerifier: '1',
+            codeChallenge: '2',
+          },
+        },
+      ]
       render(<AuthGuard />, {
         preloadedState: {
           settings: {
             remoteConfigActivated: true,
           },
         },
+        queriesData: queriesData,
       })
 
       expect(screen.getByText('Profile')).toBeTruthy()

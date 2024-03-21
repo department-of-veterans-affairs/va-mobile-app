@@ -2,7 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
+import { authKeys } from 'api/auth'
+import { QueriesData, context, render } from 'testUtils'
 
 import { SyncScreen } from './index'
 
@@ -36,7 +37,25 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 
 context('SyncScreen', () => {
   const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
-    render(<SyncScreen />)
+    const queriesData: QueriesData = [
+      {
+        queryKey: authKeys.settings,
+        data: {
+          canStoreWithBiometric: true,
+          displayBiometricsPreferenceScreen: true,
+          firstTimeLogin: false,
+          loading: false,
+          loggedIn: loggedIn,
+          loggingOut: loggingOut,
+          shouldStoreWithBiometric: true,
+          supportedBiometric: 'Face',
+          syncing: syncing,
+          codeVerifier: '1',
+          codeChallenge: '2',
+        },
+      },
+    ]
+    render(<SyncScreen />, { queriesData })
   }
 
   beforeEach(() => {
