@@ -2,48 +2,42 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
-import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
+import { PrescriptionAttributeData, RefillStatusConstants } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import PrescriptionDetails from './PrescriptionDetails'
 
 context('PrescriptionDetails', () => {
   const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
-    const props = mockNavProps(undefined, undefined, { params: { prescriptionId: '13650544' } })
-
-    render(<PrescriptionDetails {...props} />, {
-      preloadedState: {
-        prescriptions: {
-          ...initialPrescriptionState,
-          prescriptionsById: {
-            '13650544': {
-              type: 'Prescription',
-              id: '13650544',
-              attributes: {
-                refillStatus: RefillStatusConstants.ACTIVE,
-                refillSubmitDate: '2022-10-28T04:00:00.000Z',
-                refillDate: '2022-10-28T04:00:00.000Z',
-                refillRemaining: 5,
-                facilityName: 'DAYT29',
-                facilityPhoneNumber: '(217) 636-6712',
-                isRefillable: false,
-                isTrackable: false,
-                orderedDate: '2022-10-28T04:00:00.000Z',
-                quantity: 10,
-                expirationDate: '2022-10-28T04:00:00.000Z',
-                prescriptionNumber: '2719536',
-                prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
-                instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
-                dispensedDate: '2022-10-28T04:00:00.000Z',
-                stationNumber: '989',
-                ...mockAttributeData,
-              },
-            },
+    const props = mockNavProps(undefined, undefined, {
+      params: {
+        prescription: {
+          type: 'Prescription',
+          id: '13650544',
+          attributes: {
+            refillStatus: RefillStatusConstants.ACTIVE,
+            refillSubmitDate: '2022-10-28T04:00:00.000Z',
+            refillDate: '2022-10-28T04:00:00.000Z',
+            refillRemaining: 5,
+            facilityName: 'DAYT29',
+            facilityPhoneNumber: '(217) 636-6712',
+            isRefillable: false,
+            isTrackable: false,
+            orderedDate: '2022-10-28T04:00:00.000Z',
+            quantity: 10,
+            expirationDate: '2022-10-28T04:00:00.000Z',
+            prescriptionNumber: '2719536',
+            prescriptionName: 'SOMATROPIN 5MG INJ (VI)',
+            instructions: 'TAKE 1 TABLET WITH FOOD 3 TIMES A DAY',
+            dispensedDate: '2022-10-28T04:00:00.000Z',
+            stationNumber: '989',
+            ...mockAttributeData,
           },
         },
       },
     })
+
+    render(<PrescriptionDetails {...props} />)
   }
 
   describe('when showing prescription details data', () => {
