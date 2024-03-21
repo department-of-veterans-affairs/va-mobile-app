@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import {
@@ -17,11 +17,7 @@ import { cancelAppointment } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import {
-  getAppointmentAnalyticsDays,
-  getAppointmentAnalyticsStatus,
-  getAppointmentPhoneString,
-} from 'utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
@@ -111,10 +107,9 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
     }
   }
 
-  const phoneString = getAppointmentPhoneString(phone)
   const linkOrPhone =
     phone && phone.areaCode && phone.number ? (
-      <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />
+      <ClickToCallPhoneNumber phone={phone} />
     ) : (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics

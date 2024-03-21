@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import { Box, LinkWithAnalytics, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import {
   AppointmentAttributes,
@@ -13,7 +13,7 @@ import {
   AppointmentTypeConstants,
 } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getAppointmentPhoneString, isAPendingAppointment } from 'utils/appointments'
+import { isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
 
@@ -100,7 +100,6 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
-    const phoneString = getAppointmentPhoneString(phone)
     const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
@@ -125,7 +124,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
             testID="directionsTestID"
           />
         )}
-        {hasPhone && <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />}
+        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
         {!hasFullAddress && !hasPhone && <LinkWithAnalytics {...findYourVALocationProps} />}
       </>
     )
@@ -211,8 +210,6 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
       a11yHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
-    const phoneString = getAppointmentPhoneString(phone)
-
     const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
 
     return (
@@ -245,7 +242,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
           )}
           {showFacilityLocatorLink && <LinkWithAnalytics {...findYourVALocationProps} />}
         </Box>
-        {hasPhone && <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />}
+        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
       </>
     )
   }

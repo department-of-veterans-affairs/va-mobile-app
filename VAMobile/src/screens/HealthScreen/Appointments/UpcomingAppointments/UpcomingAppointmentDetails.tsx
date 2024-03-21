@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import {
   Box,
   ClickForActionLink,
+  ClickToCallPhoneNumber,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkTypeOptionsConstants,
@@ -35,12 +36,7 @@ import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import {
-  getAppointmentAnalyticsDays,
-  getAppointmentAnalyticsStatus,
-  getAppointmentPhoneString,
-  isAPendingAppointment,
-} from 'utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -335,8 +331,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       return <></>
     }
 
-    const phoneString = getAppointmentPhoneString(location.phone)
-
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
@@ -355,7 +349,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
                 {t('appointments.reschedule.body')}
               </TextView>
               {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />
+                <ClickToCallPhoneNumber phone={location.phone} />
               ) : undefined}
               <ClickForActionLink
                 displayedText={t('appointments.vaSchedule')}
