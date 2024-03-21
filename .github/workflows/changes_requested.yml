@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Move to In Progress
-        uses: move_issue
+        uses: /.github/move_issue.yml
         with:
           access-token: ${{ secrets.GITHUB_TOKEN }}
           project-name: "VA-Mobile"
