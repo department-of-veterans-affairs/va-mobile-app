@@ -25,10 +25,8 @@ export const useCancelAppointment = (currentPage: number) => {
 
   return useMutation({
     mutationFn: cancelAppointment,
-    onSettled: () => {
-      registerReviewEvent()
-    },
     onSuccess(_, variables) {
+      registerReviewEvent()
       const appointmentsData = queryClient.getQueryData([
         appointmentsKeys.appointments,
         TimeFrameTypeConstants.UPCOMING,
