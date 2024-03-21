@@ -23,17 +23,17 @@ jobs:
     name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
     secrets: inherit
-  start_slack_thread:
-    name: Start Slack thread
-    needs: queue_build
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+  # start_slack_thread:
+  #   name: Start Slack thread
+  #   needs: queue_build
+  #   uses: ./.github/workflows/start_slack_thread.yml
+  #   secrets: inherit
+  #   with:
+  #     channel_name: va-mobile-build-alerts
+  #     message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -41,10 +41,10 @@ jobs:
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
-      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+      # slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
   android:
     name: Android On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
@@ -52,4 +52,4 @@ jobs:
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
-      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+      # slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
