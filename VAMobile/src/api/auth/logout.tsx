@@ -6,7 +6,6 @@ import {
   dispatchClearLoadedAppointments,
   dispatchClearLoadedClaimsAndAppeals,
   dispatchClearLoadedMessages,
-  dispatchClearPrescriptionLogout,
 } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -62,7 +61,6 @@ export const useLogout = () => {
       dispatch(dispatchClearLoadedAppointments())
       dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchClearLoadedClaimsAndAppeals())
-      dispatch(dispatchClearPrescriptionLogout())
       await logoutFinish(queryClient)
     },
     onError: (error) => {
