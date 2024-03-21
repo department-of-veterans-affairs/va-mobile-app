@@ -9,7 +9,6 @@ import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -28,7 +27,6 @@ const store = configureStore({
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
-    prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
