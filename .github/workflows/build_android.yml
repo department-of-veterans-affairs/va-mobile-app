@@ -126,4 +126,4 @@ jobs:
       - name: List directory files
         run: | 
           cd app/build/outputs/bundle && ls
-          cd releease && ls
+          cd release && ls
