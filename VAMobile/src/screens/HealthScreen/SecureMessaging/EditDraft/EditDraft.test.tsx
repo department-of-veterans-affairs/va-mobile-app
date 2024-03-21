@@ -225,9 +225,9 @@ context('EditDraft', () => {
       expect(screen.getByText("We can't match you with a provider")).toBeTruthy()
     })
 
-    describe('on click of the go to inbox button', () => {
+    describe('on click of the go to inbox link', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' }))
+        fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
         expect(mockNavigationSpy).toHaveBeenCalled()
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })

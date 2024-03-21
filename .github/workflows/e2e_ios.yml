@@ -101,6 +101,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
 
     strategy:
+      fail-fast: false
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
 
@@ -274,6 +275,8 @@ jobs:
     if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
     needs: matrix-e2e-ios
     strategy:
+      fail-fast: false
+      max-parallel: 1
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}     
     name: Update testRail Results

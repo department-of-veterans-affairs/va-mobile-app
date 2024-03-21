@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useQueryClient } from '@tanstack/react-query'
+
+import { useDecisionLetters, useDownloadDecisionLetter } from 'api/decisionLetters'
+import { DecisionLettersList } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -14,18 +17,15 @@ import {
   TextLine,
   TextView,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getA11yLabelText } from 'utils/common'
+import { getA11yLabelText, isErrorObject, showSnackBar } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
@@ -36,29 +36,38 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>(
-    (state) => state.decisionLetters,
-  )
+  const queryClient = useQueryClient()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-
+  const [letterID, setLetterID] = useState<string>('')
+  const {
+    data: decisionLettersData,
+    isLoading: loading,
+    isError: letterInfoError,
+    refetch: fetchInfoAgain,
+  } = useDecisionLetters({
+    enabled: screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime,
+  })
+  const {
+    isLoading: downloading,
+    error: downloadLetterErrorDetails,
+    refetch: refetchLetter,
+  } = useDownloadDecisionLetter(letterID, {
+    enabled: letterID.length > 0,
+  })
   // This screen is reachable from two different screens, so adjust back button label
+  const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: '',
-    errorMsg: t('claimLetters.download.error'),
-  }
-
   useEffect(() => {
-    if (screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime) {
-      dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
+    if (downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('ClaimLetters view letter'))
+      }
+      snackBar?.hideAll()
+      showSnackBar(t('claimLetters.download.error'), dispatch, refetchLetter, false, true, true)
     }
-  }, [dispatch, claimsInDowntime])
-
-  const fetchInfoAgain = () => {
-    dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
-  }
+  }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter])
 
   const letterButtons = decisionLetters.map((letter, index) => {
     const { typeDescription, receivedAt } = letter.attributes
@@ -67,11 +76,11 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
     const onPress = () => {
       logAnalyticsEvent(Events.vama_ddl_letter_view())
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('ClaimLetters view letter'))
+      if (letterID === letter.id) {
+        refetchLetter()
+      } else {
+        setLetterID(letter.id)
       }
-      snackBar?.hideAll()
-      dispatch(downloadDecisionLetter(letter.id, snackbarMessages))
     }
 
     const letterButton = {
@@ -86,7 +95,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      {useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID) ? (
+      {letterInfoError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
       ) : loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
