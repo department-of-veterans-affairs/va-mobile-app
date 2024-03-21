@@ -15,6 +15,7 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { usePrescriptions } from 'api/prescriptions'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -40,15 +41,16 @@ import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/Secure
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
+  AnalyticsState,
   AppointmentsState,
   ClaimsAndAppealsState,
   LettersState,
-  PrescriptionState,
+  SecureMessagingState,
+  getInbox,
   getLetterBeneficiaryData,
+  prefetchAppointments,
   prefetchClaimsAndAppeals,
 } from 'store/slices'
-import { AnalyticsState, SecureMessagingState } from 'store/slices'
-import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -95,10 +97,12 @@ export function HomeScreen({}: HomeScreenProps) {
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const {
-    prescriptionStatusCount,
-    loadingHistory: loadingPrescriptions,
-    prescriptionFirstRetrieval: rxPrefetch,
-  } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+    data: prescriptionData,
+    isFetched: rxPrefetch,
+    isLoading: loadingPrescriptions,
+  } = usePrescriptions({
+    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+  })
   const {
     activeClaimsCount,
     loadingClaimsAndAppeals,
@@ -123,7 +127,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
@@ -142,14 +146,6 @@ export function HomeScreen({}: HomeScreenProps) {
         dispatch(prefetchClaimsAndAppeals(undefined, true))
       }
     }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
-  )
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
-        dispatch(loadAllPrescriptions())
-      }
-    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions]),
   )
 
   useFocusEffect(
@@ -216,7 +212,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const activityLoading =
     loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
   const hasActivity =
-    !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
+    !!upcomingAppointmentsCount ||
+    !!activeClaimsCount ||
+    !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
+    !!unreadMessageCount
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -287,11 +286,11 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {!!prescriptionStatusCount.isRefillable && (
+              {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
                 <ActivityButton
                   title={t('prescription.title')}
                   subText={t('prescriptions.activityButton.subText', {
-                    count: prescriptionStatusCount.isRefillable,
+                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
                   })}
                   deepLink={'prescriptions'}
                 />
