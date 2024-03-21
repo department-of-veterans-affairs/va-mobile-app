@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAppReview } from './utils'
 
-export const ClaimsE2eIdConstants = {
+export const DecisionLettersE2eIDConstants = {
   CLOSED_CLAIM_DECISION_LETTER_ID:
     'Claim for compensation updated on April 09, 2021 Submitted January 01, 2021 Decision letter ready',
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
@@ -19,7 +19,7 @@ beforeAll(async () => {
   await openClaimsHistory()
 })
 
-describe('Claims Screen', () => {
+describe('Decision Letters Screen', () => {
   it('should tap on the closed tab', async () => {
     await resetInAppReview()
     await openBenefits()
@@ -29,19 +29,19 @@ describe('Claims Screen', () => {
   })
 
   it('verify the status details page of closed claim with decision letter', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
+    await element(by.id(DecisionLettersE2eIDConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
     await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(
       element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
     ).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
+    await expect(element(by.id(DecisionLettersE2eIDConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
   it('verify that the claims letters sceen is displayed', async () => {
-    await element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID)).tap()
+    await element(by.id(DecisionLettersE2eIDConstants.GET_CLAIMS_LETTER_BUTTON_ID)).tap()
     await expect(element(by.text('Claim letters'))).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.DECISION_CLAIM_LETTER_1_ID))).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.DECISION_CLAIM_LETTER_2_ID))).toExist()
+    await expect(element(by.id(DecisionLettersE2eIDConstants.DECISION_CLAIM_LETTER_1_ID))).toExist()
+    await expect(element(by.id(DecisionLettersE2eIDConstants.DECISION_CLAIM_LETTER_2_ID))).toExist()
   })
 
   it('should go back to the claims details page', async () => {
@@ -49,14 +49,14 @@ describe('Claims Screen', () => {
   })
 
   it('tap on claims letters', async () => {
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(DecisionLettersE2eIDConstants.CLAIMS_HISTORY_TEXT)).tap()
     await element(by.text('Claims')).tap()
     await element(by.text('Claim letters')).tap()
   })
 
   it('should tap on a claim letter and verify a pdf is displayed', async () => {
     if (device.getPlatform() === 'ios') {
-      await element(by.id(ClaimsE2eIdConstants.DECISION_CLAIM_LETTER_1_ID)).tap()
+      await element(by.id(DecisionLettersE2eIDConstants.DECISION_CLAIM_LETTER_1_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('DecisionLetter')
     }
