@@ -3,20 +3,13 @@ import { BIOMETRY_TYPE } from 'react-native-keychain'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { InitialState } from 'store/slices'
 import { context, render } from 'testUtils'
 
 import BiometricsPreferenceScreen from './BiometricsPreferenceScreen'
 
 context('BiometricsPreferenceScreen', () => {
   const initializeTestInstance = (biometric = BIOMETRY_TYPE.TOUCH_ID) => {
-    render(<BiometricsPreferenceScreen />, {
-      preloadedState: {
-        auth: {
-          ...InitialState.auth,
-        },
-      },
-    })
+    render(<BiometricsPreferenceScreen />)
   }
 
   beforeEach(() => {

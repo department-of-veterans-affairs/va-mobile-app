@@ -2,7 +2,6 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { initialAuthState } from 'store/slices'
 import { context, render } from 'testUtils'
 
 import { SyncScreen } from './index'
@@ -37,10 +36,7 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 
 context('SyncScreen', () => {
   const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
-    const store = {
-      auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
-    }
-    render(<SyncScreen />, { preloadedState: store })
+    render(<SyncScreen />)
   }
 
   beforeEach(() => {

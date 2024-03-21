@@ -56,9 +56,6 @@ context('SettingsScreen', () => {
     render(<SettingsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
-        auth: {
-          ...InitialState.auth,
-        },
         demo: {
           demoMode,
         },
