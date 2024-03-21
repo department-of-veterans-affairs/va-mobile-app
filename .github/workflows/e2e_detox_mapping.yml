@@ -87,7 +87,7 @@ jobs:
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["Types"]) or contains(["VAImage"])) +=
-              ["AvailabilityFramework", "Cerner", "ContactInformation", "Letters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
+              ["AvailabilityFramework", "Cerner", "ContactInformation", "Letters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique')
           resp_file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
             jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
@@ -121,7 +121,7 @@ jobs:
             select(contains(["AccordionCollapsible"])) += ["Claims", "Messages"] |
             select(contains(["AlertBox"])) += ["AvailabilityFramework", "Letters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit"] |
             select(contains(["AppVersionAndBuild"])) += ["LoginScreen", "SettingsScreen"] |
-            select(contains(["ClickForActionLink"]) or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"] |
+            select(contains(["ClickForActionLink"]) or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"] |
             select(contains(["CollapsibileAlert"])) += ["Cerner", "Prescriptions", "ContactInformation"] |
             select(contains(["CollapsibleView"])) += ["Appeals", "AppealsExpanded", "Messages", "DirectDeposit"] |
             select(contains(["DefaultList"])) += ["Claims", "DisabilityRattings", "Letters", "ContactInformation", "Appointments", "VaccineRecords", "MilitaryInformation", "PersonalInformationScreen", "DirectDeposit", "Prescriptions", "Payments", "SettingsScreen"] |
@@ -130,10 +130,10 @@ jobs:
             select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
-            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteranCrisisLine"] |
+            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteransCrisisLine"] |
             select(contains(["Screens"]) or contains(["BasicError"]) or contains(["LoadingComponent"]) or contains(["Box"]) or contains(["HeaderTitle"]) or contains(["LargeNaveButton"]) 
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common"])) +=
-              ["AvailabilityFramework", "Cerner", "ContactInformation", "Letters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteranCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
+              ["AvailabilityFramework", "Cerner", "ContactInformation", "Letters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique ')
 
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
