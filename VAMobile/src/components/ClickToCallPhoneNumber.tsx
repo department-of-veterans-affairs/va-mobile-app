@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
+import { Box, LinkWithAnalytics } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { AppointmentPhone } from 'store/api/types'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
@@ -17,10 +19,10 @@ type ClickToCallPhoneNumberProps = {
   a11yLabel?: string
   /** tty bypass */
   ttyBypass?: boolean
-  /** color bypass */
-  colorOverride?: string
-  /** optional function to fire analytic events when the link is clicked */
-  fireAnalytic?: () => void
+  /** color variant */
+  variant?: 'default' | 'base'
+  /** optional onPress when the link is clicked */
+  onPress?: () => void
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
@@ -30,8 +32,8 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
   center,
   a11yLabel,
   ttyBypass,
-  colorOverride,
-  fireAnalytic,
+  variant,
+  onPress,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -41,26 +43,30 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
 
   const phoneNumber = typeof phone === 'string' ? phone : `${phone.areaCode}-${phone.number}`
 
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: displayedText || phoneNumber,
-    linkType: LinkTypeOptionsConstants.call,
-    numberOrUrlLink: getNumbersFromString(phoneNumber),
+  const clickToCallProps: LinkProps = {
+    type: 'call',
+    phoneNumber: getNumbersFromString(phoneNumber),
+    text: displayedText || phoneNumber,
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
-    colorOverride: colorOverride,
+    variant,
+    onPress,
+    testID: 'CallVATestID',
   }
 
-  const ttyProps: LinkButtonProps = {
-    displayedText: t('contactVA.tty.displayText'),
-    linkType: LinkTypeOptionsConstants.callTTY,
-    numberOrUrlLink: t('contactVA.tty.number'),
+  const ttyProps: LinkProps = {
+    type: 'call TTY',
+    TTYnumber: t('contactVA.tty.number'),
+    text: t('contactVA.tty.displayText'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
-    colorOverride: colorOverride,
+    variant,
+    onPress,
+    testID: 'CallTTYTestID',
   }
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
-      {!ttyBypass && <ClickForActionLink {...ttyProps} testID="CallTTYTestID" />}
+      <LinkWithAnalytics {...clickToCallProps} />
+      {!ttyBypass && <LinkWithAnalytics {...ttyProps} />}
     </Box>
   )
 }
