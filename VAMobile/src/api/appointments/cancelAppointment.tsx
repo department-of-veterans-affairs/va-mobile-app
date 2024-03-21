@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import * as underscore from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsGetData } from 'api/types'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -32,7 +31,7 @@ export const useCancelAppointment = (currentPage: number) => {
         TimeFrameTypeConstants.UPCOMING,
         currentPage,
       ]) as AppointmentsGetData
-      const newAppointmentsList = underscore.map(appointmentsData.data, (appointment) => {
+      const newAppointmentsList = appointmentsData.data.map((appointment) => {
         const newAppointment = { ...appointment }
 
         if (newAppointment.attributes.cancelId === variables) {
