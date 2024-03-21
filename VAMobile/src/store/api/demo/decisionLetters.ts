@@ -1,4 +1,4 @@
-import { DecisionLettersGetData } from '../types'
+import { DecisionLettersGetData } from 'api/types'
 
 /**
  * Type denoting the demo data store
