@@ -35,7 +35,6 @@ import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -568,7 +567,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())
   }
 }

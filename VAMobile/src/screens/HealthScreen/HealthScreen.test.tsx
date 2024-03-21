@@ -5,7 +5,6 @@ import { when } from 'jest-when'
 
 import { SecureMessagingFoldersGetData } from 'api/types'
 import * as api from 'store/api'
-import { loadAllPrescriptions } from 'store/slices'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -52,19 +51,6 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    loadAllPrescriptions: jest.fn(() => {
-      return {
-        type: '',
-        payload: {},
-      }
-    }),
-  }
-})
-
 context('HealthScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
 
@@ -101,17 +87,13 @@ context('HealthScreen', () => {
       },
     },
   }
-  //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
+
+  const initializeTestInstance = (prescriptionsEnabled = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
-    render(<HealthScreen {...props} />, {
-      preloadedState: {
-        prescriptions: { prescriptionsNeedLoad },
-      },
-    })
+    render(<HealthScreen {...props} />)
   }
   beforeEach(() => {
     initializeTestInstance()
@@ -145,12 +127,6 @@ context('HealthScreen', () => {
       initializeTestInstance(true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
-    })
-
-    it('should reload rx data if data is present', () => {
-      initializeTestInstance(true, false)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(loadAllPrescriptions).toHaveBeenCalled()
     })
   })
 
