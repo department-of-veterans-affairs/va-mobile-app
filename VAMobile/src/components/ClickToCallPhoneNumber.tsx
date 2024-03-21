@@ -21,8 +21,6 @@ type ClickToCallPhoneNumberProps = {
   ttyBypass?: boolean
   /** color variant */
   variant?: 'default' | 'base'
-  /** optional onPress when the link is clicked */
-  onPress?: () => void
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
@@ -33,7 +31,6 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
   a11yLabel,
   ttyBypass,
   variant,
-  onPress,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -49,7 +46,6 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
     text: displayedText || phoneNumber,
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
     variant,
-    onPress,
     testID: 'CallVATestID',
   }
 
@@ -59,7 +55,6 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
     text: t('contactVA.tty.displayText'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
     variant,
-    onPress,
     testID: 'CallTTYTestID',
   }
 
