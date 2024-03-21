@@ -3,15 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  TextArea,
-  TextView,
-} from 'components'
+import { Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import {
@@ -25,7 +17,11 @@ import { cancelAppointment } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
+import {
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  getAppointmentPhoneString,
+} from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
@@ -47,14 +43,6 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
   const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
     attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
-
-  const findYourVALocationProps: LinkButtonProps = {
-    displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
-    linkType: LinkTypeOptionsConstants.externalLink,
-    numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation')),
-    accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
-  }
 
   let title
   let titleA11yLabel
@@ -123,12 +111,19 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
     }
   }
 
+  const phoneString = getAppointmentPhoneString(phone)
   const linkOrPhone =
     phone && phone.areaCode && phone.number ? (
-      <ClickToCallPhoneNumber phone={phone} />
+      <LinkWithAnalytics type="call" phoneNumber={phoneString} text={phoneString} />
     ) : (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <ClickForActionLink {...findYourVALocationProps} />
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('upcomingAppointmentDetails.findYourVALocation')}
+          a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
+          a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
+        />
       </Box>
     )
 
