@@ -1,5 +1,5 @@
 # Workflow that moves a PR and it's corresponding ticket to in progress as well as labeling it with FE Changes requested
-name: "[Zenhub Management] changes requested"
+name: "[Zenhub Management] Changes Requested"
 
 on:
   pull_request_review:
