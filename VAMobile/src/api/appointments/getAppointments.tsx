@@ -10,7 +10,7 @@ import { appointmentsKeys } from './queryKeys'
 /**
  * Fetch user appointments
  */
-const getAppointments = async (
+const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
