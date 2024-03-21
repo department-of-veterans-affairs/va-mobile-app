@@ -8,8 +8,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFolders } from 'api/secureMessaging'
 import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import {
   Box,
   CategoryLanding,
@@ -79,7 +79,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
   })
-      
+
   useEffect(() => {
     if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
