@@ -14,7 +14,7 @@ import { appointmentsKeys } from './queryKeys'
  * Cancels a user's appointment
  */
 const cancelAppointment = (cancelID: string) => {
-  return put('/v0/appointments/cancel/' + cancelID)
+  return put(`/v0/appointments/cancel/${cancelID}`)
 }
 
 /**
