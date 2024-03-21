@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { PrescriptionAttributeData } from 'store/api'
+import { PrescriptionAttributeData } from 'api/types'
 import { context, render } from 'testUtils'
 import {
   emptyStatePrescriptionList as emptyMockData,
