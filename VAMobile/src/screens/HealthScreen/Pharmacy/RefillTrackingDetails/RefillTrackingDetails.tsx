@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useTrackingInfo } from 'api/prescriptions'
+import {
+  DELIVERY_SERVICE_TYPES,
+  PrescriptionTrackingInfoAttributeData,
+  PrescriptionTrackingInfoOtherItem,
+} from 'api/types'
 import {
   Box,
   ErrorComponent,
@@ -16,14 +21,11 @@ import {
 import { ClickForActionLink } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
-import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { PrescriptionState, getTrackingInfo } from 'store/slices'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -52,22 +54,18 @@ const getTrackingLink = (deliveryService: string): string => {
 
 function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps) {
   const { prescription } = route.params
-  const dispatch = useAppDispatch()
-  const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>(
-    (state) => state.prescriptions,
-  )
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const {
+    data: trackingInfo,
+    isLoading: loadingTrackingInfo,
+    isError: hasError,
+  } = useTrackingInfo(prescription.id, {
+    enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
+  })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = t('noneNoted')
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime) {
-      dispatch(getTrackingInfo(prescription.id, ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
-    }
-  }, [dispatch, prescription, prescriptionInDowntime])
 
   useBeforeNavBackListener(navigation, () => {
     logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
