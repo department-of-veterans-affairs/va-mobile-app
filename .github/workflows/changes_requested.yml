@@ -1,0 +1,41 @@
+# Workflow that moves a PR and it's corresponding ticket to in progress as well as labeling it with FE Changes requested
+name: "[Zenhub Management] changes requested"
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  changes_requested:
+    if: github.event.review.state != 'APPROVED'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Move to In Progress
+        uses: kin/gh-action-move-issue-to-column@1.0
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          project-name: "VA-Mobile"
+          target-column: "In Progress"
+      - name: Remove all existing labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.removeLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            })
+      - name: Add the changes requested label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            labels: ["FE-Changes%20Requested"]
+            })
