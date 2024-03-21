@@ -3,8 +3,12 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
-import { initialPrescriptionState } from 'store/slices'
+import { prescriptionKeys } from 'api/prescriptions'
+import { PrescriptionsGetData } from 'api/types'
 import { initialClaimsAndAppealsState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
+
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigationSpy = jest.fn()
@@ -22,6 +26,37 @@ jest.mock('utils/remoteConfig')
 context('HomeScreen', () => {
   const initializeTestInstance = (refillablePrescriptionsCount?: number, activeClaimsCount?: number) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+    const mock: PrescriptionsGetData = {
+      data: refillablePrescriptionsCount && refillablePrescriptionsCount > 0 ? mockData : [],
+      meta: {
+        pagination: {
+          currentPage: 1,
+          perPage: 10,
+          totalPages: 1,
+          totalEntries: 2,
+        },
+        prescriptionStatusCount: {
+          active: refillablePrescriptionsCount || 0,
+          isRefillable: refillablePrescriptionsCount || 0,
+          discontinued: 0,
+          expired: 0,
+          historical: 0,
+          pending: 0,
+          transferred: 0,
+          submitted: 0,
+          hold: 0,
+          unknown: 0,
+          total: 0,
+        },
+      },
+      links: {
+        self: '',
+        first: '',
+        prev: '',
+        next: '',
+        last: '',
+      },
+    }
     const queriesData = [
       {
         queryKey: personalInformationKeys.personalInformation,
@@ -36,15 +71,13 @@ context('HomeScreen', () => {
           hasFacilityTransitioningToCerner: false,
         },
       },
+      {
+        queryKey: prescriptionKeys.prescriptions,
+        data: mock,
+      },
     ]
     render(<HomeScreen {...props} />, {
       preloadedState: {
-        prescriptions: {
-          ...initialPrescriptionState,
-          prescriptionStatusCount: {
-            isRefillable: refillablePrescriptionsCount || 0,
-          }
-        },
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
           activeClaimsCount: activeClaimsCount || 0,
