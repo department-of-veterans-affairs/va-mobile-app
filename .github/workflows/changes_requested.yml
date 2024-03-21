@@ -18,7 +18,7 @@ jobs:
         uses: leonsteinhaeuser/project-beta-automations@v2.1.0
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
-          project_id: 1
+          project_id: 823
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: "In Progress"
           move_related_issues: true
