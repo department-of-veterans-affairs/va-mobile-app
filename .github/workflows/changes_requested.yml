@@ -1,5 +1,5 @@
 # Workflow that moves a PR and it's corresponding ticket to in progress as well as labeling it with FE Changes requested
-name: "[Zenhub Management] Changes Requested"
+name: "[Github Management] Changes Requested"
 
 on:
   pull_request_review:
@@ -14,12 +14,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Move to In Progress
-        uses: ./.github/actions/moveIssue/action.yml
-        with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-          project-name: "VA-Mobile"
-          target-column: "In Progress"
+      
       - name: Remove all existing labels
         uses: actions/github-script@v6
         with:
@@ -29,6 +24,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             })
+
       - name: Add the changes requested label
         uses: actions/github-script@v6
         with:
