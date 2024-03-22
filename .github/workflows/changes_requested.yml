@@ -14,18 +14,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Remove all existing labels
+
+      - name: Remove FE-Needs Review
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.issues.removeLabels({
-              issue_number: context.issue.number,
+            github.rest.issues.removeLabel({
+              issue_number: issue_num,
               owner: context.repo.owner,
               repo: context.repo.repo,
+              name: ["FE-Needs%20Review"]
+            })
+      
+      - name: Remove FE-With QA
+        if: failure() || success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: issue_num,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["FE-With%20QA"]
             })
 
       - name: Add the changes requested label
+        if: failure() || success()
         uses: actions/github-script@v6
         with:
           script: |
