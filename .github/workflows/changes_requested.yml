@@ -1,4 +1,4 @@
-# Workflow that moves a PR and it's corresponding ticket to in progress as well as labeling it with FE Changes requested
+# Workflow that labels a pr with FE Changes requested and removes other labels when changes are requested
 name: "[Github Management] Changes Requested"
 
 on:
