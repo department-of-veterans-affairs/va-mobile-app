@@ -1,5 +1,5 @@
-# Workflow that labels a pr with FE Changes requested and removes other labels when changes are requested
-name: "[Github Management] Changes Requested"
+# Workflow that labels a pr with the correct label
+name: "[Github Management] Pull Request Labeler on Review"
 
 on:
   pull_request_review:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   changes_requested:
-    if: github.event.review.state != 'APPROVED'
+    if: github.event.review.state == 'changes_requested'
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
