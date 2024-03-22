@@ -5,9 +5,6 @@ on:
   pull_request_review:
     types: [submitted]
 
-env:
-  issue_num: ${{ github.event.number }}
-
 jobs:
   changes_requested:
     if: github.event.review.state != 'APPROVED'
@@ -23,7 +20,7 @@ jobs:
         with:
           script: |
             github.rest.issues.removeLabel({
-              issue_number: issue_num,
+              issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: ["FE-Needs%20Review"]
@@ -35,7 +32,7 @@ jobs:
         with:
           script: |
             github.rest.issues.removeLabel({
-              issue_number: issue_num,
+              issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: ["FE-With%20QA"]
@@ -47,7 +44,7 @@ jobs:
         with:
           script: |
             github.rest.issues.addLabels({
-            issue_number: context.issue.number,
+            issue_number: ${{ github.event.number }},
             owner: context.repo.owner,
             repo: context.repo.repo,
             labels: ["FE-Changes%20Requested"]
