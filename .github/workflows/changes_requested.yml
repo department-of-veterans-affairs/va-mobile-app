@@ -20,9 +20,9 @@ jobs:
         with:
           script: |
             github.rest.issues.removeLabel({
-              issue_number: ${{ github.event.number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              issue_number: ${{ github.event.number }}
+              owner: context.repo.owner
+              repo: context.repo.repo
               name: ["FE-Needs%20Review"]
             })
       
@@ -32,9 +32,9 @@ jobs:
         with:
           script: |
             github.rest.issues.removeLabel({
-              issue_number: ${{ github.event.number }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              issue_number: ${{ github.event.number }}
+              owner: context.repo.owner
+              repo: context.repo.repo
               name: ["FE-With%20QA"]
             })
 
@@ -44,8 +44,8 @@ jobs:
         with:
           script: |
             github.rest.issues.addLabels({
-            issue_number: ${{ github.event.number }},
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            issue_number: ${{ github.event.number }}
+            owner: context.repo.owner
+            repo: context.repo.repo
             labels: ["FE-Changes%20Requested"]
             })
