@@ -23,7 +23,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: ["FE-Needs%20Review"]
+              name: ["FE-Needs Review"]
             })
       
       - name: Remove FE-With QA
@@ -35,7 +35,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: ["FE-With%20QA"]
+              name: ["FE-With QA"]
             })
 
       - name: Add the changes requested label
@@ -47,5 +47,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            labels: ["FE-Changes%20Requested"]
+            labels: ["FE-Changes Requested"]
             })
