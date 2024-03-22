@@ -1,4 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { SetDataOptions, useMutation, useQueryClient } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
 
 import { ClaimData, ClaimDecisionResponseData } from 'api/types'
 import { post } from 'store/api'
@@ -26,7 +27,10 @@ export const useSubmitClaimDecision = (claimID: string) => {
   return useMutation({
     mutationFn: submitClaimDecision,
     onSuccess: () => {
-      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
+      const setDataOptions: SetDataOptions = {
+        updatedAt: DateTime.now().toMillis(),
+      }
+      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData, setDataOptions)
     },
     onError: (error) => {
       if (isErrorObject(error)) {

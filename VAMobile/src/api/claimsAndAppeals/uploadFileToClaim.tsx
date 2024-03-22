@@ -1,6 +1,6 @@
 import { Asset } from 'react-native-image-picker'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { SetDataOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { find, map } from 'underscore'
 
@@ -102,7 +102,10 @@ export const useUploadFileToClaim = (
   return useMutation({
     mutationFn: uploadFileToClaim,
     onSuccess: async () => {
-      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData)
+      const setDataOptions: SetDataOptions = {
+        updatedAt: DateTime.now().toMillis(),
+      }
+      queryClient.setQueryData([claimsAndAppealsKeys.claim, claimID], claimData, setDataOptions)
     },
     onError: (error) => {
       if (isErrorObject(error)) {
