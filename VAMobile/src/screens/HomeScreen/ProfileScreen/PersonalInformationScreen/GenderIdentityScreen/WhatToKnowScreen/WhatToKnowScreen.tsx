@@ -1,14 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, LargePanel, TextView, TextViewProps, VABulletList, VAIcon } from 'components'
+import { Box, ClickForActionLink, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import getEnv from 'utils/env'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
@@ -17,17 +16,6 @@ const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const launchExternalLink = useExternalLink()
-
-  const textViewProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-  }
-
-  const pressableProps: PressableProps = {
-    onPress: () => launchExternalLink(WEBVIEW_URL_FACILITY_LOCATOR),
-    accessibilityLabel: t('personalInformation.genderIdentity.whatToKnow.findContactInfo'),
-    accessibilityRole: 'link',
-  }
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
@@ -77,12 +65,12 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
             paragraphSpacing={true}
           />
         </Box>
-        <Pressable {...pressableProps}>
-          <Box flexDirection="row">
-            <VAIcon name="CircleExternalLink" fill2="link" width={24} height={24} />
-            <TextView {...textViewProps}>{t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}</TextView>
-          </Box>
-        </Pressable>
+        <ClickForActionLink
+          displayedText={t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}
+          a11yLabel={t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}
+          linkType={'externalLink'}
+          numberOrUrlLink={WEBVIEW_URL_FACILITY_LOCATOR}
+        />
       </Box>
     </LargePanel>
   )
