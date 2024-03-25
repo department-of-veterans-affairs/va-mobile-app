@@ -6,8 +6,6 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    branches:
-      - develop
   workflow_dispatch:
     inputs:
       tests_to_run:
