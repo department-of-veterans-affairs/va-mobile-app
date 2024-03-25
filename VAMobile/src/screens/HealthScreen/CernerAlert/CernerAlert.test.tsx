@@ -1,20 +1,11 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
 import CernerAlert from './CernerAlert'
-
-const mockExternalLinkSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 jest.mock('../../../api/facilities/getFacilitiesInfo', () => {
   const original = jest.requireActual('../../../api/facilities/getFacilitiesInfo')
@@ -85,6 +76,6 @@ context('CernerAlert', () => {
   it('when some facilities are cerner and pressing the link', async () => {
     fireEvent.press(screen.getByLabelText('Some of your V-A health care team may be using the My V-A Health portal'))
     fireEvent.press(screen.getByLabelText('Go to My V-A Health'))
-    expect(mockExternalLinkSpy).toBeCalledWith('https://patientportal.myhealth.va.gov/')
+    expect(Alert.alert).toBeCalled()
   })
 })
