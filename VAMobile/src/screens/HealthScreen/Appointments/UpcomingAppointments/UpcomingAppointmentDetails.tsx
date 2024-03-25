@@ -8,11 +8,9 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import {
   Box,
-  ClickForActionLink,
   ClickToCallPhoneNumber,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkTypeOptionsConstants,
   LinkWithAnalytics,
   LoadingComponent,
   TextArea,
@@ -351,11 +349,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
               {location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
               ) : undefined}
-              <ClickForActionLink
-                displayedText={t('appointments.vaSchedule')}
+              <LinkWithAnalytics
+                type="url"
+                url={LINK_URL_VA_SCHEDULING}
+                text={t('appointments.vaSchedule')}
                 a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-                numberOrUrlLink={LINK_URL_VA_SCHEDULING}
-                linkType={LinkTypeOptionsConstants.externalLink}
               />
             </TextArea>
           </Box>

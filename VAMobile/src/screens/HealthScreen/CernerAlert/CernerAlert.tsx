@@ -1,17 +1,11 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import {
-  Box,
-  ClickForActionLink,
-  CollapsibleAlert,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextView,
-} from 'components'
+import { Box, CollapsibleAlert, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -63,11 +57,10 @@ function CernerAlert() {
       )
     })
 
-    const linkToCallProps: LinkButtonProps = {
-      displayedText: t('goToMyVAHealth'),
-      linkType: LinkTypeOptionsConstants.url,
-      linkUrlIconType: LinkUrlIconType.Arrow,
-      numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
+    const linkProps: LinkProps = {
+      type: 'url',
+      url: LINK_URL_GO_TO_PATIENT_PORTAL,
+      text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       testID: 'goToMyVAHealthTestID',
     }
@@ -84,7 +77,7 @@ function CernerAlert() {
           accessibilityLabel={a11yLabelVA(t('cernerAlert.footer'))}>
           {t('cernerAlert.footer')}
         </TextView>
-        <ClickForActionLink {...linkToCallProps} />
+        <LinkWithAnalytics {...linkProps} />
       </Box>
     )
   }
