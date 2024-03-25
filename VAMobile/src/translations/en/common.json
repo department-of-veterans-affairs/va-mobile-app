@@ -533,7 +533,7 @@
   "done": "Done",
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "done.picker.a11yHint": "confirms selection and closes the menu",
-  "downtime.message": "{{featureName}} on V\ufeffA mobile app is currently unavailable. We’re working to fix this. We intend to restore this by {{endTime}}. Please check back soon.",
+  "downtime.message": "We're working on this part of the mobile app right now. We'll be done by {{endTime}}. \nIf you need help, call our main information line. We're here 24\ufeff7.",
   "downtime.title": "Maintenance on mobile app",
   "dynamicField": "{{field}}",
   "editAddress.address": "{{ addressLines }}\n{{ city }}, {{ state }}, {{ postCode }}",

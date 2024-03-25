@@ -50,8 +50,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
         <AlertBox
           title={t('downtime.title')}
           titleA11yLabel={t('downtime.title')}
-          text={t('downtime.message', { featureName, endTime })}
-          textA11yLabel={t('downtime.message', { featureName, endTime })}
+          text={t('downtime.message', { endTime })}
+          textA11yLabel={t('downtime.message', { endTime })}
           border="warning"
         />
       </Box>
