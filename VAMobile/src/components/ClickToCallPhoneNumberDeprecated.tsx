@@ -23,8 +23,9 @@ type ClickToCallPhoneNumberDeprecatedProps = {
   fireAnalytic?: () => void
 }
 
-/** DEPRECATED March 2024. Still in use because of colorOverride which Link component lacks. */
-/**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
+/** DEPRECATED March 2024. Still in use because of colorOverride which Link component lacks.
+ * A common component for a blue underlined phone number with a phone icon beside it -
+ * clicking brings up phone app - automatically renders TTY info */
 const ClickToCallPhoneNumberDeprecated: FC<ClickToCallPhoneNumberDeprecatedProps> = ({
   phone,
   displayedText,
