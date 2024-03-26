@@ -12,40 +12,8 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Remove FE-Needs Review
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: ["FE-Needs Review"]
-            })
-      
-      - name: Remove FE-With QA
-        continue-on-error: true
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.removeLabel({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: ["FE-With QA"]
-            })
-
-      - name: Add the changes requested label
-        continue-on-error: true
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.addLabels({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            labels: ["FE-Changes Requested"]
-            })
+      - name: Remove old labels and add FE-Changes Requested
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Changes Requested"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
