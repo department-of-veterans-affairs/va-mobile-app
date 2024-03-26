@@ -1,4 +1,4 @@
-import { LetterBeneficiaryDataPayload, LettersData } from '../types'
+import { LetterBeneficiaryDataPayload, LettersData } from 'api/types'
 
 /**
  * Type denoting the demo data store
