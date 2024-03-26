@@ -127,8 +127,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
-      - name: List directory files
-        run: | 
-          cd app/build/outputs && ls
-          cd bundle/debug && ls
+          path: VAMobile/android/app/build/outputs/apk/debug/app-debug.apk
