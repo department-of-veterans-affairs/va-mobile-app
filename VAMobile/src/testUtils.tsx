@@ -20,7 +20,6 @@ import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import lettersReducer from 'store/slices/lettersSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -84,7 +83,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
       claimsAndAppeals: claimsAndAppealsReducer as any,
-      letters: lettersReducer as any,
       notifications: notificationReducer as any,
       secureMessaging: secureMessagingReducer as any,
       snackBar: snackbarReducer as any,

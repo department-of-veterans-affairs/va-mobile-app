@@ -6,7 +6,6 @@ import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import lettersReducer from 'store/slices/lettersSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -21,7 +20,6 @@ const store = configureStore({
     errors: errorReducer,
     analytics: analyticsReducer,
     claimsAndAppeals: claimsAndAppealsReducer,
-    letters: lettersReducer,
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
