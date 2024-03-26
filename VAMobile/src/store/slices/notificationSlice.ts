@@ -68,7 +68,6 @@ export const registerDevice =
         const savedUserID = await AsyncStorage.getItem(USER_ID)
         const isNewUser = !savedUserID || (userID && savedUserID !== userID)
         const deviceName = await getDeviceName()
-        console.debug(`saved endpointSid: ${savedSid}`)
         // if there is no saved token, we have not registered
         // if there is a token and it is different, we need to register the change with VETEXT
         // if the endpoint sid is missing, we need to register again to retrieve it
