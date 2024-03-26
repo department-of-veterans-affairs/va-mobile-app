@@ -59,32 +59,14 @@ function BenefitsScreen({}: BenefitsScreenProps) {
 
   return (
     <CategoryLanding title={t('benefits.title')} testID="benefitsTestID">
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('disabilityRating.title')}
           onPress={onDisabilityRatings}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
           subText={combinedPercentText}
         />
-        <LargeNavButton
-          title={t('claims.title')}
-          onPress={onClaims}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('lettersAndDocs.title')}
-          onPress={onLetters}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('claims.title')} onPress={onClaims} />
+        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
       </Box>
     </CategoryLanding>
   )

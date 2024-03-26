@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePrescriptions } from 'api/prescriptions'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -12,6 +13,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { AppointmentsState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -42,9 +44,13 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const { data: prescriptionData } = usePrescriptions({
+    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+  })
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
     navigateTo('Webview', {
@@ -58,54 +64,32 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box
-        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}>
+      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          tagCount={userAuthorizedServices?.secureMessaging && smNotInDowntime ? unreadCount : undefined}
-          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
+          subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
+            subText={t('prescriptions.activityButton.subText', {
+              count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+            })}
           />
         )}
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
         />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {CernerAlert ? (
         <Box mb={theme.dimensions.contentMarginBottom}>
