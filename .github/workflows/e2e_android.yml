@@ -85,7 +85,7 @@ jobs:
 
   e2e-navigation-android:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     needs: output_detox_tests_to_run
     env:
       OPERATING_SYSTEM: 'android'
@@ -98,7 +98,7 @@ jobs:
         run: |
           array=($(echo ${{ toJson(needs.output_detox_tests_to_run.outputs.output1)}} | jq -r '.[]'))
           echo "NAV_TESTS_TO_RUN=$array" >> $GITHUB_ENV
-          bash ./e2e/tests/GetVariablesForNav.txt
+          ./e2e/tests/GetVariablesForNav.sh
         
   # matrix-e2e-android:
   #   if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
