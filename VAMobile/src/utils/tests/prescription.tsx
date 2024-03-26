@@ -1,4 +1,4 @@
-import { PrescriptionsList, RefillStatus } from 'store/api/types'
+import { PrescriptionsList, RefillStatus } from 'api/types'
 
 export const defaultPrescriptionsList: PrescriptionsList = [
   {

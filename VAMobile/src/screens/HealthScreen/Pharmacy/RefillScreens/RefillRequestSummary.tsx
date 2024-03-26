@@ -1,11 +1,12 @@
 import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useRequestRefills } from 'api/prescriptions'
+import { PrescriptionsList, RefillStatusConstants } from 'api/types'
 import {
   AlertBox,
   AlertBoxProps,
@@ -20,13 +21,9 @@ import {
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { PrescriptionsList, RefillStatusConstants } from 'store/api/types'
-import { PrescriptionState, requestRefills } from 'store/slices'
-import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
@@ -39,20 +36,17 @@ const enum REQUEST_STATUS {
 
 type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'RefillRequestSummary'>
 
-function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
+function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) {
+  const { refillRequestSummaryItems } = route.params
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
-  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>(
-    (s) => s.prescriptions,
-  )
+
+  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefillsRetry } = useRequestRefills()
 
   const onNavToHistory = () => {
-    dispatch(dispatchSetPrescriptionsNeedLoad())
-    dispatch(dispatchClearLoadingRequestRefills())
     navigateTo('PrescriptionHistory', {})
   }
 
@@ -112,7 +106,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Button
                 onPress={() => {
-                  dispatch(requestRefills(requestFailed))
+                  requestRefill(requestFailed)
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
@@ -210,22 +204,11 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
-        <Box
-          accessibilityRole="link"
-          accessibilityLabel={t('prescriptions.refillRequestSummary.pendingRefills')}
-          accessible={true}>
-          <Box importantForAccessibility={'no-hide-descendants'}>
-            <Button
-              onPress={() => {
-                dispatch(dispatchSetPrescriptionsNeedLoad())
-                dispatch(dispatchClearLoadingRequestRefills())
-                navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
-              }}
-              label={t('prescriptions.refillRequestSummary.pendingRefills')}
-              buttonType={ButtonVariants.Secondary}
-            />
-          </Box>
-        </Box>
+        <Button
+          onPress={() => navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })}
+          label={t('prescriptions.refillRequestSummary.pendingRefills')}
+          buttonType={ButtonVariants.Secondary}
+        />
       </Box>
     )
   }

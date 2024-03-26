@@ -35,7 +35,6 @@ import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
 const {
@@ -570,7 +569,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())
   }
 }
