@@ -12,6 +12,9 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Remove old labels and add FE-Changes Requested
         run: |
           gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Changes Requested"
