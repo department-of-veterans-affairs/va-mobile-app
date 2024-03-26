@@ -18,4 +18,10 @@ Use Case 2: ![](../../../static/img/availabilityFramework/AF-UseCase2.png)
 
 Use Case 3: ![](../../../static/img/availabilityFramework/AF-UseCase3.png)
 
+## How to Enable
 
+Here you'll see existing examples of previously enabled availability framework setups:
+
+Firebase definitions: ![](../../../static/img/availabilityFramework/AF_in_Firebase.png)
+
+Here is a [link](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process-%20Availability%20Framework.md#json-disclaimer) to the JSON documentation and the parameter setup.
