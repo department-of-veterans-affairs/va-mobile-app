@@ -147,8 +147,8 @@ describe('Prescriptions Screen', () => {
         ),
       ),
     ).toExist()
-    await expect(element(by.label('Go to My  V-A  Health'))).toExist()
-    await element(by.label('Go to My  V-A  Health')).tap()
+    await expect(element(by.label('Go to My  V-A  Health')).atIndex(1)).toExist()
+    await element(by.label('Go to My  V-A  Health')).atIndex(1).tap()
     await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionVAHealthLink')
