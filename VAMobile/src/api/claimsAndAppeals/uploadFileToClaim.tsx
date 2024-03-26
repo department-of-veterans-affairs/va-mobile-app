@@ -101,7 +101,7 @@ export const useUploadFileToClaim = (
 
   return useMutation({
     mutationFn: uploadFileToClaim,
-    onSuccess: async () => {
+    onSuccess: () => {
       const setDataOptions: SetDataOptions = {
         updatedAt: DateTime.now().toMillis(),
       }
