@@ -186,6 +186,7 @@ platform :android do
   def bundle(type)
     gradle(task: "clean")
     gradle(task: "bundle", build_type: type)
+    gradle(task: "assemble", build_type: type)
   end
 
   def upload(track, skip_meta = true)

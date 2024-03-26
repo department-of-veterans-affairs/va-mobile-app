@@ -125,4 +125,5 @@ jobs:
         run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
       - name: List directory files
         run: | 
-          cd app/build/outputs/bundle/debug && ls
+          cd app/build/outputs && ls
+          cd bundle/debug && ls
