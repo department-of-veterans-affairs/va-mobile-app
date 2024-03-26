@@ -3,8 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
-process.argv.forEach((index, value) => console.log(index, value))
-var navigationValue = process.argv[7]
+var navigationValue = process.argv[8]
 
 const { exec } = require('child_process')
 const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
