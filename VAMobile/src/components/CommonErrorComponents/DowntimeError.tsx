@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { AlertBox, Box, ClickToCallPhoneNumber, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -43,7 +43,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     }
   })
 
-  const featureName = ScreenIDToFeatureName[screenID]
   const endTime = latestDowntimeWindow ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat('fff') : ''
 
   return (
