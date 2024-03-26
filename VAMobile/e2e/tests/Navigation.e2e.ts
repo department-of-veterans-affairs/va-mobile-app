@@ -10,32 +10,36 @@ const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 const navigationDic = {
   Home: [
-    ['HomeScreen', 'Contact VA', 'Contact VA'],
-    [['ProfileScreen', 'PersonalInformationScreen'], ['Profile', 'Personal information'], 'Personal information'],
-    [['ProfileScreen', 'ContactInformation'], ['Profile', 'Contact information'], 'Contact information'],
-    [['ProfileScreen', 'MilitaryInformation'], ['Profile', 'Military information'], 'Military information'],
-    [['ProfileScreen', 'SettingsScreen'], ['Profile', 'Settings'], 'Settings'],
+    ['HomeScreen.e2e', 'Contact VA', 'Contact VA'],
     [
-      ['ProfileScreen', 'SettingsScreen'],
+      ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
+      ['Profile', 'Personal information'],
+      'Personal information',
+    ],
+    [['ProfileScreen.e2e', 'ContactInformation.e2e'], ['Profile', 'Contact information'], 'Contact information'],
+    [['ProfileScreen.e2e', 'MilitaryInformation.e2e'], ['Profile', 'Military information'], 'Military information'],
+    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings'], 'Settings'],
+    [
+      ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
       ['Profile', 'Settings', 'Manage account'],
       'To confirm or update your sign-in email, go to the website where you manage your account information.',
     ],
-    [['ProfileScreen', 'SettingsScreen'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
+    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
   ],
   Benefits: [
-    ['DiabilityRatings', 'Disability rating', 'Disability rating'],
-    ['Claims', 'Claims', 'Claims'],
-    ['Claims', ['Claims', 'Claims history'], 'Claims history'],
-    ['Claims', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
-    ['Claims', ['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
-    ['Claims', ['Claims', 'Claims history', 'Submitted July 20, 2021'], 'Claim details'],
+    ['DiabilityRatings.e2e', 'Disability rating', 'Disability rating'],
+    ['Claims.e2e', 'Claims', 'Claims'],
+    ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Submitted July 20, 2021'], 'Claim details'],
     [
-      'Claims',
+      'Claims.e2e',
       ['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'],
       'File requests',
     ],
     [
-      'Claims',
+      'Claims.e2e',
       [
         'Claims',
         'Claims history',
@@ -45,40 +49,40 @@ const navigationDic = {
       ],
       'Dental disability - More information needed',
     ],
-    ['Claims', ['Claims', 'Claims history', 'Submitted July 20, 2021', 'Details'], 'Claim type'],
-    [['Appeals', 'AppealsExpanded'], ['Claims', 'Claims history', 'Submitted July 17, 2008'], 'Appeal details'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Submitted July 20, 2021', 'Details'], 'Claim type'],
+    [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Submitted July 17, 2008'], 'Appeal details'],
     [
-      ['Appeals', 'AppealsExpanded'],
+      ['Appeals.e2e', 'AppealsExpanded.e2e'],
       ['Claims', 'Claims history', 'Submitted July 17, 2008', 'Issues'],
       'Currently on appeal',
     ],
-    ['Claims', ['Claims', 'Claim letters'], 'Claim letters'],
-    ['Letters', 'VA letters and documents', 'Letters'],
-    ['Letters', ['VA letters and documents', 'Review letters'], 'Review letters'],
+    ['DecisionLetters.e2e', ['Claims', 'Claim letters'], 'Claim letters'],
+    ['Letters.e2e', 'VA letters and documents', 'Letters'],
+    ['Letters.e2e', ['VA letters and documents', 'Review letters'], 'Review letters'],
     [
-      'Letters',
+      'Letters.e2e',
       ['VA letters and documents', 'Review letters', 'Benefit summary and service verification letter'],
       'Letter details',
     ],
   ],
   Health: [
-    [['Appointments', 'AppointmentsExpanded'], 'Appointments', 'Appointments'],
-    [['Appointments', 'AppointmentsExpanded'], ['Appointments', 'Outpatient Clinic'], 'Community care'],
-    [['Appointments', 'AppointmentsExpanded'], ['Appointments', 'Past'], 'Past 3 months'],
-    [['Appointments', 'AppointmentsExpanded'], ['Appointments', 'Past', 'Claim exam'], 'Claim exam'],
-    ['Messages', 'Messages', 'Messages'],
-    ['Messages', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
-    ['Messages', ['Messages', 'Folders'], 'My folders'],
-    ['Messages', ['Messages', 'Drafts (3)'], 'Drafts'],
-    ['Prescriptions', 'Prescriptions', 'Prescriptions'],
-    ['Prescriptions', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-    ['VaccineRecords', 'V\ufeffA vaccine records', 'VA vaccines'],
-    ['VaccineRecords', ['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Outpatient Clinic'], 'Community care'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past', 'Claim exam'], 'Claim exam'],
+    ['Messages.e2e', 'Messages', 'Messages'],
+    ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
+    ['Messages.e2e', ['Messages', 'Folders'], 'My folders'],
+    ['Messages.e2e', ['Messages', 'Drafts (3)'], 'Drafts'],
+    ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
+    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
+    ['VaccineRecords.e2e', 'V\ufeffA vaccine records', 'VA vaccines'],
+    ['VaccineRecords.e2e', ['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
   ],
   Payments: [
-    ['Payments', 'VA payment history', 'History'],
-    ['Payments', ['VA payment history', 'Regular Chapter 31'], 'Regular Chapter 31'],
-    ['DirectDeposit', 'Direct deposit information', 'Direct deposit'],
+    ['Payments.e2e', 'VA payment history', 'History'],
+    ['Payments.e2e', ['VA payment history', 'Regular Chapter 31'], 'Regular Chapter 31'],
+    ['DirectDeposit.e2e', 'Direct deposit information', 'Direct deposit'],
   ],
 }
 
@@ -342,6 +346,8 @@ describe('Navigation', () => {
             }
           })
         }
+      } else {
+        it('No nav tests needed', async () => {})
       }
     }
   }
