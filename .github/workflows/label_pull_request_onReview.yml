@@ -1,0 +1,22 @@
+# Workflow that labels a pr with the correct label
+name: "[Github Management] Pull Request Labeler on Review"
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  changes_requested:
+    if: github.event.review.state == 'changes_requested'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Remove old labels and add FE-Changes Requested
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Changes Requested"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
