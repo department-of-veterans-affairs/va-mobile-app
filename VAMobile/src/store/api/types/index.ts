@@ -1,6 +1,4 @@
 export * from './UserData'
-export * from './LettersData'
-export * from './LetterBeneficiaryData'
 export * from './AppointmentData'
 export * from './Errors'
 export * from './Screens'
