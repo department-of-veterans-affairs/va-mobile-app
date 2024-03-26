@@ -17,6 +17,8 @@ import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useLetterBeneficiaryData } from 'api/letters'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   ActivityButton,
@@ -46,11 +48,9 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AppointmentsState,
   ClaimsAndAppealsState,
-  DisabilityRatingState,
-  LettersState,
-  MilitaryServiceState,
-  PrescriptionState,
-  getLetterBeneficiaryData,
+  SecureMessagingState,
+  getInbox,
+  prefetchAppointments,
   prefetchClaimsAndAppeals,
 } from 'store/slices'
 import { AnalyticsState, SecureMessagingState } from 'store/slices'
@@ -114,15 +114,10 @@ export function HomeScreen({}: HomeScreenProps) {
     loading: loadingAppointments,
     upcomingAppointmentsCount,
   } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { loading: loadingServiceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
-    (state) => state.militaryService,
-  )
-  const { letterBeneficiaryData, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
-    (state) => state.letters,
-  )
-  const { ratingData, loading: loadingDisabilityRating } = useSelector<RootState, DisabilityRatingState>(
-    (state) => state.disabilityRating,
-  )
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
+    enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
+  })
+
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
@@ -164,14 +159,6 @@ export function HomeScreen({}: HomeScreenProps) {
         dispatch(getInbox())
       }
     }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime) {
-        dispatch(getLetterBeneficiaryData())
-      }
-    }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
   const onFacilityLocator = () => {
