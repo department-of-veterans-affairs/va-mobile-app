@@ -63,6 +63,7 @@ jobs:
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"])) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["ClaimsLettersScreen"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"])) += ["Letters"] |
             select(contains(["Appointments"])) += ["Appointments", "AppointmentsExpanded"] |
@@ -91,7 +92,7 @@ jobs:
             | unique')
           resp_file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
             jq 'select(contains(["appealData"])) += ["Appeals", "AppealsExpanded"] |
-            select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
+            select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded", "DecisionLetters"] |
             select(contains(["DisabilityRating"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["letters"]) or contains(["Letter"]) or contains(["BasicError"])) += ["Letters"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
