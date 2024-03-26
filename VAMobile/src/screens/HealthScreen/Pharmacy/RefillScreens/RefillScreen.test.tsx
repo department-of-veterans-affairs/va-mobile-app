@@ -1,20 +1,78 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
-import { DateTime } from 'luxon'
 
-import { RootState } from 'store'
-import { ErrorsState, PrescriptionState, initialErrorsState, initialPrescriptionState } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { PrescriptionsGetData } from 'api/types'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 import { RefillScreen } from './RefillScreen'
 
 context('RefillScreen', () => {
-  const initializeTestInstance = (
-    prescriptionState?: Partial<PrescriptionState>,
-    errorState?: Partial<ErrorsState>,
-  ) => {
+  const mock: PrescriptionsGetData = {
+    data: mockData,
+    meta: {
+      pagination: {
+        currentPage: 1,
+        perPage: 10,
+        totalPages: 1,
+        totalEntries: 2,
+      },
+      prescriptionStatusCount: {
+        active: 2,
+        isRefillable: 2,
+        discontinued: 0,
+        expired: 0,
+        historical: 0,
+        pending: 0,
+        transferred: 0,
+        submitted: 0,
+        hold: 0,
+        unknown: 0,
+        total: 0,
+      },
+    },
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+  }
+  const emptyMock: PrescriptionsGetData = {
+    data: [],
+    meta: {
+      pagination: {
+        currentPage: 1,
+        perPage: 10,
+        totalPages: 1,
+        totalEntries: 0,
+      },
+      prescriptionStatusCount: {
+        active: 0,
+        isRefillable: 0,
+        discontinued: 0,
+        expired: 0,
+        historical: 0,
+        pending: 0,
+        transferred: 0,
+        submitted: 0,
+        hold: 0,
+        unknown: 0,
+        total: 0,
+      },
+    },
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+  }
+  const initializeTestInstance = () => {
     const props = mockNavProps(
       {},
       {
@@ -22,54 +80,43 @@ context('RefillScreen', () => {
         navigate: jest.fn(),
         addListener: jest.fn(),
       },
+      {
+        params: {
+          refillRequestSummaryItems: undefined,
+        },
+      },
     )
-    const store: Partial<RootState> = {
-      prescriptions: {
-        ...initialPrescriptionState,
-        ...prescriptionState,
-      },
-      errors: {
-        ...initialErrorsState,
-        ...errorState,
-      },
-    }
-    render(<RefillScreen {...props} />, { preloadedState: store })
+    render(<RefillScreen {...props} />)
   }
 
   describe('no there are no refillable prescriptions', () => {
-    it('should show NoRefills component', () => {
-      initializeTestInstance({
-        refillablePrescriptions: [],
-      })
-      expect(screen.getByText('You have no prescriptions for refill')).toBeTruthy()
+    it('should show NoRefills component', async () => {
+      const params = {
+        'page[number]': '1',
+        'page[size]': '5000',
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(emptyMock)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('You have no prescriptions for refill')).toBeTruthy())
     })
   })
 
   describe('if no prescription is selected', () => {
-    it('should show alert for no prescription selected', () => {
-      initializeTestInstance({
-        prescriptionsNeedLoad: false,
-        refillablePrescriptions: mockData,
-      })
-      fireEvent.press(screen.getByRole('button', { name: 'Request refills' }))
-      expect(screen.getByText('Please select a prescription')).toBeTruthy()
-    })
-  })
-
-  describe('when there is a downtime message for rx refill', () => {
-    it('should show PRESCRIPTION_REFILL_SCREEN_ID downtime message', async () => {
-      initializeTestInstance(
-        {},
-        {
-          downtimeWindowsByFeature: {
-            rx_refill: {
-              startTime: DateTime.now().plus({ days: -1 }),
-              endTime: DateTime.now().plus({ days: 1 }),
-            },
-          },
-        },
-      )
-      expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy()
+    it('should show alert for no prescription selected', async () => {
+      const params = {
+        'page[number]': '1',
+        'page[size]': '5000',
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue(mock)
+      initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Request refills' })))
+      await waitFor(() => expect(screen.getByText('Please select a prescription')).toBeTruthy())
     })
   })
 })
