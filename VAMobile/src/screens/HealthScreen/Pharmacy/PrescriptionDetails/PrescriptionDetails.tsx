@@ -1,30 +1,23 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { MutateOptions } from '@tanstack/react-query'
 
+import { useRequestRefills } from 'api/prescriptions'
+import { PrescriptionsList, RefillRequestSummaryItems, RefillStatusConstants } from 'api/types'
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import {
-  useAppDispatch,
-  useDestructiveActionSheet,
-  useDowntime,
-  useExternalLink,
-  useRouteNavigation,
-  useTheme,
-} from 'utils/hooks'
+import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import DetailsTextSections from './DetailsTextSections'
@@ -35,14 +28,10 @@ type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'Prescrip
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
-  const { prescriptionId } = route.params
-  const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>(
-    (s) => s.prescriptions,
-  )
+  const { prescription } = route.params
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveActionSheet()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -50,7 +39,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
 
   const { contentMarginBottom } = theme.dimensions
 
-  const prescription = prescriptionsById[prescriptionId]
   const {
     refillStatus,
     prescriptionName,
@@ -66,14 +54,12 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     orderedDate,
   } = prescription?.attributes
 
-  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
+  const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
+
   useFocusEffect(
     React.useCallback(() => {
-      if (prescriptionsNeedLoad) {
-        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
-      }
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
-    }, [dispatch, prescriptionsNeedLoad]),
+    }, []),
   )
 
   const redirectLink = (): void => {
@@ -117,9 +103,13 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               // Call refill request so its starts the loading screen and then go to the modal
               if (!prescriptionInDowntime) {
                 logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-                dispatch(requestRefills([prescription]))
+                const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
+                  onSettled(data) {
+                    navigateTo('RefillScreenModal', { refillRequestSummaryItems: data })
+                  },
+                }
+                requestRefill([prescription], mutateOptions)
               }
-              navigateTo('RefillScreenModal')
             },
           },
         ],

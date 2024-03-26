@@ -1,15 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { find } from 'underscore'
+import { filter, find } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePrescriptions } from 'api/prescriptions'
+import {
+  PrescriptionData,
+  PrescriptionSortOptionConstants,
+  PrescriptionSortOptions,
+  PrescriptionsList,
+  RefillStatus,
+  RefillStatusConstants,
+} from 'api/types'
 import {
   Box,
   BoxProps,
@@ -34,23 +41,14 @@ import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModa
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import {
-  DowntimeFeatureTypeConstants,
-  PrescriptionSortOptionConstants,
-  PrescriptionSortOptions,
-  PrescriptionsList,
-  RefillStatus,
-  RefillStatusConstants,
-} from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getFilterArgsForFilter } from 'utils/prescriptions'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -73,28 +71,40 @@ const sortByOptions = [
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
-  const dispatch = useAppDispatch()
-  const {
-    filteredPrescriptions: prescriptions,
-    prescriptions: allPrescriptions,
-    loadingHistory,
-    prescriptionsNeedLoad,
-    prescriptionStatusCount,
-    pendingPrescriptions,
-    shippedPrescriptions,
-    transferredPrescriptions,
-  } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
   } = useAuthorizedServices()
+  const {
+    data: prescriptionData,
+    isLoading: loadingHistory,
+    isError: hasError,
+    isFetched: prescriptionsFetched,
+  } = usePrescriptions({
+    enabled:
+      screenContentAllowed('WG_PrescriptionHistory') &&
+      userAuthorizedServices?.prescriptions &&
+      !prescriptionInDowntime,
+  })
+  const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
+  const transferredPrescriptions = filter(allPrescriptions, (prescription) => {
+    return prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED
+  })
+  const pendingPrescriptions = filter(allPrescriptions, (prescription) => {
+    return (
+      prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS ||
+      prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED
+    )
+  })
+  const shippedPrescriptions = filter(allPrescriptions, (prescription) => {
+    return prescription.attributes.isTrackable
+  })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
 
@@ -111,6 +121,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     PrescriptionSortOptionConstants.REFILL_STATUS,
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
+  const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
+
+  useEffect(() => {
+    if (prescriptionsFetched && prescriptionData?.data) {
+      setAllPrescriptions(prescriptionData.data)
+    }
+  }, [prescriptionsFetched, prescriptionData])
 
   useEffect(() => {
     if (hasTransferred) {
@@ -136,27 +153,15 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
-    dispatch(filterAndSortPrescriptions(filters, sortByToUse, sortOnToUse === ASCENDING, t))
-  }, [dispatch, filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
+    setFilteredPrescriptions(
+      filterAndSortPrescriptions(allPrescriptions, filters, sortByToUse, sortOnToUse === ASCENDING, t),
+    )
+  }, [filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
 
   useEffect(() => {
-    const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
+    const newPrescriptions = filteredPrescriptions?.slice((page - 1) * pageSize, page * pageSize)
     setCurrentPrescriptions(newPrescriptions || [])
-  }, [page, prescriptions])
-
-  // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
-  useFocusEffect(
-    React.useCallback(() => {
-      if (
-        screenContentAllowed('WG_PrescriptionHistory') &&
-        prescriptionsNeedLoad &&
-        userAuthorizedServices?.prescriptions &&
-        !prescriptionInDowntime
-      ) {
-        dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
-      }
-    }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
-  )
+  }, [page, filteredPrescriptions])
 
   const filterOptions = [
     {
@@ -167,18 +172,18 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     {
       display: 'prescription.history.tag.active',
       value: RefillStatusConstants.ACTIVE,
-      count: prescriptionStatusCount.active || 0,
+      count: prescriptionData?.meta.prescriptionStatusCount.active || 0,
       additionalLabelText: [t('prescription.history.tag.active.helpText')],
     },
     {
       display: 'prescription.history.tag.discontinued',
       value: RefillStatusConstants.DISCONTINUED,
-      count: prescriptionStatusCount.discontinued || 0,
+      count: prescriptionData?.meta.prescriptionStatusCount.discontinued || 0,
     },
     {
       display: 'prescription.history.tag.expired',
       value: RefillStatusConstants.EXPIRED,
-      count: prescriptionStatusCount.expired || 0,
+      count: prescriptionData?.meta.prescriptionStatusCount.expired || 0,
     },
     {
       display: 'prescription.history.tag.pending',
@@ -195,12 +200,12 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     {
       display: 'prescription.history.tag.transferred',
       value: RefillStatusConstants.TRANSFERRED,
-      count: prescriptionStatusCount.transferred || 0,
+      count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
     },
     {
       display: 'prescription.history.tag.unknown',
       value: RefillStatusConstants.UNKNOWN,
-      count: prescriptionStatusCount.unknown || 0,
+      count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
     },
   ]
 
@@ -266,9 +271,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const prescriptionDetailsClicked = (prescriptionID: string) => {
-    logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    return navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
+  const prescriptionDetailsClicked = (prescription: PrescriptionData) => {
+    logAnalyticsEvent(Events.vama_rx_details(prescription.id))
+    return navigateTo('PrescriptionDetails', { prescription: prescription })
   }
 
   const prescriptionItems = () => {
@@ -276,7 +281,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
     const listItems: Array<React.ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
-        onPress: () => prescriptionDetailsClicked(prescription.id),
+        onPress: () => prescriptionDetailsClicked(prescription),
         accessible: true,
         accessibilityRole: 'button',
         accessibilityLabel: t('prescription.history.getDetails'),
@@ -362,7 +367,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         setPage(page - 1)
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
-      totalEntries: prescriptions?.length || 0,
+      totalEntries: filteredPrescriptions?.length || 0,
       pageSize: pageSize,
       page,
     }
@@ -451,7 +456,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     testID: 'filterSortWrapperBoxTestID',
   }
 
-  const hasNoItems = prescriptions?.length === 0
+  const hasNoItems = filteredPrescriptions?.length === 0
 
   const getTransferAlert = () => {
     if (!hasTransferred) {
@@ -500,13 +505,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getRequestRefillButton = () => {
     return (
-      <Box accessibilityRole="link" accessibilityLabel={t('prescription.history.startRefillRequest')} accessible={true}>
-        <Box mx={theme.dimensions.buttonPadding} importantForAccessibility={'no-hide-descendants'}>
-          <Button
-            label={t('prescription.history.startRefillRequest')}
-            onPress={() => navigateTo('RefillScreenModal')}
-          />
-        </Box>
+      <Box mx={theme.dimensions.buttonPadding}>
+        <Button
+          label={t('prescription.history.startRefillRequest')}
+          onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+        />
       </Box>
     )
   }
@@ -514,7 +517,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
     const keys = {
-      count: prescriptions?.length,
+      count: filteredPrescriptions?.length,
       filter: getDisplayForValue(filterOptions, filterToUse),
       sort: sortUppercase[0].toLowerCase() + sortUppercase.slice(1),
     }

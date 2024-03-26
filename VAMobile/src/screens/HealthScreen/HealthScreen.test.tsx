@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { initialSecureMessagingState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -50,19 +50,6 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    loadAllPrescriptions: jest.fn(() => {
-      return {
-        type: '',
-        payload: {},
-      }
-    }),
-  }
-})
-
 context('HealthScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
 
@@ -71,19 +58,13 @@ context('HealthScreen', () => {
   })
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (
-    unreadCount = 13,
-    hasLoadedInbox = true,
-    prescriptionsEnabled = false,
-    prescriptionsNeedLoad = false,
-  ) => {
+  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     render(<HealthScreen {...props} />, {
       preloadedState: {
-        prescriptions: { prescriptionsNeedLoad },
         secureMessaging: {
           ...initialSecureMessagingState,
           hasLoadedInbox,
@@ -135,12 +116,6 @@ context('HealthScreen', () => {
       initializeTestInstance(0, true, true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
-    })
-
-    it('should reload rx data if data is present', async () => {
-      initializeTestInstance(0, true, true, false)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(loadAllPrescriptions).toHaveBeenCalled()
     })
   })
 
