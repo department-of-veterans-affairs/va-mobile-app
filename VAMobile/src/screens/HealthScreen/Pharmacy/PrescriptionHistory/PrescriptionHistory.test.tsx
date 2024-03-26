@@ -300,7 +300,7 @@ context('PrescriptionHistory', () => {
       )
       await waitFor(() => expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy())
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Start refill request' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy())
       await waitFor(() =>
         expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy(),
       )
