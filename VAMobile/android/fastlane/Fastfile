@@ -197,7 +197,7 @@ platform :android do
       skip_upload_metadata: skip_meta,
       skip_upload_changelogs: skip_meta,
       skip_upload_images: skip_meta,
-      skip_upload_screenshots: skip_meta
+      skip_upload_screenshots: skip_meta,
       skip_upload_apk: true
     )
   end
