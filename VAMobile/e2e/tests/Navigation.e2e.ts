@@ -3,6 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
+process.argv.forEach((index, value) => console.log(index, value))
 var navigationValue = process.argv[7]
 
 const { exec } = require('child_process')
