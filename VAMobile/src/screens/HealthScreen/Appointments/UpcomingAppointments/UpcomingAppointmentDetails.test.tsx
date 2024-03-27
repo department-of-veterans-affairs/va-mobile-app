@@ -139,7 +139,6 @@ context('UpcomingAppointmentDetails', () => {
         undefined,
         true,
       )
-      jest.spyOn(Alert, 'alert')
       fireEvent.press(screen.getByText('Join session'))
       expect(Alert.alert).toHaveBeenCalled()
     })

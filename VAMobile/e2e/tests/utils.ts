@@ -422,7 +422,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
   if (AFUseCase === 'DenyAccess') {
-    await element(by.text('OK')).tap()
+    await element(by.text('Leave')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()

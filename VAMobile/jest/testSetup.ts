@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native'
+import { Alert, NativeModules } from 'react-native'
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 
 const globalAny: any = global
@@ -34,6 +34,8 @@ NativeModules.I18nManager = {
   ...NativeModules.I18nManager,
   localeIdentifier: 'en_US',
 }
+
+jest.spyOn(Alert, 'alert')
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 

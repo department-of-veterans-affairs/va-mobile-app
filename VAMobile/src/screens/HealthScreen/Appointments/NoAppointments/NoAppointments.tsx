@@ -1,10 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -38,12 +38,12 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
         </TextView>
       </Box>
       {showVAGovLink && (
-        <ClickForActionLink
-          {...a11yHintProp(t('mobileBodyLink.a11yHint'))}
-          displayedText={t('noAppointments.visitVA')}
-          numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
-          linkType={LinkTypeOptionsConstants.externalLink}
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_SCHEDULE_APPOINTMENTS}
+          text={t('noAppointments.visitVA')}
           a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
+          a11yHint={t('mobileBodyLink.a11yHint')}
         />
       )}
     </Box>
