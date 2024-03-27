@@ -12,7 +12,6 @@ import { SecureMessagingFormData } from 'store/api/types'
 import { context, realStore } from 'testUtils'
 
 import * as api from '../api'
-import { initialAuthState } from './authSlice'
 import { initialErrorsState } from './errorSlice'
 import {
   dispatchClearLoadedMessages,
@@ -102,7 +101,6 @@ context('secureMessaging', () => {
 
   describe('getMessage', () => {
     const store = realStore({
-      auth: { ...initialAuthState },
       secureMessaging: {
         ...initialSecureMessagingState,
         inbox: {
@@ -240,7 +238,6 @@ context('secureMessaging', () => {
   describe('clearLoadedMessages', () => {
     it('should dispatch the correct action', async () => {
       const store = realStore({
-        auth: { ...initialAuthState },
         secureMessaging: {
           ...initialSecureMessagingState,
           inbox: {

@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
-import { useSelector } from 'react-redux'
 
+import { useAuthSettings } from 'api/auth'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
-import { RootState } from 'store'
-import { AuthState } from 'store/slices'
 import {
   dispatchSetInitialUrl,
   dispatchSetTappedForegroundNotification,
@@ -21,8 +19,8 @@ const foregroundNotifications: Array<string> = []
  * notification manager component to handle all push logic
  */
 const NotificationManager: FC = ({ children }) => {
-  const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
+  const { data: userAuthSettings } = useAuthSettings()
+  const { data: personalInformation } = usePersonalInformation({ enabled: userAuthSettings?.loggedIn })
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
@@ -39,10 +37,10 @@ const NotificationManager: FC = ({ children }) => {
       Notifications.registerRemoteNotifications()
     }
 
-    if (loggedIn) {
+    if (userAuthSettings?.loggedIn) {
       register()
     }
-  }, [dispatch, loggedIn, personalInformation?.id])
+  }, [dispatch, userAuthSettings?.loggedIn, personalInformation?.id])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
@@ -66,7 +64,7 @@ const NotificationManager: FC = ({ children }) => {
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
       if (notification.payload.url) {
-        if (loggedIn) {
+        if (userAuthSettings?.loggedIn) {
           Linking.openURL(notification.payload.url)
         } else {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
