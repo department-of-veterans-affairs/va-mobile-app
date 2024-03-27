@@ -36,6 +36,7 @@
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
 		EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */; };
 		F0A7D505A86F15F0584E031D /* libPods-VAMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-VAMobile.a */; };
+		FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Bold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf"; sourceTree = "<group>"; };
+		FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +198,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */,
 				4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -334,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
+				FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				4091AC6126B07CA100DFE08C /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
