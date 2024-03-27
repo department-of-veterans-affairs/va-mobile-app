@@ -66,20 +66,30 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+          subText={
+            upcomingAppointmentsCount
+              ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
+              : undefined
+          }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging')}
-          subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+          subText={
+            unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
+          }
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            subText={t('prescriptions.activityButton.subText', {
-              count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-            })}
+            subText={
+              prescriptionData?.meta.prescriptionStatusCount.isRefillable
+                ? t('prescriptions.activityButton.subText', {
+                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                  })
+                : undefined
+            }
           />
         )}
         <LargeNavButton

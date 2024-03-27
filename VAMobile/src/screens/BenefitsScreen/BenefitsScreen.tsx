@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
@@ -19,6 +20,8 @@ import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScr
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
+import { RootState } from 'store'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -40,6 +43,8 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const combinedPercentText = ratingIsDefined
     ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
     : undefined
+
+  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -65,7 +70,11 @@ function BenefitsScreen({}: BenefitsScreenProps) {
           onPress={onDisabilityRatings}
           subText={combinedPercentText}
         />
-        <LargeNavButton title={t('claims.title')} onPress={onClaims} />
+        <LargeNavButton
+          title={t('claims.title')}
+          subText={activeClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
+          onPress={onClaims}
+        />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
       </Box>
     </CategoryLanding>
