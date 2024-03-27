@@ -25,6 +25,7 @@ const SkeletonLoader = () => {
   return (
     <ContentLoader
       backgroundColor={theme.colors.background.skeletonLoader}
+      foregroundColor={theme.colors.background.skeletonLoaderSecondary}
       speed={0.6}
       width="400"
       height="25"

@@ -48,6 +48,7 @@ export const lightTheme = {
     veteranStatusHome: colors.white,
     linkRow: DSColors.grayWarmLight,
     skeletonLoader: DSColors.grayLighter,
+    skeletonLoaderSecondary: DSColors.grayLightest,
   },
   border: {
     aboutYou: DSColors.grayWarmLight,
@@ -263,6 +264,7 @@ export const darkTheme = {
     veteranStatusHome: colors.darkmodeGrayWarmDark,
     linkRow: colors.darkmodeGrayWarmDark,
     skeletonLoader: DSColors.grayMedium,
+    skeletonLoaderSecondary: DSColors.grayLight,
   },
   border: {
     aboutYou: colors.darkmodeBorder,
