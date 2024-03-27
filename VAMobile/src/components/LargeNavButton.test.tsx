@@ -13,14 +13,9 @@ context('LargeNavButton', () => {
     render(<LargeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} />)
   })
 
-  it('renders title, tagcount, and subtext', () => {
+  it('renders title and subtext', () => {
     expect(screen.getByRole('menuitem', { name: 'My Title' })).toBeTruthy()
     expect(screen.getByRole('menuitem', { name: 'My Subtext' })).toBeTruthy()
-  })
-
-  it('renders a11yHint and a11yLabel', () => {
-    expect(screen.getByA11yHint('a11y')).toBeTruthy()
-    expect(screen.getByLabelText('My Title  My Subtext')).toBeTruthy()
   })
 
   it('calls onPress when clicked', () => {

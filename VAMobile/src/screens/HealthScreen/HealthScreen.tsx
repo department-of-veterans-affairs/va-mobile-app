@@ -60,8 +60,6 @@ export function HealthScreen({}: HealthScreenProps) {
     })
   }
 
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
