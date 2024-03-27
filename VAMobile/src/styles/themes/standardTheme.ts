@@ -189,6 +189,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont(
       'SourceSansPro-Regular',

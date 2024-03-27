@@ -133,6 +133,7 @@ export type VATypographyThemeVariants = {
   AnnouncementBannerTitle: string
   BitterBoldHeading: string
   BitterHeading: string
+  CategoryBitterHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
   HomeScreen: string
