@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react'
+import ContentLoader, { Rect } from 'react-content-loader/native'
 import { Pressable, ViewStyle } from 'react-native'
 
 import {
@@ -16,6 +17,12 @@ import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import MessagesCountTag from './MessagesCountTag'
+
+const SkeletonLoader = () => (
+  <ContentLoader speed={0.6} width="400" height="25" viewBox="100 0 100 100">
+    <Rect width="100%" height="70px" />
+  </ContentLoader>
+)
 
 interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
@@ -48,6 +55,8 @@ interface HomeNavButtonProps {
   tagCount?: number
   /**a11y for the tag */
   tagCountA11y?: string
+  /** Show loading animation in place of subtext */
+  showLoading?: boolean
 }
 
 /**
@@ -70,6 +79,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderStyle,
   tagCount,
   tagCountA11y,
+  showLoading,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
@@ -145,10 +155,16 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          {subText && (
-            <TextView variant={'MobileBody'} color={textColor}>
-              {subText}
-            </TextView>
+          {showLoading ? (
+            <Box mt={0}>
+              <SkeletonLoader />
+            </Box>
+          ) : (
+            subText && (
+              <TextView variant={'MobileBody'} color={textColor}>
+                {subText}
+              </TextView>
+            )
           )}
         </Box>
         <VAIcon
