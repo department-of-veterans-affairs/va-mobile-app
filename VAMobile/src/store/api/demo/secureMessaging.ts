@@ -1,4 +1,3 @@
-import { Params } from '../api'
 import {
   SecureMessagingFolderGetData,
   SecureMessagingFolderMessagesGetData,
@@ -6,7 +5,9 @@ import {
   SecureMessagingMessageGetData,
   SecureMessagingRecipientData,
   SecureMessagingThreadGetData,
-} from '../types'
+} from 'api/types'
+
+import { Params } from '../api'
 import { DemoStore } from './store'
 
 type MessagePageNumber = '1' | '2'

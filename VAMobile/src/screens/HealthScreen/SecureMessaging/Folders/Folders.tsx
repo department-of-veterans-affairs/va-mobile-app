@@ -1,17 +1,15 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
+import { useFolders } from 'api/secureMessaging'
+import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
-import { RootState } from 'store'
-import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -103,8 +101,7 @@ function Folders({}: FoldersProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
+  const { data: foldersData, isLoading: loadingFolders } = useFolders()
   const onFolderPress = (folderID: number, folderName: string): void => {
     const folder = (): string => {
       switch (folderID) {
@@ -131,8 +128,8 @@ function Folders({}: FoldersProps) {
   return (
     <VAScrollView {...testIdProps('', false, 'Folders-page')}>
       <Box>
-        {getSystemFolders(folders || [], theme, t, onFolderPress)}
-        {getUserFolders(folders || [], theme, t, onFolderPress)}
+        {getSystemFolders(foldersData?.data || [], theme, t, onFolderPress)}
+        {getUserFolders(foldersData?.data || [], theme, t, onFolderPress)}
       </Box>
     </VAScrollView>
   )

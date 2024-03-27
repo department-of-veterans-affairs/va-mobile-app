@@ -1,24 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSaveDraft } from 'api/secureMessaging'
+import { SaveDraftParameters, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  FolderNameTypeConstants,
-  FormHeaderType,
-  FormHeaderTypeConstants,
-  SegmentedControlIndexes,
-} from 'constants/secureMessaging'
-import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import {
-  resetHasLoadedRecipients,
-  resetReplyTriageError,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
-  resetSendMessageFailed,
-  saveDraft,
-  updateSecureMessagingTab,
-} from 'store/slices'
+import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
@@ -44,7 +34,7 @@ export function useComposeCancelConfirmation(): [
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
   const [isDiscarded, setIsDiscarded] = useState(false)
-
+  const { mutate: saveDraft } = useSaveDraft()
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
     errorMsg: t('secureMessaging.draft.saved.error'),
@@ -57,32 +47,43 @@ export function useComposeCancelConfirmation(): [
       const isReply = origin === FormHeaderTypeConstants.reply
       const isEditDraft = origin === FormHeaderTypeConstants.draft
 
-      const resetAlerts = () => {
-        dispatch(resetSendMessageFailed())
-        dispatch(resetSaveDraftComplete())
-        dispatch(resetSaveDraftFailed())
-        dispatch(resetHasLoadedRecipients())
-      }
-
       const onSaveDraft = (): void => {
         if (!isFormValid) {
           navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
         } else {
-          dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
-          dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
+          const message = {
+            ...messageData,
+            draft_id: draftMessageID,
+            recipient_id: replyToID,
+          }
+          const params: SaveDraftParameters = { messageData: message }
+          const mutateOptions = {
+            onSuccess: () => {
+              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
+              navigateTo('SecureMessaging', { activeTab: 1 })
+              navigateTo('FolderMessages', {
+                folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+                folderName: FolderNameTypeConstants.drafts,
+                draftSaved: true,
+              })
+            },
+            onError: () => {
+              showSnackBar(snackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+            },
+          }
+          saveDraft(params, mutateOptions)
         }
       }
 
       const onDiscard = (): void => {
         setIsDiscarded(true)
-        resetAlerts()
         if (isReply && replyToID) {
-          dispatch(resetReplyTriageError())
           navigateTo('ViewMessage', { messageID: replyToID })
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
-          navigateTo('SecureMessaging')
+          navigateTo('SecureMessaging', { activeTab: origin === 'Draft' ? 1 : 0 })
         }
       }
 
@@ -117,6 +118,7 @@ export function useComposeCancelConfirmation(): [
 export function useGoToDrafts(): (draftSaved: boolean) => void {
   const navigateTo = useRouteNavigation()
   return (draftSaved: boolean): void => {
+    navigateTo('SecureMessaging', { activeTab: 1 })
     navigateTo('FolderMessages', {
       folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
       folderName: FolderNameTypeConstants.drafts,

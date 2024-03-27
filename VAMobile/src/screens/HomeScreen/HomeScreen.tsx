@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import {
   Box,
   CategoryLanding,
@@ -23,16 +24,15 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import {
   AnalyticsState,
   AppointmentsState,
   ClaimsAndAppealsState,
-  SecureMessagingState,
   getClaimsAndAppeals,
-  getInbox,
   prefetchAppointments,
 } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -71,19 +71,29 @@ export function HomeScreen({}: HomeScreenProps) {
   const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
   )
-  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: foldersData, isFetched: smPrefetch } = useFolders({
+    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
+  })
   const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
   })
+
   useEffect(() => {
     if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
     }
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
+
+  useEffect(() => {
+    if (smPrefetch && foldersData) {
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      if (inboxFolder) {
+        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
+      }
+    }
+  }, [smPrefetch, foldersData])
 
   useEffect(() => {
     if (
@@ -102,13 +112,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [rxPrefetch, prescriptionData])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
-      dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
-    }
-  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
-
-  useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])

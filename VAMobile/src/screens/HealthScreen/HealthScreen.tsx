@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFolders } from 'api/secureMessaging'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { RootState } from 'store'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -27,7 +27,6 @@ import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDeta
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
@@ -42,8 +41,21 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { data: foldersData, isFetched: smFetch } = useFolders({
+    enabled: isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+  })
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    if (smFetch && foldersData) {
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      if (inboxFolder) {
+        setUnreadCount(inboxFolder.attributes.unreadCount)
+      }
+    }
+  }, [smFetch, foldersData])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
@@ -53,8 +65,6 @@ export function HealthScreen({}: HealthScreenProps) {
       loadingMessage: t('webview.covidUpdates.loading'),
     })
   }
-
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
@@ -71,12 +81,12 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={() => navigateTo('SecureMessaging')}
+          onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          tagCount={userAuthorizedServices?.secureMessaging && smNotInDowntime ? unreadCount : undefined}
+          tagCount={unreadCount}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
         {featureEnabled('prescriptions') && (

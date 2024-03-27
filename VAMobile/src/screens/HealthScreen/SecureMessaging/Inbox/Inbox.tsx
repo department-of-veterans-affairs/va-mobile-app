@@ -1,16 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
+import { useFolderMessages } from 'api/secureMessaging'
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
-import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
 
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
@@ -18,21 +14,22 @@ import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 type InboxProps = Record<string, unknown>
 
 function Inbox({}: InboxProps) {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
+  const [page, setPage] = useState(1)
+  const { data: inboxMessagesData, isLoading: loadingInbox } = useFolderMessages(
+    SecureMessagingSystemFolderIdConstants.INBOX,
+    page,
   )
-  const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
+  const paginationMetaData = inboxMessagesData?.meta.pagination
 
   const onInboxMessagePress = (messageID: number): void => {
     navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
-      messagesLeft: inboxMessages.length,
+      messagesLeft: inboxMessagesData?.data?.length,
     })
   }
 
@@ -40,21 +37,16 @@ function Inbox({}: InboxProps) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
-  if (!inboxMessages?.length) {
+  if (!inboxMessagesData?.data?.length) {
     return <NoInboxMessages />
   }
 
-  const requestPage = (requestedPage: number) => {
-    dispatch(fetchInboxMessages(requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-  }
-
-  const page = paginationMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1)
+      setPage(page + 1)
     },
     onPrev: () => {
-      requestPage(page - 1)
+      setPage(page - 1)
     },
     totalEntries: paginationMetaData?.totalEntries || 0,
     pageSize: paginationMetaData?.perPage || 0,
@@ -63,9 +55,14 @@ function Inbox({}: InboxProps) {
   }
 
   return (
-    <Box {...testIdProps('', false, 'Inbox-page')}>
+    <Box>
       <MessageList
-        items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)}
+        items={getMessagesListItems(
+          inboxMessagesData?.data || [],
+          t,
+          onInboxMessagePress,
+          FolderNameTypeConstants.inbox,
+        )}
         title={t('secureMessaging.inbox')}
       />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
