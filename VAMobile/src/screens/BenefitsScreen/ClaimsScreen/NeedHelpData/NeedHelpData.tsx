@@ -1,19 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-} from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -33,21 +24,19 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
       return <></>
     }
 
-    const clickToRedirectProps: LinkButtonProps = {
-      displayedText: t('goToVAGov'),
-      numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
-      linkType: LinkTypeOptionsConstants.url,
-      linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: a11yLabelVA(t('goToVAGov')),
-    }
-
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('appealDetails.viewMoreDetails'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.goToVAGovA11yHint'))} />
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_CLAIM_APPEAL_STATUS}
+            text={t('goToVAGov')}
+            a11yLabel={a11yLabelVA(t('goToVAGov'))}
+            a11yHint={t('appealDetails.goToVAGovA11yHint')}
+          />
         </Box>
       </Box>
     )
