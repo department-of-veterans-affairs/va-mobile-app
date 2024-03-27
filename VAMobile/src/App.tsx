@@ -23,6 +23,7 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
+import { useLoadPushPreferences } from 'api/notifications'
 import queryClient from 'api/queryClient'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
@@ -47,7 +48,7 @@ import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInfo
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -392,7 +393,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { data: notificationData } = useLoadPushPreferences()
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
@@ -402,10 +403,10 @@ export function AuthedApp() {
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
   useEffect(() => {
-    if (initialUrl) {
-      Linking.openURL(initialUrl)
+    if (notificationData?.initialUrl) {
+      Linking.openURL(notificationData?.initialUrl)
     }
-  }, [initialUrl])
+  }, [notificationData?.initialUrl])
 
   return (
     <>

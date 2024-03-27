@@ -8,6 +8,9 @@ import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { notificationKeys } from 'api/notifications'
+import queryClient from 'api/queryClient'
+import { LoadPushPreferencesData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { AppDispatch, AppThunk } from 'store'
@@ -34,7 +37,6 @@ import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
-import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
 const {
@@ -615,11 +617,12 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 
 export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
   const { loggedIn } = getState().auth
-  const { tappedForegroundNotification } = getState().notifications
+  const notificationData = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
 
-  if (loggedIn && tappedForegroundNotification) {
+  if (loggedIn && notificationData.tappedForegroundNotification) {
     console.debug('User tapped foreground notification. Skipping initializeAuth.')
-    dispatch(dispatchResetTappedForegroundNotification())
+    notificationData.tappedForegroundNotification = false
+    queryClient.setQueryData(notificationKeys.settings, notificationData)
     return
   }
 

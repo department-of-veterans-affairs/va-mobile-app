@@ -3,17 +3,14 @@ import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
+import { useQueryClient } from '@tanstack/react-query'
+
+import { notificationKeys, useLoadPushPreferences, useRegisterDevice } from 'api/notifications'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
 import { AuthState } from 'store/slices'
-import {
-  dispatchSetInitialUrl,
-  dispatchSetTappedForegroundNotification,
-  registerDevice,
-} from 'store/slices/notificationSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch } from 'utils/hooks'
 
 const foregroundNotifications: Array<string> = []
 
@@ -23,18 +20,25 @@ const foregroundNotifications: Array<string> = []
 const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
-  const dispatch = useAppDispatch()
+  const { mutate: registerDevice } = useRegisterDevice()
+  const { data: notificationData } = useLoadPushPreferences()
+  const queryClient = useQueryClient()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
-        console.debug('Device Token Received', event.deviceToken)
-        dispatch(registerDevice(event.deviceToken, undefined, personalInformation?.id))
+        const registerParams = {
+          deviceToken: event.deviceToken,
+          userID: personalInformation?.id,
+        }
+        registerDevice(registerParams)
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
-        //TODO: Log this error in crashlytics?
-        console.error(event)
-        dispatch(registerDevice())
+        const registerParams = {
+          deviceToken: undefined,
+          userID: undefined,
+        }
+        registerDevice(registerParams)
       })
       Notifications.registerRemoteNotifications()
     }
@@ -42,7 +46,7 @@ const NotificationManager: FC = ({ children }) => {
     if (loggedIn) {
       register()
     }
-  }, [dispatch, loggedIn, personalInformation?.id])
+  }, [loggedIn, personalInformation?.id])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
@@ -60,7 +64,11 @@ const NotificationManager: FC = ({ children }) => {
        */
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
       if (foregroundNotifications.includes(notification.identifier)) {
-        dispatch(dispatchSetTappedForegroundNotification())
+        if (notificationData) {
+          const newData = notificationData
+          newData.tappedForegroundNotification = true
+          queryClient.setQueryData(notificationKeys.settings, newData)
+        }
       }
 
       // Open deep link from the notification when present. If the user is
@@ -69,7 +77,11 @@ const NotificationManager: FC = ({ children }) => {
         if (loggedIn) {
           Linking.openURL(notification.payload.url)
         } else {
-          dispatch(dispatchSetInitialUrl(notification.payload.url))
+          if (notificationData) {
+            const newData = notificationData
+            newData.initialUrl = notification.payload.url
+            queryClient.setQueryData(notificationKeys.settings, newData)
+          }
         }
       }
       console.debug('Notification opened by device user', notification)
@@ -91,7 +103,11 @@ const NotificationManager: FC = ({ children }) => {
         console.debug('Initial notification was:', notification || 'N/A')
 
         if (notification?.payload.url) {
-          dispatch(dispatchSetInitialUrl(notification.payload.url))
+          if (notificationData) {
+            const newData = notificationData
+            newData.initialUrl = notification.payload.url
+            queryClient.setQueryData(notificationKeys.settings, newData)
+          }
         }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
