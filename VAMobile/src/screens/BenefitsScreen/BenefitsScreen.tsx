@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useDisabilityRating } from 'api/disabilityRating'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,14 +34,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { data: ratingData } = useDisabilityRating({ enabled: screenContentAllowed('WG_Benefits') })
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
-
-  const ratingPercent = ratingData?.combinedDisabilityRating
-  const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
-  const combinedPercentText = ratingIsDefined
-    ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
-    : undefined
 
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
@@ -66,16 +58,12 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     <CategoryLanding title={t('benefits.title')} testID="benefitsTestID">
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
-          title={t('disabilityRating.title')}
-          onPress={onDisabilityRatings}
-          subText={combinedPercentText}
-        />
-        <LargeNavButton
           title={t('claims.title')}
           subText={activeClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
           onPress={onClaims}
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
+        <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
       </Box>
     </CategoryLanding>
   )
