@@ -33,7 +33,7 @@ const NotificationManager: FC = ({ children }) => {
         }
         registerDevice(registerParams)
       })
-      Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
+      Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
         const registerParams = {
           deviceToken: undefined,
           userID: undefined,
@@ -46,7 +46,7 @@ const NotificationManager: FC = ({ children }) => {
     if (loggedIn) {
       register()
     }
-  }, [loggedIn, personalInformation?.id])
+  }, [loggedIn, personalInformation?.id, registerDevice])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground

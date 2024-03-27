@@ -1,4 +1,4 @@
-import { GetPushPrefsResponse } from '../types'
+import { GetPushPrefsResponse } from 'api/types'
 
 /**
  * Type denoting the demo data store
