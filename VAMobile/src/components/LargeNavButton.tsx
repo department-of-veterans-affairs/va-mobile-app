@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react'
 import ContentLoader, { Rect } from 'react-content-loader/native'
+import { useTranslation } from 'react-i18next'
 import { Pressable, ViewStyle } from 'react-native'
 
 import {
@@ -12,6 +13,7 @@ import {
   TextView,
   VAIcon,
 } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -82,6 +84,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   showLoading,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [isPressed, setIsPressed] = useState(false)
 
   const _onPressIn = (): void => {
@@ -156,7 +159,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
           {showLoading ? (
-            <Box mt={0}>
+            <Box accessible={true} accessibilityLabel={t('loadingActivity')}>
               <SkeletonLoader />
             </Box>
           ) : (
