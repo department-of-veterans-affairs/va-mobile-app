@@ -307,6 +307,7 @@ afterEach(async () => {
 })
 
 describe('Navigation', () => {
+  let testsRun = false
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
@@ -328,6 +329,7 @@ describe('Navigation', () => {
         runTest = true
       }
       if (runTest === true || navigationValue === undefined) {
+        testsRun = true
         it('verify navigation for: ' + testName, async () => {
           await accessibilityOption(key, value[j], null)
         })
@@ -346,9 +348,10 @@ describe('Navigation', () => {
             }
           })
         }
-      } else {
-        it('No nav tests needed', async () => {})
       }
     }
+  }
+  if (testsRun == false) {
+    it('No nav tests needed', async () => {})
   }
 })
