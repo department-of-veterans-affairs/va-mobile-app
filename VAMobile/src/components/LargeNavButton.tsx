@@ -20,11 +20,19 @@ import { useTheme } from 'utils/hooks'
 
 import MessagesCountTag from './MessagesCountTag'
 
-const SkeletonLoader = () => (
-  <ContentLoader speed={0.6} width="400" height="25" viewBox="100 0 100 100">
-    <Rect width="100%" height="50" />
-  </ContentLoader>
-)
+const SkeletonLoader = () => {
+  const theme = useTheme()
+  return (
+    <ContentLoader
+      backgroundColor={theme.colors.background.skeletonLoader}
+      speed={0.6}
+      width="400"
+      height="25"
+      viewBox="100 0 100 100">
+      <Rect width="100%" height="50" />
+    </ContentLoader>
+  )
+}
 
 interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/

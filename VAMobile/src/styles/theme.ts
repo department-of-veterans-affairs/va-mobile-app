@@ -199,6 +199,7 @@ export type VABackgroundColors = {
   veteranStatus: string
   veteranStatusHome: string
   linkRow: string
+  skeletonLoader: string
 }
 
 export type VABorderColors = {
