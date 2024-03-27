@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useLetters } from 'api/letters'
+import { LetterData, LetterTypeConstants, LetterTypes } from 'api/types'
 import {
   Box,
   ErrorComponent,
@@ -18,19 +19,11 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import {
-  DowntimeFeatureTypeConstants,
-  LetterData,
-  LetterTypeConstants,
-  LetterTypes,
-  ScreenIDTypesConstants,
-} from 'store/api/types'
-import { LettersState, getLetters } from 'store/slices/lettersSlice'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoLettersScreen from './NoLettersScreen'
@@ -38,16 +31,22 @@ import NoLettersScreen from './NoLettersScreen'
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
 function LettersListScreen({ navigation }: LettersListScreenProps) {
-  const dispatch = useAppDispatch()
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
   } = useAuthorizedServices()
-  const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
+  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
+  const {
+    data: letters,
+    isLoading: loading,
+    isError: getLettersError,
+  } = useLetters({
+    enabled:
+      screenContentAllowed('WG_LettersList') && userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime,
+  })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
   const navigateTo = useRouteNavigation()
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
@@ -127,13 +126,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     return letterButton
   })
 
-  useEffect(() => {
-    if (screenContentAllowed('WG_LettersList') && userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime) {
-      dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
-    }
-  }, [dispatch, userAuthorizedServices?.lettersAndDocuments, lettersNotInDowntime])
-
-  const errorCheck = useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID) || getUserAuthorizedServicesError
+  const errorCheck = getLettersError || getUserAuthorizedServicesError
   const noLettersCheck = !userAuthorizedServices?.lettersAndDocuments || !letters || letters.length === 0
 
   return (
