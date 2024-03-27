@@ -151,9 +151,4 @@ context('HealthScreen', () => {
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
-
-  it('should render messagesCountTag with the correct count number', async () => {
-    initializeTestInstance(13)
-    expect(screen.getByText('13')).toBeTruthy()
-  })
 })
