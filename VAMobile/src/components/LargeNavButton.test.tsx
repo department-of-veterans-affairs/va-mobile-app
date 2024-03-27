@@ -14,12 +14,12 @@ context('LargeNavButton', () => {
   })
 
   it('renders title and subtext', () => {
-    expect(screen.getByRole('menuitem', { name: 'My Title' })).toBeTruthy()
-    expect(screen.getByRole('menuitem', { name: 'My Subtext' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'My Title' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'My Subtext' })).toBeTruthy()
   })
 
   it('calls onPress when clicked', () => {
-    fireEvent.press(screen.getByRole('menuitem', { name: 'My Title' }))
+    fireEvent.press(screen.getByRole('link', { name: 'My Title' }))
     expect(onPressSpy).toHaveBeenCalled()
   })
 })
