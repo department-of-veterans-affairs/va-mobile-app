@@ -248,3 +248,8 @@ export const AppointmentCancellationStatusConstants: {
   SUCCESS: 'SUCCESS',
   FAIL: 'FAIL',
 }
+
+export type AppointmentsDateRange = {
+  startDate: string
+  endDate: string
+}

@@ -1,14 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AlertBox, Box } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes } from 'store/api'
 import {
+  AppointmentAttributes,
   AppointmentStatusConstants,
   AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
-} from 'store/api/types/AppointmentData'
+} from 'api/types'
+import { AlertBox, Box } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentAlertProps = {

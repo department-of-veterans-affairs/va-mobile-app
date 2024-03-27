@@ -7,7 +7,7 @@ import {
   AppointmentPhone,
   AppointmentStatusConstants,
   AppointmentTypeConstants,
-} from 'store/api/types'
+} from 'api/types'
 import { render } from 'testUtils'
 
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
 
+import { AppointmentAttributes } from 'api/types'
 import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes } from 'store/api/types'
 import { VATheme } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 

@@ -1,10 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AppointmentAttributes, AppointmentProposedTimesPeriodConstant } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes } from 'store/api'
-import { AppointmentProposedTimesPeriodConstant } from 'store/api/types/AppointmentData'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 

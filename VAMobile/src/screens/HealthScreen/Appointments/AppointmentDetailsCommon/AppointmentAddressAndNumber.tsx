@@ -2,6 +2,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  AppointmentAttributes,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentType,
+  AppointmentTypeConstants,
+} from 'api/types'
+import {
   Box,
   ClickForActionLink,
   ClickToCallPhoneNumber,
@@ -10,13 +17,6 @@ import {
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  AppointmentAttributes,
-  AppointmentLocation,
-  AppointmentStatusConstants,
-  AppointmentType,
-  AppointmentTypeConstants,
-} from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp } from 'utils/accessibility'
 import { isAPendingAppointment } from 'utils/appointments'

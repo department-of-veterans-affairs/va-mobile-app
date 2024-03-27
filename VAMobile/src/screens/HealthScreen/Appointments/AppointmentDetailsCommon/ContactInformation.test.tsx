@@ -2,11 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import {
-  AppointmentAttributes,
-  AppointmentStatusConstants,
-  AppointmentTypeConstants,
-} from 'store/api/types/AppointmentData'
+import { AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
 import { context, render } from 'testUtils'
 
 import ContactInformation from './ContactInformation'
