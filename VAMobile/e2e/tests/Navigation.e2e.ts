@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
-var navigationValue = process.argv[6]
+var navigationValue = process.argv[7]
 
 const { exec } = require('child_process')
 const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
@@ -352,6 +352,6 @@ describe('Navigation', () => {
     }
   }
   if (testsRun == false) {
-    it('No nav tests needed', async () => {})
+    it('no nav tests', async () => {})
   }
 })
