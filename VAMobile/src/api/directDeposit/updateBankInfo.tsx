@@ -31,6 +31,7 @@ export const useUpdateBankInfo = () => {
       logAnalyticsEvent(Events.vama_update_dir_dep())
       setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const queryData = queryClient.getQueryData(directDepositKeys.directDeposit) as DirectDepositData
+      newAccountData.financialInstitutionName = 'Bank'
       queryData.data.attributes.paymentAccount = newAccountData
       queryClient.setQueryData(directDepositKeys.directDeposit, queryData)
     },
