@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -13,14 +14,15 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AppointmentsState } from 'store/slices'
+import { AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import Appointments from './Appointments'
+import { getUpcomingAppointmentDateRange } from './Appointments/Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import CernerAlert from './CernerAlert'
@@ -40,17 +42,43 @@ type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { loading: loadingAppointments, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
+  const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
+
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const { data: prescriptionData } = usePrescriptions({
+
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
+  const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
+        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+      }
+    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
+  )
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+        dispatch(getInbox())
+      }
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
+  )
+
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
     navigateTo('Webview', {
@@ -66,6 +94,7 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
+          showLoading={loadingAppointments}
           subText={
             upcomingAppointmentsCount
               ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
@@ -75,6 +104,7 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging')}
+          showLoading={loadingInbox}
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
@@ -83,6 +113,7 @@ export function HealthScreen({}: HealthScreenProps) {
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
+            showLoading={fetchingPrescriptions}
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {

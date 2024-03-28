@@ -1,11 +1,23 @@
 import React, { FC } from 'react'
+import ContentLoader, { Rect } from 'react-content-loader/native'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, ViewStyle } from 'react-native'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import colors from '../styles/themes/VAColors'
+
+const SkeletonLoader = () => {
+  const theme = useTheme()
+  return (
+    <ContentLoader backgroundColor={theme.colors.background.skeletonLoader} speed={0.6} width="100" height="10">
+      <Rect width="100%" height="25" />
+    </ContentLoader>
+  )
+}
 
 interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
@@ -18,14 +30,23 @@ interface HomeNavButtonProps {
   a11yHint?: string
   /**function to be called when press occurs */
   onPress: () => void
+  /** Show loading animation in place of subtext */
+  showLoading?: boolean
 }
 
 /**
  * Reusable large navigation button
  * @returns LargeNavButton component
  */
-const LargeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
+const LargeNavButton: FC<HomeNavButtonProps> = ({
+  title,
+  subText,
+  a11yHint,
+  onPress,
+  showLoading,
+}: HomeNavButtonProps) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {
     py: theme.dimensions.cardPadding,
@@ -48,7 +69,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPr
   }
 
   const pressableStyles: ViewStyle = {
-    flexDirection: 'row',
+    width: '100%',
   }
 
   return (
@@ -62,26 +83,37 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPr
         accessibilityLabel={title}
         accessibilityValue={{ text: subText }}
         {...a11yHintProp(a11yHint || '')}>
-        <Box flex={1}>
-          <Box
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
+        <Box flexDirection="row">
+          <Box flex={1}>
             <TextView variant="LargeNavButton">{title}</TextView>
+            {showLoading ? (
+              <Box
+                flex={1}
+                height={30}
+                flexDirection={'row'}
+                alignItems={'flex-end'}
+                accessible={true}
+                accessibilityLabel={t('loadingActivity')}>
+                <SkeletonLoader />
+              </Box>
+            ) : subText ? (
+              <TextView pt={10} variant={'LargeNavSubtext'}>
+                {subText}
+              </TextView>
+            ) : (
+              <></>
+            )}
           </Box>
-          <Box flexDirection={'row'} alignItems={'center'}>
-            <Box flex={1}>
-              <TextView variant={'LargeNavSubtext'}>{subText}</TextView>
-            </Box>
-            <VAIcon
-              width={24}
-              height={24}
-              name="RightArrowInCircle"
-              fill={theme.colors.icon.largeNavButton}
-              fill2={theme.colors.icon.transparent}
-              ml={theme.dimensions.listItemDecoratorMarginLeft}
-            />
-          </Box>
+          <VAIcon
+            flexDirection="row"
+            alignItems="flex-end"
+            width={24}
+            height={24}
+            name="RightArrowInCircle"
+            fill={theme.colors.icon.largeNavButton}
+            fill2={theme.colors.icon.transparent}
+            ml={theme.dimensions.listItemDecoratorMarginLeft}
+          />
         </Box>
       </Pressable>
     </Box>

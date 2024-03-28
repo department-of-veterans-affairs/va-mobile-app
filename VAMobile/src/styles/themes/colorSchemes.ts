@@ -47,6 +47,7 @@ export const lightTheme = {
     veteranStatus: colors.primaryDarker,
     veteranStatusHome: colors.white,
     linkRow: DSColors.grayWarmLight,
+    skeletonLoader: DSColors.grayLighter,
   },
   border: {
     aboutYou: DSColors.grayWarmLight,
@@ -231,7 +232,7 @@ export const darkTheme = {
     listActive: colors.darkmodeBorder,
     segmentedController: colors.darkmodeGrayWarmDark,
     headerDropShadow: colors.black,
-    shadow: colors.grayMedium,
+    shadow: colors.grayWarmLight,
     profileBanner: colors.primaryDarker2,
     ctaButton: DSColors.uswdsRedVivid40,
     completedPhase: colors.greenLight,
@@ -262,6 +263,7 @@ export const darkTheme = {
     veteranStatus: colors.primaryDarker,
     veteranStatusHome: colors.darkmodeGrayWarmDark,
     linkRow: colors.darkmodeGrayWarmDark,
+    skeletonLoader: DSColors.grayMedium,
   },
   border: {
     aboutYou: colors.darkmodeBorder,
