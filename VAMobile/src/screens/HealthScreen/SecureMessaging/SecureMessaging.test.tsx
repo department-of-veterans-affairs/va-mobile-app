@@ -2,9 +2,16 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { CommonErrorTypesConstants } from 'constants/errors'
 import * as api from 'store/api'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { updateSecureMessagingTab } from 'store/slices'
+import { ScreenIDTypesConstants, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import {
+  ErrorsState,
+  InitialState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  updateSecureMessagingTab,
+} from 'store/slices'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
@@ -14,6 +21,30 @@ jest.mock('store/slices', () => {
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftComplete: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    fetchInboxMessages: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    listFolders: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -74,8 +105,13 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('SecureMessaging', () => {
-  const initializeTestInstance = () => {
-    render(<SecureMessaging {...mockNavProps()} />)
+  const initializeTestInstance = (errorsState = initialErrorsState) => {
+    render(<SecureMessaging {...mockNavProps()} />, {
+      preloadedState: {
+        ...InitialState,
+        errors: errorsState,
+      },
+    })
   }
 
   beforeEach(() => {
@@ -98,9 +134,16 @@ context('SecureMessaging', () => {
         .mockRejectedValue({ networkError: true } as api.APIError)
         .calledWith(`/v0/messaging/health/folders`, expect.anything())
         .mockRejectedValue({ networkError: true } as api.APIError)
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
       await waitFor(() => {
-        initializeTestInstance()
+        initializeTestInstance(errorState)
       })
       expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
@@ -116,9 +159,16 @@ context('SecureMessaging', () => {
         .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
         .calledWith(`/v0/messaging/health/folders`, expect.anything())
         .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] =
+        CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
 
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
       await waitFor(() => {
-        initializeTestInstance()
+        initializeTestInstance(errorState)
       })
       expect(
         screen.getByText(
