@@ -75,6 +75,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const pressableStyles: ViewStyle = {
     width: '100%',
   }
+  const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subText || ''}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -84,21 +85,13 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessible={true}
         accessibilityRole={'link'}
         testID={title}
-        accessibilityLabel={title}
-        accessibilityValue={{ text: subText }}
+        accessibilityLabel={accessibilityLabel}
         {...a11yHintProp(a11yHint || '')}>
         <Box flexDirection="row">
           <Box flex={1}>
             <TextView variant="LargeNavButton">{title}</TextView>
             {showLoading ? (
-              <Box
-                flex={1}
-                mt={10}
-                height={30}
-                flexDirection={'row'}
-                alignItems={'flex-end'}
-                accessible={true}
-                accessibilityLabel={t('loadingActivity')}>
+              <Box flex={1} mt={10} height={30} flexDirection={'row'} alignItems={'flex-end'}>
                 <SkeletonLoader />
               </Box>
             ) : subText ? (
