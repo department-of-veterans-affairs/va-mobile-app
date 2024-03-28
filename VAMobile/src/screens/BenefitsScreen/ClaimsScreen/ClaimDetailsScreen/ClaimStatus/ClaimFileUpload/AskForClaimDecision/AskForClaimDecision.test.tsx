@@ -1,18 +1,11 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {
-  ErrorsState,
-  InitialState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  submitClaimDecision,
-} from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 import AskForClaimDecision from './AskForClaimDecision'
 
@@ -25,65 +18,55 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    submitClaimDecision: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+when(api.get as jest.Mock)
+  .calledWith(`/v0/claim/600156928/request-decision`, {}, expect.anything())
+  .mockResolvedValue({})
+when(api.get as jest.Mock)
+  .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+  .mockResolvedValue({
+    data: {
+      ...claim,
+      id: '600156928',
+      type: 'evss_claims',
+      attributes: {
+        ...claim.attributes,
+        open: false,
+      },
+    },
+  })
 
 context('AskForClaimDecision', () => {
   const navigateSpy = jest.fn()
-  const initializeTestInstance = (
-    submittedDecision: boolean,
-    error?: Error,
-    errorsState: ErrorsState = initialErrorsState,
-    decisionLetterSent = true,
-  ): void => {
+  const initializeTestInstance = (): void => {
     const props = mockNavProps(
       undefined,
       {
-        navigate: navigateSpy,
-        goBack: jest.fn(),
+        navigate: jest.fn(),
+        goBack: navigateSpy,
       },
       {
-        params: { claimID: 'id' },
+        params: { claimID: '600156928' },
       },
     )
-
-    render(<AskForClaimDecision {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          submittedDecision,
-          error,
-          claim: {
-            id: '600156928',
-            type: 'evss_claims',
-            attributes: {
-              ...Claim.attributes,
-              decisionLetterSent,
-              open: false,
-            },
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '600156928'],
+        data: {
+          ...claim,
+          id: '600156928',
+          type: 'evss_claims',
+          attributes: {
+            ...claim.attributes,
+            open: false,
           },
         },
-        errors: errorsState,
       },
-    })
+    ]
+    render(<AskForClaimDecision {...props} />, { queriesData })
   }
 
-  beforeEach(() => {
-    initializeTestInstance(false)
-  })
-
   it('should initialize', () => {
+    initializeTestInstance()
     expect(screen.getByText('Claim evaluation')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Evaluation details' })).toBeTruthy()
     expect(
@@ -104,55 +87,42 @@ context('AskForClaimDecision', () => {
     expect(screen.getByRole('button', { name: 'Request claim evaluation' })).toBeTruthy()
   })
 
-  describe('on click of the back button', () => {
-    describe('when submittedDecision is true and there is no error', () => {
-      describe('if the claim is closed', () => {
-        it('should call navigation navigate for the ClaimDetailsScreen with claimType set to CLOSED', () => {
-          initializeTestInstance(true)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
-            claimID: 'id',
-            claimType: 'CLOSED',
-            focusOnSnackbar: true,
-          })
-        })
-      })
-    })
-
-    describe('when submitted decision is false or there is an error', () => {
-      it('should not call navigation go back', () => {
-        initializeTestInstance(true, { name: 'ERROR', message: 'ERROR' })
-        expect(navigateSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
-          claimID: 'id',
-          claimType: 'CLOSED',
-          focusOnSnackbar: true,
-        })
-      })
+  describe('when cancel button is pressed', () => {
+    it('should call goBack', () => {
+      initializeTestInstance()
+      fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
+      expect(navigateSpy).toHaveBeenCalled()
     })
   })
 
-  describe('on click of submit', () => {
-    describe('if the check box is not checked', () => {
-      it('should display the field error', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Request claim evaluation' }))
-        expect(submitClaimDecision).not.toHaveBeenCalled()
-        expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy()
+  describe('when submitted decision is false or there is an erroror check box is not checked', () => {
+    it('should not call navigation go back and display a field error when not checked', () => {
+      initializeTestInstance()
+      expect(mockNavigationSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
+        claimID: '600156928',
+        claimType: 'CLOSED',
+        focusOnSnackbar: true,
       })
+      fireEvent.press(screen.getByRole('button', { name: 'Request claim evaluation' }))
+      expect(api.post).not.toBeCalledWith(`/v0/claim/600156928/request-decision`)
+      expect(mockNavigationSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
+        claimID: '600156928',
+        claimType: 'CLOSED',
+        focusOnSnackbar: true,
+      })
+      expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(false, undefined, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    it('should render error component when the stores screenID matches the components screenID', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .mockRejectedValue('Error')
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
+      )
     })
   })
 })

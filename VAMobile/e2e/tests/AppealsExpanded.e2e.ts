@@ -128,7 +128,8 @@ describe('AppealsExpanded', () => {
   for (const [key, value] of Object.entries(AppealsExpandedIdConstants)) {
     it('verify ' + key + ' opens and the correct information is displayed', async () => {
       //Note: Most of the wording in the appeals current status is tested using unit tests so it isn't being tested here.
-      if (
+      //Uncomment when 8101 is completed
+      /*if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
         value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
@@ -136,7 +137,7 @@ describe('AppealsExpanded', () => {
         await element(by.id('claimsHistoryID')).scrollTo('bottom')
         await element(by.id('next-page')).tap()
         await element(by.id('claimsHistoryID')).scrollTo('top')
-      }
+      }*/
 
       await waitFor(element(by.id(value)))
         .toBeVisible()
@@ -181,7 +182,8 @@ describe('AppealsExpanded', () => {
         await openBenefits()
         await openClaims()
         await openClaimsHistory()
-        if (i >= 4 && i <= 13) {
+        //Uncomment when 8101 is completed
+        /*if (i >= 4 && i <= 13) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
           await element(by.id('claimsHistoryID')).scrollTo('top')
@@ -203,7 +205,7 @@ describe('AppealsExpanded', () => {
           await element(by.id('next-page')).tap()
           await element(by.id('next-page')).tap()
           await element(by.id('claimsHistoryID')).scrollTo('top')
-        }
+        }*/
       }
     })
   }
