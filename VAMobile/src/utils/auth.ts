@@ -293,13 +293,7 @@ export const logoutStart = async (queryClient: QueryClient) => {
 }
 
 export const logoutFinish = async (queryClient: QueryClient) => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  queryClient.setQueryData(authKeys.settings, {
-    ...userSettings,
-    loggingOut: false,
-    syncing: false,
-    loggedIn: false,
-  })
+  queryClient.clear()
 }
 
 export const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
