@@ -116,6 +116,7 @@ export function HomeScreen({}: HomeScreenProps) {
     preloadComplete: apptsPrefetch,
     loading: loadingAppointments,
     upcomingAppointmentsCount,
+    upcomingDaysLimit,
   } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
     enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
@@ -260,7 +261,10 @@ export function HomeScreen({}: HomeScreenProps) {
               {!!upcomingAppointmentsCount && (
                 <ActivityButton
                   title={t('appointments')}
-                  subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                  subText={t('appointments.activityButton.subText', {
+                    count: upcomingAppointmentsCount,
+                    dayCount: upcomingDaysLimit,
+                  })}
                   deepLink={'appointments'}
                 />
               )}
