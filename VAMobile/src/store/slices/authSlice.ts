@@ -32,7 +32,6 @@ import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
-import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 
@@ -566,7 +565,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
-    dispatch(dispatchClearLoadedClaimsAndAppeals())
     dispatch(dispatchFinishLogout())
   }
 }

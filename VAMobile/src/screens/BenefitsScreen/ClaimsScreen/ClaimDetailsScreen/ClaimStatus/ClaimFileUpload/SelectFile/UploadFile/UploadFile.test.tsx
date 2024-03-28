@@ -3,10 +3,10 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { InitialState } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 import UploadFile from './UploadFile'
 
@@ -33,10 +33,18 @@ context('UploadFile', () => {
     uploaded: false,
     uploadsAllowed: true,
   }
-
-  const initializeTestInstance = (imageUploaded?: ImagePickerResponse) => {
+  const renderWithData = (imageUploaded?: ImagePickerResponse): void => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
+
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '0'],
+        data: {
+          ...Claim,
+        },
+      },
+    ]
 
     const file = {
       name: 'File 1',
@@ -46,22 +54,14 @@ context('UploadFile', () => {
     const props = mockNavProps(
       undefined,
       { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
-      { params: { request, fileUploaded: file, imageUploaded } },
+      { params: { claimID: '0', request, fileUploaded: file, imageUploaded } },
     )
 
-    render(<UploadFile {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claim: Claim,
-        },
-      },
-    })
+    render(<UploadFile {...props} />, { queriesData })
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    renderWithData()
   })
 
   it('initializes correctly', () => {

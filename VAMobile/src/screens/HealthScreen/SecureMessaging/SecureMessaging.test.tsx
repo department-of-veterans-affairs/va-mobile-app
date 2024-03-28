@@ -8,19 +8,6 @@ import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateSecureMessagingTab: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
   return {
