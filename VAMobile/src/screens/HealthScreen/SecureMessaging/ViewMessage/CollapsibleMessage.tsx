@@ -20,7 +20,8 @@ import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import { fixSpecialCharacters, getLinkifiedText } from 'utils/secureMessaging'
+import { fixSpecialCharacters } from 'utils/jsonFormatting'
+import { getLinkifiedText } from 'utils/secureMessaging'
 
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 

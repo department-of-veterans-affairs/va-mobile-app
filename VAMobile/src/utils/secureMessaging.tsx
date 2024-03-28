@@ -482,13 +482,6 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const fixSpecialCharacters = (text: string): string => {
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&ldquo;/g, '"')
-    .replace(/&rsquo;/g, "'")
-}
-
 export const getLinkifiedText = (
   body: string,
   t: TFunction,

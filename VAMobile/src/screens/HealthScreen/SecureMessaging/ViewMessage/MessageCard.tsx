@@ -18,7 +18,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { fixSpecialCharacters, formatSubject, getLinkifiedText } from 'utils/secureMessaging'
+import { fixSpecialCharacters } from 'utils/jsonFormatting'
+import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 
 export type MessageCardProps = {
   /* message object */
