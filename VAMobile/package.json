@@ -59,6 +59,7 @@
     "luxon": "^3.4.4",
     "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
+    "react-content-loader": "^7.0.0",
     "react-i18next": "^14.0.1",
     "react-native": "0.73.5",
     "react-native-blob-util": "^0.19.6",
