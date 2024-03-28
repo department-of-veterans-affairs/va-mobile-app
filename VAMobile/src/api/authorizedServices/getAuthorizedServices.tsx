@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
+import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types'
 import { get } from 'store/api'
 
 import { authorizedServicesKeys } from './queryKeys'

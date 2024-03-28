@@ -5,16 +5,10 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
-import {
-  ClaimAttributesData,
-  ClaimEventData,
-  ClaimPhaseData,
-  FILE_REQUEST_STATUS,
-  FILE_REQUEST_TYPE,
-} from 'store/api/types'
 
 import { logAnalyticsEvent } from './analytics'
 

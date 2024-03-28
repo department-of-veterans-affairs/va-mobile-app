@@ -414,6 +414,7 @@
   "claimsAndAppeal.troubleLoadingAppeals": "We're having trouble loading appeals information at this time. Check back again later. You are still able to review claims information.",
   "claimsAndAppeal.troubleLoadingClaims": "We're having trouble loading claims information at this time. Check back again later. You are still able to review appeals information.",
   "claimsAndAppeal.troubleLoadingClaimsAndAppeals": "We're having trouble loading claims and appeals information at this time. Check back again later.",
+  "claimsAndAppeals.loadingClaim": "Loading your claim...",
   "claimsAndAppeals.loadingClaimsAndAppeals": "Loading your claims and appeals...",
   "claimsAndAppeals.noClaimsAndAppealsAccess.body": "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the VA benefits hotline.",
   "claimsAndAppeals.noClaimsAndAppealsAccess.title": "We can't find any claims information for you",
