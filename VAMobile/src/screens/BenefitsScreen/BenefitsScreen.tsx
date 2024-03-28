@@ -1,10 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,9 +19,8 @@ import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScr
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
-import { RootState } from 'store'
-import { ClaimsAndAppealsState } from 'store/slices'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants } from 'store/api'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -34,9 +33,13 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
+  const { data: claimsData, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+  })
 
-  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const activeClaimsCount = claimsData?.meta.activeClaimsCount
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -60,6 +63,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         <LargeNavButton
           title={t('claims.title')}
           subText={activeClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
+          showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
