@@ -5,7 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -22,12 +23,13 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   } = useAuthorizedServices()
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+  const { isLoading: loadingServiceHistory, refetch: refetchServiceHistory } = useServiceHistory({
     enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
   })
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { data: personalInfo } = usePersonalInformation()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -35,10 +37,27 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
+    // Get the service history to populate the profile banner
+    if (userAuthorizedServices?.militaryServiceHistory) {
+      refetchServiceHistory()
+    }
   }
 
-  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
+
+  const displayName = !!personalInfo?.fullName && (
+    <Box>
+      <TextView
+        mx={theme.dimensions.condensedMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
+        textTransform="capitalize"
+        accessibilityRole="header"
+        variant="ProfileScreenHeader">
+        {personalInfo.fullName}
+      </TextView>
+    </Box>
+  )
 
   return (
     <ChildTemplate
@@ -62,11 +81,13 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         </Box>
       ) : loadingCheck ? (
         <Box>
+          {displayName}
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>
+          {displayName}
           <NameTag />
           <Box
             mt={theme.dimensions.contentMarginTop}

@@ -80,6 +80,8 @@ export type BoxProps = ViewProps & {
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   /**controls which directions children of a container go*/
   flexDirection?: 'column' | 'row'
+  /** sets the gaps between rows and columns */
+  gap?: number
   /**controls how children are measured and displayed*/
   overflow?: 'hidden' | 'visible' | 'scroll'
   /**aligns children in the main direction*/
@@ -259,6 +261,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     'flex-shrink': props.flexShrink,
     'flex-grow': props.flexGrow,
     'flex-wrap': props.flexWrap,
+    gap: typeof props.gap === 'number' ? `${props.gap}px` : props.gap,
     'text-align': props.textAlign,
     overflow: props.overflow,
     ...mStyles,

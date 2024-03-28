@@ -357,7 +357,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       }}
-      showCrisisLineCta={true}
+      showCrisisLineButton={true}
       testID="replyPageTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>

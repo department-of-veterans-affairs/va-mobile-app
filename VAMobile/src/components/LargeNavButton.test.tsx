@@ -10,14 +10,11 @@ context('LargeNavButton', () => {
   const onPressSpy = jest.fn()
 
   beforeEach(() => {
-    render(
-      <LargeNavButton title={'My Title'} subText={'My Subtext'} tagCount={45} a11yHint={'a11y'} onPress={onPressSpy} />,
-    )
+    render(<LargeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} />)
   })
 
   it('renders title, tagcount, and subtext', () => {
     expect(screen.getByRole('menuitem', { name: 'My Title' })).toBeTruthy()
-    expect(screen.getByRole('menuitem', { name: '45' })).toBeTruthy()
     expect(screen.getByRole('menuitem', { name: 'My Subtext' })).toBeTruthy()
   })
 

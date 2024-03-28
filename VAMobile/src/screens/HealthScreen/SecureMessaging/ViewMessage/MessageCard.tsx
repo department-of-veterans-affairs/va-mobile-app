@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { Pressable, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -74,12 +74,18 @@ function MessageCard({ message }: MessageCardProps) {
 
   function getAttachment() {
     if (loadingAttachments && !attachments?.length) {
+      const loadingScrollViewStyle: ViewStyle = {
+        backgroundColor: theme.colors.background.contentBox,
+      }
       return (
         <Box
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.contentMarginTop}
           mb={theme.dimensions.contentMarginBottom}>
-          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+          <LoadingComponent
+            text={t('secureMessaging.viewMessage.loadingAttachment')}
+            scrollViewStyle={loadingScrollViewStyle}
+          />
         </Box>
       )
     } else if (attachments?.length) {
