@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { AlertBox, Box, VAScrollView } from 'components'
+import { AlertBox, Box, ClickToCallPhoneNumber, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { DowntimeWindow, ErrorsState } from 'store/slices'
+import { a11yLabelID } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureInDowntime, useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
@@ -41,7 +43,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     }
   })
 
-  const featureName = ScreenIDToFeatureName[screenID]
   const endTime = latestDowntimeWindow ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat('fff') : ''
 
   return (
@@ -50,10 +51,15 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
         <AlertBox
           title={t('downtime.title')}
           titleA11yLabel={t('downtime.title')}
-          text={t('downtime.message', { featureName, endTime })}
-          textA11yLabel={t('downtime.message', { featureName, endTime })}
-          border="warning"
-        />
+          text={t('downtime.message', { endTime })}
+          textA11yLabel={t('downtime.message.a11yLabel', { endTime })}
+          border="warning">
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8006982411'))}
+            phone={t('8006982411')}
+            a11yLabel={a11yLabelID(t('8006982411'))}
+          />
+        </AlertBox>
       </Box>
     </VAScrollView>
   )
