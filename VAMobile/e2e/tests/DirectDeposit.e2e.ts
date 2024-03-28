@@ -56,7 +56,7 @@ describe('Direct Deposit Screen', () => {
   it('should check direct deposit error handling incorrect routing number', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('1234567\n')
@@ -74,7 +74,7 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('053100300\n')
@@ -95,7 +95,7 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Savings')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('053100300\n')
