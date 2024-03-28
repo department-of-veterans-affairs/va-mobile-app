@@ -98,13 +98,13 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
     }
   }, [rxPrefetch, prescriptionData])
-  
+
   useEffect(() => {
     if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
     }
   }, [claimsPrefetch, claimsData])
-  
+
   useEffect(() => {
     if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
