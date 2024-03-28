@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
 import {
   Box,
@@ -16,9 +17,10 @@ import {
 } from 'components'
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -34,7 +36,11 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const [page, setPage] = useState(1)
   const [previousClaimType, setClaimType] = useState(claimType)
   const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: decisionLetterData } = useDecisionLetters({
+    enabled: userAuthorizedServices?.decisionLetters && !claimsInDowntime,
+  })
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
@@ -81,7 +87,8 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       if (
         featureEnabled('decisionLettersWaygate') &&
         userAuthorizedServices?.decisionLetters &&
-        attributes.decisionLetterSent
+        attributes.decisionLetterSent &&
+        (decisionLetterData?.data.length || 0) > 0
       ) {
         const margin = theme.dimensions.condensedMarginBetween
         textLines.push({
