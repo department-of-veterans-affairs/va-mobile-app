@@ -7,7 +7,6 @@ import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import notificationReducer from 'store/slices/notificationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -22,7 +21,6 @@ const store = configureStore({
     analytics: analyticsReducer,
     appointments: appointmentsReducer,
     claimsAndAppeals: claimsAndAppealsReducer,
-    notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     settings: settingsReducer,

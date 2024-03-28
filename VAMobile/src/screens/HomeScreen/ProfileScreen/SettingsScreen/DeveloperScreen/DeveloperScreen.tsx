@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { DEVICE_ENDPOINT_SID, useLoadPushPreferences } from 'api/notifications'
 import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -16,7 +17,6 @@ import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -96,7 +96,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const { data: notificationData } = useLoadPushPreferences()
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
@@ -278,7 +278,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Device Token</TextView>
-            <TextView selectable={true}>{deviceToken}</TextView>
+            <TextView selectable={true}>{notificationData?.deviceToken}</TextView>
           </TextArea>
         </Box>
       </Box>
