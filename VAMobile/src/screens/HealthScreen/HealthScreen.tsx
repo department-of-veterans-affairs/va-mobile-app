@@ -102,7 +102,11 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           showLoading={loadingAppointments}
-          subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+          subText={
+            upcomingAppointmentsCount
+              ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
+              : undefined
+          }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
@@ -111,7 +115,9 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+          subText={
+            unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
+          }
           showLoading={loadingInbox}
         />
         {featureEnabled('prescriptions') && (
@@ -123,9 +129,13 @@ export function HealthScreen({}: HealthScreenProps) {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
             showLoading={fetchingPrescriptions}
-            subText={t('prescriptions.activityButton.subText', {
-              count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-            })}
+            subText={
+              prescriptionData?.meta.prescriptionStatusCount.isRefillable
+                ? t('prescriptions.activityButton.subText', {
+                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                  })
+                : undefined
+            }
           />
         )}
         <LargeNavButton
