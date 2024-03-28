@@ -1,4 +1,6 @@
 export * from './AddressData'
+export * from './AuthorizedServicesData'
+export * from './ClaimsAndAppealsData'
 export * from './ContactInformation'
 export * from './DecisionLettersData'
 export * from './DemographicsData'

@@ -35,7 +35,6 @@ import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
-import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
@@ -570,7 +569,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
-    dispatch(dispatchClearLoadedClaimsAndAppeals())
     dispatch(dispatchFinishLogout())
   }
 }

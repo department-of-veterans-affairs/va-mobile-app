@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import AppealDecision from './AppealDecision'
