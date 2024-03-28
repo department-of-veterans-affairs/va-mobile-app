@@ -159,7 +159,7 @@ context('ClaimsAndAppealsListView', () => {
         })
         .mockResolvedValue(emptyPayload)
       initializeTestInstance('ACTIVE', true)
-      await waitFor(() => expect(screen.getByText("You don't have any Received claims or appeals")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByText(
