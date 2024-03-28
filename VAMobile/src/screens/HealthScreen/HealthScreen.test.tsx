@@ -135,20 +135,4 @@ context('HealthScreen', () => {
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
-
-  it('should render messagesCountTag with the correct count number', async () => {
-    when(api.get as jest.Mock)
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(inboxData)
-    initializeTestInstance()
-    await waitFor(() => expect(screen.getByText('13')).toBeTruthy())
-  })
-
-  it('should render messagesCountTag with the correct a11yLabel', async () => {
-    when(api.get as jest.Mock)
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(inboxData)
-    initializeTestInstance()
-    await waitFor(() => expect(screen.getByLabelText('Messages You have 13 unread messages')).toBeTruthy())
-  })
 })

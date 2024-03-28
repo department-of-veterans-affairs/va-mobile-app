@@ -842,6 +842,7 @@
   "lettersAndDocs.title": "VA letters and documents",
   "listPosition": "{{position}} of {{total}}",
   "loading": "Loading",
+  "loadingActivity": "Loading activity",
   "loadingComponent.spinner.a11y": "Loading icon,",
   "loaGate.expandMsg": "Read more if you haven't yet verified",
   "loaGate.p1": "Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.",
