@@ -11,12 +11,11 @@ import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
-import { DowntimeFeatureTypeConstants } from 'store/api'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
@@ -38,9 +37,8 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const { data: decisionLetterData } = useDecisionLetters({
-    enabled: userAuthorizedServices?.decisionLetters && !claimsInDowntime,
+    enabled: userAuthorizedServices?.decisionLetters,
   })
   const sentEvent = useRef(false)
 

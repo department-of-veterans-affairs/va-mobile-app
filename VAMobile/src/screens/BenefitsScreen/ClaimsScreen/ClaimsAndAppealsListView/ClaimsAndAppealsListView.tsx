@@ -17,10 +17,9 @@ import {
 } from 'components'
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants } from 'store/api'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -36,11 +35,8 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const [page, setPage] = useState(1)
   const [previousClaimType, setClaimType] = useState(claimType)
   const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { data: decisionLetterData } = useDecisionLetters({
-    enabled: userAuthorizedServices?.decisionLetters && !claimsInDowntime,
-  })
+  const { data: decisionLetterData } = useDecisionLetters({ enabled: userAuthorizedServices?.decisionLetters })
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
