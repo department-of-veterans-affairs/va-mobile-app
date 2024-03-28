@@ -20,7 +20,7 @@ export const fixedWhiteSpaceString = (text: string | undefined) => {
 
 export const fixSpecialCharacters = (text: string): string => {
   return text
-    .replace(/\&amp;/g, '&')
+    .replace(/&amp;/g, '&')
     .replace(/&ldquo;/g, '"')
     .replace(/&rsquo;/g, "'")
 }
