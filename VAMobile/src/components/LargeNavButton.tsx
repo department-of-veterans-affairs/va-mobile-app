@@ -62,12 +62,11 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
       shadowColor: colors.black,
       ...Platform.select({
         ios: {
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
-          shadowRadius: 8,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
         },
         android: {
-          elevation: 8,
+          elevation: 2,
         },
       }),
     },
