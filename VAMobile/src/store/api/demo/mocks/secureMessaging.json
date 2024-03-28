@@ -455,7 +455,7 @@
         "messageId": 2092803,
         "category": "COVID",
         "subject": "Your requested info",
-        "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
+        "body": "Special character testing\nAmpersand: &amp;\nDouble Quotes: &ldquo;\nSingle Quote: &rsquo;",
         "hasAttachments": true,
         "attachment": true,
         "sentDate": "2021-10-26T22:21:11.000Z",
