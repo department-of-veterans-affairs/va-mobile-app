@@ -2,7 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import AppealCurrentStatus from './AppealCurrentStatus'
