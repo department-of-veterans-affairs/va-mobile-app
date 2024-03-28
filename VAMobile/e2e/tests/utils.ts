@@ -409,7 +409,15 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
-    await element(by.text(featureNavigationArray[j])).tap()
+    if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
+      await element(by.id(featureNavigationArray[j])).tap()
+    } else {
+      try {
+        await element(by.text(featureNavigationArray[j])).tap()
+      } catch (ex) {
+        await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+      }
+    }
   }
 }
 
