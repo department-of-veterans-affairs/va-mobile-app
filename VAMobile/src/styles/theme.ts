@@ -122,6 +122,7 @@ export type VAIconColors = {
   inlineSpinner: string
   homeScreenError: string
   linkRow: string
+  largeNavButton: string
 }
 
 export type VATypographyThemeVariants = {
@@ -132,6 +133,7 @@ export type VATypographyThemeVariants = {
   AnnouncementBannerTitle: string
   BitterBoldHeading: string
   BitterHeading: string
+  CategoryBitterHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
   HomeScreen: string
@@ -139,6 +141,8 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LargeNavButton: string
+  LargeNavSubtext: string
   MobileBody: string
   MobileBodyBold: string
   MobileBodyLink: string

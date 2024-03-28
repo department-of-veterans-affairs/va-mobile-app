@@ -149,6 +149,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 18,
   },
+  largeNavSubext: {
+    fontSize: 16,
+    lineHeight: 20,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -185,6 +189,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont(
       'SourceSansPro-Regular',
@@ -196,6 +201,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
     HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
+    LargeNavButton: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
+    LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
