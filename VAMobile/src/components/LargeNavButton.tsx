@@ -17,7 +17,7 @@ const SkeletonLoader = () => {
       backgroundColor={theme.colors.background.skeletonLoader}
       foregroundColor={theme.colors.background.skeletonLoaderSecondary}
       speed={0.6}
-      width="100"
+      width="150"
       height="10">
       <Rect width="100%" height="25" />
     </ContentLoader>
