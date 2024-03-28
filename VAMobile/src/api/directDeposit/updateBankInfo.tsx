@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { includes } from 'lodash'
 
-import { PaymentAccountData } from 'api/types'
+import { DirectDepositData, PaymentAccountData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { DirectDepositErrors } from 'constants/errors'
 import { APIError, put } from 'store/api'
@@ -27,10 +27,12 @@ export const useUpdateBankInfo = () => {
 
   return useMutation({
     mutationFn: updateBankInfo,
-    onSuccess: async () => {
+    onSuccess: async (data, newAccountData) => {
       logAnalyticsEvent(Events.vama_update_dir_dep())
       setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      queryClient.invalidateQueries({ queryKey: directDepositKeys.directDeposit })
+      const queryData = queryClient.getQueryData(directDepositKeys.directDeposit) as DirectDepositData
+      queryData.data.attributes.paymentAccount = newAccountData
+      queryClient.setQueryData(directDepositKeys.directDeposit, queryData)
     },
     onError: async (error) => {
       if (isErrorObject(error)) {
