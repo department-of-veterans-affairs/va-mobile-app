@@ -111,7 +111,6 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
           subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
           showLoading={loadingInbox}
         />

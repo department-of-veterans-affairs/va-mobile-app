@@ -62,10 +62,6 @@ interface HomeNavButtonProps {
   borderColorActive?: BorderColorVariant
   /**BorderStyles denotes the styling of the borders*/
   borderStyle?: BorderStyles
-  /**number for the tag */
-  tagCount?: number
-  /**a11y for the tag */
-  tagCountA11y?: string
   /** Show loading animation in place of subtext */
   showLoading?: boolean
 }
@@ -88,8 +84,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderColor,
   borderColorActive,
   borderStyle,
-  tagCount,
-  tagCountA11y,
   showLoading,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
@@ -142,8 +136,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel =
-    tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
+  const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subTextA11yLabel || subText || ''}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -165,12 +158,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
-            {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
           {showLoading ? (
-            <Box accessible={true} accessibilityLabel={t('loadingActivity')}>
-              <SkeletonLoader />
-            </Box>
+            <SkeletonLoader />
           ) : (
             subText && (
               <TextView variant={'MobileBody'} color={textColor}>
