@@ -31,7 +31,6 @@ import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
@@ -566,7 +565,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedMessages())
-    dispatch(dispatchClearLoadedClaimsAndAppeals())
     dispatch(dispatchFinishLogout())
   }
 }

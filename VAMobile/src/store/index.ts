@@ -3,7 +3,6 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import authReducer from 'store/slices/authSlice'
-import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import notificationReducer from 'store/slices/notificationSlice'
@@ -19,7 +18,6 @@ const store = configureStore({
     demo: demoReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
-    claimsAndAppeals: claimsAndAppealsReducer,
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,

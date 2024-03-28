@@ -1,5 +1,4 @@
 export * from './UserData'
-export * from './ClaimsAndAppealsData'
 export * from './Errors'
 export * from './Screens'
 export * from './SecureMessagingData'

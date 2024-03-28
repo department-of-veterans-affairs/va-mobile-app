@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { usePrescriptions } from 'api/prescriptions'
 import {
   Box,
@@ -28,13 +29,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import {
-  AnalyticsState,
-  ClaimsAndAppealsState,
-  SecureMessagingState,
-  getClaimsAndAppeals,
-  getInbox,
-} from 'store/slices'
+import { AnalyticsState, SecureMessagingState, getInbox } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -67,9 +62,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
   const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
@@ -85,6 +77,12 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch'),
     },
   )
+  const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled:
+      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
+      !claimsInDowntime &&
+      featureEnabled('homeScreenPrefetch'),
+  })
 
   const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
@@ -95,16 +93,6 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
     }
   }, [apptsData, apptsPrefetch])
-
-  useEffect(() => {
-    if (
-      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
-      !claimsInDowntime &&
-      featureEnabled('homeScreenPrefetch')
-    ) {
-      dispatch(getClaimsAndAppeals('ACTIVE', undefined, undefined, true))
-    }
-  }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
     if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
@@ -119,7 +107,13 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
+    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+    }
+  }, [claimsPrefetch, claimsData])
+
+  useEffect(() => {
+    if (apptsPrefetch && claimsPrefetch && rxPrefetch && !smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
