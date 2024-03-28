@@ -99,7 +99,7 @@ context('ClaimsAndAppealsListView', () => {
           screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020'),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getAllByText('Submitted October 22, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getAllByText('Received October 22, 2020')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy())
       initializeTestInstance('CLOSED')
       await waitFor(() => expect(screen.getByText('Your closed claims and appeals')).toBeTruthy())
@@ -119,7 +119,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020',
+            name: 'Claim for compensation updated on October 30, 2020 Received October 22, 2020',
           }),
         ),
       )
@@ -141,7 +141,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020',
+            name: 'Supplemental claim for disability compensation updated on October 28, 2020 Received October 22, 2020',
           }),
         ),
       )
@@ -159,7 +159,7 @@ context('ClaimsAndAppealsListView', () => {
         })
         .mockResolvedValue(emptyPayload)
       initializeTestInstance('ACTIVE', true)
-      await waitFor(() => expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("You don't have any Received claims or appeals")).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByText(
