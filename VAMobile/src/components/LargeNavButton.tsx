@@ -18,8 +18,6 @@ import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-import MessagesCountTag from './MessagesCountTag'
-
 const SkeletonLoader = () => {
   const theme = useTheme()
   return (

@@ -47,7 +47,6 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loading: loadingAppointments, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
