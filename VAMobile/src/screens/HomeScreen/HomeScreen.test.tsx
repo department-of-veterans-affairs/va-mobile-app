@@ -2,10 +2,10 @@ import React from 'react'
 import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { prescriptionKeys } from 'api/prescriptions'
-import { PrescriptionsGetData } from 'api/types'
-import { initialClaimsAndAppealsState } from 'store/slices'
+import { ClaimsAndAppealsListPayload, PrescriptionsGetData } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
@@ -57,6 +57,17 @@ context('HomeScreen', () => {
         last: '',
       },
     }
+    const claimsAppealsPayload: ClaimsAndAppealsListPayload = {
+      data: [],
+      meta: {
+        pagination: {
+          currentPage: 1,
+          totalEntries: 3,
+          perPage: 10,
+        },
+        activeClaimsCount: activeClaimsCount,
+      },
+    }
     const queriesData = [
       {
         queryKey: personalInformationKeys.personalInformation,
@@ -75,16 +86,12 @@ context('HomeScreen', () => {
         queryKey: prescriptionKeys.prescriptions,
         data: mock,
       },
-    ]
-    render(<HomeScreen {...props} />, {
-      preloadedState: {
-        claimsAndAppeals: {
-          ...initialClaimsAndAppealsState,
-          activeClaimsCount: activeClaimsCount || 0,
-        },
+      {
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', 1],
+        data: claimsAppealsPayload,
       },
-      queriesData,
-    })
+    ]
+    render(<HomeScreen {...props} />, { queriesData })
   }
 
   beforeEach(() => {
