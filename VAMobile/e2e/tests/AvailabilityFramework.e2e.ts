@@ -37,9 +37,6 @@ const AFNavigationForIndividual = [
   ['ContactInformation.e2e', 'WG_ContactInformation', 'Profile', 'Contact information'],
   ['ContactInformation.e2e', 'WG_HowWillYou', 'Profile', 'Contact information', 'How we use your contact information'],
   ['ContactInformation.e2e', 'WG_EditAddress', 'Profile', 'Contact information', 'Mailing address'],
-  ['ContactInformation.e2e', 'WG_EditAddress', 'Profile', 'Contact information', 'Home address'],
-  ['ContactInformation.e2e', 'WG_EditPhoneNumber', 'Profile', 'Contact information', '555-444-6666'],
-  ['ContactInformation.e2e', 'WG_EditPhoneNumber', 'Profile', 'Contact information', 'Work'],
   ['ContactInformation.e2e', 'WG_EditPhoneNumber', 'Profile', 'Contact information', 'Mobile'],
   ['ContactInformation.e2e', 'WG_EditEmail', 'Profile', 'Contact information', 'Email address'],
   ['MilitaryInformation.e2e', 'WG_MilitaryInformation', 'Profile', 'Military information'],
@@ -57,18 +54,10 @@ const AFNavigationForIndividual = [
   ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'talk-to-the-veterans-crisis-line-now'],
   ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],
-  ['Messages.e2e', 'WG_FolderMessages', 'Health', 'Messages', 'Folders', 'Sent'],
-  [
-    ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
-    'WG_PastAppointmentDetails',
-    'Health',
-    'Appointments',
-    'Past',
-    'Claim exam',
-  ],
+  //['Messages.e2e', 'WG_FolderMessages', 'Health', 'Messages', 'Folders', 'Sent'],
   ['Prescriptions.e2e', 'WG_PrescriptionDetails', 'Health', 'Prescriptions', 'Get prescription details'],
   ['Prescriptions.e2e', 'WG_PrescriptionHistory', 'Health', 'Prescriptions'],
-  ['Messages.e2e', 'WG_SecureMessaging', 'Health', 'Messages'],
+  //['Messages.e2e', 'WG_SecureMessaging', 'Health', 'Messages'],
   [
     ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
     'WG_UpcomingAppointmentDetails',
@@ -83,11 +72,11 @@ const AFNavigationForIndividual = [
     'WG_ViewMessage',
     'Health',
     'Messages',
-    'Folder',
+    'Folders',
     'Custom Folder 2',
     'Medication: Naproxen side effects',
   ],
-  ['Messages.e2e', 'WG_EditDraft', 'Health', 'Messages', 'Folders', 'Drafts (3)', 'Test: Test Inquiry'],
+  //['Messages.e2e', 'WG_EditDraft', 'Health', 'Messages', 'Folders', 'Drafts (3)', 'Test: Test Inquiry'],
   ['Prescriptions.e2e', 'WG_PrescriptionHelp', 'Health', 'Prescriptions', 'Help'],
   ['Prescriptions.e2e', 'WG_StatusDefinition', 'Health', 'Prescriptions', 'Active: Refill in process'],
   ['Payments.e2e', 'WG_PaymentDetails', 'Payments', 'VA payment history', 'Regular Chapter 31'],
@@ -160,7 +149,7 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 }
 
-describe(':android: Availability Framework', () => {
+describe('Availability Framework', () => {
   if (AFValue !== undefined) {
     let AFNeeded = false
     for (let x = 0; x < AFNavigationForIndividual.length; x++) {

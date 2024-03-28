@@ -352,6 +352,6 @@ describe('Navigation', () => {
     }
   }
   if (testsRun == false) {
-    it('no nav tests', async () => {})
+    it('no Nav changes', async () => {})
   }
 })
