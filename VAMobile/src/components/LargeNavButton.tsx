@@ -13,7 +13,12 @@ import colors from '../styles/themes/VAColors'
 const SkeletonLoader = () => {
   const theme = useTheme()
   return (
-    <ContentLoader backgroundColor={theme.colors.background.skeletonLoader} speed={0.6} width="100" height="10">
+    <ContentLoader
+      backgroundColor={theme.colors.background.skeletonLoader}
+      foregroundColor={theme.colors.background.skeletonLoaderSecondary}
+      speed={0.6}
+      width="100"
+      height="10">
       <Rect width="100%" height="25" />
     </ContentLoader>
   )
