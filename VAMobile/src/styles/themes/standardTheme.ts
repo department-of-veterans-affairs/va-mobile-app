@@ -74,7 +74,7 @@ const fontSizes = {
   },
   CrisisLineButton: {
     fontSize: 16,
-    lineHeight: 20.11,
+    lineHeight: 20,
   },
   DescriptiveBackButton: {
     fontSize: 16,
