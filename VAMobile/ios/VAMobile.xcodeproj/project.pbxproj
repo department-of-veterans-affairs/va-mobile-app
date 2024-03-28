@@ -38,6 +38,7 @@
 		F0A7D505A86F15F0584E031D /* libPods-VAMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-VAMobile.a */; };
 		F16E6BEE32054C639EAAF608 /* Bitter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */; };
 		EFE00507643646128D33A4FB /* launch_icon.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2579582387BD4A9C937E3141 /* launch_icon.jpeg */; };
+		FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,7 @@
 		F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Bold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf"; sourceTree = "<group>"; };
 		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; name = "launch_icon.jpeg"; path = "../assets/fonts/launch_icon.jpeg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +204,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */,
 				4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -340,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
+				FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				4091AC6126B07CA100DFE08C /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
