@@ -29,7 +29,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-function FolderMessages({ navigation, route }: FolderMessagesProps) {
+function FolderMessages({ route }: FolderMessagesProps) {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -58,7 +58,12 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
 
   if (folderMessagesError) {
     return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate
+        backLabel={t('messages')}
+        backLabelOnPress={() => {
+          navigateTo('SecureMessaging', { activeTab: 1 })
+        }}
+        title={title}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
       </ChildTemplate>
     )
@@ -67,7 +72,12 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
   if (loadingFolderMessages) {
     const text = t('secureMessaging.messages.loading')
     return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate
+        backLabel={t('messages')}
+        backLabelOnPress={() => {
+          navigateTo('SecureMessaging', { activeTab: 1 })
+        }}
+        title={title}>
         <LoadingComponent text={text} />
       </ChildTemplate>
     )
@@ -75,7 +85,12 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
 
   if (messages.length === 0) {
     return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate
+        backLabel={t('messages')}
+        backLabelOnPress={() => {
+          navigateTo('SecureMessaging', { activeTab: 1 })
+        }}
+        title={title}>
         <NoFolderMessages />
       </ChildTemplate>
     )
@@ -112,7 +127,12 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
   }
 
   return (
-    <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
+    <ChildTemplate
+      backLabel={t('messages')}
+      backLabelOnPress={() => {
+        navigateTo('SecureMessaging', { activeTab: 1 })
+      }}
+      title={title}>
       <Box mx={theme.dimensions.buttonPadding}>
         <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
       </Box>

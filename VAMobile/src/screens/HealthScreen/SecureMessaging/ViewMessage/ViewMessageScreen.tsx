@@ -8,9 +8,17 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { secureMessagingKeys, useFolders, useMessage, useMoveMessage, useThread } from 'api/secureMessaging'
+import {
+  secureMessagingKeys,
+  useFolderMessages,
+  useFolders,
+  useMessage,
+  useMoveMessage,
+  useThread,
+} from 'api/secureMessaging'
 import {
   MoveMessageParameters,
+  SecureMessagingAttachment,
   SecureMessagingFolderList,
   SecureMessagingMessageAttributes,
   SecureMessagingMessageList,
@@ -124,8 +132,22 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
+  const { refetch: refetchInbox } = useFolderMessages(currentFolderIdParam, currentPage, {
+    enabled: false,
+  })
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+  const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
+  if (includedAttachments?.length) {
+    const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
+      id: attachment.id,
+      filename: attachment.attributes.name,
+      link: attachment.links.download,
+      size: attachment.attributes.attachmentSize,
+    }))
+
+    message.attachments = attachments
+  }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
 
   useEffect(() => {
@@ -136,9 +158,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   useEffect(() => {
     if (messageFetched && message.readReceipt !== READ && !demoMode) {
-      queryClient.invalidateQueries({ queryKey: secureMessagingKeys.inboxData })
+      refetchInbox()
     }
-  }, [messageFetched, message.readReceipt, demoMode, queryClient])
+  }, [messageFetched, message.readReceipt, demoMode, queryClient, refetchInbox])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {

@@ -18,6 +18,7 @@ import {
 } from 'api/secureMessaging'
 import {
   SaveDraftParameters,
+  SecureMessagingAttachment,
   SecureMessagingFormData,
   SecureMessagingMessageAttributes,
   SecureMessagingMessageList,
@@ -96,6 +97,17 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const { data: messageReplyData, isLoading: loadingMessage } = useMessage(messageID)
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageReplyData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+  const includedAttachments = messageReplyData?.included?.filter((included) => included.type === 'attachments')
+  if (includedAttachments?.length) {
+    const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
+      id: attachment.id,
+      filename: attachment.attributes.name,
+      link: attachment.links.download,
+      size: attachment.attributes.attachmentSize,
+    }))
+
+    message.attachments = attachments
+  }
   const subject = message ? message.subject : ''
   const category = message.category
   // Receiver is the sender of the message user is replying to
