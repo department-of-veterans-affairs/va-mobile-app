@@ -1,7 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useFocusEffect } from '@react-navigation/native'
 
 import { AppointmentData, AppointmentsGetData } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
@@ -23,26 +21,6 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const [groupedAppts, setGroupedAppts] = useState<ReactNode | undefined>(undefined)
-  const onUpcomingAppointmentPress = (appointment: AppointmentData): void => {
-    navigateTo('UpcomingAppointmentDetails', { appointment: appointment, page: currentPage })
-  }
-  const pagination = appointmentsData?.meta?.pagination || {
-    currentPage: 1,
-    perPage: 10,
-    totalEntries: 0,
-  }
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (appointmentsData) {
-        setGroupedAppts(
-          getGroupedAppointments(appointmentsData.data, theme, { t }, onUpcomingAppointmentPress, false, pagination),
-        )
-      }
-    }, [appointmentsData]),
-  )
-
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
@@ -58,7 +36,16 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
 
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
+  const pagination = appointmentsData.meta?.pagination || {
+    currentPage: 1,
+    perPage: 10,
+    totalEntries: 0,
+  }
   const { currentPage, perPage, totalEntries } = pagination
+  const onUpcomingAppointmentPress = (appointment: AppointmentData): void => {
+    navigateTo('UpcomingAppointmentDetails', { appointment: appointment, page: currentPage })
+  }
+
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(currentPage + 1)
@@ -77,7 +64,7 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
-      {groupedAppts}
+      {getGroupedAppointments(appointmentsData.data, theme, { t }, onUpcomingAppointmentPress, false, pagination)}
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
