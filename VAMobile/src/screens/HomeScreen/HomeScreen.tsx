@@ -261,10 +261,14 @@ export function HomeScreen({}: HomeScreenProps) {
               {!!upcomingAppointmentsCount && (
                 <ActivityButton
                   title={t('appointments')}
-                  subText={t('appointments.activityButton.subText', {
-                    count: upcomingAppointmentsCount,
-                    dayCount: upcomingDaysLimit,
-                  })}
+                  subText={
+                    upcomingDaysLimit
+                      ? t('appointments.activityButton.subText', {
+                          count: upcomingAppointmentsCount,
+                          dayCount: upcomingDaysLimit,
+                        })
+                      : t('appointments.activityButton.subText.noDayCount', { count: upcomingAppointmentsCount })
+                  }
                   deepLink={'appointments'}
                 />
               )}
