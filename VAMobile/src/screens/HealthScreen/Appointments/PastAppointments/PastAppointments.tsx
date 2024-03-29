@@ -198,7 +198,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
           testID="getDateRangeTestID"
         />
       </Box>
-      {getGroupedAppointments(appointmentsData.data, theme, { t }, onPastAppointmentPress, false, pagination)}
+      {getGroupedAppointments(appointmentsData.data, theme, { t }, onPastAppointmentPress, true, pagination)}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
