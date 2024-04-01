@@ -16,7 +16,7 @@ type ClinicNameAndPhysicalLocationProps = {
 function clinicName(attributes: AppointmentAttributes, theme: VATheme) {
   const { friendlyLocationName, physicalLocation, location } = attributes || ({} as AppointmentAttributes)
   if (friendlyLocationName && friendlyLocationName?.length > 1) {
-    if (!physicalLocation && friendlyLocationName === location.name) {
+    if (!physicalLocation && friendlyLocationName === location?.name) {
       return <></>
     }
     return (
