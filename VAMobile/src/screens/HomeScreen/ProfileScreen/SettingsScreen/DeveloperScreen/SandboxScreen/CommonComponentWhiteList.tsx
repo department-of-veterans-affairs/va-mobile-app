@@ -1,4 +1,4 @@
-import { LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
+import { LabelTagTypeConstants } from 'components'
 import { getTheme } from 'styles/themes/standardTheme'
 
 import {
@@ -81,19 +81,6 @@ const CommonComponentWhiteList: CommonComponentWhiteListProps = {
       'text',
       { label: 'justTheSpinnerIcon', options: BooleanOptions },
       { label: 'spinnerColor', options: VAColorsOptions },
-    ],
-  },
-  ClickForActionLink: {
-    defaultProps: {
-      displayedText: 'DisplayText',
-      linkType: LinkTypeOptionsConstants.url,
-      linkUrlIconType: LinkUrlIconType.Chat,
-      metaData: {},
-    },
-    propOptions: [
-      'displayedText',
-      { label: 'linkType', options: objectToPickerOptions(LinkTypeOptionsConstants, true) },
-      { label: 'linkUrlIconType', options: objectToPickerOptions(LinkUrlIconType, true) },
     ],
   },
   LabelTag: {

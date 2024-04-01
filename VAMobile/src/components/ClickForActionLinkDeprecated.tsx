@@ -47,7 +47,7 @@ export type CalendarMetaData = {
 export type ActionLinkMetaData = CalendarMetaData
 
 /**
- *  Signifies the props that need to be passed in to {@link ClickForActionLink}
+ *  Signifies the props that need to be passed in to {@link ClickForActionLinkDeprecated}
  */
 export type LinkButtonProps = AccessibilityProps & {
   /** phone number or text for url that is displayed to the user, may be different than actual number or url used */
@@ -77,9 +77,10 @@ export type LinkButtonProps = AccessibilityProps & {
 }
 
 /**
+ * DEPRECATED March 2024. Use the LinkWithAnalytics component unelss you need colorOverride.
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({
+const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   displayedText,
   linkType,
   numberOrUrlLink,
@@ -191,4 +192,4 @@ const ClickForActionLink: FC<LinkButtonProps> = ({
   )
 }
 
-export default ClickForActionLink
+export default ClickForActionLinkDeprecated
