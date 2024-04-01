@@ -111,6 +111,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             fill={theme.colors.icon.largeNavButton}
             fill2={theme.colors.icon.transparent}
             ml={theme.dimensions.listItemDecoratorMarginLeft}
+            preventScaling={true}
           />
         </Box>
       </Pressable>
