@@ -4,14 +4,14 @@ import { setTimeout } from 'timers/promises'
 import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 
 export const AppealsIdConstants = {
-  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
+  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Received June 12, 2008',
   REVIEW_PAST_EVENTS_ID: 'reviewPastEventsTestID',
   ISSUES_TAB_TEXT: 'Issues',
   STATUS_TAB_TEXT: 'Status',
   APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   APPEAL_DETAILS_TEXT: 'Appeal details',
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
-  APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
+  APPEAL_SUBMITTED_TEXT: 'Received June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
   APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
