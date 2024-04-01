@@ -75,7 +75,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
         { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
-        { text: `Submitted ${formattedDateFiled}` },
+        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
       ]
 
       if (
