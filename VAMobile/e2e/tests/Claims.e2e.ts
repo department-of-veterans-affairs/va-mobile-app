@@ -90,7 +90,7 @@ describe('Claims Screen', () => {
       element(by.label('What should I do if I disagree with your decision on my  V-A  disability claim?')),
     ).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('DecisionReviewOptionsWebsite')
     await device.launchApp({ newInstance: false })
