@@ -2,47 +2,105 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
-import { InitialState } from 'store/slices'
-import { context, render } from 'testUtils'
+import * as api from 'store/api'
+import { QueriesData, context, render, waitFor, when } from 'testUtils'
 
 import NoClaimsAndAppeals from './NoClaimsAndAppeals'
 
+const mockPayload: ClaimsAndAppealsListPayload = {
+  data: [],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalEntries: 3,
+    },
+  },
+}
+
 context('NoClaimsAndAppeals', () => {
-  const initializeTestInstance = (claimsServiceError = false, appealsServiceError = false) => {
-    render(<NoClaimsAndAppeals claimType={ClaimTypeConstants.ACTIVE} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claimsServiceError,
-          appealsServiceError,
-        },
+  const initializeTestInstance = (
+    claimType = ClaimTypeConstants.ACTIVE,
+    errors: Array<ClaimsAndAppealsGetDataMetaError>,
+  ) => {
+    const queryPayload = mockPayload
+    queryPayload.meta.errors = errors
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/claims-and-appeals-overview`, {
+        showCompleted: 'false',
+        'page[size]': '10',
+        'page[number]': '1',
+      })
+      .mockResolvedValue(queryPayload)
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
+        data: queryPayload,
       },
-    })
+    ]
+    render(<NoClaimsAndAppeals claimType={claimType} />, { queriesData })
   }
 
-  it('initializes correctly', () => {
-    initializeTestInstance()
-    expect(screen.getByRole('header', { name: "You don't have any submitted claims or appeals" })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
-      ),
-    ).toBeTruthy()
+  it('initializes correctly for no claims or appeals', async () => {
+    initializeTestInstance(ClaimTypeConstants.ACTIVE, [])
+    await waitFor(() =>
+      expect(screen.getByRole('header', { name: "You don't have any submitted claims or appeals" })).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
+        ),
+      ).toBeTruthy(),
+    )
+  })
 
-    initializeTestInstance(true)
-    expect(screen.getByRole('header', { name: "You don't have any appeals" })).toBeTruthy()
-    expect(
-      screen.getByText('This app shows only completed applications but you don’t have active appeals.'),
-    ).toBeTruthy()
+  it('initializes correctly for no claims', async () => {
+    initializeTestInstance(ClaimTypeConstants.ACTIVE, [
+      {
+        service: 'claims',
+      },
+    ])
+    await waitFor(() => expect(screen.getByRole('header', { name: "You don't have any appeals" })).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText('This app shows only completed applications but you don’t have active appeals.'),
+      ).toBeTruthy(),
+    )
+  })
 
-    initializeTestInstance(false, true)
-    expect(screen.getByRole('header', { name: "You don't have any submitted claims" })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.',
-      ),
-    ).toBeTruthy()
+  it('initializes correctly for no appeals', async () => {
+    initializeTestInstance(ClaimTypeConstants.ACTIVE, [
+      {
+        service: 'appeals',
+      },
+    ])
+    await waitFor(() =>
+      expect(screen.getByRole('header', { name: "You don't have any submitted claims" })).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.',
+        ),
+      ).toBeTruthy(),
+    )
+  })
+
+  it('initializes correctly for closed claims and appeals', async () => {
+    initializeTestInstance(ClaimTypeConstants.CLOSED, [])
+    await waitFor(() =>
+      expect(screen.getByRole('header', { name: " You don't have any closed claims or appeals" })).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(
+        screen.queryByText(
+          'This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.',
+        ),
+      ).toBeFalsy(),
+    )
   })
 })
