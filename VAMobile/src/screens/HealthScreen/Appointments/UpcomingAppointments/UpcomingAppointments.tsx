@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { AppointmentData, AppointmentsGetData } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,8 +22,9 @@ function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAp
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
 
-  if (loading) {
+  if (loading && isFocused) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
