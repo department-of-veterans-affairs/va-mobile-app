@@ -31,8 +31,8 @@ context('WhatDoIDoIfDisagreement', () => {
         'If you disagree with a claim decision that you received on or after February 19, 2019, you can ask us to review the decision. You have 3 decision review options to choose from.',
       ),
     ).toBeTruthy()
-    expect(screen.getByText('Learn about your decision review options.')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Learn about your decision review options.' }))
+    expect(screen.getByText('Learn more about decision reviews and appeals')).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Learn more about decision reviews and appeals' }))
     expect(mockExternalLinkSpy).toHaveBeenCalled()
   })
 })
