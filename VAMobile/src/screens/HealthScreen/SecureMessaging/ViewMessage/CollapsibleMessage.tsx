@@ -17,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { getLinkifiedText } from 'utils/secureMessaging'
 
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
@@ -80,7 +81,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(body, t, launchLink)
+      return getLinkifiedText(fixSpecialCharacters(body), t, launchLink)
     }
     return <></>
   }
