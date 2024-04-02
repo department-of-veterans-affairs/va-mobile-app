@@ -2568,10 +2568,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@reduxjs/toolkit@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.1.tgz#3dce4906fb33da9e0122468ef21438dd7f2277a9"
-  integrity sha512-8CREoqJovQW/5I4yvvijm/emUiCCmcs4Ev4XPWd4mizSO+dD3g5G6w34QK5AGeNrSH7qM8Fl66j4vuV7dpOdkw==
+"@reduxjs/toolkit@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.3.tgz#5ce71cbf162f98c5dafb49bd3f1e11c5486ab9c4"
+  integrity sha512-76dll9EnJXg4EVcI5YNxZA/9hSAmZsFqzMmNRHvIlzw2WS/twfcVX3ysYrWGJMClwEmChQFC4yRq74tn6fdzRA==
   dependencies:
     immer "^10.0.3"
     redux "^5.0.1"
@@ -2744,10 +2744,10 @@
     lodash "^4.17.15"
     redent "^3.0.0"
 
-"@testing-library/react-native@^12.4.3":
-  version "12.4.3"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.4.3.tgz#57cd6a88b289f19144558b5e97336b57101af3ec"
-  integrity sha512-WLE7VbbR5jZJQl3vfNK7Wt+IHnzhOxyu95Mr56EHmzH3XhC8DkrPVAnUq9asq/QWj4aGnymbinFx6zZys/WZmA==
+"@testing-library/react-native@^12.4.5":
+  version "12.4.5"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.4.5.tgz#16528aeae7b29238872478f3d1132a2bf821365d"
+  integrity sha512-SfwFwV1MrnvL//9T4C4UyusnZfWy2IOftNU7mG+bspk23bDM9HH1TxsMvec7JVZleraicDO7tP1odFqwb4KPcg==
   dependencies:
     jest-matcher-utils "^29.7.0"
     pretty-format "^29.7.0"
