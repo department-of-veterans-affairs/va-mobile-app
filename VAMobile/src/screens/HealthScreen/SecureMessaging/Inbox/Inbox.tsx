@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { useFolderMessages } from 'api/secureMessaging'
 import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
@@ -22,6 +24,7 @@ function Inbox({}: InboxProps) {
     SecureMessagingSystemFolderIdConstants.INBOX,
     page,
   )
+  const isFocused = useIsFocused()
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
   const onInboxMessagePress = (messageID: number): void => {
@@ -34,7 +37,7 @@ function Inbox({}: InboxProps) {
     })
   }
 
-  if (loadingInbox) {
+  if (loadingInbox && isFocused) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 

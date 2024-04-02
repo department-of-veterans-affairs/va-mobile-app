@@ -1,4 +1,4 @@
-import React, { Ref, useState } from 'react'
+import React, { Ref, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
@@ -37,26 +37,48 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const { t: tFunction } = useTranslation()
   const launchLink = useExternalLink()
   const { condensedMarginBetween } = theme.dimensions
-  const [fetchMessageWithAttachment, setFetchMessageWithAttachment] = useState(false)
-  const [fetchFile, setFetchFile] = useState(false)
-  const [fileToGet, setFile] = useState({} as SecureMessagingAttachment)
+  const fileToGet = {} as SecureMessagingAttachment
+  const [attachments, setAttachments] = useState<SecureMessagingAttachment[]>([])
   const {
     data: messageWithAttachmentData,
-    isLoading: loadingAttachments,
+    isFetching: loadingAttachments,
     isError: messageWithAttachmentError,
+    isFetched: fetchedMessage,
+    refetch: fetchMessage,
   } = useMessage(message.messageId, {
-    enabled: fetchMessageWithAttachment,
+    enabled: false,
   })
-  const { isFetched: attachmentFetched, isPending: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
-    enabled: fetchFile,
+  const { refetch: refetchFile, isFetching: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
+    enabled: false,
   })
 
   const messageToUse = messageWithAttachmentData?.data.attributes || message
-  const { attachment, hasAttachments, attachments, senderName, sentDate, body } = messageToUse
+  const { attachment, hasAttachments, senderName, sentDate, body } = messageToUse
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
   const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
+
+  useEffect(() => {
+    if (fetchedMessage) {
+      console.log('looping throught attachments')
+      console.log(messageWithAttachmentData?.included)
+      const includedAttachments = messageWithAttachmentData?.included?.filter(
+        (included) => included.type === 'attachments',
+      )
+      console.log(includedAttachments?.length)
+      if (includedAttachments?.length) {
+        const attachmentsToSet: Array<SecureMessagingAttachment> = includedAttachments.map((attachmentToMap) => ({
+          id: attachmentToMap.id,
+          filename: attachmentToMap.attributes.name,
+          link: attachmentToMap.links.download,
+          size: attachmentToMap.attributes.attachmentSize,
+        }))
+        console.log(attachmentsToSet?.length)
+        setAttachments(attachmentsToSet)
+      }
+    }
+  }, [messageWithAttachmentData, fetchedMessage])
 
   if (isInitialMessage) {
     return <></>
@@ -65,16 +87,17 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
-    if (expandedValue && attachmentBoolean && !attachments?.length) {
-      setFetchMessageWithAttachment(true)
+    if (expandedValue && attachmentBoolean) {
+      fetchMessage()
     }
   }
 
   const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
-    if (!attachmentFetched && !attachmentFetchPending) {
-      setFile(file)
-      setFetchFile(true)
-    }
+    fileToGet.filename = file.filename
+    fileToGet.id = file.id
+    fileToGet.link = file.link
+    fileToGet.size = file.size
+    refetchFile()
   }
 
   function getBody() {
@@ -91,17 +114,17 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
           {getBody()}
-          {loadingAttachments && !attachments?.length && attachmentBoolean && (
+          {(loadingAttachments || attachmentFetchPending) && !attachments?.length && attachmentBoolean ? (
             <Box
               mx={theme.dimensions.gutter}
               mt={theme.dimensions.contentMarginTop}
               mb={theme.dimensions.contentMarginBottom}>
               <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
             </Box>
-          )}
+          ) : undefined}
         </Box>
         <Box>
-          {attachments?.length && (
+          {attachments?.length ? (
             <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
@@ -119,7 +142,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
                 </Box>
               ))}
             </Box>
-          )}
+          ) : undefined}
         </Box>
       </Box>
     )

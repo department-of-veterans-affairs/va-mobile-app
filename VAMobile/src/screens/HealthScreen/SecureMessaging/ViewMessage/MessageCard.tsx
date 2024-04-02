@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
-import { AttachmentLink, Box, CollapsibleView, TextView } from 'components'
+import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
@@ -34,10 +34,9 @@ function MessageCard({ message }: MessageCardProps) {
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const navigateTo = useRouteNavigation()
   const launchLink = useExternalLink()
-  const [fetchFile, setFetchFile] = useState(false)
-  const [fileToGet, setFile] = useState({} as SecureMessagingAttachment)
-  const { isFetched: attachmentFetched, isPending: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
-    enabled: fetchFile,
+  const fileToGet = {} as SecureMessagingAttachment
+  const { isPending: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
+    enabled: false,
   })
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired =
@@ -45,11 +44,12 @@ function MessageCard({ message }: MessageCardProps) {
       ? false
       : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
-  const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
-    if (!attachmentFetched && !attachmentFetchPending) {
-      setFile(file)
-      setFetchFile(true)
-    }
+  const onPressAttachment = (file: SecureMessagingAttachment) => {
+    fileToGet.filename = file.filename
+    fileToGet.id = file.id
+    fileToGet.link = file.link
+    fileToGet.size = file.size
+    refetchFile()
   }
 
   function getHeader() {
@@ -80,7 +80,16 @@ function MessageCard({ message }: MessageCardProps) {
   }
 
   function getAttachment() {
-    if (attachments?.length) {
+    if (attachmentFetchPending && !attachments?.length) {
+      return (
+        <Box
+          mx={theme.dimensions.gutter}
+          mt={theme.dimensions.contentMarginTop}
+          mb={theme.dimensions.contentMarginBottom}>
+          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+        </Box>
+      )
+    } else if (attachments?.length) {
       return (
         <Box mb={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
           <Box accessible={true} accessibilityRole="header">
