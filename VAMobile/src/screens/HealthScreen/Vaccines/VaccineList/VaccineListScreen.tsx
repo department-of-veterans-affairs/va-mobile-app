@@ -18,12 +18,11 @@ import {
   TextLine,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants } from 'store/api'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getA11yLabelText } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -36,7 +35,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
  */
 function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const [page, setPage] = useState(1)
-  const vaccinesInDowntime = useDowntime(DowntimeFeatureTypeConstants.immunizations)
+  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID) // checks for downtime, immunizations downtime constant is having an issue with unit test
   const {
     data: vaccines,
     isLoading: loading,
