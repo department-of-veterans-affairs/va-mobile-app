@@ -3,8 +3,8 @@ name: '[Documentation] Accessibility Check'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
-  pull_request:
-    branches: [develop]
+  push:
+    branches: [chanel-8217-accessibility-checks]
     paths: 
       - VAMobile/src/components/**
       - VAMobile/documentation/**
