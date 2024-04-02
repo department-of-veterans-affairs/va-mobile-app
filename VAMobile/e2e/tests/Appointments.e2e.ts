@@ -45,7 +45,7 @@ beforeAll(async () => {
 describe('Appointments Screen', () => {
   it('should match the appointments page design', async () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
+    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).atIndex(0)).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
   })
