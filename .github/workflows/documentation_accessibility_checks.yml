@@ -1,0 +1,52 @@
+name: '[Documentation] Accessibility Check'
+
+# Adapted from https://docusaurus.io/docs/deployment
+
+on:
+  pull_request:
+    branches: [develop]
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/documentation/**
+      - VAMobile/src/utils/hooks.tsx
+
+jobs:
+  test-deploy:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: yarn
+          cache-dependency-path: VAMobile/yarn.lock
+      - name: Test build
+        working-directory: VAMobile
+        run: |
+          yarn install --frozen-lockfile
+          cd documentation
+          yarn install --frozen-lockfile
+          yarn build
+
+      - name: Run documentation site
+        working-directory: Mob/documentation
+        run: yarn start    
+
+      - name: Wait for server to start
+        run: sleep 10
+  
+      - name: Run axe
+        run: |
+          npm install -g @axe-core/cli
+          axe http://localhost:3000 --exit   
+
+  start_slack_thread:
+        name: Start Slack thread
+        needs: test-deploy
+        uses: ./.github/workflows/start_slack_thread.yml
+        secrets: inherit
+        with:
+          channel_name: va-mobile-build-alerts
+          message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+              
