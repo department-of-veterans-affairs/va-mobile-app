@@ -19,12 +19,9 @@ import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
-import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import lettersReducer from 'store/slices/lettersSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -88,12 +85,9 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       analytics: analyticsReducer as any,
       appointments: appointmentsReducer as any,
       claimsAndAppeals: claimsAndAppealsReducer as any,
-      decisionLetters: decisionLettersReducer as any,
-      letters: lettersReducer as any,
       notifications: notificationReducer as any,
       secureMessaging: secureMessagingReducer as any,
       snackBar: snackbarReducer as any,
-      prescriptions: prescriptionsReducer as any,
       settings: settingsReducer as any,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
