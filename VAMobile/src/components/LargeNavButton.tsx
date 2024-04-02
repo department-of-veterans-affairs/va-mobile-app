@@ -91,9 +91,9 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
           <Box flex={1}>
             <TextView variant="LargeNavButton">{title}</TextView>
             {showLoading ? (
-              <Box flex={1} mt={33} flexDirection={'row'}>
+              <TextView mt={30} flexDirection={'row'}>
                 <SkeletonLoader />
-              </Box>
+              </TextView>
             ) : subText ? (
               <TextView mt={20} variant={'LargeNavSubtext'}>
                 {subText}
