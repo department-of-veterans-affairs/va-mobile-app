@@ -69,7 +69,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [apptsDataFetched])
 
-  if (appointmentsHasError || getUserAuthorizedServicesError) {
+  if (appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime) {
     return (
       <FeatureLandingTemplate
         backLabel={t('health.title')}
