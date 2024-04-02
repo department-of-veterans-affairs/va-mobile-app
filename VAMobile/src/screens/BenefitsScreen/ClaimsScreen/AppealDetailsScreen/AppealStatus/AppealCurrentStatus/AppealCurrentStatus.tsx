@@ -5,8 +5,6 @@ import { TFunction } from 'i18next'
 import _ from 'underscore'
 
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import {
   AppealAOJTypes,
   AppealAOJTypesConstants,
@@ -15,7 +13,9 @@ import {
   AppealStatusTypesConstants,
   AppealTypes,
   AppealTypesConstants,
-} from 'store/api/types'
+} from 'api/types'
+import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import getEnv from 'utils/env'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'

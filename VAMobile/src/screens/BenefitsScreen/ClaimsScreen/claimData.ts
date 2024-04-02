@@ -1,4 +1,4 @@
-import { ClaimData } from '../../../store/api'
+import { ClaimData } from 'api/types'
 
 export const claim: ClaimData = {
   id: '600156928',

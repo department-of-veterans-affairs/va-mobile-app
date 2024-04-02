@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ClaimsAndAppealsState } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -17,17 +16,27 @@ type NoClaimsAndAppealsProps = {
 function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
+  const [appealsServiceErrors, setAppealsServiceErrors] = useState(false)
+  const { data: claimsAndAppealsListPayload } = useClaimsAndAppeals(claimType, 1)
+
+  useEffect(() => {
+    const nonFatalErros = claimsAndAppealsListPayload?.meta.errors
+    const claimsError = !!nonFatalErros?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsError = !!nonFatalErros?.find(
+      (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+    )
+    setClaimsServiceErrors(claimsError)
+    setAppealsServiceErrors(appealsError)
+  }, [claimsAndAppealsListPayload, setClaimsServiceErrors, setAppealsServiceErrors])
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
   let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')
 
-  if (claimsServiceError) {
+  if (claimsServiceErrors) {
     header = t('noClaims.youDontHaveAnyAppeals')
     text = t('noClaims.appOnlyShowsCompletedAppeals')
-  } else if (appealsServiceError) {
+  } else if (appealsServiceErrors) {
     header = t('noClaims.youDontHaveAnyClaims')
     text = t('noClaims.appOnlyShowsCompletedClaims')
   } else if (claimType === ClaimTypeConstants.CLOSED) {

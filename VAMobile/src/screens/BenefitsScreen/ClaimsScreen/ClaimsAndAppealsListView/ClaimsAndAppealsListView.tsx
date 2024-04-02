@@ -1,25 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
 import {
   Box,
   DefaultList,
   DefaultListItemObj,
   LabelTagTypeConstants,
+  LoadingComponent,
   Pagination,
   PaginationProps,
   TextLine,
 } from 'components'
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -31,17 +30,21 @@ type ClaimsAndAppealsListProps = {
 function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const [page, setPage] = useState(1)
+  const [previousClaimType, setClaimType] = useState(claimType)
+  const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
-  const { currentPage, perPage, totalEntries } = pageMetaData
+  const claimsAndAppeals = claimsAndAppealsListPayload?.data
+  const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
+  const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
+
+  useEffect(() => {
+    if (previousClaimType !== claimType) {
+      setClaimType(claimType)
+      setPage(1)
+    }
+  }, [claimType, previousClaimType])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
@@ -66,13 +69,13 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    claimsAndAppeals.forEach((claimAndAppeal, index) => {
+    claimsAndAppeals?.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
         { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
-        { text: `Submitted ${formattedDateFiled}` },
+        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
       ]
 
       if (
@@ -102,22 +105,22 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     return listItems
   }
 
-  if (claimsAndAppeals.length === 0) {
+  if (claimsAndAppeals?.length === 0) {
     return <NoClaimsAndAppeals claimType={claimType} />
+  }
+
+  if (loadingClaimsAndAppeals) {
+    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
-  const requestPage = (requestedPage: number, selectedClaimType: ClaimType) => {
-    dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID, requestedPage))
-  }
-
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(currentPage + 1, claimType)
+      setPage(currentPage + 1)
     },
     onPrev: () => {
-      requestPage(currentPage - 1, claimType)
+      setPage(currentPage - 1)
     },
     totalEntries: totalEntries,
     pageSize: perPage,

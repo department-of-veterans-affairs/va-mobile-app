@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, ScrollView } from 'react-native'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { useSelector } from 'react-redux'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -10,6 +9,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
+import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
+import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import {
   AlertBox,
   Box,
@@ -28,9 +29,6 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import { ClaimEventData } from 'store/api'
-import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
@@ -50,15 +48,18 @@ type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOr
 function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<
-    RootState,
-    ClaimsAndAppealsState
-  >((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request: originalRequest, firstImageResponse } = route.params
+  const { claimID, request: originalRequest, firstImageResponse } = route.params
+  const { data: claim } = useClaim(claimID)
+  const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
+  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
+    claimID,
+    originalRequest,
+    imagesList,
+  )
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
@@ -98,15 +99,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   })
 
   useEffect(() => {
-    if (fileUploadedFailure || filesUploadedSuccess) {
-      dispatch(fileUploadSuccess())
-    }
-
     if (filesUploadedSuccess) {
-      setImagesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, imagesList])
+  }, [filesUploadedSuccess, claim, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -125,7 +121,20 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     logAnalyticsEvent(
       Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
     )
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || [], 'photo'))
+    const mutateOptions = {
+      onMutate: () => {
+        logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'photo'))
+      },
+      onSuccess: () => {
+        setImagesList([])
+        setFilesUploadedSuccess(true)
+        logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'photo'))
+        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
+      },
+      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
+    }
+    const params: UploadFileToClaimParamaters = { claimID, request, files: imagesList || [] }
+    uploadFileToClaim(params, mutateOptions)
   }
 
   const onUpload = (): void => {
