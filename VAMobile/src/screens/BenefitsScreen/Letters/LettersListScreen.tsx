@@ -135,7 +135,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
-      {errorCheck ? (
+      {errorCheck || !lettersNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
       ) : loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('letters.list.loading')} />
