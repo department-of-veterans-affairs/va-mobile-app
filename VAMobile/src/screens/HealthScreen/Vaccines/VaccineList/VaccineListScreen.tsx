@@ -35,7 +35,8 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
  */
 function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const [page, setPage] = useState(1)
-  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID) // checks for downtime, immunizations downtime constant is having an issue with unit test
+  // checks for downtime, immunizations downtime constant is having an issue with unit test
+  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
   const {
     data: vaccines,
     isLoading: loading,
