@@ -94,7 +94,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     )
   }
 
-  if (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError) {
+  if (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

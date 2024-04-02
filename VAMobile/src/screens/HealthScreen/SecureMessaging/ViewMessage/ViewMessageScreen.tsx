@@ -200,7 +200,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (foldersError || messageError || threadError) {
+  if (foldersError || messageError || threadError || !smNotInDowntime) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <ErrorComponent screenID={screenID} />
