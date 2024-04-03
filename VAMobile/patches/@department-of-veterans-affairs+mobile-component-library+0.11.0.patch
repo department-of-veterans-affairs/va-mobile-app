@@ -1,0 +1,94 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link.tsx
+index 13deb48..b37b276 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link.tsx
+@@ -16,7 +16,7 @@ import {
+   leaveAppPromptText,
+   useExternalLink,
+ } from '../../utils/OSfunctions'
+-import { Icon, IconProps } from '../Icon/Icon'
++import { Icon, IconMap, IconProps } from '../Icon/Icon'
+ import { t } from 'i18next'
+ import { useColorScheme } from '../../utils'
+ 
+@@ -102,7 +102,7 @@ export type LinkProps = linkTypes & {
+   /** Color variant */
+   variant?: 'default' | 'base'
+   /** Optional icon override, sized by default to 24x24 */
+-  icon?: IconProps | 'no icon'
++  icon?: Partial<IconProps> | 'no icon'
+   /** Optional a11yLabel override; should be used for phone numbers */
+   a11yLabel?: string
+   /** Optional a11yHint to provide additional context */
+@@ -151,23 +151,34 @@ export const Link: FC<LinkProps> = ({
+     if (onPress) onPress()
+   }
+ 
++  const addIconName = (name: keyof typeof IconMap, icon?: Partial<IconProps> | 'no icon') => {
++    if (!icon) {
++      return { name }
++    } else if (icon === 'no icon') {
++      return 'no icon'
++    } else {
++      icon.name = name
++      return icon
++    }
++  }
++
+   switch (type) {
+     case 'attachment':
+-      icon = icon ? icon : { name: 'PaperClip' }
++      icon = addIconName('PaperClip', icon)
+       _onPress = customOnPress
+       break
+     case 'calendar':
+-      icon = icon ? icon : { name: 'Calendar' }
++      icon = addIconName('Calendar', icon)
+       _onPress = customOnPress
+       break
+     case 'call':
+-      icon = icon ? icon : { name: 'Phone' }
++      icon = addIconName('Phone', icon)
+       _onPress = async (): Promise<void> => {
+         launchExternalLink(`tel:${phoneNumber}`, analytics)
+       }
+       break
+     case 'call TTY':
+-      icon = icon ? icon : { name: 'TTY' }
++      icon = addIconName('TTY', icon)
+       _onPress = async (): Promise<void> => {
+         launchExternalLink(`tel:${TTYnumber}`, analytics)
+       }
+@@ -177,20 +188,20 @@ export const Link: FC<LinkProps> = ({
+       _onPress = customOnPress
+       break
+     case 'directions':
+-      icon = icon ? icon : { name: 'Directions' }
++      icon = addIconName('Directions', icon)
+       const directions = FormDirectionsUrl(locationData)
+       _onPress = async (): Promise<void> => {
+         launchExternalLink(directions, analytics, promptText)
+       }
+       break
+     case 'text':
+-      icon = icon ? icon : { name: 'Text' }
++      icon = addIconName('Text', icon)
+       _onPress = async (): Promise<void> => {
+         launchExternalLink(`sms:${textNumber}`, analytics)
+       }
+       break
+     case 'url':
+-      icon = icon ? icon : { name: 'ExternalLink' }
++      icon = addIconName('ExternalLink', icon)
+       _onPress = async (): Promise<void> => {
+         launchExternalLink(url, analytics, promptText)
+       }
+@@ -215,7 +226,7 @@ export const Link: FC<LinkProps> = ({
+   const iconDisplay =
+     icon === 'no icon' ? null : (
+       <View style={{ marginRight: 5 }}>
+-        <Icon fill={linkColor} {...icon} />
++        <Icon fill={linkColor} {...(icon as IconProps)} />
+       </View>
+     )
+ 

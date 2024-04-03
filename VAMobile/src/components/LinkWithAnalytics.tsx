@@ -23,7 +23,7 @@ const LinkWithAnalytics = (props: LinkProps) => {
 
   return (
     <Box flexDirection={'row'} py={theme.dimensions.buttonPadding}>
-      <Link analytics={analytics} {...props} />
+      <Link analytics={analytics} icon={{ preventScaling: true }} {...props} />
     </Box>
   )
 }
