@@ -68,6 +68,10 @@ const fontSizes = {
     fontSize: 26,
     lineHeight: 32,
   },
+  CategoryLandingError: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
   ClaimPhase: {
     fontSize: 20,
     lineHeight: 30,
@@ -185,6 +189,11 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    CategoryLandingError: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.CategoryLandingError,
+      scheme.text.categoryLandingError,
+    ),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont(
       'SourceSansPro-Regular',
@@ -273,6 +282,7 @@ let theme: VATheme = {
     AnnouncementBannerTitle: fontSizes.AnnouncementBannerTitle,
     BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
+    CategoryLandingError: fontSizes.CategoryLandingError,
     ClaimPhase: fontSizes.ClaimPhase,
     HelperText: fontSizes.HelperText,
     LabelTag: fontSizes.LabelTag,

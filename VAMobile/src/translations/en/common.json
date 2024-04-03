@@ -22,6 +22,7 @@
   "accountType.savings": "Savings",
   "active": "active",
   "activity": "Activity",
+  "activity.error.cantShowAllActivity": "We can’t show all activity right now. Check back later.",
   "activity.informationNotIncluded": "Information from My VA Health portal not included.",
   "activity.loading": "Loading mobile app activity...",
   "add.preference.btn.title": "Add preference",
