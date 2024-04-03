@@ -4,7 +4,7 @@
 
 Encouraged update displays to the veteran that there is a newer version in the app store to encourgage them to update with a button to click to either download in App update(Android) or to go to the app store to download(iOS). In doing so they will download the latest version of the app and have access to all of the benefits that come with it. We also gave them the option of skipping an update for a particular version which hides this alert until the next version is released. This alert takes priority over the Whats New alert.
 
-This is potentially a precurssor to forced upgrading in the future after so many versions of the app have gone by without upgrading. Currently there is no plan to have a forced upgrade feature, but the ability is there.
+This is potentially a precursor to forced upgrading in the future after so many versions of the app have gone by without upgrading. Currently there is no plan to have a forced upgrade feature, but the ability is there.
 
 ## Use Cases
 
