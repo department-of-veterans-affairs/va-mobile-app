@@ -152,7 +152,12 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched])
 
   useEffect(() => {
-    if (messageFetched && message.readReceipt !== READ && currentFolderIdParam && currentPage) {
+    if (
+      messageFetched &&
+      message.readReceipt !== READ &&
+      currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX &&
+      currentPage
+    ) {
       const inboxMessagesData = queryClient.getQueryData([
         secureMessagingKeys.folderMessages,
         currentFolderIdParam,
