@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { AlertBox, Box, ClickToCallPhoneNumber, VAScrollView } from 'components'
+import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
@@ -51,9 +51,15 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
         <AlertBox
           title={t('downtime.title')}
           titleA11yLabel={t('downtime.title')}
-          text={t('downtime.message', { endTime })}
-          textA11yLabel={t('downtime.message.a11yLabel', { endTime })}
+          text={t('downtime.message.1', { endTime })}
+          textA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}
           border="warning">
+          <TextView
+            accessibilityLabel={t('downtime.message.2.a11yLabel', { endTime })}
+            mt={theme.dimensions.contentMarginTop}
+            mb={theme.dimensions.contentMarginBottom}>
+            {t('downtime.message.2', { endTime })}
+          </TextView>
           <ClickToCallPhoneNumber
             displayedText={displayedTextPhoneNumber(t('8006982411'))}
             phone={t('8006982411')}
