@@ -49,6 +49,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -90,17 +91,22 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const {
     data: prescriptionData,
+    isError: prescriptionsError,
     isFetched: rxPrefetch,
     isLoading: loadingPrescriptions,
   } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: screenContentAllowed('WG_PrescriptionHistory') && userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
   const {
     data: claimsData,
+    isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isLoading: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+    enabled:
+      screenContentAllowed('WG_ClaimsHistory') &&
+      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
+      !claimsInDowntime,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -202,6 +208,7 @@ export function HomeScreen({}: HomeScreenProps) {
     !!activeClaimsCount ||
     !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
     !!unreadMessageCount
+  const hasActivityError = !claimsData || claimsAndAppealsError || !prescriptionData || prescriptionsError
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -250,38 +257,52 @@ export function HomeScreen({}: HomeScreenProps) {
               )}
             </Box>
           ) : (
-            <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-              {!!upcomingAppointmentsCount && (
-                <ActivityButton
-                  title={t('appointments')}
-                  subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
-                  deepLink={'appointments'}
-                />
+            <>
+              <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+                {!!upcomingAppointmentsCount && (
+                  <ActivityButton
+                    title={t('appointments')}
+                    subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                    deepLink={'appointments'}
+                  />
+                )}
+                {!!activeClaimsCount && (
+                  <ActivityButton
+                    title={t('claims.title')}
+                    subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                    deepLink={'claims'}
+                  />
+                )}
+                {!!unreadMessageCount && (
+                  <ActivityButton
+                    title={`${t('messages')}`}
+                    subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                    deepLink={'messages'}
+                  />
+                )}
+                {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
+                  <ActivityButton
+                    title={t('prescription.title')}
+                    subText={t('prescriptions.activityButton.subText', {
+                      count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                    })}
+                    deepLink={'prescriptions'}
+                  />
+                )}
+              </Box>
+              {hasActivityError && (
+                <Box
+                  mx={theme.dimensions.standardMarginBetween}
+                  mt={theme.dimensions.standardMarginBetween}
+                  flexDirection="row"
+                  alignItems="center">
+                  <VAIcon width={24} height={24} name="ExclamationCircle" fill="homeScreenError" />
+                  <TextView variant="CategoryLandingError" ml={theme.dimensions.condensedMarginBetween} flex={1}>
+                    {t('activity.error.cantShowAllActivity')}
+                  </TextView>
+                </Box>
               )}
-              {!!activeClaimsCount && (
-                <ActivityButton
-                  title={t('claims.title')}
-                  subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
-                  deepLink={'claims'}
-                />
-              )}
-              {!!unreadMessageCount && (
-                <ActivityButton
-                  title={`${t('messages')}`}
-                  subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
-                  deepLink={'messages'}
-                />
-              )}
-              {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
-                <ActivityButton
-                  title={t('prescription.title')}
-                  subText={t('prescriptions.activityButton.subText', {
-                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-                  })}
-                  deepLink={'prescriptions'}
-                />
-              )}
-            </Box>
+            </>
           )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
