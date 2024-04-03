@@ -152,16 +152,16 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched])
 
   useEffect(() => {
-    if (messageFetched && messageData?.data.attributes.readReceipt !== READ) {
+    if (messageFetched && message.readReceipt !== READ && currentFolderIdParam && currentPage) {
       const inboxMessagesData = queryClient.getQueryData([
         secureMessagingKeys.folderMessages,
         currentFolderIdParam,
         currentPage,
       ]) as SecureMessagingFolderMessagesGetData
       const newInboxMessages = inboxMessagesData.data.map((m) => {
-        if (m.attributes.messageId === messageData?.data.attributes.messageId) {
+        if (m.attributes.messageId === message.messageId) {
           m.attributes.readReceipt = READ
-          const oldMessageAttributes = messageData?.data.attributes
+          const oldMessageAttributes = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
           oldMessageAttributes.readReceipt = READ
           const newMessage = {
             attributes: oldMessageAttributes,
