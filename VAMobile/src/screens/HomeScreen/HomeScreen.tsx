@@ -258,17 +258,13 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-              {!!upcomingAppointmentsCount && (
+              {!!upcomingAppointmentsCount && upcomingDaysLimit && (
                 <ActivityButton
                   title={t('appointments')}
-                  subText={
-                    upcomingDaysLimit
-                      ? t('appointments.activityButton.subText', {
-                          count: upcomingAppointmentsCount,
-                          dayCount: upcomingDaysLimit,
-                        })
-                      : t('appointments.activityButton.subText.noDayCount', { count: upcomingAppointmentsCount })
-                  }
+                  subText={t('appointments.activityButton.subText', {
+                    count: upcomingAppointmentsCount,
+                    dayCount: upcomingDaysLimit,
+                  })}
                   deepLink={'appointments'}
                 />
               )}
