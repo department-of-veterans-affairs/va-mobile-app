@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
@@ -151,47 +151,54 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     }
   }, [threadFetched])
 
-  const updateUnread = useCallback(() => {
-    const inboxMessagesData = queryClient.getQueryData([
-      secureMessagingKeys.folderMessages,
-      currentFolderIdParam,
-      currentPage,
-    ]) as SecureMessagingFolderMessagesGetData
-    const newInboxMessages = inboxMessagesData.data.map((m) => {
-      if (m.attributes.messageId === message.messageId) {
-        m.attributes.readReceipt = READ
-        message.readReceipt = READ
-        const newMessage = {
-          attributes: message,
-          type: messageData?.data.type,
-          id: messageData?.data.id,
-        } as SecureMessagingMessageData
-        const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
-        queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
-      }
-      return m
-    })
-    const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
-    queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
-    if (foldersData) {
-      const newFolders = foldersData.data.map((folder) => {
-        if (folder.attributes.name === FolderNameTypeConstants.inbox) {
-          folder.attributes.unreadCount = folder.attributes.unreadCount - 1
-        }
-        return folder
-      }) as SecureMessagingFolderList
-      queryClient.setQueryData(secureMessagingKeys.folders, {
-        ...foldersData,
-        data: newFolders,
-      } as SecureMessagingFoldersGetData)
-    }
-  }, [currentFolderIdParam, currentPage, foldersData, message, messageData, queryClient])
-
   useEffect(() => {
     if (messageFetched && message.readReceipt !== READ) {
-      updateUnread()
+      const inboxMessagesData = queryClient.getQueryData([
+        secureMessagingKeys.folderMessages,
+        currentFolderIdParam,
+        currentPage,
+      ]) as SecureMessagingFolderMessagesGetData
+      const newInboxMessages = inboxMessagesData.data.map((m) => {
+        if (m.attributes.messageId === message.messageId) {
+          m.attributes.readReceipt = READ
+          message.readReceipt = READ
+          const newMessage = {
+            attributes: message,
+            type: messageData?.data.type,
+            id: messageData?.data.id,
+          } as SecureMessagingMessageData
+          const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
+          queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
+        }
+        return m
+      })
+      const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
+      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
+      if (foldersData) {
+        const newFolders = foldersData.data.map((folder) => {
+          if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+            folder.attributes.unreadCount = folder.attributes.unreadCount - 1
+          }
+          return folder
+        }) as SecureMessagingFolderList
+        queryClient.setQueryData(secureMessagingKeys.folders, {
+          ...foldersData,
+          data: newFolders,
+        } as SecureMessagingFoldersGetData)
+      }
     }
-  }, [messageFetched, message.readReceipt, updateUnread])
+  }, [
+    messageFetched,
+    message.readReceipt,
+    queryClient,
+    message.messageId,
+    currentFolderIdParam,
+    currentPage,
+    messageData?.included,
+    foldersData,
+    message,
+    messageData,
+  ])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
