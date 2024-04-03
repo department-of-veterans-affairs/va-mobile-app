@@ -133,6 +133,7 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   BitterHeading: string
   ClaimPhase: string
+  CrisisLineButton: string
   DescriptiveBackButton: string
   HomeScreen: string
   HomeScreenHeader: string
@@ -316,6 +317,7 @@ export type VATheme = {
     BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
     ClaimPhase: VAFontSizes
+    CrisisLineButton: VAFontSizes
     HelperText: VAFontSizes
     LabelTag: VAFontSizes
     MobileBody: VAFontSizes
