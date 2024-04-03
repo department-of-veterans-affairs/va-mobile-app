@@ -8,19 +8,16 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import {
-  secureMessagingKeys,
-  useFolderMessages,
-  useFolders,
-  useMessage,
-  useMoveMessage,
-  useThread,
-} from 'api/secureMessaging'
+import { secureMessagingKeys, useFolders, useMessage, useMoveMessage, useThread } from 'api/secureMessaging'
 import {
   MoveMessageParameters,
   SecureMessagingAttachment,
   SecureMessagingFolderList,
+  SecureMessagingFolderMessagesGetData,
+  SecureMessagingFoldersGetData,
   SecureMessagingMessageAttributes,
+  SecureMessagingMessageData,
+  SecureMessagingMessageGetData,
   SecureMessagingMessageList,
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
@@ -132,9 +129,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
-  const { refetch: refetchInbox } = useFolderMessages(currentFolderIdParam, currentPage, {
-    enabled: false,
-  })
+
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
@@ -157,10 +152,49 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched])
 
   useEffect(() => {
-    if (messageFetched && message.readReceipt !== READ && !demoMode) {
-      refetchInbox()
+    if (messageFetched && message.readReceipt !== READ) {
+      const inboxMessagesData = queryClient.getQueryData([
+        secureMessagingKeys.folderMessages,
+        currentFolderIdParam,
+        currentPage,
+      ]) as SecureMessagingFolderMessagesGetData
+      const newInboxMessages = inboxMessagesData.data.map((m) => {
+        if (m.attributes.messageId === message.messageId) {
+          m.attributes.readReceipt = READ
+          message.readReceipt = READ
+          const newMessage = { ...messageData, attributes: message } as SecureMessagingMessageData
+          const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
+          queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
+        }
+        return m
+      })
+      const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
+      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
+      if (foldersData) {
+        const newFolders = foldersData.data.map((folder) => {
+          if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+            folder.attributes.unreadCount = folder.attributes.unreadCount - 1
+          }
+          return folder
+        }) as SecureMessagingFolderList
+        queryClient.setQueryData(secureMessagingKeys.folders, {
+          ...foldersData,
+          data: newFolders,
+        } as SecureMessagingFoldersGetData)
+      }
     }
-  }, [messageFetched, message.readReceipt, demoMode, queryClient, refetchInbox])
+  }, [
+    messageFetched,
+    message.readReceipt,
+    queryClient,
+    message.messageId,
+    currentFolderIdParam,
+    currentPage,
+    messageData?.included,
+    foldersData,
+    message,
+    messageData,
+  ])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {

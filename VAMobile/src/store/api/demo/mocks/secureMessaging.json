@@ -432,7 +432,7 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {
@@ -530,7 +530,7 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {
@@ -580,7 +580,7 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {

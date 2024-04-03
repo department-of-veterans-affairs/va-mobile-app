@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
@@ -39,6 +39,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const { activeTab } = route.params
   const [secureMessagingTab, setSecureMessagingTab] = useState(0)
   const [termsAndConditionError, setTermsAndConditionError] = useState(false)
+  const isFocused = useIsFocused()
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const {
@@ -64,7 +65,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
-    if (smFetch) {
+    if (smFetch && isFocused) {
       const foldersList = foldersData?.data || ([] as SecureMessagingFolderList)
       _.forEach(foldersList, (folder) => {
         if (folder.attributes.name === FolderNameTypeConstants.inbox) {
@@ -72,7 +73,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         }
       })
     }
-  }, [smFetch, foldersData])
+  }, [smFetch, foldersData, isFocused])
 
   useFocusEffect(
     React.useCallback(() => {

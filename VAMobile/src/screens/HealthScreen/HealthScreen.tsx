@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -40,6 +41,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
+  const isFocused = useIsFocused()
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
@@ -49,13 +51,13 @@ export function HealthScreen({}: HealthScreenProps) {
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
-    if (smFetch && foldersData) {
+    if (smFetch && foldersData && isFocused) {
       const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
       if (inboxFolder) {
         setUnreadCount(inboxFolder.attributes.unreadCount)
       }
     }
-  }, [smFetch, foldersData])
+  }, [smFetch, foldersData, isFocused])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
