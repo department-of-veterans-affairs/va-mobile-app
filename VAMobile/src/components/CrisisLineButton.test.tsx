@@ -17,7 +17,7 @@ jest.mock('utils/hooks', () => {
 context('CrisisLineButton', () => {
   it('navigates to VeteransCrisisLine on press', () => {
     render(<CrisisLineButton />)
-    fireEvent.press(screen.getByRole('button', { name: 'Talk to the Veterans Crisis Line now' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Talk to the Veterans Crisis Line now' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteransCrisisLine')
   })
 })
