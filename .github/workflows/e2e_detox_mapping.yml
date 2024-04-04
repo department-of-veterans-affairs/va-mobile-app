@@ -60,8 +60,8 @@ jobs:
         run: |
           resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
-            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpr contains(["NoClanded"] |
-            select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) oaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
+            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
+            select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
             select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
             select(contains(["ClaimsLettersScreen"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
