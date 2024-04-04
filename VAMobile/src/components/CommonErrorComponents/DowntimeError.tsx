@@ -43,7 +43,9 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     }
   })
 
-  const endTime = latestDowntimeWindow ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat('fff') : ''
+  const endTime = latestDowntimeWindow
+    ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat("DDD 'at' t ZZZZ")
+    : ''
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
