@@ -56,8 +56,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           border="warning">
           <TextView
             accessibilityLabel={t('downtime.message.2.a11yLabel', { endTime })}
-            mt={theme.dimensions.contentMarginTop}
-            mb={theme.dimensions.contentMarginBottom}>
+            my={theme.dimensions.contentMarginTop}>
             {t('downtime.message.2', { endTime })}
           </TextView>
           <ClickToCallPhoneNumber
