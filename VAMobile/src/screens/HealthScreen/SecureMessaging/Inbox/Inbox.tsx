@@ -27,13 +27,14 @@ function Inbox({}: InboxProps) {
   const isFocused = useIsFocused()
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
-  const onInboxMessagePress = (messageID: number): void => {
+  const onInboxMessagePress = (messageID: number, unreadMessage?: boolean): void => {
     navigateTo('SecureMessaging', { activeTab: 0 }) // ensures that when we back out of the message that the inbox is present
     navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
       messagesLeft: inboxMessagesData?.data?.length,
+      unreadMessage,
     })
   }
 

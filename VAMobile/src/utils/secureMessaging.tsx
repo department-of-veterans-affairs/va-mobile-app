@@ -45,7 +45,7 @@ const MAX_SUBJECT_LENGTH = 50
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number, isDraft?: boolean) => void,
+  onMessagePress: (messageID: number, isDraft?: boolean, unreadMessage?: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
@@ -120,7 +120,7 @@ export const getMessagesListItems = (
         logAnalyticsEvent(
           Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'),
         )
-        onMessagePress(message.id, isDraftsFolder)
+        onMessagePress(message.id, isDraftsFolder, readReceipt !== READ)
       },
       a11yHintText: isDraftsFolder
         ? t('secureMessaging.viewMessage.draft.a11yHint')
