@@ -65,7 +65,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Status' })))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Up to date as of ' + dateTime)).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Submitted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Review past events')).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy())
       await waitFor(() =>
@@ -122,7 +122,7 @@ context('AppealDetailsScreen', () => {
       })
       await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Issues' })))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Submitted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: 'Currently on appeal' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Eligibility for loan guaranty benefits')).toBeTruthy())
@@ -144,7 +144,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => expect(screen.getByText('Higher level review appeal for compensation')).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "hlr_request"', async () => {
+    it('should display the Received date as the event date where the type is "hlr_request"', async () => {
       renderWithData({
         ...appealData,
         type: 'higherLevelReview',
@@ -156,7 +156,7 @@ context('AppealDetailsScreen', () => {
           ],
         },
       })
-      await waitFor(() => expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
@@ -169,7 +169,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "nod"', async () => {
+    it('should display the Received date as the event date where the type is "nod"', async () => {
       renderWithData({
         ...appealData,
         type: 'legacyAppeal',
@@ -181,7 +181,7 @@ context('AppealDetailsScreen', () => {
           ],
         },
       })
-      await waitFor(() => expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
@@ -194,7 +194,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "nod"', async () => {
+    it('should display the Received date as the event date where the type is "nod"', async () => {
       renderWithData({
         ...appealData,
         type: 'appeal',
@@ -206,7 +206,7 @@ context('AppealDetailsScreen', () => {
           ],
         },
       })
-      await waitFor(() => expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
@@ -221,7 +221,7 @@ context('AppealDetailsScreen', () => {
       )
     })
 
-    it('should display the submitted date as the event date where the type is "sc_request"', async () => {
+    it('should display the Received date as the event date where the type is "sc_request"', async () => {
       renderWithData({
         ...appealData,
         type: 'supplementalClaim',
@@ -233,7 +233,7 @@ context('AppealDetailsScreen', () => {
           ],
         },
       })
-      await waitFor(() => expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
