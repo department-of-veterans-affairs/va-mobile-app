@@ -81,7 +81,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  if (useBankDataError) {
+  if (useBankDataError || !ddNotInDowntime) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}

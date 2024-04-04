@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
 import {
   Box,
@@ -35,6 +36,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const [previousClaimType, setClaimType] = useState(claimType)
   const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: decisionLetterData } = useDecisionLetters({ enabled: userAuthorizedServices?.decisionLetters })
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
@@ -75,13 +77,14 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
         { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
-        { text: `Submitted ${formattedDateFiled}` },
+        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
       ]
 
       if (
         featureEnabled('decisionLettersWaygate') &&
         userAuthorizedServices?.decisionLetters &&
-        attributes.decisionLetterSent
+        attributes.decisionLetterSent &&
+        (decisionLetterData?.data.length || 0) > 0
       ) {
         const margin = theme.dimensions.condensedMarginBetween
         textLines.push({
