@@ -21,8 +21,8 @@ import {
   VAModalPickerProps,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { getGroupedPayments } from 'utils/payments'
 
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
@@ -38,7 +38,12 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const [page, setPage] = useState(1)
   const [yearPickerOption, setYearPickerOption] = useState<yearsDatePickerOption>()
   const [pickerOptions, setpickerOptions] = useState<Array<yearsDatePickerOption>>([])
-  const { data: payments, isLoading: loading, isError: hasError } = usePayments(yearPickerOption?.label, page)
+  const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
+  const {
+    data: payments,
+    isLoading: loading,
+    isError: hasError,
+  } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
   const noPayments = payments?.meta.availableYears?.length === 0
 
   type yearsDatePickerOption = {
@@ -135,7 +140,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     )
   }
 
-  if (hasError) {
+  if (hasError || paymentsInDowntime) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}

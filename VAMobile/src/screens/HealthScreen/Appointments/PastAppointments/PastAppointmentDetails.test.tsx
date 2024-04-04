@@ -71,7 +71,7 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
     expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Blind Rehabilitation Center' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Type of care not noted' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Provider' })).toBeTruthy()
     expect(screen.getByText('Provider not noted')).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'VA Long Beach Healthcare System' })).toBeTruthy()

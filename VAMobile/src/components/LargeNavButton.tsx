@@ -1,4 +1,6 @@
 import React, { FC, useState } from 'react'
+import ContentLoader, { Rect } from 'react-content-loader/native'
+import { useTranslation } from 'react-i18next'
 import { Pressable, ViewStyle } from 'react-native'
 
 import {
@@ -11,11 +13,25 @@ import {
   TextView,
   VAIcon,
 } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-import MessagesCountTag from './MessagesCountTag'
+const SkeletonLoader = () => {
+  const theme = useTheme()
+  return (
+    <ContentLoader
+      backgroundColor={theme.colors.background.skeletonLoader}
+      foregroundColor={theme.colors.background.skeletonLoaderSecondary}
+      speed={0.6}
+      width="400"
+      height="25"
+      viewBox="100 0 100 100">
+      <Rect width="100%" height="50" />
+    </ContentLoader>
+  )
+}
 
 interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
@@ -44,10 +60,8 @@ interface HomeNavButtonProps {
   borderColorActive?: BorderColorVariant
   /**BorderStyles denotes the styling of the borders*/
   borderStyle?: BorderStyles
-  /**number for the tag */
-  tagCount?: number
-  /**a11y for the tag */
-  tagCountA11y?: string
+  /** Show loading animation in place of subtext */
+  showLoading?: boolean
 }
 
 /**
@@ -68,10 +82,10 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderColor,
   borderColorActive,
   borderStyle,
-  tagCount,
-  tagCountA11y,
+  showLoading,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [isPressed, setIsPressed] = useState(false)
 
   const _onPressIn = (): void => {
@@ -120,8 +134,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel =
-    tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
+  const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subTextA11yLabel || subText || ''}`.trim()
 
   return (
     <Box {...boxProps}>
@@ -143,12 +156,15 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
-            {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          {subText && (
-            <TextView variant={'MobileBody'} color={textColor}>
-              {subText}
-            </TextView>
+          {showLoading ? (
+            <SkeletonLoader />
+          ) : (
+            subText && (
+              <TextView variant={'MobileBody'} color={textColor}>
+                {subText}
+              </TextView>
+            )
           )}
         </Box>
         <VAIcon
