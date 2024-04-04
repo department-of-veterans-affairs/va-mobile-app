@@ -95,7 +95,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      {letterInfoError ? (
+      {letterInfoError || claimsInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
       ) : loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
