@@ -85,7 +85,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
-  const unreadMessage = route.params.unreadMessage
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
   const [showModalPicker, setShowModalPicker] = useState(false)
 
@@ -132,7 +131,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   })
 
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
-  console.log('foldersData: ', JSON.stringify(foldersData, undefined, 2))
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
   if (includedAttachments?.length) {
@@ -154,14 +152,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched])
 
   useEffect(() => {
-    console.log('messageFetched: ', messageFetched)
-    console.log('message.readReceipt: ', message.readReceipt)
-    console.log('currentFolderIdParam: ', currentFolderIdParam)
-    console.log('currentPage: ', currentPage)
     if (
       messageFetched &&
-      unreadMessage &&
       currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX &&
+      messageData?.data.attributes.readReceipt !== READ &&
       currentPage
     ) {
       const inboxMessagesData = queryClient.getQueryData([
@@ -169,7 +163,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         currentFolderIdParam,
         currentPage,
       ]) as SecureMessagingFolderMessagesGetData
-      console.log('inboxMessagesData: ', JSON.stringify(inboxMessagesData, undefined, 2))
       const newInboxMessages = inboxMessagesData.data.map((m) => {
         if (m.attributes.messageId === message.messageId) {
           m.attributes.readReceipt = READ
@@ -185,19 +178,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         }
         return m
       })
-      console.log('newInboxMessages: ', JSON.stringify(newInboxMessages, undefined, 2))
       const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
-      console.log('newData: ', JSON.stringify(newData, undefined, 2))
       queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
       if (foldersData) {
-        console.log('foldersData: ', JSON.stringify(foldersData, undefined, 2))
         const newFolders = foldersData.data.map((folder) => {
           if (folder.attributes.name === FolderNameTypeConstants.inbox) {
             folder.attributes.unreadCount = folder.attributes.unreadCount - 1
           }
           return folder
         }) as SecureMessagingFolderList
-        console.log('newFolders: ', JSON.stringify(newFolders, undefined, 2))
         queryClient.setQueryData(secureMessagingKeys.folders, {
           ...foldersData,
           data: newFolders,
@@ -214,7 +203,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     messageData?.included,
     foldersData,
     messageData,
-    unreadMessage,
   ])
 
   const getFolders = (): PickerItem[] => {

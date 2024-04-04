@@ -47,7 +47,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     isError: foldersError,
     isFetched: smFetch,
   } = useFolders({
-    enabled: screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
   })
   const {
     isError: inboxError,
@@ -65,7 +69,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
-    if (smFetch && isFocused) {
+    if (foldersData && isFocused) {
       const foldersList = foldersData?.data || ([] as SecureMessagingFolderList)
       _.forEach(foldersList, (folder) => {
         if (folder.attributes.name === FolderNameTypeConstants.inbox) {

@@ -19,22 +19,22 @@ function Inbox({}: InboxProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
   const [page, setPage] = useState(1)
   const { data: inboxMessagesData, isLoading: loadingInbox } = useFolderMessages(
     SecureMessagingSystemFolderIdConstants.INBOX,
     page,
+    { enabled: isFocused },
   )
-  const isFocused = useIsFocused()
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
-  const onInboxMessagePress = (messageID: number, unreadMessage?: boolean): void => {
+  const onInboxMessagePress = (messageID: number): void => {
     navigateTo('SecureMessaging', { activeTab: 0 }) // ensures that when we back out of the message that the inbox is present
     navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
       messagesLeft: inboxMessagesData?.data?.length,
-      unreadMessage,
     })
   }
 
