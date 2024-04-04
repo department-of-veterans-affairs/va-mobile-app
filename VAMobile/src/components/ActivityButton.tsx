@@ -74,6 +74,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
                 fill={theme.colors.icon.activityButton}
                 fill2={theme.colors.icon.transparent}
                 ml={theme.dimensions.listItemDecoratorMarginLeft}
+                preventScaling={true}
               />
             </Box>
           )}
