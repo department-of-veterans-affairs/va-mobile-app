@@ -3,7 +3,7 @@ name: Data Request
 about: Template for requesting mobile app data definitions, dashboard creation / updates, analysis, etc
 title: Data Request
 labels: analytics
-assignees: g-opzt
+assignees: OVezeamama
 ---
 
 
