@@ -11,6 +11,7 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
@@ -41,15 +42,7 @@ import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointmen
 import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import {
-  AnalyticsState,
-  AppointmentsState,
-  ClaimsAndAppealsState,
-  SecureMessagingState,
-  getInbox,
-  prefetchAppointments,
-  prefetchClaimsAndAppeals,
-} from 'store/slices'
+import { AnalyticsState, AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -103,10 +96,13 @@ export function HomeScreen({}: HomeScreenProps) {
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
   const {
-    activeClaimsCount,
-    loadingClaimsAndAppeals,
-    claimsFirstRetrieval: claimsPrefetch,
-  } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+    data: claimsData,
+    isFetched: claimsPrefetch,
+    isLoading: loadingClaimsAndAppeals,
+  } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+  })
+  const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
     RootState,
@@ -128,7 +124,13 @@ export function HomeScreen({}: HomeScreenProps) {
   const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
+    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+    }
+  }, [claimsPrefetch, claimsData])
+
+  useEffect(() => {
+    if (apptsPrefetch && claimsPrefetch && rxPrefetch && !smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
@@ -139,14 +141,6 @@ export function HomeScreen({}: HomeScreenProps) {
         dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
       }
     }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
-  )
-
-  useFocusEffect(
-    useCallback(() => {
-      if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
-        dispatch(prefetchClaimsAndAppeals(undefined, true))
-      }
-    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
   )
 
   useFocusEffect(
