@@ -99,7 +99,7 @@ context('HomeScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('button', { name: 'Talk to the Veterans Crisis Line now' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Talk to the Veterans Crisis Line now' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Contact us' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Find a VA location' })).toBeTruthy()
   })
