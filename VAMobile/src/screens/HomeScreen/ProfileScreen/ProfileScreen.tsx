@@ -77,14 +77,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
             error={serviceHistoryError}
           />
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            <LargeNavButton
-              title={t('settings.title')}
-              onPress={() => navigateTo('Settings')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
+            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
           </Box>
         </Box>
       ) : loadingCheck ? (
@@ -97,46 +90,21 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         <>
           {displayName}
           <NameTag />
-          <Box
-            mt={theme.dimensions.contentMarginTop}
-            mb={theme.dimensions.standardMarginBetween}
-            mx={theme.dimensions.gutter}>
+          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
             {userAuthorizedServices?.userProfileUpdate && (
               <>
                 <LargeNavButton
                   title={t('personalInformation.title')}
                   onPress={() => navigateTo('PersonalInformation')}
-                  borderWidth={theme.dimensions.buttonBorderWidth}
-                  borderColor={'secondary'}
-                  borderColorActive={'primaryDarkest'}
-                  borderStyle={'solid'}
                 />
                 <LargeNavButton
                   title={t('contactInformation.title')}
                   onPress={() => navigateTo('ContactInformation')}
-                  borderWidth={theme.dimensions.buttonBorderWidth}
-                  borderColor={'secondary'}
-                  borderColorActive={'primaryDarkest'}
-                  borderStyle={'solid'}
                 />
               </>
             )}
-            <LargeNavButton
-              title={t('militaryInformation.title')}
-              onPress={() => navigateTo('MilitaryInformation')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
-            <LargeNavButton
-              title={t('settings.title')}
-              onPress={() => navigateTo('Settings')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
+            <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
+            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
           </Box>
         </>
       )}

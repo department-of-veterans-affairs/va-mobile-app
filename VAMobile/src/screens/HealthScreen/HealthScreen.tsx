@@ -88,16 +88,10 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box
-        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}>
+      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
           showLoading={loadingAppointments}
           subText={
             upcomingAppointmentsCount
@@ -107,24 +101,16 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          onPress={() => navigateTo('SecureMessaging')}
+          showLoading={loadingInbox}
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
-          showLoading={loadingInbox}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
             showLoading={fetchingPrescriptions}
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
@@ -138,19 +124,8 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
         />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {CernerAlert ? (
         <Box mb={theme.dimensions.contentMarginBottom}>
