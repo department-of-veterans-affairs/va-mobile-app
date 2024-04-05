@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppointmentPhone } from 'api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentPhone } from 'store/api/types'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 
 type ClickToCallPhoneNumberProps = {

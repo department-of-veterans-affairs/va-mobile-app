@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { DateTime } from 'luxon'
 
-import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { usePrescriptions } from 'api/prescriptions'
@@ -22,14 +21,13 @@ import {
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
-import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { AnalyticsState, SecureMessagingState, getInbox } from 'store/slices'
+import { AnalyticsState, AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -62,21 +60,12 @@ export function HomeScreen({}: HomeScreenProps) {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const { data: apptsData, isFetched: apptsPrefetch } = useAppointments(
-    upcomingAppointmentDateRange.startDate,
-    upcomingAppointmentDateRange.endDate,
-    TimeFrameTypeConstants.UPCOMING,
-    1,
-    {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch'),
-    },
-  )
   const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled:
       (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
@@ -87,12 +76,11 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
   })
-
   useEffect(() => {
-    if (apptsPrefetch && apptsData?.meta) {
-      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
+    if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
     }
-  }, [apptsData, apptsPrefetch])
+  }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
     if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {

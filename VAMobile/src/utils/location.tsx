@@ -1,5 +1,4 @@
-import { AppointmentLocation } from 'api/types'
-
+import { AppointmentLocation } from '../store/api'
 import { isIOS } from './platform'
 
 const APPLE_MAPS_BASE_URL = 'https://maps.apple.com/'

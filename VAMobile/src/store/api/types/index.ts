@@ -1,4 +1,5 @@
 export * from './UserData'
+export * from './AppointmentData'
 export * from './Errors'
 export * from './Screens'
 export * from './SecureMessagingData'

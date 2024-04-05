@@ -2,7 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { AppointmentStatusConstants } from 'api/types'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
@@ -24,7 +24,7 @@ context('PendingAppointmentCancelButton', () => {
       isPending: true,
       status: AppointmentStatusConstants.SUBMITTED,
     }
-    render(<PendingAppointmentCancelButton attributes={props} goBack={jest.fn()} cancelAppointment={jest.fn()} />)
+    render(<PendingAppointmentCancelButton attributes={props} />)
   }
 
   it('initializes correctly and should call the useDestructive hook', () => {

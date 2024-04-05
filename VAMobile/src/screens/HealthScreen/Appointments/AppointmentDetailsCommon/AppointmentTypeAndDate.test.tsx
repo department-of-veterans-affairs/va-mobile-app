@@ -8,7 +8,7 @@ import {
   AppointmentStatusConstants,
   AppointmentStatusDetailType,
   AppointmentStatusDetailTypeConsts,
-} from 'api/types'
+} from 'store/api/types'
 import { context, render } from 'testUtils'
 
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
