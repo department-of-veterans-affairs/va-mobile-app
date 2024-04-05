@@ -62,6 +62,8 @@ interface HomeNavButtonProps {
   borderStyle?: BorderStyles
   /** Show loading animation in place of subtext */
   showLoading?: boolean
+  /** Optional test ID for button */
+  testID?: string
 }
 
 /**
