@@ -128,6 +128,7 @@ export function HealthScreen({}: HealthScreenProps) {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
             showLoading={fetchingPrescriptions}
+            testID="prescriptionsNavButtonTestID"
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {
