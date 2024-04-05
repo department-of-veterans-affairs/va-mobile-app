@@ -119,7 +119,6 @@ context('Inbox', () => {
           folderID: 0,
           messageID: 1,
           messagesLeft: 1,
-          unreadMessage: false,
         }),
       )
     })
