@@ -4,6 +4,7 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import {
+  AppointmentCancellationStatusTypes,
   AppointmentPhone,
   AppointmentStatus,
   AppointmentStatusConstants,
@@ -11,9 +12,10 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentType,
   AppointmentTypeConstants,
-} from 'api/types'
+} from 'store/api/types'
+import { InitialState, initialAppointmentsState } from 'store/slices'
+import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
 import { context, mockNavProps, render } from 'testUtils'
-import { bookedAppointmentsList, canceledAppointmentList } from 'utils/tests/appointments'
 
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
 
@@ -41,36 +43,61 @@ context('UpcomingAppointmentDetails', () => {
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     phoneData: AppointmentPhone | null = apptPhoneData,
     isCovid: boolean = false,
+    appointmentCancellationStatus?: AppointmentCancellationStatusTypes,
     statusDetail: AppointmentStatusDetailType | null = null,
     hasUrl: boolean = false,
   ): void => {
     const props = mockNavProps(
       undefined,
       { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy },
-      {
-        params: {
-          appointment:
-            status === 'BOOKED'
-              ? phoneData === null
-                ? bookedAppointmentsList[8]
-                : hasUrl
-                  ? bookedAppointmentsList[9]
-                  : bookedAppointmentsList.filter((obj) => {
-                      return obj.attributes.appointmentType === appointmentType &&
-                        obj.attributes.isCovidVaccine === isCovid
-                        ? true
-                        : false
-                    })[0]
-              : canceledAppointmentList.filter((obj) => {
-                  return (
-                    obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
-                  )
-                })[0],
-        },
-      },
+      { params: { appointmentID: '1' } },
     )
 
-    render(<UpcomingAppointmentDetails {...props} />)
+    render(<UpcomingAppointmentDetails {...props} />, {
+      preloadedState: {
+        ...InitialState,
+        appointments: {
+          ...initialAppointmentsState,
+          loading: false,
+          loadingAppointmentCancellation: false,
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          upcomingAppointmentsById:
+            status === 'BOOKED'
+              ? phoneData === null
+                ? { '1': bookedAppointmentsList[8] }
+                : hasUrl
+                  ? { '1': bookedAppointmentsList[9] }
+                  : {
+                      '1': bookedAppointmentsList.filter((obj) => {
+                        return obj.attributes.appointmentType === appointmentType &&
+                          obj.attributes.isCovidVaccine === isCovid
+                          ? true
+                          : false
+                      })[0],
+                    }
+              : {
+                  '1': canceledAppointmentList.filter((obj) => {
+                    return (
+                      obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                    )
+                  })[0],
+                },
+          loadedAppointmentsByTimeFrame: {
+            upcoming: status === 'BOOKED' ? bookedAppointmentsList : canceledAppointmentList,
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          appointmentCancellationStatus,
+        },
+      },
+    })
   }
 
   beforeEach(() => {
@@ -105,6 +132,7 @@ context('UpcomingAppointmentDetails', () => {
     it('should prompt an alert for leaving the app when the URL is present', () => {
       initializeTestInstance(
         AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -174,6 +202,7 @@ context('UpcomingAppointmentDetails', () => {
         AppointmentTypeConstants.VA,
         AppointmentStatusConstants.CANCELLED,
         undefined,
+        false,
         undefined,
         AppointmentStatusDetailTypeConsts.PATIENT,
       )
@@ -194,6 +223,7 @@ context('UpcomingAppointmentDetails', () => {
         AppointmentStatusConstants.CANCELLED,
         undefined,
         undefined,
+        undefined,
         AppointmentStatusDetailTypeConsts.PATIENT,
       )
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
@@ -203,6 +233,7 @@ context('UpcomingAppointmentDetails', () => {
       initializeTestInstance(
         undefined,
         AppointmentStatusConstants.CANCELLED,
+        undefined,
         undefined,
         undefined,
         AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
@@ -216,6 +247,7 @@ context('UpcomingAppointmentDetails', () => {
         AppointmentStatusConstants.CANCELLED,
         undefined,
         undefined,
+        undefined,
         AppointmentStatusDetailTypeConsts.CLINIC,
       )
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
@@ -225,6 +257,7 @@ context('UpcomingAppointmentDetails', () => {
       initializeTestInstance(
         undefined,
         AppointmentStatusConstants.CANCELLED,
+        undefined,
         undefined,
         undefined,
         AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,

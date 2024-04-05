@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentTypeConstants } from 'api/types'
 import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { useTheme } from 'utils/hooks'
 
 type TypeOfCareProps = {

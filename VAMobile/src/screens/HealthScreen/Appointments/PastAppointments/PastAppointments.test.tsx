@@ -2,7 +2,17 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGroupedByYear } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import 'store/slices'
+import {
+  ErrorsState,
+  InitialState,
+  getAppointmentsInDateRange,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+} from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
@@ -27,32 +37,136 @@ jest.mock('../../../../utils/platform', () => {
   }
 })
 
+jest.mock('store/slices/', () => {
+  const actual = jest.requireActual('store/slices')
+  const appointment = jest.requireActual('../../../../utils/tests/appointments').defaultAppoinment
+  return {
+    ...actual,
+    getAppointmentsInDateRange: jest.fn(() => {
+      return {
+        type: '',
+        payload: {
+          appointmentsList: [{ ...appointment }],
+        },
+      }
+    }),
+  }
+})
+
+jest.mock('../../../../store/api', () => {
+  const api = jest.requireActual('../../../../store/api')
+
+  return {
+    ...api,
+  }
+})
+
 context('PastAppointments', () => {
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     isPending = false,
-  ): AppointmentsList => {
-    return [
-      {
-        ...defaultAppoinment,
-        attributes: {
-          ...defaultAppointmentAttributes,
-          healthcareService: undefined,
-          status,
-          isPending,
-        },
+  ): AppointmentsGroupedByYear => {
+    return {
+      '2020': {
+        '3': [
+          {
+            ...defaultAppoinment,
+            attributes: {
+              ...defaultAppointmentAttributes,
+              healthcareService: undefined,
+              status,
+              isPending,
+            },
+          },
+        ],
       },
-    ]
+    }
   }
 
-  const initializeTestInstance = (appointmentsData?: AppointmentsGetData, loading = false) => {
+  const initializeTestInstance = (
+    currentPagePastAppointmentsByYear: AppointmentsGroupedByYear = {},
+    loading: boolean = false,
+    errorsState: ErrorsState = initialErrorsState,
+  ): void => {
     const props = mockNavProps()
 
-    render(<PastAppointments {...props} appointmentsData={appointmentsData} setPage={jest.fn()} loading={loading} />)
+    render(<PastAppointments {...props} />, {
+      preloadedState: {
+        appointments: {
+          ...InitialState.appointments,
+          loading,
+          loadingAppointmentCancellation: false,
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          currentPageAppointmentsByYear: {
+            upcoming: {},
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+            pastThreeMonths: currentPagePastAppointmentsByYear,
+          },
+          loadedAppointmentsByTimeFrame: {
+            upcoming: [],
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          paginationByTimeFrame: {
+            upcoming: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+
+            pastFiveToThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastEightToSixMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastElevenToNineMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllCurrentYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllLastYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+          },
+        },
+        errors: errorsState,
+      },
+    })
   }
 
+  beforeEach(() => {
+    initializeTestInstance(appointmentData())
+  })
+
   it('initializes correctly', () => {
-    initializeTestInstance({ data: appointmentData() })
     expect(screen.getByText('Select a date range')).toBeTruthy()
     expect(screen.getAllByText('Past 3 months')).toBeTruthy()
     expect(
@@ -60,6 +174,9 @@ context('PastAppointments', () => {
         'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
       ),
     ).toBeTruthy()
+    expect(screen.getByText('2 to 2 of 2')).toBeTruthy()
+    expect(screen.getByTestId('previous-page')).toBeTruthy()
+    expect(screen.getByTestId('next-page')).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {
@@ -71,35 +188,32 @@ context('PastAppointments', () => {
 
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', () => {
-      initializeTestInstance({ data: appointmentData() })
       fireEvent.press(
         screen.getByTestId(
           'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
         ),
       )
-      expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', {
-        appointment: appointmentData()[0],
-      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', { appointmentID: '1' })
     })
   })
 
   describe('when the status is CANCELLED', () => {
     it('should render the first line of the appointment item as the text "Canceled"', () => {
-      initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED) })
+      initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
     it('should render the first line of the appointment item as the text "Canceled"', () => {
-      initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED, true) })
+      initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED, true))
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
     it('should render the first line of the appointment item as the text "Pending"', () => {
-      initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.SUBMITTED, true) })
+      initializeTestInstance(appointmentData(AppointmentStatusConstants.SUBMITTED, true))
       expect(screen.getByText('Pending')).toBeTruthy()
     })
   })
@@ -108,6 +222,47 @@ context('PastAppointments', () => {
     it('should render NoAppointments', () => {
       initializeTestInstance()
       expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+      initializeTestInstance(undefined, undefined, errorState)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+      initializeTestInstance(undefined, undefined, errorState)
+      expect(screen.queryByText("The app can't be loaded.")).toBeFalsy()
+    })
+  })
+
+  describe('when the dropdown value is updated', () => {
+    it('should call getAppointmentsInDateRange', () => {
+      fireEvent.press(screen.getByTestId('getDateRangeTestID'))
+      fireEvent.press(
+        screen.getByAccessibilityValue({
+          text: '2 of 6',
+        }),
+      )
+      fireEvent.press(screen.getByText('Done'))
+      expect(getAppointmentsInDateRange).toHaveBeenCalled()
     })
   })
 })

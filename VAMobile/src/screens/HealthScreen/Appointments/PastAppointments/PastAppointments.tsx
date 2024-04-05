@@ -1,40 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
+import _ from 'underscore'
 
-import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
-import { Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  VAModalPicker,
+} from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
-import { getGroupedAppointments } from 'utils/appointments'
+import { RootState } from 'store'
+import { AppointmentsList } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { AppointmentsState, CurrentPageAppointmentsByYear, getAppointmentsInDateRange } from 'store/slices'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import {
+  getGroupedAppointments,
+  getTextLinesForAppointmentListItem,
+  getYearsToSortedMonths,
+  isAPendingAppointment,
+} from 'utils/appointments'
+import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import NoAppointments from '../NoAppointments/NoAppointments'
 
-type PastAppointmentsProps = {
-  appointmentsData?: AppointmentsGetData
-  loading: boolean
-  setPage: React.Dispatch<React.SetStateAction<number>>
-  setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
-  setTimeFrame: React.Dispatch<
-    React.SetStateAction<
-      | 'upcoming'
-      | 'pastThreeMonths'
-      | 'pastFiveToThreeMonths'
-      | 'pastEightToSixMonths'
-      | 'pastElevenToNineMonths'
-      | 'pastAllCurrentYear'
-      | 'pastAllLastYear'
-    >
-  >
-}
+type PastAppointmentsProps = Record<string, unknown>
 
-function PastAppointments({ appointmentsData, loading, setPage, setDateRange, setTimeFrame }: PastAppointmentsProps) {
+function PastAppointments({}: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
+  const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -135,51 +145,133 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
   const { timeFrame } = datePickerOption
-
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
-
-  if (!appointmentsData) {
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
-      </Box>
-    )
-  }
-
+  const currentPagePastAppointmentsByYear = newCurrentPageAppointmentsByYear[timeFrame]
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
-  const pagination = appointmentsData.meta?.pagination || {
-    currentPage: 1,
-    perPage: 10,
-    totalEntries: 0,
+  const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
+  const onPastAppointmentPress = (appointmentID: string): void => {
+    navigateTo('PastAppointmentDetails', { appointmentID })
   }
-  const { currentPage, perPage, totalEntries } = pagination
-  const onPastAppointmentPress = (appointment: AppointmentData): void => {
-    navigateTo('PastAppointmentDetails', { appointment })
+
+  const listWithAppointmentsAdded = (
+    listItems: Array<DefaultListItemObj>,
+    listOfAppointments: AppointmentsList,
+  ): Array<DefaultListItemObj> => {
+    // for each appointment, retrieve its textLines and add it to the existing listItems
+    _.forEach(listOfAppointments, (appointment, index) => {
+      const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+      const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
+
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = t('listPosition', { position, total: totalEntries })
+
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress: () => onPastAppointmentPress(appointment.id),
+        a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
+        testId: getTestIDFromTextLines(textLines),
+      })
+    })
+
+    return listItems
+  }
+
+  function getAppointmentsPastThreeMonths() {
+    if (!currentPagePastAppointmentsByYear) {
+      return <></>
+    }
+
+    const sortedYears = _.keys(currentPagePastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(currentPagePastAppointmentsByYear, true)
+
+    let listItems: Array<DefaultListItemObj> = []
+
+    _.forEach(sortedYears, (year) => {
+      _.forEach(yearsToSortedMonths[year], (month) => {
+        const listOfAppointments = currentPagePastAppointmentsByYear[year][month]
+        listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
+      })
+    })
+
+    return <DefaultList items={listItems} title={t('pastAppointments.pastThreeMonths')} />
+  }
+
+  const getAppointmentsInSelectedRange = (
+    curSelectedRange: PastAppointmentsDatePickerOption,
+    selectedPage: number,
+  ): void => {
+    const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+    const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+    if (startDate && endDate) {
+      dispatch(
+        getAppointmentsInDateRange(
+          startDate,
+          endDate,
+          curSelectedRange.timeFrame,
+          selectedPage,
+          ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
+        ),
+      )
+    }
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
     if (curSelectedRange) {
-      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
-      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
-      if (startDate && endDate) {
-        setTimeFrame(timeFrame)
-        setDateRange({ startDate: startDate, endDate: endDate })
-        setPage(1)
-      }
       setDatePickerOption(curSelectedRange)
+      getAppointmentsInSelectedRange(curSelectedRange, 1)
     }
+  }
+
+  const isPastThreeMonths = datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
+
+  function getAppointmentData() {
+    const appointmentsDoNotExist = !currentPagePastAppointmentsByYear || _.isEmpty(currentPagePastAppointmentsByYear)
+
+    if (appointmentsDoNotExist) {
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+        </Box>
+      )
+    }
+
+    return isPastThreeMonths
+      ? getAppointmentsPastThreeMonths()
+      : getGroupedAppointments(
+          currentPagePastAppointmentsByYear || {},
+          theme,
+          { t },
+          onPastAppointmentPress,
+          true,
+          paginationByTimeFrame[timeFrame],
+        )
+  }
+
+  useEffect(() => {
+    // Switching tabs resets the date range dropdown. Ensure appointments state matches dropdown
+    getAppointmentsInSelectedRange(datePickerOption, 1)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
+  }
+
+  if (loading) {
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
+  }
+
+  const requestPage = (requestedPage: number) => {
+    getAppointmentsInSelectedRange(datePickerOption, requestedPage)
   }
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(currentPage + 1)
+      requestPage(currentPage + 1)
     },
     onPrev: () => {
-      setPage(currentPage - 1)
+      requestPage(currentPage - 1)
     },
     totalEntries: totalEntries,
     pageSize: perPage,
@@ -188,7 +280,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
   }
 
   return (
-    <Box>
+    <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAModalPicker
           selectedValue={datePickerOption.value}
@@ -198,7 +290,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
           testID="getDateRangeTestID"
         />
       </Box>
-      {getGroupedAppointments(appointmentsData.data, theme, { t }, onPastAppointmentPress, true, pagination)}
+      {getAppointmentData()}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
