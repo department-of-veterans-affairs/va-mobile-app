@@ -4,18 +4,17 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import {
   AppointmentAttributes,
   AppointmentData,
-  AppointmentStatus,
-  AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
-} from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+} from 'store/api'
+import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { VATheme } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -167,7 +166,7 @@ export const getAppointmentTypeIcon = (
 /**
  * Returns list of appointments
  *
- * @param appointments - list of appointments unsorted
+ * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
  * @param theme - type VATheme, the theme object to set some properties
  * @param translate - function, the translate function
  * @param onAppointmentPress - function, the function that will be triggered on appointment press
@@ -177,17 +176,17 @@ export const getAppointmentTypeIcon = (
  * @returns list of appointments
  */
 export const getGroupedAppointments = (
-  appointments: AppointmentsList,
+  appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
   translations: { t: TFunction },
-  onAppointmentPress: (appointment: AppointmentData) => void,
+  onAppointmentPress: (appointmentID: string) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
-  if (!appointments) {
+  if (!appointmentsByYear) {
     return <></>
   }
-  const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointments)
+
   const sortedYears = _.keys(appointmentsByYear).sort()
   if (isReverseSort) {
     sortedYears.reverse()
@@ -220,24 +219,6 @@ export const getGroupedAppointments = (
   })
 }
 
-export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
-  const appointmentsByYear: AppointmentsGroupedByYear = {}
-
-  // Group appointments by year, resulting object is { year: [ list of appointments for year ] }
-  const initialAppointmentsByYear = _.groupBy(appointmentsList || [], (appointment) => {
-    return getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
-  })
-
-  // Group appointments by year by month next, resulting object is { year: { month1: [ list for month1 ], month2: [ list for month2 ] } }
-  _.each(initialAppointmentsByYear, (listOfAppointmentsInYear, year) => {
-    appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): number => {
-      return new Date(appointment.attributes.startDateUtc).getUTCMonth()
-    })
-  })
-
-  return appointmentsByYear
-}
-
 /**
  * Returns item list of appointments
  *
@@ -253,7 +234,7 @@ export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): Ap
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
   translations: { t: TFunction },
-  onAppointmentPress: (appointment: AppointmentData) => void,
+  onAppointmentPress: (appointmentID: string) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
@@ -271,7 +252,7 @@ const getListItemsForAppointments = (
     listItems.push({
       textLines,
       a11yValue,
-      onPress: () => onAppointmentPress(appointment),
+      onPress: () => onAppointmentPress(appointment.id),
       a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })

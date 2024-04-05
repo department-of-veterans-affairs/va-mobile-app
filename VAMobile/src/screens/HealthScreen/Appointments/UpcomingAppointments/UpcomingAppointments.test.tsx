@@ -2,7 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { AppointmentStatusConstants, AppointmentsGroupedByYear } from 'store/api/types'
+import { initialAppointmentsState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppoinment } from 'utils/tests/appointments'
 
@@ -17,76 +18,170 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('store/slices', () => {
+  const actual = jest.requireActual('store/slices')
+  return {
+    ...actual,
+    getAppointmentsInDateRange: jest.fn(() => {
+      return {
+        type: '',
+        payload: {},
+      }
+    }),
+  }
+})
+
+jest.mock('store/api', () => {
+  const api = jest.requireActual('store/api')
+
+  return {
+    ...api,
+  }
+})
+
 context('UpcomingAppointments', () => {
-  const appointmentData: AppointmentsList = [
-    {
-      ...defaultAppoinment,
-      attributes: {
-        ...defaultAppoinment.attributes,
-        healthcareService: undefined,
-      },
+  const appointmentsByYearData: AppointmentsGroupedByYear = {
+    '2020': {
+      '3': [
+        {
+          ...defaultAppoinment,
+          attributes: {
+            ...defaultAppoinment.attributes,
+            healthcareService: undefined,
+          },
+        },
+      ],
     },
-  ]
-
-  const initializeTestInstance = (appointmentsData?: AppointmentsGetData, loading = false) => {
-    const props = mockNavProps()
-
-    render(
-      <UpcomingAppointments {...props} appointmentsData={appointmentsData} setPage={jest.fn()} loading={loading} />,
-    )
   }
 
+  const initializeTestInstance = (
+    currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear,
+    loading: boolean = false,
+  ) => {
+    const props = mockNavProps()
+
+    render(<UpcomingAppointments {...props} />, {
+      preloadedState: {
+        appointments: {
+          ...initialAppointmentsState,
+          loading,
+          loadingAppointmentCancellation: false,
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          currentPageAppointmentsByYear: {
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+            pastThreeMonths: {},
+            upcoming: currentPageUpcomingAppointmentsByYear || {},
+          },
+          loadedAppointmentsByTimeFrame: {
+            upcoming: [],
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          paginationByTimeFrame: {
+            upcoming: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+
+            pastFiveToThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastEightToSixMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastElevenToNineMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllCurrentYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastAllLastYear: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+            pastThreeMonths: {
+              currentPage: 2,
+              totalEntries: 2,
+              perPage: 1,
+            },
+          },
+        },
+      },
+    })
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(appointmentsByYearData)
+  })
+
   describe('when loading is set to true', () => {
-    it('should show loading screen and no appointments screen', () => {
-      initializeTestInstance(undefined, true)
+    it('should show loading screen', () => {
+      initializeTestInstance({}, true)
       expect(screen.getByText('Loading your appointments...')).toBeTruthy()
     })
   })
 
-  describe('when no appointments', () => {
-    it('should show no appointments screen', () => {
-      initializeTestInstance(undefined)
+  describe('when there is no data', () => {
+    it('should show the no appointments screen', () => {
+      initializeTestInstance({})
       expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
   })
 
   describe('on appointment press', () => {
-    it('should call useRouteNavigation', async () => {
-      initializeTestInstance({ data: appointmentData })
+    it('should call useRouteNavigation', () => {
       fireEvent.press(
         screen.getByTestId(
           'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
         ),
       )
-      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {
-        appointment: appointmentData[0],
-        page: 1,
-      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
     })
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', async () => {
-      appointmentData[0].attributes.status = 'CANCELLED'
-      initializeTestInstance({ data: appointmentData })
+    it('should render the first line of the appointment item as the text "Canceled"', () => {
+      appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
+      initializeTestInstance(appointmentsByYearData)
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
-      appointmentData[0].attributes.status = AppointmentStatusConstants.CANCELLED
-      appointmentData[0].attributes.isPending = true
-      initializeTestInstance({ data: appointmentData })
+    it('should render the first line of the appointment item as the text "CANCELLED"', () => {
+      appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.CANCELLED
+      appointmentsByYearData['2020']['3'][0].attributes.isPending = true
+      initializeTestInstance(appointmentsByYearData)
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Pending"', async () => {
-      appointmentData[0].attributes.status = AppointmentStatusConstants.SUBMITTED
-      appointmentData[0].attributes.isPending = true
-      initializeTestInstance({ data: appointmentData })
+    it('should render the first line of the appointment item as the text "Pending"', () => {
+      appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.SUBMITTED
+      appointmentsByYearData['2020']['3'][0].attributes.isPending = true
+      initializeTestInstance(appointmentsByYearData)
       expect(screen.getByText('Pending')).toBeTruthy()
     })
   })

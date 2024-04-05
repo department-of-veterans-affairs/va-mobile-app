@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Box, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import {
   AppointmentAttributes,
   AppointmentStatusConstants,
@@ -8,9 +10,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToA11yLabel,
   AppointmentTypeToID,
-} from 'api/types'
-import { Box, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+} from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { isAPendingAppointment } from 'utils/appointments'
