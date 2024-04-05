@@ -8,7 +8,7 @@ import {
   AppointmentStatusConstants,
   AppointmentStatusDetailType,
   AppointmentStatusDetailTypeConsts,
-} from 'store/api/types/AppointmentData'
+} from 'api/types'
 import { context, render } from 'testUtils'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
