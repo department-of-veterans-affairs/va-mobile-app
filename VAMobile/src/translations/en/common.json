@@ -204,7 +204,7 @@
   "appointmentList.phoneOnly": "Phone",
   "appointmentList.youRequested": "Request type: {{typeOfVisit}}",
   "appointments": "Appointments",
-  "appointments.activityButton.subText": "{{count}} in the next 7 days",
+  "appointments.activityButton.subText": "{{count}} in the next {{dayCount}} days",
   "appointments.appointment": "Appointment",
   "appointments.appointmentsStatusSomeUnavailable": " We can't load some of your VA appointments",
   "appointments.atFacilityName": "At {{facilityName}}",

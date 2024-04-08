@@ -112,6 +112,7 @@ export function HomeScreen({}: HomeScreenProps) {
     preloadComplete: apptsPrefetch,
     loading: loadingAppointments,
     upcomingAppointmentsCount,
+    upcomingDaysLimit,
   } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
     enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
@@ -251,10 +252,13 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-              {!!upcomingAppointmentsCount && (
+              {!!upcomingAppointmentsCount && !!upcomingDaysLimit && (
                 <ActivityButton
                   title={t('appointments')}
-                  subText={t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })}
+                  subText={t('appointments.activityButton.subText', {
+                    count: upcomingAppointmentsCount,
+                    dayCount: upcomingDaysLimit,
+                  })}
                   deepLink={'appointments'}
                 />
               )}
