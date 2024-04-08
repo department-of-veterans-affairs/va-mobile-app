@@ -45,9 +45,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
   const isFocused = useIsFocused()
 
-  const { loading: loadingAppointments, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
+  const {
+    loading: loadingAppointments,
+    upcomingAppointmentsCount,
+    upcomingDaysLimit,
+  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
@@ -94,8 +96,11 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('Appointments')}
           showLoading={loadingAppointments}
           subText={
-            upcomingAppointmentsCount
-              ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
+            upcomingAppointmentsCount && upcomingDaysLimit
+              ? t('appointments.activityButton.subText', {
+                  count: upcomingAppointmentsCount,
+                  dayCount: upcomingDaysLimit,
+                })
               : undefined
           }
         />

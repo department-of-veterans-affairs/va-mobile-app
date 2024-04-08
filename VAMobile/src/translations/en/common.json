@@ -200,7 +200,7 @@
   "appointmentList.phoneOnly": "Phone",
   "appointmentList.requestType": "Request type: {{type}}",
   "appointments": "Appointments",
-  "appointments.activityButton.subText": "{{count}} in the next 7 days",
+  "appointments.activityButton.subText": "{{count}} in the next {{dayCount}} days",
   "appointments.appointment": "Appointment",
   "appointments.appointmentCanceled": "Appointment canceled",
   "appointments.appointmentNotCanceled": "Appointment not canceled",

@@ -4389,7 +4389,8 @@
           "totalPages": 5,
           "totalEntries": 48
         },
-        "upcomingAppointmentsCount": 3
+        "upcomingAppointmentsCount": 3,
+        "upcomingDaysLimit": 7
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
