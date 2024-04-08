@@ -4,13 +4,13 @@ name: '[Documentation] Accessibility Check'
 
 on:
   workflow_dispatch:
-   #branches:
-     # - chanel-8217-accessibility-checks
-  push:
-    paths: 
-      - 'VAMobile/src/components/**'
-      - 'VAMobile/documentation/**'
-      - 'VAMobile/src/utils/hooks.tsx'
+   branches:
+      - chanel-8217-accessibility-checks
+  #push:
+   #paths: 
+    #  - 'VAMobile/src/components/**'
+  #    - 'VAMobile/documentation/**'
+  #    - 'VAMobile/src/utils/hooks.tsx'
 
 jobs:
   test-deploy:
@@ -32,7 +32,7 @@ jobs:
           yarn build
 
       - name: Run documentation site
-        working-directory: Mob/documentation
+        working-directory: VAMob/documentation
         run: yarn start    
 
       - name: Wait for server to start
