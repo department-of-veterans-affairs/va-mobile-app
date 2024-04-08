@@ -3,12 +3,12 @@ name: '[Documentation] Accessibility Check'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
-  push:
-    branches: [chanel-8217-accessibility-checks]
-    paths: 
-      - VAMobile/src/components/**
-      - VAMobile/documentation/**
-      - VAMobile/src/utils/hooks.tsx
+  workflow_dispatch:
+    #branches: chanel-8217-accessibility-checks
+    #paths: 
+      #- VAMobile/src/components/**
+      #- VAMobile/documentation/**
+      #- VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
@@ -30,16 +30,22 @@ jobs:
           yarn build
 
       - name: Run documentation site
-        working-directory: VAMob/documentation
+        working-directory: VAMobile/documentation
         run: yarn start    
-
-      - name: Wait for server to start
-        run: sleep 10
   
+      - name: Setup docs
+        working-directory: VAMobile/documentation
+        run: cd VAMobile && yarn docs  
+    
+      - name: Wait for server to start
+        working-directory: VAMobile/documentation
+        run: npx wait-on http://localhost:3000
+      
       - name: Run axe
+        working-directory: VAMobile/documentation
         run: |
-          npm install -g @axe-core/cli
-          axe http://localhost:3000 --exit   
+              npm install -g @axe-core/cli
+              axe http://localhost:3000/va-mobile-app --exit        
 
   start_slack_thread:
         name: Start Slack thread

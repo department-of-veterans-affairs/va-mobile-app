@@ -3,8 +3,8 @@ name: '[Documentation] Test Build'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
-  push:
-    branches: [chanel-8217-accessibility-checks]
+  pull_request:
+    branches: [develop]
     paths: 
       - VAMobile/src/components/**
       - VAMobile/documentation/**
@@ -29,14 +29,4 @@ jobs:
           yarn install --frozen-lockfile
           yarn build
 
-      - name: Run documentation site
-        working-directory: VAMob/documentation
-        run: yarn start    
-  
-      - name: Wait for server to start
-        run: sleep 10
-    
-      - name: Run axe
-        run: |
-            npm install -g @axe-core/cli
-            axe http://localhost:3000 --exit        
+     
