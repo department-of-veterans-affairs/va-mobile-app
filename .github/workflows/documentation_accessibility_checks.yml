@@ -1,5 +1,4 @@
-#name: '[Documentation] Accessibility Check'
-name: '[Documentation] Test Build'
+name: '[Documentation] Accessibility Check'
 
 # Adapted from https://docusaurus.io/docs/deployment
 
