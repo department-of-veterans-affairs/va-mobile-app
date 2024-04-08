@@ -79,7 +79,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
+    isFetching: loadingHistory,
     isError: hasError,
     isFetched: prescriptionsFetched,
   } = usePrescriptions({
