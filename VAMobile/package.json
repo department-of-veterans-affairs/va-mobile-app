@@ -26,7 +26,7 @@
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
     "env:production": "./env/env.sh -e production -d false -t false",
-    "postinstall": "yarn prepare && yarn patch-package",
+    "postinstall": "yarn prepare",
     "prepare": "cd .. && husky VAMobile/.husky",
     "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
     "e2e:ios-test": "detox test -c ios --cleanup --record-logs all",
@@ -37,7 +37,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-component-library": "^0.11.0",
+    "@department-of-veterans-affairs/mobile-component-library": "0.12.1-beta.0",
     "@expo/react-native-action-sheet": "^4.0.1",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-firebase/analytics": "^18.9.0",
@@ -130,7 +130,6 @@
     "jest-when": "^3.6.0",
     "lint-staged": "^15.2.1",
     "metro-react-native-babel-preset": "^0.77.0",
-    "patch-package": "^8.0.0",
     "prettier": "^3.2.4",
     "react-devtools": "^5.0.0",
     "react-test-renderer": "^18.2.0",
