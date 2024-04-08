@@ -1,16 +1,15 @@
-name: '[Documentation] Accessibility Check'
+#name: '[Documentation] Accessibility Check'
+name: '[Documentation] Test Build'
 
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
-  workflow_dispatch:
-   branches:
-      - chanel-8217-accessibility-checks
-  #push:
-   #paths: 
-    #  - 'VAMobile/src/components/**'
-  #    - 'VAMobile/documentation/**'
-  #    - 'VAMobile/src/utils/hooks.tsx'
+  push:
+    branches: [chanel-8217-accessibility-checks]
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/documentation/**
+      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
