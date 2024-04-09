@@ -709,6 +709,8 @@
   "greetings.morning": "Good morning",
   "health.title": "Health",
   "help": "Help",
+  "healthHelp.info": "Some VA health facilities use our My VA Health portal. Information from that portal isn't included here.",
+  "healthHelp.checkFacility": "Check if your facility uses My VA Health",
   "history.title": "History",
   "home.title": "Home",
   "howDoIUpdate.dateOfBirth.body": "If our records have an error in your date of birth, you can request a correction. Here's how to request a correction:",

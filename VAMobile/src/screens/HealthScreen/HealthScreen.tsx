@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -7,7 +8,7 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -88,6 +89,10 @@ export function HealthScreen({}: HealthScreenProps) {
     })
   }
 
+  const goToHealthHelp = (): void => {
+    navigateTo('HealthHelp')
+  }
+
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box
@@ -157,6 +162,12 @@ export function HealthScreen({}: HealthScreenProps) {
       </Box>
       {CernerAlert ? (
         <Box mb={theme.dimensions.contentMarginBottom}>
+          <TextView>{t('healthHelp.info')}</TextView>
+          <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+              {t('healthHelp.checkFacility')}
+            </TextView>
+          </Pressable>
           <CernerAlert />
         </Box>
       ) : (
