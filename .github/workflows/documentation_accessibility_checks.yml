@@ -36,9 +36,9 @@ jobs:
       #  run: yarn start 
       
   
-      - name: Setup docs
-        working-directory: VAMobile/documentation
-        run: cd VAMobile && yarn docs  
+     # - name: Setup docs
+       # working-directory: VAMobile/documentation
+       # run: cd VAMobile && yarn docs  
     
       - name: Wait for server to start
         working-directory: VAMobile/documentation
