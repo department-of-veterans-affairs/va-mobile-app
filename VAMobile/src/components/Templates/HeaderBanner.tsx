@@ -110,7 +110,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
       updateVaOpacity()
       updateTitleShowing()
     }
-  })
+  }, [transition, title, titleShowing])
 
   /**
    * Handles animation effect on the title
@@ -133,7 +133,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  })
+  }) // Removed dependency array to fix screen reader issue #8310
 
   const zIndex = {
     zIndex: 1,
