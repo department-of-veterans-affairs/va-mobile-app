@@ -31,16 +31,10 @@ jobs:
           yarn install --frozen-lockfile
           yarn build
 
-      - name: Run documentation site
-        working-directory: VAMobile/documentation
-        run: yarn start 
-       # background: true
-      - name: Wait for server to start
-        run: |
-          until $(curl --output /dev/null --silent --head --fail http://localhost:3000); do
-            printf '.'
-            sleep 2
-          done 
+     # - name: Run documentation site
+      #  working-directory: VAMobile/documentation
+      #  run: yarn start 
+      
   
       - name: Setup docs
         working-directory: VAMobile/documentation
