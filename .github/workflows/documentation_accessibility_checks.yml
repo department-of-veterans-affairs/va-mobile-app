@@ -4,6 +4,9 @@ name: '[Documentation] Accessibility Check'
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "chanel-8217-accessibility-checks"
     #branches: chanel-8217-accessibility-checks
     #paths: 
       #- VAMobile/src/components/**
