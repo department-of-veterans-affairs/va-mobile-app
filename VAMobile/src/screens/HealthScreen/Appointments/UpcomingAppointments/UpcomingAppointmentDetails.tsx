@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useAppointments, useCancelAppointment } from 'api/appointments'
+import {
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+} from 'api/types'
 import {
   Box,
   ClickForActionLink,
@@ -19,27 +27,18 @@ import {
   TextView,
   TextViewProps,
 } from 'components'
-import { Events } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import {
-  AppointmentAttributes,
-  AppointmentCancellationStatusConstants,
-  AppointmentData,
-  AppointmentLocation,
-  AppointmentStatusConstants,
-  AppointmentTypeConstants,
-  AppointmentTypeToID,
-  ScreenIDTypesConstants,
-} from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { a11yHintProp } from 'utils/accessibility'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -57,6 +56,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
+import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -65,31 +65,30 @@ const { LINK_URL_VA_SCHEDULING } = getEnv()
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
 function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
-  let { appointmentID } = route.params
-  const { vetextID } = route.params
-
+  const { appointment, vetextID } = route.params
+  const { page } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const screenError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
-  const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } =
-    useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const dateRange = getUpcomingAppointmentDateRange()
+  const {
+    data: apptsData,
+    isLoading: loadingAppointments,
+    isError: getApptError,
+  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
+    enabled: !appointment,
+  })
 
-  const appointment = appointmentID
-    ? upcomingAppointmentsById?.[appointmentID]
-    : Object.values(upcomingAppointmentsById || []).find(
-        (appointmentData) => appointmentData.attributes.vetextId === vetextID,
-      )
+  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment(page || 1)
 
-  const appointmentNotFound = vetextID && !loading && !appointment
+  const trueAppointment =
+    appointment ||
+    Object.values(apptsData?.data || []).find((appointmentData) => appointmentData.attributes.vetextId === vetextID)
 
-  if (!appointmentID) {
-    appointmentID = appointment?.id
-  }
+  const appointmentNotFound = !!vetextID && !loadingAppointments && !trueAppointment
 
-  const { attributes } = (appointment || {}) as AppointmentData
+  const { attributes } = (trueAppointment || {}) as AppointmentData
   const {
     appointmentType,
     location,
@@ -106,37 +105,26 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    attributes &&
-      dispatch(
-        trackAppointmentDetail(
-          pendingAppointment,
-          appointmentID,
+    if (attributes) {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+      logAnalyticsEvent(
+        Events.vama_appt_view_details(
+          !!pendingAppointment,
+          trueAppointment?.id,
           getAppointmentAnalyticsStatus(attributes),
           attributes.appointmentType.toString(),
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-  }, [dispatch, appointmentID, pendingAppointment, attributes])
-
-  useEffect(() => {
-    if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
-      dispatch(clearAppointmentCancellation())
-    } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
-      dispatch(clearAppointmentCancellation())
-      navigation.goBack()
+      registerReviewEvent()
     }
-  }, [appointmentCancellationStatus, dispatch, navigation])
+  }, [trueAppointment, pendingAppointment, attributes])
 
   useEffect(() => {
-    if (!screenError && appointmentNotFound) {
+    if (!getApptError && appointmentNotFound) {
       logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
     }
-  }, [appointmentNotFound, screenError, vetextID])
-
-  const goBack = (): void => {
-    dispatch(clearAppointmentCancellation())
-    navigation.goBack()
-  }
+  }, [appointmentNotFound, getApptError, vetextID])
 
   const getLocation = (): string => {
     if (isIOS() && lat && long) {
@@ -149,10 +137,10 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   }
 
   const calendarAnalytics = (): void => {
-    appointmentID &&
+    trueAppointment &&
       logAnalyticsEvent(
         Events.vama_apt_add_cal(
-          appointmentID,
+          trueAppointment.id,
           getAppointmentAnalyticsStatus(attributes),
           attributes.appointmentType.toString(),
           getAppointmentAnalyticsDays(attributes),
@@ -235,15 +223,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
 
   function renderAtHomeVideoConnectAppointmentData() {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
-      const onPrepareForVideoVisit = () => {
-        dispatch(clearAppointmentCancellation())
-
-        navigateTo('PrepareForVideoVisit')
-      }
-
       const joinSessionOnPress = (): void => {
-        dispatch(clearAppointmentCancellation())
-
         if (url) {
           launchExternalLink(url)
         } else {
@@ -254,7 +234,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       const prepareForVideoVisitLinkProps: TextViewProps = {
         py: theme.dimensions.buttonPadding,
         variant: 'MobileBodyLink',
-        onPress: onPrepareForVideoVisit,
+        onPress: () => navigateTo('PrepareForVideoVisit'),
         accessibilityRole: 'link',
       }
 
@@ -274,10 +254,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
             />
           </Box>
 
-          <TextView
-            {...prepareForVideoVisitLinkProps}
-            {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}
-            testID="prepareForVideoVisitTestID">
+          <TextView {...prepareForVideoVisitLinkProps} testID="prepareForVideoVisitTestID">
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
@@ -327,7 +304,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
-          <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
+          <AppointmentCancellationInfo
+            appointment={appointment}
+            goBack={navigation.goBack}
+            cancelAppointment={cancelAppointment}
+          />
         ) : phoneOnly ||
           (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') ? (
           <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -365,7 +346,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (screenError || appointmentNotFound) {
+  if (getApptError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -373,7 +354,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (loadingAppointmentCancellation || loading) {
+  if (loadingAppointmentCancellation || loadingAppointments) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <LoadingComponent
@@ -418,7 +399,12 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <AppointmentReason attributes={attributes} />
           {renderSpecialInstructions()}
           <ContactInformation attributes={attributes} />
-          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
+          <PendingAppointmentCancelButton
+            attributes={attributes}
+            appointmentID={trueAppointment?.id}
+            cancelAppointment={cancelAppointment}
+            goBack={navigation.goBack}
+          />
         </TextArea>
 
         {readerCancelInformation()}
