@@ -7,10 +7,10 @@ on:
   push:
     branches:
       - chanel-8217-accessibility-checks
-    paths: 
-      - VAMobile/src/components/**
-      - VAMobile/documentation/**
-      - VAMobile/src/utils/hooks.tsx
+    # paths: 
+    #   - VAMobile/src/components/**
+    #   - VAMobile/documentation/**
+    #   - VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
