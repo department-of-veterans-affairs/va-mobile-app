@@ -44,6 +44,7 @@ const emptyAppointmentsInDateRange: AppointmentsGetData = {
       perPage: DEFAULT_PAGE_SIZE,
     },
     upcomingAppointmentsCount: 0,
+    upcomingDaysLimit: 0,
   },
 }
 
@@ -101,6 +102,7 @@ export type AppointmentsState = {
   messagesLoading: boolean
   upcomingAppointmentsCount?: number
   preloadComplete: boolean
+  upcomingDaysLimit?: number
 }
 
 export const initialPaginationState = {
@@ -223,6 +225,7 @@ const getLoadedAppointments = (
   latestPage: number,
   pageSize: number,
   upcomingAppointmentsCount?: number,
+  upcomingDaysLimit?: number,
 ) => {
   const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
@@ -237,6 +240,7 @@ const getLoadedAppointments = (
         },
         dataFromStore: true, // informs reducer not to save these appointments to the store
         upcomingAppointmentsCount,
+        upcomingDaysLimit,
       },
     } as AppointmentsGetData
   }
@@ -300,6 +304,7 @@ export const prefetchAppointments =
         1,
         DEFAULT_PAGE_SIZE,
         getState().appointments.upcomingAppointmentsCount,
+        getState().appointments.upcomingDaysLimit,
       )
       if (
         !forceRefetch &&
@@ -509,6 +514,7 @@ const appointmentsSlice = createSlice({
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
 
       state.upcomingAppointmentsCount = upcoming?.meta?.upcomingAppointmentsCount
+      state.upcomingDaysLimit = upcoming?.meta?.upcomingDaysLimit
       state.upcomingAppointmentsById = mapAppointmentsById(upcomingAppointments)
       state.pastAppointmentsById = mapAppointmentsById(pastAppointments)
       state.upcomingCcServiceError = upcomingCcServiceError

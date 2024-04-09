@@ -16,7 +16,7 @@ const CrisisLineButton: FC = () => {
 
   const touchableProps: TouchableWithoutFeedbackProps = {
     accessible: true,
-    accessibilityRole: 'button',
+    accessibilityRole: 'link',
     accessibilityHint: t('crisisLineButton.hint'),
   }
 
@@ -27,7 +27,7 @@ const CrisisLineButton: FC = () => {
     minHeight: theme.dimensions.touchableMinHeight,
     mx: theme.dimensions.gutter,
     my: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.buttonPadding,
+    py: theme.dimensions.headerLeftButtonFromTextPadding,
     px: theme.dimensions.cardPadding,
     borderRadius: 40,
   }
@@ -35,7 +35,7 @@ const CrisisLineButton: FC = () => {
   return (
     <TouchableWithoutFeedback onPress={() => navigateTo('VeteransCrisisLine')} {...touchableProps}>
       <Box {...boxProps}>
-        <TextView color={'crisisLineButton'}> {t('crisisLineButton.label')} </TextView>
+        <TextView variant={'CrisisLineButton'}>{t('crisisLineButton.label')}</TextView>
       </Box>
     </TouchableWithoutFeedback>
   )
