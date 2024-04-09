@@ -49,12 +49,12 @@ jobs:
               npm install -g @axe-core/cli
               axe http://localhost:3000/va-mobile-app --exit        
 
-  start_slack_thread:
-        name: Start Slack thread
-        needs: test-deploy
-        uses: ./.github/workflows/start_slack_thread.yml
-        secrets: inherit
-        with:
-          channel_name: va-mobile-build-alerts
-          message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+ # start_slack_thread:
+   #     name: Start Slack thread
+      #  needs: test-deploy
+       #uses: ./.github/workflows/start_slack_thread.yml
+      #  secrets: inherit
+       # with:
+        #  channel_name: va-mobile-build-alerts
+         # message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
               
