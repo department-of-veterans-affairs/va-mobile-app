@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import {
@@ -27,7 +28,12 @@ import { MenuViewActionsType } from 'components/Menu'
 import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  REPLY_WINDOW_IN_DAYS,
+  SegmentedControlIndexes,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
 import {
@@ -123,6 +129,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     const currentMessage = messagesById?.[id]
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
   })
+  const hasMessageNewerThan45Days = thread
+    .map((id) => messagesById[id])
+    .some((msg) => DateTime.fromISO(msg.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS)
+  const mustStartNewMessage = isReplyDraft && !hasMessageNewerThan45Days
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -484,6 +494,18 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
+  function renderAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+            {t('secureMessaging.reply.olderThan45Days')}
+          </TextView>
+        </AlertBox>
+      </Box>
+    )
+  }
+
   function renderForm() {
     if (noProviderError) {
       return (
@@ -503,6 +525,30 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
       navigateTo('ReplyHelp')
+    }
+
+    const renderButton = () => {
+      if (mustStartNewMessage) {
+        return (
+          <Button
+            label={t('secureMessaging.startNewMessage')}
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_sm_start())
+              navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+            }}
+          />
+        )
+      } else {
+        return (
+          <Button
+            label={t('secureMessaging.formMessage.send')}
+            onPress={() => {
+              setOnSendClicked(true)
+              setOnSaveDraftClicked(false)
+            }}
+          />
+        )
+      }
     }
 
     return (
@@ -552,15 +598,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               </Box>
             </Pressable>
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <Button
-              label={t('secureMessaging.formMessage.send')}
-              onPress={() => {
-                setOnSendClicked(true)
-                setOnSaveDraftClicked(false)
-              }}
-            />
-          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>{renderButton()}</Box>
         </TextArea>
       </Box>
     )
@@ -609,6 +647,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
+        {mustStartNewMessage && renderAlert()}
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
       </Box>
