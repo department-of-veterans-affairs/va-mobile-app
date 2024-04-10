@@ -257,7 +257,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     const messageData = { body: messageReply, category } as SecureMessagingFormData
     if (onSaveDraftClicked) {
       saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
-        const params: SaveDraftParameters = { messageData: messageData, messageID: message.messageId }
+        const params: SaveDraftParameters = { messageData: messageData, replyID: message.messageId }
         const mutateOptions = {
           onSuccess: () => {
             showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)

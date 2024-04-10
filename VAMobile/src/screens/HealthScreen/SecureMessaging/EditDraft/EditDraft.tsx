@@ -120,6 +120,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const {
     data: messageDraftData,
     isLoading: loadingMessage,
+    isFetched: messageFetched,
     isError: messageError,
   } = useMessage(messageID, {
     enabled: screenContentAllowed('WG_EditDraft'),
@@ -164,13 +165,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
 
   useEffect(() => {
-    if (!loadingMessage) {
+    if (!loadingMessage && messageFetched) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
       setTo(message?.recipientId.toString() || '')
     }
-  }, [loadingMessage, message.body, message.category, message.subject, message.recipientId])
+  }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
   useEffect(() => {
     if (
@@ -496,10 +497,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   const onMessageSendOrSave = (): void => {
     const messageData = getMessageData()
-
     if (onSaveDraftClicked) {
       saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
-        const params: SaveDraftParameters = { messageData: messageData }
+        const params: SaveDraftParameters = { messageData: messageData, messageID: messageID, replyID: replyToID }
         const mutateOptions = {
           onSuccess: () => {
             showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
