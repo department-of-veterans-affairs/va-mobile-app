@@ -314,7 +314,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             snackbarMessages.successMsg,
             dispatch,
             () => {
-              const undoParams: MoveMessageParameters = { messageID: messageID, newFolderID: newFolder }
+              const undoParams: MoveMessageParameters = { messageID: messageID, newFolderID: currentFolder }
               const undoMutateOptions = {
                 onSuccess: () => {
                   queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
