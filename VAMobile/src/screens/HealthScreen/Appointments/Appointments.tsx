@@ -49,13 +49,18 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
   const [page, setPage] = useState(1)
 
-  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const {
+    data: userAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+    refetch: refetchUserAuthorizedServices,
+  } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const {
     data: apptsData,
     isError: appointmentsHasError,
     isLoading: loadingAppointments,
     isFetched: apptsDataFetched,
+    refetch: refetchAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
     enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
   })
@@ -75,7 +80,13 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         backLabel={t('health.title')}
         backLabelOnPress={navigation.goBack}
         title={t('appointments')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={() => {
+            refetchUserAuthorizedServices()
+            refetchAppts()
+          }}
+        />
       </FeatureLandingTemplate>
     )
   }

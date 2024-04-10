@@ -140,7 +140,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  if (!appointmentsData) {
+  if (!appointmentsData || appointmentsData.data.length < 1) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
