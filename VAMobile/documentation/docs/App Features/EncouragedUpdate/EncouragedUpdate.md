@@ -10,7 +10,7 @@ This is potentially a precursor to forced upgrading in the future after so many 
 
 * Use Case 1: The version on the device is older than what is in the store, so it displays the encouraged update alert (see screenshot)
 * Use Case 2: The version on the device is older than what is in the store, and the veteran decided to skip the encourage update for this version so it does not display the alert
-* Use Case 3: The version on the device is the same version in the store or newer(updates from the app store role out to devices periodically so it is possible that they updated by the store api is returning to us a older version) so it displays the [Whats New](../WhatsNew/WhatsNew.md) alert if applicable
+* Use Case 3: The version on the device is the same version in the store or newer (updates from the app store roll out to devices periodically, so it is possible that the app was updated but the store's API is returning an older version) so it displays the [What's New](../WhatsNew/WhatsNew.md) alert if applicable 
 
 ## Screenshot
 
