@@ -30,6 +30,23 @@ jobs:
           cd documentation
           yarn install --frozen-lockfile
           yarn build
+        #run: npm start & npx wait-on http://localhost:3000
+
+      - name: Start web server
+        working-directory: Mob/documentation
+        run: npx http-server -p 8080 &
+      - name: Extract URLs from sitemap
+        id: extract-urls
+        run: |
+          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > urls.txt
+      - name: Run accessibility check
+        run: |
+          while IFS= read -r url; do
+            npx axe-cli "$url" --no-color --tags wcag2a,wcag2aa --report "$url-axe-report.json"
+          done < urls.txt
+          # Add any additional logic here based on the output of the accessibility check
+
 
      # - name: Run documentation site
       #  working-directory: VAMobile/documentation
@@ -44,11 +61,11 @@ jobs:
     #    working-directory: VAMobile/documentation
     #    run: npx wait-on http://localhost:3000
       
-      - name: Run axe
-        working-directory: VAMobile/documentation
-        run: |
-              npm install -g @axe-core/cli
-              axe http://localhost:3000 --exit        
+     # - name: Run axe
+    #   working-directory: VAMobile/documentation
+    #    run: |
+    #          npm install -g @axe-core/cli
+   #          axe http://localhost:3000 --exit        
 
  # start_slack_thread:
    #     name: Start Slack thread
@@ -57,5 +74,5 @@ jobs:
       #  secrets: inherit
        # with:
         #  channel_name: va-mobile-build-alerts
-         # message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+       #  # message: 'On demand build started by {{ github.actor }}: \"{{ inputs.notes }}\"  (:git: `{{ github.ref_name }}`). This process may take a while. See :thread: or <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|workflow run> for results.'
               
