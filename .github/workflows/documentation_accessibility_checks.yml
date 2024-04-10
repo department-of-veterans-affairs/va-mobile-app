@@ -68,8 +68,11 @@ jobs:
       - name: Run accessibility check
         run: |
          while IFS= read -r url; do
-           axe "$url" --exit --tags wcag2a,wcag2aa > "$url-axe-report.json"
-         done < urls.txt    
+           # Use a unique name for the report file based on the URL
+           report_file="${url//\//-}-axe-report.json"
+           axe "$url" --exit --tags wcag2a,wcag2aa > "$report_file"
+         done < urls.txt   
+         
 
 
      # - name: Run documentation site
