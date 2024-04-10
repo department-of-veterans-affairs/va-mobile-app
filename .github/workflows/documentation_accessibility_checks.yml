@@ -48,7 +48,7 @@ jobs:
         working-directory: VAMobile/documentation
         run: |
               npm install -g @axe-core/cli
-              axe http://localhost:3000/va-mobile-app --exit        
+              axe http://localhost:3000 --exit        
 
  # start_slack_thread:
    #     name: Start Slack thread
