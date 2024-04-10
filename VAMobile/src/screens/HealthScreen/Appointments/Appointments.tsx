@@ -72,7 +72,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-  }, [apptsDataFetched])
+  }, [apptsDataFetched, page])
 
   if (appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime) {
     return (
