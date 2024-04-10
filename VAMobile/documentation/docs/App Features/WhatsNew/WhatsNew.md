@@ -2,7 +2,7 @@
 
 ## Feature Summary
 
-Whats new displays to the veteran what is new in the version that they upgraded to. This alert only shows if the the version of the app the user is on is the most recent in the store and if there is an important enough change to annouce with the provided notes to display to the user. The user can dismiss this alert from reappearing for the current version.
+What's new displays to the veteran what is new in the version that they upgraded to. This alert is only shown if the version of the app the user is on is the most recent in the store and if there is asignificant change to announce with the provided notes to display to the user. The user can dismiss this alert from reappearing for the current version.
 
 ## Use Cases
 
