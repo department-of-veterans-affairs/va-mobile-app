@@ -48,10 +48,23 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     data: claimsAndAppealsListPayload,
     isError: claimsAndAppealsListError,
     isLoading: loadingClaimsAndAppealsList,
+    isFetched: finishedLoadingClaimsAndAppeals,
     refetch: refetchClaimsAndAppealsList,
   } = useClaimsAndAppeals(claimType, 1, {
     enabled: claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime),
   })
+
+  useEffect(() => {
+    if (finishedLoadingClaimsAndAppeals) {
+      const claimsList = claimsAndAppealsListPayload?.data
+      logAnalyticsEvent(
+        Events.vama_claim_count(
+          claimType === ClaimTypeConstants.CLOSED ? claimsList?.length || 0 : 0,
+          claimType === ClaimTypeConstants.ACTIVE ? claimsList?.length || 0 : 0,
+        ),
+      )
+    }
+  }, [claimsAndAppealsListPayload, claimType, finishedLoadingClaimsAndAppeals])
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
