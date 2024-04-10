@@ -18,11 +18,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      # Step 1: Clean npm cache
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      # Step 2: Install Axe CLI globally
+      - name: Install Axe CLI globally
+        run: npm install -g @axe-core/cli@latest
+
+      # Step 3: Update npm
+      - name: Update npm
+        run: npm install -g npm@latest
+      # Step 4: Setup Node.js environment  
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock
+
+      # Step 5: Install dependencies and build     
       - name: Test build
         working-directory: VAMobile
         run: |
@@ -30,11 +44,13 @@ jobs:
           cd documentation
           yarn install --frozen-lockfile
           yarn build
-        #run: npm start & npx wait-on http://localhost:3000
 
+      # Step 6: Start web server
       - name: Start web server
         working-directory: VAMobile/documentation
         run: npm start & npx wait-on http://localhost:3000 &
+
+      # Step 7: Extract URLs from sitemap   
       - name: Extract URLs from sitemap
         id: extract-urls
         run: |
@@ -47,10 +63,12 @@ jobs:
        #   done < urls.txt
           # Add any additional logic here based on the output of the accessibility check
        ###
+
+       # Step 8: Run accessibility check 
       - name: Run accessibility check
         run: |
          while IFS= read -r url; do
-           npx @axe-core/cli "$url" --exit --tags wcag2a,wcag2aa --report "$url-axe-report.json"
+           axe "$url" --exit --tags wcag2a,wcag2aa --report "$url-axe-report.json"
          done < urls.txt    
 
 
