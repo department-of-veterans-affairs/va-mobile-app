@@ -61,7 +61,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     const todaysDate = DateTime.local()
 
     const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 }).endOf('month').endOf('day')
 
     const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
     const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
