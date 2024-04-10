@@ -33,7 +33,7 @@ jobs:
         #run: npm start & npx wait-on http://localhost:3000
 
       - name: Start web server
-        working-directory: Mob/documentation
+        working-directory: VAMobile/documentation
         run: npx http-server -p 8080 &
       - name: Extract URLs from sitemap
         id: extract-urls
