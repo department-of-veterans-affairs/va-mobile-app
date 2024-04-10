@@ -1,4 +1,4 @@
-# Whats New
+# What's New
 
 ## Feature Summary
 
