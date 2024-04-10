@@ -40,9 +40,9 @@ jobs:
        # working-directory: VAMobile/documentation
        # run: cd VAMobile && yarn docs  
     
-      - name: Wait for server to start
-        working-directory: VAMobile/documentation
-        run: npx wait-on http://localhost:3000
+     #- name: Wait for server to start
+    #    working-directory: VAMobile/documentation
+    #    run: npx wait-on http://localhost:3000
       
       - name: Run axe
         working-directory: VAMobile/documentation
