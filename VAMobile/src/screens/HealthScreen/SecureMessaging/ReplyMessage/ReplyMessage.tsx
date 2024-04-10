@@ -154,7 +154,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           navigateTo('SecureMessaging', { activeTab: 0 })
         },
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      const params: SendMessageParameters = {
+        messageData: messageData,
+        uploads: attachmentsList,
+        replyToID: message.messageId,
+      }
       showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
     }
   }, [
@@ -168,6 +172,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     messageReply,
     receiverID,
     subject,
+    message.messageId,
     navigateTo,
     sendMessage,
   ])
