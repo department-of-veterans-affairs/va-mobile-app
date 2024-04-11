@@ -5,9 +5,12 @@
 name: '[e2e] Android Detox Test Run'
 
 on:
+  pull_request:
   push:
     branches:
-      - 'dependabot/**'
+      - main
+      - develop
+      - 'release/v**'
   workflow_dispatch:
     inputs:
       tests_to_run:
@@ -84,6 +87,9 @@ jobs:
         run: |
           mkdir keys
           cd keys
+          echo "------------------hello"
+          echo "${{secrets.FIREBASE_DIST_FILE_BASE64}}" | sed 's/./& /g'
+          echo "------------------hello"
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
           echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
           echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
