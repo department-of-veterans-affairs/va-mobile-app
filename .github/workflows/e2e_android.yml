@@ -88,7 +88,6 @@ jobs:
           mkdir keys
           cd keys
           echo "------------------hello"
-          echo "${{secrets.FIREBASE_DIST_FILE_BASE64}}" | sed 's/./& /g'
           echo "------------------hello"
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
           echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
