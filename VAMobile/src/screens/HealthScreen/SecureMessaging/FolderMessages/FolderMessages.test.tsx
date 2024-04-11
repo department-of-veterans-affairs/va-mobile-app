@@ -79,6 +79,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
+          per_page: '10',
         } as api.Params)
         .mockResolvedValue(messages)
       initializeTestInstance()
@@ -95,6 +96,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
+          per_page: '10',
         } as api.Params)
         .mockResolvedValue({
           data: [],
@@ -127,6 +129,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.DRAFTS}/messages`, {
           page: '1',
+          per_page: '10',
         } as api.Params)
         .mockResolvedValue(messages)
       initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)

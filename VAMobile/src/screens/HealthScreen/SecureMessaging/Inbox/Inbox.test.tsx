@@ -66,6 +66,7 @@ context('Inbox', () => {
     when(api.get as jest.Mock)
       .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
         page: '1',
+        per_page: '10',
       } as api.Params)
       .mockResolvedValue(messages)
     render(<Inbox />)
@@ -80,6 +81,7 @@ context('Inbox', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
+          per_page: '10',
         } as api.Params)
         .mockResolvedValue({
           data: [],
