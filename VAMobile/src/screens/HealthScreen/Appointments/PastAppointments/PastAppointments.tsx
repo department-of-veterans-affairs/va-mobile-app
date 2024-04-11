@@ -134,7 +134,6 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
 
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
-  const { timeFrame } = datePickerOption
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
@@ -146,7 +145,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
       const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
       const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
       if (startDate && endDate) {
-        setTimeFrame(timeFrame)
+        setTimeFrame(curSelectedRange.timeFrame)
         setDateRange({ startDate: startDate, endDate: endDate })
         setPage(1)
       }
