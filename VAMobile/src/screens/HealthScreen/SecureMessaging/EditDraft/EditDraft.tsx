@@ -129,10 +129,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     const currentMessage = messagesById?.[id]
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
   })
-  const hasMessageNewerThan45Days = thread
+  const hasRecentMessages = thread
     .map((id) => messagesById[id])
     .some((msg) => DateTime.fromISO(msg.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS)
-  const mustStartNewMessage = isReplyDraft && !hasMessageNewerThan45Days
+  const replyDisabled = isReplyDraft && !hasRecentMessages
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -242,34 +242,40 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }
 
   const onDeletePressed = (): void => {
+    const buttons = [
+      {
+        text: t('keepEditing'),
+      },
+      {
+        text: t('delete'),
+        onPress: () => {
+          dispatch(deleteDraft(messageID, snackbarMessages))
+        },
+      },
+    ]
+
+    if (!replyDisabled) {
+      buttons.push({
+        text: t('save'),
+        onPress: () => {
+          setOnSaveDraftClicked(true)
+          setOnSendClicked(true)
+        },
+      })
+    }
+
     destructiveAlert({
       title: t('deleteDraft'),
       message: t('secureMessaging.deleteDraft.deleteInfo'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('delete'),
-          onPress: () => {
-            dispatch(deleteDraft(messageID, snackbarMessages))
-          },
-        },
-        {
-          text: t('save'),
-          onPress: () => {
-            setOnSaveDraftClicked(true)
-            setOnSendClicked(true)
-          },
-        },
-      ],
+      buttons,
     })
   }
 
-  const MenViewActions: MenuViewActionsType = [
-    {
+  const menuViewActions: MenuViewActionsType = []
+  if (!replyDisabled) {
+    menuViewActions.push({
       actionText: t('save'),
       addDivider: true,
       iconName: 'Folder',
@@ -278,17 +284,17 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       },
-    },
-    {
-      actionText: t('delete'),
-      addDivider: false,
-      iconName: 'Trash',
-      accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
-      iconColor: 'error',
-      textColor: 'error',
-      onPress: onDeletePressed,
-    },
-  ]
+    })
+  }
+  menuViewActions.push({
+    actionText: t('delete'),
+    addDivider: false,
+    iconName: 'Trash',
+    accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
+    iconColor: 'error',
+    textColor: 'error',
+    onPress: onDeletePressed,
+  })
 
   /**
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
@@ -315,7 +321,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       <FullScreenSubtask
         title={t('editDraft')}
         leftButtonText={t('cancel')}
-        menuViewActions={MenViewActions}
+        menuViewActions={menuViewActions}
         scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
@@ -452,7 +458,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       fieldProps: {
         removeOnPress: removeAttachment,
         buttonLabel:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments && !replyDisabled
             ? t('secureMessaging.formMessage.addFiles')
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
@@ -528,18 +534,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
 
     const renderButton = () => {
-      if (mustStartNewMessage) {
-        return (
-          <Button
-            label={t('secureMessaging.startNewMessage')}
-            onPress={() => {
-              logAnalyticsEvent(Events.vama_sm_start())
-              navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-            }}
-          />
-        )
-      } else {
-        return (
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <Button
             label={t('secureMessaging.formMessage.send')}
             onPress={() => {
@@ -547,8 +543,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               setOnSaveDraftClicked(false)
             }}
           />
-        )
-      }
+        </Box>
+      )
     }
 
     return (
@@ -598,7 +594,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               </Box>
             </Pressable>
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>{renderButton()}</Box>
+          {!replyDisabled && renderButton()}
         </TextArea>
       </Box>
     )
@@ -642,12 +638,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       title={t('editDraft')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-      menuViewActions={MenViewActions}
+      menuViewActions={menuViewActions}
       showCrisisLineCta={true}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
-        {mustStartNewMessage && renderAlert()}
+        {replyDisabled && renderAlert()}
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
       </Box>
