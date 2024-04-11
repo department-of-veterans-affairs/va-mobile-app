@@ -140,10 +140,35 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
+  const setValuesOnPickerSelect = (selectValue: string): void => {
+    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
+    if (curSelectedRange) {
+      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+      if (startDate && endDate) {
+        setTimeFrame(timeFrame)
+        setDateRange({ startDate: startDate, endDate: endDate })
+        setPage(1)
+      }
+      setDatePickerOption(curSelectedRange)
+    }
+  }
+
   if (!appointmentsData || appointmentsData.data.length < 1) {
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+      <Box>
+        <Box mx={theme.dimensions.gutter} accessible={true}>
+          <VAModalPicker
+            selectedValue={datePickerOption.value}
+            onSelectionChange={setValuesOnPickerSelect}
+            pickerOptions={pickerOptions}
+            labelKey={'pastAppointments.selectADateRange'}
+            testID="getDateRangeTestID"
+          />
+        </Box>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+        </Box>
       </Box>
     )
   }
@@ -158,20 +183,6 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
   const { currentPage, perPage, totalEntries } = pagination
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
     navigateTo('PastAppointmentDetails', { appointment })
-  }
-
-  const setValuesOnPickerSelect = (selectValue: string): void => {
-    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
-    if (curSelectedRange) {
-      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
-      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
-      if (startDate && endDate) {
-        setTimeFrame(timeFrame)
-        setDateRange({ startDate: startDate, endDate: endDate })
-        setPage(1)
-      }
-      setDatePickerOption(curSelectedRange)
-    }
   }
 
   const paginationProps: PaginationProps = {
