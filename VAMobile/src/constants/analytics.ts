@@ -133,15 +133,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_count: (closed_claims: number, open_claims: number): Event => {
-    return {
-      name: 'vama_claim_count',
-      params: {
-        closed_claims,
-        open_claims,
-      },
-    }
-  },
   vama_claim_details_exp: (
     claim_id: string,
     claim_type: string,
