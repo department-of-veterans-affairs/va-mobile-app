@@ -36,6 +36,7 @@ export const CommonE2eIdConstants = {
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
   LEAVING_APP_CANCEL_TEXT: 'Go back',
+  LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
