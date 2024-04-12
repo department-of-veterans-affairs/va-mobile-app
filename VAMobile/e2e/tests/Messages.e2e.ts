@@ -53,7 +53,6 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  // OPEN_URL_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
   OPEN_URL_TEXT: 'Leave',
 }
 
