@@ -28,5 +28,6 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getPrescriptions: Service error',
     },
+    staleTime: 300000, // 5 minutes
   })
 }

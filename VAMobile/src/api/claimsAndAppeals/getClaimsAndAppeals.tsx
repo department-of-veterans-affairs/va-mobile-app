@@ -48,5 +48,6 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',
     },
+    staleTime: 300000, // 5 minutes
   })
 }
