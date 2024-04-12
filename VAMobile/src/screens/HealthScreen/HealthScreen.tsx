@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -47,6 +48,10 @@ export function HealthScreen({}: HealthScreenProps) {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
+
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+  const cernerExist = cernerFacilities.length >= 1
 
   const {
     loading: loadingAppointments,
@@ -141,7 +146,7 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
-      {CernerAlert ? (
+      {cernerExist ? (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <TextView>{t('healthHelp.info')}</TextView>
           <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
@@ -149,6 +154,12 @@ export function HealthScreen({}: HealthScreenProps) {
               {t('healthHelp.checkFacility')}
             </TextView>
           </Pressable>
+        </Box>
+      ) : (
+        <></>
+      )}
+      {CernerAlert ? (
+        <Box mb={theme.dimensions.contentMarginBottom}>
           <CernerAlert />
         </Box>
       ) : (
