@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -73,6 +73,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
@@ -91,16 +92,16 @@ export function HomeScreen({}: HomeScreenProps) {
   const {
     data: prescriptionData,
     isFetched: rxPrefetch,
-    isLoading: loadingPrescriptions,
+    isFetching: loadingPrescriptions,
   } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: isFocused && userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
   const {
     data: claimsData,
     isFetched: claimsPrefetch,
-    isLoading: loadingClaimsAndAppeals,
+    isFetching: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+    enabled: isFocused && (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -134,21 +135,17 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
 
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
-  )
+  useEffect(() => {
+    if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+    }
+  }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-        dispatch(getInbox())
-      }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
+  useEffect(() => {
+    if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+      dispatch(getInbox())
+    }
+  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
