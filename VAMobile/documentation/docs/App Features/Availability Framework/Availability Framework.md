@@ -31,12 +31,12 @@ Here is a [link](https://github.com/department-of-veterans-affairs/va.gov-team/b
 * If we run into an issue that requires ClaimsHistoryScreen to have an AF toggle, we will need to investigate doing the same for 'ClaimsHistory' for releases that happened in january if it's relevant to the scenario.
 * All 'Else' clauses should be set to the default waygate configuration to avoid issues with the remote config developer setup.
 
-const waygateDefault: Waygate = {
+Defaults:
   enabled: true,
   type: undefined,
   errorMsgTitle: undefined,
   errorMsgBody: undefined,
-  appUpdateButton: false,
-}
+  appUpdateButton: false
+
 
 * We should endeavor to avoid screen name changes at all costs to avoid duplicative AF requirements.
