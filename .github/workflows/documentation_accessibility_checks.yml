@@ -54,8 +54,10 @@ jobs:
       - name: Extract URLs from sitemap
         id: extract-urls
         run: |
-          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
-          cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > VAMobile/documentation/urls.txt
+          # wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          #cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > VAMobile/documentation/urls.txt
+
+          wget -q -O - https://affairs.github.io/mob/sitemap.xml | grep -oPm1 "(?<=<loc>)[^<]+" > mob/documentation/urls.txt
      # - name: Run accessibility check
       #  run: |
        #   while IFS= read -r url; do
