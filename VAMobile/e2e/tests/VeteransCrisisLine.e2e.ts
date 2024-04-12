@@ -51,7 +51,7 @@ describe('Veterans Crisis Line', () => {
 
   it('should open chat link', async () => {
     await element(by.text(VCLConstants.CHAT_LINK_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('CrisisLineChat')
     await device.launchApp({ newInstance: false })
