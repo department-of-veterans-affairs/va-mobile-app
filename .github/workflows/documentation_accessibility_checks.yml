@@ -52,11 +52,10 @@ jobs:
 
       # Step 7: Extract URLs from sitemap   
       - name: Extract URLs from sitemap
-        working-directory: VAMobile/documentation 
         id: extract-urls
         run: |
           wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
-          cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > urls.txt
+          cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > VAMobile/documentation/urls.txt
      # - name: Run accessibility check
       #  run: |
        #   while IFS= read -r url; do
