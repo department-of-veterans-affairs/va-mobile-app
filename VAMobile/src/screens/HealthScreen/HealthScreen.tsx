@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -44,6 +44,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
@@ -63,7 +64,7 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: isFocused && userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
 
   useFocusEffect(
