@@ -47,9 +47,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const { loading: loadingAppointments, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
+  const {
+    loading: loadingAppointments,
+    upcomingAppointmentsCount,
+    upcomingDaysLimit,
+  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
@@ -90,44 +92,34 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box
-        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}>
+      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
           showLoading={loadingAppointments}
           subText={
-            upcomingAppointmentsCount
-              ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
+            upcomingAppointmentsCount && upcomingDaysLimit
+              ? t('appointments.activityButton.subText', {
+                  count: upcomingAppointmentsCount,
+                  dayCount: upcomingDaysLimit,
+                })
               : undefined
           }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          showLoading={loadingInbox}
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
-          showLoading={loadingInbox}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
             showLoading={fetchingPrescriptions}
+            testID="prescriptionsNavButtonTestID"
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {
@@ -141,19 +133,8 @@ export function HealthScreen({}: HealthScreenProps) {
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
         />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {CernerAlert ? (
         <Box mb={theme.dimensions.contentMarginBottom}>

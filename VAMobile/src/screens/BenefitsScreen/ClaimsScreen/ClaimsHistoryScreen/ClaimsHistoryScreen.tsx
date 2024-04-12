@@ -124,7 +124,9 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID">
-      {claimsAndAppealsListError || getUserAuthorizedServicesError ? (
+      {claimsAndAppealsListError ||
+      getUserAuthorizedServicesError ||
+      (!claimsNotInDowntime && !appealsNotInDowntime) ? (
         <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
