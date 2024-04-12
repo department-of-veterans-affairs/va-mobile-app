@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -33,10 +34,11 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
-  const { data: claimsData, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+  const { data: claimsData, isFetching: loadingClaimsAndAppeals } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: isFocused && (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
 
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
