@@ -38,5 +38,4 @@ Defaults:
   errorMsgBody: undefined,
   appUpdateButton: false
 
-
 * We should endeavor to avoid screen name changes at all costs to avoid duplicative AF requirements.
