@@ -66,6 +66,7 @@ jobs:
 
        # Step 8: Run accessibility check 
       - name: Run accessibility check
+        working-directory: VAMobile/documentation
         run: |
          while IFS= read -r url; do
            # Use a unique name for the report file based on the URL
