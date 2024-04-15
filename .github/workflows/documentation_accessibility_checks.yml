@@ -55,7 +55,7 @@ jobs:
         ###added
       - name: Download sitemap
         run: |
-          curl -o mob/documentation/sitemap.xml https://affairs.github.io/va-mobile-app.xml/sitemap.xml
+          curl -o mob/documentation/sitemap.xml https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml
       
       - name: Install xmlstarlet
         run: brew install xmlstarlet
