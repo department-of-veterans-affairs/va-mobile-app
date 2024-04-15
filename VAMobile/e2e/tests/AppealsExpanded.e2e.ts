@@ -163,7 +163,7 @@ describe('AppealsExpanded', () => {
             .whileElement(by.id('appealsDetailsTestID'))
             .scroll(300, 'down')
           await element(by.text(appealInfo[2])).tap()
-          await element(by.text(CommonE2eIdConstants.OK_PLATFORM_SPECIFIC_TEXT)).tap()
+          await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
           await device.takeScreenshot('Form 9 Opt In Website')
           await device.launchApp({ newInstance: false })
         }
