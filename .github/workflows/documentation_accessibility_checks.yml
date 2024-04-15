@@ -66,8 +66,7 @@ jobs:
     
       - name: Extract URLs from sitemap
         run: |
-          awk -F'<loc>|</loc>' '/<loc>/{print $2}' VAMobile/documentation/sitemap.xml
-
+          grep -oP '<loc>\K(.*)(?=<\/loc>)' VAMobile/documentation/sitemap.xml | sed 's/^ *//;s/ *$//' > VAMobile/documentation/urls.txt
       ####
      # - name: Extract URLs from sitemap
        # working-directory: VAMobile/documentation
