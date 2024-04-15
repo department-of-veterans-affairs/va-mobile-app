@@ -9281,10 +9281,10 @@ react-native-webp-format@^1.2.0:
   resolved "https://registry.yarnpkg.com/react-native-webp-format/-/react-native-webp-format-1.2.0.tgz#6c7cbed4cdc8247711c7d7f656d0d4f739836c82"
   integrity sha512-tUL/AbM6QwUsxsGutJ1bN4RW8JdD2w5Mpj+An4DvYKkm0bKHbODj7U7gI1+8X68GqJWOy+Ps2cbVmgNpSDfRPQ==
 
-react-native-webview@^13.6.4:
-  version "13.6.4"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.6.4.tgz#6ef66db9dd78b2a2ae1b4fe79e1e3597aa29186e"
-  integrity sha512-AdgmaMBHPcyERTvng9eSGgHX6AleyUlSusWAxngSOSdiYGgHW81T6C5A8j/ImJAF9oZg0bQDxp43Hu56tzENZQ==
+react-native-webview@^13.8.5:
+  version "13.8.5"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.8.5.tgz#1ce4706042fb83c85c6e45f6948d97477dc5bee2"
+  integrity sha512-EkMuuss3g+xwkjCEJQeqaRYgRidks+EiQe4pmyxrYBvPQvx/pt3tb23x9t4v359gYSMktSGOVBTlvg8JWGFXiA==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
