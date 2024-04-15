@@ -29,6 +29,8 @@ jobs:
       # Step 3: Update npm
       - name: Update npm
         run: npm install -g npm@latest
+
+  
       # Step 4: Setup Node.js environment  
       - uses: actions/setup-node@v3
         with:
@@ -50,21 +52,46 @@ jobs:
         working-directory: VAMobile/documentation
         run: npm start & npx wait-on http://localhost:3000 &
 
-      # Step 7: Extract URLs from sitemap   
-      - name: Extract URLs from sitemap
-        id: extract-urls
+        ###added
+      - name: Download sitemap
         run: |
-          wget -q -O - https://affairs.github.io/mob/sitemap.xml | grep -oPm1 "(?<=<loc>)[^<]+" > VAMobile/documentation/urls.txt
+          curl -o mob/documentation/sitemap.xml https://affairs.github.io/va-mobile-app.xml/sitemap.xml
+      
+      - name: Install xmlstarlet
+        run: brew install xmlstarlet
+        ##
+
+      # Step 7: Extract URLs from sitemap   
+      ####
+      - name: Extract URLs from sitemap
+        run: |
+          # Attempt to use xmlstarlet to extract URLs
+          if xmlstarlet sel -N ns="http://www.sitemaps.org/schemas/sitemap/0.9" -t -m "//ns:url/ns:loc" -v . -n < sitemap.xml > VAMobile/documentation/urls.txt; then
+            echo "URLs extracted successfully using xmlstarlet."
+          else
+            # Fallback to using xmllint if xmlstarlet is not available
+            if xmllint --xpath "//*[local-name()='loc']/text()" sitemap.xml > VAMobile/documentation/urls.txt; then
+              echo "URLs extracted successfully using xmllint."
+            else
+              echo "Failed to extract URLs."
+              exit 1
+            fi
+          fi
+      ####
+     # - name: Extract URLs from sitemap
+       # working-directory: VAMobile/documentation
+       # id: extract-urls
+        #run: |
+        #  wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+        #  cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > urls.txt
+
      # - name: Run accessibility check
       #  run: |
        #   while IFS= read -r url; do
      #       npx axe-cli "$url" --no-color --tags wcag2a,wcag2aa --report "$url-axe-report.json"
        #   done < urls.txt
           # Add any additional logic here based on the output of the accessibility check
-       ###
- # wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
-          #cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > VAMobile/documentation/urls.txt
-       ####
+      
 
        # Step 8: Run accessibility check 
       - name: Run accessibility check
