@@ -64,9 +64,12 @@ jobs:
       # Step 7: Extract URLs from sitemap   
       ####
     
+      - name: Install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
+
       - name: Extract URLs from sitemap
         run: |
-          grep -oP '<loc>\K(.*)(?=<\/loc>)' VAMobile/documentation/sitemap.xml | sed 's/^ *//;s/ *$//' > VAMobile/documentation/urls.txt
+          xmlstarlet sel -t -m "//loc" -v . -n VAMobile/documentation/sitemap.xml > VAMobile/documentation/urls.txt
       ####
      # - name: Extract URLs from sitemap
        # working-directory: VAMobile/documentation
