@@ -104,7 +104,7 @@ describe('Settings Screen', () => {
 
   it('should show Privacy Policy page', async () => {
     await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('SettingsPrivacyPolicy')
     await device.launchApp({ newInstance: false })
