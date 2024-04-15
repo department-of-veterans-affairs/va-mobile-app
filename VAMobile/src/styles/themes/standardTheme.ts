@@ -157,6 +157,14 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
+  cernerPanelSubtext: {
+    fontSize: 20,
+    lineHeight: 25,
+  },
+  cernerPanelHeader: {
+    fontSize: 19,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -233,6 +241,9 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     VeteranStatusProof: buildFont('SourceSansPro-Regular', fontSizes.veteranStatus, scheme.text.veteranStatusProof),
     webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
+    cernerPanelHeader: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelHeader, scheme.text.cernerPanel),
+    cernerPanelSubtext: buildFont('SourceSansPro-Regular', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
+    cernerPanelFacility: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
   }
 }
 
@@ -296,6 +307,8 @@ let theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
+    cernerPanelSubtext: fontSizes.cernerPanelSubtext,
+    cernerPanelHeader: fontSizes.cernerPanelHeader,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   paragraphSpacing: {

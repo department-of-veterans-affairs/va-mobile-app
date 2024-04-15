@@ -166,6 +166,7 @@ export const lightTheme = {
     homeScreen: DSColors.base,
     profileScreen: DSColors.base,
     activityFooter: DSColors.gray,
+    cernerPanel: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -381,6 +382,7 @@ export const darkTheme = {
     homeScreen: DSColors.grayLightest,
     profileScreen: DSColors.grayLightest,
     activityFooter: DSColors.grayLightest,
+    cernerPanel: colors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

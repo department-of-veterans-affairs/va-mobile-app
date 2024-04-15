@@ -79,6 +79,7 @@ export type VATextColors = {
   homeScreen: string
   profileScreen: string
   activityFooter: string
+  cernerPanel: string
 }
 
 export type VAIconColors = {
@@ -161,6 +162,9 @@ export type VATypographyThemeVariants = {
   VeteranStatusBranch: string
   VeteranStatusProof: string
   webviewTitle: string
+  cernerPanelSubtext: string
+  cernerPanelHeader: string
+  cernerPanelFacility: string
 }
 
 export type VABackgroundColors = {
@@ -330,6 +334,8 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
+    cernerPanelSubtext: VAFontSizes
+    cernerPanelHeader: VAFontSizes
   }
   mode: ColorSchemeTypes
   paragraphSpacing: {
