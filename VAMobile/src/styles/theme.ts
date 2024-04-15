@@ -80,6 +80,7 @@ export type VATextColors = {
   profileScreen: string
   activityFooter: string
   cernerPanel: string
+  cernerFooter: string
 }
 
 export type VAIconColors = {
@@ -165,6 +166,8 @@ export type VATypographyThemeVariants = {
   cernerPanelSubtext: string
   cernerPanelHeader: string
   cernerPanelFacility: string
+  cernerFooterText: string
+  MobileFooterLink: string
 }
 
 export type VABackgroundColors = {
@@ -336,6 +339,7 @@ export type VATheme = {
     VASelector: VAFontSizes
     cernerPanelSubtext: VAFontSizes
     cernerPanelHeader: VAFontSizes
+    FooterText: VAFontSizes
   }
   mode: ColorSchemeTypes
   paragraphSpacing: {
