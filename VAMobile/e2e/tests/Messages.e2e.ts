@@ -53,7 +53,7 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  OPEN_URL_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  OPEN_URL_TEXT: 'Leave',
 }
 
 const tapItems = async (items: string, type: string) => {
@@ -378,7 +378,7 @@ describe('Messages Screen', () => {
     await device.launchApp({ newInstance: false })
 
     await element(by.text('Start a confidential chat')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpChat')
     await device.launchApp({ newInstance: false })
