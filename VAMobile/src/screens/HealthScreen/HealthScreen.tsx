@@ -147,20 +147,13 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {cernerExist ? (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <TextView>{t('healthHelp.info')}</TextView>
+        <Box mx={theme.dimensions.standardMarginBetween}>
+          <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
           <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
-            <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+            <TextView variant="MobileFooterLink" paragraphSpacing={true}>
               {t('healthHelp.checkFacility')}
             </TextView>
           </Pressable>
-        </Box>
-      ) : (
-        <></>
-      )}
-      {CernerAlert ? (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <CernerAlert />
         </Box>
       ) : (
         <></>
