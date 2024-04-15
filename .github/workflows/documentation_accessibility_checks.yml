@@ -89,7 +89,7 @@ jobs:
         run: |
           while IFS= read -r url; do
             axe "$url" --exit
-          done < VAMobile/documentation/urls.txtag2aa > "$report_file" 
+          done < VAMobile/documentation/urls.txt > "$report_file" 
          
          
 
