@@ -31,46 +31,68 @@ function HealthHelp({}: HealthHelpProps) {
   const multiFacilities = cernerFacilities.length > 1
 
   const bullets: VABulletListText[] = cernerFacilities.map((facility: Facility) => ({
-    variant: 'MobileBodyBold',
+    variant: 'cernerPanelFacility',
     text: facility.name,
-    allyLabel: facility.name,
+    a11yLabel: facility.name,
   }))
 
   const multipleFacilitiesBody = (
-    <>
-      <TextView variant="MobileBodyBold">
+    <Box>
+      <TextView variant="cernerPanelHeader" mb={theme.dimensions.standardMarginBetween}>
         {allCernerFacilities ? t('healthHelp.usesVAHealth.multi.all') : t('healthHelp.usesVAHealth.some')}
       </TextView>
-      <TextView>{t('healthHelp.manageHealthCare.multi.both')}</TextView>
+      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.standardMarginBetween}>
+        {t('healthHelp.manageHealthCare.multi.both')}
+      </TextView>
       <VABulletList listOfText={bullets} />
-      <TextView>{t('healthHelp.goToPortal.multi.both')}</TextView>
-      {allCernerFacilities ? <></> : <TextView>{t('healthHelp.canStillUse.some')}</TextView>}
-    </>
+      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.condensedMarginBetween}>
+        {t('healthHelp.goToPortal.multi.both')}
+      </TextView>
+      {allCernerFacilities ? (
+        <></>
+      ) : (
+        <TextView variant="cernerPanelSubtext" my={theme.dimensions.condensedMarginBetween}>
+          {t('healthHelp.canStillUse.some')}
+        </TextView>
+      )}
+    </Box>
   )
 
   const singleFacilityBody = (
-    <>
-      <TextView variant="MobileBodyBold">
+    <Box>
+      <TextView variant="cernerPanelHeader" mb={theme.dimensions.standardMarginBetween}>
         {allCernerFacilities ? t('healthHelp.usesVAHealth.single.all') : t('healthHelp.usesVAHealth.some')}
       </TextView>
       <TextView
-        variant="MobileBody"
+        variant="cernerPanelSubtext"
+        mb={theme.dimensions.standardMarginBetween}
         accessibilityLabel={a11yLabelVA(
           t('healthHelp.manageHealthCare.single.both.a11yLabel', {
             facilityName: cernerFacilities[0].name,
           }),
         )}>
         {t('healthHelp.manageHealthCare.single.both')}
-        <TextView variant="MobileBodyBold">{cernerFacilities[0].name}</TextView>
+        <TextView variant="cernerPanelFacility">{cernerFacilities[0].name}</TextView>
         {'?'}
       </TextView>
-      <TextView>{t('healthHelp.goToPortal.single.both')}</TextView>
-      {allCernerFacilities ? <></> : <TextView>{t('healthHelp.canStillUse.some')}</TextView>}
-    </>
+      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.condensedMarginBetween}>
+        {t('healthHelp.goToPortal.single.both')}
+      </TextView>
+      {allCernerFacilities ? (
+        <></>
+      ) : (
+        <TextView variant="cernerPanelSubtext" my={theme.dimensions.condensedMarginBetween}>
+          {t('healthHelp.canStillUse.some')}
+        </TextView>
+      )}
+    </Box>
   )
   return (
     <LargePanel title={t('healthHelp.title')} rightButtonText={t('close')}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        mx={theme.dimensions.standardMarginBetween}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.formMarginBetween}>
         {multiFacilities ? multipleFacilitiesBody : singleFacilityBody}
         <ClickForActionLink
           displayedText={t('goToMyVAHealth')}
