@@ -78,7 +78,7 @@ describe('Appointments Screen', () => {
       await device.launchApp({ newInstance: false })
 
       await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
-      await element(by.text('Leave')).tap()
+      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
@@ -131,7 +131,7 @@ describe('Appointments Screen', () => {
 
     if (device.getPlatform() === 'android') {
       await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
-      await element(by.text('Leave')).tap()
+      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
