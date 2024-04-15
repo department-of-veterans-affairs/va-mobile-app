@@ -58,7 +58,7 @@ jobs:
           curl -o VAMobile/documentation/sitemap.xml https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml
       
       - name: Install xmlstarlet
-        run: brew install xmlstarlet
+        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
         ##
 
       # Step 7: Extract URLs from sitemap   
