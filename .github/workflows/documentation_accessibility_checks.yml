@@ -57,7 +57,9 @@ jobs:
         run: |
           curl -o VAMobile/documentation/sitemap.xml https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml
       
-      
+      - name: Check if sitemap exists
+        run: ls -la VAMobile/documentation/sitemap.xml
+        
 
       # Step 7: Extract URLs from sitemap   
       ####
@@ -65,7 +67,7 @@ jobs:
       - name: Extract URLs from sitemap
         run: |
           awk -F'<loc>|</loc>' '/<loc>/{print $2}' VAMobile/documentation/sitemap.xml > VAMobile/documentation/urls.txt
-
+          cat VAMobile/documentation/urls.txt
 
       ####
      # - name: Extract URLs from sitemap
