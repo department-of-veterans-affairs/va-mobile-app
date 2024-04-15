@@ -25,3 +25,17 @@ Here you'll see existing examples of previously enabled availability framework s
 Firebase definitions: ![](../../../static/img/availabilityFramework/AF_in_Firebase.png)
 
 Here is a [link](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process-%20Availability%20Framework.md#json-disclaimer) to the JSON documentation and the parameter setup.
+
+## Developer Notes
+
+* If we run into an issue that requires ClaimsHistoryScreen to have an AF toggle, we will need to investigate doing the same for 'ClaimsHistory' for releases that happened in january if it's relevant to the scenario.
+* All 'Else' clauses should be set to the default waygate configuration to avoid issues with the remote config developer setup.
+
+Defaults:
+  enabled: true,
+  type: undefined,
+  errorMsgTitle: undefined,
+  errorMsgBody: undefined,
+  appUpdateButton: false
+
+* We should endeavor to avoid screen name changes at all costs to avoid duplicative AF requirements.
