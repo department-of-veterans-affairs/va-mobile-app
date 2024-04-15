@@ -57,26 +57,19 @@ jobs:
         run: |
           curl -o VAMobile/documentation/sitemap.xml https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml
       
-      - name: Install xmlstarlet
-        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
-        ##
+      
 
       # Step 7: Extract URLs from sitemap   
       ####
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+    
       - name: Extract URLs from sitemap
         run: |
-          # Attempt to use xmlstarlet to extract URLs
-          if xmlstarlet sel -N ns="http://www.sitemaps.org/schemas/sitemap/0.9" -t -m "//ns:url/ns:loc" -v . -n < sitemap.xml > VAMobile/documentation/urls.txt; then
-            echo "URLs extracted successfully using xmlstarlet."
-          else
-            # Fallback to using xmllint if xmlstarlet is not available
-            if xmllint --xpath "//*[local-name()='loc']/text()" sitemap.xml > VAMobile/documentation/urls.txt; then
-              echo "URLs extracted successfully using xmllint."
-            else
-              echo "Failed to extract URLs."
-              exit 1
-            fi
-          fi
+          python3 -c "import xml.etree.ElementTree as ET; tree = ET.parse('VAMobile/documentation/sitemap.xml'); root = tree.getroot(); urls = [url.text for url in root.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]; with open('mob/documentation/urls.txt', 'w') as f: f.write('\n'.join(urls))"
+
       ####
      # - name: Extract URLs from sitemap
        # working-directory: VAMobile/documentation
