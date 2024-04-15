@@ -61,10 +61,6 @@ jobs:
 
       # Step 7: Extract URLs from sitemap   
       ####
-      - name: Install Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
     
       - name: Extract URLs from sitemap
         run: |
@@ -91,17 +87,9 @@ jobs:
       - name: Run accessibility check
         working-directory: VAMobile/documentation # Set the working directory to the repository's root directory
         run: |
-          # Ensure that the URLs file exists
-          if [ ! -f "urls.txt" ]; then
-            echo "Error: urls.txt file not found."
-            exit 1
-          fi
-
           while IFS= read -r url; do
-           # Use a unique name for the report file based on the URL
-           report_file="${url//\//-}-axe-report.json"
-           axe "$url" --exit --tags wcag2a,wcag2aa > "$report_file"
-          done < urls.txt   
+            axe "$url" --exit
+          done < VAMobile/documentation/urls.txtag2aa > "$report_file" 
          
          
 
