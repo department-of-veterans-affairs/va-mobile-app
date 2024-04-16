@@ -60,21 +60,22 @@ jobs:
         id: accessibility_check
         run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit || echo "ACCESSIBILITY_ISSUES=true" >> $GITHUB_ENV
 
-      - name: Notify about accessibility issues
-       
-        run: |
-          echo "Accessibility issues were detected during the first run of the accessibility check. Please review and address them. /cc @IsraelleHub" >> message.txt
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git commit -am "Notify about accessibility issues"
-          git push
+    
+      - name: Start Slack thread
+        if: ${{ success() && env.ACCESSIBILITY_ISSUES == 'true' }}
+        uses: ./.github/workflows/start_slack_thread.yml
+        with:
+          channel_name: axe_check
+          message: 'Accessibility issues were detected during the first run of the accessibility check. Please review and address them. <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|View workflow run>.'
 
- # start_slack_thread:
-   #     name: Start Slack thread
-      #  needs: test-deploy
-       #uses: ./.github/workflows/start_slack_thread.yml
-      #  secrets: inherit
-       # with:
-        #  channel_name: va-mobile-build-alerts
-       #  # message: 'On demand build started by {{ github.actor }}: \"{{ inputs.notes }}\"  (:git: `{{ github.ref_name }}`). This process may take a while. See :thread: or <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|workflow run> for results.'
+
+ #start_slack_thread:
+ #   name: Start Slack thread
+  #  
+ #   needs: test-deploy
+ #   uses: ./.github/workflows/start_slack_thread.yml
+   # secrets: inherit
+ #   with:
+  #    channel_name: axe_check
+  #    message: 'On demand build started by {{ github.actor }}: \"{{ inputs.notes }}\"  (:git: `{{ github.ref_name }}`). This process may take a while. See :thread: or <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|workflow run> for results.'
               
