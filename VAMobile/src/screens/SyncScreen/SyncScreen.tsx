@@ -32,8 +32,6 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { ENVIRONMENT } = getEnv()
 
-  setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
-
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
@@ -78,6 +76,7 @@ function SyncScreen({}: SyncScreenProps) {
       !drNotInDowntime ||
       (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
+      setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
       dispatch(completeSync())
     }
   }, [
