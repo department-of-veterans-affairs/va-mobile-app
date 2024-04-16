@@ -32,7 +32,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
-  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistory') })
+  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
