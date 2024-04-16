@@ -58,7 +58,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: errorDetails,
     isFetched: inboxFetched,
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
-    enabled: screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
   })
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const [inboxUnreadCount, setInboxUnreadCount] = useState(0)
@@ -69,7 +73,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
-    if (foldersData && isFocused) {
+    if (foldersData) {
       const foldersList = foldersData?.data || ([] as SecureMessagingFolderList)
       _.forEach(foldersList, (folder) => {
         if (folder.attributes.name === FolderNameTypeConstants.inbox) {
@@ -77,7 +81,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         }
       })
     }
-  }, [smFetch, foldersData, isFocused])
+  }, [smFetch, foldersData])
 
   useFocusEffect(
     React.useCallback(() => {

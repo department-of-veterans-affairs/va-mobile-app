@@ -38,7 +38,7 @@ function Inbox({}: InboxProps) {
     })
   }
 
-  if (loadingInbox && isFocused) {
+  if (loadingInbox) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 

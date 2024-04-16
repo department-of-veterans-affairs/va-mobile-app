@@ -46,18 +46,18 @@ export function HealthScreen({}: HealthScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const { data: foldersData, isFetched: smFetch } = useFolders({
-    enabled: isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
   const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
-    if (smFetch && foldersData && isFocused) {
+    if (smFetch && foldersData) {
       const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
       if (inboxFolder) {
         setUnreadCount(inboxFolder.attributes.unreadCount)
       }
     }
-  }, [smFetch, foldersData, isFocused])
+  }, [smFetch, foldersData])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
