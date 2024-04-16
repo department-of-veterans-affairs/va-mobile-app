@@ -68,6 +68,10 @@ const fontSizes = {
     fontSize: 26,
     lineHeight: 32,
   },
+  CategoryLandingAlert: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
   ClaimPhase: {
     fontSize: 20,
     lineHeight: 30,
@@ -194,6 +198,16 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
+    CategoryLandingError: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.CategoryLandingAlert,
+      scheme.text.categoryLandingError,
+    ),
+    CategoryLandingWarning: buildFont(
+      'SourceSansPro-Regular',
+      fontSizes.CategoryLandingAlert,
+      scheme.text.categoryLandingWarning,
+    ),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
     DescriptiveBackButton: buildFont(
@@ -285,6 +299,7 @@ let theme: VATheme = {
     AnnouncementBannerTitle: fontSizes.AnnouncementBannerTitle,
     BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
+    CategoryLandingAlert: fontSizes.CategoryLandingAlert,
     ClaimPhase: fontSizes.ClaimPhase,
     CrisisLineButton: fontSizes.CrisisLineButton,
     HelperText: fontSizes.HelperText,
