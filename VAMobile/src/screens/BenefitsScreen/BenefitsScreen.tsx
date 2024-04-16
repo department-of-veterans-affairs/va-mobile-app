@@ -50,9 +50,10 @@ function BenefitsScreen({}: BenefitsScreenProps) {
 
   const claimsWaygate = waygateEnabled('WG_ClaimsHistory')
   const claimsWaygateBlocked =
-    (!claimsWaygate.enabled && claimsWaygate.type === 'DenyContent') ||
-    claimsWaygate.type === 'DenyAccess' ||
-    claimsWaygate.type === 'AllowFunction'
+    !claimsWaygate.enabled &&
+    (claimsWaygate.type === 'DenyContent' ||
+      claimsWaygate.type === 'DenyAccess' ||
+      claimsWaygate.type === 'AllowFunction')
 
   const showAlert = claimsAndAppealsError || featureInDowntime || claimsWaygateBlocked
   const alertVariant = claimsAndAppealsError ? 'CategoryLandingError' : 'CategoryLandingWarning'
@@ -89,7 +90,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
-        {showAlert && (
+        {!showAlert && (
           <Box
             mx={theme.dimensions.condensedMarginBetween}
             mt={theme.dimensions.standardMarginBetween}
