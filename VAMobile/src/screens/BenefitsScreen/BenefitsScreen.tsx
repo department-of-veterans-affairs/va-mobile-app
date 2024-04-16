@@ -38,7 +38,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const featureInDowntime = claimsInDowntime || appealsInDowntime
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
   const {
-    data: claimsData,
+    data: claimsAndAppeals,
     isFetching: loadingClaimsAndAppeals,
     isError: claimsAndAppealsError,
   } = useClaimsAndAppeals('ACTIVE', 1, {
@@ -52,16 +52,20 @@ function BenefitsScreen({}: BenefitsScreenProps) {
       claimsWaygate.type === 'DenyAccess' ||
       claimsWaygate.type === 'AllowFunction')
 
-  const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const showClaimsCount = !claimsAndAppealsError && !claimsWaygateBlocked && !featureInDowntime && activeClaimsCount
+  const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
+  const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
+  const showClaimsCount =
+    !claimsAndAppealsError && !nonFatalErrors && !claimsWaygateBlocked && !featureInDowntime && activeClaimsCount
 
-  const showAlert = claimsAndAppealsError || featureInDowntime || claimsWaygateBlocked
-  const alertVariant = claimsAndAppealsError ? 'CategoryLandingError' : 'CategoryLandingWarning'
+  const showAlert = claimsAndAppealsError || nonFatalErrors || featureInDowntime || claimsWaygateBlocked
+  const alertVariant = claimsAndAppealsError || nonFatalErrors ? 'CategoryLandingError' : 'CategoryLandingWarning'
   const alertMessage = featureInDowntime
     ? t('benefits.activity.warning.downtime')
     : claimsWaygateBlocked
       ? t('benefits.activity.warning.accessBlocked')
-      : t('benefits.activity.error')
+      : nonFatalErrors
+        ? t('benefits.activity.nonFatalError')
+        : t('benefits.activity.error')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
