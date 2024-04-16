@@ -52,69 +52,9 @@ jobs:
         working-directory: VAMobile/documentation
         run: npm start & npx wait-on http://localhost:3000 &
 
-        ###added
-      - name: Download sitemap
-        run: |
-          curl -o VAMobile/documentation/sitemap.xml https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml
-      
-      - name: Check if sitemap exists
-        run: ls -la VAMobile/documentation/sitemap.xml
-        
 
-      # Step 7: Extract URLs from sitemap   
-      ####
-    
-      - name: Install xmlstarlet
-        run: sudo apt-get update && sudo apt-get install -y xmlstarlet
-
-      - name: Extract URLs from sitemap
-        run: |
-          xmlstarlet sel -t -m "//loc" -v . -n VAMobile/documentation/sitemap.xml > VAMobile/documentation/urls.txt
-      ####
-     # - name: Extract URLs from sitemap
-       # working-directory: VAMobile/documentation
-       # id: extract-urls
-        #run: |
-        #  wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
-        #  cat sitemap.xml | grep "<loc>" | sed 's/.*<loc>\(.*\)<\/loc>.*/\1/' > urls.txt
-
-     # - name: Run accessibility check
-      #  run: |
-       #   while IFS= read -r url; do
-     #       npx axe-cli "$url" --no-color --tags wcag2a,wcag2aa --report "$url-axe-report.json"
-       #   done < urls.txt
-          # Add any additional logic here based on the output of the accessibility check
-      
-
-       # Step 8: Run accessibility check 
-      - name: Run accessibility check
-        working-directory: VAMobile/documentation # Set the working directory to the repository's root directory
-        run: |
-          while IFS= read -r url; do
-            axe "$url" --exit
-          done < VAMobile/documentation/urls.txt > "$report_file" 
-         
-         
-
-
-     # - name: Run documentation site
-      #  working-directory: VAMobile/documentation
-      #  run: yarn start 
-      
-  
-     # - name: Setup docs
-       # working-directory: VAMobile/documentation
-       # run: cd VAMobile && yarn docs  
-    
-     #- name: Wait for server to start
-    #    working-directory: VAMobile/documentation
-    #    run: npx wait-on http://localhost:3000
-      
-     # - name: Run axe
-    #   working-directory: VAMobile/documentation
-    #    run: |
-    #          npm install -g @axe-core/cli
-   #          axe http://localhost:3000 --exit        
+      - name: Run accessibility check on single URL
+        run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit 
 
  # start_slack_thread:
    #     name: Start Slack thread
