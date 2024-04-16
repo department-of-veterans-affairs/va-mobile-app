@@ -188,7 +188,7 @@ function DisabilityRatingsScreen() {
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
       testID="disabilityRatingTestID">
-      {useDisabilityRatingError ? (
+      {useDisabilityRatingError || !drNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
       ) : loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
