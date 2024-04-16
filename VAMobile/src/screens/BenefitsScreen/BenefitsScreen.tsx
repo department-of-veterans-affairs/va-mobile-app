@@ -61,7 +61,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     ? t('benefits.activity.warning.downtime')
     : claimsWaygateBlocked
       ? t('benefits.activity.warning.accessBlocked')
-      : t('benefits.activity.error.temporary')
+      : t('benefits.activity.error')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
