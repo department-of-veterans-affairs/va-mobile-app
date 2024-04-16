@@ -45,15 +45,15 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
 
-  const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const showClaimsCount = !claimsAndAppealsError && activeClaimsCount
-
   const claimsWaygate = waygateEnabled('WG_ClaimsHistory')
   const claimsWaygateBlocked =
     !claimsWaygate.enabled &&
     (claimsWaygate.type === 'DenyContent' ||
       claimsWaygate.type === 'DenyAccess' ||
       claimsWaygate.type === 'AllowFunction')
+
+  const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const showClaimsCount = !claimsAndAppealsError && !claimsWaygateBlocked && !featureInDowntime && activeClaimsCount
 
   const showAlert = claimsAndAppealsError || featureInDowntime || claimsWaygateBlocked
   const alertVariant = claimsAndAppealsError ? 'CategoryLandingError' : 'CategoryLandingWarning'
