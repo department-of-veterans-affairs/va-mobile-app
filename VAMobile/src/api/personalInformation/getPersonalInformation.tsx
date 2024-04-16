@@ -1,23 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
-import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
-import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getAllFieldsThatExist } from 'utils/common'
-import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 
 import { personalInformationKeys } from './queryKeys'
 
-const { ENVIRONMENT } = getEnv()
 /**
  * Fetch user personal information
  */
 export const getPersonalInformation = async (): Promise<PersonalInformationData | undefined> => {
   const response = await get<PersonalInformationPayload>('/v2/user')
   const personalInformation = response?.data.attributes
-  setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
 
   if (personalInformation) {
     const birthDay = personalInformation.birthDate
