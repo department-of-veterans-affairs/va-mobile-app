@@ -5,7 +5,7 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton, TextView, VAIcon } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -22,7 +22,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 import { DowntimeFeatureTypeConstants } from 'store/api'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
@@ -34,12 +34,33 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const featureInDowntime = claimsInDowntime || appealsInDowntime
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
-  const { data: claimsData, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals('ACTIVE', 1, {
+  const {
+    data: claimsData,
+    isFetching: loadingClaimsAndAppeals,
+    isError: claimsAndAppealsError,
+  } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
 
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const showClaimsCount = !claimsAndAppealsError && activeClaimsCount
+
+  const claimsWaygate = waygateEnabled('WG_ClaimsHistory')
+  const claimsWaygateBlocked =
+    (!claimsWaygate.enabled && claimsWaygate.type === 'DenyContent') ||
+    claimsWaygate.type === 'DenyAccess' ||
+    claimsWaygate.type === 'AllowFunction'
+
+  const showAlert = claimsAndAppealsError || featureInDowntime || claimsWaygateBlocked
+  const alertVariant = claimsAndAppealsError ? 'CategoryLandingError' : 'CategoryLandingWarning'
+  const alertMessage = featureInDowntime
+    ? t('benefits.activity.warning.downtime')
+    : claimsWaygateBlocked
+      ? t('benefits.activity.warning.accessBlocked')
+      : t('benefits.activity.error.temporary')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -62,12 +83,24 @@ function BenefitsScreen({}: BenefitsScreenProps) {
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('claims.title')}
-          subText={activeClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
+          subText={showClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
           showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
+        {showAlert && (
+          <Box
+            mx={theme.dimensions.condensedMarginBetween}
+            mt={theme.dimensions.standardMarginBetween}
+            flexDirection="row"
+            alignItems="center">
+            <VAIcon width={24} height={24} name="ExclamationCircle" fill="homeScreenError" />
+            <TextView variant={alertVariant} ml={theme.dimensions.condensedMarginBetween} flex={1}>
+              {alertMessage}
+            </TextView>
+          </Box>
+        )}
       </Box>
     </CategoryLanding>
   )
