@@ -126,7 +126,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
             <TextView variant="MobileBody" testID="appealsUpToDateTestID">
               {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
             </TextView>
-            <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
+            <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedSubmittedDate })}</TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}

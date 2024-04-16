@@ -107,7 +107,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   const onSubmit = (): void => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
+      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     const mutateOptions = {
       onSuccess: () => {
@@ -121,7 +121,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   const onRequestEvaluation = (): void => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
+      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     requestEvalAlert({
       title: t('askForClaimDecision.alertTitle'),

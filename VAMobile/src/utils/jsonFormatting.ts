@@ -17,3 +17,10 @@ export const fixedWhiteSpaceString = (text: string | undefined) => {
   }
   return ''
 }
+
+export const fixSpecialCharacters = (text: string): string => {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&ldquo;/g, '"')
+    .replace(/&rsquo;/g, "'")
+}
