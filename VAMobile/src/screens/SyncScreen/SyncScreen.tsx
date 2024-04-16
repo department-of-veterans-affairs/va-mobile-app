@@ -91,6 +91,7 @@ function SyncScreen({}: SyncScreenProps) {
     drNotInDowntime,
     mhNotInDowntime,
     syncing,
+    ENVIRONMENT,
   ])
 
   return (
