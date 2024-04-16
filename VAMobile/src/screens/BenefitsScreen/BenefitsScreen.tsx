@@ -22,7 +22,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 import { DowntimeFeatureTypeConstants } from 'store/api'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
+import { WaygateToggleType, screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
@@ -45,7 +45,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
 
-  const claimsWaygate = waygateEnabled('WG_ClaimsHistory')
+  const claimsWaygate = waygateEnabled('WG_ClaimsHistory' as WaygateToggleType)
   const claimsWaygateBlocked =
     !claimsWaygate.enabled &&
     (claimsWaygate.type === 'DenyContent' ||
