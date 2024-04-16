@@ -34,7 +34,7 @@ describe('Disability Ratings', () => {
   it('verify About VA disability ratings information', async () => {
     await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
     await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AboutDisabilityRatings')
     await device.launchApp({ newInstance: false })
