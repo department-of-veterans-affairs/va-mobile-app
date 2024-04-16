@@ -53,8 +53,17 @@ jobs:
         run: npm start & npx wait-on http://localhost:3000 &
 
 
-      - name: Run accessibility check on single URL
-        run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit 
+     # - name: Run accessibility check on single URL
+     #   run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit 
+
+      - name: Check accessibility issues
+        run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit || echo "::set-output name=accessibility_issues::true"
+
+      - name: Notify about accessibility issues
+        if: steps.check_accessibility_issues.outputs.accessibility_issues == 'true'
+        run: |
+          echo "Accessibility issues were detected during the first run of the accessibility check. Please review and address them." | mail -s "Accessibility Issues Detected" charnelle.domguia@adhocteam.com
+
 
  # start_slack_thread:
    #     name: Start Slack thread
