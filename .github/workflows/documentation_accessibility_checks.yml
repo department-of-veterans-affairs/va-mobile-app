@@ -65,7 +65,7 @@ jobs:
         if: ${{ success() && env.ACCESSIBILITY_ISSUES == 'true' }}
         uses: ./.github/workflows/start_slack_thread.yml
         with:
-          channel_name: axe_check
+          channel_name: va-mobile-build-alerts
           message: 'Accessibility issues were detected during the first run of the accessibility check. Please review and address them. <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|View workflow run>.'
 
 
