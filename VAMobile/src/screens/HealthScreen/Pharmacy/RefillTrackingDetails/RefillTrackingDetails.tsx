@@ -13,12 +13,12 @@ import {
   Box,
   ErrorComponent,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
   TextView,
 } from 'components'
-import { ClickForActionLink } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -144,16 +144,15 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
       const [shippedDateMMddyyyy, shippedDateA11yLabel] = getDateTextAndLabel(t, shippedDate)
       const trackingNumberA11yLabel = a11yLabelID(trackingNumber)
-      console.log(trackingNumberA11yLabel)
 
       const mainContent = (
         <>
           <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
           {trackingLink && trackingNumber ? (
-            <ClickForActionLink
-              displayedText={trackingNumber}
-              linkType="externalLink"
-              numberOrUrlLink={trackingLink + trackingNumber}
+            <LinkWithAnalytics
+              type="url"
+              url={trackingLink + trackingNumber}
+              text={trackingNumber}
               a11yLabel={trackingNumberA11yLabel}
             />
           ) : (
