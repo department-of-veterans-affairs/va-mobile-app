@@ -42,6 +42,7 @@ describe('Disability Ratings', () => {
 
   it('verify links in the get help section', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-827-1000')).tap()
       await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
@@ -50,6 +51,7 @@ describe('Disability Ratings', () => {
       await element(by.text('TTY: 711')).tap()
       await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 })

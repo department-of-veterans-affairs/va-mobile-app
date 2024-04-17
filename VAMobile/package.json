@@ -37,7 +37,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-component-library": "^0.11.0",
+    "@department-of-veterans-affairs/mobile-component-library": "0.12.1",
     "@expo/react-native-action-sheet": "^4.0.1",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-firebase/analytics": "^18.9.0",
