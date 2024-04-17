@@ -17,7 +17,7 @@ export const SignE2eIdConstants = {
 
 describe('Sign In', () => {
   it('should show sign in page content', async () => {
-    await waitFor(element(by.id(SignE2eIdConstants.LOGIN_PAGE_ID)))
+    await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
       .toExist()
       .withTimeout(20000)
 
