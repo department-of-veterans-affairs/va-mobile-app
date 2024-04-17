@@ -370,27 +370,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (screenError || appointmentNotFound) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingAppointmentCancellation || loading) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <LoadingComponent
-          text={
-            loadingAppointmentCancellation
-              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
-              : t('appointmentDetails.loading')
-          }
-        />
-      </FeatureLandingTemplate>
-    )
-  }
+  const hasError = screenError || appointmentNotFound
+  const isLoading = loadingAppointmentCancellation || loading
 
   return (
     <FeatureLandingTemplate
@@ -398,36 +379,48 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <AppointmentAlert attributes={attributes} />
-        <TextArea>
-          <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
-          {renderAddToCalendarLink()}
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : isLoading ? (
+        <LoadingComponent
+          text={
+            loadingAppointmentCancellation
+              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
+              : t('appointmentDetails.loading')
+          }
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AppointmentAlert attributes={attributes} />
+          <TextArea>
+            <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
+            {renderAddToCalendarLink()}
 
-          {renderVideoAppointmentInstructions()}
+            {renderVideoAppointmentInstructions()}
 
-          {renderAtHomeVideoConnectAppointmentData()}
-          <TypeOfCare attributes={attributes} />
-          <ProviderName attributes={attributes} />
-          <ClinicNameAndPhysicalLocation attributes={attributes} />
-          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
+            {renderAtHomeVideoConnectAppointmentData()}
+            <TypeOfCare attributes={attributes} />
+            <ProviderName attributes={attributes} />
+            <ClinicNameAndPhysicalLocation attributes={attributes} />
+            <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
-          {renderAtlasVideoConnectAppointmentData()}
-          {featureEnabled('patientCheckIn') && (
-            <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
-            </Box>
-          )}
-          <PreferredDateAndTime attributes={attributes} />
-          <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} />
-          {renderSpecialInstructions()}
-          <ContactInformation attributes={attributes} />
-          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
-        </TextArea>
+            {renderAtlasVideoConnectAppointmentData()}
+            {featureEnabled('patientCheckIn') && (
+              <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
+                <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
+              </Box>
+            )}
+            <PreferredDateAndTime attributes={attributes} />
+            <PreferredAppointmentType attributes={attributes} />
+            <AppointmentReason attributes={attributes} />
+            {renderSpecialInstructions()}
+            <ContactInformation attributes={attributes} />
+            <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
+          </TextArea>
 
-        {readerCancelInformation()}
-      </Box>
+          {readerCancelInformation()}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

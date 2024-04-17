@@ -44,6 +44,7 @@ function PastAppointments({}: PastAppointmentsProps) {
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
+  const error = useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
   const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
 
   const getMMMyyyy = (date: DateTime): string => {
@@ -254,14 +255,6 @@ function PastAppointments({}: PastAppointmentsProps) {
     getAppointmentsInSelectedRange(datePickerOption, 1)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
-  }
-
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
-
   const requestPage = (requestedPage: number) => {
     getAppointmentsInSelectedRange(datePickerOption, requestedPage)
   }
@@ -279,7 +272,11 @@ function PastAppointments({}: PastAppointmentsProps) {
     tab: 'past appointments',
   }
 
-  return (
+  return error ? (
+    <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
+  ) : loading ? (
+    <LoadingComponent text={t('appointments.loadingAppointments')} />
+  ) : (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAModalPicker

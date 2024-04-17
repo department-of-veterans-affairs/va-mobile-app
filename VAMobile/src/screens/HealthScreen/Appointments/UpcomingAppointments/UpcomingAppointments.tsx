@@ -37,19 +37,6 @@ function UpcomingAppointments({}: UpcomingAppointmentsProps) {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })
   }
 
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
-
-  if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
-    return (
-      <NoAppointments
-        subText={t('noAppointments.youCanSchedule')}
-        subTextA11yLabel={a11yLabelVA(t('noAppointments.youCanSchedule'))}
-      />
-    )
-  }
-
   const requestPage = (requestedPage: number) => {
     const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
     dispatch(
@@ -79,7 +66,16 @@ function UpcomingAppointments({}: UpcomingAppointmentsProps) {
     tab: 'upcoming appointments',
   }
 
-  return (
+  const hasNoAppointments = _.isEmpty(currentPageUpcomingAppointmentsByYear)
+
+  return loading ? (
+    <LoadingComponent text={t('appointments.loadingAppointments')} />
+  ) : hasNoAppointments ? (
+    <NoAppointments
+      subText={t('noAppointments.youCanSchedule')}
+      subTextA11yLabel={a11yLabelVA(t('noAppointments.youCanSchedule'))}
+    />
+  ) : (
     <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
       <Box
         mx={theme.dimensions.gutter}
