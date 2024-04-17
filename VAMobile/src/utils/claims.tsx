@@ -248,7 +248,7 @@ export const onAddPhotos = (
         case 0:
           logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
           launchCamera(
-            { mediaType: 'photo', quality: 0.9, includeBase64: true },
+            { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
             (response: ImagePickerResponse): void => {
               postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
             },
