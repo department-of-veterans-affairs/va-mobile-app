@@ -63,7 +63,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
             <TextView variant="BitterHeading">{title}</TextView>
           </Box>
           {!!subText && (
-            <Box flexDirection={'row'}>
+            <Box flexDirection={'row'} alignItems="center">
               <Box flex={1}>
                 <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
               </Box>
