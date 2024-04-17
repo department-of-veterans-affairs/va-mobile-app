@@ -326,10 +326,12 @@ describe('Claims Screen', () => {
     await expect(element(by.id('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
       await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+      await device.disableSynchronization()
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
       await device.takeScreenshot('AndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 
