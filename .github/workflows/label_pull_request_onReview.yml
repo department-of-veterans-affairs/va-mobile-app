@@ -53,18 +53,19 @@ jobs:
           --header 'Content-Type: application/json' |
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
           echo "Approvers: $approvals"
-          echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
 
           if [[ $(jq '. | length' <<< "$approvals") -ge 1 ]]
             then
               if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has QA approval and one other'
-                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Ready to Merge" --with-token < token.txt
+                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Ready to Merge"
               else 
                 echo 'This PR requires QA approval'
-                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review" --add-label "FE-With QA" --with-token < token.txt
+                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review" --add-label "FE-With QA"
               fi
           else
             echo 'This PR requires 2 approvals, including one QA approval'
           fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
