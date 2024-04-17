@@ -5,7 +5,7 @@ import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAp
 
 export const DecisionLettersE2eIDConstants = {
   CLOSED_CLAIM_DECISION_LETTER_ID:
-    'Claim for compensation updated on April 09, 2021 Submitted January 01, 2021 Decision letter ready',
+    'Claim for compensation updated on April 09, 2021 Received January 01, 2021 Decision letter ready',
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
   DECISION_CLAIM_LETTER_1_ID: 'March 11, 2023 letter Notification Letter (e.g. VA 20-8993, VA 21-0290, PCGL)',
   DECISION_CLAIM_LETTER_2_ID: 'September 21, 2022 letter Decision Rating Letter',
