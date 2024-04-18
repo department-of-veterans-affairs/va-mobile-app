@@ -65,6 +65,7 @@ import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
+const ACTIVITY_STALE_TIME = 300000 // 5 minutes
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -105,10 +106,11 @@ export function HomeScreen({}: HomeScreenProps) {
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const {
+    loadingInboxData: loadingInbox,
+    inboxFirstRetrieval: smPrefetch,
+    inboxLastUpdatedAt,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const {
     preloadComplete: apptsPrefetch,
     loading: loadingAppointments,
@@ -143,10 +145,11 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+    const isInboxStale = !inboxLastUpdatedAt || Date.now() - inboxLastUpdatedAt > ACTIVITY_STALE_TIME
+    if (isFocused && userAuthorizedServices?.secureMessaging && !smInDowntime && isInboxStale) {
       dispatch(getInbox())
     }
-  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+  }, [dispatch, isFocused, smInDowntime, userAuthorizedServices?.secureMessaging, inboxLastUpdatedAt])
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())

@@ -37,6 +37,7 @@ import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const ACTIVITY_STALE_TIME = 300000 // 5 minutes
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -54,7 +55,7 @@ export function HealthScreen({}: HealthScreenProps) {
     upcomingDaysLimit,
   } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
+  const { loadingInboxData: loadingInbox, inboxLastUpdatedAt } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
 
@@ -76,10 +77,12 @@ export function HealthScreen({}: HealthScreenProps) {
   )
   useFocusEffect(
     useCallback(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+      const isInboxStale = !inboxLastUpdatedAt || Date.now() - inboxLastUpdatedAt > ACTIVITY_STALE_TIME
+
+      if (userAuthorizedServices?.secureMessaging && !smInDowntime && isInboxStale) {
         dispatch(getInbox())
       }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging, inboxLastUpdatedAt]),
   )
 
   const onCoronaVirusFAQ = () => {

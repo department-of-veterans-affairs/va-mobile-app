@@ -98,6 +98,7 @@ export type SecureMessagingState = {
   deleteDraftFailed: boolean
   deletingDraft: boolean
   inboxFirstRetrieval: boolean
+  inboxLastUpdatedAt?: number
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -802,6 +803,7 @@ const secureMessagingSlice = createSlice({
       state.error = error
       state.inboxFirstRetrieval = !!error
       state.loadingInboxData = false
+      if (!error) state.inboxLastUpdatedAt = Date.now()
     },
 
     dispatchStartListFolders: (state) => {
