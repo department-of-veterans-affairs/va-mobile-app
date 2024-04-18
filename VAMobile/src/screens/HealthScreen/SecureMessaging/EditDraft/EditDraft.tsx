@@ -49,12 +49,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  FolderNameTypeConstants,
-  FormHeaderTypeConstants,
-  REPLY_WINDOW_IN_DAYS,
-  SegmentedControlIndexes,
-} from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -142,9 +137,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
   })?.attributes.messageId
 
-  const hasRecentMessages = thread
-    .map((id) => messagesById[id])
-    .some((msg) => DateTime.fromISO(msg.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS)
+  const hasRecentMessages = thread.some(
+    (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
+  )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
