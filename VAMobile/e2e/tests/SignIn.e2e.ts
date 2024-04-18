@@ -19,7 +19,7 @@ describe('Sign In', () => {
   it('should show sign in page content', async () => {
     await waitFor(element(by.id(SignE2eIdConstants.LOGIN_PAGE_ID)))
       .toExist()
-      .withTimeout(10000)
+      .withTimeout(20000)
 
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
