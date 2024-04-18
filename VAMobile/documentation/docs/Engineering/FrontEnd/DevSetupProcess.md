@@ -8,7 +8,7 @@ sidebar_position: 5
 ## Prerequisites
 
 :::tip
-If you are building in the app for prototyping, testing, or demo purposes you can freely build locally for Android without requesting access or keys.
+If you are building in the app for prototyping, testing, or demo purposes, you can freely build locally for Android without requesting access or keys.
 
 You can also consider [using our codespaces setup](https://github.com/features/codespaces) to get up and running quickly.
 :::
