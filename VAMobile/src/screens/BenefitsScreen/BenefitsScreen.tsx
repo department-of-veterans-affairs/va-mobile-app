@@ -33,6 +33,14 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+
+  const claimsWaygate = waygateEnabled('WG_ClaimsHistory' as WaygateToggleType)
+  const claimsWaygateBlocked =
+    !claimsWaygate.enabled &&
+    (claimsWaygate.type === 'DenyContent' ||
+      claimsWaygate.type === 'DenyAccess' ||
+      claimsWaygate.type === 'AllowFunction')
+
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const featureInDowntime = claimsInDowntime || appealsInDowntime
@@ -42,15 +50,11 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     isFetching: loadingClaimsAndAppeals,
     isError: claimsAndAppealsError,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+    enabled:
+      !claimsWaygateBlocked &&
+      ((userAuthorizedServices?.claims && !claimsInDowntime) ||
+        (userAuthorizedServices?.appeals && !appealsInDowntime)),
   })
-
-  const claimsWaygate = waygateEnabled('WG_ClaimsHistory' as WaygateToggleType)
-  const claimsWaygateBlocked =
-    !claimsWaygate.enabled &&
-    (claimsWaygate.type === 'DenyContent' ||
-      claimsWaygate.type === 'DenyAccess' ||
-      claimsWaygate.type === 'AllowFunction')
 
   const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
   const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
