@@ -90,7 +90,7 @@ describe('Claims Screen', () => {
       element(by.label('What should I do if I disagree with your decision on my  V-A  disability claim?')),
     ).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('DecisionReviewOptionsWebsite')
     await device.launchApp({ newInstance: false })
@@ -326,10 +326,12 @@ describe('Claims Screen', () => {
     await expect(element(by.id('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
       await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+      await device.disableSynchronization()
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
       await device.takeScreenshot('AndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 

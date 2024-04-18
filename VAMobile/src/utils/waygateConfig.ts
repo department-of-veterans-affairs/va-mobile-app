@@ -83,7 +83,7 @@ export type WaygateToggleType =
   | 'WG_EditDirectDeposit'
   | 'WG_Benefits'
   | 'WG_DisabilityRatings'
-  | 'WG_ClaimsHistory'
+  | 'WG_ClaimsHistoryScreen'
   | 'WG_LettersOverview'
   | 'WG_LettersList'
   | 'WG_BenefitSummaryServiceVerificationLetter'
@@ -166,7 +166,7 @@ type WaygateToggleValues = {
   WG_EditDirectDeposit: Waygate
   WG_Benefits: Waygate
   WG_DisabilityRatings: Waygate
-  WG_ClaimsHistory: Waygate
+  WG_ClaimsHistoryScreen: Waygate
   WG_LettersOverview: Waygate
   WG_LettersList: Waygate
   WG_BenefitSummaryServiceVerificationLetter: Waygate
@@ -258,7 +258,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_EditDirectDeposit: { ...waygateDefault },
   WG_Benefits: { ...waygateDefault },
   WG_DisabilityRatings: { ...waygateDefault },
-  WG_ClaimsHistory: { ...waygateDefault },
+  WG_ClaimsHistoryScreen: { ...waygateDefault },
   WG_LettersOverview: { ...waygateDefault },
   WG_LettersList: { ...waygateDefault },
   WG_BenefitSummaryServiceVerificationLetter: { ...waygateDefault },

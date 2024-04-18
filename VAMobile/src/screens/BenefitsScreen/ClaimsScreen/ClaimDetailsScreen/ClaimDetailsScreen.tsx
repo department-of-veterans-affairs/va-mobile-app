@@ -64,8 +64,17 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
       registerReviewEvent()
+      logAnalyticsEvent(
+        Events.vama_claim_details_open(
+          claimID,
+          attributes.claimType,
+          attributes.phase,
+          attributes.phaseChangeDate || '',
+          attributes.dateFiled,
+        ),
+      )
     }
-  }, [claim, loadingClaim, claimError])
+  }, [claim, loadingClaim, claimError, claimID, attributes])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
