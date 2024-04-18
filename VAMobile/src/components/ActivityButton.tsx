@@ -60,7 +60,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
             flexDirection={'row'}
             flexWrap={'wrap'}
             mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
-            <TextView variant="BitterHeading">{title}</TextView>
+            <TextView variant="ActivityButtonHeader">{title}</TextView>
           </Box>
           {!!subText && (
             <Box flexDirection={'row'} alignItems="center">
