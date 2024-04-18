@@ -1,18 +1,11 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import {
-  Box,
-  ClickForActionLink,
-  CollapsibleAlert,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  TextView,
-  VABulletList,
-  VABulletListText,
-} from 'components'
+import { Box, CollapsibleAlert, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -61,10 +54,10 @@ function CernerAlertSM() {
     const outro = `${thisFacility} ${t('cernerAlertSM.youllNeedToGoThere')}`
     const outroA11y = `${thisFacilityA11y} ${t('cernerAlertSM.youllNeedToGoThere')}`
 
-    const linkToCallProps: LinkButtonProps = {
-      displayedText: t('goToMyVAHealth'),
-      linkType: LinkTypeOptionsConstants.externalLink,
-      numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
+    const linkProps: LinkProps = {
+      type: 'url',
+      url: LINK_URL_GO_TO_PATIENT_PORTAL,
+      text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       testID: 'goToMyVAHealthTestID',
     }
@@ -78,7 +71,7 @@ function CernerAlertSM() {
         <TextView variant="MobileBody" accessibilityLabel={outroA11y} paragraphSpacing={true}>
           {outro}
         </TextView>
-        <ClickForActionLink {...linkToCallProps} />
+        <LinkWithAnalytics {...linkProps} />
       </Box>
     )
   }

@@ -188,6 +188,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    ActivityButtonHeader: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
     AnnouncementBannerTitle: buildFont(
@@ -195,7 +196,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.AnnouncementBannerTitle,
       scheme.text.announcementBanner,
     ),
-    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
+    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     CategoryLandingError: buildFont(

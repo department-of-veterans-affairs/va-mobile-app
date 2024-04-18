@@ -130,6 +130,7 @@ export type VAIconColors = {
 export type VATypographyThemeVariants = {
   AboutYou: string
   ActionBar: string
+  ActivityButtonHeader: string
   ActivityButtonSubtext: string
   ActivityFooter: string
   AnnouncementBannerTitle: string
