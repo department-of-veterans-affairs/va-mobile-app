@@ -129,7 +129,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
      ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png)
 
-9. Verify the Virtual Device launches and Android Studios installs and opens the VAMobile app on the device.
+9. Verify the Virtual Device launches and Android Studio installs and opens the VAMobile app on the device.
 
 ### Physical Device Setup
 
