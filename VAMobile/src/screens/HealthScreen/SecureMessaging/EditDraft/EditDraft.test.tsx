@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
@@ -47,6 +48,30 @@ jest.mock('store/slices', () => {
       }
     }),
     getThread: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftComplete: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    dispatchResetDeleteDraftFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSendMessageFailed: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -145,6 +170,7 @@ context('EditDraft', () => {
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
     noRecipientsReturned = false,
     sendMessageFailed = false,
+    hasRecentMessage = true,
     hasLoadedRecipients = true,
     loading = false,
     threads = mockThreads,
@@ -153,6 +179,8 @@ context('EditDraft', () => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+    mockMessages['3'].sentDate = hasRecentMessage ? String(DateTime.now().toUTC()) : '3'
 
     const props = mockNavProps(
       undefined,
@@ -245,6 +273,24 @@ context('EditDraft', () => {
     it('should display the ErrorComponent', () => {
       initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
       expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
+    })
+  })
+
+  describe('when there are no recent messages', () => {
+    beforeEach(() => {
+      initializeTestInstance({ hasRecentMessage: false })
+    })
+
+    it('should display an alert', () => {
+      expect(screen.getByRole('header', { name: 'This conversation is too old for new replies' })).toBeTruthy()
+    })
+
+    it('should hide the Add Files button', () => {
+      expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy()
+    })
+
+    it('should hide the Send button', () => {
+      expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy()
     })
   })
 

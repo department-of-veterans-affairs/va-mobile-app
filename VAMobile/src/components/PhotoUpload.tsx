@@ -125,7 +125,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
           switch (buttonIndex) {
             case 0:
               launchCamera(
-                { mediaType: 'photo', quality: 0.9, includeBase64: true },
+                { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
                 (response: ImagePickerResponse): void => {
                   uploadCallback(response)
                 },

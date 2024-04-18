@@ -11,11 +11,9 @@ import {
   TextArea,
   TextView,
 } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -24,12 +22,9 @@ const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
 type NeedHelpDataProps = {
   isAppeal?: boolean
-  claimId?: string
-  claimType?: string
-  claimPhase?: number
 }
 
-function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpDataProps) {
+function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -58,12 +53,6 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
     )
   }
 
-  const fireAnalytic = () => {
-    if (claimId && claimType && claimPhase) {
-      logAnalyticsEvent(Events.vama_claim_call(claimId, claimType, claimPhase))
-    }
-  }
-
   return (
     <TextArea>
       <Box {...testIdProps(t('claimDetails.needHelp'))} accessible={true}>
@@ -76,7 +65,7 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
           {t('claimDetails.callVA')}
         </TextView>
       </Box>
-      <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} fireAnalytic={fireAnalytic} />
+      <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
       {renderAppealData()}
     </TextArea>
   )

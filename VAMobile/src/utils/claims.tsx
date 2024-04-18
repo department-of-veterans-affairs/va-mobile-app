@@ -5,16 +5,10 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
-import {
-  ClaimAttributesData,
-  ClaimEventData,
-  ClaimPhaseData,
-  FILE_REQUEST_STATUS,
-  FILE_REQUEST_TYPE,
-} from 'store/api/types'
 
 import { logAnalyticsEvent } from './analytics'
 
@@ -254,7 +248,7 @@ export const onAddPhotos = (
         case 0:
           logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
           launchCamera(
-            { mediaType: 'photo', quality: 0.9, includeBase64: true },
+            { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
             (response: ImagePickerResponse): void => {
               postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
             },
