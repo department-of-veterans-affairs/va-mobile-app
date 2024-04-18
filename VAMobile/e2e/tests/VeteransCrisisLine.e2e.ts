@@ -17,10 +17,12 @@ export const VCLConstants = {
 }
 
 const tapAndTakeScreenshot = async (text: string, screenshotName: string) => {
+  await device.disableSynchronization()
   await element(by.text(text)).tap()
   await setTimeout(5000)
   await device.takeScreenshot(screenshotName)
   await device.launchApp({ newInstance: false })
+  await device.enableSynchronization()
 }
 
 beforeAll(async () => {
