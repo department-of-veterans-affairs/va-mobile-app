@@ -244,7 +244,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
-          text: t('cancel'),
+          text: t('leavingApp.cancel'),
           style: 'cancel',
         },
         { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },

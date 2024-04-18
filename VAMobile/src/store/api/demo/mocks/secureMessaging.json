@@ -1470,6 +1470,27 @@
   "/v0/messaging/health/folders/-2/messages": {
     "data": [
       {
+        "id": "2112896",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2112896,
+          "category": "COVID",
+          "subject": "Your requested info",
+          "body": null,
+          "hasAttachments": false,
+          "attachment": false,
+          "sentDate": "{{now - 5 days}}",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
+        }
+      },
+      {
         "id": "2113141",
         "type": "messages",
         "attributes": {
@@ -1509,27 +1530,6 @@
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
-        }
-      },
-      {
-        "id": "2112896",
-        "type": "messages",
-        "attributes": {
-          "messageId": 2112896,
-          "category": "COVID",
-          "subject": "Your requested info",
-          "body": null,
-          "hasAttachments": false,
-          "attachment": false,
-          "sentDate": "2021-11-16T16:46:36.000Z",
-          "senderId": 523757,
-          "senderName": "FREEMAN, MELVIN  V",
-          "recipientId": 1918816,
-          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
-        },
-        "links": {
-          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
         }
       }
     ],
@@ -1734,7 +1734,7 @@
           "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
           "hasAttachments": true,
           "attachment": true,
-          "sentDate": "2021-10-26T22:21:11.000Z",
+          "sentDate": "{{now - 15 days}}",
           "senderId": 1835650,
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,

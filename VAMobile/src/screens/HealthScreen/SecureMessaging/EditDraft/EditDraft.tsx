@@ -6,6 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import {
@@ -48,7 +49,12 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  REPLY_WINDOW_IN_DAYS,
+  SegmentedControlIndexes,
+} from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -135,6 +141,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     const currentMessage = id.attributes
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
   })?.attributes.messageId
+
+  const hasRecentMessages = thread
+    .map((id) => messagesById[id])
+    .some((msg) => DateTime.fromISO(msg.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS)
+  const replyDisabled = isReplyDraft && !hasRecentMessages
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -248,52 +259,58 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }
 
   const onDeletePressed = (): void => {
+    const buttons = [
+      {
+        text: t('keepEditing'),
+      },
+      {
+        text: t('delete'),
+        onPress: () => {
+          const params: DeleteMessageParameters = { messageID: messageID }
+          const mutateOptions = {
+            onSuccess: () => {
+              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              queryClient.invalidateQueries({
+                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              })
+              navigateTo('FolderMessages', {
+                folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+                folderName: FolderNameTypeConstants.drafts,
+                draftSaved: false,
+              })
+              goToDraftFolder(false)
+            },
+            onError: () => {
+              showSnackBar(snackbarMessages.errorMsg, dispatch, () => deleteDraft(params, mutateOptions), false, true)
+            },
+          }
+          deleteDraft(params, mutateOptions)
+        },
+      },
+    ]
+
+    if (!replyDisabled) {
+      buttons.push({
+        text: t('save'),
+        onPress: () => {
+          setOnSaveDraftClicked(true)
+          setOnSendClicked(true)
+        },
+      })
+    }
+
     destructiveAlert({
       title: t('deleteDraft'),
       message: t('secureMessaging.deleteDraft.deleteInfo'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('delete'),
-          onPress: () => {
-            const params: DeleteMessageParameters = { messageID: messageID }
-            const mutateOptions = {
-              onSuccess: () => {
-                showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
-                queryClient.invalidateQueries({
-                  queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
-                })
-                navigateTo('FolderMessages', {
-                  folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-                  folderName: FolderNameTypeConstants.drafts,
-                  draftSaved: false,
-                })
-                goToDraftFolder(false)
-              },
-              onError: () => {
-                showSnackBar(snackbarMessages.errorMsg, dispatch, () => deleteDraft(params, mutateOptions), false, true)
-              },
-            }
-            deleteDraft(params, mutateOptions)
-          },
-        },
-        {
-          text: t('save'),
-          onPress: () => {
-            setOnSaveDraftClicked(true)
-            setOnSendClicked(true)
-          },
-        },
-      ],
+      buttons,
     })
   }
 
-  const MenViewActions: MenuViewActionsType = [
-    {
+  const menuViewActions: MenuViewActionsType = []
+  if (!replyDisabled) {
+    menuViewActions.push({
       actionText: t('save'),
       addDivider: true,
       iconName: 'Folder',
@@ -302,17 +319,17 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       },
-    },
-    {
-      actionText: t('delete'),
-      addDivider: false,
-      iconName: 'Trash',
-      accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
-      iconColor: 'error',
-      textColor: 'error',
-      onPress: onDeletePressed,
-    },
-  ]
+    })
+  }
+  menuViewActions.push({
+    actionText: t('delete'),
+    addDivider: false,
+    iconName: 'Trash',
+    accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
+    iconColor: 'error',
+    textColor: 'error',
+    onPress: onDeletePressed,
+  })
 
   /**
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
@@ -339,7 +356,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       <FullScreenSubtask
         title={t('editDraft')}
         leftButtonText={t('cancel')}
-        menuViewActions={MenViewActions}
+        menuViewActions={menuViewActions}
         scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
@@ -469,7 +486,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       fieldProps: {
         removeOnPress: removeAttachment,
         buttonLabel:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments && !replyDisabled
             ? t('secureMessaging.formMessage.addFiles')
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
@@ -532,6 +549,18 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
+  function renderAlert() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+            {t('secureMessaging.reply.olderThan45Days')}
+          </TextView>
+        </AlertBox>
+      </Box>
+    )
+  }
+
   function renderForm() {
     if (noProviderError) {
       return (
@@ -551,6 +580,20 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
       navigateTo('ReplyHelp')
+    }
+
+    const renderButton = () => {
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <Button
+            label={t('secureMessaging.formMessage.send')}
+            onPress={() => {
+              setOnSendClicked(true)
+              setOnSaveDraftClicked(false)
+            }}
+          />
+        </Box>
+      )
     }
 
     return (
@@ -601,15 +644,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               </Box>
             </Pressable>
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <Button
-              label={t('secureMessaging.formMessage.send')}
-              onPress={() => {
-                setOnSendClicked(true)
-                setOnSaveDraftClicked(false)
-              }}
-            />
-          </Box>
+          {!replyDisabled && renderButton()}
         </TextArea>
       </Box>
     )
@@ -653,11 +688,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       title={t('editDraft')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-      menuViewActions={MenViewActions}
+      menuViewActions={menuViewActions}
       showCrisisLineCta={true}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
+        {replyDisabled && renderAlert()}
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
       </Box>

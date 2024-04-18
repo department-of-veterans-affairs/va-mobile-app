@@ -391,6 +391,7 @@ export const onAddFileAttachments = (
               quality: 1,
               maxWidth: MAX_IMAGE_DIMENSION,
               maxHeight: MAX_IMAGE_DIMENSION,
+              presentationStyle: 'fullScreen',
               includeBase64: true,
             },
             (response: ImagePickerResponse): void => {

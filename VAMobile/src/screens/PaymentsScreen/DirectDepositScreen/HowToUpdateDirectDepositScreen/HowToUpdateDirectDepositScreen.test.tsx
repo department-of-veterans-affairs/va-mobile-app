@@ -1,20 +1,11 @@
 import React from 'react'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 
 import HowToUpdateDirectDepositScreen from './HowToUpdateDirectDepositScreen'
-
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('HowToUpdateDirectDepositScreen', () => {
   beforeEach(() => {
@@ -41,6 +32,6 @@ context('HowToUpdateDirectDepositScreen', () => {
     expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
-    expect(mockExternalLinkSpy).toBeCalled()
+    expect(Linking.openURL).toBeCalled()
   })
 })

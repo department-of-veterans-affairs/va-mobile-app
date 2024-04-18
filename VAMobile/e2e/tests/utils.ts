@@ -34,7 +34,9 @@ export const CommonE2eIdConstants = {
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
-  LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
+  LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
+  LEAVING_APP_CANCEL_TEXT: 'Go back',
+  LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
@@ -135,7 +137,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
   }
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
-  await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+  await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
 }
 
 /** This function will change the mock data for demo mode
@@ -422,7 +424,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
   if (AFUseCase === 'DenyAccess') {
-    await element(by.text('OK')).tap()
+    await element(by.text('Leave')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()

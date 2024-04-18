@@ -5,7 +5,7 @@ title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug,qa
 assignees:
 ---
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA. Do not include any personally identifiable information for any real person in bug writeup, including screenshots. -->
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 
@@ -53,6 +53,6 @@ See [Bug Tracking](https://department-of-veterans-affairs.github.io/va-mobile-ap
 ## Ticket Checklist
 - [ ] Steps to reproduce are defined
 - [ ] Desired behavior is added
-- [ ] Labels added (front-end, back-end, relevant feature, accessibility, etc)
+- [ ] Labels added (front-end, back-end, global, Health, relevant feature, accessibility, etc)
 - [ ] Estimate of 1 added (for front-end tickets)
-- [ ] Added either to the relevant feature epic (if found during new feature implementation), or the [bug epic](https://app.zenhub.com/workspaces/va-mobile-product-view-610035bc5395bb000e62e529/issues/gh/department-of-veterans-affairs/va-mobile-app/5367)
+- [ ] Added either to the relevant feature epic (if found during new feature implementation), or the relevant team's bug epic ([Global](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/8302), [Health & Benefits](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/8303), [API](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/8304), [QART](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/8305))

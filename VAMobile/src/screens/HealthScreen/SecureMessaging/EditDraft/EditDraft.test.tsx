@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import {
   CategoryTypeFields,
@@ -143,7 +144,7 @@ context('EditDraft', () => {
       },
     },
   }
-
+  
   const initializeTestInstance = () => {
     goBack = jest.fn()
     const props = mockNavProps(
@@ -196,6 +197,24 @@ context('EditDraft', () => {
       await waitFor(() =>
         expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
       )
+    })
+  })
+
+  describe('when there are no recent messages', () => {
+    beforeEach(() => {
+      initializeTestInstance({ hasRecentMessage: false })
+    })
+
+    it('should display an alert', () => {
+      expect(screen.getByRole('header', { name: 'This conversation is too old for new replies' })).toBeTruthy()
+    })
+
+    it('should hide the Add Files button', () => {
+      expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy()
+    })
+
+    it('should hide the Send button', () => {
+      expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy()
     })
   })
 
