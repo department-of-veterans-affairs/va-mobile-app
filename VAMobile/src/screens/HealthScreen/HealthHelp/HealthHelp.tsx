@@ -23,11 +23,7 @@ function HealthHelp({}: HealthHelpProps) {
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
-  if (!facilitiesInfo) {
-    return null
-  }
-
-  const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
+  const allCernerFacilities = facilitiesInfo?.length === cernerFacilities.length
   const multiFacilities = cernerFacilities.length > 1
 
   const bullets: VABulletListText[] = cernerFacilities.map((facility: Facility) => ({
