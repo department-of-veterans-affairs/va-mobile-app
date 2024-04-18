@@ -22,7 +22,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 import { DowntimeFeatureTypeConstants } from 'store/api'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { WaygateToggleType, screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
@@ -34,13 +34,6 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const claimsWaygate = waygateEnabled('WG_ClaimsHistory' as WaygateToggleType)
-  const claimsWaygateBlocked =
-    !claimsWaygate.enabled &&
-    (claimsWaygate.type === 'DenyContent' ||
-      claimsWaygate.type === 'DenyAccess' ||
-      claimsWaygate.type === 'AllowFunction')
-
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const featureInDowntime = claimsInDowntime || appealsInDowntime
@@ -51,25 +44,20 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     isError: claimsAndAppealsError,
   } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled:
-      !claimsWaygateBlocked &&
-      ((userAuthorizedServices?.claims && !claimsInDowntime) ||
-        (userAuthorizedServices?.appeals && !appealsInDowntime)),
+      (userAuthorizedServices?.claims && !claimsInDowntime) || (userAuthorizedServices?.appeals && !appealsInDowntime),
   })
 
   const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
   const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
-  const showClaimsCount =
-    !claimsAndAppealsError && !nonFatalErrors && !claimsWaygateBlocked && !featureInDowntime && activeClaimsCount
+  const showClaimsCount = !claimsAndAppealsError && !nonFatalErrors && !featureInDowntime && activeClaimsCount
 
-  const showAlert = claimsAndAppealsError || nonFatalErrors || featureInDowntime || claimsWaygateBlocked
+  const showAlert = claimsAndAppealsError || nonFatalErrors || featureInDowntime
   const alertVariant = claimsAndAppealsError || nonFatalErrors ? 'CategoryLandingError' : 'CategoryLandingWarning'
   const alertMessage = featureInDowntime
     ? t('benefits.activity.warning.downtime')
-    : claimsWaygateBlocked
-      ? t('benefits.activity.warning.accessBlocked')
-      : nonFatalErrors
-        ? t('benefits.activity.nonFatalError')
-        : t('benefits.activity.error')
+    : nonFatalErrors
+      ? t('benefits.activity.nonFatalError')
+      : t('benefits.activity.error')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
