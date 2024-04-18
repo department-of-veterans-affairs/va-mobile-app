@@ -94,9 +94,11 @@ describe('Appeals', () => {
     }
 
     await device.launchApp({ newInstance: false })
+    await device.disableSynchronization()
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
+    await device.enableSynchronization()
   })
 })
