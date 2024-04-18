@@ -181,15 +181,18 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
       queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
       if (foldersData) {
+        let inboxUnreadCount = foldersData.inboxUnreadCount
         const newFolders = foldersData.data.map((folder) => {
           if (folder.attributes.name === FolderNameTypeConstants.inbox) {
             folder.attributes.unreadCount = folder.attributes.unreadCount - 1
+            inboxUnreadCount = folder.attributes.unreadCount
           }
           return folder
         }) as SecureMessagingFolderList
         queryClient.setQueryData(secureMessagingKeys.folders, {
           ...foldersData,
           data: newFolders,
+          inboxUnreadCount,
         } as SecureMessagingFoldersGetData)
       }
     }

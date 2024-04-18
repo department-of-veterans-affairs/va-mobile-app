@@ -86,6 +86,7 @@ context('HealthScreen', () => {
         totalEntries: 1,
       },
     },
+    inboxUnreadCount: 13,
   }
 
   const initializeTestInstance = (prescriptionsEnabled = false) => {

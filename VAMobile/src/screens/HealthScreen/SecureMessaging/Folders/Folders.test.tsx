@@ -91,6 +91,7 @@ context('Folder', () => {
         totalEntries: 5,
       },
     },
+    inboxUnreadCount: 0,
   }
 
   const initializeTestInstance = () => {

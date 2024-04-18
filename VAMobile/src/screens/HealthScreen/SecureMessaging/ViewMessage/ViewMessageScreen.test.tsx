@@ -192,6 +192,7 @@ context('ViewMessageScreen', () => {
         totalEntries: 5,
       },
     },
+    inboxUnreadCount: 0,
   }
 
   const initializeTestInstance = (messageID: number = 3) => {

@@ -45,19 +45,10 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: foldersData, isFetched: smFetch } = useFolders({
+  const { data: foldersData } = useFolders({
     enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
-  const [unreadCount, setUnreadCount] = useState(0)
-
-  useEffect(() => {
-    if (smFetch && foldersData) {
-      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
-      if (inboxFolder) {
-        setUnreadCount(inboxFolder.attributes.unreadCount)
-      }
-    }
-  }, [smFetch, foldersData])
+  const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
@@ -88,8 +79,8 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          tagCount={unreadCount}
-          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
+          tagCount={inboxUnreadCount}
+          tagCountA11y={t('secureMessaging.tag.a11y', { inboxUnreadCount })}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton

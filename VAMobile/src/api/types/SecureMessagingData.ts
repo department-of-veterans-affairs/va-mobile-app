@@ -181,6 +181,7 @@ export type SecureMessagingFolderList = Array<{
 export type SecureMessagingFoldersGetData = {
   data: SecureMessagingFolderList
   links: SecureMessagingPaginationLinks
+  inboxUnreadCount: number
   meta: {
     pagination: {
       currentPage: number
