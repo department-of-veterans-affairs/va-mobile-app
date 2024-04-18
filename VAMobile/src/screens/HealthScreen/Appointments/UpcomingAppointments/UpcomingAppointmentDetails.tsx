@@ -16,12 +16,10 @@ import {
 } from 'api/types'
 import {
   Box,
-  ClickForActionLink,
   ClickToCallPhoneNumber,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
+  LinkWithAnalytics,
   LoadingComponent,
   TextArea,
   TextView,
@@ -32,7 +30,6 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp } from 'utils/accessibility'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -41,6 +38,7 @@ import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
+import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import {
@@ -146,29 +144,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-  }
-
-  const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
-  const endTime = minutesDuration
-    ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString()
-    : startTimeDate.toISOString()
-  const addToCalendarProps: LinkButtonProps = {
-    displayedText: t('upcomingAppointments.addToCalendar'),
-    a11yLabel: t('upcomingAppointments.addToCalendar'),
-    linkType: LinkTypeOptionsConstants.calendar,
-    metaData: {
-      title: getTranslation(
-        isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType],
-        t,
-      ),
-      startTime: getEpochSecondsOfDate(startDateUtc),
-      endTime: getEpochSecondsOfDate(endTime),
-      location: getLocation(),
-      latitude: lat || 0,
-      longitude: long || 0,
-    },
-    testID: 'addToCalendarTestID',
-    fireAnalytic: calendarAnalytics,
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
@@ -279,15 +254,44 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     return <></>
   }
 
+  const calendarOnPress = async () => {
+    calendarAnalytics()
+
+    const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
+    const endTime = minutesDuration
+      ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString()
+      : startTimeDate.toISOString()
+
+    const title = getTranslation(
+      isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType],
+      t,
+    )
+    const startSeconds = getEpochSecondsOfDate(startDateUtc)
+    const endSeconds = getEpochSecondsOfDate(endTime)
+
+    let hasPermission = await checkCalendarPermission()
+    if (!hasPermission) {
+      hasPermission = await requestCalendarPermission()
+    }
+
+    if (hasPermission) {
+      await addToCalendar(title, startSeconds, endSeconds, getLocation(), lat || 0, long || 0)
+    }
+  }
+
   function renderAddToCalendarLink() {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box
           mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}
           mb={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink
-            {...addToCalendarProps}
-            {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))}
+          <LinkWithAnalytics
+            type="calendar"
+            text={t('upcomingAppointments.addToCalendar')}
+            a11yLabel={t('upcomingAppointments.addToCalendar')}
+            a11yHint={t('upcomingAppointmentDetails.addToCalendarA11yHint')}
+            onPress={calendarOnPress}
+            testID="addToCalendarTestID"
           />
         </Box>
       )
@@ -325,11 +329,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
               {location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
               ) : undefined}
-              <ClickForActionLink
-                displayedText={t('appointments.vaSchedule')}
+              <LinkWithAnalytics
+                type="url"
+                url={LINK_URL_VA_SCHEDULING}
+                text={t('appointments.vaSchedule')}
                 a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-                numberOrUrlLink={LINK_URL_VA_SCHEDULING}
-                linkType={LinkTypeOptionsConstants.externalLink}
               />
             </TextArea>
           </Box>

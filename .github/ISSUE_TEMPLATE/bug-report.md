@@ -5,7 +5,7 @@ title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug,qa
 assignees:
 ---
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
+<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA. Do not include any personally identifiable information for any real person in bug writeup, including screenshots. -->
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 

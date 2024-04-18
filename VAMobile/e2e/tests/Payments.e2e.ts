@@ -28,14 +28,14 @@ describe('Payments Screen', () => {
     await element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID)).tap()
     await expect(element(by.text("What if I'm missing a payment?")).atIndex(1)).toExist()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-827-1000')).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-    }
-    if (device.getPlatform() === 'android') {
       await element(by.text('TTY: 711')).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.text('Close')).tap()
   })
@@ -53,14 +53,14 @@ describe('Payments Screen', () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)).tap()
     await expect(element(by.text("What if my payment information doesn't look right?")).atIndex(1)).toExist()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-827-1000')).tap()
       await device.takeScreenshot('PaymentIncorrectAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-    }
-    if (device.getPlatform() === 'android') {
       await element(by.text('TTY: 711')).tap()
       await device.takeScreenshot('PaymentIncorrectAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.text('Close')).tap()
     await element(by.text('History')).tap()

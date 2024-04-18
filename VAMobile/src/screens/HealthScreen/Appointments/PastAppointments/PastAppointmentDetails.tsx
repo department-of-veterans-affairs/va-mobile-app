@@ -4,15 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  FeatureLandingTemplate,
-  LinkTypeOptionsConstants,
-  TextArea,
-  TextView,
-} from 'components'
+import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -97,11 +89,11 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
             {location?.phone && location.phone.areaCode && location.phone.number ? (
               <ClickToCallPhoneNumber phone={location.phone} />
             ) : undefined}
-            <ClickForActionLink
-              displayedText={t('appointments.vaSchedule')}
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_VA_SCHEDULING}
+              text={t('appointments.vaSchedule')}
               a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              numberOrUrlLink={LINK_URL_VA_SCHEDULING}
-              linkType={LinkTypeOptionsConstants.externalLink}
             />
           </TextArea>
         </Box>

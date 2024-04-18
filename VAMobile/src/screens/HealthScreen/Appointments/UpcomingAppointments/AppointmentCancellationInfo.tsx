@@ -11,15 +11,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToA11yLabel,
 } from 'api/types'
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  TextArea,
-  TextView,
-} from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -49,14 +41,6 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
   const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
     attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
-
-  const findYourVALocationProps: LinkButtonProps = {
-    displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
-    linkType: LinkTypeOptionsConstants.externalLink,
-    numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation')),
-    accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
-  }
 
   let title
   let titleA11yLabel
@@ -130,7 +114,13 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
       <ClickToCallPhoneNumber phone={phone} />
     ) : (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <ClickForActionLink {...findYourVALocationProps} />
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('upcomingAppointmentDetails.findYourVALocation')}
+          a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
+          a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
+        />
       </Box>
     )
 
