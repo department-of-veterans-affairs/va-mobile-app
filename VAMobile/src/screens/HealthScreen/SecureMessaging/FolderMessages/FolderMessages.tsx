@@ -74,33 +74,8 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
     navigateTo(screen, args)
   }
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
-    return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loading) {
-    const text = t('secureMessaging.messages.loading')
-    return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-        <LoadingComponent text={text} />
-      </ChildTemplate>
-    )
-  }
-
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
-
-  if (messages.length === 0) {
-    return (
-      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-        <NoFolderMessages />
-      </ChildTemplate>
-    )
-  }
 
   const requestPage = (requestedPage: number) => {
     // request the next page
@@ -140,15 +115,32 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const hasError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)
+  const hasNoMessages = messages.length === 0
+
   return (
     <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
-      </Box>
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
-      </Box>
-      {renderPagination()}
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('secureMessaging.messages.loading')} />
+      ) : hasNoMessages ? (
+        <NoFolderMessages />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
+          </Box>
+          {renderPagination()}
+        </>
+      )}
     </ChildTemplate>
   )
 }
