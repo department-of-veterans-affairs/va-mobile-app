@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIsFocused } from '@react-navigation/native'
@@ -11,7 +11,6 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
