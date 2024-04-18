@@ -68,7 +68,7 @@ After adding the variables, restart your terminal window and the variables shoul
 ## Local project setup
 
 1. Verify you have access to the [Firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp). If you don't, please reach out to [Flagship support](https://dsva.slack.com/archives/C018V2JCWRJ).
-2. With your preferred code editor navigate to the `va-mobile-app/VAMobile` folder inside your cloned version of the repository.
+2. With your preferred code editor, navigate to the `va-mobile-app/VAMobile` folder inside your cloned version of the repository.
 3. In the `android/app` directory add a file named `google-services.json`. You can download this `google-services.json` file from the [firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp), under the "your apps" section. You can also download the corresponding `GoogleService-Info.plist` file you will need to later place in your in `VAMobile/ios`.
 
 ### Download the files from Firebase
