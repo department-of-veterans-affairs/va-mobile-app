@@ -1,3 +1,7 @@
+import { Asset } from 'react-native-image-picker'
+
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+
 export const AppealStatusTypesConstants: {
   scheduled_hearing: AppealStatusTypes
   pending_hearing_scheduling: AppealStatusTypes
@@ -72,7 +76,7 @@ export const AppealStatusTypesConstants: {
   remand_return: 'remand_return',
 }
 
-export type AppealStatusTypes =
+type AppealStatusTypes =
   | 'scheduled_hearing'
   | 'pending_hearing_scheduling'
   | 'on_docket'
@@ -157,7 +161,7 @@ export const AppealProgramAreaTypesConstants: {
   multiple: 'multiple',
 }
 
-export type AppealProgramAreaTypes =
+type AppealProgramAreaTypes =
   | 'compensation'
   | 'pension'
   | 'insurance'
@@ -169,23 +173,6 @@ export type AppealProgramAreaTypes =
   | 'bva'
   | 'other'
   | 'multiple'
-
-export type AppealLocationTypes = 'aoj' | 'bva'
-
-export type AppealIssuesLastActions = 'field_grant' | 'withdrawn' | 'allowed' | 'denied' | 'remand' | 'cavc_remand'
-
-export type AppealIssuesData = {
-  active: boolean
-  description: string
-  diagnosticCode: string | null
-  lastAction: AppealIssuesLastActions | null
-  date: string | null
-}
-
-export type AppealEvidenceData = {
-  description: string
-  data: string
-}
 
 export const AppealEventTypesConstants: {
   claim_decision: AppealEventTypes
@@ -312,7 +299,7 @@ export type AppealEventData = {
   type: AppealEventTypes
 }
 
-export type AppealDocketData = {
+type AppealDocketData = {
   month: string
   docketMonth: string
   front: boolean
@@ -337,9 +324,7 @@ export const AppealAOJTypesConstants: {
 
 export type AppealAOJTypes = 'vba' | 'vha' | 'nca' | 'other'
 
-export type AppealAlertDetailsData = Record<string, unknown>
-
-export type AppealAlertTypes =
+type AppealAlertTypes =
   | 'form9_needed'
   | 'scheduled_hearing'
   | 'hearing_no_show'
@@ -352,24 +337,31 @@ export type AppealAlertTypes =
   | 'scheduled_dro_hearing'
   | 'dro_hearing_no_show'
 
-export type AppealAlertData = {
-  type: AppealAlertTypes
-  details: AppealAlertDetailsData
-}
-
 export type AppealAttributesData = {
   appealsIds?: Array<string>
   active: boolean
-  alerts: Array<AppealAlertData>
+  alerts: Array<{
+    type: AppealAlertTypes
+    details: Record<string, unknown>
+  }>
   aod: boolean
   aoj: AppealAOJTypes
   description: string
   docket: AppealDocketData
   events: Array<AppealEventData>
-  evidence: Array<AppealEvidenceData>
+  evidence: Array<{
+    description: string
+    data: string
+  }>
   incompleteHistory: boolean
-  issues: Array<AppealIssuesData>
-  location: AppealLocationTypes
+  issues: Array<{
+    active: boolean
+    description: string
+    diagnosticCode: string | null
+    lastAction: 'field_grant' | 'withdrawn' | 'allowed' | 'denied' | 'remand' | 'cavc_remand' | null
+    date: string | null
+  }>
+  location: 'aoj' | 'bva'
   programArea: AppealProgramAreaTypes
   status: AppealStatusData
   type: string
@@ -398,6 +390,48 @@ export type AppealData = {
   type: AppealTypes
   id: string
   attributes: AppealAttributesData
+}
+
+export type ClaimOrAppeal = 'claim' | 'appeal'
+
+export type ClaimsAndAppealsListPayload = {
+  data: Array<ClaimsAndAppealsList>
+  meta: {
+    errors?: Array<ClaimsAndAppealsGetDataMetaError>
+    pagination: {
+      currentPage: number
+      perPage: number
+      totalEntries: number
+    }
+    activeClaimsCount?: number
+  }
+}
+
+export type ClaimsAndAppealsGetDataMetaError = {
+  service?: string
+  errorDetails?: Array<{
+    title?: string
+    detail?: string
+    code?: string
+    source?: string
+    status?: string
+    key?: string
+    severity?: string
+    text?: string
+  }>
+}
+
+export type ClaimsAndAppealsList = {
+  id: string
+  type: ClaimOrAppeal
+  attributes: {
+    subtype: string
+    completed: boolean
+    dateFiled: string
+    updatedAt: string
+    displayTitle: string
+    decisionLetterSent: boolean
+  }
 }
 
 export type ClaimEventData = {
@@ -454,40 +488,12 @@ export type ClaimData = {
   attributes: ClaimAttributesData
 }
 
-export type ClaimAndAppealSubData = {
-  subtype: string
-  completed: boolean
-  decisionLetterSent: boolean
-  dateFiled: string
-  updatedAt: string
-  displayTitle: string
-}
-
 export const ClaimOrAppealConstants: {
   claim: ClaimOrAppeal
   appeal: ClaimOrAppeal
 } = {
   claim: 'claim',
   appeal: 'appeal',
-}
-
-export type ClaimOrAppeal = 'claim' | 'appeal'
-
-export type ClaimAndAppealData = {
-  id: string
-  type: ClaimOrAppeal
-  attributes: ClaimAndAppealSubData
-}
-
-export type ClaimsAndAppealsGetDataMetaErrorDetails = {
-  title?: string
-  detail?: string
-  code?: string
-  source?: string
-  status?: string
-  key?: string
-  severity?: string
-  text?: string
 }
 
 export const ClaimsAndAppealsErrorServiceTypesConstants: {
@@ -498,28 +504,16 @@ export const ClaimsAndAppealsErrorServiceTypesConstants: {
   CLAIMS: 'claims',
 }
 
-export type ClaimsAndAppealsErrorServiceTypes = 'appeals' | 'claims'
-
-export type ClaimsAndAppealsGetDataMetaError = {
-  service?: ClaimsAndAppealsErrorServiceTypes
-  errorDetails?: Array<ClaimsAndAppealsGetDataMetaErrorDetails>
-}
-
-/**
- * currentPage - use to tell us what page we are currently showing when paginating
- * perPage - the page size for each page
- * totalEntries - total number of items
- */
-export type ClaimsAndAppealsGetDataMetaPagination = {
-  currentPage: number
-  perPage: number
-  totalEntries: number
-}
+type ClaimsAndAppealsErrorServiceTypes = 'appeals' | 'claims'
 
 export type ClaimsAndAppealsGetDataMeta = {
   errors?: Array<ClaimsAndAppealsGetDataMetaError>
-  pagination: ClaimsAndAppealsGetDataMetaPagination
-  activeClaimsCount: number
+  pagination: {
+    currentPage: number
+    perPage: number
+    totalEntries: number
+  }
+  activeClaimcCount: number
   // This property does not exist in api, used to track if the data(ClaimsAndAppealsGetData) return was from an api call
   dataFromStore: boolean
 }
@@ -528,8 +522,6 @@ export type ClaimsAndAppealsGetData = {
   data: ClaimsAndAppealsList
   meta: ClaimsAndAppealsGetDataMeta
 }
-
-export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
 
 // TODO: need to get data shape for this.
 export type ClaimEventDocumentData = {
@@ -552,7 +544,7 @@ export type ClaimDecisionResponseData = {
   data: { jobId: string }
 }
 
-export type FileRequestTypes =
+type FileRequestTypes =
   | 'still_need_from_you_list'
   | 'received_from_you_list'
   | 'still_need_from_others_list'
@@ -579,7 +571,7 @@ export const FILE_REQUEST_TYPE: {
   OTHER_DOCUMENTS_LISTS: 'other_documents_list',
 }
 
-export type FileRequestsStatuses = 'NEEDED' | 'SUBMITTED_AWAITING_REVIEW'
+type FileRequestsStatuses = 'NEEDED' | 'SUBMITTED_AWAITING_REVIEW'
 
 export const FILE_REQUEST_STATUS: {
   NEEDED: FileRequestsStatuses
@@ -587,4 +579,10 @@ export const FILE_REQUEST_STATUS: {
 } = {
   NEEDED: 'NEEDED',
   SUBMITTED_AWAITING_REVIEW: 'SUBMITTED_AWAITING_REVIEW',
+}
+
+export type UploadFileToClaimParamaters = {
+  claimID: string
+  request: ClaimEventData
+  files: Array<Asset> | Array<DocumentPickerResponse>
 }

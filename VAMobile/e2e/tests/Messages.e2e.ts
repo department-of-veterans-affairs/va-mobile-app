@@ -53,7 +53,7 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  OPEN_URL_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  OPEN_URL_TEXT: 'Leave',
 }
 
 const tapItems = async (items: string, type: string) => {
@@ -351,6 +351,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
+    await device.disableSynchronization()
     if (device.getPlatform() === 'android') {
       await element(by.text('Call 988 and select 1')).tap()
       await setTimeout(5000)
@@ -378,10 +379,11 @@ describe('Messages Screen', () => {
     await device.launchApp({ newInstance: false })
 
     await element(by.text('Start a confidential chat')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpChat')
     await device.launchApp({ newInstance: false })
+    await device.enableSynchronization()
   })
 
   it('should close the messages help panel', async () => {

@@ -78,10 +78,11 @@ describe('Appointments Screen', () => {
       await device.launchApp({ newInstance: false })
 
       await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
-      await element(by.text(CommonE2eIdConstants.OK_UNIVERSAL_TEXT)).tap()
+      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
+      await device.disableSynchronization()
       await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentVALocationPhoneNumber')
       await device.launchApp({ newInstance: false })
@@ -99,6 +100,7 @@ describe('Appointments Screen', () => {
       await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(1).tap()
       await device.takeScreenshot('appointmentCancelTTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 
@@ -129,7 +131,7 @@ describe('Appointments Screen', () => {
 
     if (device.getPlatform() === 'android') {
       await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
-      await element(by.text(CommonE2eIdConstants.OK_UNIVERSAL_TEXT)).tap()
+      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import _ from 'underscore'
 
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { useTheme } from 'utils/hooks'
 
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
