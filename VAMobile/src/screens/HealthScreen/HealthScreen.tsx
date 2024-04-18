@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
@@ -14,6 +15,7 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FIRST_TIME_LOGIN, NEW_SESSION } from 'screens/auth/LoginScreen/LoginScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
@@ -52,6 +54,8 @@ export function HealthScreen({}: HealthScreenProps) {
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
   const cernerExist = cernerFacilities.length >= 1
+  const allCerner = facilitiesInfo?.length === cernerFacilities.length
+  const mixedCerner = cernerExist && !allCerner
 
   const {
     loading: loadingAppointments,
@@ -86,6 +90,18 @@ export function HealthScreen({}: HealthScreenProps) {
       }
     }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
   )
+
+  useEffect(() => {
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
+
+      if (cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+      }
+    }
+    healthHelpScreenCheck()
+  }, [cernerExist, mixedCerner, allCerner, navigateTo])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))

@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, BoxProps, CrisisLineButton, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
@@ -21,6 +23,9 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
+
+export const NEW_SESSION = ''
+export const FIRST_TIME_LOGIN = ''
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -88,10 +93,14 @@ function LoginScreen() {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-      ? () => {
+      ? async () => {
+          await AsyncStorage.setItem(FIRST_TIME_LOGIN, '@store_firt_time_login')
           navigateTo('LoaGate')
         }
-      : startAuth
+      : async () => {
+          await AsyncStorage.setItem(NEW_SESSION, '@store_new_session')
+          startAuth
+        }
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
