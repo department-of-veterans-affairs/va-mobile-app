@@ -88,17 +88,26 @@ function LoginScreen() {
     }
   }
 
+  async function setFirstTimeLogin() {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN, '@store_firt_time_login')
+  }
+  async function setNewSession() {
+    await AsyncStorage.setItem(NEW_SESSION, '@store_new_session')
+  }
+
   const onLoginInit = demoMode
     ? () => {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-      ? async () => {
-          await AsyncStorage.setItem(FIRST_TIME_LOGIN, '@store_firt_time_login')
+      ? () => {
+          setFirstTimeLogin()
+          setNewSession()
+
           navigateTo('LoaGate')
         }
-      : async () => {
-          await AsyncStorage.setItem(NEW_SESSION, '@store_new_session')
+      : () => {
+          setNewSession()
           startAuth
         }
 

@@ -98,6 +98,8 @@ export function HealthScreen({}: HealthScreenProps) {
 
       if (cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
         navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
       }
     }
     healthHelpScreenCheck()
