@@ -86,7 +86,7 @@ After adding the variables, restart your terminal window and the variables shoul
 ![Google services file](/img/devSetupImage/google-service-android-file.png)
 
 1. Open a terminal and type `nvm use` and press enter to set the node version for the project (if the version isn't installed, it will prompt you with the install command).
-2. In a terminal type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
+2. In a terminal, type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
 3. After dependencies are installed type `cd ios && pod install && cd ..` and press enter to install pods on ios (This is done once unless you installed new dependencies that need pods created).
 4. Run `yarn env:staging` and press enter to setup the staging environment and create the `.env` file. Verify the file has the client key and demo password that is in your `.zshrc` file.
 5. Run `yarn bundle:ios` and press enter to create the IOS bundle.
