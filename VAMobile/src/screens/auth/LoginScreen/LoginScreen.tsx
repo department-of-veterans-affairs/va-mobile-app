@@ -97,6 +97,7 @@ function LoginScreen() {
 
   const onLoginInit = demoMode
     ? () => {
+        setNewSession()
         dispatch(loginStart(true))
       }
     : firstTimeLogin
