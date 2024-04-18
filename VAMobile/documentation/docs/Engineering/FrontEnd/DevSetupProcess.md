@@ -171,7 +171,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
     ![Build Project](/img/devSetupImage/build-project-android.png)
 
-11. Launch Virtual Device from Android studio.
+11. Launch Virtual Device from Android Studio.
 
      ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png)
 
