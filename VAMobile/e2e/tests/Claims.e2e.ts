@@ -104,10 +104,12 @@ describe('Claims Screen', () => {
     ).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ClaimsNeedHelpAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 
