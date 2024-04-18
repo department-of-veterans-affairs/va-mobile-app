@@ -24,8 +24,8 @@ import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
 
-export const NEW_SESSION = ''
-export const FIRST_TIME_LOGIN = ''
+export const NEW_SESSION = '@store_new_session'
+export const FIRST_TIME_LOGIN = '@store_firt_time_login'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -89,10 +89,10 @@ function LoginScreen() {
   }
 
   async function setFirstTimeLogin() {
-    await AsyncStorage.setItem(FIRST_TIME_LOGIN, '@store_firt_time_login')
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN, 'true')
   }
   async function setNewSession() {
-    await AsyncStorage.setItem(NEW_SESSION, '@store_new_session')
+    await AsyncStorage.setItem(NEW_SESSION, 'true')
   }
 
   const onLoginInit = demoMode
