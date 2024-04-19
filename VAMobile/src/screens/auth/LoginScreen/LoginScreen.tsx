@@ -11,6 +11,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
+import { checkForDowntimeErrors } from 'store/slices'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -35,6 +36,10 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
+
+  useEffect(() => {
+    dispatch(checkForDowntimeErrors())
+  }, [dispatch])
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
