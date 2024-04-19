@@ -61,20 +61,22 @@ jobs:
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
             axe "$url" --exit || echo "Accessibility issues found in $url"
+            if [ $? -eq 0 ]; then
+              echo "Accessibility issues found in $url" >> accessibility_issues.txt
+            fi
           done
-      
-          
-          accessibility_issues=$(grep -c 'Accessibility issues detected' $GITHUB_WORKSPACE/sitemap.xml)
+          accessibility_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
           echo "Accessibility issues detected: $accessibility_issues"
-          if [[ $accessibility_issues -gt 0 ]]; then
-            echo "Accessibility issues detected. Please prioritize and fix." > accessibility_issues.txt
-          fi
+          
+      
 
-      # Step 8: Notify Accessibility Team
+    # Step 8: Notify Accessibility Team
       - name: Notify Accessibility Team
         if: steps.accessibility_check.outputs.accessibility_issues > 0
-        run: cat accessibility_issues.txt | mail -s "Accessibility Issues" charnelle.domguia@adhocteam.us
-          
+        run: |
+          cat accessibility_issues.txt | \
+          mail -s "Accessibility Issues Detected" -a "From: charnelle.domguia@adhocteam.us" charnelle.domguia@adhocteam.us
+    
 
       # Step 8: Notify Accessibility Team
       #- name: Notify Accessibility Team
