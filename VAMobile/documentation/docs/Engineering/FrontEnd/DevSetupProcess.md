@@ -34,7 +34,7 @@ You can also consider [using our codespaces setup](https://github.com/features/c
 
 ## Environment variables setup
 
-If you are using z on Mac you will need to create the `.zprofile` and `.zshrc` files if they do not exists.
+If you are using zsh on Mac you will need to create the `.zprofile` and `.zshrc` files if they do not exists.
 
 In your `bash_profile` or `.zprofile` add the following:
 
