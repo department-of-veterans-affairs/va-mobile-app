@@ -145,7 +145,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
     ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png)
 
-4. Go to `Android Studios -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
+4. Go to `Android Studio -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
 
     ![Preference Android](/img/devSetupImage/android-preferences-path.png)
 
