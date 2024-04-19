@@ -105,7 +105,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
     ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png)
 
-3. After opening the android project you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
+3. After opening the android project, you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
 
     ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png)
 
