@@ -117,7 +117,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
 5. Add a test emulator in Android Studios `Tools -> AVD Manager`. Follow the instructions on [Android Emulator Setup](https://developer.android.com/studio/run/managing-avds) to add a new virtual device.
 
-6. After adding the new virtual device select it from the top device menu.
+6. After adding the new virtual device, select it from the top device menu.
 
    ![Select Device](/img/devSetupImage/select-device-android-studio.png)
 
