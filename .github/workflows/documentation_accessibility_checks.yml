@@ -53,29 +53,50 @@ jobs:
         run: npm start & npx wait-on http://localhost:3000 &
 
       # Step 7: Fetch sitemap and check accessibility for each page
+      #- name: Check accessibility issues
+      #  id: accessibility_check
+      #  run: |
+          # Fetch sitemap
+    #      wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          # Extract URLs from sitemap and iterate
+    #      for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
+     #       axe "$url" --exit || echo "Accessibility issues found in $url"
+     #       if [ $? -eq 0 ]; then
+   #           echo "Accessibility issues found in $url" >> accessibility_issues.txt
+       #     fi
+    #      done
+      #    accessibility_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
+      #    echo "Accessibility issues detected: $accessibility_issues"
+          
+      
+      # Step 7: Check accessibility issues and notify Accessibility Team
       - name: Check accessibility issues
         id: accessibility_check
         run: |
           # Fetch sitemap
-          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          wget https://department-of-veterans-affairs.github.io/mob/docs/sitemap.xml -O sitemap.xml
+          # Flag to check if any issues are found
+          found_issues=false
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
-            axe "$url" --exit || echo "Accessibility issues found in $url"
-            if [ $? -eq 0 ]; then
-              echo "Accessibility issues found in $url" >> accessibility_issues.txt
+            if axe "$url" --exit; then
+              echo "No accessibility issues found in $url"
+            else
+              echo "Accessibility issues found in $url"
+              echo "$url" >> accessibility_issues.txt
+              found_issues=true
             fi
           done
-          accessibility_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
-          echo "Accessibility issues detected: $accessibility_issues"
-          
-      
+          # Send notification if issues were found
+          if [ "$found_issues" = true ]; then
+            echo "Accessibility issues were found. See details in the email." >> email_body.txt
+            cat accessibility_issues.txt >> email_body.txt
+            mail -s "Accessibility Issues Detected" -a "From: sender@example.com" team@example.com < email_body.txt
+          else
+            echo "No accessibility issues were found."
+          fi
 
-    # Step 8: Notify Accessibility Team
-      - name: Notify Accessibility Team
-        if: steps.accessibility_check.outputs.accessibility_issues > 0
-        run: |
-          cat accessibility_issues.txt | \
-          mail -s "Accessibility Issues Detected" -a "From: charnelle.domguia@adhocteam.us" charnelle.domguia@adhocteam.us
+   
     
 
       # Step 8: Notify Accessibility Team
