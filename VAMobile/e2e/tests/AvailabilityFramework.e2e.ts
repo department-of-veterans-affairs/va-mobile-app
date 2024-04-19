@@ -109,14 +109,14 @@ const AFNavigationForIndividual = [
     'Benefit summary and service verification letter',
   ],
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
-  ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Submitted December 05, 2021'],
+  ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
   [
     'Claims.e2e',
     'WG_ConsolidatedClaimsNote',
     'Benefits',
     'Claims',
     'Claims history',
-    'Submitted December 05, 2021',
+    'Received December 05, 2021',
     'Why does VA sometimes combine claims?',
   ],
   [
@@ -125,7 +125,7 @@ const AFNavigationForIndividual = [
     'Benefits',
     'Claims',
     'Claims history',
-    'Submitted December 05, 2021',
+    'Received December 05, 2021',
     "What should I do if I disagree with VA's decision on my disability claim?",
   ],
 ]

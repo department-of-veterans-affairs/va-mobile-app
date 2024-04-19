@@ -412,14 +412,17 @@ const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
     if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
       await element(by.id(featureNavigationArray[j])).tap()
-    } else if (featureNavigationArray === 'Get prescription details') {
+    } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
         .whileElement(by.id('PrescriptionHistory'))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
-    } else if (featureNavigationArray === 'Email address') {
-      await element(by.id('ContactInfoTestID')).scrollTo('bottom')
+    } else if (featureNavigationArray[j] === 'Email address') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('ContactInfoTestID'))
+        .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else {
       try {
