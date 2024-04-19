@@ -91,7 +91,13 @@ const AFNavigationForIndividual = [
     'Add your bank account information',
   ],
   ['DisabilityRatings', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
-  [['Claims.e2e', 'Appeals.e2e', 'AppealsExpanded.e2e'], 'WG_ClaimsHistory', 'Benefits', 'Claims', 'Claims history'],
+  [
+    ['Claims.e2e', 'Appeals.e2e', 'AppealsExpanded.e2e'],
+    'WG_ClaimsHistoryScreen',
+    'Benefits',
+    'Claims',
+    'Claims history',
+  ],
   ['Letters.e2e', 'WG_LettersOverview', 'Benefits', 'VA letters and documents'],
   ['Letters.e2e', 'WG_LettersList', 'Benefits', 'VA letters and documents', 'Review letters'],
   [
