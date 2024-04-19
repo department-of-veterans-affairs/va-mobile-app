@@ -62,14 +62,14 @@ jobs:
           for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
             axe "$url" --exit || echo "Accessibility issues found in $url"
           done
+          echo "::set-output name=accessibility_issues::$(grep -c 'Accessibility issues detected' $GITHUB_WORKSPACE/sitemap.xml)"
+
 
       # Step 8: Notify Accessibility Team
       - name: Notify Accessibility Team
-        if: failure()
-        run: echo "Accessibility issues detected. Please prioritize and fix." | mail -s "Accessibility Issues" accessibility@example.com
+        if: ${{ steps.accessibility_check.outputs.accessibility_issues != '0' }}
+        run: echo "Accessibility issues detected. Please prioritize and fix." | mail -s "Accessibility Issues" charnelle.domguia@adhocteam.com
   
-
-
      # - name: Run accessibility check on single URL
      #   run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit 
 
