@@ -52,13 +52,30 @@ jobs:
         working-directory: VAMobile/documentation
         run: npm start & npx wait-on http://localhost:3000 &
 
+      # Step 7: Fetch sitemap and check accessibility for each page
+      - name: Check accessibility issues
+        id: accessibility_check
+        run: |
+          # Fetch sitemap
+          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          # Extract URLs from sitemap and iterate
+          for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
+            axe "$url" --exit || echo "Accessibility issues found in $url"
+          done
+
+      # Step 8: Notify Accessibility Team
+      - name: Notify Accessibility Team
+        if: failure()
+        run: echo "Accessibility issues detected. Please prioritize and fix." | mail -s "Accessibility Issues" accessibility@example.com
+  
+
 
      # - name: Run accessibility check on single URL
      #   run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit 
 
-      - name: Check accessibility issues
-        id: accessibility_check
-        run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit || echo "ACCESSIBILITY_ISSUES=true" >> $GITHUB_ENV
+     # - name: Check accessibility issues
+    #    id: accessibility_check
+   #     run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit || echo "ACCESSIBILITY_ISSUES=true" >> $GITHUB_ENV
 
     
      # - name: Start Slack thread
@@ -69,17 +86,4 @@ jobs:
      #     message: 'Accessibility issues were detected during the first run of the accessibility check. Please review and address them. <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|View workflow run>.'
 
           
-
-  start_slack_thread:
    
-    
-     name: Start Slack thread
-    
-     if: ${{ failure() && github.event.workflow_run.conclusion == 'failure' }}
-     needs: test-deploy
-     uses: ./.github/workflows/start_slack_thread.yml
-     secrets: inherit
-     with:
-       channel_name: va-mobile-build-alerts
-       message: 'On demand build started by {{ github.actor }}: \"{{ inputs.notes }}\"  (:git: `{{ github.ref_name }}`). This process may take a while. See :thread: or <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|workflow run> for results.'
-              
