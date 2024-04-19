@@ -133,7 +133,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
 ### Physical Device Setup
 
-1. Open Android Studios and select to a open project.
+1. Open Android Studio and select to a open project.
 
    ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png)
 
