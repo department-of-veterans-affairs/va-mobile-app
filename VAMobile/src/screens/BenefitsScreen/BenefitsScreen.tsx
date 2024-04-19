@@ -86,7 +86,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
-        {!showAlert && (
+        {showAlert && (
           <Box
             mx={theme.dimensions.condensedMarginBetween}
             mt={theme.dimensions.standardMarginBetween}
