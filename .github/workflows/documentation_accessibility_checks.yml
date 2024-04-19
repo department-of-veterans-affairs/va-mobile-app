@@ -74,7 +74,7 @@ jobs:
         id: accessibility_check
         run: |
           # Fetch sitemap
-          wget https://department-of-veterans-affairs.github.io/mob/docs/sitemap.xml -O sitemap.xml
+          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
           # Flag to check if any issues are found
           found_issues=false
           # Extract URLs from sitemap and iterate
@@ -91,7 +91,7 @@ jobs:
           if [ "$found_issues" = true ]; then
             echo "Accessibility issues were found. See details in the email." >> email_body.txt
             cat accessibility_issues.txt >> email_body.txt
-            mail -s "Accessibility Issues Detected" -a "From: sender@example.com" team@example.com < email_body.txt
+            mail -s "Accessibility Issues Detected" -a "From: charnelle.domguia@adhocteam.us" charnelle.domguia@adhocteam.us < email_body.txt
           else
             echo "No accessibility issues were found."
           fi
