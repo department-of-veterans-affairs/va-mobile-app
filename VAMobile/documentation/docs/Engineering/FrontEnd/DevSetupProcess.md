@@ -101,7 +101,7 @@ After adding the variables, restart your terminal window and the variables shoul
 
    ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png)
 
-2. On the popup window browse to `va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
+2. On the popup window, browse to `va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
 
     ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png)
 
