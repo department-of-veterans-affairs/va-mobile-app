@@ -90,12 +90,12 @@ jobs:
           # Alert Slack about the number of accessibility issues detected
           if [ "$num_issues" -gt 0 ]; then
             # Trigger the start_slack_thread workflow
-            echo "Starting Slack thread for accessibility issues..."
-            github_token: ${{ secrets.GITHUB_TOKEN }} 
-            channel_name: va-mobile-build-alerts
-            message: "Accessibility issues detected: $num_issues. These issues need attention."
+            curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                 -H "Accept: application/vnd.github.v3+json" \
+                 https://api.github.com/repos/your_username/your_repository/actions/workflows/start_slack_thread.yml/dispatches \
+                 -d '{"ref": "main", "inputs": {"channel_name": "mobile-alerts", "message": "Accessibility issues detected: $num_issues. These issues need attention."}}'
           else
-            echo "No accessibility issues were found."
+             echo "No accessibility issues were found."
           fi
       
    
