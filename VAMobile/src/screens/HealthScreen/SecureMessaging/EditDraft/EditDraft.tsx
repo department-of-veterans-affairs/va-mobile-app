@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
@@ -18,6 +18,7 @@ import {
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   PickerItem,
@@ -521,9 +522,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error"
           scrollViewRef={scrollViewRef}>
-          <Box mt={theme.dimensions.standardMarginBetween} mr="auto">
-            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-          </Box>
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
     }

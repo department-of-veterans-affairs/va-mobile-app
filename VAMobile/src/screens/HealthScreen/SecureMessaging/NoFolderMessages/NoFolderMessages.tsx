@@ -2,9 +2,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SegmentedControlIndexes } from 'constants/secureMessaging'
@@ -51,9 +51,7 @@ function NoFolderMessages() {
             mb={theme.dimensions.standardMarginBetween}>
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
-          <Box width={'100%'}>
-            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-          </Box>
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </Box>
       </VAScrollView>
     </>

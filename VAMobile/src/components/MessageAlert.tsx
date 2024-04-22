@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Link } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertBox, Box, TextView, VABulletList } from 'components'
+import { AlertBox, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { RootState } from 'store'
@@ -89,9 +87,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
           accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
-        <Box mr="auto">
-          <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </Box>
+        <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
       </AlertBox>
     </Box>
   ) : (

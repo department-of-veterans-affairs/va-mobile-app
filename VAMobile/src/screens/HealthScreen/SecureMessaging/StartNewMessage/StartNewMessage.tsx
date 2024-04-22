@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import {
@@ -17,6 +17,7 @@ import {
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   PickerItem,
@@ -389,9 +390,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
-          <Box mt={theme.dimensions.standardMarginBetween} mr="auto">
-            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-          </Box>
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
     }
