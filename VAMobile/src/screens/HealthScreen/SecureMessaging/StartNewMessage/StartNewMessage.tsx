@@ -226,33 +226,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     (category !== CategoryTypeFields.other || subject)
   )
 
-  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : isDiscarded
-        ? t('secureMessaging.deleteDraft.loading')
-        : t('secureMessaging.formMessage.startNewMessage.loading')
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
@@ -447,28 +420,43 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const rightButtonProps = noProviderError
-    ? undefined
-    : {
-        rightButtonText: t('save'),
-        onRightButtonPress: () => {
-          setOnSaveDraftClicked(true)
-          setOnSendClicked(true)
-        },
-      }
+  const isLoading =
+    !hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded || sendingMessage
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : isDiscarded
+      ? t('secureMessaging.deleteDraft.loading')
+      : sendingMessage
+        ? t('secureMessaging.formMessage.send.loading')
+        : t('secureMessaging.formMessage.startNewMessage.loading')
+
+  const rightButtonProps =
+    noProviderError || isLoading
+      ? undefined
+      : {
+          rightButtonText: t('save'),
+          onRightButtonPress: () => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          },
+          rightButtonTestID: 'startNewMessageSaveTestID',
+        }
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('secureMessaging.startNewMessage')}
+      title={isLoading ? '' : t('secureMessaging.startNewMessage')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}
+      showCrisisLineCta={!isLoading}
       testID="startNewMessageTestID"
-      rightButtonTestID="startNewMessageSaveTestID"
       leftButtonTestID="startNewMessageCancelTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      )}
     </FullScreenSubtask>
   )
 }

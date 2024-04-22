@@ -178,41 +178,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ? t('messages')
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
-  // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <ErrorComponent screenID={screenID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loading || loadingFile || loadingInbox || movingMessage) {
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <LoadingComponent
-          text={
-            loadingFile
-              ? t('secureMessaging.viewMessage.loadingAttachment')
-              : movingMessage
-                ? t('secureMessaging.movingMessage')
-                : t('secureMessaging.viewMessage.loading')
-          }
-        />
-      </ChildTemplate>
-    )
-  }
-
-  if (!message || !messagesById || !thread) {
-    // return empty /error  state
-    // do not replace with error component otherwise user will always see a red error flash right before their message loads
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <></>
-      </ChildTemplate>
-    )
-  }
-
   const replyExpired =
     demoMode && message.messageId === 2092809
       ? false
@@ -255,8 +220,17 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     name: 'Folder',
   }
 
+  // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
+  const hasError = useError(screenID) || messageIDsOfError?.includes(messageID)
+  const isEmpty = !message || !messagesById || !thread
+  const isLoading = loading || loadingFile || loadingInbox || movingMessage
+  const loadingText = loadingFile
+    ? t('secureMessaging.viewMessage.loadingAttachment')
+    : movingMessage
+      ? t('secureMessaging.movingMessage')
+      : t('secureMessaging.viewMessage.loading')
   const headerButton =
-    currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
+    hasError || isEmpty || isLoading || currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
           label: t('pickerLaunchBtn'),
@@ -274,42 +248,52 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID">
-      {headerButton && showModalPicker && (
-        <VAModalPicker
-          selectedValue={newCurrentFolderID}
-          onSelectionChange={onMove}
-          onClose={() => setShowModalPicker(false)}
-          pickerOptions={getFolders()}
-          labelKey={'pickerMoveMessageToFolder'}
-          buttonText={'pickerLaunchBtn'}
-          confirmBtnText={'pickerLaunchBtn'}
-          key={newCurrentFolderID}
-          showModalByDefault={true}
-        />
-      )}
-      {replyExpired && (
-        <Box my={theme.dimensions.standardMarginBetween}>
-          <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-            <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-              {t('secureMessaging.reply.olderThan45Days')}
-            </TextView>
-          </AlertBox>
-        </Box>
-      )}
-      <MessageCard message={message} />
-      {thread.length > 1 && (
-        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <Box accessible={true} accessibilityRole={'header'}>
-            <TextView
-              ml={theme.dimensions.gutter}
-              mt={theme.dimensions.standardMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}>
-              {t('secureMessaging.reply.messageConversation')}
-            </TextView>
-          </Box>
-          {renderMessages(message, messagesById, thread, true)}
-        </Box>
+      {hasError ? (
+        <ErrorComponent screenID={screenID} />
+      ) : isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : isEmpty ? (
+        <></>
+      ) : (
+        <>
+          {headerButton && showModalPicker && (
+            <VAModalPicker
+              selectedValue={newCurrentFolderID}
+              onSelectionChange={onMove}
+              onClose={() => setShowModalPicker(false)}
+              pickerOptions={getFolders()}
+              labelKey={'pickerMoveMessageToFolder'}
+              buttonText={'pickerLaunchBtn'}
+              confirmBtnText={'pickerLaunchBtn'}
+              key={newCurrentFolderID}
+              showModalByDefault={true}
+            />
+          )}
+          {replyExpired && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+                  {t('secureMessaging.reply.olderThan45Days')}
+                </TextView>
+              </AlertBox>
+            </Box>
+          )}
+          <MessageCard message={message} />
+          {thread.length > 1 && (
+            <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+              <Box accessible={true} accessibilityRole={'header'}>
+                <TextView
+                  ml={theme.dimensions.gutter}
+                  mt={theme.dimensions.standardMarginBetween}
+                  mb={theme.dimensions.condensedMarginBetween}
+                  variant={'MobileBodyBold'}>
+                  {t('secureMessaging.reply.messageConversation')}
+                </TextView>
+              </Box>
+              {renderMessages(message, messagesById, thread, true)}
+            </Box>
+          )}
+        </>
       )}
     </ChildTemplate>
   )
