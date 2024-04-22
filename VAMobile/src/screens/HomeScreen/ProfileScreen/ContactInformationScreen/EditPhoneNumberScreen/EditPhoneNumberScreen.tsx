@@ -194,18 +194,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
-  if (deletingPhoneNumber || savingPhoneNumber) {
-    const loadingText = deletingPhoneNumber
-      ? t('contactInformation.delete.phone')
-      : t('contactInformation.savingPhoneNumber')
-
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={loadingText} />
-      </FullScreenSubtask>
-    )
-  }
-
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
@@ -258,45 +246,54 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     })
   }
 
+  const isLoading = deletingPhoneNumber || savingPhoneNumber
+  const loadingText = deletingPhoneNumber
+    ? t('contactInformation.delete.phone')
+    : t('contactInformation.savingPhoneNumber')
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={displayTitle}
+      title={isLoading ? '' : displayTitle}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={t('save')}
+      rightButtonText={isLoading ? '' : t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <Button
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: buttonTitle })}
-              buttonType={ButtonVariants.Destructive}
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {getFormattedPhoneNumber(phoneData) !== '' && (
+            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: buttonTitle })}
+                buttonType={ButtonVariants.Destructive}
+              />
+            </Box>
+          )}
+          <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
+          {formContainsError && (
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <AlertBox
+                scrollViewRef={scrollViewRef}
+                title={t('editPhoneNumber.checkPhoneNumber')}
+                border="error"
+                focusOnError={onSaveClicked}
+              />
+            </Box>
+          )}
+          <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onSave}
+              setFormContainsError={setFormContainsError}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
             />
           </Box>
-        )}
-        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
-        {formContainsError && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              scrollViewRef={scrollViewRef}
-              title={t('editPhoneNumber.checkPhoneNumber')}
-              border="error"
-              focusOnError={onSaveClicked}
-            />
-          </Box>
-        )}
-        <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={onSave}
-            setFormContainsError={setFormContainsError}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
-          />
         </Box>
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }
