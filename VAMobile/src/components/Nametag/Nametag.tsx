@@ -54,6 +54,8 @@ export const Nametag = () => {
         return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
         return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
+      case BranchesOfServiceConstants.SpaceForce:
+        return <VAIcon testID="United States Space Force" name="SpaceForce" {...dimensions} />
     }
   }
 
