@@ -104,7 +104,8 @@ jobs:
   start_slack_thread:
     name: Start Slack thread
     runs-on: ubuntu-latest
-    if: failure()
+    if: ${{ failure() }}
+    needs: test-deploy
     steps:
       - name: Start Slack thread
         uses: ./.github/workflows/start_slack_thread.yml
