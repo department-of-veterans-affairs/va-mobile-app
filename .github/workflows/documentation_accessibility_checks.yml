@@ -92,14 +92,12 @@ jobs:
             # Trigger the start_slack_thread workflow
             curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                  -H "Accept: application/vnd.github.v3+json" \
-                 https://api.github.com/repos/IsraelleHub/va-mobile-app/actions/workflows/start_slack_thread.yml/dispatches \
-                 -d '{"ref": "main", "inputs": {"channel_name": "mobile-alerts", "message": "Accessibility issues detected: $num_issues. These issues need attention."}}'
+                 https://api.github.com/repos/IsraelleHub/department-of-veterans-affairs/va-mobile-app/actions/workflows/start_slack_thread.yml/dispatches \
+                 -d '{"ref": "main", "inputs": {"channel_name": "va-mobile-build-alerts", "message": "Accessibility issues detected: $num_issues. These issues need attention."}}'
           else
              echo "No accessibility issues were found."
           fi
-      
-          https://github.com/department-of-veterans-affairs/va-mobile-app
-    
+        
 
       # Step 8: Notify Accessibility Team
       #- name: Notify Accessibility Team
