@@ -75,8 +75,8 @@ jobs:
         run: |
           # Fetch sitemap
           wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
-          # Flag to check if any issues are found
-          found_issues=false
+          # Counter for the number of accessibility issues detected
+          num_issues=0
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
             if axe "$url" --exit; then
@@ -84,18 +84,20 @@ jobs:
             else
               echo "Accessibility issues found in $url"
               echo "$url" >> accessibility_issues.txt
-              found_issues=true
+              num_issues=$((num_issues+1))
             fi
           done
-          # Send notification if issues were found
-          if [ "$found_issues" = true ]; then
-            echo "Accessibility issues were found. See details in the email." >> email_body.txt
-            cat accessibility_issues.txt >> email_body.txt
-            mail -s "Accessibility Issues Detected" -a "From: charnelle.domguia@adhocteam.us" charnelle.domguia@adhocteam.us < email_body.txt
+          # Alert Slack about the number of accessibility issues detected
+          if [ "$num_issues" -gt 0 ]; then
+            # Trigger the start_slack_thread workflow
+            echo "Starting Slack thread for accessibility issues..."
+            github_token: ${{ secrets.GITHUB_TOKEN }} 
+            channel_name: va-mobile-build-alerts
+            message: "Accessibility issues detected: $num_issues. These issues need attention."
           else
             echo "No accessibility issues were found."
           fi
-
+      
    
     
 
