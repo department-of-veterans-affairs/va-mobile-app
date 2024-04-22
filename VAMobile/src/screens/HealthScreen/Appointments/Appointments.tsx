@@ -84,28 +84,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     }
   }, [dispatch, apptsNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.appointments) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <NoMatchInRecords />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
       logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
@@ -138,6 +116,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
+  const hasError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -145,28 +125,34 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabChange}
-            selected={selectedTab}
-            a11yHints={a11yHints}
-          />
-        </Box>
-        {serviceErrorAlert()}
-        {CernerAlert ? (
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <CernerAlert />
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : !userAuthorizedServices?.appointments ? (
+        <NoMatchInRecords />
+      ) : (
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              labels={controlLabels}
+              onChange={onTabChange}
+              selected={selectedTab}
+              a11yHints={a11yHints}
+            />
           </Box>
-        ) : (
-          <></>
-        )}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === 1 && <PastAppointments />}
-          {selectedTab === 0 && <UpcomingAppointments />}
+          {serviceErrorAlert()}
+          {CernerAlert ? (
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <CernerAlert />
+            </Box>
+          ) : (
+            <></>
+          )}
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === 1 && <PastAppointments />}
+            {selectedTab === 0 && <UpcomingAppointments />}
+          </Box>
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

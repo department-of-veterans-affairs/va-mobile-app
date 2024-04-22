@@ -70,30 +70,6 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
     }
   }, [dispatch, userAuthorizedServices?.secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.secureMessaging) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <NotEnrolledSM />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (termsAndConditionError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <TermsAndConditions />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const onTabUpdate = (index: number): void => {
     if (secureMessagingTab !== index) {
       if (index === SegmentedControlIndexes.FOLDERS) {
@@ -115,34 +91,50 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const hasError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID) || getUserAuthorizedServicesError
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('messages')}
       testID="messagesTestID">
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
-      </Box>
-      <Box flex={1} justifyContent="flex-start">
-        <Box
-          mb={theme.dimensions.standardMarginBetween}
-          mt={theme.dimensions.contentMarginTop}
-          mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabUpdate}
-            selected={secureMessagingTab}
-            a11yHints={a11yHints}
-            a11yLabels={[t('secureMessaging.inbox')]}
-          />
-        </Box>
-        <CernerAlertSM />
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox />}
-          {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
-        </Box>
-      </Box>
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      ) : !userAuthorizedServices?.secureMessaging ? (
+        <NotEnrolledSM />
+      ) : termsAndConditionError ? (
+        <TermsAndConditions />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+          <Box flex={1} justifyContent="flex-start">
+            <Box
+              mb={theme.dimensions.standardMarginBetween}
+              mt={theme.dimensions.contentMarginTop}
+              mx={theme.dimensions.gutter}>
+              <SegmentedControl
+                labels={controlLabels}
+                onChange={onTabUpdate}
+                selected={secureMessagingTab}
+                a11yHints={a11yHints}
+                a11yLabels={[t('secureMessaging.inbox')]}
+              />
+            </Box>
+            <CernerAlertSM />
+            <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+              {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox />}
+              {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
+            </Box>
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

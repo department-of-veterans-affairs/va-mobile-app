@@ -207,17 +207,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }, [sendMessageComplete, dispatch, navigateTo])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask
-        title={t('secureMessaging.startNewMessage')}
-        leftButtonText={t('cancel')}
-        scrollViewRef={scrollViewRef}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
   const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message))
   const isFormValid = !!(
     to &&
@@ -420,6 +409,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
+  const hasError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
   const isLoading =
     !hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded || sendingMessage
   const loadingText = savingDraft
@@ -431,7 +421,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         : t('secureMessaging.formMessage.startNewMessage.loading')
 
   const rightButtonProps =
-    noProviderError || isLoading
+    noProviderError || isLoading || hasError
       ? undefined
       : {
           rightButtonText: t('save'),
@@ -445,15 +435,17 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={isLoading ? '' : t('secureMessaging.startNewMessage')}
+      title={isLoading || hasError ? '' : t('secureMessaging.startNewMessage')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!isLoading}
+      showCrisisLineCta={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
+      ) : hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
       )}
