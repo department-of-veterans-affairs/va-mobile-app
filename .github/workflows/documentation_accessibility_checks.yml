@@ -99,21 +99,20 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
-
      
       
-      start_slack_thread:
-        name: Start Slack thread
-        runs-on: ubuntu-latest
-        if: failure()
-        steps:
-          - name: Start Slack thread
-            uses: ./.github/workflows/start_slack_thread.yml
-            with:
-              channel_name: va-mobile-build-alerts
-              message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-            env:
-              SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  start_slack_thread:
+    name: Start Slack thread
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Start Slack thread
+        uses: ./.github/workflows/start_slack_thread.yml
+        with:
+          channel_name: va-mobile-build-alerts
+          message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}   
       
       # Step 8: Notify Accessibility Team
       #- name: Notify Accessibility Team
