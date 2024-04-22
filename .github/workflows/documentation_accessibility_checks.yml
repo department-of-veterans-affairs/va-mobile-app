@@ -4,6 +4,10 @@ name: '[Documentation] Accessibility Check'
 
 on:
   workflow_dispatch:
+    inputs:
+      notes:
+        description: Notes
+        required: true
   push:
     branches:
       - chanel-8217-accessibility-checks
@@ -14,7 +18,7 @@ on:
 
 jobs:
   test-deploy:
-    name: Test
+    name: Acessibility Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -87,18 +91,30 @@ jobs:
               num_issues=$((num_issues+1))
             fi
           done
-          # Alert Slack about the number of accessibility issues detected
-          if [ "$num_issues" -gt 0 ]; then
-            # Trigger the start_slack_thread workflow
-            curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                 -H "Accept: application/vnd.github.v3+json" \
-                 https://api.github.com/repos/IsraelleHub/department-of-veterans-affairs/va-mobile-app/actions/workflows/start_slack_thread.yml/dispatches \
-                 -d '{"ref": "main", "inputs": {"channel_name": "va-mobile-build-alerts", "message": "Accessibility issues detected: $num_issues. These issues need attention."}}'
-          else
-             echo "No accessibility issues were found."
-          fi
-        
 
+          # Fail the workflow if accessibility issues are detected
+          if [ "$num_issues" -gt 0 ]; then
+            echo "Accessibility issues were detected."
+            exit 1
+          else
+            echo "No accessibility issues were found."
+          fi
+
+     
+      
+      start_slack_thread:
+        name: Start Slack thread
+        runs-on: ubuntu-latest
+        if: failure()
+        steps:
+          - name: Start Slack thread
+            uses: ./.github/workflows/start_slack_thread.yml
+            with:
+              channel_name: va-mobile-build-alerts
+              message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+            env:
+              SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+      
       # Step 8: Notify Accessibility Team
       #- name: Notify Accessibility Team
      #   if:env.accessibility_issues != '0' }}
@@ -115,12 +131,12 @@ jobs:
    #     run: axe https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro --exit || echo "ACCESSIBILITY_ISSUES=true" >> $GITHUB_ENV
 
     
-     # - name: Start Slack thread
-     #   i
-     #   uses: ./.github/workflows/start_slack_thread.yml
-     #   with:
-     #     channel_name: va-mobile-build-alerts
-     #     message: 'Accessibility issues were detected during the first run of the accessibility check. Please review and address them. <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|View workflow run>.'
+      #- name: Start Slack thread
+        
+       # uses: ./.github/workflows/start_slack_thread.yml
+       # with:
+      #    channel_name: va-mobile-build-alerts
+      #    message: 'Accessibility issues were detected during the first run of the accessibility check. Please review and address them. <{{ github.server_url }}/{{ github.repository }}/actions/runs/{{ github.run_id }}|View workflow run>.'
 
           
    
