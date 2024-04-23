@@ -61,6 +61,19 @@ export const EncourageUpdateAlert = () => {
     }
   }, [demoMode])
 
+  useEffect(() => {
+    if (
+      featureEnabled('inAppUpdates') &&
+      storeVersion &&
+      localVersionName &&
+      skippedVersion &&
+      skippedVersion !== storeVersion &&
+      ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
+    ) {
+      logAnalyticsEvent(Events.vama_eu_shown())
+    }
+  }, [storeVersion, localVersionName, skippedVersion])
+
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
     if (result && isIOS()) {
@@ -91,7 +104,6 @@ export const EncourageUpdateAlert = () => {
     skippedVersion !== storeVersion &&
     ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
   ) {
-    logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
