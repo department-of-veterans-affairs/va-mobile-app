@@ -49,6 +49,7 @@ function DisabilityRatingsScreen() {
     isLoading: loading,
     isError: useDisabilityRatingError,
     error: disabilityRatingError,
+    refetch: refetchDisabilityRating,
   } = useDisabilityRating({
     enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
   })
@@ -193,6 +194,7 @@ function DisabilityRatingsScreen() {
         <ErrorComponent
           screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID}
           reactQueryError={disabilityRatingError}
+          onTryAgain={refetchDisabilityRating}
         />
       ) : loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
