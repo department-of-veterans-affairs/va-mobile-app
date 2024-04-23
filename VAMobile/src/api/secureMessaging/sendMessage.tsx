@@ -61,8 +61,13 @@ export const useSendMessage = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: sendMessage,
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
+      const replyToID = variables.replyToID
+      if (replyToID) {
+        queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.thread, replyToID, true] })
+        queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.thread, replyToID, false] })
+      }
       registerReviewEvent()
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
     },

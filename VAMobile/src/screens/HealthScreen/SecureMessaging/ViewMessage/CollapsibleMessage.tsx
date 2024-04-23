@@ -61,12 +61,9 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
 
   useEffect(() => {
     if (fetchedMessage) {
-      console.log('looping throught attachments')
-      console.log(messageWithAttachmentData?.included)
       const includedAttachments = messageWithAttachmentData?.included?.filter(
         (included) => included.type === 'attachments',
       )
-      console.log(includedAttachments?.length)
       if (includedAttachments?.length) {
         const attachmentsToSet: Array<SecureMessagingAttachment> = includedAttachments.map((attachmentToMap) => ({
           id: attachmentToMap.id,
@@ -74,7 +71,6 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
           link: attachmentToMap.links.download,
           size: attachmentToMap.attributes.attachmentSize,
         }))
-        console.log(attachmentsToSet?.length)
         setAttachments(attachmentsToSet)
       }
     }
