@@ -86,16 +86,30 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
-        {showAlert && (
+        {true && (
           <Box
             mx={theme.dimensions.condensedMarginBetween}
             mt={theme.dimensions.standardMarginBetween}
             flexDirection="row"
             alignItems="center"
+            accessible={true}
             accessibilityRole={'text'}
             accessibilityLabel={t('errorIcon') + alertMessage}>
-            <VAIcon width={24} height={24} name="ExclamationCircle" fill="homeScreenError" />
-            <TextView variant={alertVariant} ml={theme.dimensions.condensedMarginBetween} flex={1}>
+            <VAIcon
+              accessible={false}
+              importantForAccessibility="no"
+              width={24}
+              height={24}
+              preventScaling={true}
+              name="ExclamationCircle"
+              fill="homeScreenError"
+            />
+            <TextView
+              accessible={false}
+              importantForAccessibility="no"
+              variant={alertVariant}
+              ml={theme.dimensions.condensedMarginBetween}
+              flex={1}>
               {alertMessage}
             </TextView>
           </Box>

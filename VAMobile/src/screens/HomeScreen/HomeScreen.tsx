@@ -320,6 +320,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 importantForAccessibility="no"
                 name={'ExclamationCircle'}
                 fill={theme.colors.icon.homeScreenError}
+                preventScaling={true}
               />
               <TextView
                 ml={theme.dimensions.condensedMarginBetween}
