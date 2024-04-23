@@ -22,6 +22,7 @@ import {
   useIsScreenReaderEnabled,
   useTheme,
 } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -99,7 +100,10 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
     const emailData: SaveEmailData = { emailAddress: email, id: emailId }
 
     const mutateOptions = {
-      onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+      onSuccess: () => {
+        registerReviewEvent()
+        showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+      },
       onError: (error: unknown) => {
         if (isErrorObject(error)) {
           if (error.status === 400) {
