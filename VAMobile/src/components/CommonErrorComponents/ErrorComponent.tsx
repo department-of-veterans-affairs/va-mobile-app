@@ -8,6 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
 
@@ -16,6 +18,8 @@ export type ErrorComponentProps = {
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  /** optional react query Error */
+  reactQueryError?: Error | null
 }
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
@@ -29,12 +33,54 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const features = ScreenIDToDowntimeFeatures[props.screenID]
   const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
 
-  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
+  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID, reactQueryError }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
     if (isInDowntime) {
       return <DowntimeError screenID={screenID} />
+    }
+
+    if (reactQueryError) {
+      if (isErrorObject(reactQueryError)) {
+        const reactQueryErrorType = getCommonErrorFromAPIError(reactQueryError, screenID)
+        switch (reactQueryErrorType) {
+          case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
+            return <NetworkConnectionError onTryAgain={tryAgain} />
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR:
+            return <CallHelpCenter />
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH:
+            return <CallHelpCenter onTryAgain={tryAgain} />
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD:
+            return (
+              <CallHelpCenter
+                onTryAgain={tryAgain}
+                errorText={t('secureMessaging.sendError.ifTheAppStill')}
+                errorA11y={t('secureMessaging.sendError.ifTheAppStill.a11y')}
+                callPhone={displayedTextPhoneNumber(t('8773270022'))}
+              />
+            )
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
+            return (
+              <CallHelpCenter
+                titleText={t('disabilityRating.errorTitle')}
+                callPhone={displayedTextPhoneNumber(t('8008271000'))}
+              />
+            )
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS:
+            return <ErrorAlert text={t('appointments.errorText')} onTryAgain={tryAgain} />
+          case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
+            return (
+              <CallHelpCenter
+                onTryAgain={tryAgain}
+                titleText={t('errors.callHelpCenter.vaAppNotWorking')}
+                callPhone={displayedTextPhoneNumber(t('8006982411'))}
+              />
+            )
+          default:
+            return <CallHelpCenter onTryAgain={tryAgain} />
+        }
+      }
     }
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {

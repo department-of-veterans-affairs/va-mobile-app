@@ -48,6 +48,7 @@ function DisabilityRatingsScreen() {
     data: ratingData,
     isLoading: loading,
     isError: useDisabilityRatingError,
+    error: disabilityRatingError,
   } = useDisabilityRating({
     enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
   })
@@ -189,7 +190,10 @@ function DisabilityRatingsScreen() {
       title={t('disabilityRatingDetails.title')}
       testID="disabilityRatingTestID">
       {useDisabilityRatingError || !drNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID}
+          reactQueryError={disabilityRatingError}
+        />
       ) : loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
       ) : individualRatingsList.length === 0 ? (
