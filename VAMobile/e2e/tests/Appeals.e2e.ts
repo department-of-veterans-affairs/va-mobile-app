@@ -4,14 +4,14 @@ import { setTimeout } from 'timers/promises'
 import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 
 export const AppealsIdConstants = {
-  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
+  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Received June 12, 2008',
   REVIEW_PAST_EVENTS_ID: 'reviewPastEventsTestID',
   ISSUES_TAB_TEXT: 'Issues',
   STATUS_TAB_TEXT: 'Status',
   APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   APPEAL_DETAILS_TEXT: 'Appeal details',
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
-  APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
+  APPEAL_SUBMITTED_TEXT: 'Received June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
   APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
@@ -26,14 +26,15 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
-    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    //Uncomment when 8101 is completed
+    /*await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
+    await element(by.id('next-page')).tap()*/
     await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID)))
       .toBeVisible()
       .whileElement(by.id('claimsHistoryID'))
@@ -93,9 +94,11 @@ describe('Appeals', () => {
     }
 
     await device.launchApp({ newInstance: false })
+    await device.disableSynchronization()
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
+    await device.enableSynchronization()
   })
 })

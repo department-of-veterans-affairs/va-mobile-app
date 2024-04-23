@@ -2,9 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { InitialState } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 
@@ -32,25 +32,27 @@ context('UploadOrAddPhotos', () => {
     uri: 'uri',
   }
 
-  const initializeTestInstance = () => {
+  const renderWithData = (): void => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '0'],
+        data: {
+          ...Claim,
+        },
+      },
+    ]
+
     const props = mockNavProps(
       undefined,
       { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
-      { params: { request, firstImageResponse } },
+      { params: { claimID: '0', request, firstImageResponse } },
     )
-    render(<UploadOrAddPhotos {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claim: Claim,
-        },
-      },
-    })
+
+    render(<UploadOrAddPhotos {...props} />, { queriesData })
   }
 
   it('initializes correctly', () => {
-    initializeTestInstance()
+    renderWithData()
     expect(screen.getByRole('header', { name: 'Upload photos' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Add photo' })).toBeTruthy()
     expect(screen.getByText('of 10 photos')).toBeTruthy()
