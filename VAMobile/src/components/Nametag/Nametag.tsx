@@ -9,11 +9,13 @@ import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory({ enabled: mhNotInDowntime })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: userAuthorizedServices } = useAuthorizedServices()

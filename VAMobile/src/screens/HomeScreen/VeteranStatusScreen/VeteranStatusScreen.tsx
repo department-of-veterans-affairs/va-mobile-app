@@ -22,7 +22,8 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants } from 'store/api'
+import { useDowntime, useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -31,7 +32,8 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 function VeteranStatusScreen({}: VeteranStatusScreenProps) {
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory({ enabled: mhNotInDowntime })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: ratingData } = useDisabilityRating()
