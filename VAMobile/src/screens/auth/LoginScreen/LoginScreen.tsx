@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
@@ -28,6 +30,7 @@ function LoginScreen() {
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
+  const isFocused = useIsFocused()
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
@@ -38,8 +41,10 @@ function LoginScreen() {
   let demoTaps = 0
 
   useEffect(() => {
-    dispatch(checkForDowntimeErrors())
-  }, [dispatch])
+    if (isFocused) {
+      dispatch(checkForDowntimeErrors())
+    }
+  }, [dispatch, isFocused])
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
