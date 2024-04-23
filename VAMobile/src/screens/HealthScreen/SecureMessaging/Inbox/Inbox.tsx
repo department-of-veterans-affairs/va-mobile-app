@@ -13,9 +13,11 @@ import { getMessagesListItems } from 'utils/secureMessaging'
 
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
-type InboxProps = Record<string, unknown>
+type InboxProps = {
+  setScrollPage: React.Dispatch<React.SetStateAction<number>>
+}
 
-function Inbox({}: InboxProps) {
+function Inbox({ setScrollPage }: InboxProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -49,9 +51,11 @@ function Inbox({}: InboxProps) {
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(page + 1)
+      setScrollPage(page + 1)
     },
     onPrev: () => {
       setPage(page - 1)
+      setScrollPage(page - 1)
     },
     totalEntries: paginationMetaData?.totalEntries || 0,
     pageSize: paginationMetaData?.perPage || 0,

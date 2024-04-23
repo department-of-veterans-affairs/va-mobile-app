@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -16,6 +17,7 @@ import {
   Pagination,
   PaginationProps,
 } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -55,6 +57,15 @@ function FolderMessages({ route }: FolderMessagesProps) {
 
     navigateTo(screen, args)
   }
+
+  // Resets scroll position to top whenever current page appointment list changes:
+  // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
+  // Position reset is necessary to make the pagination component padding look consistent between pages,
+  const scrollViewRef = useRef<ScrollView | null>(null)
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }, [page])
 
   if (folderMessagesError) {
     return (
@@ -126,13 +137,18 @@ function FolderMessages({ route }: FolderMessagesProps) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+
   return (
     <ChildTemplate
       backLabel={t('messages')}
       backLabelOnPress={() => {
         navigateTo('SecureMessaging', { activeTab: 1 })
       }}
-      title={title}>
+      title={title}
+      scrollViewProps={scrollViewProps}>
       <Box mx={theme.dimensions.buttonPadding}>
         <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
       </Box>

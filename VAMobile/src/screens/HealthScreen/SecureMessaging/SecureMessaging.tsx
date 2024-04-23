@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -11,6 +12,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -67,6 +69,16 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+  const [scrollPage, setScrollPage] = useState(1)
+
+  // Resets scroll position to top whenever current page appointment list changes:
+  // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
+  // Position reset is necessary to make the pagination component padding look consistent between pages,
+  const scrollViewRef = useRef<ScrollView | null>(null)
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }, [scrollPage])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -125,12 +137,17 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('messages')}
-      testID="messagesTestID">
+      testID="messagesTestID"
+      scrollViewProps={scrollViewProps}>
       <Box mx={theme.dimensions.buttonPadding}>
         <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
       </Box>
@@ -149,7 +166,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         </Box>
         <CernerAlertSM />
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox />}
+          {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
           {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
         </Box>
       </Box>
