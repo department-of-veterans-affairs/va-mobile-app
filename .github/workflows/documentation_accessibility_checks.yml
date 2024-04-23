@@ -8,9 +8,9 @@ on:
       notes:
         description: Notes
         required: true
-  # Run on Weekdays 14:00 UTC, 10AM ET, 7AM PT
+  # Run on Weekdays 9:00 UTC, 4AM ET, 1AM PT
   schedule:
-    - cron: '0 14 * * 1,2,3,4,5'
+    - cron: '0 9 * * 1,2,3,4,5'
 
     # paths: 
     #   - VAMobile/src/components/**
