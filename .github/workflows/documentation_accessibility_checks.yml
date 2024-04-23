@@ -8,9 +8,10 @@ on:
       notes:
         description: Notes
         required: true
-  push:
-    branches:
-      - chanel-8217-accessibility-checks
+  # Run on Weekdays 14:00 UTC, 10AM ET, 7AM PT
+  schedule:
+    - cron: '0 14 * * 1,2,3,4,5'
+
     # paths: 
     #   - VAMobile/src/components/**
     #   - VAMobile/documentation/**
