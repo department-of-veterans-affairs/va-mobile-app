@@ -332,8 +332,12 @@ export async function backButton() {
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   if (AFUseCase !== 'AllowFunction') {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
+    if (AFFeature === 'WG_WhatDoIDoIfDisagreement') {
+      await resetInAppReview()
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+      await loginToDemoMode()
+    }
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
@@ -417,11 +421,20 @@ const navigateToFeature = async (featureNavigationArray) => {
         .toBeVisible()
         .whileElement(by.id('PrescriptionHistory'))
         .scroll(50, 'down')
-      await element(by.text(featureNavigationArray[j])).tap()
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Email address') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('ContactInfoTestID'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (
+      featureNavigationArray[j] === 'Why does VA sometimes combine claims?' ||
+      featureNavigationArray[j] === "What should I do if I disagree with VA's decision on my disability claim?"
+    ) {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else {

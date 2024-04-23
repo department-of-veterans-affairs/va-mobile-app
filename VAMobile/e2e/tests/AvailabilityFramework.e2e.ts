@@ -70,7 +70,7 @@ const AFNavigationForIndividual = [
   ['Messages.e2e', 'WG_ViewMessage', 'Health', 'Messages', 'Folders', 'Sent', 'Medication: Naproxen side effects'],
   //['Messages.e2e', 'WG_EditDraft', 'Health', 'Messages', 'Folders', 'Drafts (3)', 'Test: Test Inquiry'],
   ['Prescriptions.e2e', 'WG_PrescriptionHelp', 'Health', 'Prescriptions', 'Help'],
-  ['Prescriptions.e2e', 'WG_StatusDefinition', 'Health', 'Prescriptions', 'Active: Refill in process'],
+  ['Prescriptions.e2e', 'WG_StatusDefinition', 'Health', 'Prescriptions', 'Active'],
   ['Payments.e2e', 'WG_PaymentDetails', 'Payments', 'VA payment history', 'Regular Chapter 31'],
   ['DirectDeposit.e2e', 'WG_DirectDeposit', 'Payments', 'Direct deposit information'],
   ['Payments.e2e', 'WG_PaymentHistory', 'Payments', 'VA payment history'],
