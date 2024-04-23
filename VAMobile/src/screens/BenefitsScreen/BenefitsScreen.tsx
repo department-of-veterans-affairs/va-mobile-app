@@ -91,7 +91,6 @@ function BenefitsScreen({}: BenefitsScreenProps) {
             mx={theme.dimensions.condensedMarginBetween}
             mt={theme.dimensions.standardMarginBetween}
             flexDirection="row"
-            alignItems="center"
             accessible={true}
             accessibilityRole={'text'}
             accessibilityLabel={t('errorIcon') + alertMessage}>
@@ -103,6 +102,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
               preventScaling={true}
               name="ExclamationCircle"
               fill="homeScreenError"
+              mt={3}
             />
             <TextView
               accessible={false}
