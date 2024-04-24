@@ -25,7 +25,7 @@ const navigationDic = {
     [['Claims', 'Claims history'], 'Claims history'],
     [['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
     [['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
-    [['Claims', 'Claims history', 'Submitted July 20, 2021'], 'Claim details'],
+    [['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
     [
       ['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'],
       'File requests',
@@ -40,9 +40,9 @@ const navigationDic = {
       ],
       'Dental disability - More information needed',
     ],
-    [['Claims', 'Claims history', 'Submitted July 20, 2021', 'Details'], 'Claim type'],
-    [['Claims', 'Claims history', 'Submitted July 17, 2008'], 'Appeal details'],
-    [['Claims', 'Claims history', 'Submitted July 17, 2008', 'Issues'], 'Currently on appeal'],
+    [['Claims', 'Claims history', 'Received July 20, 2021', 'Details'], 'Claim type'],
+    [['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
+    [['Claims', 'Claims history', 'Received July 17, 2008', 'Issues'], 'Currently on appeal'],
     [['Claims', 'Claim letters'], 'Claim letters'],
     ['VA letters and documents', 'Letters'],
     [['VA letters and documents', 'Review letters'], 'Review letters'],
@@ -82,9 +82,9 @@ const featureID = {
   'Manage account': 'settingsID',
   Notifications: 'settingsID',
   Benefits: 'benefitsTestID',
-  'Submitted July 20, 2021': 'claimsHistoryID',
-  'Submitted January 01, 2021': 'claimsHistoryID',
-  'Submitted July 17, 2008': 'claimsHistoryID',
+  'Received July 20, 2021': 'claimsHistoryID',
+  'Received January 01, 2021': 'claimsHistoryID',
+  'Received July 17, 2008': 'claimsHistoryID',
   'Review file requests': 'claimStatusDetailsID',
   'Dental disability - More information needed': 'fileRequestPageTestID',
   'Review letters': 'lettersPageID',
@@ -205,8 +205,8 @@ const navigateToPage = async (key, navigationDicValue) => {
           .toBeVisible()
           .whileElement(by.id('ClaimDetailsScreen'))
           .scroll(100, 'down')
-      } else if (subNavigationArray[k] === 'Submitted July 17, 2008') {
-        await waitFor(element(by.text('Submitted July 17, 2008')))
+      } else if (subNavigationArray[k] === 'Received July 17, 2008') {
+        await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
           .whileElement(by.id('claimsHistoryID'))
           .scroll(100, 'down')
@@ -240,8 +240,8 @@ const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id('PrescriptionHistory'))
         .scroll(50, 'down')
-    } else if (subNavigationArray.slice(-1)[0] === 'Submitted June 12, 2008') {
-      await waitFor(element(by.text('Submitted June 12, 2008')))
+    } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
+      await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')

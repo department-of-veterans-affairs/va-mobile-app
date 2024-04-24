@@ -4,6 +4,86 @@ title: Changelog
 
 # Changelog
 
+## [tokens-v0.7.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/tokens-v0.7.0) (2024-04-18)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/components-v0.13.0...tokens-v0.7.0)
+
+## [components-v0.13.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/components-v0.13.0) (2024-04-18)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/assets-v0.4.1...components-v0.13.0)
+
+**Closed issues:**
+
+- Design Tokens: Update Figma to use semantic tokens [\#273](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/273)
+
+**Merged pull requests:**
+
+- Updating assets package and Icon component to use updated names/struc… [\#290](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/290) ([TimRoe](https://github.com/TimRoe))
+
+## [assets-v0.4.1](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/assets-v0.4.1) (2024-04-16)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/assets-v0.4.0...assets-v0.4.1)
+
+## [assets-v0.4.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/assets-v0.4.0) (2024-04-16)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/components-v0.12.1...assets-v0.4.0)
+
+**Fixed bugs:**
+
+- BUG - 2 - All - Link Component Icon Override Issues [\#274](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/274)
+- BUG - Sev-3 - All - Link Icon is not vertically aligned at larger text sizes [\#240](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/240)
+
+**Merged pull requests:**
+
+- \[CU\] Update assets icon structure and make icon names app agnostic [\#289](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/289) ([TimRoe](https://github.com/TimRoe))
+
+## [components-v0.12.1](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/components-v0.12.1) (2024-04-16)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/tokens-v0.6.0...components-v0.12.1)
+
+**Merged pull requests:**
+
+- \[Bug\] Link - Icon Overrides Incorrectly Require Icon Name and Icon not Centered with Font Scaling [\#275](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/275) ([TimRoe](https://github.com/TimRoe))
+
+## [tokens-v0.6.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/tokens-v0.6.0) (2024-04-15)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/linting-v0.4.0...tokens-v0.6.0)
+
+**Closed issues:**
+
+- DS - Update token build for compatibility with css-library 0.5.1 [\#265](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/265)
+- DS - Design Tokens: Create semantic tokens list based on VADS [\#238](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/238)
+- DS - Update semantic and component tokens [\#236](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/236)
+- DS - Update file structure for semantic tokens [\#235](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/235)
+- Design Tokens: Set up semantic tokens in Figma [\#232](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/232)
+- Link - Validate and Publish [\#216](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/216)
+- Link component - Update linting package [\#182](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/182)
+- Design Tokens: Create semantic color tokens - segmented control [\#179](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/179)
+- Icon Library: Determine naming strategy for icons [\#177](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/177)
+- Design Tokens: Determine naming structure for semantic tokens [\#153](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/153)
+- Design Tokens: Create color tokens - gray [\#152](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/152)
+- Design Tokens: Create color tokens - green [\#151](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/151)
+- Design Tokens: Create color tokens - yellow [\#150](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/150)
+- Design Tokens: Create color tokens - red [\#149](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/149)
+- Design Tokens: Create color tokens - blue [\#148](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/148)
+- Icon Library: Collect and export icons for implementation [\#147](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/147)
+- Discovery - Icon Library: Determine if/how we can import\(?\) VADS/USWDS icons into our library [\#145](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/145)
+- Add Automatic Doc Flow to Doc Site [\#143](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/143)
+- Link Component Unit Tests [\#134](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/134)
+- Component Implementation - Alert [\#132](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/132)
+- Design Tokens: Colors - Implementation [\#128](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/128)
+- Design Tokens: Typography - Implementation [\#127](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/127)
+
+**Merged pull requests:**
+
+- Add tokens for Segmented Control [\#282](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/282) ([jessicawoodin](https://github.com/jessicawoodin))
+- Bump tar from 6.2.0 to 6.2.1 [\#281](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/281) ([dependabot[bot]](https://github.com/apps/dependabot))
+- \[Feature\] Update tokens to support css-library 0.5.1 [\#276](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/276) ([narin](https://github.com/narin))
+- Bump express from 4.18.2 to 4.19.2 [\#267](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/267) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump webpack-dev-middleware from 5.3.3 to 5.3.4 [\#259](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/259) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump follow-redirects from 1.15.4 to 1.15.6 [\#242](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/242) ([dependabot[bot]](https://github.com/apps/dependabot))
+- \[Feature\] Alert - Create Alert Component [\#228](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/228) ([TimRoe](https://github.com/TimRoe))
+
 ## [linting-v0.4.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/linting-v0.4.0) (2024-03-14)
 
 [Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/components-v0.12.0...linting-v0.4.0)

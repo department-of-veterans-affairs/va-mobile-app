@@ -1,18 +1,19 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
+import { Box, LinkWithAnalytics, TextArea, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 function NotEnrolledSM() {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const launchExternalLink = useExternalLink()
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
@@ -31,19 +32,12 @@ function NotEnrolledSM() {
     a11yLabel: a11yLabelVA(t('notEnrolledSM.bothYouAndYour')),
   }
 
-  const redirectLink = (): void => {
-    launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
-  }
-
-  const textViewProps: TextViewProps = {
-    variant: 'MobileBody',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    color: 'link',
-    onPress: redirectLink,
-    accessibilityRole: 'link',
-    ...testIdProps(t('notEnrolledSM.learnHowTo')),
-    ...a11yHintProp(t('notEnrolledSM.learnHowTo.a11yHint')),
+  const linkProps: LinkProps = {
+    type: 'url',
+    url: LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT,
+    text: t('notEnrolledSM.learnHowTo'),
+    a11yLabel: t('notEnrolledSM.learnHowTo'),
+    a11yHint: t('notEnrolledSM.learnHowTo.a11yHint'),
   }
 
   return (
@@ -72,9 +66,9 @@ function NotEnrolledSM() {
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
             <VABulletList listOfText={[bulletOne, bulletTwo, bulletThree]} paragraphSpacing={true} />
-            <TextView {...textViewProps} paragraphSpacing={true}>
-              {t('notEnrolledSM.learnHowTo')}
-            </TextView>
+            <Box mb={standardMarginBetween}>
+              <LinkWithAnalytics {...linkProps} />
+            </Box>
             <Box>
               <TextView>
                 <TextView variant="MobileBodyBold">{t('note') + ' '}</TextView>
