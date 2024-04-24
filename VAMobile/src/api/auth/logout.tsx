@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import store from 'store'
 import * as api from 'store/api'
-import { dispatchClearLoadedAppointments, dispatchClearLoadedMessages } from 'store/slices'
+import { dispatchClearLoadedMessages } from 'store/slices'
 import { updateDemoMode } from 'store/slices/demoSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { clearStoredAuthCreds, finishInitialize, logoutFinish, logoutStart, retrieveRefreshToken } from 'utils/auth'
@@ -54,7 +54,6 @@ export const useLogout = () => {
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       await finishInitialize(false, queryClient)
-      dispatch(dispatchClearLoadedAppointments())
       dispatch(dispatchClearLoadedMessages())
       await logoutFinish(queryClient)
     },
