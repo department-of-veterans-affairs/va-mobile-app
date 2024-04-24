@@ -67,7 +67,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     data: personalInfo,
     isLoading: loadingPersonalInfo,
     isError: personalInfoError,
-    error: personalInfoRQError,
     refetch: refetchPersonalInfo,
   } = usePersonalInformation({
     enabled: isScreenContentAllowed,
@@ -153,8 +152,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck =
-    personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError || personalInfoError
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   return (
@@ -167,7 +165,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
-          reactQueryError={personalInfoRQError || demographicsRQError || genderIdentityRQError}
+          reactQueryError={demographicsRQError || genderIdentityRQError}
         />
       ) : loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
