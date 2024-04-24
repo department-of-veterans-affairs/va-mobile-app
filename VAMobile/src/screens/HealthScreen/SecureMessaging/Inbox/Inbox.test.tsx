@@ -69,7 +69,7 @@ context('Inbox', () => {
         per_page: '10',
       } as api.Params)
       .mockResolvedValue(messages)
-    render(<Inbox />)
+    render(<Inbox setScrollPage={jest.fn()} />)
   }
 
   beforeEach(() => {
@@ -104,7 +104,7 @@ context('Inbox', () => {
             },
           },
         })
-      render(<Inbox />)
+      render(<Inbox setScrollPage={jest.fn()} />)
       await waitFor(() => expect(screen.getByText('Loading your messages...')).toBeTruthy())
       await waitFor(() => expect(screen.getByText("You don't have any messages in your inbox")).toBeTruthy())
     })
