@@ -241,11 +241,9 @@ context('AppealDetailsScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/appeal/0`, {}, expect.anything())
-        .mockRejectedValue('Error')
+        .mockRejectedValue({ networkError: true } as api.APIError)
       renderWithData()
-      await waitFor(() =>
-        expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })
