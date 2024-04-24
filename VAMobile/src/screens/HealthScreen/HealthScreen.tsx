@@ -75,13 +75,6 @@ export function HealthScreen({}: HealthScreenProps) {
 
   useFocusEffect(
     useCallback(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
-  )
-  useFocusEffect(
-    useCallback(() => {
       if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
         dispatch(getInbox())
       }
