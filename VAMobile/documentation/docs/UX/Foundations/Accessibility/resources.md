@@ -36,7 +36,7 @@ title: Native Mobile App Resources
     * Use TalkBack on your Android to listen to apps:
         * [Turn TalkBack on or off - Android Accessibility Help](https://support.google.com/accessibility/android/answer/6007100?hl=en)
         * [Use TalkBack gestures - Android Accessibility Help](https://support.google.com/accessibility/android/answer/6151827?hl=en&ref_topic=10601570) 
-* [Deque Summary and Checklist: Android Native Mobile App Accessibility](https://dequeuniversity.com/assets/pdf/module-android/module-android-checklist.pdf) 
+* [Deque Summary and Checklist: Android Native Mobile App Accessibility (pdf)](https://dequeuniversity.com/assets/pdf/module-android/module-android-checklist.pdf) 
 
 
 #### React Native a11y
@@ -69,12 +69,13 @@ title: Native Mobile App Resources
 <br/>
 
 ### Documentation / standards / resources
+* [Mobile Content Accessibility Guidelines (MCAG)](https://getevinced.github.io/mcag/)
 * [Mobile Accessibility: How WCAG 2.0 and Other W3C/WAI Guidelines Apply to Mobile](https://www.w3.org/TR/mobile-accessibility-mapping/)
 * [ICT Accessibility Testing Symposium Committee working docs on mobile testing methodology](https://www.ictaccessibilitytesting.org/mobile-test-process-updates/)
-    * [Introduction – Mobile Testing Methodology](https://www.ictaccessibilitytesting.org/wp-content/uploads/2019/10/Introduction-Mobile-Testing-Methodology-Final-30-September_PDF_version.pdf)
-    * [Mobile Testing Methodology](https://www.ictaccessibilitytesting.org/wp-content/uploads/2019/10/Mobile-Testing-Methodology-Final-30-September_v2.pdf)
+    * [Introduction – Mobile Testing Methodology (pdf)](https://www.ictaccessibilitytesting.org/wp-content/uploads/2019/10/Introduction-Mobile-Testing-Methodology-Final-30-September_pdf_version.pdf)
+    * [Mobile Testing Methodology (pdf)](https://www.ictaccessibilitytesting.org/wp-content/uploads/2019/10/Mobile-Testing-Methodology-Final-30-September_v2.pdf)
 * [Mobile Testing on AccessibilityOz](https://www.accessibilityoz.com/resources/mobile-testing/)
-* [WCAG 2.0 Principles Applied to Mobile](https://info.usablenet.com/inclusive-ada-ux-mobile-app-accessibility-principles) (Downloadable whitepaper)
+* [WCAG 2.0 Principles Applied to Mobile](https://info.usablenet.com/inclusive-ada-ux-mobile-app-accessibility-principles) (downloadable whitepaper)
 * [Magentaa11y: Native app accessibility checklist](https://www.magentaa11y.com/native/)
 <br/>
 <br/>
@@ -85,7 +86,7 @@ title: Native Mobile App Resources
 * Low literacy:
     * [Designing Digital Products for Adults With Low Literacy](https://www.youtube.com/watch?v=d1MDLbZoEwQ) 
 * Cognitive disabilities:
-    * [Inclusive Design and Cognitive Disability - CSUN Assistive Technology Conference March 2022 with Dennis Lembrée @DennisL](https://www.dropbox.com/s/k1kbi7xljlb86bf/Inclusive%20Design%20and%20Cognitive%20Disability%20-%20CSUN%202022%20v3.pdf?dl=0) (Slides)
+    * [Inclusive Design and Cognitive Disability - CSUN Assistive Technology Conference March 2022 with Dennis Lembrée @DennisL (pdf)](https://www.dropbox.com/s/k1kbi7xljlb86bf/Inclusive%20Design%20and%20Cognitive%20Disability%20-%20CSUN%202022%20v3.pdf?dl=0)
     * [Designing for People with Cognitive Disabilities and Everyone Else](https://www.youtube.com/watch?v=9Ae8bUlSSXU) 
     * [How to improve Experience Design by Managing Cognitive Biases | by Marina Shapira, Ph.D | UX Collective](https://uxdesign.cc/how-to-improve-experience-design-by-managing-cognitive-biases-d7b360d35b0a)
 * General a11y resources:
@@ -95,7 +96,7 @@ title: Native Mobile App Resources
 * [Accessibility for Teams - digital.gov](https://accessibility.digital.gov/)
 * [Ad Hoc - Accessibility Champions Program](https://sites.google.com/adhocteam.us/hub/professional-growth-and-development/accessibility-champions-program) 
 * [VA Mobile app team > UX, A11y Research > A11y > Resources](https://drive.google.com/drive/folders/1hWn8I1pfkqyzua0PZzLBOgNwgtgSDV_k?usp=sharing)
-* [A Designer’s Guide to Documenting Accessibility & User Interactions](https://stephaniewalter.design/blog/a-designers-guide-to-documenting-accessibility-user-interactions/) (includes presentation slides and checklist)
+* [A Designer’s Guide to Documenting Accessibility & User Interactions](https://stephaniewalter.design/blog/a-designers-guide-to-documenting-accessibility-user-interactions/)
 <br/>
 <br/>
 
@@ -110,10 +111,12 @@ title: Native Mobile App Resources
 ### Additional resources 
 * [Designing accessible services](https://ukhomeoffice.github.io/accessibility-posters/)
 * [Inclusive Design Principles](https://inclusivedesignprinciples.org/)
+* [The Ad Hoc Accessibility Beyond Compliance Playbook](https://adhoc.team/playbook-accessibility/)
+<br/>
 <br/>
 <br/>
 
 ### Veteran-specific accessibility resources
 * [Invisible Wounds of War: Psychological and Cognitive Injuries, Their Consequences, and Services to Assist Recovery | RAND](https://www.rand.org/pubs/monographs/MG720.html) 
-* [The Disability of Veterans (Census.gov)](https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Holder-2016-01.pdf)
+* [The Disability of Veterans (Census.gov) (pdf)](https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Holder-2016-01.pdf)
 * [US veterans by disability status 2019 | Statista](https://www.statista.com/statistics/250316/us-veterans-by-disability-status/) 

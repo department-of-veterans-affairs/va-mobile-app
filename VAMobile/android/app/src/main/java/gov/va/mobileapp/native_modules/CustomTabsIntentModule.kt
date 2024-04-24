@@ -89,13 +89,26 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             // https://developer.chrome.com/docs/android/custom-tabs/howto-custom-tab-check/
             val intent = Intent(ACTION_VIEW, Uri.parse("https://www.example.com"))
             val intentHandlers = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
-            val intentHandlerPackages = intentHandlers.map {
+            var intentHandlerPackages = intentHandlers.map {
                 it.activityInfo.packageName
             }.toTypedArray().asList()
 
-            // From the above list, find a package that supports Custom Tabs. If no installed
-            // packages support Custom Tabs, packageName will be set to null here
-            val packageName = CustomTabsClient.getPackageName(context, intentHandlerPackages)
+            // DuckDuckGo claims to support Custom Tabs but it forces the tab to launch inside
+            // the browser itself, which breaks login (version 5.196.2, 4/10/24). If DDG is the
+            // default browser and there's a fallback installed, remove DDG from the list
+            val ddgPackageName = "com.duckduckgo.mobile.android"
+            val defaultBrowserList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            val ddgIsDefault = defaultBrowserList[0]?.activityInfo?.packageName == ddgPackageName
+            var ignoreDefaultBrowser = false
+            if (intentHandlerPackages.size > 1 && ddgIsDefault) {
+                intentHandlerPackages = intentHandlerPackages.filter { it != ddgPackageName }
+                ignoreDefaultBrowser = true
+            }
+
+            // Find a package in the list that supports Custom Tabs. Default browser gets
+            // preference. If no installed packages support Custom Tabs, packageName will
+            // be set to null here
+            val packageName = CustomTabsClient.getPackageName(context, intentHandlerPackages, ignoreDefaultBrowser)
 
             // If packageName is present, that package supports Custom Tabs, so use it
             // TODO: Inform user when no installed packages support Custom Tabs

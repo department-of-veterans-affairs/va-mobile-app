@@ -203,6 +203,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} VA Mobile App, Inc. Built with Docusaurus.`,
         logo: {
           src: 'img/va-blue-logo.png',
+          alt: 'VA, United States Department of Veteran Affairs',
         },
       },
 

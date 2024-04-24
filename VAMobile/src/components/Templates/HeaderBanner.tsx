@@ -133,7 +133,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  }, [titleShowing, titleFade])
+  }) // Removed dependency array to fix screen reader issue #8310
 
   const zIndex = {
     zIndex: 1,

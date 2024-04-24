@@ -10,13 +10,16 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
+import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { checkForDowntimeErrors } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { completeSync, loginFinish } from 'utils/auth'
+import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -35,6 +38,9 @@ function SyncScreen({}: SyncScreenProps) {
   const loggedIn = userAuthSettings?.loggedIn
   const loggingOut = userAuthSettings?.loggingOut
   const syncing = userAuthSettings?.syncing
+
+  const { ENVIRONMENT } = getEnv()
+
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
@@ -79,6 +85,7 @@ function SyncScreen({}: SyncScreenProps) {
       (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       completeSync(queryClient)
+      setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
   }, [
     dispatch,
@@ -93,6 +100,7 @@ function SyncScreen({}: SyncScreenProps) {
     mhNotInDowntime,
     syncing,
     queryClient,
+    ENVIRONMENT,
   ])
 
   return (

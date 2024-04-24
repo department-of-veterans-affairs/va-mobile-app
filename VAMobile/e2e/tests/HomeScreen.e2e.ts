@@ -125,6 +125,7 @@ describe('Home Screen', () => {
       ),
     ).toExist()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-698-2411')).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ContactVAAndroidCallingScreen')
@@ -133,6 +134,7 @@ describe('Home Screen', () => {
       await setTimeout(5000)
       await device.takeScreenshot('ContactVATTYAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 
