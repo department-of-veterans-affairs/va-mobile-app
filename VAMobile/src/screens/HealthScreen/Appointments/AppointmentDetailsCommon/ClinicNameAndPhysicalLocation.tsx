@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
 
+import { AppointmentAttributes } from 'api/types'
 import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes } from 'store/api/types'
 import { VATheme } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 
@@ -16,7 +16,7 @@ type ClinicNameAndPhysicalLocationProps = {
 function clinicName(attributes: AppointmentAttributes, theme: VATheme) {
   const { friendlyLocationName, physicalLocation, location } = attributes || ({} as AppointmentAttributes)
   if (friendlyLocationName && friendlyLocationName?.length > 1) {
-    if (!physicalLocation && friendlyLocationName === location.name) {
+    if (!physicalLocation && friendlyLocationName === location?.name) {
       return <></>
     }
     return (
