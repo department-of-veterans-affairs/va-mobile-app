@@ -129,7 +129,7 @@ describe('VA Letters', () => {
         if (isBenefitSummaryLetter) {
           await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom')
           await element(by.text('Go to Ask VA')).tap()
-          await element(by.text('Ok')).tap()
+          await element(by.text('Leave')).tap()
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
