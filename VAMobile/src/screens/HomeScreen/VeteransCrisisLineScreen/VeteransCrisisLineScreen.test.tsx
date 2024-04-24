@@ -1,20 +1,11 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
-
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('VeteransCrisisLineScreen', () => {
   beforeEach(() => {
@@ -37,9 +28,9 @@ context('VeteransCrisisLineScreen', () => {
   })
 
   describe('when the veteransCrisisLine.net link is clicked', () => {
-    it('should launch external link with the parameter https://www.veteranscrisisline.net/', () => {
+    it('should show alert', () => {
       fireEvent.press(screen.getByRole('link', { name: 'VeteransCrisisLine.net' }))
-      expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/')
+      expect(Alert.alert).toBeCalled()
     })
   })
 })

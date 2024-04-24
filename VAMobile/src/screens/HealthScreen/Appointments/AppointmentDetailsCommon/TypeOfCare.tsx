@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AppointmentAttributes, AppointmentTypeConstants } from 'api/types'
 import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { useTheme } from 'utils/hooks'
 
 type TypeOfCareProps = {
@@ -14,8 +14,7 @@ function TypeOfCare({ attributes }: TypeOfCareProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { typeOfCare, phoneOnly, appointmentType, serviceCategoryName, healthcareService } =
-    attributes || ({} as AppointmentAttributes)
+  const { typeOfCare, phoneOnly, appointmentType, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
 
   if (
     phoneOnly ||
@@ -23,11 +22,7 @@ function TypeOfCare({ attributes }: TypeOfCareProps) {
   ) {
     return (
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-        {typeOfCare && typeOfCare.length > 1
-          ? typeOfCare
-          : healthcareService && healthcareService.length > 1
-            ? healthcareService
-            : t('appointments.noTypeOfCare')}
+        {typeOfCare && typeOfCare.length > 1 ? typeOfCare : t('appointments.noTypeOfCare')}
       </TextView>
     )
   }

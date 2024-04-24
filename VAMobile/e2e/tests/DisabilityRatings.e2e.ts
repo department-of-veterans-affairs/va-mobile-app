@@ -34,7 +34,7 @@ describe('Disability Ratings', () => {
   it('verify About VA disability ratings information', async () => {
     await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
     await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AboutDisabilityRatings')
     await device.launchApp({ newInstance: false })
@@ -42,6 +42,7 @@ describe('Disability Ratings', () => {
 
   it('verify links in the get help section', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-827-1000')).tap()
       await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
@@ -50,6 +51,7 @@ describe('Disability Ratings', () => {
       await element(by.text('TTY: 711')).tap()
       await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
   })
 })

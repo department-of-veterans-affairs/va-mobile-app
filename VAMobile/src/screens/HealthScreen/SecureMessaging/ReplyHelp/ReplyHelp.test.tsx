@@ -1,19 +1,11 @@
 import React from 'react'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
 import ReplyHelpScreen from './ReplyHelp'
-
-const mockExternalLinkSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('ReplyHelpScreen', () => {
   beforeEach(() => {
@@ -42,7 +34,7 @@ context('ReplyHelpScreen', () => {
   describe('when the Call 911 link is clicked', () => {
     it('should launch external link', () => {
       fireEvent.press(screen.getByRole('link', { name: 'Call 911' }))
-      expect(mockExternalLinkSpy).toBeCalledWith('tel:911')
+      expect(Linking.openURL).toBeCalledWith('tel:911')
     })
   })
 })

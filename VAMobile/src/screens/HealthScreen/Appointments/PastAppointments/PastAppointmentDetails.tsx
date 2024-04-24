@@ -1,30 +1,17 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  FeatureLandingTemplate,
-  LinkTypeOptionsConstants,
-  TextArea,
-  TextView,
-} from 'components'
+import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
+import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import {
-  AppointmentAttributes,
-  AppointmentData,
-  AppointmentStatusConstants,
-  AppointmentTypeConstants,
-} from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
   getAppointmentAnalyticsDays,
@@ -49,14 +36,11 @@ type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastA
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 
 function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
-  const { appointmentID } = route.params
+  const { appointment } = route.params
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
-  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
-  const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status, phoneOnly, location, serviceCategoryName } =
     attributes || ({} as AppointmentAttributes)
@@ -64,16 +48,20 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(
-      trackAppointmentDetail(
-        pendingAppointment,
-        appointmentID,
-        getAppointmentAnalyticsStatus(attributes),
-        attributes.appointmentType.toString(),
-        getAppointmentAnalyticsDays(attributes),
-      ),
-    )
-  }, [dispatch, appointmentID, pendingAppointment, attributes])
+    if (attributes) {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+      logAnalyticsEvent(
+        Events.vama_appt_view_details(
+          !!pendingAppointment,
+          appointment.id,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
+      )
+      registerReviewEvent()
+    }
+  }, [appointment, pendingAppointment, attributes])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
@@ -101,11 +89,11 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
             {location?.phone && location.phone.areaCode && location.phone.number ? (
               <ClickToCallPhoneNumber phone={location.phone} />
             ) : undefined}
-            <ClickForActionLink
-              displayedText={t('appointments.vaSchedule')}
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_VA_SCHEDULING}
+              text={t('appointments.vaSchedule')}
               a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              numberOrUrlLink={LINK_URL_VA_SCHEDULING}
-              linkType={LinkTypeOptionsConstants.externalLink}
             />
           </TextArea>
         </Box>
