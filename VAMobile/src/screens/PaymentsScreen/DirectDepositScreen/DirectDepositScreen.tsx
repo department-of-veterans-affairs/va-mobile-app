@@ -39,6 +39,8 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     data: directDepositData,
     isLoading: loading,
     isError: useBankDataError,
+    error: useBandDataRQError,
+    refetch: refetchBankData,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
   const bankData = directDepositData?.data.attributes?.paymentAccount
   const { gutter, contentMarginBottom } = theme.dimensions
@@ -87,7 +89,11 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
         backLabel={t('payments.title')}
         backLabelOnPress={navigation.goBack}
         title={t('directDeposit.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}
+          reactQueryError={useBandDataRQError}
+          onTryAgain={refetchBankData}
+        />
       </FeatureLandingTemplate>
     )
   }

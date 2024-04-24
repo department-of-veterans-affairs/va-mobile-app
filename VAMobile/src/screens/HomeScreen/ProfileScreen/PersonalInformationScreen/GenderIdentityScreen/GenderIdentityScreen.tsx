@@ -39,12 +39,18 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
-  const { data: demographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
+  const {
+    data: demographics,
+    isError: getDemographicsError,
+    refetch: refetchDemographics,
+    error: demographicsRQError,
+  } = useDemographics()
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
     isError: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
+    error: genderIdentityRQError,
   } = useGenderIdentityOptions()
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
@@ -160,7 +166,11 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       onPrimaryContentButtonPress={onSave}
       testID="PersonalInformationTestID">
       {errorCheck ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID}
+          onTryAgain={onTryAgain}
+          reactQueryError={demographicsRQError || genderIdentityRQError}
+        />
       ) : loadingCheck ? (
         <LoadingComponent
           text={

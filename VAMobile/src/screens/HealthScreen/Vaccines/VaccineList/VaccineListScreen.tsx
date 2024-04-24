@@ -41,6 +41,8 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     data: vaccines,
     isLoading: loading,
     isError: vaccineError,
+    error: vaccineRQError,
+    refetch: refetchVaccines,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -96,7 +98,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
         backLabelOnPress={navigation.goBack}
         title={t('vaVaccines')}
         titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
+          reactQueryError={vaccineRQError}
+          onTryAgain={refetchVaccines}
+        />
       </FeatureLandingTemplate>
     )
   }

@@ -53,6 +53,9 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     data: prescriptionData,
     isLoading: loadingHistory,
     isFetched: prescriptionsFetched,
+    isError: prescriptionHasError,
+    error: prescriptionRQError,
+    refetch: refetchPrescriptions,
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
@@ -160,10 +163,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return listItems
   }
 
-  if (prescriptionInDowntime) {
+  if (prescriptionInDowntime || prescriptionHasError) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID}
+          reactQueryError={prescriptionRQError}
+          onTryAgain={refetchPrescriptions}
+        />
       </FullScreenSubtask>
     )
   }

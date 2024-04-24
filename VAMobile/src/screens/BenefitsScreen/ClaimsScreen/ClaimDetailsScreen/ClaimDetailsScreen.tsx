@@ -48,6 +48,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     data: claim,
     isLoading: loadingClaim,
     isError: claimError,
+    error: claimRQError,
+    refetch: refetchClaim,
   } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
@@ -130,7 +132,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       title={t('claimDetails.title')}
       testID="ClaimDetailsScreen">
       {claimError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}
+          reactQueryError={claimRQError}
+          onTryAgain={refetchClaim}
+        />
       ) : loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
       ) : (

@@ -61,6 +61,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     isLoading: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
+    error: apptsRQError,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
     enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
   })
@@ -86,6 +87,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             refetchUserAuthorizedServices()
             refetchAppts()
           }}
+          reactQueryError={apptsRQError}
         />
       </FeatureLandingTemplate>
     )

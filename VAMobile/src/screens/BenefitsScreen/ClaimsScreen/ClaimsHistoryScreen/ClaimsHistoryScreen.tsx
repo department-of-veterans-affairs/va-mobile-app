@@ -46,6 +46,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const {
     data: claimsAndAppealsListPayload,
+    error: claimsAndAppealsRQError,
     isError: claimsAndAppealsListError,
     isLoading: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
@@ -127,7 +128,11 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       {claimsAndAppealsListError ||
       getUserAuthorizedServicesError ||
       (!claimsNotInDowntime && !appealsNotInDowntime) ? (
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
+        <ErrorComponent
+          onTryAgain={fetchInfoAgain}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          reactQueryError={claimsAndAppealsRQError}
+        />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
       ) : !claimsAndAppealsAccess ? (

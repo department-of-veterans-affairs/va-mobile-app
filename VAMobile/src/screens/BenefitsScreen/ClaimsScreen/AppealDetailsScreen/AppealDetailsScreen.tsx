@@ -41,6 +41,8 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
     data: appeal,
     isLoading: loadingAppeal,
     isError: appealError,
+    error: appealRQError,
+    refetch: refetchAppeals,
   } = useAppeal(appealID, abortSignal, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } =
@@ -111,7 +113,11 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       title={t('appealDetails.title')}
       testID="appealsDetailsTestID">
       {appealError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID}
+          reactQueryError={appealRQError}
+          onTryAgain={refetchAppeals}
+        />
       ) : loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />
       ) : (

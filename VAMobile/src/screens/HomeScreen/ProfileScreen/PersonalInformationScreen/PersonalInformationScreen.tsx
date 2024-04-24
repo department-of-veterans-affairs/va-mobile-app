@@ -63,7 +63,13 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
-  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation({
+  const {
+    data: personalInfo,
+    isLoading: loadingPersonalInfo,
+    isError: personalInfoError,
+    error: personalInfoRQError,
+    refetch: refetchPersonalInfo,
+  } = usePersonalInformation({
     enabled: isScreenContentAllowed,
   })
   const {
@@ -71,12 +77,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     isFetching: loadingDemographics,
     isError: getDemographicsError,
     refetch: refetchDemographics,
+    error: demographicsRQError,
   } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
     isError: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
+    error: genderIdentityRQError,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -139,10 +147,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     if (getGenderIdentityOptionsError) {
       refetchGenderIdentityOptions()
     }
+    if (personalInfoError) {
+      refetchPersonalInfo()
+    }
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const errorCheck =
+    personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError || personalInfoError
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   return (
@@ -152,7 +164,11 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID">
       {errorCheck ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
+          onTryAgain={onTryAgain}
+          reactQueryError={personalInfoRQError || demographicsRQError || genderIdentityRQError}
+        />
       ) : loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
       ) : (

@@ -41,6 +41,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     data: letters,
     isLoading: loading,
     isError: getLettersError,
+    error: getLettersRQError,
+    refetch: refetchLetters,
   } = useLetters({
     enabled:
       screenContentAllowed('WG_LettersList') && userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime,
@@ -136,7 +138,11 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
       {errorCheck || !lettersNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}
+          reactQueryError={getLettersRQError}
+          onTryAgain={refetchLetters}
+        />
       ) : loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('letters.list.loading')} />
       ) : noLettersCheck ? (

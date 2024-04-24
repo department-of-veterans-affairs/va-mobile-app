@@ -36,7 +36,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { data: claim, isError: loadingClaimError } = useClaim(claimID)
+  const { data: claim, isError: loadingClaimError, error: claimRQError, refetch: refetchClaim } = useClaim(claimID)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -63,7 +63,11 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   if (loadingClaimError) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+          reactQueryError={claimRQError}
+          onTryAgain={refetchClaim}
+        />
       </FullScreenSubtask>
     )
   }

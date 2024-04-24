@@ -43,6 +43,8 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     data: payments,
     isLoading: loading,
     isError: hasError,
+    error: paymentsRQError,
+    refetch: refetchPayments,
   } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
   const noPayments = payments?.meta.availableYears?.length === 0
 
@@ -146,7 +148,11 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
         backLabel={t('payments.title')}
         backLabelOnPress={navigation.goBack}
         title={t('history.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
+          reactQueryError={paymentsRQError}
+          onTryAgain={refetchPayments}
+        />
       </FeatureLandingTemplate>
     )
   }

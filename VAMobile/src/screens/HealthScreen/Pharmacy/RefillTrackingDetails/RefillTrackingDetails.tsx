@@ -59,6 +59,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     data: trackingInfo,
     isLoading: loadingTrackingInfo,
     isError: hasError,
+    error: trackingRQError,
+    refetch: refetchTracking,
   } = useTrackingInfo(prescription.id, {
     enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
   })
@@ -86,7 +88,11 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   if (hasError) {
     return (
       <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID}
+          reactQueryError={trackingRQError}
+          onTryAgain={refetchTracking}
+        />
       </FullScreenSubtask>
     )
   }

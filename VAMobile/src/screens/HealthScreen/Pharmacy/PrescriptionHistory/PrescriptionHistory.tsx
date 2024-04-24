@@ -80,6 +80,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     isLoading: loadingHistory,
     isError: hasError,
     isFetched: prescriptionsFetched,
+    error: prescriptionRQError,
+    refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled:
       screenContentAllowed('WG_PrescriptionHistory') &&
@@ -228,7 +230,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         backLabel={t('health.title')}
         backLabelOnPress={navigation.goBack}
         title={t('prescription.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          reactQueryError={prescriptionRQError}
+          onTryAgain={refetchPrescriptions}
+        />
       </FeatureLandingTemplate>
     )
   }

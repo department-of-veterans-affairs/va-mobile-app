@@ -131,6 +131,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     data: contactInformation,
     isLoading: loadingContactInformation,
     isError: contactInformationError,
+    error: contactInfoRQError,
     refetch: refetchContactInformation,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
@@ -215,6 +216,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
           onTryAgain={refetchContactInformation}
+          reactQueryError={contactInfoRQError}
         />
       ) : loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />

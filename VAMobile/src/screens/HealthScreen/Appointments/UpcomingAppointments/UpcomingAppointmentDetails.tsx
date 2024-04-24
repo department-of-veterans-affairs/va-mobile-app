@@ -74,6 +74,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     data: apptsData,
     isLoading: loadingAppointments,
     isError: getApptError,
+    error: apptRQError,
+    refetch: refetchAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
   })
@@ -353,7 +355,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   if (getApptError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          reactQueryError={apptRQError}
+          onTryAgain={refetchAppointments}
+        />
       </FeatureLandingTemplate>
     )
   }
