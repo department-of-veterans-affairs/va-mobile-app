@@ -1,47 +1,34 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
-import _ from 'underscore'
+import { useIsFocused } from '@react-navigation/native'
 
+import { AppointmentData, AppointmentsGetData } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
-import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { AppointmentsGroupedByYear, ScreenIDTypesConstants } from 'store/api/types'
-import { AppointmentsDateRange, AppointmentsState, getAppointmentsInDateRange } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { getGroupedAppointments } from 'utils/appointments'
-import { deepCopyObject } from 'utils/common'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { getUpcomingAppointmentDateRange } from '../Appointments'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
-type UpcomingAppointmentsProps = Record<string, unknown>
+type UpcomingAppointmentsProps = {
+  appointmentsData?: AppointmentsGetData
+  loading: boolean
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
 
-function UpcomingAppointments({}: UpcomingAppointmentsProps) {
+function UpcomingAppointments({ appointmentsData, loading, setPage }: UpcomingAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
-  const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(
-    currentPageAppointmentsByYear?.upcoming,
-  )
+  const isFocused = useIsFocused()
 
-  const onUpcomingAppointmentPress = (appointmentID: string): void => {
-    navigateTo('UpcomingAppointmentDetails', { appointmentID })
-  }
-
-  if (loading) {
+  if (loading && isFocused) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
+  if (!appointmentsData || appointmentsData.data.length < 1) {
     return (
       <NoAppointments
         subText={t('noAppointments.youCanSchedule')}
@@ -50,28 +37,24 @@ function UpcomingAppointments({}: UpcomingAppointmentsProps) {
     )
   }
 
-  const requestPage = (requestedPage: number) => {
-    const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
-    dispatch(
-      getAppointmentsInDateRange(
-        upcomingRange.startDate,
-        upcomingRange.endDate,
-        TimeFrameTypeConstants.UPCOMING,
-        requestedPage,
-        ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-      ),
-    )
-  }
-
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
-  const { currentPage, perPage, totalEntries } = paginationByTimeFrame.upcoming
+  const pagination = appointmentsData.meta?.pagination || {
+    currentPage: 1,
+    perPage: 10,
+    totalEntries: 0,
+  }
+  const { currentPage, perPage, totalEntries } = pagination
+  const onUpcomingAppointmentPress = (appointment: AppointmentData): void => {
+    navigateTo('UpcomingAppointmentDetails', { appointment: appointment, page: currentPage })
+  }
+
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(currentPage + 1)
+      setPage(currentPage + 1)
     },
     onPrev: () => {
-      requestPage(currentPage - 1)
+      setPage(currentPage - 1)
     },
     totalEntries: totalEntries,
     pageSize: perPage,
@@ -80,22 +63,11 @@ function UpcomingAppointments({}: UpcomingAppointmentsProps) {
   }
 
   return (
-    <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
-      <Box
-        mx={theme.dimensions.gutter}
-        mb={theme.dimensions.standardMarginBetween}
-        {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))}
-        accessible={true}>
-        <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
-      </Box>
-      {getGroupedAppointments(
-        currentPageUpcomingAppointmentsByYear || {},
-        theme,
-        { t },
-        onUpcomingAppointmentPress,
-        false,
-        paginationByTimeFrame.upcoming,
-      )}
+    <Box>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        {t('upcomingAppointments.confirmedApptsDisplayed')}
+      </TextView>
+      {getGroupedAppointments(appointmentsData.data, theme, { t }, onUpcomingAppointmentPress, false, pagination)}
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
