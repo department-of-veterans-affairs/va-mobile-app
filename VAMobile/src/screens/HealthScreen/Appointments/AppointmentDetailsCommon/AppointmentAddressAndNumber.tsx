@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import {
   AppointmentAttributes,
   AppointmentLocation,
   AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
-} from 'store/api/types'
+} from 'api/types'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'

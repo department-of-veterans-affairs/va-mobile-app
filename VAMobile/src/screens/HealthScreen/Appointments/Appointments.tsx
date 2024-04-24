@@ -1,25 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { AppointmentsDateRange, AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { AppointmentsState } from 'store/slices'
-import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import CernerAlert from '../CernerAlert'
@@ -43,21 +42,28 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(0)
+  const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
+  const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
+  const [page, setPage] = useState(1)
+
   const {
-    upcomingVaServiceError,
-    upcomingCcServiceError,
-    pastVaServiceError,
-    pastCcServiceError,
-    currentPageAppointmentsByYear,
-  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-
-  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+    data: userAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+    refetch: refetchUserAuthorizedServices,
+  } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
-
+  const {
+    data: apptsData,
+    isError: appointmentsHasError,
+    isLoading: loadingAppointments,
+    isFetched: apptsDataFetched,
+    refetch: refetchAppts,
+  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
+    enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
+  })
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,
@@ -66,35 +72,40 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-  }, [currentPageAppointmentsByYear])
-
-  useEffect(() => {
-    const todaysDate = DateTime.local()
-    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-
-    const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
-    const pastRange: AppointmentsDateRange = {
-      startDate: threeMonthsEarlier.startOf('day').toISO(),
-      endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
-    }
-
-    // fetch upcoming and default past appointments ranges
-    if (screenContentAllowed('WG_Appointments') && apptsNotInDowntime) {
-      dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
-    }
-  }, [dispatch, apptsNotInDowntime])
+  }, [apptsDataFetched, page])
 
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
+      if (tab === 0) {
+        setDateRange(getUpcomingAppointmentDateRange())
+        setTimeFrame(TimeFrameTypeConstants.UPCOMING)
+      } else {
+        const todaysDate = DateTime.local()
+        const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+
+        const pastRange: AppointmentsDateRange = {
+          startDate: threeMonthsEarlier.startOf('day').toISO(),
+          endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+        }
+
+        setDateRange(pastRange)
+        setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+      }
+      setPage(1)
       logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }
 
   function serviceErrorAlert() {
-    const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
-    const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
-    if (pastAppointmentError || upcomingAppointmentError) {
+    const appointmentsMetaErrors = apptsData?.meta?.errors
+    const serviceError = !!appointmentsMetaErrors?.find((error) => {
+      return (
+        error.source === AppointmentsErrorServiceTypesConstants.VA ||
+        error.source === AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE
+      )
+    })
+    if (serviceError) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox
@@ -116,7 +127,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const hasError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError
+  const hasError = appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime
 
   return (
     <FeatureLandingTemplate
@@ -126,7 +137,13 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
       {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={() => {
+            refetchUserAuthorizedServices()
+            refetchAppts()
+          }}
+        />
       ) : !userAuthorizedServices?.appointments ? (
         <NoMatchInRecords />
       ) : (
@@ -148,8 +165,18 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             <></>
           )}
           <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-            {selectedTab === 1 && <PastAppointments />}
-            {selectedTab === 0 && <UpcomingAppointments />}
+            {selectedTab === 1 && (
+              <PastAppointments
+                appointmentsData={apptsData}
+                setPage={setPage}
+                loading={loadingAppointments}
+                setDateRange={setDateRange}
+                setTimeFrame={setTimeFrame}
+              />
+            )}
+            {selectedTab === 0 && (
+              <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+            )}
           </Box>
         </Box>
       )}
