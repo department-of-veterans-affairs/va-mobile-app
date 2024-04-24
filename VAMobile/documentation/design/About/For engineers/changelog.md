@@ -4,6 +4,22 @@ title: Changelog
 
 # Changelog
 
+## [tokens-v0.7.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/tokens-v0.7.0) (2024-04-18)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/components-v0.13.0...tokens-v0.7.0)
+
+## [components-v0.13.0](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/components-v0.13.0) (2024-04-18)
+
+[Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/assets-v0.4.1...components-v0.13.0)
+
+**Closed issues:**
+
+- Design Tokens: Update Figma to use semantic tokens [\#273](https://github.com/department-of-veterans-affairs/va-mobile-library/issues/273)
+
+**Merged pull requests:**
+
+- Updating assets package and Icon component to use updated names/struc… [\#290](https://github.com/department-of-veterans-affairs/va-mobile-library/pull/290) ([TimRoe](https://github.com/TimRoe))
+
 ## [assets-v0.4.1](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/assets-v0.4.1) (2024-04-16)
 
 [Full Changelog](https://github.com/department-of-veterans-affairs/va-mobile-library/compare/assets-v0.4.0...assets-v0.4.1)
