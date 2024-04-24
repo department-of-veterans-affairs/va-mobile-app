@@ -62,14 +62,14 @@ export const EncourageUpdateAlert = () => {
   }, [demoMode])
 
   const callRequestStorePopup = async () => {
-    const result = await requestStorePopup()
-    if (result && isIOS()) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      openAppStore()
-    } else if (result) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      setVersionName(storeVersion ? storeVersion : '0.0')
-    }
+    //const result = await requestStorePopup()
+    // if (result && isIOS()) {
+    logAnalyticsEvent(Events.vama_eu_updated_success())
+    openAppStore()
+    // } else if (result) {
+    // logAnalyticsEvent(Events.vama_eu_updated_success())
+    setVersionName(storeVersion ? storeVersion : '0.0')
+    // }
   }
 
   const onUpdatePressed = (): void => {

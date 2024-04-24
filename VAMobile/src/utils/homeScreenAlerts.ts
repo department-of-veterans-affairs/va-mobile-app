@@ -130,10 +130,11 @@ export const getStoreVersion = async (): Promise<string> => {
 
 export const openAppStore = () => {
   const link = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
-  Linking.canOpenURL(link).then(
-    (supported) => {
-      supported && Linking.openURL(link)
-    },
-    (err) => console.log(err),
-  )
+  // Linking.canOpenURL(link).then(
+  //   (supported) => {
+  //     supported && Linking.openURL(link)
+  //   },
+  //   (err) => console.log(err),
+  // )
+  Linking.openURL(link)
 }
