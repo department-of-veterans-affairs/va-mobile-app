@@ -3,8 +3,8 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { AppointmentPhone } from 'api/types'
 import { ClickToCallPhoneNumberDeprecated } from 'components'
-import { AppointmentPhone } from 'store/api/types'
 import { context, render } from 'testUtils'
 
 context('ClickToCallPhoneNumberDeprecated', () => {
