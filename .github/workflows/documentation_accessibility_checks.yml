@@ -7,18 +7,14 @@ on:
     inputs:
       notes:
         description: Notes
-        required: true
+        required: false
   # Run on Weekdays 9:00 UTC, 4AM ET, 1AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
 
-    # paths: 
-    #   - VAMobile/src/components/**
-    #   - VAMobile/documentation/**
-    #   - VAMobile/src/utils/hooks.tsx
 
 jobs:
-  test-deploy:
+  axe-scan:
     name: Acessibility Check
     runs-on: ubuntu-latest
     steps:
@@ -26,23 +22,18 @@ jobs:
       # Step 1: Clean npm cache
       - name: Clean npm cache
         run: npm cache clean --force
-
       # Step 2: Install Axe CLI globally
       - name: Install Axe CLI globally
         run: npm install -g @axe-core/cli@latest
-
       # Step 3: Update npm
       - name: Update npm
         run: npm install -g npm@latest
-
-  
       # Step 4: Setup Node.js environment  
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock
-
       # Step 5: Install dependencies and build     
       - name: Test build
         working-directory: VAMobile
@@ -51,12 +42,10 @@ jobs:
           cd documentation
           yarn install --frozen-lockfile
           yarn build
-
       # Step 6: Start web server
       - name: Start web server
         working-directory: VAMobile/documentation
         run: npm start & npx wait-on http://localhost:3000 &          
-      
       # Step 7: Check accessibility issues and notify Accessibility Team
       - name: Check accessibility issues
         id: accessibility_check
@@ -84,12 +73,11 @@ jobs:
             echo "No accessibility issues were found."
           fi
      
-      
   start_slack_thread:
     name: Start Slack thread
     runs-on: ubuntu-latest
     if: ${{ failure() }}
-    needs: test-deploy
+    needs: axe-scan
     
     steps:
       - name: Notify Slack
