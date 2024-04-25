@@ -54,7 +54,7 @@ jobs:
         id: accessibility_check
         run: |
           # Path to the downloaded sitemap file
-          sitemap_path="VAMobile/documentation/sitemap.xml"
+          sitemap_path="VAMobile/documentation/build/sitemap.xml"
     
           # Counter for the number of accessibility issues detected
           num_issues=0
