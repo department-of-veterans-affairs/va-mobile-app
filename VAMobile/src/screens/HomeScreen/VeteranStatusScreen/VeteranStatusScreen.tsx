@@ -100,7 +100,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
       case BranchesOfServiceConstants.Navy:
         return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
       case BranchesOfServiceConstants.SpaceForce:
-        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" fill2="white" {...dimensions} />
     }
   }
 
