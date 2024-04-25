@@ -9,21 +9,22 @@ import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory({ enabled: mhNotInDowntime })
-  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
-  const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { data: personalInfo } = usePersonalInformation()
-  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
+  const mhNotInDowntime = !useDowntime('military_service_history')
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: personalInfo } = usePersonalInformation()
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory({ enabled: mhNotInDowntime })
+  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
+  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
 
   useEffect(() => {
     if (personalInfo) {
@@ -75,7 +76,7 @@ export const Nametag: FC = () => {
       <Box
         width="100%"
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
-        minHeight={85}
+        minHeight={accessToMilitaryInfo || fullName ? 85 : undefined}
         display="flex"
         justifyContent="center"
         mb={theme.dimensions.standardMarginBetween}
