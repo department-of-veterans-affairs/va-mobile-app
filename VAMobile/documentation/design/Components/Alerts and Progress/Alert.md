@@ -62,6 +62,9 @@ On the website and mobile app, do not use the Alert component for:
 ### Placement
 * Alerts always appear near the top of the screen
 
+## Code usage
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--docs)
+
 ## Content considerations
 * The [VA Design System's content considerations for alerts](https://design.va.gov/components/alert#content-considerations) are appropriate for the mobile app with the following addition:
     * VA no longer says, “Please” in alerts when making a request of the user.
@@ -76,9 +79,6 @@ On the website and mobile app, do not use the Alert component for:
 * No buttons should be disabled within an Alert.
 * Focusable elements within an Alert should include: heading, body copy, phone numbers, and buttons.
 * [accessibilityLabel](https://reactnative.dev/docs/accessibility#accessibilitylabel) and [accessibilityLabelledBy](https://reactnative.dev/docs/accessibility#accessibilitylabelledby-android) should be used where appropriate.
-
-## Code usage
-Link to Storybook coming soon
 
 ## Related
 * [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)
