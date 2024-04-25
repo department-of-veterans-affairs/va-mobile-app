@@ -15,10 +15,16 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { FIRST_TIME_LOGIN, NEW_SESSION } from 'screens/auth/LoginScreen/LoginScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
+import {
+  AppointmentsState,
+  FIRST_TIME_LOGIN,
+  NEW_SESSION,
+  SecureMessagingState,
+  getInbox,
+  prefetchAppointments,
+} from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'

@@ -13,7 +13,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
@@ -23,9 +23,6 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
-
-export const NEW_SESSION = '@store_new_session'
-export const FIRST_TIME_LOGIN = '@store_firt_time_login'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
