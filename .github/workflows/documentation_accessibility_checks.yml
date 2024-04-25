@@ -90,7 +90,7 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           channel_name: va-mobile-build-alerts
-          message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). Accessibility issues detected. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. @Tim Wright'
+          message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. @Tim Wright'
         run: |
           curl -X POST \
                -H "Authorization: Bearer $SLACK_API_TOKEN" \
