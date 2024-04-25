@@ -3,10 +3,12 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { appointmentsKeys } from 'api/appointments'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { prescriptionKeys } from 'api/prescriptions'
-import { ClaimsAndAppealsListPayload, PrescriptionsGetData } from 'api/types'
+import { AppointmentsGetData, ClaimsAndAppealsListPayload, PrescriptionsGetData } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
@@ -69,6 +71,14 @@ context('HomeScreen', () => {
         activeClaimsCount: activeClaimsCount,
       },
     }
+    const apptsData: AppointmentsGetData = {
+      data: [],
+      meta: {
+        dataFromStore: false,
+        upcomingAppointmentsCount: 0,
+        upcomingDaysLimit: 0,
+      },
+    }
     const queriesData = [
       {
         queryKey: personalInformationKeys.personalInformation,
@@ -90,6 +100,10 @@ context('HomeScreen', () => {
       {
         queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', 1],
         data: claimsAppealsPayload,
+      },
+      {
+        queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING, 1],
+        data: apptsData,
       },
     ]
     render(<HomeScreen {...props} />, { queriesData })

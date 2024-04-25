@@ -3,7 +3,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { PrescriptionData, RefillRequestSummaryItems, RefillStatus, Vaccine } from 'api/types'
+import { AppointmentData, PrescriptionData, RefillRequestSummaryItems, RefillStatus, Vaccine } from 'api/types'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -29,13 +29,14 @@ export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
   Appointments: undefined
   UpcomingAppointmentDetails: {
-    appointmentID?: string
+    appointment?: AppointmentData
     vetextID?: string
+    page?: number
   }
   ConfirmContactInfo: undefined
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
-    appointmentID: string
+    appointment: AppointmentData
   }
   AppointmentCancellationConfirmation: {
     cancelID: string

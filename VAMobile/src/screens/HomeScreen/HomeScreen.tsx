@@ -10,6 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
@@ -35,6 +36,7 @@ import {
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -42,7 +44,7 @@ import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointmen
 import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AnalyticsState, AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
+import { AnalyticsState, SecureMessagingState, getInbox } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -108,12 +110,23 @@ export function HomeScreen({}: HomeScreenProps) {
     RootState,
     SecureMessagingState
   >((state) => state.secureMessaging)
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
-    preloadComplete: apptsPrefetch,
-    loading: loadingAppointments,
-    upcomingAppointmentsCount,
-    upcomingDaysLimit,
-  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+    data: apptsData,
+    isFetched: apptsPrefetch,
+    isLoading: loadingAppointments,
+  } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    1,
+    {
+      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
+    },
+  )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
     enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
   })
@@ -122,6 +135,18 @@ export function HomeScreen({}: HomeScreenProps) {
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
   const { isLoading: loadingPersonalInfo } = usePersonalInformation()
+
+  useEffect(() => {
+    if (apptsPrefetch && apptsData?.meta) {
+      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
+    }
+  }, [apptsData, apptsPrefetch])
+
+  useEffect(() => {
+    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
+    }
+  }, [rxPrefetch, prescriptionData])
 
   useEffect(() => {
     if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
@@ -134,14 +159,6 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
-  )
 
   useFocusEffect(
     useCallback(() => {
@@ -314,12 +331,13 @@ export function HomeScreen({}: HomeScreenProps) {
               mb={theme.dimensions.standardMarginBetween}
               accessible={true}
               accessibilityRole={'text'}
-              accessibilityLabel={t('aboutYou.error') + t('aboutYou.noInformation')}>
+              accessibilityLabel={t('errorIcon') + t('aboutYou.noInformation')}>
               <VAIcon
                 accessible={false}
                 importantForAccessibility="no"
                 name={'ExclamationCircle'}
                 fill={theme.colors.icon.homeScreenError}
+                preventScaling={true}
               />
               <TextView
                 ml={theme.dimensions.condensedMarginBetween}

@@ -424,9 +424,10 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
   if (AFUseCase === 'DenyAccess') {
-    await element(by.text('Leave')).tap()
+    await element(by.text('OK')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
@@ -435,6 +436,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
     if (AFUseCaseUpgrade) {

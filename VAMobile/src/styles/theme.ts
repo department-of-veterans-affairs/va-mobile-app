@@ -79,6 +79,8 @@ export type VATextColors = {
   homeScreen: string
   profileScreen: string
   activityFooter: string
+  categoryLandingError: string
+  categoryLandingWarning: string
   cernerPanel: string
   cernerFooter: string
 }
@@ -136,6 +138,9 @@ export type VATypographyThemeVariants = {
   AnnouncementBannerTitle: string
   BitterBoldHeading: string
   BitterHeading: string
+  CategoryBitterHeading: string
+  CategoryLandingError: string
+  CategoryLandingWarning: string
   ClaimPhase: string
   CrisisLineButton: string
   DescriptiveBackButton: string
@@ -326,6 +331,7 @@ export type VATheme = {
     AnnouncementBannerTitle: VAFontSizes
     BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
+    CategoryLandingAlert: VAFontSizes
     ClaimPhase: VAFontSizes
     CrisisLineButton: VAFontSizes
     HelperText: VAFontSizes
