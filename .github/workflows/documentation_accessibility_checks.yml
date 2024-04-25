@@ -12,6 +12,9 @@ on:
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
 
+  push:
+    branches: [chanel-8217-accessibility-checks] 
+
 
 jobs:
   axe-scan:
@@ -50,12 +53,14 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
-          # Fetch sitemap
-          wget https://department-of-veterans-affairs.github.io/va-mobile-app/sitemap.xml -O sitemap.xml
+          # Path to the downloaded sitemap file
+          sitemap_path="VAMobile/documentation/sitemap.xml"
+    
           # Counter for the number of accessibility issues detected
           num_issues=0
+    
           # Extract URLs from sitemap and iterate
-          for url in $(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//'); do
+          while IFS= read -r url; do
             if axe "$url" --exit; then
               echo "No accessibility issues found in $url"
             else
@@ -63,7 +68,7 @@ jobs:
               echo "$url" >> accessibility_issues.txt
               num_issues=$((num_issues+1))
             fi
-          done
+          done < "$sitemap_path"
 
           # Fail the workflow if accessibility issues are detected
           if [ "$num_issues" -gt 0 ]; then
