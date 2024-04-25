@@ -8,7 +8,7 @@ import {
   AppointmentStatus,
   AppointmentType,
   AppointmentTypeConstants,
-} from 'store/api/types'
+} from 'api/types'
 import { context, render } from 'testUtils'
 import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
 
@@ -44,7 +44,9 @@ context('AppointmentCancellationInfo', () => {
       },
     }
 
-    render(<AppointmentCancellationInfo appointment={mockAppointment} />)
+    render(
+      <AppointmentCancellationInfo appointment={mockAppointment} goBack={jest.fn()} cancelAppointment={jest.fn()} />,
+    )
   }
 
   describe('when the appointment type is VA video connect atlas', () => {
