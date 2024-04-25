@@ -32,6 +32,14 @@ export const EncourageUpdateAlert = () => {
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
+  const displayEU =
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
+
   useEffect(() => {
     async function checkLocalVersion() {
       const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, demoMode)
@@ -62,17 +70,10 @@ export const EncourageUpdateAlert = () => {
   }, [demoMode])
 
   useEffect(() => {
-    if (
-      featureEnabled('inAppUpdates') &&
-      storeVersion &&
-      localVersionName &&
-      skippedVersion &&
-      skippedVersion !== storeVersion &&
-      ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
-    ) {
+    if (displayEU) {
       logAnalyticsEvent(Events.vama_eu_shown())
     }
-  }, [storeVersion, localVersionName, skippedVersion])
+  }, [displayEU])
 
   const callRequestStorePopup = async () => {
     const result = await requestStorePopup()
@@ -96,14 +97,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (
-    featureEnabled('inAppUpdates') &&
-    storeVersion &&
-    localVersionName &&
-    skippedVersion &&
-    skippedVersion !== storeVersion &&
-    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
-  ) {
+  if (displayEU) {
     return (
       <Box mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
