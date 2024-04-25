@@ -331,12 +331,13 @@ export function HomeScreen({}: HomeScreenProps) {
               mb={theme.dimensions.standardMarginBetween}
               accessible={true}
               accessibilityRole={'text'}
-              accessibilityLabel={t('aboutYou.error') + t('aboutYou.noInformation')}>
+              accessibilityLabel={t('errorIcon') + t('aboutYou.noInformation')}>
               <VAIcon
                 accessible={false}
                 importantForAccessibility="no"
                 name={'ExclamationCircle'}
                 fill={theme.colors.icon.homeScreenError}
+                preventScaling={true}
               />
               <TextView
                 ml={theme.dimensions.condensedMarginBetween}
