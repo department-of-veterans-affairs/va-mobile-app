@@ -60,7 +60,7 @@ jobs:
           num_issues=0
     
           # Extract URLs from sitemap and iterate
-          while IFS= read -r url; do
+          grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//' | while IFS= read -r url; do
             if axe "$url" --exit; then
               echo "No accessibility issues found in $url"
             else
@@ -68,7 +68,7 @@ jobs:
               echo "$url" >> accessibility_issues.txt
               num_issues=$((num_issues+1))
             fi
-          done < "$sitemap_path"
+          done
 
           # Fail the workflow if accessibility issues are detected
           if [ "$num_issues" -gt 0 ]; then
