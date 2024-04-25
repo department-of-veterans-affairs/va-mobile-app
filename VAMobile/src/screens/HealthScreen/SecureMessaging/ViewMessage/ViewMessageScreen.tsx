@@ -420,7 +420,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         </Box>
       )}
       <MessageCard message={message} />
-      {thread.length > 1 && (
+      {thread.length > 0 && (
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box accessible={true} accessibilityRole={'header'}>
             <TextView
