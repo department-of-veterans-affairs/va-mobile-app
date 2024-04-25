@@ -60,7 +60,7 @@ jobs:
           num_issues=0
     
           # Extract URLs from sitemap and iterate
-          grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//' | while IFS= read -r url; do
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
             if axe "$url" --exit; then
               echo "No accessibility issues found in $url"
             else
@@ -77,7 +77,8 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
-     
+
+
   start_slack_thread:
     name: Start Slack thread
     runs-on: ubuntu-latest
