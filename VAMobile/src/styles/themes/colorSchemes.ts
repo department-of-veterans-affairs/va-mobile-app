@@ -166,6 +166,8 @@ export const lightTheme = {
     homeScreen: DSColors.base,
     profileScreen: DSColors.base,
     activityFooter: DSColors.gray,
+    categoryLandingError: DSColors.secondaryDark,
+    categoryLandingWarning: DSColors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -381,6 +383,8 @@ export const darkTheme = {
     homeScreen: DSColors.grayLightest,
     profileScreen: DSColors.grayLightest,
     activityFooter: DSColors.grayLightest,
+    categoryLandingError: DSColors.uswdsRedVivid40,
+    categoryLandingWarning: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,
