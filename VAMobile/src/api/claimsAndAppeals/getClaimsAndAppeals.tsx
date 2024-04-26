@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { chain } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants, get } from 'store/api'
+import { useDowntime } from 'utils/hooks'
 
 import { claimsAndAppealsKeys } from './queryKeys'
 
@@ -41,8 +43,15 @@ const getClaimsAndAppeals = async (
  * Returns a query for user ClaimsAndAppeals
  */
 export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?: { enabled?: boolean }) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+
   return useQuery({
     ...options,
+    enabled: claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled,
     queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, page],
     queryFn: () => getClaimsAndAppeals(claimType, page),
     meta: {
