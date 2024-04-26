@@ -94,4 +94,32 @@ context('SecureMessaging', () => {
       await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
+
+  describe('when terms and conditions error occurs', () => {
+    it('should render the terms and conditions component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: '10',
+        })
+        .mockRejectedValue({
+          json: {
+            errors: [
+              {
+                title: 'User is not eligible because they have not accepted terms and conditions or opted-in',
+                detail: 'You have not accepted the MHV Terms and Conditions to use secure messaging',
+                code: 'SM135',
+                source: '',
+              },
+            ],
+          },
+        } as api.APIError)
+        .calledWith(`/v0/messaging/health/folders`)
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText('You’re required to accept the current terms and conditions')).toBeTruthy(),
+      )
+    })
+  })
 })
