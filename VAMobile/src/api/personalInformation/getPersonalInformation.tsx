@@ -44,7 +44,6 @@ export const usePersonalInformation = (options?: { enabled?: boolean }) => {
     queryKey: personalInformationKeys.personalInformation,
     queryFn: () => getPersonalInformation(),
     meta: {
-      analyticsUserProperty: UserAnalytics.vama_environment(ENVIRONMENT),
       errorName: 'getPersonalInformation: Service error',
     },
   })
