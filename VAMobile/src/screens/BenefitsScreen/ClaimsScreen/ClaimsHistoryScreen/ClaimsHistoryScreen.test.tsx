@@ -58,6 +58,27 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
           secureMessaging: true,
           userProfileUpdate: true,
         },
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: {
+          appeals: false,
+          appointments: true,
+          claims: false,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
       }),
   }
 })
