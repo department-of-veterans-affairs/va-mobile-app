@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
@@ -40,7 +41,7 @@ export const useAppointments = (
 ) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,

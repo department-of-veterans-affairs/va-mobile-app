@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { DecisionLettersGetData } from 'api/types'
@@ -18,7 +19,7 @@ const getDecisionLetters = (): Promise<DecisionLettersGetData | undefined> => {
  */
 export const useDecisionLetters = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,

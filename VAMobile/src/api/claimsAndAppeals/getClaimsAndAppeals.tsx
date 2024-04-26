@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { chain } from 'underscore'
+import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
@@ -47,7 +47,7 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
   const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
-  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,

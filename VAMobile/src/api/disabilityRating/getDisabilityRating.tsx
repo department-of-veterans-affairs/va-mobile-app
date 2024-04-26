@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { DisabilityRatingData, RatingData } from 'api/types'
@@ -22,7 +23,7 @@ const getDisabilityRating = async (): Promise<RatingData | undefined> => {
 export const useDisabilityRating = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const disabilityRatingInDowntime = useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
-  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,

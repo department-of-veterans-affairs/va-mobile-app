@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { max } from 'underscore'
+import { has, max } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { MilitaryServiceHistoryData, ServiceData, ServiceHistoryAttributes, ServiceHistoryData } from 'api/types'
@@ -33,7 +33,7 @@ const getServiceHistory = async (): Promise<ServiceHistoryAttributes | undefined
 export const useServiceHistory = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const queryEnabled = options && Object.hasOwn(options, 'enabled') ? options.enabled : true
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,
