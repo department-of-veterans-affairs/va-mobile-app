@@ -91,13 +91,13 @@ const AFNavigationForIndividual = [
     'Add your bank account information',
   ],
   ['DisabilityRatings', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
-  /*[
+  [
     ['Claims.e2e', 'Appeals.e2e', 'AppealsExpanded.e2e'],
     'WG_ClaimsHistoryScreen',
     'Benefits',
     'Claims',
     'Claims history',
-  ],*/
+  ],
   ['Letters.e2e', 'WG_LettersOverview', 'Benefits', 'VA letters and documents'],
   ['Letters.e2e', 'WG_LettersList', 'Benefits', 'VA letters and documents', 'Review letters'],
   [
@@ -109,7 +109,7 @@ const AFNavigationForIndividual = [
     'Benefit summary and service verification letter',
   ],
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
-  /*['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
+  ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
   [
     'Claims.e2e',
     'WG_ConsolidatedClaimsNote',
@@ -118,7 +118,7 @@ const AFNavigationForIndividual = [
     'Claims history',
     'Received December 05, 2021',
     'Why does VA sometimes combine claims?',
-  ],*/
+  ],
   [
     'Claims.e2e',
     'WG_WhatDoIDoIfDisagreement',

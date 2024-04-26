@@ -55,7 +55,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID))).toExist()
   })
 
-  /*it('Verify the claim status detail page', async () => {
+  it('Verify the claim status detail page', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Details'))).toExist()
@@ -345,5 +345,5 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Date received'))).toExist()
     await expect(element(by.text('January 01, 2021')).atIndex(0)).toExist()
     await expect(element(by.text('Your representative for VA claims'))).toExist()
-  })*/
+  })
 })
