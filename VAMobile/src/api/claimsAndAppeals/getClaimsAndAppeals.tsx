@@ -45,8 +45,8 @@ const getClaimsAndAppeals = async (
 export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const claimsInDowntime = useDowntime('claims')
+  const appealsInDowntime = useDowntime('appeals')
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({

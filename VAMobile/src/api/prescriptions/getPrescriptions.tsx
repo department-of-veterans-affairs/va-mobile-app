@@ -3,7 +3,7 @@ import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { PrescriptionsGetData } from 'api/types'
-import { DowntimeFeatureTypeConstants, get } from 'store/api'
+import { get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
 
 import { prescriptionKeys } from './queryKeys'
@@ -25,7 +25,7 @@ const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
  */
 export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const rxInDowntime = useDowntime('rx_refill')
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
