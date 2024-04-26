@@ -57,9 +57,8 @@ export function useComposeCancelConfirmation(): [
           const message = {
             ...messageData,
             draft_id: draftMessageID,
-            recipient_id: replyToID,
           }
-          const params: SaveDraftParameters = { messageData: message }
+          const params: SaveDraftParameters = { messageData: message, replyID: replyToID, messageID: draftMessageID }
           const mutateOptions = {
             onSuccess: () => {
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
