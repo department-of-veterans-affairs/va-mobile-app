@@ -41,10 +41,10 @@ function SyncScreen({}: SyncScreenProps) {
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
   const { isFetched: useServiceHistoryFetched } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime && loggedIn,
+    enabled: loggedIn,
   })
   const { isFetched: useDisabilityRatingFetched } = useDisabilityRating({
-    enabled: userAuthorizedServices?.disabilityRating && drNotInDowntime && loggedIn,
+    enabled: loggedIn,
   })
   const [displayMessage, setDisplayMessage] = useState('')
 
