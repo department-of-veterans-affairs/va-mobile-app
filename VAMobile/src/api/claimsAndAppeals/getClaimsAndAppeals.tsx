@@ -5,7 +5,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { DowntimeFeatureTypeConstants, get } from 'store/api'
+import { get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
 
 import { claimsAndAppealsKeys } from './queryKeys'
