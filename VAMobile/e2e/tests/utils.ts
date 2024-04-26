@@ -332,7 +332,7 @@ export async function backButton() {
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   if (AFUseCase !== 'AllowFunction') {
-    if (AFFeature === 'WG_WhatDoIDoIfDisagreement') {
+    if (AFFeature === 'WG_WhatDoIDoIfDisagreement' && AFUseCase === 'DenyAccess') {
       await resetInAppReview()
     } else {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
