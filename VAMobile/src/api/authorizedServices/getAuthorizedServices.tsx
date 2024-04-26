@@ -24,5 +24,6 @@ export const useAuthorizedServices = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getAuthorizedServices: Service error',
     },
+    staleTime: 300000, // 5 minutes
   })
 }
