@@ -1,15 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
-import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
 import { getAllFieldsThatExist } from 'utils/common'
-import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 
 import { personalInformationKeys } from './queryKeys'
-
-const { ENVIRONMENT } = getEnv()
 
 /**
  * Fetch user personal information
