@@ -106,7 +106,7 @@ function LoginScreen() {
         }
       : () => {
           setNewSession()
-          startAuth
+          startAuth()
         }
 
   return (
