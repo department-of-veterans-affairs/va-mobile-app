@@ -73,12 +73,18 @@ Primitives mainly come from the USWDS. They are the building blocks that we use.
 
 The mobile app library shares primitive tokens with VADS. For example, **vads-color-base** is a primitive token that references the USWDS token for #1B1B1B.
 
+![Image of two primitive tokens](/img/design-system/tokens-primitive.png)
+
 #### 2. Semantic
 Semantic tokens communicate how a primitive is used. These tokens capture a semantic meaning that should relay the context in which that token should be used.
 
-In the mobile app library, semantic tokens reference primitive tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we maintain our own semantic tokens for light and dark mode. For example, **vads-color-fg-default-on-light** and **vads-color-fg-default-on-dark** are the default colors used for foreground elements such as text and icons. They reference VADS’ primitive tokens – **vads-color-base** and **vads-color-base-lightest**. \
+In the mobile app library, semantic tokens reference primitive tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we maintain our own semantic tokens for light and dark mode. For example, **vads-color-fg-default-on-light** and **vads-color-fg-default-on-dark** are the default colors used for foreground elements such as text and icons. They reference VADS’ primitive tokens – **vads-color-base** and **vads-color-base-lightest**.
+
+![Image of two semantic tokens](/img/design-system/tokens-semantic.png)
 
 #### 3. Component
 Component tokens are scoped to a specific component and represent decisions specific to that component.
 
 In the mobile app library, component tokens reference primitive or semantic tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we maintain our own component tokens for light and dark mode. For example, **vads-segmented-control-color-fg-default-on-light** and **vads-segmented-control-color-fg-default-on-dark** reference the default colors used for foreground elements such as text and icons.
+
+![Image of two component tokens](/img/design-system/tokens-component.png)
