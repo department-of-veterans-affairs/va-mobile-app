@@ -66,7 +66,6 @@ export function useComposeCancelConfirmation(): [
               queryClient.invalidateQueries({
                 queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
               })
-              navigateTo('SecureMessaging', { activeTab: 1 })
               navigateTo('FolderMessages', {
                 folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
                 folderName: FolderNameTypeConstants.drafts,
@@ -123,7 +122,6 @@ export function useComposeCancelConfirmation(): [
 export function useGoToDrafts(): (draftSaved: boolean) => void {
   const navigateTo = useRouteNavigation()
   return (draftSaved: boolean): void => {
-    navigateTo('SecureMessaging', { activeTab: 1 })
     navigateTo('FolderMessages', {
       folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
       folderName: FolderNameTypeConstants.drafts,
