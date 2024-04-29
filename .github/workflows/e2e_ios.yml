@@ -60,6 +60,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.empty_matrix}}
+      output3: ${{ steps.matrix_value.outputs.push_event}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -69,7 +70,8 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
-            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+            echo "push_event=true" >> "$GITHUB_OUTPUT"
+            echo "$push_event"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "empty_matrix=" >> "$GITHUB_OUTPUT"
             else
@@ -78,6 +80,7 @@ jobs:
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
           else
+            echo "push_event=" >> "$GITHUB_OUTPUT"
             if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
               echo "matrix=" >> "$GITHUB_OUTPUT"
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
@@ -90,6 +93,7 @@ jobs:
   matrix-e2e-ios:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-14-xlarge
+    needs: output_detox_tests_to_run 
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -151,10 +155,14 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run_e2e_tests_for_iOS
-        id: run_e2e_tests
-        run: yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot
+      - name: Run e2e tests for iOS with Nav
+        if: needs.output_detox_tests_to_run.outputs.output3 != ''
+        run: yarn e2e:ios-test /e2e/tests/Navigation.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
 
+      - name: Run e2e tests for iOS with AF and Nav
+        if: needs.output_detox_tests_to_run.outputs.output3 == ''
+        run: yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+      
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
@@ -171,7 +179,7 @@ jobs:
 
   e2e-ios:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
-    needs: start_slack_thread
+    needs: [start_slack_thread, output_detox_tests_to_run]
     runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
@@ -276,7 +284,7 @@ jobs:
 
   matrix-send_test_results_to_testrail:
     if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
-    needs: matrix-e2e-ios
+    needs: [matrix-e2e-ios, output_detox_tests_to_run]
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -291,7 +299,7 @@ jobs:
 
   send_test_results_to_testrail:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
-    needs: e2e-ios
+    needs: [e2e-ios, output_detox_tests_to_run]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 

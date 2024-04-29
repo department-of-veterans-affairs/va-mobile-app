@@ -30,7 +30,7 @@ const navigationDic = {
     [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
   ],
   Benefits: [
-    ['DiabilityRatings.e2e', 'Disability rating', 'Disability rating'],
+    ['DisabilityRatings.e2e', 'Disability rating', 'Disability rating'],
     ['Claims.e2e', 'Claims', 'Claims'],
     ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
