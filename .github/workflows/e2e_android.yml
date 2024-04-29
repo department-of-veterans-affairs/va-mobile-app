@@ -81,7 +81,7 @@ jobs:
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
             echo "push_event=true" >> "GITHUB_OUTPUT"
-            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+            echo "${{needs.find_detox_tests_to_run.outputs.push_event}}"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "empty_matrix=" >> "$GITHUB_OUTPUT"
             else
@@ -159,6 +159,9 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
       
+      - name: Test ouput
+        run: echo "${{needs.output_detox_tests_to_run.outputs.output3}}"
+
       - name: Run e2e tests for Android
         if: needs.output_detox_tests_to_run.outputs.output3 != ''
         uses: reactivecircus/android-emulator-runner@v2
