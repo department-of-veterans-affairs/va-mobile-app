@@ -59,6 +59,10 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
   
+  find_detox_tests_to_run:
+    if: ${{github.event_name == 'push'}}
+    uses: ./.github/workflows/e2e_detox_mapping.yml
+
   output_detox_tests_to_run:
     if: always()
     runs-on: macos-latest-xl
@@ -66,6 +70,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.empty_matrix}}
+      output3: ${{ steps.matrix_value.outputs.push_event}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,6 +80,7 @@ jobs:
         id: matrix_value
         run: |
           if [[ ${{ github.event_name == 'push' }} == true ]]; then
+            echo "push_event=true" >> "GITHUB_OUTPUT"
             echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "empty_matrix=" >> "$GITHUB_OUTPUT"
@@ -84,6 +90,7 @@ jobs:
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
           else
+          echo "push_event=" >> "GITHUB_OUTPUT"
             if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
               echo "matrix=" >> "$GITHUB_OUTPUT"
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
@@ -153,6 +160,20 @@ jobs:
         run: yarn e2e:android-build
       
       - name: Run e2e tests for Android
+        if: needs.output_detox_tests_to_run.outputs.output3 != ''
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          
+      - name: Run e2e tests for Android
+        if: needs.output_detox_tests_to_run.outputs.output3 == ''
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
@@ -163,8 +184,8 @@ jobs:
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-          
-      # - name: Run e2e Navigation tests for Android
+      
+          # - name: Run e2e Navigation tests for Android
       #   uses: reactivecircus/android-emulator-runner@v2
       #   with:
       #     working-directory: VAMobile
