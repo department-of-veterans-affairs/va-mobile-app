@@ -387,7 +387,7 @@ export const darkTheme = {
     activityFooter: DSColors.grayLightest,
     categoryLandingError: DSColors.uswdsRedVivid40,
     categoryLandingWarning: DSColors.grayLightest,
-    cernerPanel: colors.base,
+    cernerPanel: DSColors.grayLightest,
     cernerFooter: DSColors.grayLightest,
   },
   buttonBackground: {
