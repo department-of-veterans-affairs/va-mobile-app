@@ -1,0 +1,67 @@
+
+#
+# Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
+#
+
+name: '[Utils] QA required approval'
+
+on:
+  pull_request:
+    types: [opened, edited]
+  pull_request_review:
+    types: [submitted, dismissed]
+  push:
+
+jobs:
+  check_for_qa_required:
+    if: github.event.review.state == 'APPROVED'
+    runs-on: ubuntu-latest
+    outputs:
+      requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: qa_required
+        with:
+          filters: |
+            requires_qa:
+                - 'VAMobile/src'
+                - 'VAMobile/package.json'
+                - '!VAMobile/src/*.test.*'
+  check_for_qa_approval:
+    runs-on: ubuntu-latest
+    needs: check_for_qa_required
+    outputs:
+      has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
+    steps:
+      - name: Check QA approval
+        id: check-qa-approval
+        shell: bash
+        if: ${{ needs.check_for_qa_required.outputs.requires_qa }} == 'true'
+        run: |
+          token=${{ secrets.GITHUB_TOKEN }}
+          base64AuthInfo='$token | base64 -e'
+          response=$(curl --request GET \
+          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
+          --header 'Authorization: $base64AuthInfo' \
+          --header 'Content-Type: application/json')
+          approvals = $response | jq '.[] | select(.state=="APPROVED")'
+          echo $approvals
+          if $aprovals.length > 2
+            qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
+              if $qa_approvals.length > 0
+                echo 'This PR has QA approval to merge'
+                echo ::set-output name=has_qa_approval::'true'
+              else 
+                echo 'This PR requires QA approval to merge'
+                echo ::set-output name=has_qa_approval::'false'
+              fi
+          else
+            echo 'This PR requires 3 approvals, including one QA approval, before merging.'
+            echo ::set-output name=has_qa_approval::'false'
+          fi
+  add_or_remove_qa_required_label:
+    name: Add or Remove label
+    needs: check_for_qa_approval
+    runs-on: ubuntu-latest
+    env:
+      LABEL: qa-review-required
