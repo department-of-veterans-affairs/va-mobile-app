@@ -2,7 +2,7 @@
 # Detox e2e tests in CI
 #
 
-name: '[e2e] Android Detox Test Run'
+name: '[e2e] Detox Mapping'
 
 on:
   workflow_call:
@@ -96,7 +96,7 @@ jobs:
             select(contains(["DisabilityRating"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["letters"]) or contains(["Letter"]) or contains(["BasicError"])) += ["Letters"] |
             select(contains(["Claims"]) or contains(["claims"])) += ["Claims", "Appeals", "AppealsExpanded"] |
-            select(contains(["BenefitsScreen"])) += ["DisabilityRating", "Claims", "Appeals", "Letters"] |
+            select(contains(["BenefitsScreen.tsx"])) += ["DisabilityRating", "Claims", "Appeals", "Letters"] |
             select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
             select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
             select(contains(["Prescription"]) or contains(["SelectionList"]) or contains(["MultiTouchCard"]) or contains(["RadioGroupModal"])) += ["Prescriptions"] |

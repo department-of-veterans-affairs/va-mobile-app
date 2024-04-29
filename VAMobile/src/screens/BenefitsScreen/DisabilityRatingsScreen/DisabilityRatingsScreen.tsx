@@ -156,8 +156,7 @@ function DisabilityRatingsScreen() {
             variant="MobileBody"
             selectable={false}
             accessibilityLabel={t('claimDetails.callVA.a11yLabel')}
-            paragraphSpacing={true}
-            testID="Test">
+            paragraphSpacing={true}>
             {t('claimDetails.callVA')}
           </TextView>
         </Box>
