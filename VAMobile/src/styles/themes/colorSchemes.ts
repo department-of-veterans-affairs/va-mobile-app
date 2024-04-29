@@ -120,6 +120,7 @@ export const lightTheme = {
     inlineSpinner: DSColors.primary,
     homeScreenError: DSColors.secondaryDark,
     linkRow: DSColors.primary,
+    ussf: colors.black,
   },
   text: {
     footerButton: colors.primary,
@@ -339,6 +340,7 @@ export const darkTheme = {
     inlineSpinner: DSColors.uswdsBlueVivid30,
     homeScreenError: DSColors.uswdsRedVivid40,
     linkRow: DSColors.uswdsBlueVivid30,
+    ussf: colors.white,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
