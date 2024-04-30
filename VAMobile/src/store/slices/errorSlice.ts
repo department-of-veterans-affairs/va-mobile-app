@@ -70,7 +70,7 @@ export const initialErrorsState: ErrorsState = {
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
   if (!response) {
-    dispatch(dispatchSetDowntime())
+    dispatch(dispatchSetDowntime(undefined))
     return
   }
 
