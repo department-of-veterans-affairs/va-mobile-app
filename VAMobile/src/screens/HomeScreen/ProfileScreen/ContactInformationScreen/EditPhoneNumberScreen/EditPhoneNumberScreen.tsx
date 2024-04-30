@@ -24,6 +24,7 @@ import {
   useIsScreenReaderEnabled,
   useTheme,
 } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
@@ -129,7 +130,10 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     const save = (): void => {
       const mutateOptions = {
-        onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onSuccess: () => {
+          registerReviewEvent()
+          showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+        },
         onError: (error: unknown) =>
           isErrorObject(error) && showSnackBar(saveSnackbarMessages.errorMsg, dispatch, save, false, true, true),
       }
