@@ -89,7 +89,6 @@ export function HomeScreen({}: HomeScreenProps) {
   })
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-
   const {
     data: prescriptionData,
     isError: prescriptionsError,
@@ -107,6 +106,7 @@ export function HomeScreen({}: HomeScreenProps) {
     enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
     RootState,
@@ -115,6 +115,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
+    isError: appointmentsError,
     isFetched: apptsPrefetch,
     isLoading: loadingAppointments,
   } = useAppointments(
@@ -222,7 +223,7 @@ export function HomeScreen({}: HomeScreenProps) {
     !!activeClaimsCount ||
     !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
     !!unreadMessageCount
-  const hasActivityError = !claimsData || claimsAndAppealsError || !prescriptionData || prescriptionsError
+  const hasActivityError = appointmentsError || claimsError || prescriptionsError
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -283,7 +284,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     deepLink={'appointments'}
                   />
                 )}
-                {!!activeClaimsCount && (
+                {!claimsError && !!activeClaimsCount && (
                   <ActivityButton
                     title={t('claims.title')}
                     subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
