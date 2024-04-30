@@ -51,7 +51,7 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
 
   return useQuery({
     ...options,
-    enabled: claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled,
+    enabled: !!(claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled),
     queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, page],
     queryFn: () => getClaimsAndAppeals(claimType, page),
     meta: {

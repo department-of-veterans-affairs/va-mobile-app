@@ -30,7 +30,7 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
 
   return useQuery({
     ...options,
-    enabled: authorizedServices?.prescriptions && !rxInDowntime && queryEnabled,
+    enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: prescriptionKeys.prescriptions,
     queryFn: () => getPrescriptions(),
     meta: {

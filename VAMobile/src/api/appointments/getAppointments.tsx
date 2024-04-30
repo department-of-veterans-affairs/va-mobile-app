@@ -45,7 +45,7 @@ export const useAppointments = (
 
   return useQuery({
     ...options,
-    enabled: authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled,
+    enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
     queryKey: [appointmentsKeys.appointments, timeFrame, page],
     queryFn: () => getAppointments(startDate, endDate, timeFrame, page),
     meta: {

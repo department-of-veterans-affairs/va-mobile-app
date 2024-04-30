@@ -27,7 +27,7 @@ export const useDisabilityRating = (options?: { enabled?: boolean }) => {
 
   return useQuery({
     ...options,
-    enabled: authorizedServices?.disabilityRating && !disabilityRatingInDowntime && queryEnabled,
+    enabled: !!(authorizedServices?.disabilityRating && !disabilityRatingInDowntime && queryEnabled),
     queryKey: disabilityRatingKeys.disabilityRating,
     queryFn: () => getDisabilityRating(),
     meta: {

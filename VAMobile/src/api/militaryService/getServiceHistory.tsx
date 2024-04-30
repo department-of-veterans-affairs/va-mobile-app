@@ -37,7 +37,7 @@ export const useServiceHistory = (options?: { enabled?: boolean }) => {
 
   return useQuery({
     ...options,
-    enabled: authorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime && queryEnabled,
+    enabled: !!(authorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime && queryEnabled),
     queryKey: militaryServiceHistoryKeys.serviceHistory,
     queryFn: () => getServiceHistory(),
     meta: {

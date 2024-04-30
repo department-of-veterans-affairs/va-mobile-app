@@ -23,7 +23,7 @@ export const useDecisionLetters = (options?: { enabled?: boolean }) => {
 
   return useQuery({
     ...options,
-    enabled: authorizedServices?.decisionLetters && queryEnabled,
+    enabled: !!(authorizedServices?.decisionLetters && queryEnabled),
     queryKey: decisionLettersKeys.decisionLetters,
     queryFn: () => getDecisionLetters(),
     meta: {
