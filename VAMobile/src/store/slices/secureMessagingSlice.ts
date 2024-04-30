@@ -98,6 +98,7 @@ export type SecureMessagingState = {
   deleteDraftFailed: boolean
   deletingDraft: boolean
   inboxFirstRetrieval: boolean
+  inboxError?: APIError
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -802,6 +803,7 @@ const secureMessagingSlice = createSlice({
       state.error = error
       state.inboxFirstRetrieval = !!error
       state.loadingInboxData = false
+      state.inboxError = error
     },
 
     dispatchStartListFolders: (state) => {

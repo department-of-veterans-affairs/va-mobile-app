@@ -108,10 +108,11 @@ export function HomeScreen({}: HomeScreenProps) {
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const {
+    loadingInboxData: loadingInbox,
+    inboxFirstRetrieval: smPrefetch,
+    inboxError,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -229,7 +230,7 @@ export function HomeScreen({}: HomeScreenProps) {
     !!activeClaimsCount ||
     !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
     !!unreadMessageCount
-  const hasActivityError = appointmentsError || claimsError || prescriptionsError
+  const hasActivityError = appointmentsError || claimsError || inboxError || prescriptionsError
   const alertVariant = hasActivityError ? 'CategoryLandingError' : 'CategoryLandingWarning'
 
   return (
