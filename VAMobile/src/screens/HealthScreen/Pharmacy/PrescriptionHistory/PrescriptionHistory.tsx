@@ -5,6 +5,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -20,14 +21,11 @@ import {
 import {
   Box,
   BoxProps,
-  ClickForActionLink,
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
+  LinkWithAnalytics,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
@@ -79,7 +77,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
+    isFetching: loadingHistory,
     isError: hasError,
     isFetched: prescriptionsFetched,
   } = usePrescriptions({
@@ -463,11 +461,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       return <></>
     }
 
-    const linkProps: LinkButtonProps = {
-      displayedText: t('goToMyVAHealth'),
-      linkType: LinkTypeOptionsConstants.externalLink,
-      linkUrlIconType: LinkUrlIconType.Arrow,
-      numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
+    const linkProps: LinkProps = {
+      type: 'url',
+      url: LINK_URL_GO_TO_PATIENT_PORTAL,
+      text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
     }
 
@@ -487,7 +484,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
-          <ClickForActionLink {...linkProps} />
+          <LinkWithAnalytics {...linkProps} />
         </>
       ),
       a11yLabel: t('prescription.history.transferred.title'),

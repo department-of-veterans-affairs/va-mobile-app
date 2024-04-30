@@ -114,7 +114,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
       updateVaOpacity()
       updateTitleShowing()
     }
-  })
+  }, [transition, title, titleShowing])
 
   /**
    * Handles animation effect on the title
@@ -137,7 +137,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  })
+  }) // Removed dependency array to fix screen reader issue #8310
 
   const zIndex = {
     zIndex: 1,
@@ -219,7 +219,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   if (title) {
     titleTextViewProps = {
       variant: transition ? 'MobileBodyTight' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
-      textAlign: 'center',
+      textAlign: title.type !== 'VA' ? 'center' : undefined,
       allowFontScaling: false,
     }
   }

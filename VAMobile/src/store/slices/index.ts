@@ -1,7 +1,6 @@
 import { RootState } from 'store'
 import { initialAccessibilityState } from 'store/slices/accessibilitySlice'
 import { initialAnalyticsState } from 'store/slices/analyticsSlice'
-import { initialAppointmentsState } from 'store/slices/appointmentsSlice'
 import { initialAuthState } from 'store/slices/authSlice'
 import { initialDemoState } from 'store/slices/demoSlice'
 import { initialErrorsState } from 'store/slices/errorSlice'
@@ -12,7 +11,6 @@ import { initialSnackBarState } from 'store/slices/snackBarSlice'
 
 export * from './accessibilitySlice'
 export * from './analyticsSlice'
-export * from './appointmentsSlice'
 export * from './authSlice'
 export * from './errorSlice'
 export * from './notificationSlice'
@@ -22,7 +20,6 @@ export * from './settingsSlice'
 
 export const InitialState: RootState = {
   auth: initialAuthState,
-  appointments: initialAppointmentsState,
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
   notifications: initialNotificationsState,

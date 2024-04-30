@@ -25,6 +25,7 @@ const scrollToThenTap = async (text: string) => {
 }
 
 const checkLocatorAndContactLinks = async () => {
+  await device.disableSynchronization()
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
   await setTimeout(5000)
   await device.takeScreenshot('PersonalInformationFindVALocations')
@@ -39,6 +40,7 @@ const checkLocatorAndContactLinks = async () => {
   await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationTTY')
   await device.launchApp({ newInstance: false })
+  await device.enableSynchronization()
 }
 
 export async function updateGenderIdentify(genderIdentityOption) {

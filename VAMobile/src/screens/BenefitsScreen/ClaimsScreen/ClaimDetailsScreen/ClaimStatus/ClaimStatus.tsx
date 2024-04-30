@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimData } from 'api/types'
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -36,6 +37,9 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: decisionLetterData } = useDecisionLetters({
+    enabled: userAuthorizedServices?.decisionLetters,
+  })
   const sentEvent = useRef(false)
 
   function renderActiveClaimStatusDetails() {
@@ -107,7 +111,8 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       if (
         featureEnabled('decisionLettersWaygate') &&
         userAuthorizedServices?.decisionLetters &&
-        claim.attributes.decisionLetterSent
+        claim.attributes.decisionLetterSent &&
+        (decisionLetterData?.data.length || 0) > 0
       ) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
@@ -143,7 +148,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
     <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')} testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
       {renderClosedClaimStatusDetails()}
-      <NeedHelpData claimId={claim.id} claimType={claim.attributes.claimType} claimPhase={claim.attributes.phase} />
+      <NeedHelpData />
     </Box>
   )
 }

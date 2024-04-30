@@ -5,16 +5,18 @@ import { useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
+import { SecureMessagingState, getInbox } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -47,9 +49,6 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const { loading: loadingAppointments, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
@@ -63,14 +62,19 @@ export function HealthScreen({}: HealthScreenProps) {
   const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const { data: apptsData, isLoading: loadingAppointments } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    1,
+    {
+      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
+    },
   )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+
   useFocusEffect(
     useCallback(() => {
       if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
@@ -90,44 +94,34 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box
-        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}>
+      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
           showLoading={loadingAppointments}
           subText={
-            upcomingAppointmentsCount
-              ? t('appointments.activityButton.subText', { count: upcomingAppointmentsCount })
+            upcomingAppointmentsCount && upcomingDaysLimit
+              ? t('appointments.activityButton.subText', {
+                  count: upcomingAppointmentsCount,
+                  dayCount: upcomingDaysLimit,
+                })
               : undefined
           }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          showLoading={loadingInbox}
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
-          showLoading={loadingInbox}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
             showLoading={fetchingPrescriptions}
+            testID="prescriptionsNavButtonTestID"
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {
@@ -141,19 +135,8 @@ export function HealthScreen({}: HealthScreenProps) {
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
         />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {CernerAlert ? (
         <Box mb={theme.dimensions.contentMarginBottom}>

@@ -57,6 +57,7 @@ const config = {
     './docusaurus-plugin-react-native-web',
     engineeringDocForm('documentation', 'documentation', [
       'contributing.md',
+      'namingConventions.md',
       'overview.md',
       'testing.md',
       'versioning.md',
@@ -203,6 +204,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} VA Mobile App, Inc. Built with Docusaurus.`,
         logo: {
           src: 'img/va-blue-logo.png',
+          alt: 'VA, United States Department of Veteran Affairs',
         },
       },
 

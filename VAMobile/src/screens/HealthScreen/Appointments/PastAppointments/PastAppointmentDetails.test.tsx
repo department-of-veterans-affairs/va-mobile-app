@@ -9,10 +9,9 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentType,
   AppointmentTypeConstants,
-} from 'store/api/types'
-import { initialAppointmentsState } from 'store/slices'
-import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
+} from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
+import { bookedAppointmentsList, canceledAppointmentList } from 'utils/tests/appointments'
 
 import PastAppointmentDetails from './PastAppointmentDetails'
 
@@ -23,47 +22,24 @@ context('PastAppointmentDetails', () => {
     statusDetail: AppointmentStatusDetailType | null = null,
     isCovid: boolean = false,
   ) => {
-    const props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' } })
-
-    render(<PastAppointmentDetails {...props} />, {
-      preloadedState: {
-        appointments: {
-          ...initialAppointmentsState,
-          loading: false,
-          loadingAppointmentCancellation: false,
-          upcomingVaServiceError: false,
-          upcomingCcServiceError: false,
-          pastVaServiceError: false,
-          pastCcServiceError: false,
-          pastAppointmentsById:
-            status === 'BOOKED'
-              ? {
-                  '1': bookedAppointmentsList.filter((obj) => {
-                    return obj.attributes.appointmentType === appointmentType &&
-                      obj.attributes.isCovidVaccine === isCovid
-                      ? true
-                      : false
-                  })[0],
-                }
-              : {
-                  '1': canceledAppointmentList.filter((obj) => {
-                    return (
-                      obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
-                    )
-                  })[0],
-                },
-          loadedAppointmentsByTimeFrame: {
-            upcoming: status === 'BOOKED' ? bookedAppointmentsList : canceledAppointmentList,
-            pastThreeMonths: [],
-            pastFiveToThreeMonths: [],
-            pastEightToSixMonths: [],
-            pastElevenToNineMonths: [],
-            pastAllCurrentYear: [],
-            pastAllLastYear: [],
-          },
-        },
+    const props = mockNavProps(undefined, undefined, {
+      params: {
+        appointment:
+          status === 'BOOKED'
+            ? bookedAppointmentsList.filter((obj) => {
+                return obj.attributes.appointmentType === appointmentType && obj.attributes.isCovidVaccine === isCovid
+                  ? true
+                  : false
+              })[0]
+            : canceledAppointmentList.filter((obj) => {
+                return (
+                  obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                )
+              })[0],
       },
     })
+
+    render(<PastAppointmentDetails {...props} />)
   }
 
   it('initializes correctly', () => {
@@ -71,7 +47,7 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
     expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Blind Rehabilitation Center' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Type of care not noted' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Provider' })).toBeTruthy()
     expect(screen.getByText('Provider not noted')).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'VA Long Beach Healthcare System' })).toBeTruthy()

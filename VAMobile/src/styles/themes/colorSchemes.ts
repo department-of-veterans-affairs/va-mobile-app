@@ -115,10 +115,12 @@ export const lightTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.white,
+    largeNavButton: DSColors.primary,
     announcementBanner: DSColors.primary,
     inlineSpinner: DSColors.primary,
     homeScreenError: DSColors.secondaryDark,
     linkRow: DSColors.primary,
+    ussf: colors.black,
   },
   text: {
     footerButton: colors.primary,
@@ -166,6 +168,7 @@ export const lightTheme = {
     profileScreen: DSColors.base,
     activityFooter: DSColors.gray,
     categoryLandingError: DSColors.secondaryDark,
+    categoryLandingWarning: DSColors.base,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -332,10 +335,12 @@ export const darkTheme = {
     tagInfoIcon: colors.base,
     transparent: colors.transparent,
     activityButton: colors.black,
+    largeNavButton: DSColors.uswdsBlueVivid30,
     announcementBanner: DSColors.uswdsBlueVivid30,
     inlineSpinner: DSColors.uswdsBlueVivid30,
     homeScreenError: DSColors.uswdsRedVivid40,
     linkRow: DSColors.uswdsBlueVivid30,
+    ussf: colors.white,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
@@ -381,6 +386,7 @@ export const darkTheme = {
     profileScreen: DSColors.grayLightest,
     activityFooter: DSColors.grayLightest,
     categoryLandingError: DSColors.uswdsRedVivid40,
+    categoryLandingWarning: DSColors.grayLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

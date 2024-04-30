@@ -80,6 +80,7 @@ export type VATextColors = {
   profileScreen: string
   activityFooter: string
   categoryLandingError: string
+  categoryLandingWarning: string
 }
 
 export type VAIconColors = {
@@ -123,24 +124,32 @@ export type VAIconColors = {
   inlineSpinner: string
   homeScreenError: string
   linkRow: string
+  largeNavButton: string
+  ussf: string
 }
 
 export type VATypographyThemeVariants = {
   AboutYou: string
   ActionBar: string
+  ActivityButtonHeader: string
   ActivityButtonSubtext: string
   ActivityFooter: string
   AnnouncementBannerTitle: string
   BitterBoldHeading: string
   BitterHeading: string
+  CategoryBitterHeading: string
   CategoryLandingError: string
+  CategoryLandingWarning: string
   ClaimPhase: string
+  CrisisLineButton: string
   DescriptiveBackButton: string
   HomeScreen: string
   HomeScreenHeader: string
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LargeNavButton: string
+  LargeNavSubtext: string
   MobileBody: string
   MobileBodyBold: string
   MobileBodyLink: string
@@ -316,8 +325,9 @@ export type VATheme = {
     AnnouncementBannerTitle: VAFontSizes
     BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
-    CategoryLandingError: VAFontSizes
+    CategoryLandingAlert: VAFontSizes
     ClaimPhase: VAFontSizes
+    CrisisLineButton: VAFontSizes
     HelperText: VAFontSizes
     LabelTag: VAFontSizes
     MobileBody: VAFontSizes

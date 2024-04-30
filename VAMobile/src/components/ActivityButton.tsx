@@ -60,10 +60,10 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
             flexDirection={'row'}
             flexWrap={'wrap'}
             mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
-            <TextView variant="BitterHeading">{title}</TextView>
+            <TextView variant="ActivityButtonHeader">{title}</TextView>
           </Box>
           {!!subText && (
-            <Box flexDirection={'row'}>
+            <Box flexDirection={'row'} alignItems="center">
               <Box flex={1}>
                 <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
               </Box>
@@ -74,6 +74,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
                 fill={theme.colors.icon.activityButton}
                 fill2={theme.colors.icon.transparent}
                 ml={theme.dimensions.listItemDecoratorMarginLeft}
+                preventScaling={true}
               />
             </Box>
           )}

@@ -34,9 +34,11 @@ export const CommonE2eIdConstants = {
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
-  LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
+  LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
+  LEAVING_APP_CANCEL_TEXT: 'Go back',
+  LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
+  PRESCRIPTIONS_BUTTON_ID: 'prescriptionsNavButtonTestID',
   OK_UNIVERSAL_TEXT: 'OK',
   CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
@@ -135,7 +137,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
   }
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
-  await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+  await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
 }
 
 /** This function will change the mock data for demo mode
@@ -272,7 +274,7 @@ export async function openDirectDeposit() {
 }
 
 export async function openPrescriptions() {
-  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID)).tap()
 }
 
 export async function openContactInfo() {
@@ -425,6 +427,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     await element(by.text('OK')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
@@ -433,6 +436,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
     if (AFUseCaseUpgrade) {

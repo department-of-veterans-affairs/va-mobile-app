@@ -81,7 +81,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  if (useBankDataError) {
+  if (useBankDataError || !ddNotInDowntime) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}
@@ -113,7 +113,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
         <TextView
           variant="MobileBody"
           mb={theme.dimensions.standardMarginBetween}
-          accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
+          accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText.a11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>
