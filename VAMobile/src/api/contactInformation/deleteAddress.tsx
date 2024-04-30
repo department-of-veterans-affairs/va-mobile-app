@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { AddressData } from 'api/types'
+import { Events } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, del } from 'store/api'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 
 import { contactInformationKeys } from './queryKeys'
@@ -23,6 +24,7 @@ export const useDeleteAddress = () => {
   return useMutation({
     mutationFn: deleteAddress,
     onSuccess: () => {
+      logAnalyticsEvent(Events.vama_prof_update_address())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
     onError: (error) => {
