@@ -22,16 +22,16 @@ export const useUpdateGenderIdentity = () => {
 
   return useMutation({
     mutationFn: updateGenderIdentity,
-    onSuccess: async () => {
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      await logAnalyticsEvent(Events.vama_gender_id_success)
+    onSuccess: () => {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      logAnalyticsEvent(Events.vama_gender_id_success())
       queryClient.invalidateQueries({ queryKey: demographicsKeys.demographics })
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'updateGenderIdentity: Service error')
       }
-      await logAnalyticsEvent(Events.vama_gender_id_fail)
+      logAnalyticsEvent(Events.vama_gender_id_fail())
     },
   })
 }
