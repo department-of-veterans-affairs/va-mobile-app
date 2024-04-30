@@ -196,6 +196,7 @@ jobs:
       - name: Run_e2e_tests_for_iOS
         id: run_e2e_tests
         run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+        continue-on-error: true
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -227,11 +228,15 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure()
+        if: steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
+
+      - name: Fail workflow if needed(View e2e step for details)
+        if: steps.run_e2e_tests.outcome == 'failure'
+        run: exit 1
 
   matrix-send_test_results_to_testrail:
     if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_run != ''

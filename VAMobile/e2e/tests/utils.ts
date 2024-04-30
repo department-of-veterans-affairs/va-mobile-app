@@ -36,6 +36,7 @@ export const CommonE2eIdConstants = {
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
   LEAVING_APP_CANCEL_TEXT: 'Go back',
+  LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
@@ -426,6 +427,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     await element(by.text('OK')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
@@ -434,6 +436,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
     if (AFUseCaseUpgrade) {

@@ -1,19 +1,11 @@
 import React from 'react'
+import { Alert, Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
 import NeedHelpData from './NeedHelpData'
-
-const mockExternalLinkSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('NeedHelpData', () => {
   const initializeTestInstance = (isAppeal?: boolean) => {
@@ -39,14 +31,14 @@ context('NeedHelpData', () => {
 
   it('should launch external link on click of the number', () => {
     fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
-    expect(mockExternalLinkSpy).toHaveBeenCalled()
+    expect(Linking.openURL).toHaveBeenCalledWith('tel:8008271000')
   })
 
   describe('when isAppeal is true', () => {
     it('should launch external link on click of the url', () => {
       initializeTestInstance(true)
       fireEvent.press(screen.getByRole('link', { name: 'Go to VA.gov' }))
-      expect(mockExternalLinkSpy).toHaveBeenCalled()
+      expect(Alert.alert).toHaveBeenCalled()
     })
   })
 })

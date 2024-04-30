@@ -14,7 +14,7 @@ context('AttachmentLink', () => {
   })
 
   it('renders text', () => {
-    expect(screen.getByRole('button', { name: 'Test.png (234 KB)' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Test.png (234 KB)' })).toBeTruthy()
   })
 
   it('renders a11yLabel', () => {
@@ -22,7 +22,7 @@ context('AttachmentLink', () => {
   })
 
   it('calls onPress when clicked', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'Test.png (234 KB)' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Test.png (234 KB)' }))
     expect(onPressSpy).toBeCalled()
   })
 })
