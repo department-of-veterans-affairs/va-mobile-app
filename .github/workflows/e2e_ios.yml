@@ -90,6 +90,7 @@ jobs:
   matrix-e2e-ios:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-14-xlarge
+    needs: output_detox_tests_to_run
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -171,7 +172,7 @@ jobs:
 
   e2e-ios:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
-    needs: start_slack_thread
+    needs: [start_slack_thread, output_detox_tests_to_run]
     runs-on: macos-14-xlarge
     env:
       # Path to write secret key to. Also used by fastlane
@@ -276,7 +277,7 @@ jobs:
 
   matrix-send_test_results_to_testrail:
     if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
-    needs: matrix-e2e-ios
+    needs: [matrix-e2e-ios, output_detox_tests_to_run]
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -291,7 +292,7 @@ jobs:
 
   send_test_results_to_testrail:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
-    needs: e2e-ios
+    needs: [e2e-ios, output_detox_tests_to_run]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 

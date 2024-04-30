@@ -2,7 +2,7 @@
 # Detox e2e tests in CI
 #
 
-name: '[e2e] Android Detox Test Run'
+name: '[e2e] Detox Mapping'
 
 on:
   workflow_call:
