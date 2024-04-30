@@ -180,24 +180,23 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
   useEffect(() => {
-    if (
-      sendMessageError &&
-      isErrorObject(sendMessageErrorDetails) &&
-      hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
-    ) {
-      setReplyTriageError(true)
-      const messageData = isReplyDraft
-        ? { body, draft_id: messageID, category }
-        : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
-      const mutateOptions = {
-        onSuccess: () => {
-          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
-          logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-          navigateTo('SecureMessaging', { activeTab: 1 })
-        },
+    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+        setReplyTriageError(true)
+      } else {
+        const messageData = isReplyDraft
+          ? { body, draft_id: messageID, category }
+          : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+            navigateTo('SecureMessaging', { activeTab: 1 })
+          },
+        }
+        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
-      showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
     }
   }, [
     dispatch,

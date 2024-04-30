@@ -125,27 +125,26 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
-    if (
-      sendMessageError &&
-      isErrorObject(sendMessageErrorDetails) &&
-      hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
-    ) {
-      setReplyTriageError(true)
-      const messageData = {
-        recipient_id: parseInt(to, 10),
-        category: category as CategoryTypes,
-        body: message,
-        subject,
-      } as SecureMessagingFormData
-      const mutateOptions = {
-        onSuccess: () => {
-          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
-          logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-          navigateTo('SecureMessaging', { activeTab: 0 })
-        },
+    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+        setReplyTriageError(true)
+      } else {
+        const messageData = {
+          recipient_id: parseInt(to, 10),
+          category: category as CategoryTypes,
+          body: message,
+          subject,
+        } as SecureMessagingFormData
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+            navigateTo('SecureMessaging', { activeTab: 0 })
+          },
+        }
+        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
-      showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
     }
   }, [
     dispatch,

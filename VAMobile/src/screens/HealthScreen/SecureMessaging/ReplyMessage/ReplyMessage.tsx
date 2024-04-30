@@ -135,31 +135,30 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   }
 
   useEffect(() => {
-    if (
-      sendMessageError &&
-      isErrorObject(sendMessageErrorDetails) &&
-      hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
-    ) {
-      setReplyTriageError(true)
-      const messageData = {
-        body: messageReply,
-        category: category,
-        subject: subject,
-        recipient_id: receiverID,
-      } as SecureMessagingFormData
-      const mutateOptions = {
-        onSuccess: () => {
-          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
-          logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-          navigateTo('SecureMessaging', { activeTab: 0 })
-        },
+    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+        setReplyTriageError(true)
+      } else {
+        const messageData = {
+          body: messageReply,
+          category: category,
+          subject: subject,
+          recipient_id: receiverID,
+        } as SecureMessagingFormData
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+            navigateTo('SecureMessaging', { activeTab: 0 })
+          },
+        }
+        const params: SendMessageParameters = {
+          messageData: messageData,
+          uploads: attachmentsList,
+          replyToID: message.messageId,
+        }
+        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
       }
-      const params: SendMessageParameters = {
-        messageData: messageData,
-        uploads: attachmentsList,
-        replyToID: message.messageId,
-      }
-      showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
     }
   }, [
     dispatch,
