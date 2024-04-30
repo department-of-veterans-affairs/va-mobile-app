@@ -315,34 +315,33 @@ export function HomeScreen({}: HomeScreenProps) {
                   />
                 )}
               </Box>
-              {hasActivityError ||
-                (featureInDowntime && (
-                  <Box
-                    mx={theme.dimensions.standardMarginBetween}
-                    mt={theme.dimensions.standardMarginBetween}
-                    flexDirection="row"
-                    accessible={true}
-                    accessibilityRole={'text'}
-                    accessibilityLabel={`${t('errorIcon')} ${t('activity.error.cantShowAllActivity')}`}>
-                    <VAIcon
-                      accessible={false}
-                      importantForAccessibility="no"
-                      width={24}
-                      height={24}
-                      name="ExclamationCircle"
-                      fill="homeScreenError"
-                      mt={3}
-                    />
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility="no"
-                      variant={alertVariant}
-                      ml={theme.dimensions.condensedMarginBetween}
-                      flex={1}>
-                      {t('activity.error.cantShowAllActivity')}
-                    </TextView>
-                  </Box>
-                ))}
+              {(hasActivityError || featureInDowntime) && (
+                <Box
+                  mx={theme.dimensions.standardMarginBetween}
+                  mt={theme.dimensions.standardMarginBetween}
+                  flexDirection="row"
+                  accessible={true}
+                  accessibilityRole={'text'}
+                  accessibilityLabel={`${t('errorIcon')} ${t('activity.error.cantShowAllActivity')}`}>
+                  <VAIcon
+                    accessible={false}
+                    importantForAccessibility="no"
+                    width={24}
+                    height={24}
+                    name="ExclamationCircle"
+                    fill="homeScreenError"
+                    mt={3}
+                  />
+                  <TextView
+                    accessible={false}
+                    importantForAccessibility="no"
+                    variant={alertVariant}
+                    ml={theme.dimensions.condensedMarginBetween}
+                    flex={1}>
+                    {t('activity.error.cantShowAllActivity')}
+                  </TextView>
+                </Box>
+              )}
             </>
           )}
         </Box>
