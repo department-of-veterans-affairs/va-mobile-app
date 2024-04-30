@@ -230,7 +230,7 @@ export function HomeScreen({}: HomeScreenProps) {
     !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
     !!unreadMessageCount
   const hasActivityError = appointmentsError || claimsError || prescriptionsError
-  const alertVariant = featureInDowntime ? 'CategoryLandingWarning' : 'CategoryLandingError'
+  const alertVariant = hasActivityError ? 'CategoryLandingError' : 'CategoryLandingWarning'
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
