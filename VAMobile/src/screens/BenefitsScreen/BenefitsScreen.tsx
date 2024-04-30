@@ -6,7 +6,7 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton, TextView, VAIcon } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -36,12 +36,30 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const featureInDowntime = claimsInDowntime || appealsInDowntime
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
-  const { data: claimsData, isFetching: loadingClaimsAndAppeals } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: isFocused && (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+  const {
+    data: claimsAndAppeals,
+    isFetching: loadingClaimsAndAppeals,
+    isError: claimsAndAppealsError,
+  } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled:
+      (isFocused && userAuthorizedServices?.claims && !claimsInDowntime) ||
+      (userAuthorizedServices?.appeals && !appealsInDowntime),
   })
 
-  const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
+  const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
+  const showClaimsCount = !claimsAndAppealsError && !nonFatalErrors && !featureInDowntime && activeClaimsCount
+
+  const showAlert = claimsAndAppealsError || nonFatalErrors || featureInDowntime
+  const alertVariant = claimsAndAppealsError || nonFatalErrors ? 'CategoryLandingError' : 'CategoryLandingWarning'
+  const alertMessage = featureInDowntime
+    ? t('benefits.activity.warning.downtime')
+    : nonFatalErrors
+      ? t('benefits.activity.nonFatalError')
+      : t('benefits.activity.error')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -64,12 +82,40 @@ function BenefitsScreen({}: BenefitsScreenProps) {
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('claims.title')}
-          subText={activeClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
+          subText={showClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
           showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
+        {showAlert && (
+          <Box
+            mx={theme.dimensions.condensedMarginBetween}
+            mt={theme.dimensions.standardMarginBetween}
+            flexDirection="row"
+            accessible={true}
+            accessibilityRole={'text'}
+            accessibilityLabel={t('errorIcon') + alertMessage}>
+            <VAIcon
+              accessible={false}
+              importantForAccessibility="no"
+              width={24}
+              height={24}
+              preventScaling={true}
+              name="ExclamationCircle"
+              fill="homeScreenError"
+              mt={3}
+            />
+            <TextView
+              accessible={false}
+              importantForAccessibility="no"
+              variant={alertVariant}
+              ml={theme.dimensions.condensedMarginBetween}
+              flex={1}>
+              {alertMessage}
+            </TextView>
+          </Box>
+        )}
       </Box>
     </CategoryLanding>
   )

@@ -1,6 +1,5 @@
 ---
 title: Alert
-draft: true
 ---
 
 Alerts are an in-content way to keep users informed of important and sometimes time-sensitive changes.
@@ -8,28 +7,20 @@ Alerts are an in-content way to keep users informed of important and sometimes t
 ## Examples
 
 ### Informational
-Add Figma links and embed Storybook
-
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--info)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=253-1119&mode=design&t=gceZHkCGGR5VP79F-4)
+<iframe width="620" height="450" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/alert--info&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Success
-Add Figma links and embed Storybook
-
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--success)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=253-1098&mode=design&t=gceZHkCGGR5VP79F-4)
+<iframe width="620" height="450" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/alert--success&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Warning
-Add Figma links and embed Storybook
-
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--warning)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=253-1077&mode=design&t=gceZHkCGGR5VP79F-4)
+<iframe width="620" height="450" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/alert--warning&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Error
-Add Figma links and embed Storybook
-
-**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--error)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=253-1056&mode=design&t=gceZHkCGGR5VP79F-4)
+<iframe width="620" height="450" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/alert--error&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 
 ## Usage
@@ -71,6 +62,9 @@ On the website and mobile app, do not use the Alert component for:
 ### Placement
 * Alerts always appear near the top of the screen
 
+## Code usage
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/alert--docs)
+
 ## Content considerations
 * The [VA Design System's content considerations for alerts](https://design.va.gov/components/alert#content-considerations) are appropriate for the mobile app with the following addition:
     * VA no longer says, “Please” in alerts when making a request of the user.
@@ -85,9 +79,6 @@ On the website and mobile app, do not use the Alert component for:
 * No buttons should be disabled within an Alert.
 * Focusable elements within an Alert should include: heading, body copy, phone numbers, and buttons.
 * [accessibilityLabel](https://reactnative.dev/docs/accessibility#accessibilitylabel) and [accessibilityLabelledBy](https://reactnative.dev/docs/accessibility#accessibilitylabelledby-android) should be used where appropriate.
-
-## Code usage
-Link to Storybook coming soon
 
 ## Related
 * [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)

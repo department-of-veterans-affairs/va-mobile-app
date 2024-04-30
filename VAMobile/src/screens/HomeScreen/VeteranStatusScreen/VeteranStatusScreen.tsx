@@ -15,13 +15,14 @@ import {
   BorderColorVariant,
   Box,
   BoxProps,
-  ClickToCallPhoneNumber,
+  ClickToCallPhoneNumberDeprecated,
   LargePanel,
   TextView,
   VAIcon,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { darkTheme } from 'styles/themes/colorSchemes'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
@@ -99,6 +100,8 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
         return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
         return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
+      case BranchesOfServiceConstants.SpaceForce:
+        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" fill2={darkTheme.icon.ussf} {...dimensions} />
     }
   }
 
@@ -172,7 +175,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
             {t('veteranStatus.fixAnError.2')}
           </TextView>
-          <ClickToCallPhoneNumber
+          <ClickToCallPhoneNumberDeprecated
             phone={t('8008271000')}
             displayedText={displayedTextPhoneNumber(t('8008271000'))}
             colorOverride={'veteranStatus'}
@@ -180,7 +183,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
             {t('veteranStatus.fixAnError.3')}
           </TextView>
-          <ClickToCallPhoneNumber
+          <ClickToCallPhoneNumberDeprecated
             phone={t('8005389552')}
             displayedText={displayedTextPhoneNumber(t('8005389552'))}
             colorOverride={'veteranStatus'}

@@ -5,16 +5,18 @@ import { useSelector } from 'react-redux'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AppointmentsState, SecureMessagingState, getInbox, prefetchAppointments } from 'store/slices'
+import { SecureMessagingState, getInbox } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -49,11 +51,6 @@ export function HealthScreen({}: HealthScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const {
-    loading: loadingAppointments,
-    upcomingAppointmentsCount,
-    upcomingDaysLimit,
-  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { loadingInboxData: loadingInbox, inboxLastUpdatedAt } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
@@ -67,14 +64,19 @@ export function HealthScreen({}: HealthScreenProps) {
   const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
     enabled: isFocused && userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const { data: apptsData, isLoading: loadingAppointments } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    1,
+    {
+      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
+    },
   )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+
   useFocusEffect(
     useCallback(() => {
       const isInboxStale = !inboxLastUpdatedAt || Date.now() - inboxLastUpdatedAt > ACTIVITY_STALE_TIME

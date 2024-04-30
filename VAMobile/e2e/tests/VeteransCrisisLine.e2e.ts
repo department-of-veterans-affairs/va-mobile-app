@@ -17,10 +17,12 @@ export const VCLConstants = {
 }
 
 const tapAndTakeScreenshot = async (text: string, screenshotName: string) => {
+  await device.disableSynchronization()
   await element(by.text(text)).tap()
   await setTimeout(5000)
   await device.takeScreenshot(screenshotName)
   await device.launchApp({ newInstance: false })
+  await device.enableSynchronization()
 }
 
 beforeAll(async () => {
@@ -51,7 +53,7 @@ describe('Veterans Crisis Line', () => {
 
   it('should open chat link', async () => {
     await element(by.text(VCLConstants.CHAT_LINK_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('CrisisLineChat')
     await device.launchApp({ newInstance: false })
@@ -59,7 +61,7 @@ describe('Veterans Crisis Line', () => {
 
   it('should open website link', async () => {
     await element(by.text(VCLConstants.VCL_SITE_LINK_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text('Leave')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('VCLWebsite')
     await device.launchApp({ newInstance: false })
