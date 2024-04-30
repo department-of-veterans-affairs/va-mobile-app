@@ -51,7 +51,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -97,7 +96,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: rxPrefetch,
     isLoading: loadingPrescriptions,
   } = usePrescriptions({
-    enabled: screenContentAllowed('WG_PrescriptionHistory') && userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
   const {
     data: claimsData,
@@ -105,10 +104,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: claimsPrefetch,
     isLoading: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      screenContentAllowed('WG_ClaimsHistoryScreen') &&
-      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
-      !claimsInDowntime,
+    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
