@@ -36,6 +36,7 @@ export const useUpdateBankInfo = () => {
       logAnalyticsEvent(Events.vama_update_dir_dep())
       setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       if (demoMode) {
+        // have to manually set the data in demo mode since we don't get an actual api update. Would be fixed with moving over to MSW for api call mocking
         const queryData = queryClient.getQueryData(directDepositKeys.directDeposit) as DirectDepositData
         const updatedData = { ...newAccountData }
         updatedData.financialInstitutionName = 'FIRST CITIZENS BANK & TRUST COMPANY'
