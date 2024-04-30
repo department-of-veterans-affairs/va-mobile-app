@@ -15,13 +15,11 @@ import {
   getLocalVersion,
   getStoreVersion,
   getVersionSkipped,
-  openAppStore,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useTheme } from 'utils/hooks'
+import { useOpenAppStore, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-import { requestStorePopup } from 'utils/rnInAppUpdate'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
@@ -31,6 +29,7 @@ export const EncourageUpdateAlert = () => {
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const openAppStore = useOpenAppStore()
 
   const displayEU =
     featureEnabled('inAppUpdates') &&
@@ -75,20 +74,9 @@ export const EncourageUpdateAlert = () => {
     }
   }, [displayEU])
 
-  const callRequestStorePopup = async () => {
-    const result = await requestStorePopup()
-    if (result && isIOS()) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      openAppStore()
-    } else if (result) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      setVersionName(storeVersion ? storeVersion : '0.0')
-    }
-  }
-
   const onUpdatePressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_updated())
-    callRequestStorePopup()
+    openAppStore()
   }
 
   const onSkipPressed = (): void => {

@@ -11,8 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { openAppStore } from 'utils/homeScreenAlerts'
-import { useTheme } from 'utils/hooks'
+import { useOpenAppStore, useTheme } from 'utils/hooks'
 import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 
@@ -29,6 +28,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
   const waygateScreen = waygateName || waygateStateScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isFocused = useIsFocused()
+  const openAppStore = useOpenAppStore()
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
     if (waygateType === 'DenyContent' || waygateType === 'AllowFunction') {
