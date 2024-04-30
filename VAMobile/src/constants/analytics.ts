@@ -802,40 +802,19 @@ export const Events = {
       name: 'vama_pref_name_success',
     }
   },
-  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_address: (): Event => {
     return {
       name: 'vama_prof_update_address',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_email: (): Event => {
     return {
       name: 'vama_prof_update_email',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_gender',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_phone: (): Event => {
     return {
       name: 'vama_prof_update_phone',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
