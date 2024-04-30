@@ -30,7 +30,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { States } from 'constants/states'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import {
+  useAlert,
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useIsScreenReaderEnabled,
+  useTheme,
+} from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
