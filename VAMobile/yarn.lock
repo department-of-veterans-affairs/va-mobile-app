@@ -1286,7 +1286,7 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.21.0", "@babel/runtime@^7.22.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.4", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.4", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.24.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.4.tgz#de795accd698007a66ba44add6cc86542aff1edd"
   integrity sha512-dkxf7+hn8mFBwKjs9bvBlArzLVxVbS8usaPUDd5p2a9JCL9tB8OaOVN1isD4+Xyk4ns89/xeOmbQvgdK7IIVdA==
@@ -1370,17 +1370,17 @@
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
-"@department-of-veterans-affairs/mobile-assets@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.3.0.tgz#814a97351ca761b14032134080b23002c83d4cbf"
-  integrity sha512-/BbQb/9sXsB9K2qw/MU2oNOJAX2au4m2RDPmw7UIRwwn1kaPMZP5qAqA1eiwr1ITP2P0sq585fMD+aFgwSP5NA==
+"@department-of-veterans-affairs/mobile-assets@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.4.1.tgz#d25af3609f71356e68994a733bf86670a7334b05"
+  integrity sha512-H5hv4IKmbC+aqudb/NH10J6ZvtNkWz+zPqfFPFmBk/fUuU7ScpDorJnGD0jH8oZjGTZ93V35PdKeU79QTDuvrg==
 
-"@department-of-veterans-affairs/mobile-component-library@0.12.1":
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.12.1.tgz#b0ddf61f75504680a150e69afa81c2db16c00ecb"
-  integrity sha512-xN8v6RDtA6F52wD5mPTazVt280geRhoHOC1BC0W8QYWHXlITJsg20u+rMG0rjQQnnFPThUXUhqVBMsxRnV1G0Q==
+"@department-of-veterans-affairs/mobile-component-library@0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.15.0.tgz#2180c9cd8dc21b6b4deb899f90a102357fd9ab94"
+  integrity sha512-w7xbrtRfw1krNSWTLkCLlx6hvV19Cnm4R1nEWGvntGkpw+X8QWAHHs1vJ0fWvRIBNtIh2Idv7oErf8kMFijVQQ==
   dependencies:
-    "@department-of-veterans-affairs/mobile-assets" "^0.3.0"
+    "@department-of-veterans-affairs/mobile-assets" "^0.4.1"
     "@department-of-veterans-affairs/mobile-tokens" "0.5.1"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
     i18next "^23.8.2"
@@ -6507,14 +6507,7 @@ husky@^9.0.10:
   resolved "https://registry.yarnpkg.com/husky/-/husky-9.0.10.tgz#ddca8908deb5f244e9286865ebc80b54387672c2"
   integrity sha512-TQGNknoiy6bURzIO77pPRu+XHi6zI7T93rX+QnJsoYFf3xdjKOur+IlfqzJGMHIK/wXrLg+GsvMs8Op7vI2jVA==
 
-i18next@^23.7.18:
-  version "23.7.18"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.7.18.tgz#4f219e3702b08342c5519bc2cda7d09c67edebb9"
-  integrity sha512-b9N2KjRCYQNlUvE1Kc83g8knyUkL5NiZQOp9BsTR/v/LXk6Fzz+doOzTg2/826XK28mCgBkYLNAtixjE58qpCw==
-  dependencies:
-    "@babel/runtime" "^7.23.2"
-
-i18next@^23.8.2:
+i18next@^23.7.18, i18next@^23.8.2:
   version "23.10.0"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.10.0.tgz#fb328794ae692e6fdde0564259e421f4203c4a2c"
   integrity sha512-/TgHOqsa7/9abUKJjdPeydoyDc0oTi/7u9F8lMSj6ufg4cbC1Oj3f/Jja7zj7WRIhEQKB7Q4eN6y68I9RDxxGQ==
@@ -9280,15 +9273,7 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.0.tgz#b21c65fe1783743007c8c9a2952b1c8879a77354"
   integrity sha512-yQaiOqDmoKqks56LN9MTgY06O0qQHgV4FUrikH357DydArSZHQhl0BJFqGKIZoTqi8JizF9Dxhuk1FIZD6qCaw==
 
-react-i18next@^14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.0.1.tgz#75351b25be076ad7391360b5a111b59ca87e0b63"
-  integrity sha512-TMV8hFismBmpMdIehoFHin/okfvgjFhp723RYgIqB4XyhDobVMyukyM3Z8wtTRmajyFMZrBl/OaaXF2P6WjUAw==
-  dependencies:
-    "@babel/runtime" "^7.22.5"
-    html-parse-stringify "^3.0.1"
-
-react-i18next@^14.0.5:
+react-i18next@^14.0.1, react-i18next@^14.0.5:
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.0.tgz#44da74fbffd416f5d0c5307ef31735cf10cc91d9"
   integrity sha512-3KwX6LHpbvGQ+sBEntjV4sYW3Zovjjl3fpoHbUwSgFHf0uRBcbeCBLR5al6ikncI5+W0EFb71QXZmfop+J6NrQ==
