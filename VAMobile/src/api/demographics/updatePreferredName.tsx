@@ -25,16 +25,16 @@ export const useUpdatePreferredName = () => {
 
   return useMutation({
     mutationFn: updatePreferredName,
-    onSuccess: async () => {
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
-      await logAnalyticsEvent(Events.vama_pref_name_success)
+    onSuccess: () => {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
+      logAnalyticsEvent(Events.vama_pref_name_success())
       queryClient.invalidateQueries({ queryKey: demographicsKeys.demographics })
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'updatePreferredName: Service error')
       }
-      await logAnalyticsEvent(Events.vama_pref_name_fail)
+      logAnalyticsEvent(Events.vama_pref_name_fail())
     },
   })
 }
