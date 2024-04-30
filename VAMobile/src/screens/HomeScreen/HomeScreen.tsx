@@ -37,7 +37,7 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { CloseSnackbarOnNavigation } from 'constants/common'
+import { ACTIVITY_STALE_TIME, CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
@@ -67,7 +67,6 @@ import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
-const ACTIVITY_STALE_TIME = 300000 // 5 minutes
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { PrescriptionsGetData } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 
 import { prescriptionKeys } from './queryKeys'
@@ -28,6 +29,6 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getPrescriptions: Service error',
     },
-    staleTime: 300000, // 5 minutes
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

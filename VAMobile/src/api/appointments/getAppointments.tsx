@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 
 import { appointmentsKeys } from './queryKeys'
@@ -43,5 +43,6 @@ export const useAppointments = (
     meta: {
       errorName: 'getAppointments: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }
