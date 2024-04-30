@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react'
 import DocumentPicker from 'react-native-document-picker'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
@@ -488,16 +490,9 @@ export const getLinkifiedText = (
   t: TFunction,
   launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
 ): ReactNode => {
-  const textReconstructedBody: Array<ReactNode> = []
+  const linkCollection: Array<ReactNode> = []
   const bodySplit = body.split(' ')
-  let dontAddNextString = false
   _.forEach(bodySplit, (text, index) => {
-    if (dontAddNextString) {
-      //if previous entry was a phone number with xxx xxx xxxx format need to not add xxxx again
-      dontAddNextString = false
-      return
-    }
-
     if (index !== 0 && index !== bodySplit.length - 1) {
       //phone number with spaces xxx xxx xxxx format
       const previousText = bodySplit[index - 1]
@@ -510,22 +505,19 @@ export const getLinkifiedText = (
         NUMBERS_ONLY_REGEX_EXP.test(text) &&
         NUMBERS_ONLY_REGEX_EXP.test(nextText)
       ) {
-        textReconstructedBody.pop()
-        textReconstructedBody.pop()
-        textReconstructedBody.push(
-          <TouchableWithoutFeedback
-            onPress={() => {
-              launchExternalLink('tel:' + previousText + text + nextText)
-            }}
-            accessibilityRole="link"
-            accessible={true}
-            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
-            accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
-          </TouchableWithoutFeedback>,
+        const linkProps: LinkProps = {
+          text: previousText + ' ' + text + ' ' + nextText,
+          type: 'call',
+          phoneNumber: previousText + text + nextText,
+          a11yLabel: getNumberAccessibilityLabelFromString(previousText + text + nextText),
+          a11yHint: t('openInPhoneMessaging.a11yHint'),
+        }
+
+        linkCollection.push(
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <Link icon={{ preventScaling: true }} {...linkProps} />
+          </Box>,
         )
-        textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
-        dontAddNextString = true
         return
       }
     }
@@ -537,90 +529,95 @@ export const getLinkifiedText = (
     const url2Match = URL2_REGEX_EXP.exec(text)
     if (emailMatch) {
       //matches <email address> only
-      textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('mailto:' + text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+      const iconProps: IconProps = {
+        name: 'ExternalLink',
+      }
+      const linkProps: LinkProps = {
+        text: text,
+        type: 'custom',
+        onPress: () => {
+          launchExternalLink('mailto:' + text)
+        },
+        icon: iconProps,
+        a11yHint: t('openInEmailMessaging.a11yHint'),
+      }
+
+      linkCollection.push(
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Link icon={{ preventScaling: true }} {...linkProps} />
+        </Box>,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (mailToMatch) {
       // matches mailto:<email address>
-      textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink(text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+      const iconProps: IconProps = {
+        name: 'ExternalLink',
+      }
+      const linkProps: LinkProps = {
+        text: text,
+        type: 'custom',
+        onPress: () => {
+          launchExternalLink(text)
+        },
+        icon: iconProps,
+        a11yHint: t('openInEmailMessaging.a11yHint'),
+      }
+
+      linkCollection.push(
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Link icon={{ preventScaling: true }} {...linkProps} />
+        </Box>,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (phoneMatch) {
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
-      textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('tel:' + getNumbersFromString(text))
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
-          accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+      const linkProps: LinkProps = {
+        text: text,
+        type: 'call',
+        phoneNumber: getNumbersFromString(text),
+        a11yLabel: getNumberAccessibilityLabelFromString(text),
+        a11yHint: t('openInPhoneMessaging.a11yHint'),
+      }
+
+      linkCollection.push(
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Link icon={{ preventScaling: true }} {...linkProps} />
+        </Box>,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (urlMatch) {
       // matches any https, http url
-      textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
-      textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink(text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+      const linkProps: LinkProps = {
+        text: text,
+        type: 'url',
+        url: text,
+        a11yHint: t('openInBrowser.a11yHint'),
+      }
+
+      linkCollection.push(
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Link icon={{ preventScaling: true }} {...linkProps} />
+        </Box>,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (url2Match) {
       // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
-      // into a link - may need to update this if we need to include other domains greater than 3 digits)
-      textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('https://' + text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+      const linkProps: LinkProps = {
+        text: text,
+        type: 'url',
+        url: 'https://' + text,
+        a11yHint: t('openInBrowser.a11yHint'),
+      }
+
+      linkCollection.push(
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Link icon={{ preventScaling: true }} {...linkProps} />
+        </Box>,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
-    } else {
-      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
     }
   })
   return (
     <Box>
       <TextView selectable={true} paragraphSpacing={true}>
-        {textReconstructedBody}
+        {body}
       </TextView>
+      {linkCollection}
     </Box>
   )
 }
