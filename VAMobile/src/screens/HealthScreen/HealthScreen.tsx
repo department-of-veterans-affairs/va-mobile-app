@@ -8,7 +8,7 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -17,6 +17,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { SecureMessagingState, getInbox } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -38,7 +39,7 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -50,7 +51,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox } = useSelector<RootState, SecureMessagingState>(
+  const { loadingInboxData: loadingInbox, inboxError } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
 
@@ -59,11 +60,19 @@ export function HealthScreen({}: HealthScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-  const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
+  const {
+    data: prescriptionData,
+    isFetching: fetchingPrescriptions,
+    isError: prescriptionsError,
+  } = usePrescriptions({
     enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
   })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const { data: apptsData, isLoading: loadingAppointments } = useAppointments(
+  const {
+    data: apptsData,
+    isLoading: loadingAppointments,
+    isError: appointmentsError,
+  } = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
@@ -74,6 +83,17 @@ export function HealthScreen({}: HealthScreenProps) {
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+
+  const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
+  const activityError = appointmentsError || !!inboxError || prescriptionsError
+  const showAlert = featureInDowntime || activityError
+  const alertMessage = featureInDowntime ? t('health.activity.downtime') : t('health.activity.error')
+
+  const enrolledInVAHealthCare =
+    userAuthorizedServices?.appointments ||
+    userAuthorizedServices?.secureMessaging ||
+    userAuthorizedServices?.prescriptions ||
+    userAuthorizedServices?.scheduleAppointments
 
   useFocusEffect(
     useCallback(() => {
@@ -137,13 +157,21 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('VaccineList')}
         />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      {CernerAlert ? (
+      {CernerAlert && (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <CernerAlert />
         </Box>
-      ) : (
-        <></>
+      )}
+      {!enrolledInVAHealthCare && (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('applyForHealthCare')}
+            link={LINK_URL_APPLY_FOR_HEALTH_CARE}
+            a11yLabel={a11yLabelVA(t('applyForHealthCare'))}
+          />
+        </Box>
       )}
     </CategoryLanding>
   )
