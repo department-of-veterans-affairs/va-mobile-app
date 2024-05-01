@@ -31,7 +31,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
+import {
+  AppointmentDetailsSubTypeConstants,
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  isAPendingAppointment,
+} from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -54,6 +59,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
+import { InPersonVAAppointments } from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -372,6 +378,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
+  const isInPersonVAAppointment =
+    appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+
   return (
     <FeatureLandingTemplate
       backLabel={t('appointments')}
@@ -379,39 +388,56 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
-        <AppointmentAlert attributes={attributes} />
-        <TextArea>
-          <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
-          {renderAddToCalendarLink()}
-
-          {renderVideoAppointmentInstructions()}
-
-          {renderAtHomeVideoConnectAppointmentData()}
-          <TypeOfCare attributes={attributes} />
-          <ProviderName attributes={attributes} />
-          <ClinicNameAndPhysicalLocation attributes={attributes} />
-          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
-
-          {renderAtlasVideoConnectAppointmentData()}
-          {featureEnabled('patientCheckIn') && (
-            <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
-            </Box>
-          )}
-          <PreferredDateAndTime attributes={attributes} />
-          <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} />
-          {renderSpecialInstructions()}
-          <ContactInformation attributes={attributes} />
-          <PendingAppointmentCancelButton
+        {isInPersonVAAppointment ? (
+          <InPersonVAAppointments
             attributes={attributes}
-            appointmentID={trueAppointment?.id}
-            cancelAppointment={cancelAppointment}
-            goBack={navigation.goBack}
+            subType={
+              isAppointmentCanceled && pendingAppointment
+                ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+                : isAppointmentCanceled
+                  ? AppointmentDetailsSubTypeConstants.Canceled
+                  : pendingAppointment
+                    ? AppointmentDetailsSubTypeConstants.Pending
+                    : AppointmentDetailsSubTypeConstants.Upcoming
+            }
           />
-        </TextArea>
+        ) : (
+          <Box>
+            <AppointmentAlert attributes={attributes} />
+            <TextArea>
+              <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
+              {renderAddToCalendarLink()}
 
-        {readerCancelInformation()}
+              {renderVideoAppointmentInstructions()}
+
+              {renderAtHomeVideoConnectAppointmentData()}
+              <TypeOfCare attributes={attributes} />
+              <ProviderName attributes={attributes} />
+              <ClinicNameAndPhysicalLocation attributes={attributes} />
+              <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
+
+              {renderAtlasVideoConnectAppointmentData()}
+              {featureEnabled('patientCheckIn') && (
+                <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
+                  <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
+                </Box>
+              )}
+              <PreferredDateAndTime attributes={attributes} />
+              <PreferredAppointmentType attributes={attributes} />
+              <AppointmentReason attributes={attributes} />
+              {renderSpecialInstructions()}
+              <ContactInformation attributes={attributes} />
+              <PendingAppointmentCancelButton
+                attributes={attributes}
+                appointmentID={trueAppointment?.id}
+                cancelAppointment={cancelAppointment}
+                goBack={navigation.goBack}
+              />
+            </TextArea>
+
+            {readerCancelInformation()}
+          </Box>
+        )}
       </Box>
     </FeatureLandingTemplate>
   )
