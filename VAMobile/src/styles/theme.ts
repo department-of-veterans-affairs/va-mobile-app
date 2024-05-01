@@ -122,7 +122,7 @@ export type VAIconColors = {
   activityButton: string
   announcementBanner: string
   inlineSpinner: string
-  homeScreenError: string
+  categoryLandingAlert: string
   linkRow: string
   largeNavButton: string
   ussf: string

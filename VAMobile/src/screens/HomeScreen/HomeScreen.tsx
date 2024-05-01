@@ -27,6 +27,7 @@ import {
   Box,
   BoxProps,
   CategoryLanding,
+  CategoryLandingAlert,
   EncourageUpdateAlert,
   LinkRow,
   LoadingComponent,
@@ -230,8 +231,7 @@ export function HomeScreen({}: HomeScreenProps) {
     !!activeClaimsCount ||
     !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
     !!unreadMessageCount
-  const hasActivityError = appointmentsError || claimsError || inboxError || prescriptionsError
-  const alertVariant = hasActivityError ? 'CategoryLandingError' : 'CategoryLandingWarning'
+  const hasActivityError = !!(appointmentsError || claimsError || inboxError || prescriptionsError)
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -315,34 +315,10 @@ export function HomeScreen({}: HomeScreenProps) {
                     deepLink={'prescriptions'}
                   />
                 )}
+                {(hasActivityError || featureInDowntime) && (
+                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+                )}
               </Box>
-              {(hasActivityError || featureInDowntime) && (
-                <Box
-                  mx={theme.dimensions.standardMarginBetween}
-                  mt={theme.dimensions.standardMarginBetween}
-                  flexDirection="row"
-                  accessible={true}
-                  accessibilityRole={'text'}
-                  accessibilityLabel={`${t('errorIcon')} ${t('activity.error.cantShowAllActivity')}`}>
-                  <VAIcon
-                    accessible={false}
-                    importantForAccessibility="no"
-                    width={24}
-                    height={24}
-                    name="ExclamationCircle"
-                    fill="homeScreenError"
-                    mt={3}
-                  />
-                  <TextView
-                    accessible={false}
-                    importantForAccessibility="no"
-                    variant={alertVariant}
-                    ml={theme.dimensions.condensedMarginBetween}
-                    flex={1}>
-                    {t('activity.error.cantShowAllActivity')}
-                  </TextView>
-                </Box>
-              )}
             </>
           )}
         </Box>
@@ -365,28 +341,8 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              mx={theme.dimensions.standardMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}
-              accessible={true}
-              accessibilityRole={'text'}
-              accessibilityLabel={t('errorIcon') + t('aboutYou.noInformation')}>
-              <VAIcon
-                accessible={false}
-                importantForAccessibility="no"
-                name={'ExclamationCircle'}
-                fill={theme.colors.icon.homeScreenError}
-                preventScaling={true}
-              />
-              <TextView
-                ml={theme.dimensions.condensedMarginBetween}
-                variant="HomeScreen"
-                accessible={false}
-                importantForAccessibility="no">
-                {t('aboutYou.noInformation')}
-              </TextView>
+            <Box mx={theme.dimensions.condensedMarginBetween}>
+              <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
             <>

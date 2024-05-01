@@ -5,7 +5,7 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { Box, CategoryLanding, LargeNavButton, TextView, VAIcon } from 'components'
+import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -51,8 +51,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
   const showClaimsCount = !claimsAndAppealsError && !nonFatalErrors && !featureInDowntime && activeClaimsCount
 
-  const showAlert = claimsAndAppealsError || nonFatalErrors || featureInDowntime
-  const alertVariant = claimsAndAppealsError || nonFatalErrors ? 'CategoryLandingError' : 'CategoryLandingWarning'
+  const showAlert = claimsAndAppealsError || !!nonFatalErrors || featureInDowntime
   const alertMessage = featureInDowntime
     ? t('benefits.activity.warning.downtime')
     : nonFatalErrors
@@ -86,34 +85,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
-        {showAlert && (
-          <Box
-            mx={theme.dimensions.condensedMarginBetween}
-            mt={theme.dimensions.standardMarginBetween}
-            flexDirection="row"
-            accessible={true}
-            accessibilityRole={'text'}
-            accessibilityLabel={t('errorIcon') + alertMessage}>
-            <VAIcon
-              accessible={false}
-              importantForAccessibility="no"
-              width={24}
-              height={24}
-              preventScaling={true}
-              name="ExclamationCircle"
-              fill="homeScreenError"
-              mt={3}
-            />
-            <TextView
-              accessible={false}
-              importantForAccessibility="no"
-              variant={alertVariant}
-              ml={theme.dimensions.condensedMarginBetween}
-              flex={1}>
-              {alertMessage}
-            </TextView>
-          </Box>
-        )}
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={claimsAndAppealsError || !!nonFatalErrors} />}
       </Box>
     </CategoryLanding>
   )
