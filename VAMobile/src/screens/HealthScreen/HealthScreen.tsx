@@ -11,7 +11,7 @@ import { usePrescriptions } from 'api/prescriptions'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { CloseSnackbarOnNavigation } from 'constants/common'
+import { ACTIVITY_STALE_TIME, CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
@@ -39,7 +39,6 @@ import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
-const ACTIVITY_STALE_TIME = 300000 // 5 minutes
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
