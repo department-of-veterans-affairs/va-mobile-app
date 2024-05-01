@@ -19,7 +19,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAppDispatch, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { getLinkifiedText } from 'utils/secureMessaging'
 
@@ -38,7 +38,6 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const launchLink = useExternalLink()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
@@ -72,7 +71,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(fixSpecialCharacters(body), t, launchLink)
+      return getLinkifiedText(fixSpecialCharacters(body), t)
     }
     return <></>
   }

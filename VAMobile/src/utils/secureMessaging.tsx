@@ -3,14 +3,20 @@ import DocumentPicker from 'react-native-document-picker'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { Link } from '@department-of-veterans-affairs/mobile-component-library'
-import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
+import {
+  Box,
+  InlineTextWithIconsProps,
+  LinkWithAnalytics,
+  MessageListItemObj,
+  PickerItem,
+  TextView,
+  VAIconProps,
+} from 'components'
 import { Events } from 'constants/analytics'
 import {
   EMAIL_REGEX_EXP,
@@ -43,7 +49,7 @@ import {
   stringToTitleCase,
 } from 'utils/formattingUtils'
 
-import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 
@@ -485,11 +491,7 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const getLinkifiedText = (
-  body: string,
-  t: TFunction,
-  launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
-): ReactNode => {
+export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
   const linkCollection: Array<ReactNode> = []
   const bodySplit = body.split(' ')
   _.forEach(bodySplit, (text, index) => {
@@ -515,7 +517,7 @@ export const getLinkifiedText = (
 
         linkCollection.push(
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <Link icon={{ preventScaling: true }} {...linkProps} />
+            <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
           </Box>,
         )
         return
@@ -529,42 +531,30 @@ export const getLinkifiedText = (
     const url2Match = URL2_REGEX_EXP.exec(text)
     if (emailMatch) {
       //matches <email address> only
-      const iconProps: IconProps = {
-        name: 'ExternalLink',
-      }
       const linkProps: LinkProps = {
         text: text,
-        type: 'custom',
-        onPress: () => {
-          launchExternalLink('mailto:' + text)
-        },
-        icon: iconProps,
+        type: 'url',
+        url: 'mailto:' + text,
         a11yHint: t('openInEmailMessaging.a11yHint'),
       }
 
       linkCollection.push(
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Link icon={{ preventScaling: true }} {...linkProps} />
+          <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
         </Box>,
       )
     } else if (mailToMatch) {
       // matches mailto:<email address>
-      const iconProps: IconProps = {
-        name: 'ExternalLink',
-      }
       const linkProps: LinkProps = {
         text: text,
-        type: 'custom',
-        onPress: () => {
-          launchExternalLink(text)
-        },
-        icon: iconProps,
+        type: 'url',
+        url: text,
         a11yHint: t('openInEmailMessaging.a11yHint'),
       }
 
       linkCollection.push(
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Link icon={{ preventScaling: true }} {...linkProps} />
+          <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
         </Box>,
       )
     } else if (phoneMatch) {
@@ -579,7 +569,7 @@ export const getLinkifiedText = (
 
       linkCollection.push(
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Link icon={{ preventScaling: true }} {...linkProps} />
+          <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
         </Box>,
       )
     } else if (urlMatch) {
@@ -593,7 +583,7 @@ export const getLinkifiedText = (
 
       linkCollection.push(
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Link icon={{ preventScaling: true }} {...linkProps} />
+          <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
         </Box>,
       )
     } else if (url2Match) {
@@ -607,7 +597,7 @@ export const getLinkifiedText = (
 
       linkCollection.push(
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Link icon={{ preventScaling: true }} {...linkProps} />
+          <LinkWithAnalytics icon={{ preventScaling: true }} {...linkProps} />
         </Box>,
       )
     }

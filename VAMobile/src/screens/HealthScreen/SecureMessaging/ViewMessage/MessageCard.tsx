@@ -17,7 +17,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 
@@ -35,7 +35,6 @@ function MessageCard({ message }: MessageCardProps) {
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const navigateTo = useRouteNavigation()
-  const launchLink = useExternalLink()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired =
     demoMode && message.messageId === 2092809
@@ -68,7 +67,7 @@ function MessageCard({ message }: MessageCardProps) {
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(fixSpecialCharacters(body), t, launchLink)
+      return getLinkifiedText(fixSpecialCharacters(body), t)
     }
     return <></>
   }
