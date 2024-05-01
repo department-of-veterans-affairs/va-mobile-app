@@ -15,7 +15,6 @@ function SessionNotStarted({}: SessionNotStartedProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  console.log('test')
   return (
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
       <Box mx={theme.dimensions.gutter}>
