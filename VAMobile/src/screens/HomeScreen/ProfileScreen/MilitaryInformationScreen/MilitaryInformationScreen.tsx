@@ -41,8 +41,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const {
     data: militaryServiceHistoryAttributes,
     isLoading: loadingServiceHistory,
-    isError: useServiceHistoryError,
-    error: militaryInfoRQError,
+    error: useServiceHistoryError,
     refetch: refetchServiceHistory,
   } = useServiceHistory({ enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
@@ -96,7 +95,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
       {errorCheck || !mhNotInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
-          reactQueryError={militaryInfoRQError}
+          error={useServiceHistoryError}
           onTryAgain={refetchServiceHistory}
         />
       ) : loadingCheck ? (

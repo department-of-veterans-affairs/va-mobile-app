@@ -73,8 +73,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const {
     data: apptsData,
     isLoading: loadingAppointments,
-    isError: getApptError,
-    error: apptRQError,
+    error: getApptError,
     refetch: refetchAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
@@ -357,7 +356,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          reactQueryError={apptRQError}
+          error={getApptError}
           onTryAgain={refetchAppointments}
         />
       </FeatureLandingTemplate>

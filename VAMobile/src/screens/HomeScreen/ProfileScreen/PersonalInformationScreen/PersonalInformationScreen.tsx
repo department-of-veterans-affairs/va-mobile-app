@@ -74,16 +74,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const {
     data: demographics,
     isFetching: loadingDemographics,
-    isError: getDemographicsError,
+    error: getDemographicsError,
     refetch: refetchDemographics,
-    error: demographicsRQError,
   } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
-    isError: getGenderIdentityOptionsError,
+    error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
-    error: genderIdentityRQError,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -165,7 +163,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
-          reactQueryError={demographicsRQError || genderIdentityRQError}
+          error={getDemographicsError || getGenderIdentityOptionsError}
         />
       ) : loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />

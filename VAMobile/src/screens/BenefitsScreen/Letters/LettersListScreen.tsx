@@ -40,8 +40,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const {
     data: letters,
     isLoading: loading,
-    isError: getLettersError,
-    error: getLettersRQError,
+    error: getLettersError,
     refetch: refetchLetters,
   } = useLetters({
     enabled:
@@ -140,7 +139,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
       {errorCheck || !lettersNotInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}
-          reactQueryError={getLettersRQError}
+          error={getLettersError}
           onTryAgain={refetchLetters}
         />
       ) : loading || loadingUserAuthorizedServices ? (

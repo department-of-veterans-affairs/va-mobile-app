@@ -34,13 +34,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
-  const {
-    data: claim,
-    isError: claimError,
-    isLoading: loadingClaim,
-    error: claimRQError,
-    refetch: refetchClaim,
-  } = useClaim(claimID)
+  const { data: claim, error: claimError, isLoading: loadingClaim, refetch: refetchClaim } = useClaim(claimID)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
@@ -105,7 +99,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       {claimError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID}
-          reactQueryError={claimRQError}
+          error={claimError}
           onTryAgain={refetchClaim}
         />
       ) : loadingClaim ? (

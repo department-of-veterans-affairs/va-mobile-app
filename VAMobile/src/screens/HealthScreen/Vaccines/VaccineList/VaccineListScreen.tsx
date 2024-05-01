@@ -40,8 +40,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const {
     data: vaccines,
     isLoading: loading,
-    isError: vaccineError,
-    error: vaccineRQError,
+    error: vaccineError,
     refetch: refetchVaccines,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
@@ -100,7 +99,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
         titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <ErrorComponent
           screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
-          reactQueryError={vaccineRQError}
+          error={vaccineError}
           onTryAgain={refetchVaccines}
         />
       </FeatureLandingTemplate>

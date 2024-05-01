@@ -57,11 +57,10 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const {
     data: apptsData,
-    isError: appointmentsHasError,
+    error: appointmentsHasError,
     isLoading: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
-    error: apptsRQError,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
     enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
   })
@@ -87,7 +86,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             refetchUserAuthorizedServices()
             refetchAppts()
           }}
-          reactQueryError={apptsRQError}
+          error={appointmentsHasError}
         />
       </FeatureLandingTemplate>
     )

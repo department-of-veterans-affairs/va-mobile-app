@@ -78,9 +78,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const {
     data: prescriptionData,
     isLoading: loadingHistory,
-    isError: hasError,
+    error: hasError,
     isFetched: prescriptionsFetched,
-    error: prescriptionRQError,
     refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled:
@@ -232,7 +231,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         title={t('prescription.title')}>
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
-          reactQueryError={prescriptionRQError}
+          error={hasError}
           onTryAgain={refetchPrescriptions}
         />
       </FeatureLandingTemplate>

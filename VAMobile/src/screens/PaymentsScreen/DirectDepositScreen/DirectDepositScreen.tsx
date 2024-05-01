@@ -38,8 +38,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
   const {
     data: directDepositData,
     isLoading: loading,
-    isError: useBankDataError,
-    error: useBandDataRQError,
+    error: useBankDataError,
     refetch: refetchBankData,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
   const bankData = directDepositData?.data.attributes?.paymentAccount
@@ -91,7 +90,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
         title={t('directDeposit.title')}>
         <ErrorComponent
           screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}
-          reactQueryError={useBandDataRQError}
+          error={useBankDataError}
           onTryAgain={refetchBankData}
         />
       </FeatureLandingTemplate>

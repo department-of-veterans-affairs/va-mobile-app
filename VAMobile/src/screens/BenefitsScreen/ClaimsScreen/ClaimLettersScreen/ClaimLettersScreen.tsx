@@ -43,8 +43,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const {
     data: decisionLettersData,
     isLoading: loading,
-    isError: letterInfoError,
-    error: decisionLettersRQError,
+    error: letterInfoError,
     refetch: fetchInfoAgain,
   } = useDecisionLetters({
     enabled: screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime,
@@ -100,7 +99,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
         <ErrorComponent
           screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID}
           onTryAgain={fetchInfoAgain}
-          reactQueryError={decisionLettersRQError}
+          error={letterInfoError}
         />
       ) : loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
