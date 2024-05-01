@@ -32,7 +32,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, ...props }: LinkW
   }
 
   return (
-    <Box flexDirection={'row'} py={theme.dimensions.buttonPadding}>
+    <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} pr={theme.dimensions.gutter}>
       <Link analytics={analytics} icon={{ preventScaling: true }} {...props} />
     </Box>
   )
