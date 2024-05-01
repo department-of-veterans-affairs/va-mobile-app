@@ -70,7 +70,7 @@ export function HealthScreen({}: HealthScreenProps) {
     TimeFrameTypeConstants.UPCOMING,
     1,
     {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
+      enabled: isFocused && userAuthorizedServices?.appointments && !appointmentsInDowntime,
     },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
