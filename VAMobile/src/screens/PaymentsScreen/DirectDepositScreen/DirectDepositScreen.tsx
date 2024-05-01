@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useBankData } from 'api/directDeposit'
@@ -40,8 +41,14 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     isLoading: loading,
     isError: useBankDataError,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
-  const bankData = directDepositData?.data.attributes?.paymentAccount
+  const [bankData, setBankData] = useState(directDepositData?.data.attributes?.paymentAccount)
   const { gutter, contentMarginBottom } = theme.dimensions
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setBankData(directDepositData?.data.attributes?.paymentAccount)
+    }, [directDepositData]),
+  )
 
   const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
