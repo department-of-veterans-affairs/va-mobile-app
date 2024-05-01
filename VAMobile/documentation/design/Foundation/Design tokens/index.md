@@ -28,9 +28,9 @@ Currently unused. In the future, could be used for large areas of related tokens
 
 ### Object
 These levels refer to a component, element within a component, or component group.
-* Group: Defines a family of tokens. Examples include forms and navigation.
-* Component: Component name
-* Element: Elements within a component
+* **Group**: Defines a family of tokens. Examples include forms and navigation.
+* **Component**: Component name
+* **Element**: Elements within a component
 
 ### Base
 
@@ -78,13 +78,13 @@ The mobile app library shares primitive tokens with VADS. For example, **vads-co
 #### 2. Semantic
 Semantic tokens communicate how a primitive is used. These tokens capture a semantic meaning that should relay the context in which that token should be used.
 
-In the mobile app library, semantic tokens reference primitive tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we maintain our own semantic tokens for light and dark mode. For example, **vads-color-fg-default-on-light** and **vads-color-fg-default-on-dark** are the default colors used for foreground elements such as text and icons. They reference VADS’ primitive tokens – **vads-color-base** and **vads-color-base-lightest**.
+In the mobile app library, semantic tokens reference primitive tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we currently maintain our own semantic tokens for light and dark mode. For example, **vads-color-fg-default-on-light** and **vads-color-fg-default-on-dark** are the default colors used for foreground elements such as text and icons. They reference VADS’ primitive tokens – **vads-color-base** and **vads-color-base-lightest**.
 
 ![Image of two semantic tokens](/img/design-system/tokens-semantic.png)
 
 #### 3. Component
 Component tokens are scoped to a specific component and represent decisions specific to that component.
 
-In the mobile app library, component tokens reference primitive or semantic tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we maintain our own component tokens for light and dark mode. For example, **vads-segmented-control-color-fg-default-on-light** and **vads-segmented-control-color-fg-default-on-dark** reference the default colors used for foreground elements such as text and icons.
+In the mobile app library, component tokens reference primitive or semantic tokens and are sometimes shared with VADS. Since the mobile app library needs to account for theming, we currently maintain our own component tokens for light and dark mode. For example, **vads-segmented-control-color-fg-default-on-light** and **vads-segmented-control-color-fg-default-on-dark** reference the default colors used for foreground elements such as text and icons.
 
 ![Image of two component tokens](/img/design-system/tokens-component.png)

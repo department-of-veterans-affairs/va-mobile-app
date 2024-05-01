@@ -24,7 +24,7 @@ Our design tokens are available in JavaScript format for React Native engineers 
 It’s not recommended to use primitive tokens in your designs. These tokens will not reflect any usage guidance at the semantic or component level. Primitive color tokens will also not support theming in light and dark mode.
 
 ### Semantic
-If you’re looking to use a semantic token in your designs, you can find the appropriate token by understanding the [taxonomy](/va-mobile-app/design/Foundation/Design%20tokens). In the mobile app library, we currently use the following options to describe our tokens:
+If you’re looking to use a semantic token in your designs, you can find the appropriate token by understanding the [taxonomy](/va-mobile-app/design/Foundation/Design%20tokens/#taxonomy-and-typology). In the mobile app library, we currently use the following options to describe our tokens:
 
 * System
     * **vads**: Used for tokens in the VA Design System
