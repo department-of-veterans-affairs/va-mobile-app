@@ -135,6 +135,7 @@ describe('Direct Deposit Screen', () => {
 
   it('should tap phone and TTY links', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await scrollToThenTap(DirectDepositConstants.PHONE_LINK_TEXT)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositPhoneNumber')
@@ -143,6 +144,7 @@ describe('Direct Deposit Screen', () => {
       await scrollToThenTap(DirectDepositConstants.TTY_LINK_TEXT)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositTTY')
+      await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
     }
   })
