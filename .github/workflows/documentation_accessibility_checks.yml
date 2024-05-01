@@ -14,6 +14,8 @@ jobs:
   axe-scan:
     name: Acessibility Check
     runs-on: ubuntu-latest
+    outputs:
+      num_issues: ${{ steps.accessibility_check.outputs.env_name }}
     steps:
       - uses: actions/checkout@v3
       # Step 1: Clean npm cache
