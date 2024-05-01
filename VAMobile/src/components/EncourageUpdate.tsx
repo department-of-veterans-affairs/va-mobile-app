@@ -31,6 +31,14 @@ export const EncourageUpdateAlert = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const openAppStore = useOpenAppStore()
 
+  const displayEU =
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
+
   useEffect(() => {
     async function checkLocalVersion() {
       const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, demoMode)
@@ -60,6 +68,12 @@ export const EncourageUpdateAlert = () => {
     }
   }, [demoMode])
 
+  useEffect(() => {
+    if (displayEU) {
+      logAnalyticsEvent(Events.vama_eu_shown())
+    }
+  }, [displayEU])
+
   const onUpdatePressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_updated())
     openAppStore()
@@ -71,15 +85,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (
-    featureEnabled('inAppUpdates') &&
-    storeVersion &&
-    localVersionName &&
-    skippedVersion &&
-    skippedVersion !== storeVersion &&
-    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
-  ) {
-    logAnalyticsEvent(Events.vama_eu_shown())
+  if (displayEU) {
     return (
       <Box mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
