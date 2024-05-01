@@ -82,7 +82,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
-    await expect(element(by.text('Bank'))).toExist()
+    await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
@@ -103,7 +103,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
-    await expect(element(by.text('Bank'))).toExist()
+    await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Savings account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
