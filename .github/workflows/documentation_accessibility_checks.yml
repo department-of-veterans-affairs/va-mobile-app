@@ -15,7 +15,7 @@ jobs:
     name: Acessibility Check
     runs-on: ubuntu-latest
     outputs:
-      num_issues: ${{ steps.accessibility_check.outputs.env_name }}
+      num_issues: ${{ steps.accessibility_check.outputs.num_issues }} 
     steps:
       - uses: actions/checkout@v3
       # Step 1: Clean npm cache
@@ -87,10 +87,11 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           channel_name: va-mobile-build-alerts
-          message: 'Accessibility issues detected. Number of issues: ${{ needs.axe-scan.outputs.num_issues }}  Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+          message: 'Accessibility issues detected. Number of issues: ${{ needs.axe-scan.outputs.num_issues }}. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
         run: |
           curl -X POST \
                -H "Authorization: Bearer $SLACK_API_TOKEN" \
                -H "Content-Type: application/json" \
                -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
                https://slack.com/api/chat.postMessage
+
