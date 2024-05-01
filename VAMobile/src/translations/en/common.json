@@ -518,7 +518,6 @@
   "directDeposit.savingInformation": "Saving your direct deposit information...",
   "directDeposit.title": "Direct deposit",
   "directDeposit.viewAndEditText": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on VA.gov.",
-  "directDeposit.viewAndEditText.a11yLabel": "Add, review, or change your direct deposit information for disability compensation and pension benefits. Any updates you make here will also update on VA.gov .",
   "directions": "Get directions",
   "directions.a11yHint": "Opens the maps application to get directions",
   "disabilityRating.combinePercent": "{{combinedPercent}}% service connected",

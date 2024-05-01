@@ -329,7 +329,10 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
                 mb={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
+              <TextView
+                variant="MobileBody"
+                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}
+                paragraphSpacing={true}>
                 {t('appointments.reschedule.body')}
               </TextView>
               {location?.phone && location.phone.areaCode && location.phone.number ? (
