@@ -65,11 +65,12 @@ jobs:
               num_issues=$((num_issues+1))
             fi
           done
+          num_issues_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
+          echo "Accessibility issues detected: $num_issues"
 
           # Fail the workflow if accessibility issues are detected
           if [ "$num_issues" -gt 0 ]; then
             echo "Accessibility issues were detected."    
-            echo "::set-output name=num_issues::$num_issues"
             exit 1
           else
             echo "No accessibility issues were found."
