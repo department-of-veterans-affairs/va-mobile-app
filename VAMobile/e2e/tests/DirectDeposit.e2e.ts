@@ -56,7 +56,7 @@ describe('Direct Deposit Screen', () => {
   it('should check direct deposit error handling incorrect routing number', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('1234567\n')
@@ -74,7 +74,7 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('053100300\n')
@@ -82,7 +82,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
-    await expect(element(by.text('Bank'))).toExist()
+    await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
@@ -95,7 +95,7 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType picker required')).tap()
+    await element(by.id('accountType')).tap()
     await element(by.text('Savings')).tap()
     await element(by.text('Done')).tap()
     await element(by.id('routingNumber')).typeText('053100300\n')
@@ -103,7 +103,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
-    await expect(element(by.text('Bank'))).toExist()
+    await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Savings account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
@@ -135,6 +135,7 @@ describe('Direct Deposit Screen', () => {
 
   it('should tap phone and TTY links', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await scrollToThenTap(DirectDepositConstants.PHONE_LINK_TEXT)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositPhoneNumber')
@@ -143,6 +144,7 @@ describe('Direct Deposit Screen', () => {
       await scrollToThenTap(DirectDepositConstants.TTY_LINK_TEXT)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositTTY')
+      await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
     }
   })

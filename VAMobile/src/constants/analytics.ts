@@ -441,11 +441,6 @@ export const Events = {
       name: 'vama_eu_updated',
     }
   },
-  vama_eu_updated_success: (): Event => {
-    return {
-      name: 'vama_eu_updated_success',
-    }
-  },
   vama_evidence_cancel_1: (
     claim_id: string,
     claim_request_id: number | null,
