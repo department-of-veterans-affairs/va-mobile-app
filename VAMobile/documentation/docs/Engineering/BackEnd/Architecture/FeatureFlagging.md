@@ -20,7 +20,8 @@ You will then need to add your production id.me email address to `config/setting
 ## Toggling Feature Flags
 
 Flipper URLS (note the 'api' in the url)
-* staging: https://staging-api.va.gov/flipper/features
-* production: https://api.va.gov/flipper/features
+
+* staging: staging-api.va.gov/flipper/features
+* production: api.va.gov/flipper/features
 
 From there, you can select individual features and turn them on and off for all users, individual users, or even a percentage of random users.
