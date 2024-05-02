@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useFolderMessages } from 'api/secureMessaging'
+import { SecureMessagingMessageList } from 'api/types'
 import {
   Box,
   ChildTemplate,
@@ -15,19 +17,13 @@ import {
   Pagination,
   PaginationProps,
 } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {
-  SecureMessagingState,
-  dispatchResetDeleteDraftComplete,
-  listFolderMessages,
-  resetSaveDraftComplete,
-} from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -35,35 +31,23 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-function FolderMessages({ navigation, route }: FolderMessagesProps) {
+function FolderMessages({ route }: FolderMessagesProps) {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, deleteDraftComplete } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
-
-  const paginationMetaData = paginationMetaByFolderId?.[folderID]
+  const [page, setPage] = useState(1)
+  const {
+    data: folderMessagesData,
+    isLoading: loadingFolderMessages,
+    isError: folderMessagesError,
+  } = useFolderMessages(folderID, page, {
+    enabled: screenContentAllowed('WG_FolderMessages'),
+  })
+  const messages = folderMessagesData?.data || ([] as SecureMessagingMessageList)
+  const paginationMetaData = folderMessagesData?.meta.pagination
   const title = t('text.raw', { text: folderName })
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_FolderMessages')) {
-      // Load first page messages
-      dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-      // If draft saved message showing, clear status so it doesn't show again
-      dispatch(resetSaveDraftComplete())
-    }
-  }, [dispatch, folderID])
-
-  useEffect(() => {
-    if (deleteDraftComplete) {
-      dispatch(dispatchResetDeleteDraftComplete())
-    }
-  }, [deleteDraftComplete, dispatch, t])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessage'
@@ -74,24 +58,22 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
     navigateTo(screen, args)
   }
 
-  const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }
-  const messages = folderMessages ? folderMessages.data : []
+  // Resets scroll position to top whenever current page appointment list changes:
+  // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
+  // Position reset is necessary to make the pagination component padding look consistent between pages,
+  const scrollViewRef = useRef<ScrollView | null>(null)
 
-  const requestPage = (requestedPage: number) => {
-    // request the next page
-    dispatch(
-      listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID),
-    )
-  }
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }, [page])
 
   function renderPagination() {
-    const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
-        requestPage(page + 1)
+        setPage(page + 1)
       },
       onPrev: () => {
-        requestPage(page - 1)
+        setPage(page - 1)
       },
       totalEntries: paginationMetaData?.totalEntries || 0,
       pageSize: paginationMetaData?.perPage || 0,
@@ -115,16 +97,23 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
-  const hasError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)
-  const hasNoMessages = messages.length === 0
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
 
   return (
-    <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-      {hasError ? (
+    <ChildTemplate
+      backLabel={t('messages')}
+      backLabelOnPress={() => {
+        navigateTo('SecureMessaging', { activeTab: 1 })
+      }}
+      title={title}
+      scrollViewProps={scrollViewProps}>
+      {folderMessagesError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
-      ) : loading ? (
+      ) : loadingFolderMessages ? (
         <LoadingComponent text={t('secureMessaging.messages.loading')} />
-      ) : hasNoMessages ? (
+      ) : messages.length === 0 ? (
         <NoFolderMessages />
       ) : (
         <>
