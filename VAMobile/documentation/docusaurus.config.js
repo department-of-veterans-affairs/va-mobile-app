@@ -57,6 +57,7 @@ const config = {
     './docusaurus-plugin-react-native-web',
     engineeringDocForm('documentation', 'documentation', [
       'contributing.md',
+      'namingConventions.md',
       'overview.md',
       'testing.md',
       'versioning.md',

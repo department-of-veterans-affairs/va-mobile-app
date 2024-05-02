@@ -41,6 +41,7 @@ import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
@@ -618,4 +619,16 @@ export function usePrevious<T>(value: T): T {
     ref.current = value
   }, [value])
   return ref.current as T
+}
+/**
+ * Opens the app listing in the device's respective app store.
+ *
+ * @returns An alert asking the user whether they'd like to leave the app to the app store.
+ */
+export function useOpenAppStore(): () => void {
+  const launchExternalLink = useExternalLink()
+  const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
+  const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+
+  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
 }
