@@ -1,57 +1,12 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import * as api from 'store/api'
-import { ScreenIDTypesConstants, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import {
-  ErrorsState,
-  InitialState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  updateSecureMessagingTab,
-} from 'store/slices'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
-
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateSecureMessagingTab: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    resetSaveDraftComplete: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    resetSaveDraftFailed: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    fetchInboxMessages: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    listFolders: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
@@ -105,21 +60,25 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('SecureMessaging', () => {
-  const initializeTestInstance = (errorsState = initialErrorsState) => {
-    render(<SecureMessaging {...mockNavProps()} />, {
-      preloadedState: {
-        ...InitialState,
-        errors: errorsState,
-      },
-    })
+  const initializeTestInstance = () => {
+    render(
+      <SecureMessaging
+        {...mockNavProps(
+          undefined,
+          {
+            navigate: jest.fn(),
+            setOptions: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: { activeTab: 0 } },
+        )}
+      />,
+    )
   }
-
-  beforeEach(() => {
-    initializeTestInstance()
-  })
 
   describe('when user is not authorized for secure messaging', () => {
     it('should display NotEnrolledSM component', () => {
+      initializeTestInstance()
       expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy()
     })
   })
@@ -127,63 +86,40 @@ context('SecureMessaging', () => {
   describe('when common error occurs', () => {
     it('should render the error component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(
-          `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`,
-          expect.anything(),
-        )
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
+        .calledWith(`/v0/messaging/health/folders`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-      await waitFor(() => {
-        initializeTestInstance(errorState)
-      })
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
-    })
-  })
-
-  describe('when loading messages error occurs', () => {
-    it('should render the loading messages error component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(
-          `/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`,
-          expect.anything(),
-        )
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] =
-        CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-      await waitFor(() => {
-        initializeTestInstance(errorState)
-      })
-      expect(
-        screen.getByText(
-          "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('877-327-0022')).toBeTruthy()
-    })
-  })
-
-  describe('on click of a segmented control tab', () => {
-    it('should call updateSecureMessagingTab', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByText('Folders'))
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
+      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+    })
+  })
+
+  describe('when terms and conditions error occurs', () => {
+    it('should render the terms and conditions component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: '10',
+        })
+        .mockRejectedValue({
+          json: {
+            errors: [
+              {
+                title: 'User is not eligible because they have not accepted terms and conditions or opted-in',
+                detail: 'You have not accepted the MHV Terms and Conditions to use secure messaging',
+                code: 'SM135',
+                source: '',
+              },
+            ],
+          },
+        } as api.APIError)
+        .calledWith(`/v0/messaging/health/folders`)
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText('You’re required to accept the current terms and conditions')).toBeTruthy(),
+      )
     })
   })
 })

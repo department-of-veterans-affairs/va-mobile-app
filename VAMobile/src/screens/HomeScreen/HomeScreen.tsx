@@ -19,6 +19,7 @@ import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -40,11 +41,11 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AnalyticsState, SecureMessagingState, getInbox } from 'store/slices'
+import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -106,12 +107,14 @@ export function HomeScreen({}: HomeScreenProps) {
     enabled: isFocused && (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const {
-    loadingInboxData: loadingInbox,
-    inboxFirstRetrieval: smPrefetch,
-    inboxLastUpdatedAt,
-  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+    data: foldersData,
+    isFetched: smPrefetch,
+    isLoading: loadingInbox,
+  } = useFolders({
+    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime,
+  })
+
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -136,6 +139,11 @@ export function HomeScreen({}: HomeScreenProps) {
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
+  const unreadMessageCount =
+    foldersData?.inboxUnreadCount ||
+    foldersData?.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)?.attributes
+      .unreadCount ||
+    0
   const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
@@ -143,6 +151,15 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
     }
   }, [apptsData, apptsPrefetch])
+
+  useEffect(() => {
+    if (smPrefetch && foldersData) {
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      if (inboxFolder) {
+        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
+      }
+    }
+  }, [smPrefetch, foldersData])
 
   useEffect(() => {
     if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
@@ -157,17 +174,10 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [claimsPrefetch, claimsData])
 
   useEffect(() => {
-    if (apptsPrefetch && claimsPrefetch && rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
-
-  useEffect(() => {
-    const isInboxStale = !inboxLastUpdatedAt || Date.now() - inboxLastUpdatedAt > ACTIVITY_STALE_TIME
-    if (isFocused && userAuthorizedServices?.secureMessaging && !smInDowntime && isInboxStale) {
-      dispatch(getInbox())
-    }
-  }, [dispatch, isFocused, smInDowntime, userAuthorizedServices?.secureMessaging, inboxLastUpdatedAt])
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())

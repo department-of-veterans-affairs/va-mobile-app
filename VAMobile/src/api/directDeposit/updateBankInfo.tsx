@@ -1,10 +1,14 @@
+import { useSelector } from 'react-redux'
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { includes } from 'lodash'
 
-import { PaymentAccountData } from 'api/types'
+import { DirectDepositData, PaymentAccountData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { DirectDepositErrors } from 'constants/errors'
+import { RootState } from 'store'
 import { APIError, put } from 'store/api'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getErrorKeys } from 'utils/errors'
@@ -24,13 +28,24 @@ const updateBankInfo = (paymentAccountData: PaymentAccountData) => {
  */
 export const useUpdateBankInfo = () => {
   const queryClient = useQueryClient()
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   return useMutation({
     mutationFn: updateBankInfo,
-    onSuccess: async () => {
+    onSuccess: async (data, newAccountData) => {
       logAnalyticsEvent(Events.vama_update_dir_dep())
       setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      queryClient.invalidateQueries({ queryKey: directDepositKeys.directDeposit })
+      if (demoMode) {
+        // have to manually set the data in demo mode. Would be fixed with moving over to MSW for api call mocking
+        const queryData = queryClient.getQueryData(directDepositKeys.directDeposit) as DirectDepositData
+        const updatedData = { ...newAccountData }
+        updatedData.financialInstitutionName = 'FIRST CITIZENS BANK & TRUST COMPANY'
+        updatedData.accountNumber = updatedData.accountNumber.replace(/\d(?=\d{4})/, '#')
+        queryData.data.attributes.paymentAccount = updatedData
+        queryClient.setQueryData(directDepositKeys.directDeposit, queryData)
+      } else {
+        queryClient.invalidateQueries({ queryKey: directDepositKeys.directDeposit })
+      }
     },
     onError: async (error) => {
       if (isErrorObject(error)) {

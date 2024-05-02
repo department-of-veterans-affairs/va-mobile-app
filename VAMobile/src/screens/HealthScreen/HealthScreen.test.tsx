@@ -3,7 +3,6 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { initialSecureMessagingState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -57,32 +56,12 @@ context('HealthScreen', () => {
     jest.clearAllMocks()
   })
 
-  //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false) => {
+  const initializeTestInstance = (prescriptionsEnabled = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
-    render(<HealthScreen {...props} />, {
-      preloadedState: {
-        secureMessaging: {
-          ...initialSecureMessagingState,
-          hasLoadedInbox,
-          inbox: {
-            type: 'Inbox',
-            id: '123',
-            attributes: {
-              //SecureMessagingFolderAttributes
-              folderId: 123,
-              name: 'Inbox',
-              count: 45,
-              unreadCount: unreadCount,
-              systemFolder: true,
-            },
-          },
-        },
-      },
-    })
+    render(<HealthScreen {...props} />)
   }
   beforeEach(() => {
     initializeTestInstance()
@@ -100,8 +79,8 @@ context('HealthScreen', () => {
     })
 
     describe('feature enabled', () => {
-      it('does not display prescriptions button if feature toggle enabled', async () => {
-        initializeTestInstance(0, true, true)
+      it('does not display prescriptions button if feature toggle enabled', () => {
+        initializeTestInstance(true)
         expect(screen.getByText('Appointments')).toBeTruthy()
         expect(screen.getByText('Messages')).toBeTruthy()
         expect(screen.getByText('Prescriptions')).toBeTruthy()
@@ -112,8 +91,8 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the prescriptions button', () => {
-    it('should call useRouteNavigation', async () => {
-      initializeTestInstance(0, true, true)
+    it('should call useRouteNavigation', () => {
+      initializeTestInstance(true)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
@@ -127,9 +106,9 @@ context('HealthScreen', () => {
   })
 
   describe('on click of the secure messaging button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByText('Messages'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
     })
   })
 
