@@ -1,2 +1,2 @@
-export { default as InPersonVAAppointments } from './InPersonVAAppointments'
-export * from './InPersonVAAppointments'
+export { default as InPersonVAAppointment } from './InPersonVAAppointment'
+export * from './InPersonVAAppointment'

@@ -59,7 +59,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { InPersonVAAppointments } from '../AppointmentTypeComponents'
+import { InPersonVAAppointment } from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -392,7 +392,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         {isInPersonVAAppointment ? (
-          <InPersonVAAppointments
+          <InPersonVAAppointment
             attributes={attributes}
             subType={
               isAppointmentCanceled && pendingAppointment

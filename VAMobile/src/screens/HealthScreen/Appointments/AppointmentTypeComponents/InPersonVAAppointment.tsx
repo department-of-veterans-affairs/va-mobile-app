@@ -6,12 +6,12 @@ import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'util
 
 import { AppointmentDetailsModality } from './SharedComponents'
 
-type InPersonVAAppointmentsProps = {
+type InPersonVAAppointmentProps = {
   attributes: AppointmentAttributes
   subType: AppointmentDetailsSubType
 }
 
-function InPersonVAAppointments({ attributes, subType }: InPersonVAAppointmentsProps) {
+function InPersonVAAppointment({ attributes, subType }: InPersonVAAppointmentProps) {
   return (
     <Box>
       <TextArea>
@@ -25,4 +25,4 @@ function InPersonVAAppointments({ attributes, subType }: InPersonVAAppointmentsP
   )
 }
 
-export default InPersonVAAppointments
+export default InPersonVAAppointment
