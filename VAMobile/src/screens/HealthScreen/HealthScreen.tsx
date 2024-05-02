@@ -11,7 +11,7 @@ import { useFolders } from 'api/secureMessaging'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { ACTIVITY_STALE_TIME, CloseSnackbarOnNavigation } from 'constants/common'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -67,7 +67,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
   const { data: foldersData, isLoading: loadingInbox } = useFolders({
-    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && !smInDowntime,
+    enabled: isFocused && userAuthorizedServices?.secureMessaging && !smInDowntime,
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 

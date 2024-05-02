@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { SecureMessagingFoldersGetData } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
 
@@ -32,5 +33,6 @@ export const useFolders = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getFolders: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

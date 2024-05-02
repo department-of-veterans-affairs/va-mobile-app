@@ -38,7 +38,7 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { ACTIVITY_STALE_TIME, CloseSnackbarOnNavigation } from 'constants/common'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
@@ -110,9 +110,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const {
     data: foldersData,
     isFetched: smPrefetch,
-    isLoading: loadingInbox,
+    isFetching: loadingInbox,
   } = useFolders({
-    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime,
+    enabled: isFocused && userAuthorizedServices?.secureMessaging && !smInDowntime,
   })
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
