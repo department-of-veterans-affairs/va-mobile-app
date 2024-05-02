@@ -110,6 +110,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
   const {
     data: foldersData,
+    isError: inboxError,
     isFetched: smPrefetch,
     isLoading: loadingInbox,
   } = useFolders({

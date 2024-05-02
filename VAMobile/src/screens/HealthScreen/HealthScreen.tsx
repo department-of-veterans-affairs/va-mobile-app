@@ -62,7 +62,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
-    isLoading: loadingAppointments,
+    isFetching: loadingAppointments,
     isError: appointmentsError,
   } = useAppointments(
     upcomingAppointmentDateRange.startDate,
