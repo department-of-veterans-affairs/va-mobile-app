@@ -7,15 +7,10 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
-  push:
-    branches: [chanel-8217-accessibility-checks]  
-
 jobs:
   axe-scan:
     name: Acessibility Check
     runs-on: ubuntu-latest
-    outputs:
-      num_issues: ${{ steps.accessibility_check.outputs.num_issues }} 
     steps:
       - uses: actions/checkout@v3
       # Step 1: Clean npm cache
@@ -76,27 +71,17 @@ jobs:
             echo "No accessibility issues were found."
           fi
           # Your steps for accessibility check...
-      - name: Debug - Print num_issues
-        run: |
-          echo "num_issues: ${{ steps.accessibility_check.outputs.num_issues }}"
-    
-    
-        
-
   start_slack_thread:
     name: Start Slack thread
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     needs: axe-scan
     steps:
-      - name: Debug - Print num_issues from needs context
-        run: |
-          echo "num_issues from needs context: ${{ needs.axe-scan.outputs.num_issues }}"
       - name: Notify Slack
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           channel_name: va-mobile-build-alerts
-          message: 'Accessibility issues detected. Number of issues: ${{ needs.axe-scan.outputs.num_issues }}. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+          message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
         run: |
           curl -X POST \
                -H "Authorization: Bearer $SLACK_API_TOKEN" \
