@@ -2,7 +2,7 @@
 # Detox e2e tests in CI
 #
 
-name: '[e2e] Android Detox Test Run'
+name: '[e2e] Detox Mapping'
 
 on:
   workflow_call:
@@ -46,13 +46,13 @@ jobs:
           ref: ${{ github.ref }}
       - name: Get file difference by directory
         id: changed_files_dir
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v41
         with:
           dir_names: true
           json: true
       - name: Get file difference by file name
         id: changed_files_file_name
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v41
         with: 
           json: true
       - name: Get testing matrix array

@@ -1,26 +1,24 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
-import { useFocusEffect } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { SecureMessagingState, getInbox } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -34,7 +32,6 @@ import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDeta
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
@@ -45,15 +42,10 @@ type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
-
-  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox, inboxError } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const isFocused = useIsFocused()
 
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
@@ -83,9 +75,17 @@ export function HealthScreen({}: HealthScreenProps) {
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+  const {
+    data: foldersData,
+    isFetching: loadingInbox,
+    isError: inboxError,
+  } = useFolders({
+    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && !smInDowntime,
+  })
+  const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
-  const activityError = appointmentsError || !!inboxError || prescriptionsError
+  const activityError = appointmentsError || inboxError || prescriptionsError
   const showAlert = featureInDowntime || activityError
   const alertMessage = featureInDowntime ? t('health.activity.downtime') : t('health.activity.error')
 
@@ -94,14 +94,6 @@ export function HealthScreen({}: HealthScreenProps) {
     userAuthorizedServices?.secureMessaging ||
     userAuthorizedServices?.prescriptions ||
     userAuthorizedServices?.scheduleAppointments
-
-  useFocusEffect(
-    useCallback(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-        dispatch(getInbox())
-      }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
@@ -130,7 +122,7 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={() => navigateTo('SecureMessaging')}
+          onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
           showLoading={loadingInbox}
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
