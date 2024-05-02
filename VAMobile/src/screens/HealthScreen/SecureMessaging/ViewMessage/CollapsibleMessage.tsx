@@ -38,8 +38,8 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const dispatch = useAppDispatch()
   const launchLink = useExternalLink()
+  const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>(
