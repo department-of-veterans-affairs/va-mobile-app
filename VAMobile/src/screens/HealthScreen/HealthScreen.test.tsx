@@ -3,9 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { SecureMessagingFoldersGetData } from 'api/types'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { HealthScreen } from './HealthScreen'
