@@ -48,7 +48,7 @@ A button draws attention to important actions with a large selectable surface.
 * Primary buttons usually appear first, or to the left, of a secondary button.
 
 ## Code usage
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--docs)
 
 ## Content considerations
 * Refer to the [VA Design System for content considerations](https://design.va.gov/components/button#content-considerations)

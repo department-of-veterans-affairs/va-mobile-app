@@ -77,14 +77,21 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       phoneOnly ||
       (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
     ) {
+      const title = appointmentIsCanceled ? t('appointments.reschedule.title') : t('appointments.schedule.title')
+      const body = appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')
+
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-              {appointmentIsCanceled ? t('appointments.reschedule.title') : t('appointments.schedule.title')}
+            <TextView
+              variant="MobileBodyBold"
+              accessibilityRole="header"
+              accessibilityLabel={a11yLabelVA(title)}
+              mb={theme.dimensions.condensedMarginBetween}>
+              {title}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
-              {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(body)} paragraphSpacing={true}>
+              {body}
             </TextView>
             {location?.phone && location.phone.areaCode && location.phone.number ? (
               <ClickToCallPhoneNumber phone={location.phone} />

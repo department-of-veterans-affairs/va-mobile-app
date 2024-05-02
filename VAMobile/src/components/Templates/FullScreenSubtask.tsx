@@ -98,7 +98,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const confirmAlert = useDestructiveActionSheet()
 
   const titleTextProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     accessibilityLabel: titleA11yLabel,
     accessibilityRole: 'header',
   }

@@ -3,8 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import { downloadFileAttachment } from 'store/slices'
+import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 
@@ -137,12 +136,5 @@ context('CollapsibleMessage', () => {
     expect(screen.queryByRole('link', { name: 'ftp://www.va.gov/' })).toBeFalsy()
     expect(screen.queryByRole('link', { name: 'www. va .gov' })).toBeFalsy()
     expect(screen.queryByRole('link', { name: 'htttps://va.gov' })).toBeFalsy()
-  })
-
-  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
-    fireEvent.press(screen.getByText('John Smith'))
-    expect(screen.getByText('testAttachment (1 MB)')).toBeTruthy()
-    fireEvent.press(screen.getByText('testAttachment (1 MB)'))
-    expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
   })
 })

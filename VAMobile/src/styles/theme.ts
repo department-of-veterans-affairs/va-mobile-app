@@ -127,6 +127,7 @@ export type VAIconColors = {
   homeScreenError: string
   linkRow: string
   largeNavButton: string
+  ussf: string
 }
 
 export type VATypographyThemeVariants = {
