@@ -38,6 +38,7 @@ import {
   useIsScreenReaderEnabled,
   useTheme,
 } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
 import { profileAddressOptions } from '../AddressSummary'
@@ -289,6 +290,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
             if (data?.confirmedSuggestedAddresses) {
               setShowAddressValidation(true)
             } else {
+              registerReviewEvent()
               setAddressValidated(true)
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
             }

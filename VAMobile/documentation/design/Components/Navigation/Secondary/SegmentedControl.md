@@ -43,7 +43,7 @@ A segmented control consists of a horizontal set of 2-4 segments, each of which 
 - Claims also uses a segmented control to show the Status/Details of claims. This is not an appropriate use of this component since it groups content that is dissimilar. In this case, a different component should be considered.
 
 ## Code usage
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--docs)
 
 ## Content considerations
 - **Keep labels to 1 word**: If you need 2 (or more) words, you're likely trying to include extraneous words or group together items that are not similar enough. You may need to consider using a different component. The label text must be short enough that it doesn't wrap in the component.

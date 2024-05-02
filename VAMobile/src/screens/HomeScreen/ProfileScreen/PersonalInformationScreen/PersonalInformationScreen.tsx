@@ -191,9 +191,9 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
               <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
             </Pressable>
           </Box>
+          {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
         </>
       )}
-      {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
     </FeatureLandingTemplate>
   )
 }

@@ -8,6 +8,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
 import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import {
@@ -27,12 +28,6 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  SecureMessagingFolderList,
-  SecureMessagingMessageList,
-} from 'store/api/types'
 import theme from 'styles/themes/standardTheme'
 import {
   getFormattedMessageTime,
@@ -50,7 +45,7 @@ const MAX_SUBJECT_LENGTH = 50
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number, isDraft?: boolean) => void,
+  onMessagePress: (messageID: number, isDraft?: boolean, unreadMessage?: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
@@ -125,7 +120,7 @@ export const getMessagesListItems = (
         logAnalyticsEvent(
           Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'),
         )
-        onMessagePress(message.id, isDraftsFolder)
+        onMessagePress(message.id, isDraftsFolder, readReceipt !== READ)
       },
       a11yHintText: isDraftsFolder
         ? t('secureMessaging.viewMessage.draft.a11yHint')
