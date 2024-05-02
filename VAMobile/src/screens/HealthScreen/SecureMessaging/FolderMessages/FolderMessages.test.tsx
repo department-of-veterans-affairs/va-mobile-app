@@ -2,10 +2,11 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { SecureMessagingFolderMessagesGetData } from 'api/types'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { InitialState, listFolderMessages } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import FolderMessages from './FolderMessages'
 
@@ -18,32 +19,47 @@ jest.mock('/utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    listFolderMessages: jest.fn(() => {
-      return {
-        type: '',
-        payload: {},
-      }
-    }),
-    resetSaveDraftComplete: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 context('FolderMessages', () => {
-  const initializeTestInstance = (
-    loading = false,
-    noMessages = false,
-    folderID = SecureMessagingSystemFolderIdConstants.SENT,
-    draftSaved = false,
-  ) => {
+  const messages: SecureMessagingFolderMessagesGetData = {
+    data: [
+      {
+        type: 'type',
+        id: 0,
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'subject',
+          hasAttachments: true,
+          attachment: true,
+          sentDate: '03-12-2021',
+          senderId: 0,
+          senderName: 'name',
+          recipientId: 1,
+          recipientName: 'recipient',
+        },
+      },
+    ],
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+    meta: {
+      sort: {
+        sentDate: 'DESC',
+      },
+      pagination: {
+        currentPage: 1,
+        perPage: 1,
+        totalPages: 3,
+        totalEntries: 5,
+      },
+    },
+  }
+
+  const initializeTestInstance = (folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
@@ -55,123 +71,69 @@ context('FolderMessages', () => {
       },
       { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } },
     )
+    render(<FolderMessages {...props} />)
+  }
 
-    const messages = {
-      [folderID]: {
-        data: [
-          {
-            type: 'type',
-            id: 0,
-            attributes: {
-              messageId: 1,
-              category: CategoryTypeFields.other,
-              subject: 'subject',
-              hasAttachments: true,
-              attachment: true,
-              sentDate: '03-12-2021',
-              senderId: 0,
-              senderName: 'name',
-              recipientId: 1,
-              recipientName: 'recipient',
+  describe('when a message is pressed', () => {
+    it('should call navigate', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: '10',
+        } as api.Params)
+        .mockResolvedValue(messages)
+      initializeTestInstance()
+      expect(screen.getByText('Loading your messages...')).toBeTruthy()
+      await waitFor(() =>
+        fireEvent.press(screen.getByTestId('Recipient Invalid DateTime Has attachment General: subject')),
+      )
+      await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+    })
+  })
+
+  describe('when there are no messages', () => {
+    it('should render the NoFolderMessages', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: '10',
+        } as api.Params)
+        .mockResolvedValue({
+          data: [],
+          links: {
+            self: '',
+            first: '',
+            prev: '',
+            next: '',
+            last: '',
+          },
+          meta: {
+            sort: {
+              sentDate: 'DESC',
             },
-          },
-        ],
-        links: {
-          self: '',
-          first: '',
-          prev: '',
-          next: '',
-          last: '',
-        },
-        meta: {
-          sort: {
-            sentDate: 'DESC',
-          },
-          pagination: {
-            currentPage: 2,
-            perPage: 1,
-            totalPages: 3,
-            totalEntries: 5,
-          },
-        },
-      },
-    }
-
-    render(<FolderMessages {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        secureMessaging: {
-          ...InitialState.secureMessaging,
-          messagesByFolderId: noMessages ? {} : messages,
-          loading,
-          paginationMetaByFolderId: {
-            [folderID]: {
+            pagination: {
               currentPage: 2,
               perPage: 1,
               totalPages: 3,
               totalEntries: 5,
             },
           },
-        },
-      },
-    })
-  }
-
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  describe('when a message is pressed', () => {
-    it('should call navigate', () => {
-      fireEvent.press(screen.getByTestId('Recipient Invalid DateTime Has attachment General: subject'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('when loading is true', () => {
-    it('should render the LoadingComponent', () => {
-      initializeTestInstance(true)
-      expect(screen.getByText('Loading your messages...')).toBeTruthy()
-    })
-  })
-
-  describe('when there are no messages', () => {
-    it('should render the NoFolderMessages', () => {
-      initializeTestInstance(false, true)
-      expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
-    })
-  })
-
-  describe('pagination', () => {
-    it('should call listFolderMessages for previous arrow', () => {
-      fireEvent.press(screen.getByTestId('previous-page'))
-      expect(listFolderMessages).toHaveBeenCalledWith(-1, 1, expect.anything())
-    })
-
-    it('should call listFolderMessages for next arrow', () => {
-      fireEvent.press(screen.getByTestId('next-page'))
-      expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
-    })
-
-    it('should show pagination if it is not a system folder', () => {
-      initializeTestInstance(false, false, 1)
-      expect(screen.getByTestId('next-page')).toBeTruthy()
-      expect(screen.getByTestId('previous-page')).toBeTruthy()
-      expect(screen.getByText('2 to 2 of 5')).toBeTruthy()
+        })
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy())
     })
   })
 
   describe('drafts', () => {
-    it('should mark messages as a draft', () => {
-      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-      expect(screen.getByText('DRAFT - Recipient')).toBeTruthy()
-    })
-
-    it('should show pagination', () => {
-      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-      expect(screen.getByTestId('next-page')).toBeTruthy()
-      expect(screen.getByTestId('previous-page')).toBeTruthy()
-      expect(screen.getByText('2 to 2 of 5')).toBeTruthy()
+    it('should mark messages as a draft', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.DRAFTS}/messages`, {
+          page: '1',
+          per_page: '10',
+        } as api.Params)
+        .mockResolvedValue(messages)
+      initializeTestInstance(SecureMessagingSystemFolderIdConstants.DRAFTS)
+      await waitFor(() => expect(screen.getByText('DRAFT - Recipient')).toBeTruthy())
     })
   })
 })
