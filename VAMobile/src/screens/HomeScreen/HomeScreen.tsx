@@ -79,6 +79,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
@@ -104,7 +105,8 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: claimsPrefetch,
     isLoading: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+    enabled:
+      (userAuthorizedServices?.claims && !claimsInDowntime) || (userAuthorizedServices?.appeals && !appealsInDowntime),
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
@@ -231,7 +233,8 @@ export function HomeScreen({}: HomeScreenProps) {
     loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
   const featureInDowntime = !!(
     (userAuthorizedServices?.appointments && appointmentsInDowntime) ||
-    ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && claimsInDowntime) ||
+    (userAuthorizedServices?.appeals && appealsInDowntime) ||
+    (userAuthorizedServices?.claims && claimsInDowntime) ||
     (userAuthorizedServices?.prescriptions && rxInDowntime) ||
     (userAuthorizedServices?.secureMessaging && smInDowntime)
   )
