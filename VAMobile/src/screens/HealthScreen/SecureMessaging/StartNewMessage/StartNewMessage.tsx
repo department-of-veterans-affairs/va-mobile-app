@@ -6,7 +6,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
-
 import _ from 'underscore'
 
 import {
