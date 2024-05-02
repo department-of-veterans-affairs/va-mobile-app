@@ -75,6 +75,12 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
+          # Your steps for accessibility check...
+      - name: Debug - Print num_issues
+        run: |
+          echo "num_issues: ${{ steps.accessibility_check.outputs.num_issues }}"
+    
+    
         
 
   start_slack_thread:
@@ -83,6 +89,9 @@ jobs:
     if: ${{ failure() }}
     needs: axe-scan
     steps:
+      - name: Debug - Print num_issues from needs context
+        run: |
+          echo "num_issues from needs context: ${{ needs.axe-scan.outputs.num_issues }}"
       - name: Notify Slack
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
