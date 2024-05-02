@@ -7,7 +7,13 @@ import { appointmentsKeys } from 'api/appointments'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { prescriptionKeys } from 'api/prescriptions'
-import { AppointmentsGetData, ClaimsAndAppealsListPayload, PrescriptionsGetData } from 'api/types'
+import { secureMessagingKeys } from 'api/secureMessaging'
+import {
+  AppointmentsGetData,
+  ClaimsAndAppealsListPayload,
+  PrescriptionsGetData,
+  SecureMessagingFoldersGetData,
+} from 'api/types'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
@@ -79,6 +85,37 @@ context('HomeScreen', () => {
         upcomingDaysLimit: 0,
       },
     }
+    const inboxData: SecureMessagingFoldersGetData = {
+      data: [
+        {
+          id: '1',
+          type: 'hah',
+          attributes: {
+            folderId: 1,
+            name: 'Inbox',
+            count: 22,
+            unreadCount: 13,
+            systemFolder: true,
+          },
+        },
+      ],
+      links: {
+        self: '1',
+        first: '1',
+        prev: '1',
+        next: '1',
+        last: '1',
+      },
+      meta: {
+        pagination: {
+          currentPage: 1,
+          perPage: 1,
+          totalPages: 1,
+          totalEntries: 1,
+        },
+      },
+      inboxUnreadCount: 13,
+    }
     const queriesData = [
       {
         queryKey: personalInformationKeys.personalInformation,
@@ -104,6 +141,10 @@ context('HomeScreen', () => {
       {
         queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING, 1],
         data: apptsData,
+      },
+      {
+        queryKey: secureMessagingKeys.folders,
+        data: inboxData,
       },
     ]
     render(<HomeScreen {...props} />, { queriesData })

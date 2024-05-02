@@ -3,7 +3,6 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { SecureMessagingFoldersGetData } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
