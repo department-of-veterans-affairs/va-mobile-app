@@ -40,7 +40,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         The front end is built using{' '}
-        <Link href="https://reactnative.dev/" target="_blank" aria-label="React Native, opens in a new window">
+        <Link href="https://reactnative.dev/" target="_blank" aria-label="React Native (opens in new window)">
           React Native
         </Link>
         .
@@ -54,7 +54,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         The back end is built using{' '}
-        <Link href="https://rubyonrails.org/" target="_blank" aria-label="Ruby on Rails, opens in a new window">
+        <Link href="https://rubyonrails.org/" target="_blank" aria-label="Ruby on Rails (opens in new window)">
           Ruby on Rails
         </Link>
         .
