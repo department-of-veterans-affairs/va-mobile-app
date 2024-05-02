@@ -5,7 +5,6 @@ import analyticsReducer from 'store/slices/analyticsSlice'
 import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 
@@ -17,7 +16,6 @@ const store = configureStore({
     demo: demoReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
-    secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     settings: settingsReducer,
   },

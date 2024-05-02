@@ -35,7 +35,6 @@ import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { updateDemoMode } from './demoSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -566,7 +565,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
-    dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchFinishLogout())
   }
 }

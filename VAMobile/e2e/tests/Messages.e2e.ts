@@ -443,7 +443,6 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
     await expect(element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit'))).toExist()
   })
 

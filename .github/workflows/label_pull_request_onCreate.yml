@@ -1,0 +1,22 @@
+# Workflow that labels a pr with the correct label
+name: "[Github Management] Pull Request Labeler on create or taken out of draft"
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+
+jobs:
+  needs_review:
+    if: github.event.requested_team.name == 'flagship-mobile-reviewers' && github.event.pull_request.draft == false
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Add FE-Needs Reviewv
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "FE-Needs Review"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
