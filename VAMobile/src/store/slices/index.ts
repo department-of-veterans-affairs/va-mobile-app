@@ -4,7 +4,6 @@ import { initialAnalyticsState } from 'store/slices/analyticsSlice'
 import { initialDemoState } from 'store/slices/demoSlice'
 import { initialErrorsState } from 'store/slices/errorSlice'
 import { initialNotificationsState } from 'store/slices/notificationSlice'
-import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
 
@@ -12,7 +11,6 @@ export * from './accessibilitySlice'
 export * from './analyticsSlice'
 export * from './errorSlice'
 export * from './notificationSlice'
-export * from './secureMessagingSlice'
 export * from './snackBarSlice'
 export * from './settingsSlice'
 
@@ -20,7 +18,6 @@ export const InitialState: RootState = {
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
   notifications: initialNotificationsState,
-  secureMessaging: initialSecureMessagingState,
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   snackBar: initialSnackBarState,
