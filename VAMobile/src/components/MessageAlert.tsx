@@ -1,15 +1,10 @@
 import React, { FC, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { AlertBox, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SegmentedControlIndexes } from 'constants/secureMessaging'
-import { RootState } from 'store'
-import { SecureMessagingState, resetReplyTriageError, resetSendMessageFailed } from 'store/slices'
-import { updateSecureMessagingTab } from 'store/slices'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
   /** Optional boolean for determining when to focus on error alert boxes. */
@@ -22,6 +17,8 @@ export type MessageAlertProps = {
   scrollViewRef?: RefObject<ScrollView>
   /** optional list of alertbox failed reasons, supplied by FormWrapper component */
   errorList?: { [key: number]: string }
+  /** sets if triage error returned from api */
+  replyTriageError?: boolean
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
@@ -31,18 +28,14 @@ const MessageAlert: FC<MessageAlertProps> = ({
   scrollViewRef,
   focusOnError,
   errorList,
+  replyTriageError,
 }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    dispatch(resetReplyTriageError())
-    navigateTo('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const bulletedListOfText = []

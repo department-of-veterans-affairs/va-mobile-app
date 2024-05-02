@@ -103,7 +103,9 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           {t('fileUpload.ifMoreThan10.1')}
           <TextView variant="MobileBodyBold">
             {t('fileUpload.ifMoreThan10.2')}
-            <TextView variant="MobileBody">{t('fileUpload.ifMoreThan10.3')}</TextView>
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('fileUpload.ifMoreThan10.3'))}>
+              {t('fileUpload.ifMoreThan10.3')}
+            </TextView>
           </TextView>
         </TextView>
         <TextView variant="MobileBodyBold">{t('fileUpload.maxFileSize')}</TextView>
