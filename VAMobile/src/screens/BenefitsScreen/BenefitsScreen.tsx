@@ -45,8 +45,9 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     isError: claimsAndAppealsError,
   } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled:
-      (isFocused && userAuthorizedServices?.claims && !claimsInDowntime) ||
-      (userAuthorizedServices?.appeals && !appealsInDowntime),
+      isFocused &&
+      ((userAuthorizedServices?.claims && !claimsInDowntime) ||
+        (userAuthorizedServices?.appeals && !appealsInDowntime)),
   })
 
   const nonFatalErrors = claimsAndAppeals?.meta.errors?.length

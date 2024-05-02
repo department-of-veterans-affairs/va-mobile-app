@@ -80,6 +80,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
@@ -104,7 +105,10 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: isFocused && (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
+    enabled:
+      isFocused &&
+      ((userAuthorizedServices?.claims && !claimsInDowntime) ||
+        (userAuthorizedServices?.appeals && !appealsInDowntime)),
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const {
