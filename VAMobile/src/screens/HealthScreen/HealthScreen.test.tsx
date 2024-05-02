@@ -56,37 +56,6 @@ context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-  const inboxData: SecureMessagingFoldersGetData = {
-    data: [
-      {
-        id: '1',
-        type: 'hah',
-        attributes: {
-          folderId: 1,
-          name: 'Inbox',
-          count: 22,
-          unreadCount: 13,
-          systemFolder: true,
-        },
-      },
-    ],
-    links: {
-      self: '1',
-      first: '1',
-      prev: '1',
-      next: '1',
-      last: '1',
-    },
-    meta: {
-      pagination: {
-        currentPage: 1,
-        perPage: 1,
-        totalPages: 1,
-        totalEntries: 1,
-      },
-    },
-    inboxUnreadCount: 13,
-  }
 
   const initializeTestInstance = (prescriptionsEnabled = false) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
