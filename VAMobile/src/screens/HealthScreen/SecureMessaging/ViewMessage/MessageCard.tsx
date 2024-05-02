@@ -6,18 +6,18 @@ import { useSelector } from 'react-redux'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
+import { useDownloadFileAttachment } from 'api/secureMessaging'
+import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { RootState } from 'store'
-import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api'
-import { SecureMessagingState, downloadFileAttachment } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 
@@ -30,20 +30,26 @@ function MessageCard({ message }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const { hasAttachments, attachment, attachments, senderName, sentDate, body, messageId, subject, category } = message
+  const { hasAttachments, attachment, attachments, senderName, sentDate, body, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const dispatch = useAppDispatch()
-  const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const navigateTo = useRouteNavigation()
   const launchLink = useExternalLink()
+  const fileToGet = {} as SecureMessagingAttachment
+  const { isPending: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
+    enabled: false,
+  })
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired =
     demoMode && message.messageId === 2092809
       ? false
       : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
-  const onPressAttachment = async (file: SecureMessagingAttachment, key: string): Promise<void> => {
-    dispatch(downloadFileAttachment(file, key))
+  const onPressAttachment = (file: SecureMessagingAttachment) => {
+    fileToGet.filename = file.filename
+    fileToGet.id = file.id
+    fileToGet.link = file.link
+    fileToGet.size = file.size
+    refetchFile()
   }
 
   function getHeader() {
@@ -74,7 +80,7 @@ function MessageCard({ message }: MessageCardProps) {
   }
 
   function getAttachment() {
-    if (loadingAttachments && !attachments?.length) {
+    if (attachmentFetchPending && !attachments?.length) {
       const loadingScrollViewStyle: ViewStyle = {
         backgroundColor: theme.colors.background.contentBox,
       }
@@ -103,7 +109,7 @@ function MessageCard({ message }: MessageCardProps) {
                 formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                 a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                 a11yValue={t('listPosition', { position: index + 1, total: attachments.length })}
-                onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                onPress={() => onPressAttachment(a)}
               />
             </Box>
           ))}
@@ -141,7 +147,7 @@ function MessageCard({ message }: MessageCardProps) {
   }
 
   const onReplyPress = () =>
-    navigateTo('ReplyMessage', { messageID: messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   function getReplyOrStartNewMessageButton() {
     return (
