@@ -81,20 +81,20 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
-  async function healthHelpScreenCheck() {
-    const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
-    const newSession = await AsyncStorage.getItem(NEW_SESSION)
-
-    if (cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
-      navigateTo('HealthHelp')
-      await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
-      await AsyncStorage.setItem(NEW_SESSION, '')
-    }
-  }
-
   useEffect(() => {
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
+
+      if (cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
+      }
+    }
+
     healthHelpScreenCheck()
-  }, [cernerExist])
+  }, [allCerner, cernerExist, mixedCerner, navigateTo])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
