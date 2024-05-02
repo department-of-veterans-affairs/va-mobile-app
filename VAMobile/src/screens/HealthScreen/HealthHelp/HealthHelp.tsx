@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import { Box, ClickForActionLink, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
+import { Box, LargePanel, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
@@ -90,11 +90,11 @@ function HealthHelp({}: HealthHelpProps) {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.formMarginBetween}>
         {multiFacilities ? multipleFacilitiesBody : singleFacilityBody}
-        <ClickForActionLink
-          displayedText={t('goToMyVAHealth')}
-          a11yLabel={t('goToMyVAHealth')}
-          linkType={'externalLink'}
-          numberOrUrlLink={LINK_URL_GO_TO_PATIENT_PORTAL}
+        <LinkWithAnalytics
+          type={'url'}
+          url={LINK_URL_GO_TO_PATIENT_PORTAL}
+          text={t('goToMyVAHealth')}
+          a11yLabel={a11yLabelVA(t('goToMyVAHealth'))}
         />
       </Box>
     </LargePanel>
