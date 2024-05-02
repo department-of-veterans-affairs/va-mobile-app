@@ -41,7 +41,8 @@ function FolderMessages({ route }: FolderMessagesProps) {
   const {
     data: folderMessagesData,
     isLoading: loadingFolderMessages,
-    isError: folderMessagesError,
+    error: folderMessagesError,
+    refetch: refetchFolderMessages,
   } = useFolderMessages(folderID, page, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
@@ -75,7 +76,11 @@ function FolderMessages({ route }: FolderMessagesProps) {
           navigateTo('SecureMessaging', { activeTab: 1 })
         }}
         title={title}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID}
+          error={folderMessagesError}
+          onTryAgain={refetchFolderMessages}
+        />
       </ChildTemplate>
     )
   }

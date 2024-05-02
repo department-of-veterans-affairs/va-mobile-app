@@ -98,14 +98,16 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    isError: recipientsError,
+    error: recipientsError,
+    refetch: refetchRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
   const {
     data: signature,
     isFetched: signatureFetched,
-    isError: signatureError,
+    error: signatureError,
+    refetch: refetchSignature,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
@@ -217,7 +219,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         title={t('secureMessaging.startNewMessage')}
         leftButtonText={t('cancel')}
         scrollViewRef={scrollViewRef}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || signatureError}
+          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+        />
       </FullScreenSubtask>
     )
   }

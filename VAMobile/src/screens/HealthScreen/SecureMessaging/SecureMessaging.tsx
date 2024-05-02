@@ -44,7 +44,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const isFocused = useIsFocused()
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: foldersData, isError: foldersError } = useFolders({
+  const {
+    data: foldersData,
+    error: foldersError,
+    refetch: refetchFolder,
+  } = useFolders({
     enabled:
       isFocused &&
       screenContentAllowed('WG_SecureMessaging') &&
@@ -52,9 +56,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       smNotInDowntime,
   })
   const {
-    isError: inboxError,
-    error: errorDetails,
+    error: inboxError,
     isFetched: inboxFetched,
+    refetch: refetchInbox,
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
     enabled:
       isFocused &&
@@ -87,10 +91,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   )
 
   useEffect(() => {
-    if (inboxFetched && inboxError && isErrorObject(errorDetails)) {
-      setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, errorDetails))
+    if (inboxFetched && inboxError && isErrorObject(inboxError)) {
+      setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, inboxError))
     }
-  }, [errorDetails, inboxError, inboxFetched])
+  }, [inboxError, inboxFetched])
 
   if (termsAndConditionError) {
     return (
@@ -103,7 +107,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   if (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={foldersError || inboxError}
+          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
+        />
       </FeatureLandingTemplate>
     )
   }

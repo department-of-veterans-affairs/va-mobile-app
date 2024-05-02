@@ -108,24 +108,27 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
   const {
     data: messageData,
-    isError: messageError,
+    error: messageError,
     isLoading: loadingMessage,
     isFetched: messageFetched,
+    refetch: refetchMessage,
   } = useMessage(messageID, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: threadData,
-    isError: threadError,
+    error: threadError,
     isLoading: loadingThread,
     isFetched: threadFetched,
+    refetch: refetchThread,
   } = useThread(messageID, true, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: foldersData,
-    isError: foldersError,
+    error: foldersError,
     isLoading: loadingFolder,
+    refetch: refetchFolders,
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -249,7 +252,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   if (foldersError || messageError || threadError || !smNotInDowntime) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <ErrorComponent screenID={screenID} />
+        <ErrorComponent
+          screenID={screenID}
+          error={foldersError || messageError || threadError}
+          onTryAgain={
+            foldersError ? refetchFolders : messageError ? refetchMessage : threadError ? refetchThread : undefined
+          }
+        />
       </ChildTemplate>
     )
   }
