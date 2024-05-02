@@ -1,2 +1,6 @@
 export { default as AppointmentDetailsModality } from './AppointmentDetailsModality'
 export * from './AppointmentDetailsModality'
+export { default as AppointmentDateAndTime } from './AppointmentDateAndTime'
+export * from './AppointmentDateAndTime'
+export { default as AppointmentCalendarButton } from './AppointmentCalendarButton'
+export * from './AppointmentCalendarButton'

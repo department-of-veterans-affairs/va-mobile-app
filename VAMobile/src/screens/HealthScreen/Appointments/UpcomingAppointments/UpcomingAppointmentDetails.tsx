@@ -393,6 +393,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       <Box mb={theme.dimensions.contentMarginBottom}>
         {isInPersonVAAppointment ? (
           <InPersonVAAppointment
+            appointmentID={trueAppointment?.id || ''}
             attributes={attributes}
             subType={
               isAppointmentCanceled && pendingAppointment

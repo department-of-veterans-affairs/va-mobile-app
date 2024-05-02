@@ -4,21 +4,26 @@ import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
 import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
 
-import { AppointmentDetailsModality } from './SharedComponents'
+import { AppointmentCalendarButton, AppointmentDateAndTime, AppointmentDetailsModality } from './SharedComponents'
 
 type InPersonVAAppointmentProps = {
+  appointmentID: string
   attributes: AppointmentAttributes
   subType: AppointmentDetailsSubType
 }
 
-function InPersonVAAppointment({ attributes, subType }: InPersonVAAppointmentProps) {
+function InPersonVAAppointment({ appointmentID, attributes, subType }: InPersonVAAppointmentProps) {
+  const type = AppointmentDetailsTypeConstants.InPersonVA
   return (
     <Box>
       <TextArea>
-        <AppointmentDetailsModality
+        <AppointmentDetailsModality attributes={attributes} type={type} subType={subType} />
+        <AppointmentDateAndTime attributes={attributes} subType={subType} />
+        <AppointmentCalendarButton
+          appointmentID={appointmentID}
           attributes={attributes}
-          type={AppointmentDetailsTypeConstants.InPersonVA}
           subType={subType}
+          type={type}
         />
       </TextArea>
     </Box>
