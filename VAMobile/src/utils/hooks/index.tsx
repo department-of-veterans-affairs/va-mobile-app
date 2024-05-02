@@ -27,6 +27,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,7 +35,7 @@ import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -407,14 +408,16 @@ export function useAutoScrollToElement(): [
  *
  * @returns message state and the setMessage function
  */
-export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+export function useMessageWithSignature(
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+  signatureFetched: boolean,
+): [string, React.Dispatch<React.SetStateAction<string>>] {
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
-  }, [loadingSignature, signature])
+  }, [signatureFetched, signature])
   return [message, setMessage]
 }
 
@@ -424,10 +427,11 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * @param message - the message to be validated
  * @returns boolean if the message is valid
  */
-export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
-  return (message: string): boolean => {
+export function useValidateMessageWithSignature(): (
+  message: string,
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+) => boolean {
+  return (message: string, signature: SecureMessagingSignatureDataAttributes | undefined): boolean => {
     let isMessageBlank = !!message
     if (signature && signature.includeSignature) {
       isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
