@@ -1,9 +1,14 @@
 import { DateTime } from 'luxon'
 
-import { AddressData, GenderIdentityUpdatePayload, PaymentAccountData, PreferredNameUpdatePayload } from 'api/types'
+import {
+  AddressData,
+  GenderIdentityUpdatePayload,
+  PaymentAccountData,
+  PreferredNameUpdatePayload,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
 
 import { Params } from '../api'
-import { SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
