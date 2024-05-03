@@ -33,6 +33,7 @@ export const LINK_URL_GO_TO_PATIENT_PORTAL = 'https://patientportal.myhealth.va.
 export const LINK_URL_ASK_VA_GOV = 'https://ask.va.gov/'
 export const LINK_URL_GO_TO_VA_GOV = 'https://va.gov'
 export const LINK_URL_ABOUT_PACT_ACT = 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/'
+export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/apply/application/introduction'
 export const ENVIRONMENT = 'test'
 export const CARRIER_TRACKING_URL_USPS = 'https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum='
 export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums='
