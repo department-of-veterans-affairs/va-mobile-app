@@ -19,6 +19,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
+import HealthHelp from './HealthHelp/HealthHelp'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
@@ -134,6 +135,7 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   PrescriptionHelp: undefined
   SessionNotStarted: undefined
+  HealthHelp: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -213,5 +215,6 @@ export const getHealthScreens = () => {
       component={SessionNotStarted}
       options={LARGE_PANEL_OPTIONS}
     />,
+    <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]
 }
