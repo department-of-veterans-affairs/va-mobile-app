@@ -27,7 +27,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
       return (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-            {t('appointments.pending.preferredDateAndTime')}
+            {t('appointments.pending.preferredDateAndTimeFrame')}
           </TextView>
           {filteredTimes?.map(({ date, time }, index) => {
             const timeSlot =
