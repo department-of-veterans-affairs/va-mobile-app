@@ -107,7 +107,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const {
     data: apptsData,
     isFetched: apptsPrefetch,
-    isLoading: loadingAppointments,
+    isFetching: loadingAppointments,
   } = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
