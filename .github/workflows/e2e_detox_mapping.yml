@@ -102,7 +102,7 @@ jobs:
             select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
             select(contains(["Prescriptions.json"]) or contains(["Prescriptions.ts"]) or contains(["SelectionList"]) or contains(["MultiTouchCard"]) or contains(["RadioGroupModal"])) += ["Prescriptions"] |
             select(contains(["SecureMessaging.json"]) or contains(["SecureMessaging.ts"]) or contains(["InLineTextWithIcons"]) 
-              or contains(["MessageAlert"]) or contains(["MessageList"]) or contains(["MessagesCountTag"]) or contains("secureMessaging.ts")] or contains(["TextLineWithIcon"])) += ["Messages"] |
+              or contains(["MessageAlert"]) or contains(["MessageList"]) or contains(["MessagesCountTag"]) or contains(["secureMessaging.ts"]) or contains(["TextLineWithIcon"])) += ["Messages"] |
             select(contains(["vaccine"])) += ["VaccineRecords"] |
             select(contains(["EncourageUpdate.tsx"]) or contains("WhatsNew.tsx")) += ["HomeScreen"]
             select(contains(["countries"]) or contains(["militaryPostOffices"]) or contains(["militaryStates"]) or contains(["states.ts"]) or contains(["PhoneData"]) or contains(["EmailData"])) += ["ContactInformation"] |
