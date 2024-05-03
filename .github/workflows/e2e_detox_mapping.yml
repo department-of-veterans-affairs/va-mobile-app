@@ -94,7 +94,7 @@ jobs:
               or contains(["ClaimsAndAppealsData"]) or contains(["claims.ts"]) or contains(["claims.tsx"])) += ["Claims", "Appeals", "AppealsExpanded", "DecisionLetters"] |
             select(contains(["DisabilityRatingData"]) or contains(["disabilityRating.json"]) or contains(["disabilityRating.ts"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["letters.json"]) or contains(["letters.ts"]) or contains(["Letters.ts"]) or contains(["LettersData"]) or contains(["LetterBeneficiaryData"]) or contains(["BasicError"])) += ["Letters"] |
-            select(contains(["HealthScreen.tsx"]) or (["HealthStackScreens.tsx"])) += ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"] |
+            select(contains(["HealthScreen.tsx"]) or contains(["HealthStackScreens.tsx"])) += ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"] |
             select(contains(["BenefitsScreen.tsx"]) or contains(["BenefitsStackScreens.tsx"])) += ["DisabilityRating", "Claims", "Appeals", "Letters"] |
             select(contains(["Appointments.json"]) or contains(["Appointments.ts"]) or contains(["AppointmentsSlice.ts"]) or contains(["appointments.ts"]) or contains(["canclAppointment.tsx"]) or contains(["getAppointments.tsx"]) or contains(["appointments.tsx"])) += ["Appointments", "AppointmentsExpanded"] |
             select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
@@ -108,7 +108,7 @@ jobs:
             select(contains(["demographics"]) or contains(["PersonalInformation"]) or contains(["UserData"]) or contains(["Demographics"])) += ["PeronalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
             select(contains(["settingsSlice.ts"])) += ["SettingsScreen"] |
             select(contains(["ProfileScreen.tsx"]) or contains(["profile.json"]) or contains(["profile.ts"])) += ["ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Letters", "Payments"] |
-            select(contains(["HomeScreen.tsx"]) or ["HomeStackScreens.tsx"])) += ["ContactVAScreen", "ProfileScreen", "VeteranStatusCard"] |
+            select(contains(["HomeScreen.tsx"]) or contains(["HomeStackScreens.tsx"])) += ["ContactVAScreen", "ProfileScreen", "VeteranStatusCard"] |
             select(contains(["carousel"])) += ["Onboarding"] |
             select(contains(["payments.json"]) or contains(["payments.ts"])) += ["Payments"] |
             select(contains(["accounts.ts"])) += ["DirectDeposit"] |
