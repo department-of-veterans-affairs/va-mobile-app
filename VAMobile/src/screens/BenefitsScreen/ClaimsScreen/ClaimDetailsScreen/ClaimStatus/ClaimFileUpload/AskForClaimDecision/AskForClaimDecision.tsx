@@ -66,18 +66,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     }
   }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 
-  if (loadingClaimError) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
-          error={loadingClaimError}
-          onTryAgain={refetchClaim}
-        />
-      </FullScreenSubtask>
-    )
-  }
-
   const onCancelPress = () => {
     if (claim) {
       logAnalyticsEvent(
@@ -112,6 +100,18 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
         onLeftButtonPress={onCancelPress}
         title={t('askForClaimDecision.pageTitle')}>
         <LoadingComponent text={t('askForClaimDecision.loading')} />
+      </FullScreenSubtask>
+    )
+  }
+
+  if (loadingClaimError) {
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+          error={loadingClaimError}
+          onTryAgain={refetchClaim}
+        />
       </FullScreenSubtask>
     )
   }
