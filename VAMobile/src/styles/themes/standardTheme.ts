@@ -64,6 +64,10 @@ const fontSizes = {
     fontSize: 22,
     lineHeight: 24,
   },
+  BitterHeading26: {
+    fontSize: 26,
+    lineHeight: 26,
+  },
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
@@ -208,7 +212,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.AnnouncementBannerTitle,
       scheme.text.announcementBanner,
     ),
-    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
+    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading26, scheme.text.homeScreen),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     CategoryLandingError: buildFont(
