@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -15,7 +16,6 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import {
@@ -73,31 +73,49 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
 
   const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
   const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
-  const { data: prescriptionData, isFetched: rxPrefetch, isLoading: loadingPrescriptions } = usePrescriptions()
+  const {
+    data: prescriptionData,
+    isFetched: rxPrefetch,
+    isFetching: loadingPrescriptions,
+  } = usePrescriptions({
+    enabled: isFocused,
+  })
   const {
     data: claimsData,
     isFetched: claimsPrefetch,
-    isLoading: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1)
+    isFetching: loadingClaimsAndAppeals,
+  } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: isFocused,
+  })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const { data: foldersData, isFetched: smPrefetch, isLoading: loadingInbox } = useFolders()
+  const {
+    data: foldersData,
+    isFetched: smPrefetch,
+    isFetching: loadingInbox,
+  } = useFolders({
+    enabled: isFocused,
+  })
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
     isFetched: apptsPrefetch,
-    isLoading: loadingAppointments,
+    isFetching: loadingAppointments,
   } = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     1,
+    {
+      enabled: isFocused,
+    },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
@@ -107,12 +125,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const unreadMessageCount =
-    foldersData?.inboxUnreadCount ||
-    foldersData?.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)?.attributes
-      .unreadCount ||
-    0
-  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
+  const unreadMessageCount = foldersData?.inboxUnreadCount
 
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {
@@ -192,8 +205,7 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const activityLoading =
-    loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
+  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
   const hasActivity =
     !!upcomingAppointmentsCount ||
     !!activeClaimsCount ||

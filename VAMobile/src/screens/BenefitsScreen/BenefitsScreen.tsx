@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -33,6 +34,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isFocused = useIsFocused()
 
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
@@ -43,8 +45,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     isFetching: loadingClaimsAndAppeals,
     isError: claimsAndAppealsError,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      (userAuthorizedServices?.claims && !claimsInDowntime) || (userAuthorizedServices?.appeals && !appealsInDowntime),
+    enabled: isFocused,
   })
 
   const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
