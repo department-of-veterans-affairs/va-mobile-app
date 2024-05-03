@@ -64,7 +64,6 @@ export const WhatsNew = () => {
     setSkippedVersionHomeScreen(localVersion || '0.0')
   }
 
-  console.log('Test')
   //@ts-ignore
   const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
   const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue

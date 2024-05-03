@@ -95,7 +95,7 @@ export const initialAuthState: AuthState = {
 /*
 Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
 */
-console.log('test')
+
 const postLoggedIn = async () => {
   try {
     await logAnalyticsEvent(Events.vama_login_success(true))

@@ -77,7 +77,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     setClaimsServiceErrors(claimsError)
     setAppealsServiceErrors(appealsError)
   }, [claimsAndAppealsListPayload, setClaimsAndAppealsServiceErrors, setClaimsServiceErrors, setAppealsServiceErrors])
-  console.log('Test')
+
   const serviceErrorAlert = (): ReactElement => {
     // if there is a claims service error or an appeals service error
     if (claimsServiceErrors || appealsServiceErrors) {
