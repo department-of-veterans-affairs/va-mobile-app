@@ -82,13 +82,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
-  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime,
-  })
+  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
   const {
@@ -96,28 +92,16 @@ export function HomeScreen({}: HomeScreenProps) {
     isError: prescriptionsError,
     isFetched: rxPrefetch,
     isLoading: loadingPrescriptions,
-  } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
-  })
+  } = usePrescriptions()
   const {
     data: claimsData,
     isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isLoading: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      (userAuthorizedServices?.claims && !claimsInDowntime) || (userAuthorizedServices?.appeals && !appealsInDowntime),
-  })
+  } = useClaimsAndAppeals('ACTIVE', 1)
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
-  const {
-    data: foldersData,
-    isError: inboxError,
-    isFetched: smPrefetch,
-    isLoading: loadingInbox,
-  } = useFolders({
-    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime,
-  })
+  const { data: foldersData, isError: inboxError, isFetched: smPrefetch, isLoading: loadingInbox } = useFolders()
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
@@ -130,16 +114,11 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     1,
-    {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
-    },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
 
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
-    enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
-  })
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating

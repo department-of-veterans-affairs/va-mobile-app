@@ -77,7 +77,7 @@ export const Nametag = () => {
   const boxProps: BoxProps = {
     pl: theme.dimensions.buttonPadding,
     backgroundColor: theme.colors.background.veteranStatusHome as BackgroundVariant,
-    minHeight: 82,
+    minHeight: accessToMilitaryInfo ? 82 : undefined,
     display: 'flex',
     justifyContent: 'center',
     mb: theme.dimensions.standardMarginBetween,
