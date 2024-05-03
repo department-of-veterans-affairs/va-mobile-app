@@ -156,7 +156,7 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
       {cernerExist ? (
-        <Box mx={theme.dimensions.formMarginBetween}>
+        <Box mx={theme.dimensions.buttonPadding}>
           <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
           <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
             <TextView variant="MobileFooterLink" paragraphSpacing={true}>
