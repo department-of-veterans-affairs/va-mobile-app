@@ -85,7 +85,7 @@ export function HealthScreen({}: HealthScreenProps) {
       const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
       const newSession = await AsyncStorage.getItem(NEW_SESSION)
 
-      if (cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
         navigateTo('HealthHelp')
         await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
         await AsyncStorage.setItem(NEW_SESSION, '')
@@ -93,7 +93,7 @@ export function HealthScreen({}: HealthScreenProps) {
     }
 
     healthHelpScreenCheck()
-  }, [allCerner, cernerExist, mixedCerner, navigateTo])
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
