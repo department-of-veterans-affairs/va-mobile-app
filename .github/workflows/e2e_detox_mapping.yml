@@ -104,7 +104,7 @@ jobs:
             select(contains(["SecureMessaging.json"]) or contains(["SecureMessaging.ts"]) or contains(["InLineTextWithIcons"]) 
               or contains(["MessageAlert"]) or contains(["MessageList"]) or contains(["MessagesCountTag"]) or contains(["secureMessaging.ts"]) or contains(["TextLineWithIcon"])) += ["Messages"] |
             select(contains(["vaccine"])) += ["VaccineRecords"] |
-            select(contains(["EncourageUpdate.tsx"]) or contains("WhatsNew.tsx")) += ["HomeScreen"]
+            select(contains(["EncourageUpdate.tsx"]) or contains(["WhatsNew.tsx"])) += ["HomeScreen"] |
             select(contains(["countries"]) or contains(["militaryPostOffices"]) or contains(["militaryStates"]) or contains(["states.ts"]) or contains(["PhoneData"]) or contains(["EmailData"])) += ["ContactInformation"] |
             select(contains(["ServiceHistoryData"])) += ["MilitaryInformation", "VeteranStatusCard"] |
             select(contains(["demographics"]) or contains(["PersonalInformation"]) or contains(["UserData"]) or contains(["Demographics"])) += ["PeronalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
