@@ -63,7 +63,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     refetch: refetchAppts,
     isRefetching: refetchingAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
-    enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
+    enabled: screenContentAllowed('WG_Appointments'),
   })
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.

@@ -56,7 +56,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     error: prescriptionHasError,
     refetch: refetchPrescriptions,
     isRefetching: refetchingPrescriptions,
-  } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime })
+  } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.isRefillable

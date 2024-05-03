@@ -44,7 +44,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     error: useServiceHistoryError,
     refetch: refetchServiceHistory,
     isRefetching: refetchingServiceHistory,
-  } = useServiceHistory({ enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime })
+  } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
 
