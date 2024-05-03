@@ -109,7 +109,7 @@ jobs:
             select(contains(["ServiceHistoryData"])) += ["MilitaryInformation", "VeteranStatusCard"] |
             select(contains(["demographics"]) or contains(["PersonalInformation"]) or contains(["UserData"]) or contains(["Demographics"])) += ["PeronalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
             select(contains(["settingsSlice.ts"])) += ["SettingsScreen"] |
-            select(contains(["ProfileScreen.tsx"]) or contains(["profile.json"]) or contains(["profile.ts"])) += ["ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen"] |
+            select(contains(["ProfileScreen.tsx"]) or contains(["profile.json"]) or contains(["profile.ts"])) += ["ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Letters", "Payments"] |
             select(contains(["HomeScreen.tsx"])) += ["ContactVAScreen", "ProfileScreen", "VeteranStatusCard"] |
             select(contains(["carousel"])) += ["Onboarding"] |
             select(contains(["payments.json"]) or contains(["payments.ts"])) += ["Payments"] |
