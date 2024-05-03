@@ -39,8 +39,8 @@ type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const isFocused = useIsFocused()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
 
   const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
     enabled: isFocused,
