@@ -125,11 +125,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const unreadMessageCount =
-    foldersData?.inboxUnreadCount ||
-    foldersData?.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)?.attributes
-      .unreadCount ||
-    0
+  const unreadMessageCount = foldersData?.inboxUnreadCount
 
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {
