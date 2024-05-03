@@ -23,6 +23,14 @@ export const WhatsNew = () => {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
 
   const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
+  //@ts-ignore
+  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
+  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
+
+  //@ts-ignore
+  const body = t(BODY_PREFIX)
+
+  const displayWN = featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -46,6 +54,12 @@ export const WhatsNew = () => {
     }
   }, [demoMode])
 
+  useEffect(() => {
+    if (displayWN) {
+      logAnalyticsEvent(Events.vama_whatsnew_alert())
+    }
+  }, [displayWN])
+
   const expandCollapsible = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_more())
   }
@@ -54,22 +68,11 @@ export const WhatsNew = () => {
     logAnalyticsEvent(Events.vama_whatsnew_close())
   }
 
-  const whatsNewAppeared = (): void => {
-    logAnalyticsEvent(Events.vama_whatsnew_alert())
-  }
-
   const onPress = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
     setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
     setSkippedVersionHomeScreen(localVersion || '0.0')
   }
-
-  //@ts-ignore
-  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
-  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
-
-  //@ts-ignore
-  const body = t(BODY_PREFIX)
 
   const getBullets = () => {
     const bullets: VABulletListText[] = []
@@ -115,8 +118,7 @@ export const WhatsNew = () => {
     onCollapse: closeCollapsible,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
-    whatsNewAppeared()
+  if (displayWN) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
