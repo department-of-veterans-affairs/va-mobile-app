@@ -11,3 +11,4 @@ export type NotificationDemoStore = {
  * Type to define the mock returns to keep type safety
  */
 export type NotificationDemoApiReturnTypes = GetPushPrefsResponse
+console.log('test')

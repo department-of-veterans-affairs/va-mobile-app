@@ -26,3 +26,5 @@ export const InitialState: RootState = {
   snackBar: initialSnackBarState,
   settings: initialSettingsState,
 }
+
+console.log('test')
