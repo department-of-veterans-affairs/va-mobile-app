@@ -13,7 +13,7 @@ import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'component
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
+import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
@@ -85,10 +85,10 @@ function SyncScreen({}: SyncScreenProps) {
       !fetchingServiceHistory &&
       !fetchingDisabilityRating
     ) {
+      completeSync(queryClient)
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
   }, [
-    dispatch,
     loggedIn,
     loggingOut,
     downtimeWindowsFetched,
