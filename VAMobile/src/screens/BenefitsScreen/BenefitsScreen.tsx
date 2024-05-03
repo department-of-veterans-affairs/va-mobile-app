@@ -35,6 +35,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const featureInDowntime = claimsInDowntime || appealsInDowntime
