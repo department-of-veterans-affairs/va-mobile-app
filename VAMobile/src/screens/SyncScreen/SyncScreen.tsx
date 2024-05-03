@@ -13,14 +13,14 @@ import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'component
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { checkForDowntimeErrors } from 'store/slices'
+import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { completeSync, loginFinish } from 'utils/auth'
 import getEnv from 'utils/env'
-import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 function SyncScreen({}: SyncScreenProps) {
@@ -42,18 +42,18 @@ function SyncScreen({}: SyncScreenProps) {
   const { ENVIRONMENT } = getEnv()
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
+  const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+
+  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
   })
-  // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
-  const drNotInDowntime = !useDowntime('disability_rating')
-  const mhNotInDowntime = !useDowntime('military_service_history')
-  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime && loggedIn,
+  const { isFetching: fetchingServiceHistory } = useServiceHistory({
+    enabled: loggedIn && downtimeWindowsFetched,
   })
-  const { isFetched: useDisabilityRatingFetched } = useDisabilityRating({
-    enabled: userAuthorizedServices?.disabilityRating && drNotInDowntime && loggedIn,
+  const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
+    enabled: loggedIn && downtimeWindowsFetched,
   })
+
   const [displayMessage, setDisplayMessage] = useState('')
 
   useEffect(() => {
@@ -77,27 +77,25 @@ function SyncScreen({}: SyncScreenProps) {
       setDisplayMessage('')
     }
 
-    const finishSyncingMilitaryHistory =
-      !mhNotInDowntime ||
-      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || useServiceHistoryFetched))
-    const finishSyncingDisabilityRating =
-      !drNotInDowntime ||
-      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched))
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
-      completeSync(queryClient)
+    if (
+      !loggingOut &&
+      loggedIn &&
+      downtimeWindowsFetched &&
+      !fetchingUserAuthorizedServices &&
+      !fetchingServiceHistory &&
+      !fetchingDisabilityRating
+    ) {
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
   }, [
     dispatch,
     loggedIn,
     loggingOut,
-    loadingUserAuthorizedServices,
-    useServiceHistoryFetched,
-    userAuthorizedServices,
+    downtimeWindowsFetched,
+    fetchingUserAuthorizedServices,
+    fetchingServiceHistory,
+    fetchingDisabilityRating,
     t,
-    useDisabilityRatingFetched,
-    drNotInDowntime,
-    mhNotInDowntime,
     syncing,
     queryClient,
     ENVIRONMENT,

@@ -12,6 +12,7 @@ import { render as rtlRender } from '@testing-library/react-native'
 import path from 'path'
 import { ThemeProvider } from 'styled-components'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { RootState } from 'store'
 import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
@@ -184,6 +185,24 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
           retry: false,
         },
       },
+    })
+    queryClient.setQueryData(authorizedServicesKeys.authorizedServices, {
+      appeals: true,
+      appointments: true,
+      claims: true,
+      decisionLetters: true,
+      directDepositBenefits: true,
+      directDepositBenefitsUpdate: true,
+      disabilityRating: true,
+      genderIdentity: true,
+      lettersAndDocuments: true,
+      militaryServiceHistory: true,
+      paymentHistory: true,
+      preferredName: true,
+      prescriptions: true,
+      scheduleAppointments: true,
+      secureMessaging: true,
+      userProfileUpdate: true,
     })
     if (queriesData?.length) {
       queriesData.forEach(({ queryKey, data }) => {

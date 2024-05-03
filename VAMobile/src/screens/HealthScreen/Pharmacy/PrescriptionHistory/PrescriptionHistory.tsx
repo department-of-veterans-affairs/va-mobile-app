@@ -81,10 +81,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     isError: hasError,
     isFetched: prescriptionsFetched,
   } = usePrescriptions({
-    enabled:
-      screenContentAllowed('WG_PrescriptionHistory') &&
-      userAuthorizedServices?.prescriptions &&
-      !prescriptionInDowntime,
+    enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {

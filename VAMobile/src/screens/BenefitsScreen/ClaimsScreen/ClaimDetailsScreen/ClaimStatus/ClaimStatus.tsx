@@ -37,9 +37,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { data: decisionLetterData } = useDecisionLetters({
-    enabled: userAuthorizedServices?.decisionLetters,
-  })
+  const { data: decisionLetterData } = useDecisionLetters()
   const sentEvent = useRef(false)
 
   function renderActiveClaimStatusDetails() {
