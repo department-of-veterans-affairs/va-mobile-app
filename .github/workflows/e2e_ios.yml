@@ -102,7 +102,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
+        testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
       - uses: actions/checkout@v3
