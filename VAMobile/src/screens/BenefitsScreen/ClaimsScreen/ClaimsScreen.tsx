@@ -21,7 +21,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const onClaimsHistory = () => {
     navigateTo('ClaimsHistoryScreen')
   }
-
+  console.log('Test')
   const onClaimLettersPress = () => {
     logAnalyticsEvent(Events.vama_ddl_landing_click())
     navigateTo('ClaimLettersScreen')

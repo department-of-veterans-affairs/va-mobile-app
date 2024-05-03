@@ -73,7 +73,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     } else {
       textLines.push({ text: t('directDeposit.addBankAccountInformation') })
     }
-
+    console.log('Test')
     return [
       {
         textLines: textLines,
