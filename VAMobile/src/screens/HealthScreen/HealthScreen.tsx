@@ -29,7 +29,6 @@ import Appointments from './Appointments'
 import { getUpcomingAppointmentDateRange } from './Appointments/Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import CernerAlert from './CernerAlert'
 import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
@@ -111,7 +110,7 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
+      <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
