@@ -243,7 +243,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <Box my={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
@@ -266,7 +266,6 @@ export function HomeScreen({}: HomeScreenProps) {
               <Box
                 flexDirection="row"
                 alignItems="center"
-                mb={theme.dimensions.standardMarginBetween}
                 accessible={true}
                 accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
                 <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
@@ -328,16 +327,12 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           )}
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityRole="header">
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          <TextView mx={theme.dimensions.gutter} variant={'HomeScreenHeader'} accessibilityRole="header">
             {t('aboutYou')}
           </TextView>
           {loadingAboutYou ? (
-            <Box mx={theme.dimensions.standardMarginBetween}>
+            <Box mx={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween}>
               <LoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
@@ -347,11 +342,11 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box mx={theme.dimensions.condensedMarginBetween}>
+            <Box mx={theme.dimensions.condensedMarginBetween} mt={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
-            <>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {disRating && (
@@ -402,7 +397,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
               </Box>
-            </>
+            </Box>
           )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
