@@ -42,10 +42,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     data: claimsAndAppeals,
     isFetching: loadingClaimsAndAppeals,
     isError: claimsAndAppealsError,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      (userAuthorizedServices?.claims && !claimsInDowntime) || (userAuthorizedServices?.appeals && !appealsInDowntime),
-  })
+  } = useClaimsAndAppeals('ACTIVE', 1)
 
   const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
   const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount

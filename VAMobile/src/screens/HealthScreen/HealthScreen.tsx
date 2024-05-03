@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
@@ -45,20 +44,13 @@ export function HealthScreen({}: HealthScreenProps) {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
-  const isFocused = useIsFocused()
 
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-  const {
-    data: prescriptionData,
-    isFetching: fetchingPrescriptions,
-    isError: prescriptionsError,
-  } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
-  })
+  const { data: prescriptionData, isFetching: fetchingPrescriptions, isError: prescriptionsError } = usePrescriptions()
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -69,19 +61,10 @@ export function HealthScreen({}: HealthScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     1,
-    {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
-    },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
-  const {
-    data: foldersData,
-    isFetching: loadingInbox,
-    isError: inboxError,
-  } = useFolders({
-    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && !smInDowntime,
-  })
+  const { data: foldersData, isFetching: loadingInbox, isError: inboxError } = useFolders()
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
