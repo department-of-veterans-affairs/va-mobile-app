@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { SecureMessagingFoldersGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
+import { useDowntime } from 'utils/hooks'
 
 import { secureMessagingKeys } from './queryKeys'
 
@@ -26,8 +29,13 @@ const getFolders = async (): Promise<SecureMessagingFoldersGetData | undefined> 
  * Returns a query for a user folders
  */
 export const useFolders = (options?: { enabled?: boolean }) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const secureMessagingInDowntime = useDowntime('secure_messaging')
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+
   return useQuery({
     ...options,
+    enabled: !!(authorizedServices?.secureMessaging && !secureMessagingInDowntime && queryEnabled),
     queryKey: secureMessagingKeys.folders,
     queryFn: () => getFolders(),
     meta: {

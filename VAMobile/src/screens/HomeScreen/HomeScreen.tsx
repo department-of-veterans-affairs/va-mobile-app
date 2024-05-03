@@ -11,7 +11,6 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
@@ -77,7 +76,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
@@ -87,9 +86,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
-  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime,
-  })
+  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
@@ -98,17 +95,14 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: rxPrefetch,
     isFetching: loadingPrescriptions,
   } = usePrescriptions({
-    enabled: isFocused && userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: isFocused,
   })
   const {
     data: claimsData,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      isFocused &&
-      ((userAuthorizedServices?.claims && !claimsInDowntime) ||
-        (userAuthorizedServices?.appeals && !appealsInDowntime)),
+    enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
   const {
@@ -116,7 +110,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: smPrefetch,
     isFetching: loadingInbox,
   } = useFolders({
-    enabled: isFocused && userAuthorizedServices?.secureMessaging && !smInDowntime,
+    enabled: isFocused,
   })
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
@@ -130,15 +124,14 @@ export function HomeScreen({}: HomeScreenProps) {
     TimeFrameTypeConstants.UPCOMING,
     1,
     {
-      enabled: isFocused && userAuthorizedServices?.appointments && !appointmentsInDowntime,
+      enabled: isFocused,
     },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
 
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
-    enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
-  })
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
+  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
@@ -148,7 +141,6 @@ export function HomeScreen({}: HomeScreenProps) {
     foldersData?.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)?.attributes
       .unreadCount ||
     0
-  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {

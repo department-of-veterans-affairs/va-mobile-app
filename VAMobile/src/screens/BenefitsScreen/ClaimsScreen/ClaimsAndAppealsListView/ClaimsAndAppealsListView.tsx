@@ -36,7 +36,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const [previousClaimType, setClaimType] = useState(claimType)
   const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { data: decisionLetterData } = useDecisionLetters({ enabled: userAuthorizedServices?.decisionLetters })
+  const { data: decisionLetterData } = useDecisionLetters()
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
