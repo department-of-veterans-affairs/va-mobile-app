@@ -16,7 +16,6 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import {
@@ -122,7 +121,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
 
   const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
-  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
@@ -211,8 +209,7 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const activityLoading =
-    loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
+  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
   const hasActivity =
     !!upcomingAppointmentsCount ||
     !!activeClaimsCount ||
