@@ -10,7 +10,6 @@ import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
@@ -43,14 +42,13 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -75,43 +73,20 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
-  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime,
-  })
+  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
-  const {
-    data: prescriptionData,
-    isFetched: rxPrefetch,
-    isLoading: loadingPrescriptions,
-  } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
-  })
+  const { data: prescriptionData, isFetched: rxPrefetch, isLoading: loadingPrescriptions } = usePrescriptions()
   const {
     data: claimsData,
     isFetched: claimsPrefetch,
     isLoading: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime,
-  })
+  } = useClaimsAndAppeals('ACTIVE', 1)
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const {
-    data: foldersData,
-    isFetched: smPrefetch,
-    isLoading: loadingInbox,
-  } = useFolders({
-    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime,
-  })
+  const { data: foldersData, isFetched: smPrefetch, isLoading: loadingInbox } = useFolders()
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
@@ -123,16 +98,11 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     1,
-    {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
-    },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
 
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
-    enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
-  })
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating

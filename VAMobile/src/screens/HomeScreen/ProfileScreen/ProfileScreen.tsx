@@ -9,8 +9,8 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -22,10 +22,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const { isLoading: loadingServiceHistory, refetch: refetchServiceHistory } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
-  })
+  const { isLoading: loadingServiceHistory, refetch: refetchServiceHistory } = useServiceHistory()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

@@ -49,9 +49,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     isError: claimsAndAppealsListError,
     isLoading: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
-  } = useClaimsAndAppeals(claimType, 1, {
-    enabled: claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime),
-  })
+  } = useClaimsAndAppeals(claimType, 1)
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
