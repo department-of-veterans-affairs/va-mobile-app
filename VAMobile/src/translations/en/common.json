@@ -244,6 +244,7 @@
   "appointments.pending.officeVisit": "Office visit",
   "appointments.pending.phoneCall": "Phone call",
   "appointments.pending.preferredDateAndTime": "Preferred date and time",
+  "appointments.pending.preferredDateAndTimeFrame": "Preferred date and timeframe",
   "appointments.pending.preferredTypeOfAppointment": "Preferred type of appointment",
   "appointments.pending.submitted.pendingRequestTypeOfCare": "Pending request for {{typeOfCare}} appointment",
   "appointments.pending.submitted.theTimeAndDate": "The time and date of this appointment are still to be determined.",
