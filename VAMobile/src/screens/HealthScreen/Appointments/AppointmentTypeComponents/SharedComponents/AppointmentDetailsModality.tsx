@@ -17,8 +17,8 @@ import { useTheme } from 'utils/hooks'
 
 type AppointmentDetailsModalityProps = {
   attributes: AppointmentAttributes
-  type: AppointmentDetailsScreenType
   subType: AppointmentDetailsSubType
+  type: AppointmentDetailsScreenType
 }
 
 const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDetailsScreenType, t: TFunction) => {
@@ -89,7 +89,7 @@ const supportingModalityBody = (
   }
 }
 
-function AppointmentDetailsModality({ attributes, type, subType }: AppointmentDetailsModalityProps) {
+function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDetailsModalityProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const heading = modalityHeader(subType, type, t)

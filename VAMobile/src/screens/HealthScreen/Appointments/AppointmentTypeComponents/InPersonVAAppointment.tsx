@@ -4,7 +4,14 @@ import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
 import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
 
-import { AppointmentCalendarButton, AppointmentDateAndTime, AppointmentDetailsModality } from './SharedComponents'
+import {
+  AppointmentCalendarButton,
+  AppointmentDateAndTime,
+  AppointmentDetailsModality,
+  AppointmentLocation,
+  AppointmentProvider,
+  AppointmentTypeOfCare,
+} from './SharedComponents'
 
 type InPersonVAAppointmentProps = {
   appointmentID: string
@@ -17,7 +24,7 @@ function InPersonVAAppointment({ appointmentID, attributes, subType }: InPersonV
   return (
     <Box>
       <TextArea>
-        <AppointmentDetailsModality attributes={attributes} type={type} subType={subType} />
+        <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
         <AppointmentCalendarButton
           appointmentID={appointmentID}
@@ -25,6 +32,9 @@ function InPersonVAAppointment({ appointmentID, attributes, subType }: InPersonV
           subType={subType}
           type={type}
         />
+        <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
+        <AppointmentProvider attributes={attributes} subType={subType} type={type} />
+        <AppointmentLocation attributes={attributes} subType={subType} type={type} />
       </TextArea>
     </Box>
   )
