@@ -77,14 +77,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
 
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-
   const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
   const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
