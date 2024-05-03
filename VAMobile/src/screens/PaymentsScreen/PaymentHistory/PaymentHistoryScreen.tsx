@@ -44,6 +44,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     isLoading: loading,
     error: hasError,
     refetch: refetchPayments,
+    isRefetching: refetching,
   } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
   const noPayments = payments?.meta.availableYears?.length === 0
 
@@ -141,6 +142,17 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     )
   }
 
+  if (loading || refetching) {
+    return (
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
+        <LoadingComponent text={t('payments.loading')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
   if (hasError || paymentsInDowntime) {
     return (
       <FeatureLandingTemplate
@@ -152,17 +164,6 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
           error={hasError}
           onTryAgain={refetchPayments}
         />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('history.title')}>
-        <LoadingComponent text={t('payments.loading')} />
       </FeatureLandingTemplate>
     )
   }

@@ -66,6 +66,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     isLoading: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
+    isRefetching: refetchingLetter,
   } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
@@ -227,7 +228,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     refetchLetter()
   }
 
-  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
+  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData || refetchingLetter
 
   return (
     <FeatureLandingTemplate
@@ -235,14 +236,16 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID">
-      {letterDownloadError ? (
+      {loadingCheck ? (
+        <LoadingComponent
+          text={t(downloading || refetchingLetter ? 'letters.loading' : 'letters.benefitService.loading')}
+        />
+      ) : letterDownloadError ? (
         <BasicError
           onTryAgain={onViewLetter}
           messageText={t('letters.download.error')}
           buttonA11yHint={t('letters.download.tryAgain.a11y')}
         />
-      ) : loadingCheck ? (
-        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <TextArea>

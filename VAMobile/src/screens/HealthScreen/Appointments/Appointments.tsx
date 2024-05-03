@@ -61,6 +61,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     isLoading: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
+    isRefetching: refetchingAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
     enabled: screenContentAllowed('WG_Appointments') && apptsNotInDowntime,
   })
@@ -185,13 +186,17 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             <PastAppointments
               appointmentsData={apptsData}
               setPage={setPage}
-              loading={loadingAppointments}
+              loading={loadingAppointments || refetchingAppts}
               setDateRange={setDateRange}
               setTimeFrame={setTimeFrame}
             />
           )}
           {selectedTab === 0 && (
-            <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+            <UpcomingAppointments
+              appointmentsData={apptsData}
+              setPage={setPage}
+              loading={loadingAppointments || refetchingAppts}
+            />
           )}
         </Box>
       </Box>

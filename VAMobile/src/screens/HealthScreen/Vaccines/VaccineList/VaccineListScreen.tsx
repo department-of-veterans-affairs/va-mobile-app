@@ -42,6 +42,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     isLoading: loading,
     error: vaccineError,
     refetch: refetchVaccines,
+    isRefetching: refetching,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -90,6 +91,18 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     )
   }
 
+  if (loading || refetching) {
+    return (
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('vaVaccines')}
+        titleA11y={a11yLabelVA(t('vaVaccines'))}>
+        <LoadingComponent text={t('vaccines.loading')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
   if (vaccineError || vaccinesInDowntime) {
     return (
       <FeatureLandingTemplate
@@ -102,18 +115,6 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
           error={vaccineError}
           onTryAgain={refetchVaccines}
         />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
   }

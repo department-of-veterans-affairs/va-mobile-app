@@ -41,6 +41,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     isLoading: loading,
     error: useBankDataError,
     refetch: refetchBankData,
+    isRefetching: refetching,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
   const [bankData, setBankData] = useState(directDepositData?.data.attributes?.paymentAccount)
   const { gutter, contentMarginBottom } = theme.dimensions
@@ -89,6 +90,17 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
+  if (loading || refetching) {
+    return (
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('directDeposit.title')}>
+        <LoadingComponent text={t('directDeposit.loading')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
   if (useBankDataError || !ddNotInDowntime) {
     return (
       <FeatureLandingTemplate
@@ -100,17 +112,6 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
           error={useBankDataError}
           onTryAgain={refetchBankData}
         />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('directDeposit.title')}>
-        <LoadingComponent text={t('directDeposit.loading')} />
       </FeatureLandingTemplate>
     )
   }

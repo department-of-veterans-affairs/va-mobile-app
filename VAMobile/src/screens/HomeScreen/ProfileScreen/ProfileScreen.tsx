@@ -19,6 +19,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
+    isRefetching: refetching,
   } = useAuthorizedServices()
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
@@ -37,7 +38,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     refetchUserAuthorizedServices()
   }
 
-  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
+  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices || refetching
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
@@ -46,7 +47,12 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       backLabel={t('home.title')}
       backLabelOnPress={navigation.goBack}
       testID="profileID">
-      {errorCheck ? (
+      {loadingCheck ? (
+        <Box>
+          <NameTag />
+          <LoadingComponent text={t('profile.loading')} />
+        </Box>
+      ) : errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
@@ -59,11 +65,6 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
               borderStyle={'solid'}
             />
           </Box>
-        </Box>
-      ) : loadingCheck ? (
-        <Box>
-          <NameTag />
-          <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>

@@ -55,6 +55,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     isFetched: prescriptionsFetched,
     error: prescriptionHasError,
     refetch: refetchPrescriptions,
+    isRefetching: refetchingPrescriptions,
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
@@ -162,6 +163,14 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return listItems
   }
 
+  if (loadingHistory || refetchingPrescriptions) {
+    return (
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FullScreenSubtask>
+    )
+  }
+
   if (prescriptionInDowntime || prescriptionHasError) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
@@ -178,14 +187,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <NoRefills />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingHistory) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FullScreenSubtask>
     )
   }

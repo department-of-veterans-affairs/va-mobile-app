@@ -81,6 +81,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     error: hasError,
     isFetched: prescriptionsFetched,
     refetch: refetchPrescriptions,
+    isRefetching: refetchingPrescriptions,
   } = usePrescriptions({
     enabled:
       screenContentAllowed('WG_PrescriptionHistory') &&
@@ -222,22 +223,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  if (hasError || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
-          error={hasError}
-          onTryAgain={refetchPrescriptions}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
   if (!userAuthorizedServices?.prescriptions) {
     return (
       <FeatureLandingTemplate
@@ -250,7 +235,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  if (loadingHistory || loadingUserAuthorizedServices) {
+  if (loadingHistory || loadingUserAuthorizedServices || refetchingPrescriptions) {
     return (
       <FeatureLandingTemplate
         scrollViewProps={{ scrollViewRef }}
@@ -258,6 +243,22 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         backLabelOnPress={navigation.goBack}
         title={t('prescription.title')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (hasError || getUserAuthorizedServicesError) {
+    return (
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('prescription.title')}>
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchPrescriptions}
+        />
       </FeatureLandingTemplate>
     )
   }

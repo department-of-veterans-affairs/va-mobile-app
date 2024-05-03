@@ -39,12 +39,19 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
-  const { data: demographics, error: getDemographicsError, refetch: refetchDemographics } = useDemographics()
+  const {
+    data: demographics,
+    error: getDemographicsError,
+    refetch: refetchDemographics,
+    isRefetching: refetchingDemographics,
+    isLoading: loadingDemographics,
+  } = useDemographics()
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
+    isRefetching: refetchingGenderIdentity,
   } = useGenderIdentityOptions()
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
@@ -149,7 +156,12 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
   }
 
   const errorCheck = genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loadingGenderIdentityOptions || genderIdentityMutation.isPending
+  const loadingCheck =
+    loadingGenderIdentityOptions ||
+    genderIdentityMutation.isPending ||
+    refetchingDemographics ||
+    refetchingGenderIdentity ||
+    loadingDemographics
 
   return (
     <FullScreenSubtask
@@ -159,19 +171,19 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       primaryContentButtonText={errorCheck || loadingCheck ? undefined : t('save')}
       onPrimaryContentButtonPress={onSave}
       testID="PersonalInformationTestID">
-      {errorCheck ? (
+      {loadingCheck ? (
+        <LoadingComponent
+          text={
+            loadingGenderIdentityOptions || refetchingGenderIdentity || loadingDemographics || refetchingDemographics
+              ? t('personalInformation.genderIdentity.loading')
+              : t('personalInformation.genderIdentity.saving')
+          }
+        />
+      ) : errorCheck ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID}
           onTryAgain={onTryAgain}
           error={getDemographicsError || getGenderIdentityOptionsError}
-        />
-      ) : loadingCheck ? (
-        <LoadingComponent
-          text={
-            loadingGenderIdentityOptions
-              ? t('personalInformation.genderIdentity.loading')
-              : t('personalInformation.genderIdentity.saving')
-          }
         />
       ) : (
         <Box mx={theme.dimensions.gutter}>

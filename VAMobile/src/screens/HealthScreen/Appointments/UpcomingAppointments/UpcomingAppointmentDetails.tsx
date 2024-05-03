@@ -75,6 +75,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     isLoading: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
+    isRefetching: refetchingAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
   })
@@ -354,19 +355,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (getApptError || appointmentNotFound) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          error={getApptError}
-          onTryAgain={refetchAppointments}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingAppointmentCancellation || loadingAppointments) {
+  if (loadingAppointmentCancellation || loadingAppointments || refetchingAppointments) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <LoadingComponent
@@ -375,6 +364,18 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
               ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
               : t('appointmentDetails.loading')
           }
+        />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (getApptError || appointmentNotFound) {
+    return (
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          error={getApptError}
+          onTryAgain={refetchAppointments}
         />
       </FeatureLandingTemplate>
     )

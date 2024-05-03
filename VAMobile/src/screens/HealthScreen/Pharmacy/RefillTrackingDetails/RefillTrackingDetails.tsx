@@ -60,6 +60,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     isLoading: loadingTrackingInfo,
     error: hasError,
     refetch: refetchTracking,
+    isRefetching: refetchingTracking,
   } = useTrackingInfo(prescription.id, {
     enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
   })
@@ -84,6 +85,14 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     )
   }
 
+  if (loadingTrackingInfo || refetchingTracking) {
+    return (
+      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
+        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      </FullScreenSubtask>
+    )
+  }
+
   if (hasError) {
     return (
       <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
@@ -92,14 +101,6 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           error={hasError}
           onTryAgain={refetchTracking}
         />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingTrackingInfo) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
       </FullScreenSubtask>
     )
   }

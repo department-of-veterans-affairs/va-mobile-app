@@ -100,6 +100,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
+    isRefetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
@@ -108,6 +109,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isFetched: signatureFetched,
     error: signatureError,
     refetch: refetchSignature,
+    isRefetching: refetchingSignature,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
@@ -213,21 +215,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (recipientsError || signatureError) {
-    return (
-      <FullScreenSubtask
-        title={t('secureMessaging.startNewMessage')}
-        leftButtonText={t('cancel')}
-        scrollViewRef={scrollViewRef}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || signatureError}
-          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
-        />
-      </FullScreenSubtask>
-    )
-  }
-
   const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message, signature))
   const isFormValid = !!(
     to &&
@@ -236,7 +223,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     (category !== CategoryTypeFields.other || subject)
   )
 
-  if (!hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded) {
+  if (
+    !hasLoadedRecipients ||
+    savingDraft ||
+    !signatureFetched ||
+    isDiscarded ||
+    refetchingRecipients ||
+    refetchingSignature
+  ) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
@@ -248,6 +242,21 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         onLeftButtonPress={navigation.goBack}
         scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
+      </FullScreenSubtask>
+    )
+  }
+
+  if (recipientsError || signatureError) {
+    return (
+      <FullScreenSubtask
+        title={t('secureMessaging.startNewMessage')}
+        leftButtonText={t('cancel')}
+        scrollViewRef={scrollViewRef}>
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || signatureError}
+          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+        />
       </FullScreenSubtask>
     )
   }

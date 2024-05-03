@@ -68,6 +68,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     isLoading: loadingPersonalInfo,
     isError: personalInfoError,
     refetch: refetchPersonalInfo,
+    isRefetching: refetchingPersonalInfo,
   } = usePersonalInformation({
     enabled: isScreenContentAllowed,
   })
@@ -76,12 +77,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     isFetching: loadingDemographics,
     error: getDemographicsError,
     refetch: refetchDemographics,
+    isRefetching: refetchingDemographics,
   } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
+    isRefetching: refetchingGenderIdentity,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -151,7 +154,13 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
   const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
+  const loadingCheck =
+    loadingPersonalInfo ||
+    loadingGenderIdentityOptions ||
+    loadingDemographics ||
+    refetchingPersonalInfo ||
+    refetchingDemographics ||
+    refetchingGenderIdentity
 
   return (
     <FeatureLandingTemplate
@@ -159,14 +168,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID">
-      {errorCheck ? (
+      {loadingCheck ? (
+        <LoadingComponent text={t('personalInformation.loading')} />
+      ) : errorCheck ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
           error={getDemographicsError || getGenderIdentityOptionsError}
         />
-      ) : loadingCheck ? (
-        <LoadingComponent text={t('personalInformation.loading')} />
       ) : (
         <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>

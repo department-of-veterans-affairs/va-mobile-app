@@ -43,6 +43,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     isLoading: loadingFolderMessages,
     error: folderMessagesError,
     refetch: refetchFolderMessages,
+    isRefetching: refetchingMessages,
   } = useFolderMessages(folderID, page, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
@@ -68,6 +69,20 @@ function FolderMessages({ route }: FolderMessagesProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [page])
 
+  if (loadingFolderMessages || refetchingMessages) {
+    const text = t('secureMessaging.messages.loading')
+    return (
+      <ChildTemplate
+        backLabel={t('messages')}
+        backLabelOnPress={() => {
+          navigateTo('SecureMessaging', { activeTab: 1 })
+        }}
+        title={title}>
+        <LoadingComponent text={text} />
+      </ChildTemplate>
+    )
+  }
+
   if (folderMessagesError) {
     return (
       <ChildTemplate
@@ -81,20 +96,6 @@ function FolderMessages({ route }: FolderMessagesProps) {
           error={folderMessagesError}
           onTryAgain={refetchFolderMessages}
         />
-      </ChildTemplate>
-    )
-  }
-
-  if (loadingFolderMessages) {
-    const text = t('secureMessaging.messages.loading')
-    return (
-      <ChildTemplate
-        backLabel={t('messages')}
-        backLabelOnPress={() => {
-          navigateTo('SecureMessaging', { activeTab: 1 })
-        }}
-        title={title}>
-        <LoadingComponent text={text} />
       </ChildTemplate>
     )
   }

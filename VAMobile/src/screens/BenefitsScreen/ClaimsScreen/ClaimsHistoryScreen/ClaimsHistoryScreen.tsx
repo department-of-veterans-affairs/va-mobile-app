@@ -32,6 +32,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
+    isRefetching: refetching,
   } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
@@ -49,6 +50,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     error: claimsAndAppealsListError,
     isLoading: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
+    isRefetching: refetchingClaimsAndAppeals,
   } = useClaimsAndAppeals(claimType, 1, {
     enabled: claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime),
   })
@@ -124,16 +126,16 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID">
-      {claimsAndAppealsListError ||
-      getUserAuthorizedServicesError ||
-      (!claimsNotInDowntime && !appealsNotInDowntime) ? (
+      {loadingClaimsAndAppealsList || loadingUserAuthorizedServices || refetching || refetchingClaimsAndAppeals ? (
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : claimsAndAppealsListError ||
+        getUserAuthorizedServicesError ||
+        (!claimsNotInDowntime && !appealsNotInDowntime) ? (
         <ErrorComponent
           onTryAgain={fetchInfoAgain}
           screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
           error={claimsAndAppealsListError}
         />
-      ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
-        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
       ) : !claimsAndAppealsAccess ? (
         <NoClaimsAndAppealsAccess />
       ) : (

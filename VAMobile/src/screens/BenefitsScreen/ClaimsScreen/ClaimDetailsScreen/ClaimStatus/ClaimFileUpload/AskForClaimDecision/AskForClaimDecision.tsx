@@ -36,7 +36,13 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { data: claim, error: loadingClaimError, refetch: refetchClaim } = useClaim(claimID)
+  const {
+    data: claim,
+    error: loadingClaimError,
+    refetch: refetchClaim,
+    isRefetching: refetching,
+    isLoading: loadingClaim,
+  } = useClaim(claimID)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -86,6 +92,17 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       logAnalyticsEvent(Events.vama_claim_eval_check(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     setHaveSubmittedEvidence(value)
+  }
+
+  if (loadingClaim || refetching) {
+    return (
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={onCancelPress}
+        title={t('askForClaimDecision.pageTitle')}>
+        <LoadingComponent text={t('claimInformation.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingSubmitClaimDecision) {

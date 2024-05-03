@@ -112,6 +112,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     isLoading: loadingMessage,
     isFetched: messageFetched,
     refetch: refetchMessage,
+    isRefetching: refetchingMessage,
   } = useMessage(messageID, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -121,6 +122,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     isLoading: loadingThread,
     isFetched: threadFetched,
     refetch: refetchThread,
+    isRefetching: refetchingThread,
   } = useThread(messageID, true, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -129,6 +131,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     error: foldersError,
     isLoading: loadingFolder,
     refetch: refetchFolders,
+    isRefetching: refetchingFolders,
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -248,6 +251,23 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ? t('messages')
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
+  if (
+    loadingFolder ||
+    loadingThread ||
+    loadingMessage ||
+    loadingMoveMessage ||
+    refetchingFolders ||
+    refetchingMessage ||
+    refetchingThread
+  ) {
+    return (
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
+        <LoadingComponent
+          text={loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+        />
+      </ChildTemplate>
+    )
+  }
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (foldersError || messageError || threadError || !smNotInDowntime) {
     return (
@@ -258,16 +278,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           onTryAgain={
             foldersError ? refetchFolders : messageError ? refetchMessage : threadError ? refetchThread : undefined
           }
-        />
-      </ChildTemplate>
-    )
-  }
-
-  if (loadingFolder || loadingThread || loadingMessage || loadingMoveMessage) {
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <LoadingComponent
-          text={loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
         />
       </ChildTemplate>
     )

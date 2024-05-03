@@ -43,6 +43,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     isLoading: loadingServiceHistory,
     error: useServiceHistoryError,
     refetch: refetchServiceHistory,
+    isRefetching: refetchingServiceHistory,
   } = useServiceHistory({ enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime })
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
@@ -85,21 +86,21 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   }
 
   const errorCheck = useServiceHistoryError || getUserAuthorizedServicesError
-  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices || refetchingServiceHistory
 
   return (
     <FeatureLandingTemplate
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('militaryInformation.title')}>
-      {errorCheck || !mhNotInDowntime ? (
+      {loadingCheck ? (
+        <LoadingComponent text={t('militaryInformation.loading')} />
+      ) : errorCheck || !mhNotInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
           error={useServiceHistoryError}
           onTryAgain={refetchServiceHistory}
         />
-      ) : loadingCheck ? (
-        <LoadingComponent text={t('militaryInformation.loading')} />
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (

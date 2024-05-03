@@ -48,6 +48,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     data: foldersData,
     error: foldersError,
     refetch: refetchFolder,
+    isRefetching: refetchingFolders,
   } = useFolders({
     enabled:
       isFocused &&
@@ -59,6 +60,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: inboxError,
     isFetched: inboxFetched,
     refetch: refetchInbox,
+    isRefetching: refetchingInbox,
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
     enabled:
       isFocused &&
@@ -104,7 +106,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     )
   }
 
-  if (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) {
+  if (
+    (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) &&
+    !refetchingFolders &&
+    !refetchingInbox
+  ) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <ErrorComponent

@@ -49,6 +49,7 @@ function DisabilityRatingsScreen() {
     isLoading: loading,
     error: useDisabilityRatingError,
     refetch: refetchDisabilityRating,
+    isRefetching: refetching,
   } = useDisabilityRating({
     enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
   })
@@ -189,14 +190,14 @@ function DisabilityRatingsScreen() {
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
       testID="disabilityRatingTestID">
-      {useDisabilityRatingError || !drNotInDowntime ? (
+      {loading || refetching ? (
+        <LoadingComponent text={t('disabilityRating.loading')} />
+      ) : useDisabilityRatingError || !drNotInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID}
           error={useDisabilityRatingError}
           onTryAgain={refetchDisabilityRating}
         />
-      ) : loading ? (
-        <LoadingComponent text={t('disabilityRating.loading')} />
       ) : individualRatingsList.length === 0 ? (
         <NoDisabilityRatings />
       ) : (
