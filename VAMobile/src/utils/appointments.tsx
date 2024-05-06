@@ -74,6 +74,7 @@ export const getAppointmentTypeIconText = (
     case AppointmentTypeConstants.VA:
       return phoneOnly ? t('appointmentList.phoneOnly') : atFacilityText(location, t)
     case AppointmentTypeConstants.COMMUNITY_CARE:
+      return t('upcomingAppointments.communityCare')
     default:
       return phoneOnly ? t('appointmentList.phoneOnly') : ''
   }
