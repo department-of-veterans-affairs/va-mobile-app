@@ -42,7 +42,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     data: militaryServiceHistoryAttributes,
     isLoading: loadingServiceHistory,
     isError: useServiceHistoryError,
-  } = useServiceHistory({ enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime })
+  } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
 

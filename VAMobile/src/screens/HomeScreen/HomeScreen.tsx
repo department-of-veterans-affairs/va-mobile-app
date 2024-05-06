@@ -60,9 +60,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -74,20 +71,17 @@ export function HomeScreen({}: HomeScreenProps) {
     TimeFrameTypeConstants.UPCOMING,
     1,
     {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch'),
+      enabled: featureEnabled('homeScreenPrefetch'),
     },
   )
   const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled:
-      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
-      !claimsInDowntime &&
-      featureEnabled('homeScreenPrefetch'),
+    enabled: featureEnabled('homeScreenPrefetch'),
   })
   const { data: foldersData, isFetched: smPrefetch } = useFolders({
     enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
   })
   const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
+    enabled: featureEnabled('homeScreenPrefetch'),
   })
 
   useEffect(() => {
