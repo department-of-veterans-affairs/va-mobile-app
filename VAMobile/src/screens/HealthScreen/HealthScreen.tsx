@@ -1,20 +1,24 @@
-import React, { useCallback } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
-import { useFocusEffect } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { useFolders } from 'api/secureMessaging'
+import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { SecureMessagingState, getInbox } from 'store/slices'
+import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -25,7 +29,6 @@ import Appointments from './Appointments'
 import { getUpcomingAppointmentDateRange } from './Appointments/Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import CernerAlert from './CernerAlert'
 import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
@@ -45,6 +48,12 @@ export function HealthScreen({}: HealthScreenProps) {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
+
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+  const cernerExist = cernerFacilities.length >= 1
+  const allCerner = facilitiesInfo?.length === cernerFacilities.length
+  const mixedCerner = cernerExist && !allCerner
   const isFocused = useIsFocused()
 
   const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -81,6 +90,21 @@ export function HealthScreen({}: HealthScreenProps) {
     }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
   )
 
+  useEffect(() => {
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
+
+      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
+      }
+    }
+
+    healthHelpScreenCheck()
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
     navigateTo('Webview', {
@@ -90,9 +114,13 @@ export function HealthScreen({}: HealthScreenProps) {
     })
   }
 
+  const goToHealthHelp = (): void => {
+    navigateTo('HealthHelp')
+  }
+
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
+      <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
@@ -135,9 +163,14 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
       </Box>
-      {CernerAlert ? (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <CernerAlert />
+      {cernerExist ? (
+        <Box mx={theme.dimensions.buttonPadding}>
+          <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
+          <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileFooterLink" paragraphSpacing={true}>
+              {t('healthHelp.checkFacility')}
+            </TextView>
+          </Pressable>
         </Box>
       ) : (
         <></>
