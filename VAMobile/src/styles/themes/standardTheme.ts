@@ -60,9 +60,13 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 22,
   },
-  BitterHeading: {
+  LargeButtonHeader: {
     fontSize: 22,
     lineHeight: 24,
+  },
+  BitterHeading: {
+    fontSize: 26,
+    lineHeight: 26,
   },
   BitterBoldHeading: {
     fontSize: 26,
@@ -200,7 +204,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
-    ActivityButtonHeader: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.activityButton),
+    ActivityButtonHeader: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.activityButton),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
     AnnouncementBannerTitle: buildFont(
@@ -210,7 +214,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
-    CategoryBitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     CategoryLandingError: buildFont(
       'SourceSansPro-Bold',
       fontSizes.CategoryLandingAlert,
@@ -233,7 +236,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
     HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
-    LargeNavButton: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
+    LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
     LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
