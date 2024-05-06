@@ -70,7 +70,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
 
   const subtitleProps: TextViewProps = {
     variant: 'BitterHeading',
-    mt: 0,
+    mt: theme.dimensions.condensedMarginBetween,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
     mr: theme.dimensions.condensedMarginBetween,
