@@ -1,17 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import {
-  Box,
-  ClickForActionLink,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-  VAScrollView,
-} from 'components'
+import { Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -40,13 +32,12 @@ function TermsAndConditions() {
             {t('termsAndConditions.toAccept')}
           </TextView>
           <Box mb={theme.paragraphSpacing.spacing20FontSize}>
-            <ClickForActionLink
-              displayedText={t('termsAndConditions.goTo')}
-              linkType={LinkTypeOptionsConstants.url}
-              numberOrUrlLink={LINK_URL_GO_TO_MY_HEALTHEVET}
-              linkUrlIconType={LinkUrlIconType.Arrow}
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_GO_TO_MY_HEALTHEVET}
+              text={t('termsAndConditions.goTo')}
               a11yLabel={t('termsAndConditions.goTo.a11yLabel')}
-              {...a11yHintProp(t('termsAndConditions.goTo.a11yHint'))}
+              a11yHint={t('termsAndConditions.goTo.a11yHint')}
             />
           </Box>
           <TextView>
