@@ -1,27 +1,11 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
-
-const mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => mockNavigationSpy,
-  }
-})
-
-jest.mock('@react-navigation/native', () => {
-  const original = jest.requireActual('@react-navigation/native')
-  return {
-    ...original,
-    useFocusEffect: () => jest.fn(),
-  }
-})
 
 context('HowDoIUpdateScreen', () => {
   const initializeTestInstance = (screenType = 'DOB'): void => {
@@ -87,15 +71,10 @@ context('HowDoIUpdateScreen', () => {
   })
 
   describe('when the find VA location link is clicked', () => {
-    it('should call useRouteNavigation', () => {
+    it('should show alert', () => {
       initializeTestInstance('DOB')
       fireEvent.press(screen.getByRole('link', { name: 'Find nearest VA medical center' }))
-      expect(mockNavigationSpy).toBeCalledWith('Webview', {
-        displayTitle: 'va.gov',
-        url: 'https://www.va.gov/find-locations/',
-        loadingMessage: 'Loading VA location finder...',
-      })
-      expect(mockNavigationSpy).toBeCalled()
+      expect(Alert.alert).toBeCalled()
     })
   })
 })
