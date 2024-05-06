@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
+import { Box, LargePanel, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -78,13 +78,13 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
         />
         <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink
-            displayedText={t('inAppRecruitment.learnMore')}
-            numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
-            linkType={LinkTypeOptionsConstants.url}
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_VETERAN_USABILITY_PROJECT}
+            text={t('inAppRecruitment.learnMore')}
             a11yLabel={t('inAppRecruitment.learnMore')}
+            analyticsOnPress={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
             testID="inAppRecruitmentLearnMoreTestID"
-            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
           />
         </Box>
         <TextView
