@@ -56,7 +56,6 @@ jobs:
   output_detox_tests_to_run:
     if: always()
     runs-on: macos-latest-xl
-#    needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.empty_matrix}}
@@ -68,24 +67,13 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-#          if [[ ${{ github.event_name == 'push' }} == true ]]; then
-#            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-#            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-#              echo "empty_matrix=" >> "$GITHUB_OUTPUT"
-#            else
-#              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-#              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-#              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-#            fi
-#          else
-            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-              echo "matrix=" >> "$GITHUB_OUTPUT"
-              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-            else
-              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-            fi
-#          fi
+          if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+            echo "matrix=" >> "$GITHUB_OUTPUT"
+            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+          fi
 
   matrix-e2e-ios:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
