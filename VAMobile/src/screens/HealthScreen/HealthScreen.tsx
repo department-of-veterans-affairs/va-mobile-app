@@ -7,19 +7,22 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
+import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -36,7 +39,7 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -53,11 +56,24 @@ export function HealthScreen({}: HealthScreenProps) {
   const mixedCerner = cernerExist && !allCerner
   const isFocused = useIsFocused()
 
-  const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
+  const {
+    data: prescriptionData,
+    isFetching: fetchingPrescriptions,
+    isError: prescriptionsError,
+  } = usePrescriptions({
     enabled: isFocused,
   })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const { data: apptsData, isLoading: loadingAppointments } = useAppointments(
+  const {
+    data: apptsData,
+    isFetching: loadingAppointments,
+    isError: appointmentsError,
+  } = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
@@ -68,7 +84,11 @@ export function HealthScreen({}: HealthScreenProps) {
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
-  const { data: foldersData, isLoading: loadingInbox } = useFolders({
+  const {
+    data: foldersData,
+    isFetching: loadingInbox,
+    isError: inboxError,
+  } = useFolders({
     enabled: isFocused,
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
@@ -87,6 +107,32 @@ export function HealthScreen({}: HealthScreenProps) {
 
     healthHelpScreenCheck()
   }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+
+  useEffect(() => {
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
+
+      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
+      }
+    }
+
+    healthHelpScreenCheck()
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+
+  const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
+  const activityError = appointmentsError || inboxError || prescriptionsError
+  const showAlert = featureInDowntime || activityError
+  const alertMessage = featureInDowntime ? t('health.activity.downtime') : t('health.activity.error')
+
+  const enrolledInVAHealthCare =
+    userAuthorizedServices?.appointments ||
+    userAuthorizedServices?.secureMessaging ||
+    userAuthorizedServices?.prescriptions ||
+    userAuthorizedServices?.scheduleAppointments
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
@@ -146,8 +192,9 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('VaccineList')}
         />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      {cernerExist ? (
+      {cernerExist && (
         <Box mx={theme.dimensions.buttonPadding}>
           <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
           <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
@@ -156,8 +203,15 @@ export function HealthScreen({}: HealthScreenProps) {
             </TextView>
           </Pressable>
         </Box>
-      ) : (
-        <></>
+      )}
+      {!enrolledInVAHealthCare && (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('applyForHealthCare')}
+            link={LINK_URL_APPLY_FOR_HEALTH_CARE}
+            a11yLabel={a11yLabelVA(t('applyForHealthCare'))}
+          />
+        </Box>
       )}
     </CategoryLanding>
   )
