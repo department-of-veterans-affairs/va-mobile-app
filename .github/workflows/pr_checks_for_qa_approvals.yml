@@ -18,6 +18,9 @@ on:
   pull_request_target:
     branches:
       - 'develop'
+  push: 
+    branches: 
+      - 'Automation/6261-Chanel-Reuire-QA-Approval'    
 
 jobs:
   check_for_qa_approval:
