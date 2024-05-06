@@ -410,7 +410,7 @@ beforeAll(async () => {
 })
 
 describe(':ios: Contact Info Screen', () => {
-  /*it('should match the Contact Info page design', async () => {
+  it('should match the Contact Info page design', async () => {
     await expect(element(by.id(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID))).toExist()
     await expect(element(by.id(ContactInfoE2eIdConstants.HOME_ADDRESS_ID))).toExist()
     await expect(element(by.id(ContactInfoE2eIdConstants.HOME_PHONE_ID))).toExist()
@@ -431,7 +431,7 @@ describe(':ios: Contact Info Screen', () => {
   validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
-  validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')*/
+  validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
   it('should open the email address', async () => {
     await resetInAppReview()
