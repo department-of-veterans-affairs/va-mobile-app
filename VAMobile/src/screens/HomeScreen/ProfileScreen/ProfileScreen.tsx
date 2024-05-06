@@ -90,7 +90,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         <>
           {displayName}
           <NameTag />
-          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             {userAuthorizedServices?.userProfileUpdate && (
               <>
                 <LargeNavButton
