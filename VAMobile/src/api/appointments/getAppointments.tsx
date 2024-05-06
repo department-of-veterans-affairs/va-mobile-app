@@ -4,7 +4,7 @@ import { has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
 
@@ -51,5 +51,6 @@ export const useAppointments = (
     meta: {
       errorName: 'getAppointments: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

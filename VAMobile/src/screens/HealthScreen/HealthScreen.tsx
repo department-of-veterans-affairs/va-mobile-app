@@ -7,7 +7,6 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
@@ -17,11 +16,10 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -55,13 +53,8 @@ export function HealthScreen({}: HealthScreenProps) {
   const mixedCerner = cernerExist && !allCerner
   const isFocused = useIsFocused()
 
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
   const { data: prescriptionData, isFetching: fetchingPrescriptions } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime,
+    enabled: isFocused,
   })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const { data: apptsData, isLoading: loadingAppointments } = useAppointments(
@@ -70,13 +63,13 @@ export function HealthScreen({}: HealthScreenProps) {
     TimeFrameTypeConstants.UPCOMING,
     1,
     {
-      enabled: userAuthorizedServices?.appointments && !appointmentsInDowntime,
+      enabled: isFocused,
     },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
   const { data: foldersData, isLoading: loadingInbox } = useFolders({
-    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && !smInDowntime,
+    enabled: isFocused,
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
