@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAppointments } from 'api/appointments'
@@ -16,7 +17,7 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -53,13 +54,20 @@ export function HealthScreen({}: HealthScreenProps) {
   const cernerExist = cernerFacilities.length >= 1
   const allCerner = facilitiesInfo?.length === cernerFacilities.length
   const mixedCerner = cernerExist && !allCerner
+  const isFocused = useIsFocused()
 
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-  const { data: prescriptionData, isFetching: fetchingPrescriptions, isError: prescriptionsError } = usePrescriptions()
+  const {
+    data: prescriptionData,
+    isFetching: fetchingPrescriptions,
+    isError: prescriptionsError,
+  } = usePrescriptions({
+    enabled: isFocused,
+  })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -70,10 +78,19 @@ export function HealthScreen({}: HealthScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     1,
+    {
+      enabled: isFocused,
+    },
   )
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
-  const { data: foldersData, isFetching: loadingInbox, isError: inboxError } = useFolders()
+  const {
+    data: foldersData,
+    isFetching: loadingInbox,
+    isError: inboxError,
+  } = useFolders({
+    enabled: isFocused,
+  })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
   useEffect(() => {
