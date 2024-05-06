@@ -1,7 +1,5 @@
-
 #
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
-#
 
 name: '[Utils] QA required approval'
 
@@ -10,7 +8,6 @@ on:
     types: [opened, edited]
   pull_request_review:
     types: [submitted, dismissed]
-  push:
 
 jobs:
   check_for_qa_required:
@@ -46,7 +43,7 @@ jobs:
           --header 'Content-Type: application/json')
           approvals = $response | jq '.[] | select(.state=="APPROVED")'
           echo $approvals
-          if $aprovals.length > 2
+          if $aprovals.length > 1
             qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
                 echo 'This PR has QA approval to merge'
@@ -56,7 +53,7 @@ jobs:
                 echo ::set-output name=has_qa_approval::'false'
               fi
           else
-            echo 'This PR requires 3 approvals, including one QA approval, before merging.'
+            echo 'This PR requires 2 approvals, including one QA and one engineer approval, before merging.'
             echo ::set-output name=has_qa_approval::'false'
           fi
   add_or_remove_qa_required_label:
