@@ -11,14 +11,11 @@ import { IndividualRatingData } from 'api/types'
 import {
   Box,
   ChildTemplate,
-  ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
+  LinkWithAnalytics,
   LoadingComponent,
   TextArea,
   TextLine,
@@ -140,7 +137,14 @@ function DisabilityRatingsScreen() {
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
         </Box>
-        <ClickForActionLink {...clickToCallProps} />
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_ABOUT_DISABILITY_RATINGS}
+          text={t('disabilityRating.learnAboutLinkTitle')}
+          a11yLabel={a11yLabelVA(t('disabilityRating.learnAboutLinkTitle'))}
+          a11yHint={t('disabilityRating.learnAboutLinkTitle.a11yHint')}
+          testID="aboutDisabilityRatingsTestID"
+        />
       </TextArea>
     )
   }
@@ -165,16 +169,6 @@ function DisabilityRatingsScreen() {
         <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
       </TextArea>
     )
-  }
-
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: t('disabilityRating.learnAboutLinkTitle'),
-    linkType: LinkTypeOptionsConstants.url,
-    linkUrlIconType: LinkUrlIconType.Arrow,
-    numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
-    accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
-    a11yLabel: a11yLabelVA(t('disabilityRating.learnAboutLinkTitle')),
-    testID: 'aboutDisabilityRatingsTestID',
   }
 
   const titleProps: TextViewProps = {

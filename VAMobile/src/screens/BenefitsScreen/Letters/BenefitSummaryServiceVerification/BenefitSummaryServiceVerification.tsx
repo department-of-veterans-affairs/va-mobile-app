@@ -12,12 +12,10 @@ import {
   BasicError,
   Box,
   ButtonDecoratorType,
-  ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
   FeatureLandingTemplate,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
+  LinkWithAnalytics,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
@@ -27,7 +25,6 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -285,13 +282,12 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
           </TextView>
 
           <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <ClickForActionLink
-              displayedText={t('letters.benefitService.sendMessage')}
-              linkType={LinkTypeOptionsConstants.url}
-              numberOrUrlLink={LINK_URL_ASK_VA_GOV}
-              linkUrlIconType={LinkUrlIconType.Arrow}
-              {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_ASK_VA_GOV}
+              text={t('letters.benefitService.sendMessage')}
               a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
+              a11yHint={t('letters.benefitService.sendMessageA11yHint')}
             />
           </Box>
 
