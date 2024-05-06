@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
+import { useDowntime } from 'utils/hooks'
 
 import { appointmentsKeys } from './queryKeys'
 
@@ -36,8 +39,13 @@ export const useAppointments = (
   page: number,
   options?: { enabled?: boolean },
 ) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const appointmentsInDowntime = useDowntime('appointments')
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+
   return useQuery({
     ...options,
+    enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
     queryKey: [appointmentsKeys.appointments, timeFrame, page],
     queryFn: () => getAppointments(startDate, endDate, timeFrame, page),
     meta: {

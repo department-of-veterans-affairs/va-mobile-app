@@ -46,7 +46,7 @@ function DisabilityRatingsScreen() {
     isLoading: loading,
     isError: useDisabilityRatingError,
   } = useDisabilityRating({
-    enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
+    enabled: screenContentAllowed('WG_DisabilityRatings'),
   })
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []

@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { PrescriptionsGetData } from 'api/types'
 import { get } from 'store/api'
+import { useDowntime } from 'utils/hooks'
 
 import { prescriptionKeys } from './queryKeys'
 
@@ -21,8 +24,13 @@ const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
  * Returns a query for user prescriptions
  */
 export const usePrescriptions = (options?: { enabled?: boolean }) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const rxInDowntime = useDowntime('rx_refill')
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+
   return useQuery({
     ...options,
+    enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: prescriptionKeys.prescriptions,
     queryFn: () => getPrescriptions(),
     meta: {
