@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -19,7 +19,8 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -84,45 +85,57 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
+  const isFocused = useIsFocused()
 
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const {
-    prescriptionStatusCount,
-    loadingHistory: loadingPrescriptions,
-    prescriptionFirstRetrieval: rxPrefetch,
-  } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const {
-    activeClaimsCount,
-    loadingClaimsAndAppeals,
-    claimsFirstRetrieval: claimsPrefetch,
-  } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { loadingInboxData: loadingInbox, inboxFirstRetrieval: smPrefetch } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
-  const {
-    preloadComplete: apptsPrefetch,
-    loading: loadingAppointments,
-    upcomingAppointmentsCount,
-    upcomingDaysLimit,
-  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
-    enabled: userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime,
+    data: prescriptionData,
+    isFetched: rxPrefetch,
+    isFetching: loadingPrescriptions,
+  } = usePrescriptions({
+    enabled: isFocused,
   })
+  const {
+    data: claimsData,
+    isFetched: claimsPrefetch,
+    isFetching: loadingClaimsAndAppeals,
+  } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: isFocused,
+  })
+  const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const {
+    data: foldersData,
+    isFetched: smPrefetch,
+    isFetching: loadingInbox,
+  } = useFolders({
+    enabled: isFocused,
+  })
+
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const {
+    data: apptsData,
+    isFetched: apptsPrefetch,
+    isFetching: loadingAppointments,
+  } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    1,
+    {
+      enabled: isFocused,
+    },
+  )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const { isLoading: loadingPersonalInfo } = usePersonalInformation()
+  const unreadMessageCount = foldersData?.inboxUnreadCount
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
@@ -207,8 +220,7 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const activityLoading =
-    loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions || loadingPersonalInfo
+  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
   const hasActivity =
     !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
 

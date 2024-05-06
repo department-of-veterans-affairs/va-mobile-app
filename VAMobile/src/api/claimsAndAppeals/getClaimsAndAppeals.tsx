@@ -4,7 +4,7 @@ import { chain, has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
 
@@ -57,5 +57,6 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

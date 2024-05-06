@@ -3,6 +3,7 @@ import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { SecureMessagingFoldersGetData } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
 import { useDowntime } from 'utils/hooks'
@@ -40,5 +41,6 @@ export const useFolders = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getFolders: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }
