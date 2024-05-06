@@ -8,6 +8,7 @@ import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import queryClient from 'api/queryClient'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { AppDispatch, AppThunk } from 'store'
@@ -563,6 +564,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
+    queryClient.removeQueries()
     dispatch(dispatchFinishLogout())
   }
 }
