@@ -271,13 +271,6 @@ export function HomeScreen({}: HomeScreenProps) {
                   {t('noActivity')}
                 </TextView>
               </Box>
-              {!!cernerFacilities.length && (
-                <TextView
-                  variant="ActivityFooter"
-                  accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
-                  {t('activity.informationNotIncluded')}
-                </TextView>
-              )}
             </Box>
           ) : (
             <>
@@ -320,6 +313,13 @@ export function HomeScreen({}: HomeScreenProps) {
                 )}
               </Box>
             </>
+          )}
+          {!!cernerFacilities.length && (
+            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+              <TextView variant="ActivityFooter" accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
+                {t('activity.informationNotIncluded')}
+              </TextView>
+            </Box>
           )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
