@@ -45,6 +45,9 @@ const {
 
 let inMemoryRefreshToken: string | undefined
 
+export const NEW_SESSION = '@store_new_session'
+export const FIRST_TIME_LOGIN = '@store_first_time_login'
+
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
@@ -576,6 +579,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
   console.debug('startBiometricsLogin: starting')
+  await AsyncStorage.setItem(NEW_SESSION, 'true')
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
