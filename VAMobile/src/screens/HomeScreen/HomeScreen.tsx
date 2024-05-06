@@ -15,7 +15,10 @@ import React, { FC, useCallback } from 'react'
 import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
@@ -29,6 +32,7 @@ import {
   Box,
   BoxProps,
   CategoryLanding,
+  CategoryLandingAlert,
   EncourageUpdateAlert,
   LinkRow,
   LoadingComponent,
@@ -46,16 +50,7 @@ import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointmen
 import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import {
-  AppointmentsState,
-  ClaimsAndAppealsState,
-  SecureMessagingState,
-  getInbox,
-  prefetchAppointments,
-  prefetchClaimsAndAppeals,
-} from 'store/slices'
-import { AnalyticsState, SecureMessagingState } from 'store/slices'
-import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
@@ -86,12 +81,18 @@ export function HomeScreen({}: HomeScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-
   const {
     data: prescriptionData,
+    isError: prescriptionsError,
     isFetched: rxPrefetch,
     isFetching: loadingPrescriptions,
   } = usePrescriptions({
@@ -99,14 +100,17 @@ export function HomeScreen({}: HomeScreenProps) {
   })
   const {
     data: claimsData,
+    isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
   } = useClaimsAndAppeals('ACTIVE', 1, {
     enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
+  const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
   const {
     data: foldersData,
+    isError: inboxError,
     isFetched: smPrefetch,
     isFetching: loadingInbox,
   } = useFolders({
@@ -116,6 +120,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
+    isError: appointmentsError,
     isFetched: apptsPrefetch,
     isFetching: loadingAppointments,
   } = useAppointments(
@@ -221,8 +226,19 @@ export function HomeScreen({}: HomeScreenProps) {
   }
 
   const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
+  const featureInDowntime = !!(
+    (userAuthorizedServices?.appointments && appointmentsInDowntime) ||
+    (userAuthorizedServices?.appeals && appealsInDowntime) ||
+    (userAuthorizedServices?.claims && claimsInDowntime) ||
+    (userAuthorizedServices?.prescriptions && rxInDowntime) ||
+    (userAuthorizedServices?.secureMessaging && smInDowntime)
+  )
   const hasActivity =
-    !!upcomingAppointmentsCount || !!activeClaimsCount || !!prescriptionStatusCount.isRefillable || !!unreadMessageCount
+    !!upcomingAppointmentsCount ||
+    !!activeClaimsCount ||
+    !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
+    !!unreadMessageCount
+  const hasActivityError = !!(appointmentsError || claimsError || inboxError || prescriptionsError)
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -271,41 +287,46 @@ export function HomeScreen({}: HomeScreenProps) {
               )}
             </Box>
           ) : (
-            <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-              {!!upcomingAppointmentsCount && !!upcomingDaysLimit && (
-                <ActivityButton
-                  title={t('appointments')}
-                  subText={t('appointments.activityButton.subText', {
-                    count: upcomingAppointmentsCount,
-                    dayCount: upcomingDaysLimit,
-                  })}
-                  deepLink={'appointments'}
-                />
-              )}
-              {!!activeClaimsCount && (
-                <ActivityButton
-                  title={t('claims.title')}
-                  subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
-                  deepLink={'claims'}
-                />
-              )}
-              {!!unreadMessageCount && (
-                <ActivityButton
-                  title={`${t('messages')}`}
-                  subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
-                  deepLink={'messages'}
-                />
-              )}
-              {!!prescriptionStatusCount.isRefillable && (
-                <ActivityButton
-                  title={t('prescription.title')}
-                  subText={t('prescriptions.activityButton.subText', {
-                    count: prescriptionStatusCount.isRefillable,
-                  })}
-                  deepLink={'prescriptions'}
-                />
-              )}
-            </Box>
+            <>
+              <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+                {!!upcomingAppointmentsCount && !!upcomingDaysLimit && (
+                  <ActivityButton
+                    title={t('appointments')}
+                    subText={t('appointments.activityButton.subText', {
+                      count: upcomingAppointmentsCount,
+                      dayCount: upcomingDaysLimit,
+                    })}
+                    deepLink={'appointments'}
+                  />
+                )}
+                {!claimsError && !!activeClaimsCount && (
+                  <ActivityButton
+                    title={t('claims.title')}
+                    subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                    deepLink={'claims'}
+                  />
+                )}
+                {!!unreadMessageCount && (
+                  <ActivityButton
+                    title={`${t('messages')}`}
+                    subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                    deepLink={'messages'}
+                  />
+                )}
+                {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
+                  <ActivityButton
+                    title={t('prescription.title')}
+                    subText={t('prescriptions.activityButton.subText', {
+                      count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                    })}
+                    deepLink={'prescriptions'}
+                  />
+                )}
+                {(hasActivityError || featureInDowntime) && (
+                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+                )}
+              </Box>
+            </>
           )}
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
@@ -327,28 +348,8 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              mx={theme.dimensions.standardMarginBetween}
-              mb={theme.dimensions.standardMarginBetween}
-              accessible={true}
-              accessibilityRole={'text'}
-              accessibilityLabel={t('errorIcon') + t('aboutYou.noInformation')}>
-              <VAIcon
-                accessible={false}
-                importantForAccessibility="no"
-                name={'ExclamationCircle'}
-                fill={theme.colors.icon.homeScreenError}
-                preventScaling={true}
-              />
-              <TextView
-                ml={theme.dimensions.condensedMarginBetween}
-                variant="HomeScreen"
-                accessible={false}
-                importantForAccessibility="no">
-                {t('aboutYou.noInformation')}
-              </TextView>
+            <Box mx={theme.dimensions.condensedMarginBetween}>
+              <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
             <>
