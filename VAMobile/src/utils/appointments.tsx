@@ -17,7 +17,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps, VA_ICON_MAP } from 'components'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -30,34 +30,52 @@ import {
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
+const atFacilityAddress = (location: AppointmentLocation | undefined, t: TFunction) => {
+  let fullAddress = ''
+  if (location?.address) {
+    const address = location.address
+    if (address.street && address.city && address.state && address.zipCode) {
+      fullAddress = `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+    }
+  }
+
+  return fullAddress ? t('appointments.atFacility', { facility: fullAddress }) : t('appointments.atAtlasFacility')
+}
+
+const atFacilityText = (location: AppointmentLocation | undefined, t: TFunction) => {
+  const facility = location?.name
+  return facility ? t('appointments.atFacility', { facility }) : t('appointments.atVAFacility')
+}
+
 /**
  * Returns returns the appointment type icon text
  *
  * @param appointmentType - type AppointmentType, to describe the type of appointment
- * @param translate - function the translate function
+ * @param t - function the translate function
  * @param phoneOnly - boolean tells if the appointment is a phone call
  *
  * @returns string of the appointment type icon
  */
 export const getAppointmentTypeIconText = (
-  appointmentType: AppointmentType,
-  translate: TFunction,
+  type: AppointmentType,
+  location: AppointmentLocation,
   phoneOnly: boolean,
+  t: TFunction,
 ): string => {
-  switch (appointmentType) {
+  switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-      return translate('appointmentList.connectAtAtlas')
+      return atFacilityAddress(location, t)
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-      return translate('appointmentList.connectAtHome')
+      return t('video')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return translate('appointmentList.connectOnsite')
+      return atFacilityText(location, t)
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return translate('appointmentList.connectGFE')
+      return t('video')
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
+      return phoneOnly ? t('appointmentList.phoneOnly') : atFacilityText(location, t)
     case AppointmentTypeConstants.COMMUNITY_CARE:
     default:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : ''
+      return phoneOnly ? t('appointmentList.phoneOnly') : ''
   }
 }
 
@@ -138,28 +156,29 @@ export const pendingType = (appointmentType: AppointmentType, translate: TFuncti
  * @returns VAIconProps or undefined
  */
 export const getAppointmentTypeIcon = (
-  appointmentType: AppointmentType,
+  type: AppointmentType,
   phoneOnly: boolean,
   theme: VATheme,
 ): VAIconProps | undefined => {
-  const iconProp = {
+  const iconProps = {
     fill: theme.colors.icon.defaultMenuItem,
     height: theme.fontSizes.HelperText.fontSize,
     width: theme.fontSizes.HelperText.fontSize,
   } as VAIconProps
+  const types = AppointmentTypeConstants
+  let name: keyof typeof VA_ICON_MAP | undefined
 
-  switch (appointmentType) {
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return { ...iconProp, name: 'VideoCamera' }
-    case AppointmentTypeConstants.VA:
-      return phoneOnly ? { ...iconProp, name: 'Phone' } : { ...iconProp, name: 'Building' }
-    case AppointmentTypeConstants.COMMUNITY_CARE:
-    default:
-      return phoneOnly ? { ...iconProp, name: 'Phone' } : undefined
+  if (type === types.VA_VIDEO_CONNECT_ONSITE || type === types.VA_VIDEO_CONNECT_ATLAS) {
+    name = 'Building'
+  } else if (type === types.VA_VIDEO_CONNECT_GFE || type === types.VA_VIDEO_CONNECT_HOME) {
+    name = 'VideoCamera'
+  } else if (type === types.VA) {
+    name = phoneOnly ? 'Phone' : 'Building'
+  } else if (phoneOnly) {
+    name = 'Phone'
   }
+
+  return name && { ...iconProps, name }
 }
 
 /**
@@ -334,42 +353,18 @@ const makeCareText = (typeOfCare: string, serviceCategoryName: string, isCovidVa
 }
 
 const getModality = (
-  appointmentType: AppointmentType,
+  type: AppointmentType,
   phoneOnly: boolean,
   location: AppointmentLocation,
   theme: VATheme,
   t: TFunction,
-) => {
-  const textLines: TextLineWithIconProps[] = []
-
-  //  {
-  //       text: phoneOnly ? t('appointmentList.phoneOnly') : t('appointments.atFacilityName', { facilityName }),
-  //       iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-  //       variant: 'HelperText',
-  //     },
-
-  const isVideoOrVAAppointment = appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE
-  const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
-  const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
-
-  if (location?.name) {
-    textLines.push({
-      text: location.name,
-      variant: 'HelperText',
-      mb: showAppointmentTypeIcon ? theme.dimensions.condensedMarginBetween : 0,
-    })
-  }
-
-  if (showAppointmentTypeIcon) {
-    textLines.push({
-      text: getAppointmentTypeIconText(appointmentType, t, phoneOnly),
-      iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-      variant: 'HelperText',
-    })
-  }
-
-  return textLines
-}
+): TextLineWithIconProps[] => [
+  {
+    text: getAppointmentTypeIconText(type, location, phoneOnly, t),
+    iconProps: getAppointmentTypeIcon(type, phoneOnly, theme),
+    variant: 'HelperText',
+  },
+]
 
 const getTextLine = (text?: string | null, variant: keyof VATypographyThemeVariants = 'HelperText', mb = 5) => {
   return text ? [{ text, variant, mb }] : []
