@@ -89,8 +89,10 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
+    await element(by.text('Leave')).tap()
+    await setTimeout(5000)
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
-    await element(by.text('Done')).tap()
+    await device.launchApp({ newInstance: false })
 
     if (device.getPlatform() === 'android') {
       await checkLocatorAndContactLinks()

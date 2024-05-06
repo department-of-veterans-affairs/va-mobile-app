@@ -2,7 +2,7 @@ import React from 'react'
 
 import { context, fireEvent, render, screen } from 'testUtils'
 
-import ClickForActionLink, { LinkTypeOptionsConstants, LinkUrlIconType } from './ClickForActionLink'
+import ClickForActionLinkDeprecated, { LinkTypeOptionsConstants, LinkUrlIconType } from './ClickForActionLinkDeprecated'
 
 import Mock = jest.Mock
 
@@ -16,7 +16,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('ClickForActionLink', () => {
+context('ClickForActionLinkDeprecated', () => {
   let analyticFn: Mock
 
   const initializeTestInstance = (
@@ -28,7 +28,7 @@ context('ClickForActionLink', () => {
     analyticFn = jest.fn()
 
     render(
-      <ClickForActionLink
+      <ClickForActionLinkDeprecated
         displayedText={displayedText}
         a11yLabel={displayedText}
         numberOrUrlLink={numberOrUrlLink}
