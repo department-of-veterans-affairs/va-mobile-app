@@ -404,7 +404,7 @@ export const getTextLinesForAppointmentListItem = (
       getTextLine(careText, 'MobileBodyBold'),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(healthcareProvider),
-      getTextLine(t('appointmentList.youRequested', { typeOfVisit: pendingType(appointmentType, t, phoneOnly) })),
+      getTextLine(t('appointmentList.requestType', { type: pendingType(appointmentType, t, phoneOnly) })),
     ]
   } else {
     result = [
