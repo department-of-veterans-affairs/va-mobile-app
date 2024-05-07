@@ -4,6 +4,7 @@ import { has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { sortByDate } from 'utils/common'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import { useDowntime } from 'utils/hooks'
@@ -40,7 +41,7 @@ const getLetterBeneficiaryData = async (): Promise<LetterBeneficiaryData | undef
  */
 export const useLetterBeneficiaryData = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const lettersInDowntime = useDowntime('letters_and_documents')
+  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({

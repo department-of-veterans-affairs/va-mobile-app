@@ -6,6 +6,7 @@ import { SecureMessagingFoldersGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 import { secureMessagingKeys } from './queryKeys'
@@ -30,7 +31,7 @@ const getFolders = async (): Promise<SecureMessagingFoldersGetData | undefined> 
  */
 export const useFolders = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const secureMessagingInDowntime = useDowntime('secure_messaging')
+  const secureMessagingInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
