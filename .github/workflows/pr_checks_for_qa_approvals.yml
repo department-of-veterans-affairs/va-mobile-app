@@ -5,6 +5,9 @@
 name: '[Utils] QA required approval'
 
 on:
+  push: 
+    branches: 
+      - 'automation/6261-Chanel-Require-QA-Approval'
   #pull_request:
     #types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     #paths:
@@ -18,9 +21,6 @@ on:
   #pull_request_target:
     #branches:
       #- 'develop'
-  push: 
-    branches: 
-      - 'automation/6261-Chanel-Require-QA-Approval'
 
 jobs:
   check_for_qa_approval:
