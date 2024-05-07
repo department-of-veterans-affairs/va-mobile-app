@@ -16,7 +16,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 export const Nametag = () => {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { data: serviceHistory } = useServiceHistory()
+  const { data: serviceHistory } = useServiceHistory({ enabled: false })
   const accessToMilitaryInfo =
     userAuthorizedServices?.militaryServiceHistory && !!serviceHistory?.serviceHistory?.length
   const theme = useTheme()
