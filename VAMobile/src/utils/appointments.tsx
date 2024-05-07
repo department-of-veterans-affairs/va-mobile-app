@@ -298,52 +298,47 @@ const getListItemsForAppointments = (
   return listItems
 }
 
-const getStatus = (isPending: boolean, status: AppointmentStatus, t: TFunction, mb: number) => {
-  const result: TextLineWithIconProps[] = []
-
+const getStatus = (
+  isPending: boolean,
+  status: AppointmentStatus,
+  t: TFunction,
+  mb: number,
+): TextLineWithIconProps | undefined => {
   if (status === AppointmentStatusConstants.CANCELLED) {
-    result.push({
+    return {
       text: t('appointments.canceled'),
       textTag: { labelType: LabelTagTypeConstants.tagInactive },
       mb,
-    })
+    }
   } else if (status === AppointmentStatusConstants.BOOKED) {
-    result.push({
+    return {
       text: t('appointments.confirmed'),
       textTag: { labelType: LabelTagTypeConstants.tagGreen },
       mb,
-    })
+    }
   } else if (isPending) {
-    result.push({
+    return {
       text: t('appointments.pending'),
       textTag: { labelType: LabelTagTypeConstants.tagYellow },
       mb,
-    })
+    }
+  } else {
+    return undefined
   }
-
-  return result
 }
 
-const getDateAndTime = (
-  startDateUtc: string,
-  timeZone: AppointmentTimeZone,
-  t: TFunction,
-  tinyMarginBetween: number,
-): Array<TextLineWithIconProps> => {
-  return [
-    {
-      text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone),
-      variant: 'MobileBodyBold',
-    },
-    {
-      text: getFormattedTimeForTimeZone(startDateUtc, timeZone),
-      variant: 'MobileBodyBold',
-      mb: tinyMarginBetween,
-    },
-  ]
-}
+const getDate = (startDateUtc: string, timeZone: AppointmentTimeZone): TextLineWithIconProps => ({
+  text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone),
+  variant: 'MobileBodyBold',
+})
 
-const makeCareText = (typeOfCare: string, serviceCategoryName: string, isCovidVaccine: boolean, t: TFunction) => {
+const getTime = (startDateUtc: string, timeZone: AppointmentTimeZone, mb: number): TextLineWithIconProps => ({
+  text: getFormattedTimeForTimeZone(startDateUtc, timeZone),
+  variant: 'MobileBodyBold',
+  mb,
+})
+
+const getCareText = (typeOfCare: string, serviceCategoryName: string, isCovidVaccine: boolean, t: TFunction) => {
   if (serviceCategoryName === 'COMPENSATION & PENSION') {
     return t('appointments.claimExam')
   } else if (isCovidVaccine) {
@@ -359,17 +354,20 @@ const getModality = (
   location: AppointmentLocation,
   theme: VATheme,
   t: TFunction,
-): TextLineWithIconProps[] => [
-  {
-    text: getAppointmentTypeIconText(type, location, phoneOnly, t),
-    iconProps: getAppointmentTypeIcon(type, phoneOnly, theme),
-    variant: 'HelperText',
-  },
-]
+): TextLineWithIconProps => ({
+  text: getAppointmentTypeIconText(type, location, phoneOnly, t),
+  iconProps: getAppointmentTypeIcon(type, phoneOnly, theme),
+  variant: 'HelperText',
+})
 
-const getTextLine = (text?: string | null, variant: keyof VATypographyThemeVariants = 'HelperText', mb = 5) => {
-  return text ? [{ text, variant, mb }] : []
+const getTextLine = (
+  text?: string | null,
+  variant: keyof VATypographyThemeVariants = 'HelperText',
+  mb = 5,
+): TextLineWithIconProps | undefined => {
+  return text ? { text, variant, mb } : undefined
 }
+
 /**
  * Should return an array of TextLineWithIconProps that describes an appointment that is shown in upcoming and past appointment list
  *
@@ -399,24 +397,28 @@ export const getTextLinesForAppointmentListItem = (
     attributes.isPending &&
     (attributes.status === AppointmentStatusConstants.SUBMITTED ||
       attributes.status === AppointmentStatusConstants.CANCELLED)
-  const careText = makeCareText(typeOfCare || '', serviceCategoryName || '', isCovidVaccine, t)
+  const careText = getCareText(typeOfCare || '', serviceCategoryName || '', isCovidVaccine, t)
+  let result: Array<TextLineWithIconProps | undefined> = []
 
   if (isPending) {
-    return [
-      ...getTextLine(careText, 'MobileBodyBold'),
-      ...getStatus(isPending, attributes.status, t, condensedMarginBetween),
-      ...getTextLine(healthcareProvider),
-      ...getTextLine(t('appointmentList.youRequested', { typeOfVisit: pendingType(appointmentType, t, phoneOnly) })),
+    result = [
+      getTextLine(careText, 'MobileBodyBold'),
+      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      getTextLine(healthcareProvider),
+      getTextLine(t('appointmentList.youRequested', { typeOfVisit: pendingType(appointmentType, t, phoneOnly) })),
     ]
   } else {
-    return [
-      ...getDateAndTime(startDateUtc, timeZone, t, tinyMarginBetween),
-      ...getStatus(isPending, attributes.status, t, condensedMarginBetween),
-      ...getTextLine(careText),
-      ...getTextLine(healthcareProvider),
-      ...getModality(appointmentType, phoneOnly, location, theme, t),
+    result = [
+      getDate(startDateUtc, timeZone),
+      getTime(startDateUtc, timeZone, tinyMarginBetween),
+      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      getTextLine(careText),
+      getTextLine(healthcareProvider),
+      getModality(appointmentType, phoneOnly, location, theme, t),
     ]
   }
+
+  return result.filter(Boolean) as Array<TextLineWithIconProps>
 }
 
 /**
