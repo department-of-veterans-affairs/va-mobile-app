@@ -130,20 +130,18 @@ export const getAppointmentAnalyticsDays = (attributes: AppointmentAttributes): 
  *
  * @returns string of the appointment type icon
  */
-export const pendingType = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
-  switch (appointmentType) {
+export const pendingType = (type: AppointmentType, t: TFunction, phoneOnly: boolean): string => {
+  switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-      return translate('appointmentList.connectAtAtlas')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-      return translate('appointmentList.connectAtHome')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return translate('appointmentList.connectOnsite')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return translate('appointmentList.connectGFE')
-    case AppointmentTypeConstants.VA:
+      return t('video')
     case AppointmentTypeConstants.COMMUNITY_CARE:
+      return t('upcomingAppointments.communityCare')
+    case AppointmentTypeConstants.VA:
     default:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
+      return phoneOnly ? t('appointmentList.phoneOnly') : t('appointmentList.inPerson')
   }
 }
 
