@@ -375,7 +375,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   <Box
                     mx={theme.dimensions.standardMarginBetween}
                     my={theme.dimensions.condensedMarginBetween}
-                    borderWidth={1}
+                    borderBottomWidth={1}
                     borderColor={theme.colors.border.aboutYou as BorderColorVariant}
                   />
                 )}
