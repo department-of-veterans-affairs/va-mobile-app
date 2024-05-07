@@ -7,10 +7,10 @@ name: '[Utils] QA required approval'
 on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
-    paths:
-      - 'VAMobile/src/**'
-      - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
+    #paths:
+      #- 'VAMobile/src/**'
+      #- 'VAMobile/package.json'
+      #- '!VAMobile/src/**.test.*'
 
   pull_request_review:
     types: [submitted, dismissed]
