@@ -73,7 +73,7 @@ export const Nametag: FC = () => {
       <Box
         width="100%"
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
-        minHeight={85}
+        minHeight={accessToMilitaryInfo || fullName ? 85 : undefined}
         display="flex"
         justifyContent="center"
         mb={theme.dimensions.standardMarginBetween}
