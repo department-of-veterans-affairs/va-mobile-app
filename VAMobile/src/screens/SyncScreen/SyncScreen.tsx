@@ -36,9 +36,7 @@ function SyncScreen({}: SyncScreenProps) {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
-  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices({
-    enabled: loggedIn,
-  })
+  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices()
   const { isFetching: fetchingServiceHistory } = useServiceHistory({
     enabled: loggedIn && downtimeWindowsFetched,
   })
