@@ -18,7 +18,7 @@ export type ErrorComponentProps = {
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
-  /** optional react query Error */
+  /** optional Error */
   error?: Error | null
 }
 
