@@ -6,6 +6,7 @@ import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 import { appointmentsKeys } from './queryKeys'
@@ -40,7 +41,7 @@ export const useAppointments = (
   options?: { enabled?: boolean },
 ) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const appointmentsInDowntime = useDowntime('appointments')
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
