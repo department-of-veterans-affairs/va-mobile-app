@@ -65,10 +65,9 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
   const {
     data: personalInfo,
-    isLoading: loadingPersonalInfo,
+    isFetching: loadingPersonalInfo,
     isError: personalInfoError,
     refetch: refetchPersonalInfo,
-    isRefetching: refetchingPersonalInfo,
   } = usePersonalInformation({
     enabled: isScreenContentAllowed,
   })
@@ -77,14 +76,12 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     isFetching: loadingDemographics,
     error: getDemographicsError,
     refetch: refetchDemographics,
-    isRefetching: refetchingDemographics,
   } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
-    isLoading: loadingGenderIdentityOptions,
+    isFetching: loadingGenderIdentityOptions,
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
-    isRefetching: refetchingGenderIdentity,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -154,13 +151,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
   const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck =
-    loadingPersonalInfo ||
-    loadingGenderIdentityOptions ||
-    loadingDemographics ||
-    refetchingPersonalInfo ||
-    refetchingDemographics ||
-    refetchingGenderIdentity
+  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   return (
     <FeatureLandingTemplate

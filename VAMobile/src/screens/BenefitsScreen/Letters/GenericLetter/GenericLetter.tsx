@@ -38,10 +38,9 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
       false,
   }
   const {
-    isLoading: downloading,
+    isFetching: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-    isRefetching: refetchingLetter,
   } = useDownloadLetter(letterType, lettersOptions)
 
   const onViewLetter = () => {
@@ -83,7 +82,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
-      {downloading || refetchingLetter ? (
+      {downloading ? (
         <LoadingComponent text={t('letters.loading')} />
       ) : letterDownloadError ? (
         <BasicError

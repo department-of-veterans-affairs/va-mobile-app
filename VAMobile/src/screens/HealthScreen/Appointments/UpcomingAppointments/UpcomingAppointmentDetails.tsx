@@ -72,10 +72,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
-    isLoading: loadingAppointments,
+    isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
-    isRefetching: refetchingAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
   })
@@ -355,7 +354,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (loadingAppointmentCancellation || loadingAppointments || refetchingAppointments) {
+  if (loadingAppointmentCancellation || loadingAppointments) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <LoadingComponent

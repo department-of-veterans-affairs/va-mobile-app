@@ -51,11 +51,10 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
+    isFetching: loadingHistory,
     isFetched: prescriptionsFetched,
     error: prescriptionHasError,
     refetch: refetchPrescriptions,
-    isRefetching: refetchingPrescriptions,
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
@@ -163,7 +162,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return listItems
   }
 
-  if (loadingHistory || refetchingPrescriptions) {
+  if (loadingHistory) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />

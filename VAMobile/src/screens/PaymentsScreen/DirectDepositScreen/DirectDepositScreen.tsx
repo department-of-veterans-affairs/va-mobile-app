@@ -38,10 +38,9 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
   const {
     data: directDepositData,
-    isLoading: loading,
+    isFetching: loading,
     error: useBankDataError,
     refetch: refetchBankData,
-    isRefetching: refetching,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
   const [bankData, setBankData] = useState(directDepositData?.data.attributes?.paymentAccount)
   const { gutter, contentMarginBottom } = theme.dimensions
@@ -90,7 +89,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  if (loading || refetching) {
+  if (loading) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}

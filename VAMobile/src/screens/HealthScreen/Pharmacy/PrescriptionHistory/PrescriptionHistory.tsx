@@ -77,11 +77,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
+    isFetching: loadingHistory,
     error: hasError,
     isFetched: prescriptionsFetched,
     refetch: refetchPrescriptions,
-    isRefetching: refetchingPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
@@ -232,7 +231,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  if (loadingHistory || loadingUserAuthorizedServices || refetchingPrescriptions) {
+  if (loadingHistory || loadingUserAuthorizedServices) {
     return (
       <FeatureLandingTemplate
         scrollViewProps={{ scrollViewRef }}

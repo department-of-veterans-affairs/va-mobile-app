@@ -40,10 +40,9 @@ function FolderMessages({ route }: FolderMessagesProps) {
   const [page, setPage] = useState(1)
   const {
     data: folderMessagesData,
-    isLoading: loadingFolderMessages,
+    isFetching: loadingFolderMessages,
     error: folderMessagesError,
     refetch: refetchFolderMessages,
-    isRefetching: refetchingMessages,
   } = useFolderMessages(folderID, page, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
@@ -69,7 +68,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [page])
 
-  if (loadingFolderMessages || refetchingMessages) {
+  if (loadingFolderMessages) {
     const text = t('secureMessaging.messages.loading')
     return (
       <ChildTemplate

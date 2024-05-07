@@ -48,7 +48,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     data: foldersData,
     error: foldersError,
     refetch: refetchFolder,
-    isRefetching: refetchingFolders,
+    isFetching: refetchingFolders,
   } = useFolders({
     enabled:
       isFocused &&
@@ -60,7 +60,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     error: inboxError,
     isFetched: inboxFetched,
     refetch: refetchInbox,
-    isRefetching: refetchingInbox,
+    isFetching: refetchingInbox,
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
     enabled:
       isFocused &&

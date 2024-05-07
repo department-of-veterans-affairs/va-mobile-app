@@ -41,10 +41,9 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
   const {
     data: payments,
-    isLoading: loading,
+    isFetching: loading,
     error: hasError,
     refetch: refetchPayments,
-    isRefetching: refetching,
   } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
   const noPayments = payments?.meta.availableYears?.length === 0
 
@@ -142,7 +141,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     )
   }
 
-  if (loading || refetching) {
+  if (loading) {
     return (
       <FeatureLandingTemplate
         backLabel={t('payments.title')}

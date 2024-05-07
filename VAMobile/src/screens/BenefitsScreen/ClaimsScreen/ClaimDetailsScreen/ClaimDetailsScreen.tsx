@@ -46,10 +46,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const abortSignal = abortController.signal
   const {
     data: claim,
-    isLoading: loadingClaim,
+    isFetching: loadingClaim,
     error: claimError,
     refetch: refetchClaim,
-    isRefetching: refetching,
   } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
@@ -131,7 +130,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       testID="ClaimDetailsScreen">
-      {loadingClaim || refetching ? (
+      {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
       ) : claimError ? (
         <ErrorComponent

@@ -104,7 +104,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
-    isRefetching: refetchingRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_EditDraft'),
   })
@@ -123,11 +123,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const messageID = Number(route.params?.messageID)
   const {
     data: messageDraftData,
-    isLoading: loadingMessage,
+    isFetching: loadingMessage,
     isFetched: messageFetched,
     error: messageError,
     refetch: refetchMessage,
-    isRefetching: refetchingMessage,
   } = useMessage(messageID, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
@@ -135,7 +134,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     data: threadData,
     error: threadError,
     refetch: refetchThread,
-    isRefetching: refetchingThread,
+    isFetching: refetchingThread,
   } = useThread(messageID, false, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
@@ -361,7 +360,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     savingDraft ||
     deletingDraft ||
     isDiscarded ||
-    refetchingMessage ||
     refetchingRecipients ||
     refetchingThread
   ) {

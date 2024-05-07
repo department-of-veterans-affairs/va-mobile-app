@@ -43,15 +43,13 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
     data: demographics,
     error: getDemographicsError,
     refetch: refetchDemographics,
-    isRefetching: refetchingDemographics,
-    isLoading: loadingDemographics,
+    isFetching: loadingDemographics,
   } = useDemographics()
   const {
     data: genderIdentityOptions,
-    isLoading: loadingGenderIdentityOptions,
+    isFetching: loadingGenderIdentityOptions,
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
-    isRefetching: refetchingGenderIdentity,
   } = useGenderIdentityOptions()
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
@@ -156,12 +154,7 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
   }
 
   const errorCheck = genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck =
-    loadingGenderIdentityOptions ||
-    genderIdentityMutation.isPending ||
-    refetchingDemographics ||
-    refetchingGenderIdentity ||
-    loadingDemographics
+  const loadingCheck = loadingGenderIdentityOptions || genderIdentityMutation.isPending || loadingDemographics
 
   return (
     <FullScreenSubtask
@@ -174,7 +167,7 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       {loadingCheck ? (
         <LoadingComponent
           text={
-            loadingGenderIdentityOptions || refetchingGenderIdentity || loadingDemographics || refetchingDemographics
+            loadingGenderIdentityOptions || loadingDemographics
               ? t('personalInformation.genderIdentity.loading')
               : t('personalInformation.genderIdentity.saving')
           }

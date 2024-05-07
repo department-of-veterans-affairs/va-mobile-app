@@ -40,10 +40,9 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const {
     data: militaryServiceHistoryAttributes,
-    isLoading: loadingServiceHistory,
+    isFetching: loadingServiceHistory,
     error: useServiceHistoryError,
     refetch: refetchServiceHistory,
-    isRefetching: refetchingServiceHistory,
   } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
@@ -86,7 +85,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   }
 
   const errorCheck = useServiceHistoryError || getUserAuthorizedServicesError
-  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices || refetchingServiceHistory
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
   return (
     <FeatureLandingTemplate

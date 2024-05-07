@@ -43,10 +43,9 @@ function DisabilityRatingsScreen() {
   const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
   const {
     data: ratingData,
-    isLoading: loading,
+    isFetching: loading,
     error: useDisabilityRatingError,
     refetch: refetchDisabilityRating,
-    isRefetching: refetching,
   } = useDisabilityRating({
     enabled: screenContentAllowed('WG_DisabilityRatings'),
   })
@@ -184,7 +183,7 @@ function DisabilityRatingsScreen() {
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
       testID="disabilityRatingTestID">
-      {loading || refetching ? (
+      {loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
       ) : useDisabilityRatingError || !drNotInDowntime ? (
         <ErrorComponent

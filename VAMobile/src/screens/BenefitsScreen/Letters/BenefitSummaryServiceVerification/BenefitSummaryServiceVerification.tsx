@@ -60,10 +60,9 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       false,
   }
   const {
-    isLoading: downloading,
+    isFetching: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
-    isRefetching: refetchingLetter,
   } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
@@ -225,7 +224,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     refetchLetter()
   }
 
-  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData || refetchingLetter
+  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
 
   return (
     <FeatureLandingTemplate
@@ -234,9 +233,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID">
       {loadingCheck ? (
-        <LoadingComponent
-          text={t(downloading || refetchingLetter ? 'letters.loading' : 'letters.benefitService.loading')}
-        />
+        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
       ) : letterDownloadError ? (
         <BasicError
           onTryAgain={onViewLetter}

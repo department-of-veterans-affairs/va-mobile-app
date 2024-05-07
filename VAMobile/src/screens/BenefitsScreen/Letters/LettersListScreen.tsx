@@ -39,10 +39,9 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
   const {
     data: letters,
-    isLoading: loading,
+    isFetching: loading,
     error: getLettersError,
     refetch: refetchLetters,
-    isRefetching: refetchingLetters,
   } = useLetters({
     enabled:
       screenContentAllowed('WG_LettersList') && userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime,
@@ -137,7 +136,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
-      {loading || loadingUserAuthorizedServices || refetchingLetters ? (
+      {loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('letters.list.loading')} />
       ) : errorCheck || !lettersNotInDowntime ? (
         <ErrorComponent

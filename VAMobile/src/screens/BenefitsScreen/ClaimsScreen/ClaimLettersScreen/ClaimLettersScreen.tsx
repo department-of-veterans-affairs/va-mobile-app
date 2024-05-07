@@ -42,18 +42,16 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const [letterID, setLetterID] = useState<string>('')
   const {
     data: decisionLettersData,
-    isLoading: loading,
+    isFetching: loading,
     error: letterInfoError,
     refetch: fetchInfoAgain,
-    isRefetching: refetchingDecisionLetters,
   } = useDecisionLetters({
     enabled: screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime,
   })
   const {
-    isLoading: downloading,
+    isFetching: downloading,
     error: downloadLetterErrorDetails,
     refetch: refetchLetter,
-    isRefetching: refetchingLetter,
   } = useDownloadDecisionLetter(letterID, {
     enabled: letterID.length > 0,
   })
@@ -97,10 +95,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      {loading || downloading || refetchingDecisionLetters || refetchingLetter ? (
-        <LoadingComponent
-          text={t(loading || refetchingDecisionLetters ? 'claimLetters.loading' : 'claimLetters.downloading')}
-        />
+      {loading || downloading ? (
+        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
       ) : letterInfoError || claimsInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID}

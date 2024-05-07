@@ -109,29 +109,26 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const {
     data: messageData,
     error: messageError,
-    isLoading: loadingMessage,
+    isFetching: loadingMessage,
     isFetched: messageFetched,
     refetch: refetchMessage,
-    isRefetching: refetchingMessage,
   } = useMessage(messageID, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: threadData,
     error: threadError,
-    isLoading: loadingThread,
+    isFetching: loadingThread,
     isFetched: threadFetched,
     refetch: refetchThread,
-    isRefetching: refetchingThread,
   } = useThread(messageID, true, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: foldersData,
     error: foldersError,
-    isLoading: loadingFolder,
+    isFetching: loadingFolder,
     refetch: refetchFolders,
-    isRefetching: refetchingFolders,
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -251,15 +248,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ? t('messages')
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
-  if (
-    loadingFolder ||
-    loadingThread ||
-    loadingMessage ||
-    loadingMoveMessage ||
-    refetchingFolders ||
-    refetchingMessage ||
-    refetchingThread
-  ) {
+  if (loadingFolder || loadingThread || loadingMessage || loadingMoveMessage) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent

@@ -39,10 +39,9 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
   const {
     data: vaccines,
-    isLoading: loading,
+    isFetching: loading,
     error: vaccineError,
     refetch: refetchVaccines,
-    isRefetching: refetching,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -91,7 +90,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     )
   }
 
-  if (loading || refetching) {
+  if (loading) {
     return (
       <FeatureLandingTemplate
         backLabel={t('health.title')}

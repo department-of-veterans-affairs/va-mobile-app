@@ -4,8 +4,9 @@ import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
 import { militaryServiceHistoryKeys } from 'api/militaryService'
-import { BranchesOfServiceConstants, ServiceHistoryAttributes } from 'api/types'
-import { QueriesData, context, mockNavProps, render } from 'testUtils'
+import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 import MilitaryInformationScreen from './index'
 
@@ -74,6 +75,7 @@ context('MilitaryInformationScreen', () => {
       },
     ],
   }
+
   const props = mockNavProps(
     {},
     {
@@ -96,31 +98,61 @@ context('MilitaryInformationScreen', () => {
 
   describe('when military service history authorization is false', () => {
     it('should render NoMilitaryInformationAccess', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-      expect(screen.getByText("We can't access your military information")).toBeTruthy()
+      const militaryServiceHistoryData = {
+        data: {
+          type: 'a',
+          id: 'string',
+          attributes: {
+            serviceHistory: [],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(militaryServiceHistoryData)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText("We can't access your military information")).toBeTruthy())
     })
   })
 
   describe('when service history is empty', () => {
     it('should render NoMilitaryInformationAccess', async () => {
-      await waitFor(() => {
-        initializeTestInstance({} as ServiceHistoryAttributes)
-      })
-      expect(screen.getByText("We can't access your military information")).toBeTruthy()
+      const militaryServiceHistoryData = {
+        data: {
+          type: 'a',
+          id: 'string',
+          attributes: {
+            serviceHistory: [],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(militaryServiceHistoryData)
+      initializeTestInstance({} as ServiceHistoryAttributes)
+      await waitFor(() => expect(screen.getByText("We can't access your military information")).toBeTruthy())
     })
   })
 
   it('initializes correctly', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-    })
-    expect(screen.queryByText("We can't access your military information")).toBeFalsy()
-    expect(screen.getByText('Period of service')).toBeTruthy()
-    expect(screen.getByText('United States Marine Corps')).toBeTruthy()
-    expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy()
-    expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy()
-    expect(screen.getByRole('link')).toBeTruthy()
+    const militaryServiceHistoryData: MilitaryServiceHistoryData = {
+      data: {
+        type: 'a',
+        id: 'string',
+        attributes: serviceHistoryMock,
+      },
+    }
+    when(api.get as jest.Mock)
+      .calledWith('/v0/military-service-history')
+      .mockResolvedValue(militaryServiceHistoryData)
+    initializeTestInstance()
+    await waitFor(() => expect(screen.queryByText("We can't access your military information")).toBeFalsy())
+    await waitFor(() => expect(screen.getByText('Period of service')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('United States Marine Corps')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('link')).toBeTruthy())
   })
 })

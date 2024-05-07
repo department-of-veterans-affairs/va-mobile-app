@@ -101,7 +101,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
-    isRefetching: refetchingRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
@@ -110,7 +110,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isFetched: signatureFetched,
     error: signatureError,
     refetch: refetchSignature,
-    isRefetching: refetchingSignature,
+    isFetching: refetchingSignature,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })

@@ -129,10 +129,9 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const theme = useTheme()
   const {
     data: contactInformation,
-    isLoading: loadingContactInformation,
+    isFetching: loadingContactInformation,
     error: contactInformationError,
     refetch: refetchContactInformation,
-    isRefetching: refetchingContactInfo,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
@@ -212,7 +211,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID">
-      {loadingContactInformation || refetchingContactInfo ? (
+      {loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />
       ) : contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent

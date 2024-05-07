@@ -36,13 +36,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const {
-    data: claim,
-    error: loadingClaimError,
-    refetch: refetchClaim,
-    isRefetching: refetching,
-    isLoading: loadingClaim,
-  } = useClaim(claimID)
+  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -82,7 +76,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     setHaveSubmittedEvidence(value)
   }
 
-  if (loadingClaim || refetching) {
+  if (loadingClaim) {
     return (
       <FullScreenSubtask
         leftButtonText={t('cancel')}

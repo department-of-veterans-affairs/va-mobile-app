@@ -57,10 +57,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const {
     data: trackingInfo,
-    isLoading: loadingTrackingInfo,
+    isFetching: loadingTrackingInfo,
     error: hasError,
     refetch: refetchTracking,
-    isRefetching: refetchingTracking,
   } = useTrackingInfo(prescription.id, {
     enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
   })
@@ -85,7 +84,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     )
   }
 
-  if (loadingTrackingInfo || refetchingTracking) {
+  if (loadingTrackingInfo) {
     return (
       <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
         <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
