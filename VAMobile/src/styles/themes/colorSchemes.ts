@@ -116,7 +116,7 @@ export const lightTheme = {
     transparent: colors.transparent,
     activityButton: colors.white,
     largeNavButton: DSColors.primary,
-    announcementBanner: DSColors.primary,
+    announcementBanner: colors.primary,
     inlineSpinner: DSColors.primary,
     categoryLandingAlert: DSColors.secondaryDark,
     linkRow: DSColors.primary,
