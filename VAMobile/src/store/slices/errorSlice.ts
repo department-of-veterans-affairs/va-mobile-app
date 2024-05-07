@@ -30,6 +30,7 @@ export type DowntimeWindow = {
 export type ErrorsState = {
   errorsByScreenID: ErrorsByScreenIDType
   downtimeWindowsByFeature: DowntimeWindowsByFeatureType
+  downtimeWindowsFetched: boolean
   tryAgain: () => Promise<void>
 }
 
@@ -59,6 +60,7 @@ export const initialErrorsState: ErrorsState = {
   tryAgain: () => Promise.resolve(),
   errorsByScreenID: initializeErrorsByScreenID(),
   downtimeWindowsByFeature: initializeDowntimeWindowsByFeature(),
+  downtimeWindowsFetched: false,
 }
 
 /**
@@ -68,6 +70,7 @@ export const initialErrorsState: ErrorsState = {
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
   if (!response) {
+    dispatch(dispatchSetDowntime(undefined))
     return
   }
 
@@ -125,8 +128,11 @@ const errorSlice = createSlice({
       state.tryAgain = action.payload
     },
 
-    dispatchSetDowntime: (state, action: PayloadAction<DowntimeWindowsByFeatureType>) => {
-      state.downtimeWindowsByFeature = action.payload
+    dispatchSetDowntime: (state, action: PayloadAction<DowntimeWindowsByFeatureType | undefined>) => {
+      if (action.payload) {
+        state.downtimeWindowsByFeature = action.payload
+      }
+      state.downtimeWindowsFetched = true
     },
   },
 })

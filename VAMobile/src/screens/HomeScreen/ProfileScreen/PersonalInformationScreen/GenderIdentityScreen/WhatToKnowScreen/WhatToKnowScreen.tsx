@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, ClickForActionLink, LargePanel, TextView, VABulletList } from 'components'
+import { Box, LargePanel, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import getEnv from 'utils/env'
@@ -65,11 +65,11 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
             paragraphSpacing={true}
           />
         </Box>
-        <ClickForActionLink
-          displayedText={t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}
           a11yLabel={t('personalInformation.genderIdentity.whatToKnow.findContactInfo')}
-          linkType={'externalLink'}
-          numberOrUrlLink={WEBVIEW_URL_FACILITY_LOCATOR}
         />
       </Box>
     </LargePanel>

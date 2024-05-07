@@ -1,4 +1,5 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -7,14 +8,12 @@ import { context, mockNavProps, render } from 'testUtils'
 import InAppRecruitmentScreen from './InAppRecruitmentScreen'
 
 const mockNavigationSpy = jest.fn()
-const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useBeforeNavBackListener: jest.fn(),
-    useExternalLink: () => mockExternalLinkSpy,
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -58,6 +57,6 @@ context('InAppRecruitmentScreen', () => {
 
   it('goes to the Veteran Usability Project when link is pressed', () => {
     fireEvent.press(screen.getByRole('link', { name: 'Learn more about the Veteran Usability Project' }))
-    expect(mockExternalLinkSpy).toBeCalledWith('https://veteranusability.us/')
+    expect(Alert.alert).toBeCalled()
   })
 })
