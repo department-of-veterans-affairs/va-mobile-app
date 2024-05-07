@@ -9,7 +9,9 @@ import {
   AppointmentDateAndTime,
   AppointmentDetailsModality,
   AppointmentLocation,
+  AppointmentPreferredModality,
   AppointmentProvider,
+  AppointmentReasonAndComment,
   AppointmentTypeOfCare,
 } from './SharedComponents'
 
@@ -33,8 +35,10 @@ function InPersonVAAppointment({ appointmentID, attributes, subType }: InPersonV
           type={type}
         />
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
+        <AppointmentPreferredModality subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
         <AppointmentLocation attributes={attributes} subType={subType} type={type} />
+        <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
       </TextArea>
     </Box>
   )
