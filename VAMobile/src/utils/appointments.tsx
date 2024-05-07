@@ -35,7 +35,7 @@ const atFacilityAddress = (location: AppointmentLocation | undefined, t: TFuncti
   if (location?.address) {
     const address = location.address
     if (address.street && address.city && address.state && address.zipCode) {
-      fullAddress = `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+      fullAddress = `${address.street}, ${address.city}, ${address.state} ${address.zipCode}`
     }
   }
 
