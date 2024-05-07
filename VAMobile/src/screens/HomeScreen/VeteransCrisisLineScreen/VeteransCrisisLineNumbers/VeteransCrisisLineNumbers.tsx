@@ -28,7 +28,7 @@ function VeteransCrisisLineNumbers() {
           phoneNumber={t('988')}
           text={t('veteransCrisisLine.crisisCallNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
-          onPress={analyticsFunction}
+          analyticsOnPress={analyticsFunction}
         />
       </Box>
       <Box {...boxProps}>
@@ -37,7 +37,7 @@ function VeteransCrisisLineNumbers() {
           textNumber={t('838255')}
           text={t('veteransCrisisLine.textNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.textNumberDisplayed.a11y')}
-          onPress={analyticsFunction}
+          analyticsOnPress={analyticsFunction}
           testID="veteransCrisisLineTextNumberTestID"
         />
       </Box>
@@ -48,7 +48,7 @@ function VeteransCrisisLineNumbers() {
           text={t('veteransCrisisLine.startConfidentialChat')}
           a11yLabel={t('veteransCrisisLine.startConfidentialChat')}
           a11yHint={t('veteransCrisisLine.crisisUrlA11yHint')}
-          onPress={analyticsFunction}
+          analyticsOnPress={analyticsFunction}
           testID="veteransCrisisLineConfidentialChatTestID"
         />
       </Box>
@@ -58,7 +58,7 @@ function VeteransCrisisLineNumbers() {
           TTYnumber={t('8007994889')}
           text={t('veteransCrisisLine.hearingLossNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
-          onPress={analyticsFunction}
+          analyticsOnPress={analyticsFunction}
           testID="veteransCrisisLineHearingLossNumberTestID"
         />
       </Box>
