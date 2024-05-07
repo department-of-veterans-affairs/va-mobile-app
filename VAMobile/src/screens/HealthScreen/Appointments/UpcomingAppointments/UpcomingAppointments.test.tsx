@@ -37,26 +37,24 @@ context('UpcomingAppointments', () => {
   }
 
   describe('when loading is set to true', () => {
-    it('should show loading screen and no appointments screen', () => {
+    it('shows loading screen and no appointments screen', () => {
       initializeTestInstance(undefined, true)
       expect(screen.getByText('Loading your appointments...')).toBeTruthy()
     })
   })
 
   describe('when no appointments', () => {
-    it('should show no appointments screen', () => {
+    it('shows no appointments screen', () => {
       initializeTestInstance(undefined)
       expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
   })
 
   describe('on appointment press', () => {
-    it('should call useRouteNavigation', async () => {
+    it('calls useRouteNavigation', async () => {
       initializeTestInstance({ data: appointmentData })
       fireEvent.press(
-        screen.getByTestId(
-          'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
-        ),
+        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
       )
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {
         appointment: appointmentData[0],
@@ -66,7 +64,7 @@ context('UpcomingAppointments', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', async () => {
+    it('renders "Canceled" label', async () => {
       appointmentData[0].attributes.status = 'CANCELLED'
       initializeTestInstance({ data: appointmentData })
       expect(screen.getByText('Canceled')).toBeTruthy()
@@ -74,7 +72,7 @@ context('UpcomingAppointments', () => {
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
+    it('renders "Canceled" label', async () => {
       appointmentData[0].attributes.status = AppointmentStatusConstants.CANCELLED
       appointmentData[0].attributes.isPending = true
       initializeTestInstance({ data: appointmentData })
@@ -83,7 +81,7 @@ context('UpcomingAppointments', () => {
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Pending"', async () => {
+    it('renders "Pending" label', async () => {
       appointmentData[0].attributes.status = AppointmentStatusConstants.SUBMITTED
       appointmentData[0].attributes.isPending = true
       initializeTestInstance({ data: appointmentData })
