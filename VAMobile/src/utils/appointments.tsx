@@ -17,7 +17,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps, VA_ICON_MAP } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -164,20 +164,21 @@ export const getAppointmentTypeIcon = (
     height: theme.fontSizes.HelperText.fontSize,
     width: theme.fontSizes.HelperText.fontSize,
   } as VAIconProps
-  const types = AppointmentTypeConstants
-  let name: keyof typeof VA_ICON_MAP | undefined
 
-  if (type === types.VA_VIDEO_CONNECT_ONSITE || type === types.VA_VIDEO_CONNECT_ATLAS) {
-    name = 'Building'
-  } else if (type === types.VA_VIDEO_CONNECT_GFE || type === types.VA_VIDEO_CONNECT_HOME) {
-    name = 'VideoCamera'
-  } else if (type === types.VA) {
-    name = phoneOnly ? 'Phone' : 'Building'
-  } else if (phoneOnly) {
-    name = 'Phone'
+  switch (type) {
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+      return { ...iconProps, name: 'Building' }
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+      return { ...iconProps, name: 'VideoCamera' }
+    case AppointmentTypeConstants.VA:
+      return phoneOnly ? { ...iconProps, name: 'Phone' } : { ...iconProps, name: 'Building' }
+    case AppointmentTypeConstants.COMMUNITY_CARE:
+      return undefined
+    default:
+      return phoneOnly ? { ...iconProps, name: 'Phone' } : undefined
   }
-
-  return name && { ...iconProps, name }
 }
 
 /**
