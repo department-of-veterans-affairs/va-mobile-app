@@ -267,11 +267,7 @@ jobs:
 
   matrix-send_test_results_to_testrail:
     if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
-<<<<<<< HEAD
-    needs: matrix-e2e-ios
-=======
     needs: [matrix-e2e-ios, output_detox_tests_to_run]
->>>>>>> develop
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -286,11 +282,7 @@ jobs:
 
   send_test_results_to_testrail:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
-<<<<<<< HEAD
-    needs: e2e-ios
-=======
     needs: [e2e-ios, output_detox_tests_to_run]
->>>>>>> develop
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
