@@ -33,9 +33,15 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
+  const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+
+  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices()
+  const { isFetching: fetchingServiceHistory } = useServiceHistory({
+    enabled: loggedIn && downtimeWindowsFetched,
+  })
+  const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
+    enabled: loggedIn && downtimeWindowsFetched,
+  })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
