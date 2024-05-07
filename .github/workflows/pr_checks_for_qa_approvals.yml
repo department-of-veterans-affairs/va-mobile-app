@@ -20,7 +20,7 @@ on:
       #- 'develop'
   push: 
     branches: 
-      - 'Automation/6261-Chanel-Require-QA-Approval'    
+      - automation/62621-chanel-qa-approval-workflow
 
 jobs:
   check_for_qa_approval:
