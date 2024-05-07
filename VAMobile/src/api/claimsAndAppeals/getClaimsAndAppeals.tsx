@@ -6,6 +6,7 @@ import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 import { claimsAndAppealsKeys } from './queryKeys'
@@ -45,8 +46,8 @@ const getClaimsAndAppeals = async (
 export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
-  const claimsInDowntime = useDowntime('claims')
-  const appealsInDowntime = useDowntime('appeals')
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({

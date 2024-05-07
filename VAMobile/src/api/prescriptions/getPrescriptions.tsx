@@ -5,6 +5,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { PrescriptionsGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 import { prescriptionKeys } from './queryKeys'
@@ -26,7 +27,7 @@ const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
  */
 export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const rxInDowntime = useDowntime('rx_refill')
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({

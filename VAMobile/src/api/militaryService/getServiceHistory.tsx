@@ -4,6 +4,7 @@ import { has, max } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { MilitaryServiceHistoryData, ServiceData, ServiceHistoryAttributes, ServiceHistoryData } from 'api/types'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getDateFromString } from 'utils/formattingUtils'
 import { useDowntime } from 'utils/hooks'
 
@@ -32,7 +33,7 @@ const getServiceHistory = async (): Promise<ServiceHistoryAttributes | undefined
  */
 export const useServiceHistory = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const serviceHistoryInDowntime = useDowntime('military_service_history')
+  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
