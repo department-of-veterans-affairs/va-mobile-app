@@ -178,6 +178,11 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
 export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should open the ' + phoneType + ' phone number', async () => {
+    if (phoneType === 'Mobile') {
+      await resetInAppReview()
+      await openProfile()
+      await openContactInfo()
+    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
@@ -487,5 +492,5 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, Flagstaff, AZ, 86001', 'Mailing')
+  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
 })
