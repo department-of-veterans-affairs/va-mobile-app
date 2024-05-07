@@ -10,14 +10,6 @@ import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testU
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 
-when(api.get as jest.Mock)
-  .calledWith(`/v0/claim/0`, {}, expect.anything())
-  .mockResolvedValue({
-    data: {
-      ...claimData,
-    },
-  })
-
 context('ClaimDetailsScreen', () => {
   const renderWithData = (claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
@@ -55,20 +47,36 @@ context('ClaimDetailsScreen', () => {
 
   describe('when the selected tab is status', () => {
     it('should display the ClaimStatus component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
       renderWithData({
         ...claimData,
       })
-      expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
+      await waitFor(() =>
+        expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy(),
+      )
     })
 
     it('should display the ClaimDetails component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
       renderWithData({
         ...claimData,
       })
-      fireEvent.press(screen.getByText('Details'))
-      fireEvent.press(screen.getByText('Details'))
+      await waitFor(() => fireEvent.press(screen.getByText('Details')))
+      await waitFor(() => fireEvent.press(screen.getByText('Details')))
 
-      expect(screen.getByText('Claim type')).toBeTruthy()
+      await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
     })
   })
 

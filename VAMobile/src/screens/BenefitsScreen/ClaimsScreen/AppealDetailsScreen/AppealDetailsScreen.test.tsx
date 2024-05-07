@@ -11,15 +11,6 @@ import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import { appeal as appealData } from '../appealData'
 import AppealDetailsScreen from './AppealDetailsScreen'
 
-when(api.get as jest.Mock)
-  .calledWith(`/v0/appeal/0`, {}, expect.anything())
-  .mockResolvedValue({
-    data: {
-      ...appealData,
-      type: 'appeal',
-    },
-  })
-
 context('AppealDetailsScreen', () => {
   const renderWithData = (appeal?: Partial<AppealData>): void => {
     let queriesData: QueriesData | undefined
@@ -43,7 +34,6 @@ context('AppealDetailsScreen', () => {
       },
       { params: { appealID: '0' } },
     )
-
     render(<AppealDetailsScreen {...props} />, { queriesData })
   }
 
@@ -58,6 +48,14 @@ context('AppealDetailsScreen', () => {
     it('should display the AppealStatus component', async () => {
       const date = DateTime.fromISO('2018-01-19T10:20:42-05:00')
       const dateTime = date.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'appeal',
@@ -116,6 +114,14 @@ context('AppealDetailsScreen', () => {
 
   describe('when the selected tab is issues', () => {
     it('should display the AppealStatus component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'appeal',
@@ -137,6 +143,14 @@ context('AppealDetailsScreen', () => {
 
   describe('when the type is higherLevelReview', () => {
     it('should display "Higher level review appeal for {{ programArea }}" as the title', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'higherLevelReview',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'higherLevelReview',
@@ -145,6 +159,21 @@ context('AppealDetailsScreen', () => {
     })
 
     it('should display the Received date as the event date where the type is "hlr_request"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'higherLevelReview',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'hlr_request' },
+                { date: '2020-01-20', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'higherLevelReview',
@@ -162,6 +191,14 @@ context('AppealDetailsScreen', () => {
 
   describe('when the type is legacyAppeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'legacyAppeal',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'legacyAppeal',
@@ -170,6 +207,21 @@ context('AppealDetailsScreen', () => {
     })
 
     it('should display the Received date as the event date where the type is "nod"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'legacyAppeal',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'nod' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'legacyAppeal',
@@ -187,6 +239,14 @@ context('AppealDetailsScreen', () => {
 
   describe('when the type is appeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'appeal',
@@ -195,6 +255,21 @@ context('AppealDetailsScreen', () => {
     })
 
     it('should display the Received date as the event date where the type is "nod"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'nod' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'appeal',
@@ -212,6 +287,14 @@ context('AppealDetailsScreen', () => {
 
   describe('when the type is supplementalClaim', () => {
     it('should display "Supplemental claim appeal for {{ programArea }}" as the title', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'supplementalClaim',
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'supplementalClaim',
@@ -222,6 +305,21 @@ context('AppealDetailsScreen', () => {
     })
 
     it('should display the Received date as the event date where the type is "sc_request"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'supplementalClaim',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'sc_request' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
       renderWithData({
         ...appealData,
         type: 'supplementalClaim',
