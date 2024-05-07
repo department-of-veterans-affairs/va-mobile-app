@@ -21,7 +21,9 @@ export const Nametag = () => {
 
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
+  const { data: serviceHistory } = useServiceHistory({ enabled: false })
+  const accessToMilitaryInfo =
+    userAuthorizedServices?.militaryServiceHistory && !!serviceHistory?.serviceHistory?.length
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
