@@ -68,9 +68,4 @@ jobs:
             echo 'This PR requires 2 approvals, including one QA approval, before merging.'
             echo ::set-output name=has_qa_approval::'false'
           fi
-  add_or_remove_qa_required_label:
-    name: Add or Remove label
-    needs: check_for_qa_approval
-    runs-on: ubuntu-latest
-    env:
-      LABEL: qa-review-required
+  
