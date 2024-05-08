@@ -404,6 +404,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
                     ? AppointmentDetailsSubTypeConstants.Pending
                     : AppointmentDetailsSubTypeConstants.Upcoming
             }
+            goBack={navigation.goBack}
+            cancelAppointment={cancelAppointment}
           />
         ) : (
           <Box>

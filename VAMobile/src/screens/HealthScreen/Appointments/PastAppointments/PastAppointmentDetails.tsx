@@ -140,6 +140,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
                   ? AppointmentDetailsSubTypeConstants.Pending
                   : AppointmentDetailsSubTypeConstants.Past
           }
+          goBack={navigation.goBack}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes } from 'api/types'
@@ -70,8 +71,12 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
     missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
   }
 
-  const locationData = { ...location, latitude: location.lat!, longitude: location.long! }
-
+  const locationData: LocationData | undefined =
+    hasDirectionLink && hasLatLong
+      ? { name: location.name, address: location?.address, latitude: location.lat!, longitude: location.long! }
+      : hasDirectionLink && hasFullAddress
+        ? { name: location.name, address: location.address! }
+        : undefined
   return (
     <>
       <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
@@ -95,7 +100,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
           {missingBodyText}
         </TextView>
       )}
-      {hasDirectionLink && (
+      {hasDirectionLink && locationData && (
         <LinkWithAnalytics
           type="directions"
           locationData={locationData}
