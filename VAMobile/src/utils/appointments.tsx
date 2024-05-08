@@ -42,7 +42,7 @@ const atFacilityAddress = (location: AppointmentLocation | undefined, t: TFuncti
   return fullAddress ? t('appointments.atFacility', { facility: fullAddress }) : t('appointments.atAtlasFacility')
 }
 
-const atFacilityText = (location: AppointmentLocation | undefined, t: TFunction) => {
+const atFacilityName = (location: AppointmentLocation | undefined, t: TFunction) => {
   const facility = location?.name
   return facility ? t('appointments.atFacility', { facility }) : t('appointments.atVAFacility')
 }
@@ -68,11 +68,11 @@ export const getAppointmentTypeIconText = (
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
       return t('video')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return atFacilityText(location, t)
+      return atFacilityName(location, t)
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
       return t('video')
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? t('appointmentList.phoneOnly') : atFacilityText(location, t)
+      return phoneOnly ? t('appointmentList.phoneOnly') : atFacilityName(location, t)
     case AppointmentTypeConstants.COMMUNITY_CARE:
       return t('upcomingAppointments.communityCare')
     default:
@@ -360,9 +360,9 @@ const getModality = (
 })
 
 const getTextLine = (
-  text?: string | null,
+  text: string | null,
+  mb: number,
   variant: keyof VATypographyThemeVariants = 'HelperText',
-  mb = 5,
 ): TextLineWithIconProps | undefined => {
   return text ? { text, variant, mb } : undefined
 }
@@ -400,19 +400,20 @@ export const getTextLinesForAppointmentListItem = (
   let result: Array<TextLineWithIconProps | undefined> = []
 
   if (isPending) {
+    const type = pendingType(appointmentType, t, phoneOnly)
     result = [
-      getTextLine(careText, 'MobileBodyBold'),
+      getTextLine(careText, tinyMarginBetween, 'MobileBodyBold'),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
-      getTextLine(healthcareProvider),
-      getTextLine(t('appointmentList.requestType', { type: pendingType(appointmentType, t, phoneOnly) })),
+      getTextLine(healthcareProvider, tinyMarginBetween),
+      getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
     ]
   } else {
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
-      getTextLine(careText),
-      getTextLine(healthcareProvider),
+      getTextLine(careText, tinyMarginBetween),
+      getTextLine(healthcareProvider, tinyMarginBetween),
       getModality(appointmentType, phoneOnly, location, theme, t),
     ]
   }
