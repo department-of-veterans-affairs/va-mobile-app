@@ -322,11 +322,15 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          <TextView mx={theme.dimensions.gutter} variant={'HomeScreenHeader'} accessibilityRole="header">
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.standardMarginBetween}
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
             {t('aboutYou')}
           </TextView>
           {loadingAboutYou ? (
-            <Box mx={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween}>
+            <Box mx={theme.dimensions.standardMarginBetween}>
               <LoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
@@ -336,11 +340,11 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box mx={theme.dimensions.condensedMarginBetween} mt={theme.dimensions.condensedMarginBetween}>
+            <Box mx={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
-            <Box mt={theme.dimensions.condensedMarginBetween}>
+            <Box>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {disRating && (
