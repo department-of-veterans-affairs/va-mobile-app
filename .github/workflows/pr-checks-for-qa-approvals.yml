@@ -1,4 +1,3 @@
-
 #
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
 #
@@ -12,60 +11,59 @@ on:
       #- 'VAMobile/src/**'
       #- 'VAMobile/package.json'
       #- '!VAMobile/src/**.test.*'
+
   pull_request_review:
     types: [submitted, dismissed]
-  #pull_request_target:
-    #branches:
-      #- 'develop'  
-  push:
+
+  pull_request_target:
+    branches:
+      - 'develop'
+  push: 
     branches: 
-      - 'automation/6261-chanel-qa-approval-new'  
+      - 'Automation/6261-Chanel-Require-QA-Approval'    
 
 jobs:
-  check_for_qa_required:
-    if: github.event.review.state == 'APPROVED'
-    runs-on: ubuntu-latest
-    outputs:
-      requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
-    steps:
-      - uses: dorny/paths-filter@v2
-        id: qa_required
-        with:
-          filters: |
-            requires_qa:
-                - 'VAMobile/src'
-                - 'VAMobile/package.json'
-                - '!VAMobile/src/*.test.*'
   check_for_qa_approval:
+    name: Requires QA approval
     runs-on: ubuntu-latest
-    needs: check_for_qa_required
-    outputs:
-      has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
     steps:
       - name: Check QA approval
-        id: check-qa-approval
         shell: bash
-        if: ${{ needs.check_for_qa_required.outputs.requires_qa }} == 'true'
         run: |
-          token=${{ secrets.GITHUB_TOKEN }}
-          base64AuthInfo='$token | base64 -e'
-          response=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
-          --header 'Authorization: $base64AuthInfo' \
-          --header 'Content-Type: application/json')
-          approvals = $response | jq '.[] | select(.state=="APPROVED")'
-          echo $approvals
-          if $aprovals.length > 1
-            qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
-              if $qa_approvals.length > 0
+          approvals=$(curl --request GET \
+          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
+          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' |
+          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+          gh auth login --with-token < token.txt
+          required_approval_count=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
+          jq -c '.required_pull_request_reviews.required_approving_review_count')
+          echo "Approvers: $approvals"
+          
+          qa_team_members=$(
+            gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members |
+            jq -c '[.[] | .login]'
+          )
+          echo "required approval count: $required_approval_count"
+          echo "QA team: $qa_team_members"
+          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
+            then
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+                then
                 echo 'This PR has QA approval to merge'
-                echo ::set-output name=has_qa_approval::'true'
+                exit 0
               else 
                 echo 'This PR requires QA approval to merge'
-                echo ::set-output name=has_qa_approval::'false'
+                exit 1
               fi
           else
-            echo 'This PR requires 2 approvals, including one QA approval, before merging.'
-            echo ::set-output name=has_qa_approval::'false'
+            echo 'This PR requires 2 approvals, including one QA and one engineerapprovals, before merging.'
+            exit 1
           fi
-  
