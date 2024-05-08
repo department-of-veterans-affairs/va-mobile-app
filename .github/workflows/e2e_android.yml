@@ -6,6 +6,8 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
+      branches:
+        - 'dependabot/**'
   workflow_dispatch:
     inputs:
       tests_to_run:
@@ -58,15 +60,14 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
-  
-  find_detox_tests_to_run:
-    if: ${{github.event_name == 'push'}}
-    uses: ./.github/workflows/e2e_detox_mapping.yml
 
+  #find_detox_tests_to_run:
+  #  if: ${{github.event_name == 'push'}}
+  #  uses: ./.github/workflows/e2e_detox_mapping.yml
+  
   output_detox_tests_to_run:
     if: always()
     runs-on: macos-latest-xl
-    needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.empty_matrix}}
@@ -79,25 +80,12 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ ${{ github.event_name == 'push' }} == true ]]; then
-          echo "push_event=true" >> "$GITHUB_OUTPUT"
-            echo "$push_event"
-            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-              echo "empty_matrix=" >> "$GITHUB_OUTPUT"
-            else
-              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-            fi
+          if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+            echo "matrix=" >> "$GITHUB_OUTPUT"
+            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
           else
-          echo "push_event=" >> "$GITHUB_OUTPUT"
-            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-              echo "matrix=" >> "$GITHUB_OUTPUT"
-              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-            else
-              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-            fi
+            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
           fi
 
   matrix-e2e-android:

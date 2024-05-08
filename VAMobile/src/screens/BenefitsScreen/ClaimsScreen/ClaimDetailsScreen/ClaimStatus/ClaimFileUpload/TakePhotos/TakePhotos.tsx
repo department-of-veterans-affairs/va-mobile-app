@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
@@ -7,16 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import {
-  AlertBox,
-  Box,
-  ClickForActionLink,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-} from 'components'
+import { AlertBox, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
@@ -59,27 +50,22 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   }
 
-  const collapsibleContent = (): ReactNode => {
-    const linkToCallProps: LinkButtonProps = {
-      a11yLabel: a11yLabelVA(t('goToVAGov')),
-      displayedText: t('goToVAGov'),
-      linkType: LinkTypeOptionsConstants.url,
-      linkUrlIconType: LinkUrlIconType.Arrow,
-      numberOrUrlLink: LINK_URL_GO_TO_VA_GOV,
-    }
-
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView
-          variant="MobileBody"
-          paragraphSpacing={true}
-          accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
-          {t('fileUpload.accessibilityAlert.body')}
-        </TextView>
-        <ClickForActionLink {...linkToCallProps} />
-      </Box>
-    )
-  }
+  const collapsibleContent = (
+    <Box mt={theme.dimensions.standardMarginBetween}>
+      <TextView
+        variant="MobileBody"
+        paragraphSpacing={true}
+        accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
+        {t('fileUpload.accessibilityAlert.body')}
+      </TextView>
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_GO_TO_VA_GOV}
+        text={t('goToVAGov')}
+        a11yLabel={a11yLabelVA(t('goToVAGov'))}
+      />
+    </Box>
+  )
 
   const onCancel = () => {
     logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'photo'))
@@ -102,7 +88,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         <CollapsibleAlert
           border="informational"
           headerText={t('fileUpload.accessibilityAlert.title')}
-          body={collapsibleContent()}
+          body={collapsibleContent}
           a11yLabel={t('fileUpload.accessibilityAlert.title')}
         />
       </Box>
@@ -117,7 +103,9 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           {t('fileUpload.ifMoreThan10.1')}
           <TextView variant="MobileBodyBold">
             {t('fileUpload.ifMoreThan10.2')}
-            <TextView variant="MobileBody">{t('fileUpload.ifMoreThan10.3')}</TextView>
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('fileUpload.ifMoreThan10.3'))}>
+              {t('fileUpload.ifMoreThan10.3')}
+            </TextView>
           </TextView>
         </TextView>
         <TextView variant="MobileBodyBold">{t('fileUpload.maxFileSize')}</TextView>

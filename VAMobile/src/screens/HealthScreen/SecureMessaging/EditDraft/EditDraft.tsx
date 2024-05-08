@@ -1,14 +1,34 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InteractionManager, Pressable, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
+import { Pressable, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import {
+  secureMessagingKeys,
+  useDeleteMessage,
+  useMessage,
+  useMessageRecipients,
+  useSaveDraft,
+  useSendMessage,
+  useThread,
+} from 'api/secureMessaging'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  DeleteMessageParameters,
+  SaveDraftParameters,
+  SecureMessagingFormData,
+  SecureMessagingMessageAttributes,
+  SecureMessagingMessageList,
+  SecureMessagingSystemFolderIdConstants,
+  SendMessageParameters,
+} from 'api/types'
 import {
   AlertBox,
   Box,
@@ -18,6 +38,7 @@ import {
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   PickerItem,
@@ -27,45 +48,20 @@ import {
 import { MenuViewActionsType } from 'components/Menu'
 import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  FolderNameTypeConstants,
-  FormHeaderTypeConstants,
-  REPLY_WINDOW_IN_DAYS,
-  SegmentedControlIndexes,
-} from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { RootState } from 'store'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-} from 'store/api/types'
-import {
-  SecureMessagingState,
-  deleteDraft,
-  dispatchResetDeleteDraftFailed,
-  getMessage,
-  getMessageRecipients,
-  getThread,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
-  resetSendMessageComplete,
-  resetSendMessageFailed,
-  saveDraft,
-  sendMessage,
-  updateSecureMessagingTab,
-} from 'store/slices'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { isErrorObject, showSnackBar } from 'utils/common'
+import { hasErrorCode } from 'utils/errors'
 import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
-  useError,
   useRouteNavigation,
   useTheme,
 } from 'utils/hooks'
@@ -88,6 +84,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
   const navigateTo = useRouteNavigation()
+  const queryClient = useQueryClient()
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
@@ -103,35 +100,47 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }
 
   const {
-    sendingMessage,
-    sendMessageComplete,
-    hasLoadedRecipients,
-    loading,
-    messagesById,
-    recipients,
-    saveDraftComplete,
-    savingDraft,
-    threads,
-    deleteDraftComplete,
-    deletingDraft,
-  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+    data: recipients,
+    isFetched: hasLoadedRecipients,
+    isError: recipientsError,
+  } = useMessageRecipients({
+    enabled: screenContentAllowed('WG_EditDraft'),
+  })
   const destructiveAlert = useDestructiveActionSheet()
   const draftAttachmentAlert = useDestructiveActionSheet()
-  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
-
+  const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
+  const { mutate: deleteDraft, isPending: deletingDraft } = useDeleteMessage()
+  const {
+    mutate: sendMessage,
+    isPending: sendingMessage,
+    isError: sendMessageError,
+    error: sendMessageErrorDetails,
+  } = useSendMessage()
   const { attachmentFileToAdd } = route.params
 
   const messageID = Number(route.params?.messageID)
-  const message = messageID ? messagesById?.[messageID] : null
-  const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
+  const {
+    data: messageDraftData,
+    isLoading: loadingMessage,
+    isFetched: messageFetched,
+    isError: messageError,
+  } = useMessage(messageID, {
+    enabled: screenContentAllowed('WG_EditDraft'),
+  })
+  const { data: threadData, isError: threadError } = useThread(messageID, false, {
+    enabled: screenContentAllowed('WG_EditDraft'),
+  })
+  const thread = threadData?.data || ([] as SecureMessagingMessageList)
+  const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const isReplyDraft = thread.length > 1
   const replyToID = thread?.find((id) => {
-    const currentMessage = messagesById?.[id]
+    const currentMessage = id.attributes
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
-  })
-  const hasRecentMessages = thread
-    .map((id) => messagesById[id])
-    .some((msg) => DateTime.fromISO(msg.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS)
+  })?.attributes.messageId
+
+  const hasRecentMessages = thread.some(
+    (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
+  )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
@@ -140,6 +149,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [body, setBody] = useState(message?.body || '')
   const [onSendClicked, setOnSendClicked] = useState(false)
+  const [replyTriageError, setReplyTriageError] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -149,28 +159,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_EditDraft')) {
-      dispatch(resetSaveDraftFailed())
-      dispatch(dispatchResetDeleteDraftFailed())
-
-      if (messageID) {
-        dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
-        dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-      }
-      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-      InteractionManager.runAfterInteractions(() => {
-        setIsTransitionComplete(true)
-      })
-    }
-  }, [messageID, dispatch])
-
-  useEffect(() => {
-    if (!loading && message?.body) {
-      setBody(message?.body || '')
-    }
-  }, [loading, message])
 
   const goToDraftFolder = useCallback(
     (draftSaved: boolean): void => {
@@ -184,26 +172,56 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
 
   useEffect(() => {
-    if (saveDraftComplete) {
-      dispatch(resetSaveDraftComplete())
-      goToDraftFolder(true)
-    } else if (deleteDraftComplete) {
-      goToDraftFolder(false)
+    if (!loadingMessage && messageFetched) {
+      setBody(message?.body || '')
+      setCategory(message?.category || '')
+      setSubject(message?.subject || '')
+      setTo(message?.recipientId.toString() || '')
     }
-  }, [saveDraftComplete, navigation, deleteDraftComplete, goToDraftFolder, dispatch])
+  }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
   useEffect(() => {
-    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
-    if (sendMessageComplete) {
-      dispatch(resetSendMessageComplete())
-      navigateTo('SecureMessaging')
-      navigateTo('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: false,
-      })
+    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+        setReplyTriageError(true)
+      } else {
+        const messageData = isReplyDraft
+          ? { body, draft_id: messageID, category }
+          : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+            navigateTo('SecureMessaging', { activeTab: 1 })
+          },
+        }
+        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
+      }
     }
-  }, [sendMessageComplete, dispatch, navigateTo])
+  }, [
+    dispatch,
+    sendMessageError,
+    sendMessageErrorDetails,
+    snackbarSentMessages.successMsg,
+    snackbarSentMessages.errorMsg,
+    attachmentsList,
+    category,
+    messageID,
+    to,
+    subject,
+    body,
+    isReplyDraft,
+    navigateTo,
+    sendMessage,
+    setReplyTriageError,
+  ])
+
+  const getMessageData = (): SecureMessagingFormData => {
+    return isReplyDraft
+      ? { body, draft_id: messageID, category }
+      : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
+  }
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -219,12 +237,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         message?.body !== body
       )
     }
-  }
-
-  const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft
-      ? { body, draft_id: messageID, category }
-      : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -249,7 +261,25 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       {
         text: t('delete'),
         onPress: () => {
-          dispatch(deleteDraft(messageID, snackbarMessages))
+          const params: DeleteMessageParameters = { messageID: messageID }
+          const mutateOptions = {
+            onSuccess: () => {
+              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              queryClient.invalidateQueries({
+                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              })
+              navigateTo('FolderMessages', {
+                folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+                folderName: FolderNameTypeConstants.drafts,
+                draftSaved: false,
+              })
+              goToDraftFolder(false)
+            },
+            onError: () => {
+              showSnackBar(snackbarMessages.errorMsg, dispatch, () => deleteDraft(params, mutateOptions), false, true)
+            },
+          }
+          deleteDraft(params, mutateOptions)
         },
       },
     ]
@@ -316,7 +346,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
+  if (recipientsError || threadError || messageError) {
     return (
       <FullScreenSubtask
         title={t('editDraft')}
@@ -328,14 +358,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
-  if (
-    (!isReplyDraft && !hasLoadedRecipients) ||
-    loading ||
-    savingDraft ||
-    !isTransitionComplete ||
-    deletingDraft ||
-    isDiscarded
-  ) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loadingMessage || savingDraft || deletingDraft || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : deletingDraft
@@ -481,22 +504,43 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   ]
 
   const onGoToInbox = (): void => {
-    dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigateTo('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const onMessageSendOrSave = (): void => {
-    dispatch(resetSendMessageFailed())
     const messageData = getMessageData()
-
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () =>
-        dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
-      )
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
+        const params: SaveDraftParameters = { messageData: messageData, messageID: messageID, replyID: replyToID }
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
+            queryClient.invalidateQueries({
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+            })
+            goToDraftFolder(true)
+          },
+          onError: () => {
+            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+          },
+        }
+        saveDraft(params, mutateOptions)
+      })
     } else {
-      // TODO: send along composeType so API knows which endpoint to POST to
-      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))
+      const mutateOptions = {
+        onSuccess: () => {
+          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+          logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+          navigateTo('FolderMessages', {
+            folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+            folderName: FolderNameTypeConstants.drafts,
+            draftSaved: false,
+          })
+        },
+      }
+      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      sendMessage(params, mutateOptions)
     }
   }
 
@@ -521,9 +565,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error"
           scrollViewRef={scrollViewRef}>
-          <Box mt={theme.dimensions.standardMarginBetween} mr="auto">
-            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-          </Box>
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
     }
@@ -555,6 +597,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           scrollViewRef={scrollViewRef}
           focusOnError={onSendClicked}
           errorList={errorList}
+          replyTriageError={replyTriageError}
         />
         <TextArea>
           {message && isReplyDraft && (
@@ -605,7 +648,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
     // If we're editing a reply draft, don't display the draft message in the thread
     if (isReplyDraft) {
-      messageThread = messageThread?.filter((id) => id !== messageID)
+      messageThread = messageThread?.filter((id) => id.attributes.messageId !== messageID)
     }
 
     return (
@@ -615,7 +658,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             {t('secureMessaging.reply.messageConversation')}
           </TextView>
         </Box>
-        {message && messagesById && thread && (
+        {message && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box
               accessibilityRole={'header'}
@@ -625,7 +668,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               p={theme.dimensions.cardPadding}>
               <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
-            {renderMessages(message, messagesById, messageThread)}
+            {renderMessages(message, messageThread)}
           </Box>
         )}
       </Box>
