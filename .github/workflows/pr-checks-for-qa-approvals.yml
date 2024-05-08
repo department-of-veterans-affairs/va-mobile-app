@@ -32,10 +32,12 @@ jobs:
         shell: bash
         run: |
           approvals=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
-          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' |
-          jq -c '[.[] | select(.state == "APPROVED") | .user.login]'
+          --url "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100" \
+          --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "Content-Type: application/json" | \
+          jq -c '[.[] | select(.state == "APPROVED") | .user.login]')
+      
+          
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
