@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { PhoneData } from 'api/types'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, del } from 'store/api'
-import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 
 import { contactInformationKeys } from './queryKeys'
@@ -23,8 +23,9 @@ export const useDeletePhoneNumber = () => {
 
   return useMutation({
     mutationFn: deletePhoneNumber,
-    onSuccess: async () => {
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+    onSuccess: () => {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      logAnalyticsEvent(Events.vama_prof_update_phone())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
     onError: (error) => {

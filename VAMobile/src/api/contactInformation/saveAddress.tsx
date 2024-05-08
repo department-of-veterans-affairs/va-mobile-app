@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { SaveAddressParameters } from 'api/types'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
-import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 
 import { contactInformationKeys } from './queryKeys'
@@ -35,8 +35,9 @@ export const useSaveAddress = () => {
 
   return useMutation({
     mutationFn: saveAddress,
-    onSuccess: async () => {
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+    onSuccess: () => {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      logAnalyticsEvent(Events.vama_prof_update_address())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
     onError: (error) => {

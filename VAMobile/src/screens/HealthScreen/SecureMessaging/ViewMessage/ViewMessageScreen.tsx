@@ -1,12 +1,26 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { secureMessagingKeys, useFolders, useMessage, useMoveMessage, useThread } from 'api/secureMessaging'
+import {
+  MoveMessageParameters,
+  SecureMessagingAttachment,
+  SecureMessagingFolderList,
+  SecureMessagingFolderMessagesGetData,
+  SecureMessagingFoldersGetData,
+  SecureMessagingMessageAttributes,
+  SecureMessagingMessageData,
+  SecureMessagingMessageGetData,
+  SecureMessagingMessageList,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
 import {
   AlertBox,
   Box,
@@ -19,28 +33,17 @@ import {
   VAModalPicker,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
-import { Events } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
-import {
-  SecureMessagingMessageAttributes,
-  SecureMessagingMessageMap,
-  SecureMessagingSystemFolderIdConstants,
-} from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
-import {
-  SecureMessagingState,
-  getMessage,
-  getThread,
-  listFolders,
-  moveMessage,
-} from 'store/slices/secureMessagingSlice'
 import { GenerateFolderMessage } from 'translations/en/functions'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -55,22 +58,21 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  */
 export function renderMessages(
   message: SecureMessagingMessageAttributes,
-  messagesById: SecureMessagingMessageMap,
-  thread: Array<number>,
+  thread: SecureMessagingMessageList,
   hideMessage = false,
 ) {
-  const threadMessages = thread
-    .map((messageID) => messagesById[messageID])
-    .sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
+  const threadMessages = thread.sort((message1, message2) =>
+    message1.attributes.sentDate > message2.attributes.sentDate ? -1 : 1,
+  )
 
   return threadMessages.map(
     (m) =>
       m &&
-      m.messageId && (
+      m.attributes.messageId && (
         <CollapsibleMessage
-          key={m.messageId}
-          message={m}
-          isInitialMessage={hideMessage && m.messageId === message.messageId}
+          key={m.attributes.messageId}
+          message={m.attributes}
+          isInitialMessage={hideMessage && m.attributes.messageId === message.messageId}
         />
       ),
   )
@@ -98,48 +100,113 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const {
-    messagesById,
-    threads,
-    loading,
-    loadingFile,
-    loadingInbox,
-    messageIDsOfError,
-    folders,
-    movingMessage,
-    isUndo,
-    moveMessageFailed,
-  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
-  const message = messagesById?.[messageID]
-  const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
+  const queryClient = useQueryClient()
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const smNotInDowntime = !useDowntimeByScreenID(screenID)
   const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
+  const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
+  const {
+    data: messageData,
+    isError: messageError,
+    isLoading: loadingMessage,
+    isFetched: messageFetched,
+  } = useMessage(messageID, {
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
+  const {
+    data: threadData,
+    isError: threadError,
+    isLoading: loadingThread,
+    isFetched: threadFetched,
+  } = useThread(messageID, true, {
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
+  const {
+    data: foldersData,
+    isError: foldersError,
+    isLoading: loadingFolder,
+  } = useFolders({
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
 
-  // have to use uselayout due to the screen showing in white or showing the previouse data
-  useLayoutEffect(() => {
-    // Only get message and thread when inbox isn't being fetched
-    // to avoid a race condition with writing to `messagesById`
-    if (isScreenContentAllowed && !loadingInbox && smNotInDowntime) {
-      dispatch(getMessage(messageID, screenID))
-      dispatch(getThread(messageID, screenID))
-    }
-  }, [loadingInbox, messageID, smNotInDowntime, dispatch, isScreenContentAllowed])
+  const folders = foldersData?.data || ([] as SecureMessagingFolderList)
+  const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+  const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
+  if (includedAttachments?.length) {
+    const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
+      id: attachment.id,
+      filename: attachment.attributes.name,
+      link: attachment.links.download,
+      size: attachment.attributes.attachmentSize,
+    }))
+
+    message.attachments = attachments
+  }
+  const thread = threadData?.data || ([] as SecureMessagingMessageList)
 
   useEffect(() => {
-    if (isUndo || moveMessageFailed) {
-      setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
-      folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
+    if (threadFetched) {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     }
-  }, [isUndo, currentFolderIdParam, moveMessageFailed])
+  }, [threadFetched])
 
   useEffect(() => {
-    if (isScreenContentAllowed && !folders.length) {
-      dispatch(listFolders(screenID))
+    if (
+      messageFetched &&
+      currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX &&
+      messageData?.data.attributes.readReceipt !== READ &&
+      currentPage
+    ) {
+      const inboxMessagesData = queryClient.getQueryData([
+        secureMessagingKeys.folderMessages,
+        currentFolderIdParam,
+        currentPage,
+      ]) as SecureMessagingFolderMessagesGetData
+      const newInboxMessages = inboxMessagesData.data.map((m) => {
+        if (m.attributes.messageId === message.messageId) {
+          m.attributes.readReceipt = READ
+          const oldMessageAttributes = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+          oldMessageAttributes.readReceipt = READ
+          const newMessage = {
+            attributes: oldMessageAttributes,
+            type: messageData?.data.type,
+            id: messageData?.data.id,
+          } as SecureMessagingMessageData
+          const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
+          queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
+        }
+        return m
+      })
+      const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
+      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
+      if (foldersData) {
+        let inboxUnreadCount = foldersData.inboxUnreadCount
+        const newFolders = foldersData.data.map((folder) => {
+          if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+            folder.attributes.unreadCount = folder.attributes.unreadCount - 1
+            inboxUnreadCount = folder.attributes.unreadCount
+          }
+          return folder
+        }) as SecureMessagingFolderList
+        queryClient.setQueryData(secureMessagingKeys.folders, {
+          ...foldersData,
+          data: newFolders,
+          inboxUnreadCount,
+        } as SecureMessagingFoldersGetData)
+      }
     }
-  }, [dispatch, folders, isScreenContentAllowed])
+  }, [
+    messageFetched,
+    message.readReceipt,
+    queryClient,
+    message.messageId,
+    currentFolderIdParam,
+    currentPage,
+    messageData?.included,
+    foldersData,
+    messageData,
+  ])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
@@ -179,7 +246,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
+  if (foldersError || messageError || threadError || !smNotInDowntime) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <ErrorComponent screenID={screenID} />
@@ -187,23 +254,17 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     )
   }
 
-  if (loading || loadingFile || loadingInbox || movingMessage) {
+  if (loadingFolder || loadingThread || loadingMessage || loadingMoveMessage) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent
-          text={
-            loadingFile
-              ? t('secureMessaging.viewMessage.loadingAttachment')
-              : movingMessage
-                ? t('secureMessaging.movingMessage')
-                : t('secureMessaging.viewMessage.loading')
-          }
+          text={loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
         />
       </ChildTemplate>
     )
   }
 
-  if (!message || !messagesById || !thread) {
+  if (!message || !thread) {
     // return empty /error  state
     // do not replace with error component otherwise user will always see a red error flash right before their message loads
     return (
@@ -232,22 +293,84 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      dispatch(
-        moveMessage(
-          snackbarMessages,
-          messageID,
-          newFolder,
-          currentFolder,
-          currentFolderIdParam,
-          currentPage,
-          messagesLeft,
-          false,
-          folders,
-        ),
-      )
-      if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
-        navigation.goBack()
+      const folder = (): string => {
+        switch (newFolder) {
+          case SecureMessagingSystemFolderIdConstants.SENT:
+            return 'sent'
+          case SecureMessagingSystemFolderIdConstants.INBOX:
+            return 'inbox'
+          case SecureMessagingSystemFolderIdConstants.DELETED:
+            return 'deleted'
+          case SecureMessagingSystemFolderIdConstants.DRAFTS:
+            return 'drafts'
+          default:
+            return 'custom'
+        }
       }
+      const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
+      const mutateOptions = {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
+          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, page] })
+          logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
+          showSnackBar(
+            snackbarMessages.successMsg,
+            dispatch,
+            () => {
+              const undoParams: MoveMessageParameters = { messageID: messageID, newFolderID: currentFolder }
+              const undoMutateOptions = {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
+                  queryClient.invalidateQueries({
+                    queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage],
+                  })
+                  logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
+                  showSnackBar(
+                    snackbarMessages.undoMsg ? snackbarMessages.undoMsg : snackbarMessages.successMsg,
+                    dispatch,
+                    undefined,
+                    true,
+                    false,
+                    true,
+                  )
+                  setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+                  folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
+                },
+                onError: () => {
+                  showSnackBar(
+                    snackbarMessages.undoErrorMsg ? snackbarMessages.undoErrorMsg : snackbarMessages.errorMsg,
+                    dispatch,
+                    () => moveMessage(undoParams, undoMutateOptions),
+                    false,
+                    true,
+                    true,
+                  )
+                  setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+                  folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
+                },
+              }
+              moveMessage(undoParams, undoMutateOptions)
+            },
+            false,
+            false,
+            true,
+          )
+        },
+        onError: () => {
+          showSnackBar(
+            snackbarMessages.undoErrorMsg ? snackbarMessages.undoErrorMsg : snackbarMessages.errorMsg,
+            dispatch,
+            () => moveMessage(params, mutateOptions),
+            false,
+            true,
+            true,
+          )
+          setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
+          folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
+        },
+      }
+      const params: MoveMessageParameters = { messageID: messageID, newFolderID: newFolder }
+      moveMessage(params, mutateOptions)
     }
   }
 
@@ -297,7 +420,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         </Box>
       )}
       <MessageCard message={message} />
-      {thread.length > 1 && (
+      {thread.length > 0 && (
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box accessible={true} accessibilityRole={'header'}>
             <TextView
@@ -308,7 +431,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               {t('secureMessaging.reply.messageConversation')}
             </TextView>
           </Box>
-          {renderMessages(message, messagesById, thread, true)}
+          {renderMessages(message, thread, true)}
         </Box>
       )}
     </ChildTemplate>
