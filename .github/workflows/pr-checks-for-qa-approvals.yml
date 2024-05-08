@@ -22,7 +22,6 @@ on:
   push: 
     branches: 
       - 'automation/6261-chanel-qa-approval-new'    
-
 jobs:
   check_for_qa_approval:
     name: Requires QA approval
