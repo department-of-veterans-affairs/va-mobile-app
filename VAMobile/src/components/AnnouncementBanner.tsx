@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { Platform, Pressable, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
+import { BackgroundVariant, Box, BoxProps, TextView } from 'components'
 import { useExternalLink, useTheme } from 'utils/hooks'
 
 import colors from '../styles/themes/VAColors'
@@ -54,14 +56,13 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
           <Box flex={1}>
             <TextView variant="AnnouncementBannerTitle">{title}</TextView>
           </Box>
-          <VAIcon
+          <Icon
             width={24}
             height={24}
             preventScaling={true}
-            name={'CircleExternalLink'}
+            name={'ExternalLink'}
             fill={theme.colors.icon.announcementBanner}
             fill2={theme.colors.icon.transparent}
-            ml={theme.dimensions.listItemDecoratorMarginLeft}
           />
         </Box>
       </Pressable>
