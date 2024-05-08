@@ -25,48 +25,58 @@ on:
 
 jobs:
   check_for_qa_approval:
-    name: Requires QA approval
+    name: Check for QA Approval
     runs-on: ubuntu-latest
     steps:
-      - name: Check QA approval
-        shell: bash
-        run: |
-          approvals=$(curl --request GET \
-          --url "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100" \
-          --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          --header "Content-Type: application/json" | \
-          jq -c '[.[] | select(.state == "APPROVED") | .user.login]')
+      - name: Check PR Reviews and Required Approvals
+        id: check_pr_reviews
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const response = await github.request('GET /repos/:owner/:repo/pulls/:pull_number/reviews', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100
+            });
+            const reviews = response.data;
+            const approvals = reviews.filter(review => review.state === 'APPROVED').map(review => review.user.login);
+            const requiredApprovalCountResponse = await github.request('GET /repos/:owner/:repo/branches/:branch/protection', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: 'develop' // Update with your target branch
+            });
+            const requiredApprovalCount = requiredApprovalCountResponse.data.required_pull_request_reviews.required_approving_review_count;
+            const qaTeamMembersResponse = await github.request('GET /orgs/:org/teams/:team/members', {
+              org: 'department-of-veterans-affairs', // Update with your organization
+              team: 'flagship-mobile-qa' // Update with your QA team
+            });
+            const qaTeamMembers = qaTeamMembersResponse.data.map(member => member.login);
+            return JSON.stringify({
+              approvals: approvals,
+              requiredApprovalCount: requiredApprovalCount,
+              qaTeamMembers: qaTeamMembers
+            });
       
-          
-          echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
-          gh auth login --with-token < token.txt
-          required_approval_count=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
-          jq -c '.required_pull_request_reviews.required_approving_review_count')
-          echo "Approvers: $approvals"
-          
-          qa_team_members=$(
-            gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members |
-            jq -c '[.[] | .login]'
-          )
-          echo "required approval count: $required_approval_count"
-          echo "QA team: $qa_team_members"
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
-            then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
-                then
+      
+      - name: Check QA Approval
+        run: |
+          output=$(echo "${{ steps.check_pr_reviews.outputs.results }}" | jq -r .)
+          approvals=$(echo "$output" | jq -r .approvals)
+          required_approval_count=$(echo "$output" | jq -r .requiredApprovalCount)
+          qa_team_members=$(echo "$output" | jq -r .qaTeamMembers)
+          if [[ $(echo "$approvals" | jq -r 'length') -gt "$required_approval_count" ]]; then
+            for user in $(echo "$qa_team_members"); do
+              if [[ $(echo "$approvals" | jq -r 'contains(["'"$user"'"])') == true ]]; then
                 echo 'This PR has QA approval to merge'
                 exit 0
-              else 
-                echo 'This PR requires QA approval to merge'
-                exit 1
               fi
+            done
+            echo 'This PR requires QA approval to merge'
+            exit 1
           else
-            echo 'This PR requires 2 approvals, including one QA and one engineerapprovals, before merging.'
+            echo 'This PR requires 2 approvals, including one QA and one engineer, before merging.'
             exit 1
           fi
+      
