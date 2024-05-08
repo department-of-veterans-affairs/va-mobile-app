@@ -5,19 +5,19 @@
 name: '[Utils] QA required approval'
 
 on:
-  #pull_request:
-    #types: [opened, edited, converted_to_draft, ready_for_review, reopened]
-    #paths:
-      #- 'VAMobile/src/**'
-      #- 'VAMobile/package.json'
-      #- '!VAMobile/src/**.test.*'
+  pull_request:
+    types: [opened, edited, converted_to_draft, ready_for_review, reopened]
+    paths:
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - '!VAMobile/src/**.test.*'
 
-  #pull_request_review:
-    #types: [submitted, dismissed]
+  pull_request_review:
+    types: [submitted, dismissed]
 
-  #pull_request_target:
-    #branches:
-      #- 'develop'
+  pull_request_target:
+    branches:
+      - 'develop'
   push: 
     branches: 
       - 'automation/6261-chanel-qa-approval-workflow'
