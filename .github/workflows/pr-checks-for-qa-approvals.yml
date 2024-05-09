@@ -34,7 +34,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pullRequestNumber = context.payload.pull_request ? context.payload.pull_request.number : null;
+            const pullRequestNumber = ${{ github.event.pull_request.number }} ? ${{ github.event.pull_request.number }} : null;
             if (!pullRequestNumber) {
               console.error('Pull request number is undefined.');
               process.exit(1);
@@ -49,8 +49,8 @@ jobs:
             const reviews = response.data;
             const approvals = reviews.filter(review => review.state === 'APPROVED').map(review => review.user.login);
             const requiredApprovalCountResponse = await github.request('GET /repos/:owner/:repo/branches/:branch/protection', {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner:  '${{ github.repository_owner }}',
+              repo: '${{ github.repository }}',
               branch: 'develop' // Update with your target branch
             });
             const requiredApprovalCount = requiredApprovalCountResponse.data.required_pull_request_reviews.required_approving_review_count;
