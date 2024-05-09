@@ -213,18 +213,6 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
     )
   }
 
-  if (showLoadingScreenRequestRefillsRetry) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('close')}
-        onLeftButtonPress={() => {
-          onNavToHistory()
-        }}>
-        <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
-      </FullScreenSubtask>
-    )
-  }
-
   return (
     <>
       <FullScreenSubtask
@@ -233,13 +221,17 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
           onNavToHistory()
         }}
         title={t('refillRequest')}>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          {renderAlert()}
-          <TextArea>
-            {renderRequestSummary()}
-            {renderWhatsNext()}
-          </TextArea>
-        </Box>
+        {showLoadingScreenRequestRefillsRetry ? (
+          <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
+        ) : (
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            {renderAlert()}
+            <TextArea>
+              {renderRequestSummary()}
+              {renderWhatsNext()}
+            </TextArea>
+          </Box>
+        )}
       </FullScreenSubtask>
     </>
   )

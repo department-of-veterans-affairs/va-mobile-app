@@ -359,28 +359,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     )
   }
 
-  if (getApptError || appointmentNotFound) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingAppointmentCancellation || loadingAppointments) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <LoadingComponent
-          text={
-            loadingAppointmentCancellation
-              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
-              : t('appointmentDetails.loading')
-          }
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
+  const hasError = getApptError || appointmentNotFound
+  const isLoading = loadingAppointmentCancellation || loadingAppointments
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
 
@@ -391,7 +371,16 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
-        {isInPersonVAAppointment ? (
+        {{hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : isLoading ? (
+        <LoadingComponent
+          text={
+            loadingAppointmentCancellation
+              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
+              : t('appointmentDetails.loading')
+          }
+        /> ) : isInPersonVAAppointment ? (
           <InPersonVAAppointment
             appointmentID={trueAppointment?.id || ''}
             attributes={attributes}
@@ -408,7 +397,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
             cancelAppointment={cancelAppointment}
           />
         ) : (
-          <Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
             <AppointmentAlert attributes={attributes} />
             <TextArea>
               <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
