@@ -1337,7 +1337,7 @@
   "upcomingAppointmentDetails.prepareForVideoVisit": "Prepare for video visit",
   "upcomingAppointmentDetails.provider": "Provider",
   "upcomingAppointmentDetails.reason": "You shared these details about your concern",
-  "upcomingAppointmentDetails.reasonComment": "Comment: {{comment}}",
+  "upcomingAppointmentDetails.reasonComment": "Other details: {{comment}}",
   "upcomingAppointmentDetails.reasonDetails": "Reason: {{reason}}",
   "upcomingAppointmentDetails.sharedProvider": "Details you shared with your provider",
   "upcomingAppointmentDetails.specialInstructions": "Special instructions",
