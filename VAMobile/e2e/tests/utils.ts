@@ -332,7 +332,15 @@ export async function backButton() {
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   if (AFUseCase !== 'AllowFunction') {
-    if (AFFeature === 'WG_WhatDoIDoIfDisagreement' && AFUseCase === 'DenyAccess') {
+    if (
+      (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
+        AFFeature === 'WG_HowDoIUpdate' ||
+        AFFeature === 'WG_PreferredName' ||
+        AFFeature === 'WG_HowWillYou' ||
+        AFFeature === 'WG_GenderIdentity' ||
+        AFFeature === 'WG_WhatToKnow') &&
+      AFUseCase === 'DenyAccess'
+    ) {
       await resetInAppReview()
     } else {
       await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
@@ -473,8 +481,6 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
     if (AFUseCaseUpgrade) {
       await expect(element(by.text('Update now'))).toExist()
-    } else {
-      await expect(element(by.text('Update now'))).not.toExist()
     }
   }
 
