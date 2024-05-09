@@ -3,7 +3,7 @@
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
 #
 
-name: '[Utils] QA required approval'
+name: QA Approval
 
 on:
   pull_request:
@@ -21,50 +21,44 @@ on:
       - 'develop'
   push: 
     branches: 
-      - 'Automation/6261-Chanel-Require-QA-Approval'    
-
+      - 'chanel-6261-qa-approval-workflow'   
 jobs:
   check_for_qa_approval:
-    name: Requires QA approval
+    name: Check for QA Approval
     runs-on: ubuntu-latest
     steps:
-      - name: Check QA approval
-        shell: bash
+      - name: Fetch Pull Request Reviews
+        id: fetch_reviews
         run: |
           approvals=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
-          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' |
-          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
-          echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
-          gh auth login --with-token < token.txt
+            --url "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100" \
+            --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --header "Content-Type: application/json" | jq -r '[.[] | select(.state == "APPROVED") | .user.login]')
+          echo "::set-output name=approvals::${approvals}"
+
+      - name: Check QA Approval
+        run: |
+          approvals="${{ steps.fetch_reviews.outputs.approvals }}"
           required_approval_count=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
-          jq -c '.required_pull_request_reviews.required_approving_review_count')
-          echo "Approvers: $approvals"
-          
-          qa_team_members=$(
-            gh api \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            /orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members |
-            jq -c '[.[] | .login]'
-          )
-          echo "required approval count: $required_approval_count"
-          echo "QA team: $qa_team_members"
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
-            then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
-                then
+            "/repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection" | jq -r '.required_pull_request_reviews.required_approving_review_count')
+
+          qa_team_members=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/department/teams/flag/members" | jq -r '.[] | .login')
+
+          if [[ $(echo "$approvals" | jq -r 'length') -gt "$required_approval_count" ]]; then
+            for user in $qa_team_members; do
+              if [[ $(echo "$approvals" | jq -r 'contains(["'"$user"'"])') == true ]]; then
                 echo 'This PR has QA approval to merge'
                 exit 0
-              else 
-                echo 'This PR requires QA approval to merge'
-                exit 1
               fi
+            done
+            echo 'This PR requires QA approval to merge'
+            exit 1
           else
-            echo 'This PR requires 2 approvals, including one QA and one engineerapprovals, before merging.'
+            echo 'This PR requires 2 approvals, including one QA and one engineer, before merging.'
             exit 1
           fi
