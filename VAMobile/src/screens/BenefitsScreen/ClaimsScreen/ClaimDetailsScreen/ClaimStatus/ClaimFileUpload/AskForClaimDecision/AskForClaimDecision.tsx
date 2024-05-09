@@ -139,15 +139,15 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       onLeftButtonPress={onCancelPress}
       title={t('askForClaimDecision.pageTitle')}
       testID="askForClaimDecisionPageTestID">
-      {loadingClaimError ? (
+      {loadingSubmitClaimDecision || loadingClaim ? (
+        <LoadingComponent
+          text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
+        />
+      ) : loadingClaimError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
           error={loadingClaimError}
           onTryAgain={refetchClaim}
-        />
-      ) : loadingSubmitClaimDecision || loadingClaim ? (
-        <LoadingComponent
-          text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
         />
       ) : (
         <Box mb={contentMarginBottom}>

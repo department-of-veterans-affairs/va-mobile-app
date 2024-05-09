@@ -127,7 +127,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const hasError = appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime
+  const hasError =
+    ((appointmentsHasError || getUserAuthorizedServicesError) && !loadingAppointments) || !apptsNotInDowntime
 
   return (
     <FeatureLandingTemplate
