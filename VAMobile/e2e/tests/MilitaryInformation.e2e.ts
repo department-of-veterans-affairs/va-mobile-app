@@ -70,6 +70,7 @@ describe('Military Info Screen', () => {
       await device.disableSynchronization()
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
+      await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
