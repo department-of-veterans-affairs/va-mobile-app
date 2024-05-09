@@ -371,16 +371,17 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
-        {{hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      ) : isLoading ? (
-        <LoadingComponent
-          text={
-            loadingAppointmentCancellation
-              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
-              : t('appointmentDetails.loading')
-          }
-        /> ) : isInPersonVAAppointment ? (
+        {hasError ? (
+          <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+        ) : isLoading ? (
+          <LoadingComponent
+            text={
+              loadingAppointmentCancellation
+                ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
+                : t('appointmentDetails.loading')
+            }
+          />
+        ) : isInPersonVAAppointment ? (
           <InPersonVAAppointment
             appointmentID={trueAppointment?.id || ''}
             attributes={attributes}

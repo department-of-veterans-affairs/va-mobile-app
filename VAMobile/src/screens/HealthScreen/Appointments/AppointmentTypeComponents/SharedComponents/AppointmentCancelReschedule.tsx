@@ -265,6 +265,7 @@ function AppointmentCancelReschedule({
             </Box>
           )
       }
+      break
     default:
       return <></>
   }
