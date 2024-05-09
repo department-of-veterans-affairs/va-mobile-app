@@ -160,96 +160,77 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return listItems
   }
 
-  if (prescriptionInDowntime) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (refillable.length === 0) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
-        <NoRefills />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingHistory) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (showLoadingScreenRequestRefills) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
-      </FullScreenSubtask>
-    )
-  }
+  const hidePrimaryButton =
+    prescriptionInDowntime || refillable.length === 0 || loadingHistory || showLoadingScreenRequestRefills
+  const primaryButtonText =
+    selectedPrescriptionsCount === refillablePrescriptions?.length
+      ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+      : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
   return (
-    <>
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        title={t('refillRequest')}
-        primaryContentButtonText={
-          selectedPrescriptionsCount === refillablePrescriptions?.length
-            ? t('prescriptions.refill.RequestRefillButtonTitle.all')
-            : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={navigation.goBack}
+      title={t('refillRequest')}
+      primaryContentButtonText={hidePrimaryButton ? '' : primaryButtonText}
+      scrollViewRef={scrollViewRef}
+      onPrimaryContentButtonPress={() => {
+        if (selectedPrescriptionsCount === 0) {
+          setAlert(true)
+          return
         }
-        scrollViewRef={scrollViewRef}
-        onPrimaryContentButtonPress={() => {
-          if (selectedPrescriptionsCount === 0) {
-            setAlert(true)
-            return
-          }
-          onSubmitPressed()
-        }}>
-        {showAlert && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
-          </Box>
-        )}
-        <Box mx={theme.dimensions.gutter}>
-          <TextView paragraphSpacing={true} variant={'HelperText'}>
-            {t('prescriptions.refill.instructions.requestRefills')}
-            <TextView variant={'HelperTextBold'}>
-              {t('prescriptions.refill.instructions.fifteenDays')}
-              <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+        onSubmitPressed()
+      }}>
+      {prescriptionInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
+      ) : refillable.length === 0 ? (
+        <NoRefills />
+      ) : loadingHistory ? (
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      ) : showLoadingScreenRequestRefills ? (
+        <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      ) : (
+        <>
+          {showAlert && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
+            </Box>
+          )}
+          <Box mx={theme.dimensions.gutter}>
+            <TextView paragraphSpacing={true} variant={'HelperText'}>
+              {t('prescriptions.refill.instructions.requestRefills')}
+              <TextView variant={'HelperTextBold'}>
+                {t('prescriptions.refill.instructions.fifteenDays')}
+                <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
+              </TextView>
             </TextView>
-          </TextView>
-          <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
-            {t('prescriptions.refill.weWillMailText')}
-          </TextView>
-          <TextView
-            mt={theme.dimensions.condensedMarginBetween}
-            mb={theme.dimensions.condensedMarginBetween}
-            variant={'MobileBodyBold'}>
-            {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
-          </TextView>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <SelectionList
-            items={getListItems()}
-            onSelectionChange={(items) => {
-              const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
-              // only update if the count changes
-              if (selectedPrescriptionsCount !== newSelectedCount) {
-                setAlert(false)
-                setSelectedPrescriptionsCount(newSelectedCount)
-                setSelectedValues(items)
-              }
-            }}
-          />
-        </Box>
-      </FullScreenSubtask>
-    </>
+            <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
+              {t('prescriptions.refill.weWillMailText')}
+            </TextView>
+            <TextView
+              mt={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.condensedMarginBetween}
+              variant={'MobileBodyBold'}>
+              {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
+            </TextView>
+          </Box>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <SelectionList
+              items={getListItems()}
+              onSelectionChange={(items) => {
+                const newSelectedCount = Object.values(items).reduce((acc, item) => (item === true ? ++acc : acc), 0)
+                // only update if the count changes
+                if (selectedPrescriptionsCount !== newSelectedCount) {
+                  setAlert(false)
+                  setSelectedPrescriptionsCount(newSelectedCount)
+                  setSelectedValues(items)
+                }
+              }}
+            />
+          </Box>
+        </>
+      )}
+    </FullScreenSubtask>
   )
 }
 

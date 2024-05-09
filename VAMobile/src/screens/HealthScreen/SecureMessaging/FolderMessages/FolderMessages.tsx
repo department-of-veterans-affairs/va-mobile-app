@@ -67,46 +67,6 @@ function FolderMessages({ route }: FolderMessagesProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [page])
 
-  if (folderMessagesError) {
-    return (
-      <ChildTemplate
-        backLabel={t('messages')}
-        backLabelOnPress={() => {
-          navigateTo('SecureMessaging', { activeTab: 1 })
-        }}
-        title={title}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loadingFolderMessages) {
-    const text = t('secureMessaging.messages.loading')
-    return (
-      <ChildTemplate
-        backLabel={t('messages')}
-        backLabelOnPress={() => {
-          navigateTo('SecureMessaging', { activeTab: 1 })
-        }}
-        title={title}>
-        <LoadingComponent text={text} />
-      </ChildTemplate>
-    )
-  }
-
-  if (messages.length === 0) {
-    return (
-      <ChildTemplate
-        backLabel={t('messages')}
-        backLabelOnPress={() => {
-          navigateTo('SecureMessaging', { activeTab: 1 })
-        }}
-        title={title}>
-        <NoFolderMessages />
-      </ChildTemplate>
-    )
-  }
-
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -149,13 +109,27 @@ function FolderMessages({ route }: FolderMessagesProps) {
       }}
       title={title}
       scrollViewProps={scrollViewProps}>
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
-      </Box>
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
-      </Box>
-      {renderPagination()}
+      {folderMessagesError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+      ) : loadingFolderMessages ? (
+        <LoadingComponent text={t('secureMessaging.messages.loading')} />
+      ) : messages.length === 0 ? (
+        <NoFolderMessages />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
+          </Box>
+          {renderPagination()}
+        </>
+      )}
     </ChildTemplate>
   )
 }
