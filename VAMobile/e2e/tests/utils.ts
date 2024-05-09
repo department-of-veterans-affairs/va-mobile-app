@@ -338,7 +338,10 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
         AFFeature === 'WG_PreferredName' ||
         AFFeature === 'WG_HowWillYou' ||
         AFFeature === 'WG_GenderIdentity' ||
-        AFFeature === 'WG_WhatToKnow') &&
+        AFFeature === 'WG_WhatToKnow' ||
+        AFFeature === 'WG_EditAddress' ||
+        AFFeature === 'WG_EditPhoneNumber' ||
+        AFFeature === 'WG_EditEmail') &&
       AFUseCase === 'DenyAccess'
     ) {
       await resetInAppReview()
