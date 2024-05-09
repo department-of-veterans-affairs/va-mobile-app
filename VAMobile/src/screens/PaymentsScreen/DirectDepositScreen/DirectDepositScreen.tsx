@@ -88,27 +88,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  if (useBankDataError || !ddNotInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('directDeposit.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('directDeposit.title')}>
-        <LoadingComponent text={t('directDeposit.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const hasError = useBankDataError || !ddNotInDowntime
 
   return (
     <FeatureLandingTemplate
@@ -116,24 +96,32 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount">
-      <Box mx={gutter}>
-        <TextView
-          variant="MobileBody"
-          mb={theme.dimensions.standardMarginBetween}
-          accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
-          {t('directDeposit.viewAndEditText')}
-        </TextView>
-      </Box>
-      <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
-      <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true}>
-        <TextView>
-          <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
-          <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
-        </TextView>
-      </Box>
-      <Box mx={gutter} mb={contentMarginBottom}>
-        <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
-      </Box>
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('directDeposit.loading')} />
+      ) : (
+        <>
+          <Box mx={gutter}>
+            <TextView
+              variant="MobileBody"
+              mb={theme.dimensions.standardMarginBetween}
+              accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
+              {t('directDeposit.viewAndEditText')}
+            </TextView>
+          </Box>
+          <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
+          <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true}>
+            <TextView>
+              <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+              <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
+            </TextView>
+          </Box>
+          <Box mx={gutter} mb={contentMarginBottom}>
+            <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

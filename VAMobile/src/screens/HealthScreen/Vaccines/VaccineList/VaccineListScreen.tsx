@@ -89,52 +89,26 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     )
   }
 
-  if (vaccineError || vaccinesInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <LoadingComponent text={t('vaccines.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (vaccines?.data?.length === 0) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <NoVaccineRecords />
-      </FeatureLandingTemplate>
-    )
-  }
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={vaccineButtons} />
-      </Box>
-      {renderPagination()}
+      {vaccineError || vaccinesInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('vaccines.loading')} />
+      ) : vaccines?.data?.length === 0 ? (
+        <NoVaccineRecords />
+      ) : (
+        <>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <DefaultList items={vaccineButtons} />
+          </Box>
+          {renderPagination()}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
