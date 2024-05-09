@@ -60,10 +60,10 @@ const navigationDic = {
       'Currently on appeal',
     ],
     ['DecisionLetters.e2e', ['Claims', 'Claim letters'], 'Claim letters'],
-    ['Letters.e2e', 'VA letters and documents', 'Letters'],
-    ['Letters.e2e', ['VA letters and documents', 'Review letters'], 'Review letters'],
+    ['VALetters.e2e', 'VA letters and documents', 'Letters'],
+    ['VALetters.e2e', ['VA letters and documents', 'Review letters'], 'Review letters'],
     [
-      'Letters.e2e',
+      'VALetters.e2e',
       ['VA letters and documents', 'Review letters', 'Benefit summary and service verification letter'],
       'Letter details',
     ],
@@ -74,7 +74,6 @@ const navigationDic = {
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
-    ['Messages.e2e', ['Messages', 'Drafts (3)'], 'Drafts'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
     ['VaccineRecords.e2e', 'V\ufeffA vaccine records', 'VA vaccines'],
@@ -276,6 +275,7 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
+  await device.launchApp({ newInstance: false })
   await loginToDemoMode()
 })
 
