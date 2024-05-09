@@ -76,40 +76,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     setHaveSubmittedEvidence(value)
   }
 
-  if (loadingClaim) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={onCancelPress}
-        title={t('askForClaimDecision.pageTitle')}>
-        <LoadingComponent text={t('claimInformation.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingSubmitClaimDecision) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={onCancelPress}
-        title={t('askForClaimDecision.pageTitle')}>
-        <LoadingComponent text={t('askForClaimDecision.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingClaimError) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
-          error={loadingClaimError}
-          onTryAgain={refetchClaim}
-        />
-      </FullScreenSubtask>
-    )
-  }
-
   const bulletedListOfText = [
     {
       text: t('askForClaimDecision.whetherYouGetVABenefits'),
@@ -173,35 +139,45 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       onLeftButtonPress={onCancelPress}
       title={t('askForClaimDecision.pageTitle')}
       testID="askForClaimDecisionPageTestID">
-      <Box mb={contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
-            {t('askForClaimDecision.title')}
-          </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
-            {t('askForClaimDecision.weSentYouALetter')}
-          </TextView>
-          <TextView variant="MobileBody" mb={standardMarginBetween}>
-            {t('askForClaimDecision.takingFull30Days')}
-          </TextView>
-          <VABulletList listOfText={bulletedListOfText} />
-        </TextArea>
-        <Box mx={gutter}>
-          <Box my={standardMarginBetween}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onRequestEvaluation}
-              setOnSaveClicked={setOnSaveClicked}
-              onSaveClicked={onSaveClicked}
+      {loadingClaimError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+          error={loadingClaimError}
+          onTryAgain={refetchClaim}
+        />
+      ) : loadingSubmitClaimDecision || loadingClaim ? (
+        <LoadingComponent text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')} />
+      ) : (
+        <Box mb={contentMarginBottom}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
+              {t('askForClaimDecision.title')}
+            </TextView>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('askForClaimDecision.weSentYouALetter')}
+            </TextView>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
+              {t('askForClaimDecision.takingFull30Days')}
+            </TextView>
+            <VABulletList listOfText={bulletedListOfText} />
+          </TextArea>
+          <Box mx={gutter}>
+            <Box my={standardMarginBetween}>
+              <FormWrapper
+                fieldsList={formFieldsList}
+                onSave={onRequestEvaluation}
+                setOnSaveClicked={setOnSaveClicked}
+                onSaveClicked={onSaveClicked}
+              />
+            </Box>
+            <Button
+              onPress={(): void => setOnSaveClicked(true)}
+              label={t('askForClaimDecision.submit')}
+              testID={t('askForClaimDecision.submit')}
             />
           </Box>
-          <Button
-            onPress={(): void => setOnSaveClicked(true)}
-            label={t('askForClaimDecision.submit')}
-            testID={t('askForClaimDecision.submit')}
-          />
         </Box>
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }

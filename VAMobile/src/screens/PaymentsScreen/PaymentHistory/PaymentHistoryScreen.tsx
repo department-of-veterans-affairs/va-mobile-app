@@ -141,42 +141,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     )
   }
 
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('history.title')}>
-        <LoadingComponent text={t('payments.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (hasError || paymentsInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('history.title')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
-          error={hasError}
-          onTryAgain={refetchPayments}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (noPayments) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('history.title')}>
-        <NoPaymentsScreen />
-      </FeatureLandingTemplate>
-    )
-  }
+  const hasErrorOrDowntime = hasError || paymentsInDowntime
 
   return (
     <FeatureLandingTemplate
@@ -184,20 +149,34 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
       testID="paymentHistoryTestID">
-      <Box mx={gutter} mb={standardMarginBetween}>
-        <Pressable
-          onPress={() => navigateTo('PaymentMissing')}
-          accessibilityRole="link"
-          accessible={true}
-          testID="missingPaymentsTestID">
-          <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
-        </Pressable>
-      </Box>
-      <Box mx={gutter} mb={standardMarginBetween}>
-        <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
-      </Box>
-      {getPaymentsData()}
-      {renderPagination()}
+      {loading ? (
+        <LoadingComponent text={t('payments.loading')} />
+      ) : hasErrorOrDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchPayments}
+        />
+      ) : noPayments ? (
+        <NoPaymentsScreen />
+      ) : (
+        <>
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <Pressable
+              onPress={() => navigateTo('PaymentMissing')}
+              accessibilityRole="link"
+              accessible={true}
+              testID="missingPaymentsTestID">
+              <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
+            </Pressable>
+          </Box>
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
+          </Box>
+          {getPaymentsData()}
+          {renderPagination()}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

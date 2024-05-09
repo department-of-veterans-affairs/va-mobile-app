@@ -72,38 +72,6 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
   })
 
-  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
-  // In this case, we need to support two different screenIDs:
-  // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
-  // 2. Error message specific to this page
-  if (prescriptionInDowntime) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingTrackingInfo) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (hasError) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID}
-          error={hasError}
-          onTryAgain={refetchTracking}
-        />
-      </FullScreenSubtask>
-    )
-  }
-
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
     let otherPrescriptionItems
@@ -214,25 +182,41 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     )
   }
 
+  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
+  // In this case, we need to support two different screenIDs:
+  // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
+  // 2. Error message specific to this page
   return (
     <FullScreenSubtask
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
       testID="refillTrackingDetailsTestID">
-      <Box mx={gutter} mb={contentMarginBottom}>
-        {renderHeader()}
-        <Box mt={standardMarginBetween}>
-          <TextView variant="HelperText" paragraphSpacing={true}>
-            {t('prescriptions.refillTracking.upTo15Days')}
+      {prescriptionInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      ) : loadingTrackingInfo ? (
+        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchTracking}
+        />
+      ) : (
+        <Box mx={gutter} mb={contentMarginBottom}>
+          {renderHeader()}
+          <Box mt={standardMarginBetween}>
+            <TextView variant="HelperText" paragraphSpacing={true}>
+              {t('prescriptions.refillTracking.upTo15Days')}
+            </TextView>
+          </Box>
+          <TextView
+            variant="HelperText"
+            accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
+            {t('prescriptions.refillTracking.deliveryChanges')}
           </TextView>
+          {renderTrackingCards()}
         </Box>
-        <TextView
-          variant="HelperText"
-          accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
-          {t('prescriptions.refillTracking.deliveryChanges')}
-        </TextView>
-        {renderTrackingCards()}
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }
