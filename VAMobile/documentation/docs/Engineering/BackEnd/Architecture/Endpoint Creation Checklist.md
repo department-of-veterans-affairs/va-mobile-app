@@ -46,7 +46,7 @@ Some Lighthouse APIs use an authorization flow called, client credentials grant 
 Adding a new service will require the following steps:
 (For questions on the first two steps, contact Derek Brown.)
   1. Request sandbox access [here](https://developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. Client ids can be shared by anyone with the same VASI number. All of Vets-api uses the same VASI number so if possible, try to use an existing one. If a new client id is required, follow these steps:
-  * install pem-jwk tool: https://www.npmjs.com/package/pem-jwk
+  * install [pem-jwk tool](https://www.npmjs.com/package/pem-jwk)
   * In terminal, execute `openssl genrsa -out private.pem 2048`
   * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
   * `cat public.pem | pem-jwk > public.jwk`

@@ -137,64 +137,59 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(t, expirationDate)
   const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(t, orderedDate)
 
-  if (loadingHistory) {
-    return (
-      <ChildTemplate
-        backLabel={t('prescription.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescriptionDetails')}>
-        <LoadingComponent text={t('prescription.details.loading')} />
-      </ChildTemplate>
-    )
-  }
-
   return (
     <ChildTemplate
       backLabel={t('prescription.title')}
       backLabelOnPress={navigation.goBack}
       title={t('prescriptionDetails')}>
-      {getBanner()}
-      {getRefillVAHealthButton()}
-      <Box mb={contentMarginBottom}>
-        <TextArea>
-          <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
-          <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
-            {rxNumber}
-          </TextView>
-          <Box pt={theme.dimensions.standardMarginBetween}>
-            <RefillTag status={refillStatus} />
+      {loadingHistory ? (
+        <LoadingComponent text={t('prescription.details.loading')} />
+      ) : (
+        <>
+          {getBanner()}
+          {getRefillVAHealthButton()}
+          <Box mb={contentMarginBottom}>
+            <TextArea>
+              <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+              <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
+                {rxNumber}
+              </TextView>
+              <Box pt={theme.dimensions.standardMarginBetween}>
+                <RefillTag status={refillStatus} />
+              </Box>
+              <DetailsTextSections
+                leftSectionTitle={t('prescription.details.instructionsHeader')}
+                leftSectionValue={instructions || noneNoted}
+              />
+              <DetailsTextSections
+                leftSectionTitle={t('prescription.details.refillLeftHeader')}
+                leftSectionValue={refillRemaining ?? noneNoted}
+                rightSectionTitle={t('fillDate')}
+                rightSectionValue={lastRefilledDateFormatted}
+                rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
+              />
+              <DetailsTextSections
+                leftSectionTitle={t('prescription.details.quantityHeader')}
+                leftSectionValue={quantity ?? noneNoted}
+              />
+              <DetailsTextSections
+                leftSectionTitle={t('prescription.details.expiresOnHeader')}
+                leftSectionValue={expireDateFormatted}
+                leftSectionValueLabel={expireDateFormattedA11yLabel}
+                rightSectionTitle={t('prescription.details.orderedOnHeader')}
+                rightSectionValue={dateOrderedFormatted}
+                rightSectionValueLabel={dateOrderedFormattedA11yLabel}
+              />
+              <DetailsTextSections
+                leftSectionTitle={t('prescription.details.vaFacilityHeader')}
+                leftSectionValue={facilityName || noneNoted}
+                leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
+                <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
+              </DetailsTextSections>
+            </TextArea>
           </Box>
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.instructionsHeader')}
-            leftSectionValue={instructions || noneNoted}
-          />
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.refillLeftHeader')}
-            leftSectionValue={refillRemaining ?? noneNoted}
-            rightSectionTitle={t('fillDate')}
-            rightSectionValue={lastRefilledDateFormatted}
-            rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
-          />
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.quantityHeader')}
-            leftSectionValue={quantity ?? noneNoted}
-          />
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.expiresOnHeader')}
-            leftSectionValue={expireDateFormatted}
-            leftSectionValueLabel={expireDateFormattedA11yLabel}
-            rightSectionTitle={t('prescription.details.orderedOnHeader')}
-            rightSectionValue={dateOrderedFormatted}
-            rightSectionValueLabel={dateOrderedFormattedA11yLabel}
-          />
-          <DetailsTextSections
-            leftSectionTitle={t('prescription.details.vaFacilityHeader')}
-            leftSectionValue={facilityName || noneNoted}
-            leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
-            <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
-          </DetailsTextSections>
-        </TextArea>
-      </Box>
+        </>
+      )}
     </ChildTemplate>
   )
 }

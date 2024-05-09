@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
+import { Box, ClickToCallPhoneNumber, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -18,41 +18,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdat
 function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const { screenType } = route.params
-
-  const linkProps: TextViewProps = {
-    onPress: () =>
-      navigateTo('Webview', {
-        url: WEBVIEW_URL_FACILITY_LOCATOR,
-        displayTitle: t('webview.vagov'),
-        loadingMessage: t('webview.valocation.loading'),
-      }),
-    variant: 'MobileBody',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    accessibilityRole: 'link',
-    accessibilityLabel: a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter')),
-    accessibilityHint: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint'),
-    paragraphSpacing: true,
-  }
-
-  const linkNameProps: TextViewProps = {
-    onPress: () =>
-      navigateTo('Webview', {
-        url: WEBVIEW_URL_CHANGE_LEGAL_NAME,
-        displayTitle: t('webview.vagov'),
-        loadingMessage: t('webview.changeLegalName.loading'),
-      }),
-    variant: 'MobileBody',
-    color: 'link',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    accessibilityRole: 'link',
-    accessibilityLabel: a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName')),
-    paragraphSpacing: true,
-  }
 
   function renderUI() {
     if (screenType === 'name') {
@@ -73,10 +39,19 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
           paragraphSpacing={true}>
           {t('howDoIUpdate.ifEnrolledInVAHealth')}
         </TextView>
-        <TextView {...linkProps}>{t('howDoIUpdate.findYourNearestVAMedicalCenter')}</TextView>
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <LinkWithAnalytics
+            type="url"
+            url={WEBVIEW_URL_FACILITY_LOCATOR}
+            text={t('howDoIUpdate.findYourNearestVAMedicalCenter')}
+            a11yLabel={a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter'))}
+            a11yHint={t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint')}
+          />
+        </Box>
         <TextView
           variant="MobileBody"
           accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')}
+          mt={theme.dimensions.standardMarginBetween}
           paragraphSpacing={true}>
           {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
         </TextView>
@@ -98,8 +73,15 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('howDoIUpdate.name.legalName')}
         </TextView>
-        <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <LinkWithAnalytics
+            type="url"
+            url={WEBVIEW_URL_CHANGE_LEGAL_NAME}
+            text={t('howDoIUpdate.learnToChangeLegalName')}
+            a11yLabel={a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName'))}
+          />
+        </Box>
+        <TextView variant="MobileBody" paragraphSpacing={true} mt={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.name.incorrectRecords')}
         </TextView>
         {renderVAMedicalCenterSection()}
