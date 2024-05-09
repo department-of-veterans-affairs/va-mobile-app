@@ -34,6 +34,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const pullRequestNumber = context.payload.pull_request ? context.payload.pull_request.number : null;
+            if (!pullRequestNumber) {
+              console.error('Pull request number is undefined.');
+              process.exit(1);
+            }
+
             const response = await github.request('GET /repos/:owner/:repo/pulls/:pull_number/reviews', {
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -58,8 +64,7 @@ jobs:
               requiredApprovalCount: requiredApprovalCount,
               qaTeamMembers: qaTeamMembers
             });
-      
-      
+   
       - name: Check QA Approval
         run: |
           output=$(echo "${{ steps.check_pr_reviews.outputs.results }}" | jq -r .)
