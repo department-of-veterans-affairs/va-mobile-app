@@ -34,7 +34,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pullRequestNumber = ${{ github.event.pull_request.number }} ? ${{ github.event.pull_request.number }} : null;
+            const pullRequestNumber = '${{ github.event.pull_request.number }}' ? '${{ github.event.pull_request.number }}' : null;
             if (!pullRequestNumber) {
               console.error('Pull request number is undefined.');
               process.exit(1);
