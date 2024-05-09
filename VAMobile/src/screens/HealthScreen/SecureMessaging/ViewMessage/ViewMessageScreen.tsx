@@ -245,39 +245,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ? t('messages')
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
-  // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (foldersError || messageError || threadError || !smNotInDowntime) {
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <ErrorComponent screenID={screenID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loadingFolder || loadingThread || loadingMessage || loadingMoveMessage) {
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <LoadingComponent
-          text={loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
-        />
-      </ChildTemplate>
-    )
-  }
-
-  if (!message || !thread) {
-    // return empty /error  state
-    // do not replace with error component otherwise user will always see a red error flash right before their message loads
-    return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
-        <></>
-      </ChildTemplate>
-    )
-  }
-
   const replyExpired =
-    demoMode && message.messageId === 2092809
+    demoMode && message?.messageId === 2092809
       ? false
-      : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+      : DateTime.fromISO(message?.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onMove = (value: string) => {
     setShowModalPicker(false)
@@ -378,8 +349,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     name: 'Folder',
   }
 
+  // If error is caused by an individual message, we want the error alert to be
+  // contained to that message, not to take over the entire screen
+  const hasError = foldersError || messageError || threadError || !smNotInDowntime
+  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage
+  const isEmpty = !message || !thread
+  const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
+
   const headerButton =
-    currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
+    hasError || isEmpty || isLoading || currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
           label: t('pickerLaunchBtn'),
@@ -397,42 +375,54 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID">
-      {headerButton && showModalPicker && (
-        <VAModalPicker
-          selectedValue={newCurrentFolderID}
-          onSelectionChange={onMove}
-          onClose={() => setShowModalPicker(false)}
-          pickerOptions={getFolders()}
-          labelKey={'pickerMoveMessageToFolder'}
-          buttonText={'pickerLaunchBtn'}
-          confirmBtnText={'pickerLaunchBtn'}
-          key={newCurrentFolderID}
-          showModalByDefault={true}
-        />
-      )}
-      {replyExpired && (
-        <Box my={theme.dimensions.standardMarginBetween}>
-          <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-            <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-              {t('secureMessaging.reply.olderThan45Days')}
-            </TextView>
-          </AlertBox>
-        </Box>
-      )}
-      <MessageCard message={message} />
-      {thread.length > 0 && (
-        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <Box accessible={true} accessibilityRole={'header'}>
-            <TextView
-              ml={theme.dimensions.gutter}
-              mt={theme.dimensions.standardMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}>
-              {t('secureMessaging.reply.messageConversation')}
-            </TextView>
-          </Box>
-          {renderMessages(message, thread, true)}
-        </Box>
+      {hasError ? (
+        <ErrorComponent screenID={screenID} />
+      ) : isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : isEmpty ? (
+        // return empty /error  state
+        // do not replace with error component otherwise user will always see a red error flash right before their message loads
+        <></>
+      ) : (
+        <>
+          {headerButton && showModalPicker && (
+            <VAModalPicker
+              selectedValue={newCurrentFolderID}
+              onSelectionChange={onMove}
+              onClose={() => setShowModalPicker(false)}
+              pickerOptions={getFolders()}
+              labelKey={'pickerMoveMessageToFolder'}
+              buttonText={'pickerLaunchBtn'}
+              confirmBtnText={'pickerLaunchBtn'}
+              key={newCurrentFolderID}
+              showModalByDefault={true}
+            />
+          )}
+          {replyExpired && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+                  {t('secureMessaging.reply.olderThan45Days')}
+                </TextView>
+              </AlertBox>
+            </Box>
+          )}
+          <MessageCard message={message} />
+          {thread.length > 0 && (
+            <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+              <Box accessible={true} accessibilityRole={'header'}>
+                <TextView
+                  ml={theme.dimensions.gutter}
+                  mt={theme.dimensions.standardMarginBetween}
+                  mb={theme.dimensions.condensedMarginBetween}
+                  variant={'MobileBodyBold'}>
+                  {t('secureMessaging.reply.messageConversation')}
+                </TextView>
+              </Box>
+              {renderMessages(message, thread, true)}
+            </Box>
+          )}
+        </>
       )}
     </ChildTemplate>
   )

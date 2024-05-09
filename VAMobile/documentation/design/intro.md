@@ -7,15 +7,17 @@ sidebar_position: 1
 
 A system to help you write, design, and build digital services on the VA Mobile App.
 
+## Getting started
 
-### Getting started
 - [For designers](/va-mobile-app/design/About/designers)
 - [For engineers](/va-mobile-app/design/About/For%20engineers/overview)
 
-### Foundation
+## Foundation
+
 - [Design Tokens](/va-mobile-app/design/Foundation)
 
-### Components
+## Components
+
 - [Alert](/va-mobile-app/design/Components/Alerts%20and%20progress/Alert)
 - [Button](/va-mobile-app/design/Components/Buttons%20and%20links/Button)
 - [Link](/va-mobile-app/design/Components/Buttons%20and%20links/Link)
@@ -23,16 +25,19 @@ A system to help you write, design, and build digital services on the VA Mobile 
 
 -----
 
-### Design system team
+## Design system team
 
 **Product Owner**: Ryan Thurlwell
 
-#### Product
-* Kelly Lein
+### Product
 
-#### Engineering
-* Narin Ratana
-* Tim Roettger
+- Kelly Lein
 
-#### Design
-* Jessica Woodin
+### Engineering
+
+- Narin Ratana
+- Tim Roettger
+
+### Design
+
+- Jessica Woodin
