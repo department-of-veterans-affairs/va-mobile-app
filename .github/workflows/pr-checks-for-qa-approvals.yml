@@ -41,9 +41,9 @@ jobs:
             }
 
             const response = await github.request('GET /repos/:owner/:repo/pulls/:pull_number/reviews', {
-              owner: context.repo.owner,
-              repo: ${{ github.repository }},
-              pull_number: ${{ github.event.pull_request.number }},
+              owner: '${{ github.repository_owner }}',
+              repo: '${{ github.repository }}',
+              pull_number: '${{ github.event.pull_request.number }}',
               per_page: 100
             });
             const reviews = response.data;
