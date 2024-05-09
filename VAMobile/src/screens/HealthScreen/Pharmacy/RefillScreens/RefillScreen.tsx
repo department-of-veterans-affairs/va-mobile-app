@@ -183,7 +183,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         }
         onSubmitPressed()
       }}>
-      {oadingHistory ? (
+      {loadingHistory ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       ) : showLoadingScreenRequestRefills ? (
         <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
