@@ -17,7 +17,6 @@ on:
   push: 
     branches: 
       - 'chanel-6261-qa-approval-workflow'   
-
 jobs:
   check_for_qa_approval:
     name: Check for QA Approval
