@@ -138,7 +138,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       {termsAndConditionError ? (
         <TermsAndConditions />
       ) : otherError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={foldersError || inboxError}
+          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
+        />
       ) : !userAuthorizedServices?.secureMessaging ? (
         <NotEnrolledSM />
       ) : (

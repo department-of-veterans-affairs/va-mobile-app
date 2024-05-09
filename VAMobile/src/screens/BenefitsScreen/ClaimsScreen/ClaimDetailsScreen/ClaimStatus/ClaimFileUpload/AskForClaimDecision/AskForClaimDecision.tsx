@@ -146,7 +146,9 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
           onTryAgain={refetchClaim}
         />
       ) : loadingSubmitClaimDecision || loadingClaim ? (
-        <LoadingComponent text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')} />
+        <LoadingComponent
+          text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
+        />
       ) : (
         <Box mb={contentMarginBottom}>
           <TextArea>

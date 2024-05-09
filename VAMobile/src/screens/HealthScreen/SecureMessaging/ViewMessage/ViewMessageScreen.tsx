@@ -381,7 +381,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
-         <ErrorComponent
+        <ErrorComponent
           screenID={screenID}
           error={foldersError || messageError || threadError}
           onTryAgain={

@@ -437,16 +437,18 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       </Box>
     )
   }
-            
-            !hasLoadedRecipients ||
+
+  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
+
+  const hasError = recipientsError || signatureError
+  const isLoading =
+    !hasLoadedRecipients ||
     savingDraft ||
     !signatureFetched ||
     isDiscarded ||
+    sendingMessage ||
     refetchingRecipients ||
     refetchingSignature
-
-  const hasError = recipientsError || signatureError
-  const isLoading = !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || sendingMessage || refetchingRecipients || refetchingSignature
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : isDiscarded
