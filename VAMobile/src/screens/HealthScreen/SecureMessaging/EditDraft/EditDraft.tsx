@@ -102,7 +102,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    isError: recipientsError,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_EditDraft'),
   })
@@ -121,13 +123,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const messageID = Number(route.params?.messageID)
   const {
     data: messageDraftData,
-    isLoading: loadingMessage,
+    isFetching: loadingMessage,
     isFetched: messageFetched,
-    isError: messageError,
+    error: messageError,
+    refetch: refetchMessage,
   } = useMessage(messageID, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
-  const { data: threadData, isError: threadError } = useThread(messageID, false, {
+  const {
+    data: threadData,
+    error: threadError,
+    refetch: refetchThread,
+    isFetching: refetchingThread,
+  } = useThread(messageID, false, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
@@ -345,51 +353,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       navigation.setParams({ attachmentFileToAdd: {} })
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
-
-  if (recipientsError || threadError || messageError) {
-    return (
-      <FullScreenSubtask
-        title={t('editDraft')}
-        leftButtonText={t('cancel')}
-        menuViewActions={menuViewActions}
-        scrollViewRef={scrollViewRef}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if ((!isReplyDraft && !hasLoadedRecipients) || loadingMessage || savingDraft || deletingDraft || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : deletingDraft
-        ? t('secureMessaging.deleteDraft.loading')
-        : isDiscarded
-          ? t('secureMessaging.deletingChanges.loading')
-          : t('secureMessaging.draft.loading')
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={() => {
-          goToDrafts(false)
-        }}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={() => {
-          goToDrafts(false)
-        }}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
@@ -675,21 +638,60 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
+  const hasError = recipientsError || threadError || messageError
+  const isLoading =
+    (!isReplyDraft && !hasLoadedRecipients) ||
+    loadingMessage ||
+    sendingMessage ||
+    savingDraft ||
+    deletingDraft ||
+    isDiscarded ||
+    refetchingRecipients ||
+    refetchingThread
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : sendingMessage
+      ? t('secureMessaging.formMessage.send.loading')
+      : deletingDraft
+        ? t('secureMessaging.deleteDraft.loading')
+        : isDiscarded
+          ? t('secureMessaging.deletingChanges.loading')
+          : t('secureMessaging.draft.loading')
+  const leftButtonAction = noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('editDraft')}
+      title={isLoading ? '' : t('editDraft')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-      menuViewActions={menuViewActions}
-      showCrisisLineCta={true}
+      onLeftButtonPress={isLoading ? undefined : leftButtonAction}
+      menuViewActions={isLoading ? undefined : menuViewActions}
+      showCrisisLineCta={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {replyDisabled && renderAlert()}
-        <Box>{renderForm()}</Box>
-        <Box>{isReplyDraft && renderMessageThread()}</Box>
-      </Box>
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || threadError || messageError}
+          onTryAgain={
+            recipientsError
+              ? refetchRecipients
+              : threadError
+                ? refetchThread
+                : messageError
+                  ? refetchMessage
+                  : undefined
+          }
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {replyDisabled && renderAlert()}
+          <Box>{renderForm()}</Box>
+          <Box>{isReplyDraft && renderMessageThread()}</Box>
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

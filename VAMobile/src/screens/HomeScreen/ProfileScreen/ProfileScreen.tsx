@@ -21,7 +21,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
-  const { isFetched: useServiceHistoryFetched } = useServiceHistory()
+  const {
+    isFetched: useServiceHistoryFetched,
+    error: serviceHistoryError,
+    refetch: refetchServiceHistory,
+  } = useServiceHistory()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -32,10 +36,14 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
+    if (serviceHistoryError) {
+      refetchServiceHistory()
+    }
   }
 
   const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
-  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
+  const errorCheck =
+    useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError || serviceHistoryError
 
   return (
     <ChildTemplate
@@ -43,9 +51,18 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       backLabel={t('home.title')}
       backLabelOnPress={navigation.goBack}
       testID="profileID">
-      {errorCheck ? (
+      {loadingCheck ? (
         <Box>
-          <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
+          <NameTag />
+          <LoadingComponent text={t('profile.loading')} />
+        </Box>
+      ) : errorCheck ? (
+        <Box>
+          <ErrorComponent
+            onTryAgain={getInfoTryAgain}
+            screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
+            error={serviceHistoryError}
+          />
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             <LargeNavButton
               title={t('settings.title')}
@@ -56,11 +73,6 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
               borderStyle={'solid'}
             />
           </Box>
-        </Box>
-      ) : loadingCheck ? (
-        <Box>
-          <NameTag />
-          <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>

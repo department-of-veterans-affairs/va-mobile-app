@@ -27,19 +27,6 @@ const request = [
     displayName: 'Request 1',
   },
 ]
-when(api.get as jest.Mock)
-  .calledWith(`/v0/claim/600156928`, {}, expect.anything())
-  .mockResolvedValue({
-    data: {
-      ...Claim,
-      id: '600156928',
-      attributes: {
-        ...Claim.attributes,
-        waiverSubmitted: false,
-        eventsTimeline: request,
-      },
-    },
-  })
 
 context('FileRequest', () => {
   const renderWithData = (requests: ClaimEventData[]): void => {
@@ -64,7 +51,7 @@ context('FileRequest', () => {
 
   describe('when number of requests is greater than 1', () => {
     it('should display the text "You have {{number}} file requests from VA"', async () => {
-      const updatedRequests = [
+      const updatedRequests: ClaimEventData[] = [
         {
           type: 'still_need_from_you_list',
           date: '2020-07-16',
@@ -81,62 +68,75 @@ context('FileRequest', () => {
         },
       ]
 
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .mockResolvedValue({
+          data: {
+            ...Claim,
+            id: '600156928',
+            attributes: {
+              ...Claim.attributes,
+              waiverSubmitted: false,
+              eventsTimeline: updatedRequests,
+            },
+          },
+        })
+
       renderWithData(updatedRequests)
-      expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
+      await waitFor(() => expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy())
     })
   })
 
   describe('when number of requests is equal to 1', () => {
-    it('should display the text "You have 1 file request from VA"', async () => {
+    it('display correctly', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .mockResolvedValue({
+          data: {
+            ...Claim,
+            id: '600156928',
+            attributes: {
+              ...Claim.attributes,
+              waiverSubmitted: false,
+              eventsTimeline: request,
+            },
+          },
+        })
       renderWithData(request)
-      expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
-    })
-
-    it('should have we sent you a letter text section', async () => {
-      renderWithData(request)
-      expect(
-        screen.getByText(
-          "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
-        ),
-      ).toBeTruthy()
+      await waitFor(() => expect(screen.getByText('You have 1 file request from VA')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Please review the evaluation details if you are ready for us to begin evaluating your claim',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Request 1' })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
+          claimID: '600156928',
+          request: request[0],
+        }),
+      )
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
-        .mockRejectedValue('Error')
+        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData(request)
-      await waitFor(() =>
-        expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
-      )
-    })
-
-    describe('on click of a file request', () => {
-      it('should navigate to file request details page', async () => {
-        renderWithData(request)
-        fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
-          claimID: '600156928',
-          request: request[0],
-        })
-      })
-    })
-  })
-
-  describe('when waiverSubmitted is false', () => {
-    describe('when the currentPhase is 3', () => {
-      it('should display evaluation section', async () => {
-        renderWithData(request)
-        expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy()
-        expect(
-          screen.getByText(
-            'Please review the evaluation details if you are ready for us to begin evaluating your claim',
-          ),
-        ).toBeTruthy()
-      })
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 
@@ -161,8 +161,22 @@ context('FileRequest', () => {
             displayName: 'Request 2',
           },
         ]
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claim/600156928`, {}, undefined)
+          .mockResolvedValue({
+            data: {
+              ...Claim,
+              id: '600156928',
+              attributes: {
+                ...Claim.attributes,
+                waiverSubmitted: false,
+                eventsTimeline: updatedRequests,
+              },
+            },
+          })
+
         renderWithData(updatedRequests)
-        expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
+        await waitFor(() => expect(screen.getByText('You have 1 file request from VA')).toBeTruthy())
       })
     })
   })
