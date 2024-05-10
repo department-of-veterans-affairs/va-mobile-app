@@ -19,7 +19,6 @@ What did you expect to happen?
 
 
 ## System Information:
-<!-- What are the specifics that are important to this issue? Delete anything that isn't important -->
 - Apple/Android/Other:
 - Mobile Device:
 - Operating System:
@@ -29,6 +28,6 @@ What did you expect to happen?
 
 
 ## Screen shot, recording or additional information
-Add any screen shots, video, gifs, json etc that will help the engineers track down the issue. 
+Add any screen shots, video, gifs, json etc that will help the engineers track down the issue. Do not include any personally identifiable information for any real person, including screenshots.
 
 
