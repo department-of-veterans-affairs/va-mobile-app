@@ -88,9 +88,11 @@ describe('Appeals', () => {
 
   it('should tap on the links in the need help section', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text(AppealsIdConstants.APPEAL_NEED_HELP_NUMBER_TEXT)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
+      await device.enableSynchronization()
     }
 
     await device.launchApp({ newInstance: false })

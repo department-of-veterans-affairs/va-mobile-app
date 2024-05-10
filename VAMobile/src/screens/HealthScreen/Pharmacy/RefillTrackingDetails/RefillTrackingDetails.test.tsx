@@ -123,7 +123,7 @@ context('RefillTrackingDetails', () => {
         .mockRejectedValue({ networkError: 500 })
 
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })

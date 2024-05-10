@@ -60,7 +60,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       false,
   }
   const {
-    isLoading: downloading,
+    isFetching: downloading,
     isError: letterDownloadError,
     refetch: refetchLetter,
   } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions)
@@ -232,14 +232,14 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID">
-      {letterDownloadError ? (
+      {loadingCheck ? (
+        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
+      ) : letterDownloadError ? (
         <BasicError
           onTryAgain={onViewLetter}
           messageText={t('letters.download.error')}
           buttonA11yHint={t('letters.download.tryAgain.a11y')}
         />
-      ) : loadingCheck ? (
-        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <TextArea>

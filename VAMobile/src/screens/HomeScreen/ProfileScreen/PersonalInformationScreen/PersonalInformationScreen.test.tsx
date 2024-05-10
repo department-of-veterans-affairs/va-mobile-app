@@ -149,10 +149,10 @@ context('PersonalInformationScreen', () => {
     it('displays error component', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/user/gender_identity/edit')
-        .mockRejectedValue('Error')
+        .mockRejectedValue({ networkError: 500 })
 
       renderWithData()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })
