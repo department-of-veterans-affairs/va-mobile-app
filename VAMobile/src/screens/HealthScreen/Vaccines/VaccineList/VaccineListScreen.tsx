@@ -39,8 +39,9 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
   const {
     data: vaccines,
-    isLoading: loading,
-    isError: vaccineError,
+    isFetching: loading,
+    error: vaccineError,
+    refetch: refetchVaccines,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -95,10 +96,14 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}>
-      {vaccineError || vaccinesInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
-      ) : loading ? (
+      {loading ? (
         <LoadingComponent text={t('vaccines.loading')} />
+      ) : vaccineError || vaccinesInDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
+          error={vaccineError}
+          onTryAgain={refetchVaccines}
+        />
       ) : vaccines?.data?.length === 0 ? (
         <NoVaccineRecords />
       ) : (

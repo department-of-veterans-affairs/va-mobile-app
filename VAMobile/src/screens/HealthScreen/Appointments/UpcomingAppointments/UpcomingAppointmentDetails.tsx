@@ -78,8 +78,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
-    isLoading: loadingAppointments,
-    isError: getApptError,
+    isFetching: loadingAppointments,
+    error: getApptError,
+    refetch: refetchAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
   })
@@ -370,18 +371,21 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {hasError ? (
-          <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-        ) : isLoading ? (
-          <LoadingComponent
-            text={
-              loadingAppointmentCancellation
-                ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
-                : t('appointmentDetails.loading')
-            }
-          />
-        ) : isInPersonVAAppointment ? (
+      {isLoading ? (
+        <LoadingComponent
+          text={
+            loadingAppointmentCancellation
+              ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
+              : t('appointmentDetails.loading')
+          }
+        />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          error={getApptError}
+          onTryAgain={refetchAppointments}
+        />
+      ) : isInPersonVAAppointment ? (
           <InPersonVAAppointment
             appointmentID={trueAppointment?.id || ''}
             attributes={attributes}
@@ -398,38 +402,38 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
             cancelAppointment={cancelAppointment}
           />
         ) : (
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <AppointmentAlert attributes={attributes} />
-            <TextArea>
-              <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
-              {renderAddToCalendarLink()}
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AppointmentAlert attributes={attributes} />
+          <TextArea>
+            <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
+            {renderAddToCalendarLink()}
 
-              {renderVideoAppointmentInstructions()}
+            {renderVideoAppointmentInstructions()}
 
-              {renderAtHomeVideoConnectAppointmentData()}
-              <TypeOfCare attributes={attributes} />
-              <ProviderName attributes={attributes} />
-              <ClinicNameAndPhysicalLocation attributes={attributes} />
-              <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
+            {renderAtHomeVideoConnectAppointmentData()}
+            <TypeOfCare attributes={attributes} />
+            <ProviderName attributes={attributes} />
+            <ClinicNameAndPhysicalLocation attributes={attributes} />
+            <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
-              {renderAtlasVideoConnectAppointmentData()}
-              {featureEnabled('patientCheckIn') && (
-                <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-                  <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
-                </Box>
-              )}
-              <PreferredDateAndTime attributes={attributes} />
-              <PreferredAppointmentType attributes={attributes} />
-              <AppointmentReason attributes={attributes} />
-              {renderSpecialInstructions()}
-              <ContactInformation attributes={attributes} />
-              <PendingAppointmentCancelButton
-                attributes={attributes}
-                appointmentID={trueAppointment?.id}
-                cancelAppointment={cancelAppointment}
-                goBack={navigation.goBack}
-              />
-            </TextArea>
+            {renderAtlasVideoConnectAppointmentData()}
+            {featureEnabled('patientCheckIn') && (
+              <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
+                <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
+              </Box>
+            )}
+            <PreferredDateAndTime attributes={attributes} />
+            <PreferredAppointmentType attributes={attributes} />
+            <AppointmentReason attributes={attributes} />
+            {renderSpecialInstructions()}
+            <ContactInformation attributes={attributes} />
+            <PendingAppointmentCancelButton
+              attributes={attributes}
+              appointmentID={trueAppointment?.id}
+              cancelAppointment={cancelAppointment}
+              goBack={navigation.goBack}
+            />
+          </TextArea>
 
             {readerCancelInformation()}
           </Box>

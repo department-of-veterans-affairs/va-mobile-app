@@ -102,7 +102,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    isError: recipientsError,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_EditDraft'),
   })
@@ -121,13 +123,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const messageID = Number(route.params?.messageID)
   const {
     data: messageDraftData,
-    isLoading: loadingMessage,
+    isFetching: loadingMessage,
     isFetched: messageFetched,
-    isError: messageError,
+    error: messageError,
+    refetch: refetchMessage,
   } = useMessage(messageID, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
-  const { data: threadData, isError: threadError } = useThread(messageID, false, {
+  const {
+    data: threadData,
+    error: threadError,
+    refetch: refetchThread,
+    isFetching: refetchingThread,
+  } = useThread(messageID, false, {
     enabled: screenContentAllowed('WG_EditDraft'),
   })
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
@@ -637,7 +645,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     sendingMessage ||
     savingDraft ||
     deletingDraft ||
-    isDiscarded
+    isDiscarded ||
+    refetchingRecipients ||
+    refetchingThread
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : sendingMessage
@@ -662,7 +672,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || threadError || messageError}
+          onTryAgain={
+            recipientsError
+              ? refetchRecipients
+              : threadError
+                ? refetchThread
+                : messageError
+                  ? refetchMessage
+                  : undefined
+          }
+        />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {replyDisabled && renderAlert()}

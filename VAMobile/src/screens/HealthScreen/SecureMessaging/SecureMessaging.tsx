@@ -44,7 +44,12 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const isFocused = useIsFocused()
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: foldersData, isError: foldersError } = useFolders({
+  const {
+    data: foldersData,
+    error: foldersError,
+    refetch: refetchFolder,
+    isFetching: refetchingFolders,
+  } = useFolders({
     enabled:
       isFocused &&
       screenContentAllowed('WG_SecureMessaging') &&
@@ -52,9 +57,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       smNotInDowntime,
   })
   const {
-    isError: inboxError,
-    error: errorDetails,
+    error: inboxError,
     isFetched: inboxFetched,
+    refetch: refetchInbox,
+    isFetching: refetchingInbox,
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
     enabled:
       isFocused &&
@@ -87,10 +93,10 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   )
 
   useEffect(() => {
-    if (inboxFetched && inboxError && isErrorObject(errorDetails)) {
-      setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, errorDetails))
+    if (inboxFetched && inboxError && isErrorObject(inboxError)) {
+      setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, inboxError))
     }
-  }, [errorDetails, inboxError, inboxFetched])
+  }, [inboxError, inboxFetched])
 
   const onTabUpdate = (index: number): void => {
     if (secureMessagingTab !== index) {
@@ -118,7 +124,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   }
 
   const otherError =
-    foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime
+    (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) &&
+    !refetchingFolders &&
+    !refetchingInbox
 
   return (
     <FeatureLandingTemplate
@@ -130,7 +138,11 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       {termsAndConditionError ? (
         <TermsAndConditions />
       ) : otherError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={foldersError || inboxError}
+          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
+        />
       ) : !userAuthorizedServices?.secureMessaging ? (
         <NotEnrolledSM />
       ) : (

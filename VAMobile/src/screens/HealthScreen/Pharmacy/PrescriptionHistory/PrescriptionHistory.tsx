@@ -77,9 +77,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
-    isError: hasError,
+    isFetching: loadingHistory,
+    error: hasError,
     isFetched: prescriptionsFetched,
+    refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
@@ -545,12 +546,16 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       testID="PrescriptionHistory">
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      ) : hasError || getUserAuthorizedServicesError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
-      ) : !userAuthorizedServices?.prescriptions ? (
-        <PrescriptionHistoryNotAuthorized />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      ) : hasError || getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchPrescriptions}
+        />
+      ) : !userAuthorizedServices?.prescriptions ? (
+        <PrescriptionHistoryNotAuthorized />
       ) : !allPrescriptions?.length ? (
         <PrescriptionHistoryNoPrescriptions />
       ) : (

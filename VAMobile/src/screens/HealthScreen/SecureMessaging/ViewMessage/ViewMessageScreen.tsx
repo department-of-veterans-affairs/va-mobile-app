@@ -108,24 +108,27 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const { mutate: moveMessage, isPending: loadingMoveMessage } = useMoveMessage()
   const {
     data: messageData,
-    isError: messageError,
-    isLoading: loadingMessage,
+    error: messageError,
+    isFetching: loadingMessage,
     isFetched: messageFetched,
+    refetch: refetchMessage,
   } = useMessage(messageID, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: threadData,
-    isError: threadError,
-    isLoading: loadingThread,
+    error: threadError,
+    isFetching: loadingThread,
     isFetched: threadFetched,
+    refetch: refetchThread,
   } = useThread(messageID, true, {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
   const {
     data: foldersData,
-    isError: foldersError,
-    isLoading: loadingFolder,
+    error: foldersError,
+    isFetching: loadingFolder,
+    refetch: refetchFolders,
   } = useFolders({
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
@@ -375,10 +378,16 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID">
-      {hasError ? (
-        <ErrorComponent screenID={screenID} />
-      ) : isLoading ? (
+      {isLoading ? (
         <LoadingComponent text={loadingText} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={screenID}
+          error={foldersError || messageError || threadError}
+          onTryAgain={
+            foldersError ? refetchFolders : messageError ? refetchMessage : threadError ? refetchThread : undefined
+          }
+        />
       ) : isEmpty ? (
         // return empty /error  state
         // do not replace with error component otherwise user will always see a red error flash right before their message loads
