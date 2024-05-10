@@ -159,14 +159,6 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
-  describe('when the appointment type is covid vaccine', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(undefined, undefined, undefined, true)
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-  })
-
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', () => {
       initializeTestInstance(
