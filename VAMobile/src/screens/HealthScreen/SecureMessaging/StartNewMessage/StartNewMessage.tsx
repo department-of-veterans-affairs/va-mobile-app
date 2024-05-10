@@ -438,8 +438,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
-
   const hasError = recipientsError || signatureError
   const isLoading =
     !hasLoadedRecipients ||
@@ -476,7 +474,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineButton={true}
+      showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (
