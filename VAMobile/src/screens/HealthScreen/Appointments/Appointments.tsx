@@ -57,8 +57,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const {
     data: apptsData,
-    isError: appointmentsHasError,
-    isLoading: loadingAppointments,
+    error: appointmentsHasError,
+    isFetching: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
@@ -127,7 +127,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const hasError = appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime
+  const hasError =
+    ((appointmentsHasError || getUserAuthorizedServicesError) && !loadingAppointments) || !apptsNotInDowntime
 
   return (
     <FeatureLandingTemplate
@@ -143,6 +144,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             refetchUserAuthorizedServices()
             refetchAppts()
           }}
+          error={appointmentsHasError}
         />
       ) : !userAuthorizedServices?.appointments ? (
         <NoMatchInRecords />

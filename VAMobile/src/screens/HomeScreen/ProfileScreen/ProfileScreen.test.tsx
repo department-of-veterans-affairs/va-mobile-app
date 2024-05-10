@@ -3,11 +3,10 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { militaryServiceHistoryKeys } from 'api/militaryService'
-import { personalInformationKeys } from 'api/personalInformation/queryKeys'
-import { CommonErrorTypesConstants } from 'constants/errors'
+import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
+import * as api from 'store/api'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import ProfileScreen from './ProfileScreen'
 
@@ -51,7 +50,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('ProfileScreen', () => {
-  const initializeTestInstance = (errorState: ErrorsState = initialErrorsState): void => {
+  const initializeTestInstance = (): void => {
     const props = mockNavProps(undefined, {
       setOptions: jest.fn(),
       navigate: jest.fn(),
@@ -72,24 +71,38 @@ context('ProfileScreen', () => {
           hasFacilityTransitioningToCerner: false,
         },
       },
-      {
-        queryKey: militaryServiceHistoryKeys.serviceHistory,
-        data: {
-          serviceHistory: [],
-        },
-      },
     ]
 
     render(<ProfileScreen {...props} />, {
-      preloadedState: {
-        errors: errorState,
-      },
       queriesData,
     })
   }
 
   describe('when userProfileUpdate is false, true would not work since mockReturnValueOnce would not work like the other screens so confirm true with demo mode', () => {
     it('it should only render military info and settings', async () => {
+      const serviceHistoryMock: ServiceHistoryAttributes = {
+        serviceHistory: [
+          {
+            branchOfService: BranchesOfServiceConstants.MarineCorps,
+            beginDate: '1993-06-04',
+            endDate: '1995-07-10',
+            formattedBeginDate: 'June 04, 1993',
+            formattedEndDate: 'July 10, 1995',
+            characterOfDischarge: 'Honorable',
+            honorableServiceIndicator: 'Y',
+          },
+        ],
+      }
+      const militaryServiceHistoryData: MilitaryServiceHistoryData = {
+        data: {
+          type: 'a',
+          id: 'string',
+          attributes: serviceHistoryMock,
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(militaryServiceHistoryData)
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('Personal information')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Contact information')).toBeFalsy())
@@ -100,16 +113,12 @@ context('ProfileScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.PROFILE_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      when(api.get as jest.Mock)
+        .calledWith('/v0/military-service-history')
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
 
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-      initializeTestInstance(errorState)
-
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })

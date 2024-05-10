@@ -22,7 +22,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
-  const { isLoading: loadingServiceHistory, refetch: refetchServiceHistory } = useServiceHistory()
+  const {
+    isFetching: loadingServiceHistory,
+    error: serviceHistoryError,
+    refetch: refetchServiceHistory,
+  } = useServiceHistory()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -34,14 +38,14 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
-    // Get the service history to populate the profile banner
-    if (userAuthorizedServices?.militaryServiceHistory) {
+    if (userAuthorizedServices?.militaryServiceHistory && serviceHistoryError) {
       refetchServiceHistory()
     }
   }
 
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
-  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
+  const errorCheck =
+    useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError || serviceHistoryError
 
   const displayName = !!personalInfo?.fullName && (
     <Box>
@@ -62,18 +66,22 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       backLabel={t('home.title')}
       backLabelOnPress={navigation.goBack}
       testID="profileID">
-      {errorCheck ? (
-        <Box>
-          <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
-          </Box>
-        </Box>
-      ) : loadingCheck ? (
+      {loadingCheck ? (
         <Box>
           {displayName}
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
+        </Box>
+      ) : errorCheck ? (
+        <Box>
+          <ErrorComponent
+            onTryAgain={getInfoTryAgain}
+            screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
+            error={serviceHistoryError}
+          />
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
+          </Box>
         </Box>
       ) : (
         <>

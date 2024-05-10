@@ -36,7 +36,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { data: claim, isError: loadingClaimError } = useClaim(claimID)
+  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
   const {
     mutate: submitClaimDecision,
     error: error,
@@ -139,10 +139,16 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       onLeftButtonPress={onCancelPress}
       title={t('askForClaimDecision.pageTitle')}
       testID="askForClaimDecisionPageTestID">
-      {loadingClaimError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
-      ) : loadingSubmitClaimDecision ? (
-        <LoadingComponent text={t('askForClaimDecision.loading')} />
+      {loadingSubmitClaimDecision || loadingClaim ? (
+        <LoadingComponent
+          text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
+        />
+      ) : loadingClaimError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+          error={loadingClaimError}
+          onTryAgain={refetchClaim}
+        />
       ) : (
         <Box mb={contentMarginBottom}>
           <TextArea>
