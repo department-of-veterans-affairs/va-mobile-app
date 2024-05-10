@@ -74,34 +74,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [apptsDataFetched, page])
 
-  if (appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          onTryAgain={() => {
-            refetchUserAuthorizedServices()
-            refetchAppts()
-          }}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.appointments) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <NoMatchInRecords />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
       if (tab === 0) {
@@ -155,6 +127,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
+  const hasError = appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -162,38 +136,50 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabChange}
-            selected={selectedTab}
-            a11yHints={a11yHints}
-          />
-        </Box>
-        {serviceErrorAlert()}
-        {CernerAlert ? (
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <CernerAlert />
-          </Box>
-        ) : (
-          <></>
-        )}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === 1 && (
-            <PastAppointments
-              appointmentsData={apptsData}
-              setPage={setPage}
-              loading={loadingAppointments}
-              setDateRange={setDateRange}
-              setTimeFrame={setTimeFrame}
+      {hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={() => {
+            refetchUserAuthorizedServices()
+            refetchAppts()
+          }}
+        />
+      ) : !userAuthorizedServices?.appointments ? (
+        <NoMatchInRecords />
+      ) : (
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              labels={controlLabels}
+              onChange={onTabChange}
+              selected={selectedTab}
+              a11yHints={a11yHints}
             />
+          </Box>
+          {serviceErrorAlert()}
+          {CernerAlert ? (
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <CernerAlert />
+            </Box>
+          ) : (
+            <></>
           )}
-          {selectedTab === 0 && (
-            <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
-          )}
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === 1 && (
+              <PastAppointments
+                appointmentsData={apptsData}
+                setPage={setPage}
+                loading={loadingAppointments}
+                setDateRange={setDateRange}
+                setTimeFrame={setTimeFrame}
+              />
+            )}
+            {selectedTab === 0 && (
+              <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+            )}
+          </Box>
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

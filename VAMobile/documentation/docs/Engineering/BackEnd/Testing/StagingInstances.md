@@ -1,7 +1,7 @@
 # Staging Instances
 
 ## API Calls
-API calls are made in a similar way to the review instances above. Note that your API client may not connect to staging if going through the SOCKS proxy. The API URL for staging is http://staging-api.va.gov/mobile. Staging uses the same [API tokens](./ApiTokens.md#fetching-api-tokens) as review instances.
+API calls are made in a similar way to the review instances above. Note that your API client may not connect to staging if going through the SOCKS proxy. The API URL for staging is: staging-api.va.gov/mobile. Staging uses the same [API tokens](./ApiTokens.md#fetching-api-tokens) as review instances.
 ```
 curl --request GET \
   --url https://staging-api.va.gov/mobile/v1/user \

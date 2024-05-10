@@ -49,7 +49,7 @@ function VeteransCrisisLineScreen() {
             text={t('veteransCrisisLine.urlDisplayed')}
             a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
             a11yHint={t('veteransCrisisLine.urlA11yHint')}
-            onPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
+            analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
             testID="veteransCrisisLineGetMoreResourcesTestID"
           />
         </Box>

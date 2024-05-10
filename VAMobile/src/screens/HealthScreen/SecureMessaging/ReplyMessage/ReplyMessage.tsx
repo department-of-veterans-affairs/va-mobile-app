@@ -196,33 +196,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (loadingMessage || savingDraft || !signatureFetched || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : isDiscarded
-        ? t('secureMessaging.deletingChanges.loading')
-        : t('secureMessaging.viewMessage.loading')
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
@@ -394,23 +367,36 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     )
   }
 
+  const isLoading = loadingMessage || savingDraft || !signatureFetched || isDiscarded || sendingMessage
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : isDiscarded
+      ? t('secureMessaging.deletingChanges.loading')
+      : sendingMessage
+        ? t('secureMessaging.formMessage.send.loading')
+        : t('secureMessaging.viewMessage.loading')
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('reply')}
+      title={isLoading ? '' : t('reply')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={validateMessage(messageReply, signature) ? goToCancel : navigation.goBack}
-      rightButtonText={t('save')}
+      onLeftButtonPress={!isLoading && validateMessage(messageReply, signature) ? goToCancel : navigation.goBack}
+      rightButtonText={isLoading ? '' : t('save')}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       }}
-      showCrisisLineButton={true}
+      showCrisisLineButton={!isLoading}
       testID="replyPageTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box>{renderForm()}</Box>
-        <Box>{renderMessageThread()}</Box>
-      </Box>
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box>{renderForm()}</Box>
+          <Box>{renderMessageThread()}</Box>
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

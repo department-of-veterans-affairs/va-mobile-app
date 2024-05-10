@@ -67,8 +67,10 @@ describe('Military Info Screen', () => {
     await expect(element(by.id('CallVATestID'))).toExist()
     await element(by.id('IncorrectServiceTestID')).swipe('up')
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
+      await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
     }
   })

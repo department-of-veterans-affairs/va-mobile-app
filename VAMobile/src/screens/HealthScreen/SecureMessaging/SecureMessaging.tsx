@@ -92,30 +92,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     }
   }, [errorDetails, inboxError, inboxFetched])
 
-  if (termsAndConditionError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <TermsAndConditions />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.secureMessaging) {
-    return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
-        <NotEnrolledSM />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const onTabUpdate = (index: number): void => {
     if (secureMessagingTab !== index) {
       if (index === SegmentedControlIndexes.FOLDERS) {
@@ -141,6 +117,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     scrollViewRef: scrollViewRef,
   }
 
+  const otherError =
+    foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -148,28 +127,42 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       title={t('messages')}
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}>
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
-      </Box>
-      <Box flex={1} justifyContent="flex-start">
-        <Box
-          mb={theme.dimensions.standardMarginBetween}
-          mt={theme.dimensions.contentMarginTop}
-          mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabUpdate}
-            selected={secureMessagingTab}
-            a11yHints={a11yHints}
-            a11yLabels={[t('secureMessaging.inbox')]}
-          />
-        </Box>
-        <CernerAlertSM />
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
-          {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
-        </Box>
-      </Box>
+      {termsAndConditionError ? (
+        <TermsAndConditions />
+      ) : otherError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      ) : !userAuthorizedServices?.secureMessaging ? (
+        <NotEnrolledSM />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+          <Box flex={1} justifyContent="flex-start">
+            <Box
+              mb={theme.dimensions.standardMarginBetween}
+              mt={theme.dimensions.contentMarginTop}
+              mx={theme.dimensions.gutter}>
+              <SegmentedControl
+                labels={controlLabels}
+                onChange={onTabUpdate}
+                selected={secureMessagingTab}
+                a11yHints={a11yHints}
+                a11yLabels={[t('secureMessaging.inbox')]}
+              />
+            </Box>
+            <CernerAlertSM />
+            <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+              {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
+              {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
+            </Box>
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
