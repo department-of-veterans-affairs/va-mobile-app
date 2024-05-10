@@ -2,33 +2,41 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { GenderIdentityOptions } from 'api/types/DemographicsData'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import GenderIdentityScreen from './GenderIdentityScreen'
 
-const genderIdentityOptions: GenderIdentityOptions = {
-  M: 'Man',
-  B: 'Non-binary',
-  TM: 'Transgender man',
-  TF: 'Transgender woman',
-  F: 'Woman',
-  N: 'Prefer not to answer',
-  O: 'A gender not listed here',
-}
-
-jest.mock('../../../../../api/demographics/getGenderIdentityOptions', () => {
-  const original = jest.requireActual('../../../../../api/demographics/getGenderIdentityOptions')
-  return {
-    ...original,
-    useGenderIdentityOptions: () => ({
-      status: 'success',
-      data: genderIdentityOptions,
-    }),
-  }
-})
-
 context('GenderIdentityScreen', () => {
+  const genderIdentityOptionsPayload = {
+    data: {
+      id: '1',
+      type: 'string',
+      attributes: {
+        options: {
+          M: 'Man',
+          B: 'Non-binary',
+          TM: 'Transgender man',
+          TF: 'Transgender woman',
+          F: 'Woman',
+          N: 'Prefer not to answer',
+          O: 'A gender not listed here',
+        },
+      },
+    },
+  }
+
+  const demographicsPayload = {
+    data: {
+      id: '1',
+      type: 'string',
+      attributes: {
+        genderIdentity: 'M',
+        preferredName: 'Jim',
+      },
+    },
+  }
+
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -47,47 +55,57 @@ context('GenderIdentityScreen', () => {
     render(<GenderIdentityScreen {...props} />)
   }
 
-  it('initializes correctly', () => {
+  it('initializes correctly', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockResolvedValue(demographicsPayload)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
-    expect(screen.getByText('Gender identity')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy()
-    expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy()
-    expect(
-      screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' }),
-    ).toBeTruthy()
+    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.',
+        ),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' }),
+      ).toBeTruthy(),
+    )
   })
 
-  it('shows an error message on save when a gender identity type has not been selected', () => {
+  it('shows an error message on save when a gender identity type has not been selected', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockResolvedValue(demographicsPayload)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
 
-    fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-    expect(screen.queryByText('Select an option')).toBeTruthy()
+    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Save' })))
+    await waitFor(() => expect(screen.queryByText('Select an option')).toBeTruthy())
   })
 
   it('renders the ErrorComponent when an error occurs', async () => {
-    jest.mock('../../../../../api/demographics/getGenderIdentityOptions', () => {
-      const original = jest.requireActual('../../../../../api/demographics/getGenderIdentityOptions')
-      return {
-        ...original,
-        useGenderIdentityOptions: () => ({
-          status: 'error',
-        }),
-      }
-    })
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockRejectedValue({ networkError: true } as api.APIError)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockRejectedValue({ networkError: true } as api.APIError)
 
     initializeTestInstance()
     await waitFor(() => {
-      expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy()
+      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
     })
   })
 })
