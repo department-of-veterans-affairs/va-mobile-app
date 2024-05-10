@@ -26,19 +26,19 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useError, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const {
     data: notificationData,
-    isLoading: loadingPreferences,
+    isFetching: loadingPreferences,
+    error: hasError,
     refetch: refetchPushPreferences,
   } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
@@ -112,10 +112,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('notifications.title')}>
-      {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
-      ) : loadingCheck ? (
+      {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
+          error={hasError}
+          onTryAgain={refetchPushPreferences}
+        />
       ) : (
         <Box mb={contentMarginBottom}>
           {notificationData?.systemNotificationsOn ? (
