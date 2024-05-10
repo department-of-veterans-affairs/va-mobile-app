@@ -48,6 +48,7 @@ export function HealthScreen({}: HealthScreenProps) {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const { data: facilitiesInfo } = useFacilitiesInfo()
@@ -55,13 +56,12 @@ export function HealthScreen({}: HealthScreenProps) {
   const cernerExist = cernerFacilities.length >= 1
   const allCerner = facilitiesInfo?.length === cernerFacilities.length
   const mixedCerner = cernerExist && !allCerner
-  const isFocused = useIsFocused()
 
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const {
     data: prescriptionData,
     isFetching: fetchingPrescriptions,
@@ -109,21 +109,6 @@ export function HealthScreen({}: HealthScreenProps) {
     healthHelpScreenCheck()
   }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
 
-  useEffect(() => {
-    async function healthHelpScreenCheck() {
-      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
-      const newSession = await AsyncStorage.getItem(NEW_SESSION)
-
-      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
-        navigateTo('HealthHelp')
-        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
-        await AsyncStorage.setItem(NEW_SESSION, '')
-      }
-    }
-
-    healthHelpScreenCheck()
-  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
-
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
   const activityError = appointmentsError || inboxError || prescriptionsError
   const showAlert = featureInDowntime || activityError
@@ -142,10 +127,6 @@ export function HealthScreen({}: HealthScreenProps) {
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.covidUpdates.loading'),
     })
-  }
-
-  const goToHealthHelp = (): void => {
-    navigateTo('HealthHelp')
   }
 
   return (
@@ -197,7 +178,7 @@ export function HealthScreen({}: HealthScreenProps) {
       {cernerExist && (
         <Box mx={theme.dimensions.buttonPadding}>
           <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
-          <Pressable onPress={goToHealthHelp} accessibilityRole="link" accessible={true}>
+          <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
             <TextView variant="MobileFooterLink" paragraphSpacing={true}>
               {t('healthHelp.checkFacility')}
             </TextView>
