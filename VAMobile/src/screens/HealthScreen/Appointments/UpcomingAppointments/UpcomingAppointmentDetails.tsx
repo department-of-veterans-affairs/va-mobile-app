@@ -386,22 +386,22 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           onTryAgain={refetchAppointments}
         />
       ) : isInPersonVAAppointment ? (
-          <InPersonVAAppointment
-            appointmentID={trueAppointment?.id || ''}
-            attributes={attributes}
-            subType={
-              isAppointmentCanceled && pendingAppointment
-                ? AppointmentDetailsSubTypeConstants.CanceledAndPending
-                : isAppointmentCanceled
-                  ? AppointmentDetailsSubTypeConstants.Canceled
-                  : pendingAppointment
-                    ? AppointmentDetailsSubTypeConstants.Pending
-                    : AppointmentDetailsSubTypeConstants.Upcoming
-            }
-            goBack={navigation.goBack}
-            cancelAppointment={cancelAppointment}
-          />
-        ) : (
+        <InPersonVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={
+            isAppointmentCanceled && pendingAppointment
+              ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+              : isAppointmentCanceled
+                ? AppointmentDetailsSubTypeConstants.Canceled
+                : pendingAppointment
+                  ? AppointmentDetailsSubTypeConstants.Pending
+                  : AppointmentDetailsSubTypeConstants.Upcoming
+          }
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <AppointmentAlert attributes={attributes} />
           <TextArea>
@@ -435,10 +435,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
             />
           </TextArea>
 
-            {readerCancelInformation()}
-          </Box>
-        )}
-      </Box>
+          {readerCancelInformation()}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }
