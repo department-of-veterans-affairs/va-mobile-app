@@ -207,6 +207,7 @@ export async function checkImages(screenshotPath) {
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',
+    customSnapshotIdentifier: 'customSnapshotName',
   })
 }
 
