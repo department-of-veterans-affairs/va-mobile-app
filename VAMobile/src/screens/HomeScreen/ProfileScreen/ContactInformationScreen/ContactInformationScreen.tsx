@@ -129,8 +129,8 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const theme = useTheme()
   const {
     data: contactInformation,
-    isLoading: loadingContactInformation,
-    isError: contactInformationError,
+    isFetching: loadingContactInformation,
+    error: contactInformationError,
     refetch: refetchContactInformation,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
@@ -211,13 +211,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID">
-      {contactInformationInDowntime || contactInformationError ? (
+      {loadingContactInformation ? (
+        <LoadingComponent text={t('contactInformation.loading')} />
+      ) : contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
           onTryAgain={refetchContactInformation}
+          error={contactInformationError}
         />
-      ) : loadingContactInformation ? (
-        <LoadingComponent text={t('contactInformation.loading')} />
       ) : (
         <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
