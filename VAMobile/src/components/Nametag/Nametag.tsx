@@ -6,7 +6,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants } from 'api/types'
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, BoxProps, TextArea, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -127,6 +127,13 @@ export const Nametag = () => {
                   preventScaling={true}
                   ml={theme.dimensions.listItemDecoratorMarginLeft}
                 />
+              )}
+              {!showVeteranStatus && (
+                <Box>
+                  {serviceHistory.serviceHistory?.map((a, index) => (
+                    <TextView selectable={true}>{JSON.stringify(a, undefined, 2)}</TextView>
+                  ))}
+                </Box>
               )}
             </Box>
           </Box>
