@@ -49,7 +49,6 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
       default:
         return ''
     }
-    //isCovidVaccine ? 'upcomingAppointments.covidVaccine'
     //[AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
