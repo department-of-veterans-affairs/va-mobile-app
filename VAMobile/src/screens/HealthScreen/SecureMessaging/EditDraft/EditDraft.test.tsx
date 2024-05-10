@@ -252,9 +252,7 @@ context('EditDraft', () => {
         .calledWith('/v0/messaging/health/recipients')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() =>
-        expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 

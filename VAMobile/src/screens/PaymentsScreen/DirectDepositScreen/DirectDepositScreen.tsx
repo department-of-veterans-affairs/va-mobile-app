@@ -38,8 +38,9 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
   const {
     data: directDepositData,
-    isLoading: loading,
-    isError: useBankDataError,
+    isFetching: loading,
+    error: useBankDataError,
+    refetch: refetchBankData,
   } = useBankData({ enabled: screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime })
   const [bankData, setBankData] = useState(directDepositData?.data.attributes?.paymentAccount)
   const { gutter, contentMarginBottom } = theme.dimensions
@@ -96,10 +97,14 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount">
-      {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
-      ) : loading ? (
+      {loading ? (
         <LoadingComponent text={t('directDeposit.loading')} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}
+          error={useBankDataError}
+          onTryAgain={refetchBankData}
+        />
       ) : (
         <>
           <Box mx={gutter}>

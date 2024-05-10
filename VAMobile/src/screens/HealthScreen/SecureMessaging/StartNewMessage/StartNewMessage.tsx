@@ -99,14 +99,18 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    isError: recipientsError,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
   const {
     data: signature,
     isFetched: signatureFetched,
-    isError: signatureError,
+    error: signatureError,
+    refetch: refetchSignature,
+    isFetching: refetchingSignature,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
@@ -434,8 +438,17 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
+  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
+
   const hasError = recipientsError || signatureError
-  const isLoading = !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || sendingMessage
+  const isLoading =
+    !hasLoadedRecipients ||
+    savingDraft ||
+    !signatureFetched ||
+    isDiscarded ||
+    sendingMessage ||
+    refetchingRecipients ||
+    refetchingSignature
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : isDiscarded
@@ -469,7 +482,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || signatureError}
+          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+        />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
       )}

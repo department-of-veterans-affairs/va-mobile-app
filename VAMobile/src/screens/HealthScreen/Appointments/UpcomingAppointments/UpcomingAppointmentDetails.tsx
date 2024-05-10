@@ -72,8 +72,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
-    isLoading: loadingAppointments,
-    isError: getApptError,
+    isFetching: loadingAppointments,
+    error: getApptError,
+    refetch: refetchAppointments,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
     enabled: !appointment,
   })
@@ -362,15 +363,19 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       testID="UpcomingApptDetailsTestID">
-      {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      ) : isLoading ? (
+      {isLoading ? (
         <LoadingComponent
           text={
             loadingAppointmentCancellation
               ? t('upcomingAppointmentDetails.loadingAppointmentCancellation')
               : t('appointmentDetails.loading')
           }
+        />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          error={getApptError}
+          onTryAgain={refetchAppointments}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>

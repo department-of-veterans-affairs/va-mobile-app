@@ -57,8 +57,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const {
     data: trackingInfo,
-    isLoading: loadingTrackingInfo,
-    isError: hasError,
+    isFetching: loadingTrackingInfo,
+    error: hasError,
+    refetch: refetchTracking,
   } = useTrackingInfo(prescription.id, {
     enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
   })
@@ -192,10 +193,14 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
       testID="refillTrackingDetailsTestID">
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      ) : hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
       ) : loadingTrackingInfo ? (
         <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchTracking}
+        />
       ) : (
         <Box mx={gutter} mb={contentMarginBottom}>
           {renderHeader()}
