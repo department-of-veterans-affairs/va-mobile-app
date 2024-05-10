@@ -1,10 +1,13 @@
 import React from 'react'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { screen } from '@testing-library/react-native'
 
 import { notificationKeys } from 'api/notifications'
-import { PushPreference } from 'api/types'
-import { QueriesData, context, mockNavProps, render } from 'testUtils'
+import { GetPushPrefsResponse, PushPreference } from 'api/types'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 
@@ -44,6 +47,9 @@ context('NotificationsSettingsScreen', () => {
         data: {
           preferences: preferences,
           systemNotificationsOn: systemNotificationsOn,
+          deviceToken: '1',
+          initialUrl: '1',
+          tappedForegroundNotification: false,
         },
       },
     ]
@@ -52,30 +58,81 @@ context('NotificationsSettingsScreen', () => {
   }
 
   describe('appointment reminders switch', () => {
-    it('value should be true when pref is set to true', () => {
-      renderWithProps(false, true, [apptPrefOn])
-      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-        true,
+    it('value should be true when pref is set to true', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOn],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/push/prefs/1`)
+        .mockResolvedValue(responseData)
+      renderWithProps(true, true, [apptPrefOn])
+      await waitFor(() =>
+        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+          true,
+        ),
       )
     })
 
-    it('value should be false when pref is set to true', () => {
-      renderWithProps(false, true, [apptPrefOff])
-      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-        false,
+    it('value should be false when pref is set to true', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOff],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/push/prefs/1`)
+        .mockResolvedValue(responseData)
+      renderWithProps(true, true, [apptPrefOff])
+      await waitFor(() =>
+        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+          false,
+        ),
       )
     })
   })
 
   describe('when system notifications are disabled', () => {
-    it('hides the notification switches', () => {
+    it('hides the notification switches', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOff],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/push/prefs/1`)
+        .mockResolvedValue(responseData)
       renderWithProps(false, false, [apptPrefOff])
-      expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy()
-      expect(
-        screen.getByText(
-          "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
-        ),
-      ).toBeTruthy()
+      await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
+          ),
+        ).toBeTruthy(),
+      )
     })
   })
 })

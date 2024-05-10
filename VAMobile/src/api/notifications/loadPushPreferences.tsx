@@ -21,9 +21,9 @@ const loadPushPreferences = async (): Promise<LoadPushPreferencesData | undefine
   return {
     preferences: response?.data.attributes.preferences || [],
     systemNotificationsOn: systemNotificationsOn,
-    deviceToken: previousData.deviceToken,
-    initialUrl: previousData.initialUrl,
-    tappedForegroundNotification: previousData.tappedForegroundNotification || false,
+    deviceToken: previousData?.deviceToken,
+    initialUrl: previousData?.initialUrl,
+    tappedForegroundNotification: previousData?.tappedForegroundNotification || false,
   }
 }
 
