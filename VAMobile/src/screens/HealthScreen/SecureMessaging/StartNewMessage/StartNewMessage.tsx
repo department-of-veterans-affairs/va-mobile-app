@@ -438,7 +438,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-
   const hasError = recipientsError || signatureError
   const isLoading =
     !hasLoadedRecipients ||
@@ -475,7 +474,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (

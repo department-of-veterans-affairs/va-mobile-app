@@ -2,10 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
 import * as api from 'store/api'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import ProfileScreen from './ProfileScreen'
