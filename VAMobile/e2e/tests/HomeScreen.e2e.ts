@@ -19,7 +19,6 @@ export const HomeE2eIdConstants = {
   LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
   CONTACT_VA_ROW_ID: 'Contact  V-A ',
   COVID_ROW_ID: 'COVID-19 updates',
-  HOME_PAGE_USER_NAME: 'Kimberly Washington',
   HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
   CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
   CONTACT_VA_BODY:
@@ -54,17 +53,9 @@ describe('Home Screen', () => {
     await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
   })
 
-  it('should show primary home page content', async () => {
+  it('should show primary home page header content', async () => {
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_USER_NAME))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
-    const militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
-    checkImages(militaryBadge)
-    await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
 
   it('should verify the nav bar at the bottom of the screen', async () => {
@@ -85,9 +76,7 @@ describe('Home Screen', () => {
 
   it('home tab tap: verify the home screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
-    await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
   })
 
   it('benefits tab tap: verify the benefits screen tab items', async () => {
@@ -100,7 +89,7 @@ describe('Home Screen', () => {
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
     await expect(element(by.text('COVID-19 updates'))).toExist()
@@ -112,11 +101,25 @@ describe('Home Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
   })
 
-  it('should tap on home then contact VA', async () => {
+  it('should tap home then show home page About You content', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
+    await element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT)).scroll(300, 'down')
+    await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
+    const militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
+    checkImages(militaryBadge)
+  })
+
+  it('should show home page VA Resources content', async () => {
+    await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scroll(300, 'down')
+    await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
+    await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
+  })
+
+  it('should tap on contact VA', async () => {
     await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).tap()
     await expect(element(by.text('Call MyVA411'))).toExist()
     await expect(
@@ -148,17 +151,9 @@ describe('Home Screen', () => {
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
   })
 
-  it('should tap on done then VA Covid-19 updates', async () => {
-    await element(by.text('Done')).tap()
-    await element(by.id(HomeE2eIdConstants.COVID_ROW_ID)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('HomeCovide19Screenshot')
-  })
-
   it('should tap on done and verify the home screen is displayed', async () => {
     await element(by.text('Done')).tap()
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
 })
