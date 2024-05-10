@@ -24,5 +24,6 @@ export const useFacilitiesInfo = () => {
     meta: {
       errorName: 'getFacilitiesInfo: Service error',
     },
+    staleTime: Infinity,
   })
 }
