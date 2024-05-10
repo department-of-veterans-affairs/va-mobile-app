@@ -240,7 +240,7 @@ context('LettersListScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       initializeTestInstance([], true)
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })

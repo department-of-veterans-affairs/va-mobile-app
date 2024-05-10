@@ -98,9 +98,9 @@ context('DirectDepositScreen', () => {
     it('should render error component', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/payment-information/benefits')
-        .mockRejectedValue('failure')
+        .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })

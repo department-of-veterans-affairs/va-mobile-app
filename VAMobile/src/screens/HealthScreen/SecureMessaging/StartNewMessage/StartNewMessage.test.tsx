@@ -123,7 +123,7 @@ context('StartNewMessage', () => {
         .calledWith('/v0/messaging/health/messages/signature')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 
