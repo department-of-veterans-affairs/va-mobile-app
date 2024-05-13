@@ -122,7 +122,8 @@ function DisabilityRatingsScreen() {
             variant="MobileBodyBold"
             accessibilityRole="header"
             selectable={false}
-            accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
+            accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}
+            testID="Test">
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>

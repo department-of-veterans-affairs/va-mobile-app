@@ -58,7 +58,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    if: always()
+    if: !cancelled()
     runs-on: macos-latest-xl
     needs: find_detox_tests_to_run
     outputs: 
@@ -92,7 +92,7 @@ jobs:
           fi
 
   matrix-e2e-ios:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
+    if: !cancelled() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-14-xlarge
     needs: output_detox_tests_to_run
     env:
@@ -175,7 +175,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-ios:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
+    if: !cancelled() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     needs: [start_slack_thread, output_detox_tests_to_run]
     runs-on: macos-14-xlarge
     env:
@@ -280,7 +280,7 @@ jobs:
         run: exit 1
 
   matrix-send_test_results_to_testrail:
-    if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: !cancelled() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
     needs: [matrix-e2e-ios, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -295,7 +295,7 @@ jobs:
     secrets: inherit
 
   send_test_results_to_testrail:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
+    if: !cancelled() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
     needs: [e2e-ios, output_detox_tests_to_run]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
