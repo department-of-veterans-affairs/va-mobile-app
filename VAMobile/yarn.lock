@@ -5041,10 +5041,10 @@ dot-prop@^4.2.1:
   dependencies:
     is-obj "^1.0.0"
 
-dotenv@^16.3.1:
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
-  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 dtrace-provider@~0.8:
   version "0.8.8"
@@ -9367,12 +9367,12 @@ react-native-document-picker@^8.2.2:
   dependencies:
     invariant "^2.2.4"
 
-react-native-dotenv@^3.4.9:
-  version "3.4.9"
-  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.9.tgz#621c5b0c1d0c5c7f569bfe5a1d804bec7885c010"
-  integrity sha512-dbyd+mcy7SUzxEgmt33TRf1FGcNe6swJhXmB0unKkI49F7+pidog9kPtjxMLTAfmKA8gcN2XHQSKltGfGbGCLQ==
+react-native-dotenv@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz#2e6c4eabd55d5f1bf109b3dd9141dadf9c55cdd4"
+  integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
   dependencies:
-    dotenv "^16.3.1"
+    dotenv "^16.4.5"
 
 react-native-file-viewer@^2.1.4:
   version "2.1.5"
