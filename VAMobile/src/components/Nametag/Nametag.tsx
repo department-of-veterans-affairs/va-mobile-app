@@ -7,9 +7,9 @@ import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
@@ -39,6 +39,11 @@ export const Nametag: FC = () => {
   serviceHistory.forEach((service) => {
     if (service.honorableServiceIndicator === 'Y') {
       showVeteranStatus = true
+      logAnalyticsEvent(Events.vama_vet_status_shown())
+    } else if (service.honorableServiceIndicator === 'N') {
+      logAnalyticsEvent(Events.vama_vet_status_nStatus())
+    } else if (service.honorableServiceIndicator === 'Z') {
+      logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
     }
   })
 
