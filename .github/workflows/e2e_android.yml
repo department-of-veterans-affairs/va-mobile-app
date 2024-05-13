@@ -92,12 +92,13 @@ jobs:
               echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
             fi
           else
-          if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-            echo "matrix=" >> "$GITHUB_OUTPUT"
-            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+              echo "matrix=" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            fi
           fi
 
   matrix-e2e-android:
