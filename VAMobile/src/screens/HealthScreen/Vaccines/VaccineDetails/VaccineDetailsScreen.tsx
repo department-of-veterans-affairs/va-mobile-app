@@ -47,18 +47,6 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
     return <></>
   }
 
-  if (detailsLoading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('vaVaccines')}
-        backLabelA11y={a11yLabelVA(t('vaVaccines'))}
-        backLabelOnPress={navigation.goBack}
-        title={t('details')}>
-        <LoadingComponent text={t('vaccines.details.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder
 
   const displayName = vaccine.attributes?.groupName
@@ -85,89 +73,93 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
       backLabelA11y={a11yLabelVA(t('vaVaccines'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}>
-      <Box mb={contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBody" mb={standardMarginBetween}>
-            {displayDate}
-          </TextView>
-          <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="BitterBoldHeading">{displayName}</TextView>
-          </Box>
-          <TextView variant="MobileBodyBold" selectable={true}>
-            {t('vaccines.details.typeAndDosage')}
-          </TextView>
-          <TextView
-            variant="MobileBody"
-            selectable={true}
-            mb={standardMarginBetween}
-            testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
-            {vaccine.attributes?.shortDescription || placeHolder}
-          </TextView>
-          {isCovidVaccine && (
-            <>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView
-                variant="MobileBody"
-                selectable={true}
-                mb={standardMarginBetween}
-                testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
-                {vaccine.attributes?.manufacturer || placeHolder}
-              </TextView>
-            </>
-          )}
-          <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-          <TextView variant="MobileBody" selectable={true} testID={'Series status' + displaySeries}>
-            {displaySeries}
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
-            {location && (
-              <>
-                <TextView variant="MobileBody" selectable={true}>
-                  {location.data.attributes.name}
-                </TextView>
-                <TextView variant="MobileBody" selectable={true}>
-                  {location.data.attributes.address?.street}
-                </TextView>
-                <TextView variant="MobileBody" selectable={true}>
-                  {t('vaccines.details.address', {
-                    city: location.data.attributes.address?.city,
-                    state: location.data.attributes.address?.state,
-                    zip: location.data.attributes.address?.zipCode,
-                  })}
-                </TextView>
-              </>
-            )}
-            {!location && (
-              <TextView variant="MobileBody" selectable={true}>
-                {placeHolder}
-              </TextView>
-            )}
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <Box>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
-                {vaccine.attributes?.reaction || placeHolder}
-              </TextView>
+      {detailsLoading ? (
+        <LoadingComponent text={t('vaccines.details.loading')} />
+      ) : (
+        <Box mb={contentMarginBottom}>
+          <TextArea>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
+              {displayDate}
+            </TextView>
+            <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
+              <TextView variant="BitterBoldHeading">{displayName}</TextView>
             </Box>
-            <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+            <TextView variant="MobileBodyBold" selectable={true}>
+              {t('vaccines.details.typeAndDosage')}
+            </TextView>
             <TextView
               variant="MobileBody"
               selectable={true}
-              testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
-              {vaccine.attributes?.note || placeHolder}
+              mb={standardMarginBetween}
+              testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
+              {vaccine.attributes?.shortDescription || placeHolder}
             </TextView>
-          </Box>
-        </TextArea>
-        {isPartialData && (
-          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('vaccines.details.weBaseThis'))}>
-              {t('vaccines.details.weBaseThis')}
+            {isCovidVaccine && (
+              <>
+                <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
+                <TextView
+                  variant="MobileBody"
+                  selectable={true}
+                  mb={standardMarginBetween}
+                  testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
+                  {vaccine.attributes?.manufacturer || placeHolder}
+                </TextView>
+              </>
+            )}
+            <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
+            <TextView variant="MobileBody" selectable={true} testID={'Series status' + displaySeries}>
+              {displaySeries}
             </TextView>
-          </Box>
-        )}
-      </Box>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
+              {location && (
+                <>
+                  <TextView variant="MobileBody" selectable={true}>
+                    {location.data.attributes.name}
+                  </TextView>
+                  <TextView variant="MobileBody" selectable={true}>
+                    {location.data.attributes.address?.street}
+                  </TextView>
+                  <TextView variant="MobileBody" selectable={true}>
+                    {t('vaccines.details.address', {
+                      city: location.data.attributes.address?.city,
+                      state: location.data.attributes.address?.state,
+                      zip: location.data.attributes.address?.zipCode,
+                    })}
+                  </TextView>
+                </>
+              )}
+              {!location && (
+                <TextView variant="MobileBody" selectable={true}>
+                  {placeHolder}
+                </TextView>
+              )}
+            </Box>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <Box>
+                <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
+                <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+                  {vaccine.attributes?.reaction || placeHolder}
+                </TextView>
+              </Box>
+              <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+              <TextView
+                variant="MobileBody"
+                selectable={true}
+                testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
+                {vaccine.attributes?.note || placeHolder}
+              </TextView>
+            </Box>
+          </TextArea>
+          {isPartialData && (
+            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('vaccines.details.weBaseThis'))}>
+                {t('vaccines.details.weBaseThis')}
+              </TextView>
+            </Box>
+          )}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

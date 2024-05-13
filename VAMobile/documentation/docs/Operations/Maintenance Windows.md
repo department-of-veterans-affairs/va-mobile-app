@@ -4,7 +4,6 @@ title: Maintenance windows
 
 # Maintenance Windows
 
-See back-end documentation [here](../Engineering/BackEnd/Features/MaintenanceWindows.md).
+[View back-end documentation](../Engineering/BackEnd/Features/MaintenanceWindows.md).
 
-See front-end documentation [here](../Engineering/FrontEnd/DowntimeMessages.md).
-
+[View front-end documentation](../Engineering/FrontEnd/DowntimeMessages.md).

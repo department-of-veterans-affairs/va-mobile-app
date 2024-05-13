@@ -46,8 +46,8 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const {
     data: claimsAndAppealsListPayload,
-    isError: claimsAndAppealsListError,
-    isLoading: loadingClaimsAndAppealsList,
+    error: claimsAndAppealsListError,
+    isFetching: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
   } = useClaimsAndAppeals(claimType, 1)
 
@@ -122,12 +122,16 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID">
-      {claimsAndAppealsListError ||
-      getUserAuthorizedServicesError ||
-      (!claimsNotInDowntime && !appealsNotInDowntime) ? (
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
+      {loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : claimsAndAppealsListError ||
+        getUserAuthorizedServicesError ||
+        (!claimsNotInDowntime && !appealsNotInDowntime) ? (
+        <ErrorComponent
+          onTryAgain={fetchInfoAgain}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          error={claimsAndAppealsListError}
+        />
       ) : !claimsAndAppealsAccess ? (
         <NoClaimsAndAppealsAccess />
       ) : (

@@ -28,10 +28,10 @@ assignees:
  
 |Month| Project Health | Progress & Key Accomplishments| Issues/Risks/Blockers|
 |-------| ---------|--------|---------|
-|Month Year | 
-|Month Year| 
-|Month Year|
-|Month Year|
+|MM/DD/YY| 
+|MM/DD/YY|
+|MM/DD/YY|
+|MM/DD/YY|
 </details>
 
 ### Team Members

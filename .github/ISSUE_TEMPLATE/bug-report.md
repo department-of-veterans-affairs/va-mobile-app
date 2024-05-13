@@ -1,6 +1,6 @@
 ---
-name: New Bug Report Template
-about: Template for reporting a bug in the VA mobile app
+name: New Internal Bug Report Template
+about: Template for Mobile Team or Internal VA  Reporting a bug in the VA mobile app
 title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: bug,qa
 assignees:
