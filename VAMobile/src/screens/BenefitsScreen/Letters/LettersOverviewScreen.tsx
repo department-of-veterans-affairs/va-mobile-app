@@ -42,7 +42,7 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.title')}
       {...testIdProps('Letters-page')}
-      testID="lettersPageID1">
+      testID="lettersPageID">
       {!userAuthorizedServices?.lettersAndDocuments ? (
         <NoLettersScreen />
       ) : (
