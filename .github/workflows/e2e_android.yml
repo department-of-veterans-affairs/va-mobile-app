@@ -102,7 +102,7 @@ jobs:
           fi
 
   matrix-e2e-android:
-    if: !cancelled() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
+    if: ${{ !cancelled() }} && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
