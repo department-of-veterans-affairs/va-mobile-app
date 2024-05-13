@@ -60,7 +60,7 @@ jobs:
         uses: tj-actions/changed-files@v41
         with: 
           json: true
-          since_last_remote_commit: true
+          base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get testing matrix array
         id: testing_matrix
         run: |
