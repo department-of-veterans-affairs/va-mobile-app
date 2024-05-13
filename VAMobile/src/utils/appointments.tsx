@@ -337,14 +337,8 @@ const getTime = (startDateUtc: string, timeZone: AppointmentTimeZone, mb: number
   mb,
 })
 
-const getCareText = (typeOfCare: string, serviceCategoryName: string, isCovidVaccine: boolean, t: TFunction) => {
-  if (serviceCategoryName === 'COMPENSATION & PENSION') {
-    return t('appointments.claimExam')
-  } else if (isCovidVaccine) {
-    return t('upcomingAppointments.covidVaccine')
-  } else {
-    return typeOfCare
-  }
+const getCareText = (typeOfCare = '', serviceCategoryName: string | null = '', t: TFunction) => {
+  return serviceCategoryName === 'COMPENSATION & PENSION' ? t('appointments.claimExam') : typeOfCare
 }
 
 const getModality = (
@@ -386,7 +380,6 @@ export const getTextLinesForAppointmentListItem = (
     appointmentType,
     location,
     phoneOnly,
-    isCovidVaccine,
     typeOfCare,
     healthcareProvider,
     serviceCategoryName,
@@ -396,7 +389,7 @@ export const getTextLinesForAppointmentListItem = (
     attributes.isPending &&
     (attributes.status === AppointmentStatusConstants.SUBMITTED ||
       attributes.status === AppointmentStatusConstants.CANCELLED)
-  const careText = getCareText(typeOfCare || '', serviceCategoryName || '', isCovidVaccine, t)
+  const careText = getCareText(typeOfCare, serviceCategoryName, t)
   let result: Array<TextLineWithIconProps | undefined> = []
 
   if (isPending) {
