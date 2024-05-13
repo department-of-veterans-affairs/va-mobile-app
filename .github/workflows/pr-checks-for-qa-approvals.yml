@@ -36,6 +36,12 @@ jobs:
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json' |
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+
+          if [[ $(jq 'length' <<< "$approvals") -eq 0 ]]; then
+              echo 'No reviews found for this pull request.'
+              exit 1
+          fi
+          
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
