@@ -41,7 +41,7 @@ jobs:
               echo 'No reviews found for this pull request.'
               exit 1
           fi
-          
+
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
@@ -60,18 +60,20 @@ jobs:
           )
           echo "required approval count: $required_approval_count"
           echo "QA team: $qa_team_members"
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
-            then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
-                then
-                echo 'This PR has QA approval to merge'
-                exit 0
-              else 
-                echo 'This PR requires QA approval to merge'
-                exit 1
-              fi
-          else
-            echo 'This PR requires 2 approvals, including one QA approval, before merging.'
-            exit 1
+          
+          qa_approvals=$(jq '[.[] | select(. | IN("ti", "rb", "DJ", "TK"))] | length' <<< "$approvals")
+          engineer_approvals=$(jq '[.[] | select(. | NOT IN("ti", "rb", "DJ", "TK"))] | length' <<< "$approvals")
+
+          if [[ $qa_approvals -gt 0 && $engineer_approvals -gt 0 ]]; then
+              echo 'This PR has both QA and engineering approvals.'
+              exit 0
+          elif [[ $qa_approvals -gt 0 && $engineer_approvals -eq 0 ]]; then
+              echo 'This PR has QA approval but requires engineering approval.'
+              exit 1
+          elif [[ $qa_approvals -eq 0 && $engineer_approvals -gt 0 ]]; then
+              echo 'This PR has engineering approval but requires QA approval.'
+              exit 1
+          else 
+              echo 'This PR requires both QA and engineering approvals.'
+              exit 1
           fi 
-        
