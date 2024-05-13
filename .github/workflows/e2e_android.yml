@@ -6,8 +6,6 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-      branches:
-        - 'dependabot/**'
   workflow_dispatch:
     inputs:
       tests_to_run:
@@ -101,7 +99,7 @@ jobs:
             echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
             echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
           fi
-          
+
   matrix-e2e-android:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-latest-xl
