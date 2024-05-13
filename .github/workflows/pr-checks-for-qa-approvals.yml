@@ -19,9 +19,9 @@ on:
   pull_request_target:
     branches:
       - 'develop'
-      push: 
-        branches: 
-          - 'chanel-6261-qa-approval-workflow'     
+  push: 
+    branches: 
+      - 'chanel-6261-qa-approval-workflow'     
 
 jobs:
   check_for_qa_approval:
