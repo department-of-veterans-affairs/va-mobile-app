@@ -60,9 +60,9 @@ jobs:
           )
           echo "required approval count: $required_approval_count"
           echo "QA team: $qa_team_members"
-          
-          qa_approvals=$(jq '[.[] | select(. | IN("ti", "rb", "DJ", "TK"))] | length' <<< "$approvals")
-          engineer_approvals=$(jq '[.[] | select(. | NOT IN("ti", "rb", "DJ", "TK"))] | length' <<< "$approvals")
+
+          qa_approvals=$(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals")
+          engineer_approvals=$(jq '[.[] | select(. | NOT IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals")
 
           if [[ $qa_approvals -gt 0 && $engineer_approvals -gt 0 ]]; then
               echo 'This PR has both QA and engineering approvals.'
