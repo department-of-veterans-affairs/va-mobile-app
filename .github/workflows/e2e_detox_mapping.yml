@@ -50,11 +50,13 @@ jobs:
         with:
           dir_names: true
           json: true
+          since_last_remote_commit: true
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
         with: 
           json: true
+          since_last_remote_commit: true
       - name: Get testing matrix array
         id: testing_matrix
         run: |
