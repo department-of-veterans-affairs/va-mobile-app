@@ -58,7 +58,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    if: !cancelled()
+    if: (!cancelled())
     runs-on: macos-latest-xl
     needs: find_detox_tests_to_run
     outputs: 
