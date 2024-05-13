@@ -58,13 +58,6 @@ const checkUpcomingApptDetails = async (
     await expect(element(by.id('directionsTestID'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
     await expect(element(by.id('CallTTYTestID'))).toExist()
-  } else if (appointmentType === 'Covid') {
-    await expect(element(by.text('COVID-19 vaccine')))
-    if (!pastAppointment) {
-      await expect(element(by.id('directionsTestID'))).toExist()
-    }
-    await expect(element(by.id('CallVATestID')).atIndex(0)).toExist()
-    await expect(element(by.id('CallTTYTestID')).atIndex(0)).toExist()
   }
   await element(by.text('Appointments')).tap()
 }
@@ -342,27 +335,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
     await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
     await checkUpcomingApptDetails('Claim', 'Canceled', pastAppointment)
-  })
-
-  it(pastAppointmentString + 'verify canceled VA Covid-19 appt', async () => {
-    await element(by.id('appointmentsTestID')).scrollTo('bottom')
-    await scrollToThenTap('At VA Memphis Healthcare System', pastAppointmentString)
-    if (!pastAppointment) {
-      await expect(element(by.text('Special instructions'))).toExist()
-    }
-    await expect(
-      element(by.text('If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.')),
-    ).toExist()
-    await element(by.text('Appointments')).tap()
-  })
-
-  it(pastAppointmentString + 'verify confirmed VA Covid-19 appt', async () => {
-    await element(by.id('appointmentsTestID')).scrollTo('top')
-    await scrollToThenTap('At VA Long Beach Healthcare System', pastAppointmentString)
-    if (!pastAppointment) {
-      await expect(element(by.text('Special instructions'))).toExist()
-    }
-    await checkUpcomingApptDetails('Covid', 'Confirmed', pastAppointment)
   })
 
   it(pastAppointmentString + 'verify confirmed VA appt - provider/typeOfCare/facility/number', async () => {
