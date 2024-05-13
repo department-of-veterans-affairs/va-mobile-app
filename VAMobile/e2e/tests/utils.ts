@@ -434,10 +434,28 @@ const navigateToFeature = async (featureNavigationArray) => {
         .whileElement(by.id('PrescriptionHistory'))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+    } else if (featureNavigationArray[j] === 'Get prescription tracking') {
+      await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
+        .toBeVisible()
+        .whileElement(by.id('PrescriptionHistory'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+    } else if (
+      featureNavigationArray[j] === 'Reply' ||
+      featureNavigationArray[j] === 'Only use messages for non-urgent needs'
+    ) {
+      await element(by.id('viewMessageTestID')).scrollTo('bottom')
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Email address') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('ContactInfoTestID'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('claimsHistoryID'))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (
