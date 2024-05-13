@@ -72,7 +72,6 @@ describe('Military Info Screen', () => {
       await setTimeout(5000)
       await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
-      await device.enableSynchronization()
     }
   })
 

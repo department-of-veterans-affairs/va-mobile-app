@@ -467,6 +467,12 @@ const navigateToFeature = async (featureNavigationArray) => {
         .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray === 'Request Refill') {
+      if (device.getPlatform() === 'ios') {
+        await element(by.text(featureNavigationArray[j])).tap()
+      } else {
+        await element(by.text('Request Refill ')).tap()
+      }
     } else {
       try {
         await element(by.text(featureNavigationArray[j])).tap()

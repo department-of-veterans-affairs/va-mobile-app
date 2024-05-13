@@ -93,7 +93,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
+        testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
       - uses: actions/checkout@v3
@@ -143,12 +143,7 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run e2e tests for iOS with Nav
-        if: needs.output_detox_tests_to_run.outputs.output3 != ''
-        run: yarn e2e:ios-test /e2e/tests/Navigation.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-
       - name: Run e2e tests for iOS with AF and Nav
-        if: needs.output_detox_tests_to_run.outputs.output3 == ''
         run: yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
       
       - name: Upload e2e-junit
