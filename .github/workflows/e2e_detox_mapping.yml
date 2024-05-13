@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
       - name: Get SHA
         id: get-sha
-        run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUPUT
+        run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
       - name: Get file difference by directory
         id: changed_files_dir
         uses: tj-actions/changed-files@v41
