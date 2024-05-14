@@ -10,7 +10,7 @@ Deep links in the app are handled by the React Navigation library. The React Nav
 
 ## Setting up push notifications
 
-A prerequisite for adding deep linking support for a feature's push notification is to have push notifications setup for that feature. An architectural overview of how push notifications work in the app and information on how to add them for a feature can be found [here](../../BackEnd/Features/PushNotifications.md).
+A prerequisite for adding deep linking support for a feature's push notification is to have push notifications setup for that feature. An architectural overview of how push notifications work in the app and information on how to add them for a feature can be found [in push notification documentation](../../BackEnd/Features/PushNotifications.md).
 
 In order for deep linking to work for your push notification, the `url` field must be present in the push template. The URL should be prefixed with `vamobile://` and followed by the path of the deep link you want to add, e.g. `vamobile://messages/%MSG_ID%`. In this example, the path of the deep link is prefixed with `vamobile://`, starts with `messages`, and is followed by the `MSG_ID` parameter, which is a field that will be populated from the API call that triggers the push notification. This will result in push notifications returning a payload that looks something like:
 
@@ -103,4 +103,4 @@ npx uri-scheme open "vamobile://messages/1234" --ios
 
 #### Detox
 
-You can also use our automated UI testing tool Detox to simulate push notifications on a virtual device. Detox supports [mocking push notifications](https://wix.github.io/Detox/docs/guide/mocking-user-notifications/), which provides a more complete view of how the app will behave when a deep link is opened from a push notification. Since Detox is already used in our repository, all you'll need to do is create a new test for your push notification, and run it locally. You can view an example of a Detox test for a push notification [here](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/e2e/tests/PushNotifications.e2e.ts).
+You can also use our automated UI testing tool Detox to simulate push notifications on a virtual device. Detox supports [mocking push notifications](https://wix.github.io/Detox/docs/guide/mocking-user-notifications/), which provides a more complete view of how the app will behave when a deep link is opened from a push notification. Since Detox is already used in our repository, all you'll need to do is create a new test for your push notification, and run it locally. [View an example of a Detox test for a push notification](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/e2e/tests/PushNotifications.e2e.ts).
