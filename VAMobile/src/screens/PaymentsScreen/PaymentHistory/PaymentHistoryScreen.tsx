@@ -41,8 +41,9 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
   const {
     data: payments,
-    isLoading: loading,
-    isError: hasError,
+    isFetching: loading,
+    error: hasError,
+    refetch: refetchPayments,
   } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
   const noPayments = payments?.meta.availableYears?.length === 0
 
@@ -148,10 +149,14 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
       testID="paymentHistoryTestID">
-      {hasErrorOrDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
-      ) : loading ? (
+      {loading ? (
         <LoadingComponent text={t('payments.loading')} />
+      ) : hasErrorOrDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchPayments}
+        />
       ) : noPayments ? (
         <NoPaymentsScreen />
       ) : (

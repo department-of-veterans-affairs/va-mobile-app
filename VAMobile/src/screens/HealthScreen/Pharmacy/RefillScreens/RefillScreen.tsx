@@ -51,8 +51,10 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
+    isFetching: loadingHistory,
     isFetched: prescriptionsFetched,
+    error: prescriptionHasError,
+    refetch: refetchPrescriptions,
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
@@ -181,14 +183,18 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         }
         onSubmitPressed()
       }}>
-      {prescriptionInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
-      ) : refillable.length === 0 ? (
-        <NoRefills />
-      ) : loadingHistory ? (
+      {loadingHistory ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       ) : showLoadingScreenRequestRefills ? (
         <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
+      ) : prescriptionInDowntime || prescriptionHasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID}
+          error={prescriptionHasError}
+          onTryAgain={refetchPrescriptions}
+        />
+      ) : refillable.length === 0 ? (
+        <NoRefills />
       ) : (
         <>
           {showAlert && (
