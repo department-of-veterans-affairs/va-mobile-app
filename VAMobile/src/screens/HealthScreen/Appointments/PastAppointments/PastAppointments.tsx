@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
@@ -47,7 +48,7 @@ function PastAppointments({
 
   const pagination = {
     currentPage: page,
-    perPage: 10,
+    perPage: DEFAULT_PAGE_SIZE,
     totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
   }
   const { perPage, totalEntries } = pagination

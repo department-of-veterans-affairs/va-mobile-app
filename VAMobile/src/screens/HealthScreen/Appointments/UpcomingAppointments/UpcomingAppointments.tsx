@@ -5,6 +5,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 import { AppointmentData, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getGroupedAppointments } from 'utils/appointments'
@@ -28,7 +29,7 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage }: Upco
 
   const pagination = {
     currentPage: page,
-    perPage: 10,
+    perPage: DEFAULT_PAGE_SIZE,
     totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
   }
   const { perPage, totalEntries } = pagination
