@@ -145,7 +145,7 @@ jobs:
 
       - name: Bundle Android app
         run: yarn e2e:android-build
-     
+
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -157,7 +157,7 @@ jobs:
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-      
+
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
@@ -171,7 +171,7 @@ jobs:
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
-  
+
   e2e-android:
     if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     needs: [start_slack_thread, output_detox_tests_to_run]
