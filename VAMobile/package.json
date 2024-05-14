@@ -59,7 +59,7 @@
     "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
     "react-i18next": "^14.0.1",
-    "react-native": "0.73.5",
+    "react-native": "0.73.8",
     "react-native-blob-util": "^0.19.9",
     "react-native-document-picker": "^8.2.2",
     "react-native-dotenv": "^3.4.11",
