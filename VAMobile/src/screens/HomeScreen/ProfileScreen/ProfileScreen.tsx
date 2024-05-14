@@ -17,7 +17,6 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
@@ -42,8 +41,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   }
 
   const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
-  const errorCheck =
-    useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError || serviceHistoryError
+  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || serviceHistoryError
 
   return (
     <ChildTemplate
