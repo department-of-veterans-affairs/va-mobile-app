@@ -75,7 +75,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
 

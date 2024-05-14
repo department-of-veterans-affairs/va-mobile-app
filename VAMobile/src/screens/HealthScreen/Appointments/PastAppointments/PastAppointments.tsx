@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DateTime } from 'luxon'
 
-import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
+import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,6 +16,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
   loading: boolean
+  page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
   setTimeFrame: React.Dispatch<
@@ -31,10 +32,30 @@ type PastAppointmentsProps = {
   >
 }
 
-function PastAppointments({ appointmentsData, loading, setPage, setDateRange, setTimeFrame }: PastAppointmentsProps) {
+function PastAppointments({
+  appointmentsData,
+  loading,
+  page,
+  setPage,
+  setDateRange,
+  setTimeFrame,
+}: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
+
+  const pagination = {
+    currentPage: page,
+    perPage: 10,
+    totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
+  }
+  const { perPage, totalEntries } = pagination
+
+  useEffect(() => {
+    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
+    setAppointmentsToShow(appointmentsList || [])
+  }, [appointmentsData?.data, page, perPage])
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -172,28 +193,20 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     )
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const pagination = appointmentsData.meta?.pagination || {
-    currentPage: 1,
-    perPage: 10,
-    totalEntries: 0,
-  }
-  const { currentPage, perPage, totalEntries } = pagination
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
     navigateTo('PastAppointmentDetails', { appointment })
   }
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(currentPage + 1)
+      setPage(page + 1)
     },
     onPrev: () => {
-      setPage(currentPage - 1)
+      setPage(page - 1)
     },
     totalEntries: totalEntries,
     pageSize: perPage,
-    page: currentPage,
+    page,
     tab: 'past appointments',
   }
 
@@ -208,7 +221,7 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
           testID="getDateRangeTestID"
         />
       </Box>
-      {getGroupedAppointments(appointmentsData.data, theme, { t }, onPastAppointmentPress, true, pagination)}
+      {getGroupedAppointments(appointmentsToShow, theme, { t }, onPastAppointmentPress, true, pagination)}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

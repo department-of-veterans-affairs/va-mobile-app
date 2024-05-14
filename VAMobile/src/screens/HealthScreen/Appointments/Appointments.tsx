@@ -170,6 +170,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}
+                page={page}
                 setPage={setPage}
                 loading={loadingAppointments}
                 setDateRange={setDateRange}
@@ -177,7 +178,12 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
               />
             )}
             {selectedTab === 0 && (
-              <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+              <UpcomingAppointments
+                appointmentsData={apptsData}
+                page={page}
+                setPage={setPage}
+                loading={loadingAppointments}
+              />
             )}
           </Box>
         </Box>
