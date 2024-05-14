@@ -25,35 +25,35 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
   switch (type) {
     case AppointmentDetailsTypeConstants.ClaimExam:
       return <></>
+  }
+
+  switch (subType) {
+    case AppointmentDetailsSubTypeConstants.CanceledAndPending:
+    case AppointmentDetailsSubTypeConstants.Pending:
+      return (
+        <Box>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+            {t('appointments.pending.reasonTitle')}
+          </TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
+          </TextView>
+        </Box>
+      )
     default:
-      switch (subType) {
-        case AppointmentDetailsSubTypeConstants.CanceledAndPending:
-        case AppointmentDetailsSubTypeConstants.Pending:
-          return (
-            <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-                {t('appointments.pending.reasonTitle')}
-              </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
-              </TextView>
-            </Box>
-          )
-        default:
-          return (
-            <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-                {t('upcomingAppointmentDetails.sharedProvider')}
-              </TextView>
-              <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-                {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
-              </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('upcomingAppointmentDetails.reasonComment', { comment: comment || t('appointments.notAvailable') })}
-              </TextView>
-            </Box>
-          )
-      }
+      return (
+        <Box>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+            {t('upcomingAppointmentDetails.sharedProvider')}
+          </TextView>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+            {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
+          </TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('upcomingAppointmentDetails.reasonComment', { comment: comment || t('appointments.notAvailable') })}
+          </TextView>
+        </Box>
+      )
   }
 }
 
