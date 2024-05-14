@@ -12,10 +12,8 @@ on:
       - 'VAMobile/src/**'
       - 'VAMobile/package.json'
       - '!VAMobile/src/**.test.*'
-
   pull_request_review:
     types: [submitted, dismissed]
-
   pull_request_target:
     branches:
       - 'develop'
