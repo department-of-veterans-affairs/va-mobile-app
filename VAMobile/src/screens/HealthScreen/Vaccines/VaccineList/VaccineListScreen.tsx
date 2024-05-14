@@ -42,7 +42,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     isFetching: loading,
     error: vaccineError,
     refetch: refetchVaccines,
-  } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+  } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
