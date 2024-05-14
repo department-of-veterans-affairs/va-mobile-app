@@ -2,25 +2,21 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { SegmentedControlIndexes } from 'constants/secureMessaging'
-import { updateSecureMessagingTab } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 function NoFolderMessages() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigateTo('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const scrollStyles: ViewStyle = {
@@ -51,9 +47,7 @@ function NoFolderMessages() {
             mb={theme.dimensions.standardMarginBetween}>
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
-          <Box width={'100%'}>
-            <Link type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-          </Box>
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </Box>
       </VAScrollView>
     </>

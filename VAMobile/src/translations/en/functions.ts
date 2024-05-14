@@ -1,11 +1,11 @@
 import { TFunction } from 'i18next'
 
+import { SecureMessagingFolderList } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import {
   profileAddressOptions,
   profileAddressType,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { SecureMessagingFolderList } from 'store/api/types'
 import { getfolderName } from 'utils/secureMessaging'
 
 export const GenerateFolderMessage = (

@@ -207,7 +207,7 @@ platform :ios do
         automatic_release: false,
         force: true,
         overwrite_screenshots: true,
-        screenshot_processing_timeout: 300,
+        screenshot_processing_timeout: 300, # 5min
         run_precheck_before_submit: false,
         submission_information: {
           add_id_info_uses_idfa: false

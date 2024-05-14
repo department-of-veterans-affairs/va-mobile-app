@@ -1,21 +1,11 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
 import TermsAndConditions from './TermsAndConditions'
-
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('TermsAndConditions', () => {
   beforeEach(() => {
@@ -38,9 +28,7 @@ context('TermsAndConditions', () => {
   describe('when Go to My HealtheVet link is clicked', () => {
     it('should launch external link', () => {
       fireEvent.press(screen.getByRole('link', { name: 'Go to My HealtheVet' }))
-      expect(mockExternalLinkSpy).toBeCalledWith(
-        'https://www.myhealth.va.gov/mhv-portal-web/user-login?redirect=/mhv-portal-web/web/myhealthevet/secure-messaging',
-      )
+      expect(Alert.alert).toBeCalled()
     })
   })
 })

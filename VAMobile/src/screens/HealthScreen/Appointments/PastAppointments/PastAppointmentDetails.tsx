@@ -1,22 +1,17 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
 import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import {
-  AppointmentAttributes,
-  AppointmentData,
-  AppointmentStatusConstants,
-  AppointmentTypeConstants,
-} from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
   getAppointmentAnalyticsDays,
@@ -41,14 +36,11 @@ type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastA
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 
 function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
-  const { appointmentID } = route.params
+  const { appointment } = route.params
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
-  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
-  const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status, phoneOnly, location, serviceCategoryName } =
     attributes || ({} as AppointmentAttributes)
@@ -56,16 +48,20 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(
-      trackAppointmentDetail(
-        pendingAppointment,
-        appointmentID,
-        getAppointmentAnalyticsStatus(attributes),
-        attributes.appointmentType.toString(),
-        getAppointmentAnalyticsDays(attributes),
-      ),
-    )
-  }, [dispatch, appointmentID, pendingAppointment, attributes])
+    if (attributes) {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+      logAnalyticsEvent(
+        Events.vama_appt_view_details(
+          !!pendingAppointment,
+          appointment.id,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
+      )
+      registerReviewEvent()
+    }
+  }, [appointment, pendingAppointment, attributes])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
@@ -81,14 +77,21 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       phoneOnly ||
       (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
     ) {
+      const title = appointmentIsCanceled ? t('appointments.reschedule.title') : t('appointments.schedule.title')
+      const body = appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')
+
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-              {appointmentIsCanceled ? t('appointments.reschedule.title') : t('appointments.schedule.title')}
+            <TextView
+              variant="MobileBodyBold"
+              accessibilityRole="header"
+              accessibilityLabel={a11yLabelVA(title)}
+              mb={theme.dimensions.condensedMarginBetween}>
+              {title}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
-              {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(body)} paragraphSpacing={true}>
+              {body}
             </TextView>
             {location?.phone && location.phone.areaCode && location.phone.number ? (
               <ClickToCallPhoneNumber phone={location.phone} />

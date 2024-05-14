@@ -2,12 +2,10 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
-import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 
@@ -19,9 +17,7 @@ const store = configureStore({
     demo: demoReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
-    appointments: appointmentsReducer,
     notifications: notificationReducer,
-    secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     settings: settingsReducer,
   },

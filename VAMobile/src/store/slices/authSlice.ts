@@ -31,10 +31,8 @@ import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { updateDemoMode } from './demoSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -565,8 +563,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
-    dispatch(dispatchClearLoadedAppointments())
-    dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchFinishLogout())
   }
 }

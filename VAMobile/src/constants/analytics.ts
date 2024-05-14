@@ -1,4 +1,4 @@
-import { CategoryTypes } from 'store/api'
+import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
 /**
@@ -797,40 +797,19 @@ export const Events = {
       name: 'vama_pref_name_success',
     }
   },
-  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_address: (): Event => {
     return {
       name: 'vama_prof_update_address',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_email: (): Event => {
     return {
       name: 'vama_prof_update_email',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_gender',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_phone: (): Event => {
     return {
       name: 'vama_prof_update_phone',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
@@ -1053,27 +1032,18 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
+  vama_sm_save_draft: (messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
       },
     }
   },
-  vama_sm_send_message: (
-    totalTime: number,
-    actionTime: number,
-    messageCategory: CategoryTypes,
-    replyToID: number | undefined,
-  ): Event => {
+  vama_sm_send_message: (messageCategory: CategoryTypes, replyToID: number | undefined): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
         replyToID,
       },

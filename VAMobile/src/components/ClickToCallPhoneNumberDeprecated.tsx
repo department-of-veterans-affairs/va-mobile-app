@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
+import { AppointmentPhone } from 'api/types'
+import { Box, ClickForActionLinkDeprecated, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentPhone } from 'store/api/types'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 
 type ClickToCallPhoneNumberDeprecatedProps = {
@@ -61,8 +61,8 @@ const ClickToCallPhoneNumberDeprecated: FC<ClickToCallPhoneNumberDeprecatedProps
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
-      {!ttyBypass && <ClickForActionLink {...ttyProps} testID="CallTTYTestID" />}
+      <ClickForActionLinkDeprecated {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
+      {!ttyBypass && <ClickForActionLinkDeprecated {...ttyProps} testID="CallTTYTestID" />}
     </Box>
   )
 }
