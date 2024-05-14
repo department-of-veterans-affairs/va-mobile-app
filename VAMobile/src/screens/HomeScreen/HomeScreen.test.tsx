@@ -139,7 +139,7 @@ context('HomeScreen', () => {
         data: claimsAppealsPayload,
       },
       {
-        queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING, 1],
+        queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
         data: apptsData,
       },
       {
