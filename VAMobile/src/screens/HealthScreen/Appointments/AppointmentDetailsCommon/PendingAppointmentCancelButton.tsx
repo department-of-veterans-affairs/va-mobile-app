@@ -67,7 +67,7 @@ function PendingAppointmentCancelButton({
 
     const onCancel = () => {
       logAnalyticsEvent(
-        Events.vama_apt_cancel_clicks(
+        Events.vama_apt_cancel_click(
           appointmentID || '',
           getAppointmentAnalyticsStatus(attributes),
           attributes.appointmentType.toString(),
