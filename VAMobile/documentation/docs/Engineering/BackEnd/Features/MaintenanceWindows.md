@@ -33,4 +33,4 @@ So if there's an upcoming maintenance window for either `bgs` or `evss`, the `Se
 
 ## Front-end
 
-See front-end documentation [here](../../FrontEnd/DowntimeMessages.md). It is important to note that coordination with front-end will be required for any changes to the `ServiceGraph` hierarchy in the maintenance windows controller because effort is required on the front-end to add handling for new maintenance windows within the mobile app.
+See [front-end documentation](../../FrontEnd/DowntimeMessages.md). It is important to note that coordination with front-end will be required for any changes to the `ServiceGraph` hierarchy in the maintenance windows controller because effort is required on the front-end to add handling for new maintenance windows within the mobile app.
