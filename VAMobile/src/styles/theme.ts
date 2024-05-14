@@ -121,6 +121,7 @@ export type VATypographyThemeVariants = {
   MobileBodyBold: string
   MobileBodyLink: string
   MobileBodyTight: string
+  MobileBodySmall: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
@@ -284,6 +285,7 @@ export type VATheme = {
     LabelTag: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyTight: VAFontSizes
+    MobileBodySmall: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes

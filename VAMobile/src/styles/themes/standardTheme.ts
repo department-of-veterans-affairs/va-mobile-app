@@ -72,6 +72,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
+  MobileBodySmall: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
   SnackBarBtnText: {
     fontSize: 16,
     lineHeight: 24,
@@ -149,6 +153,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
     MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
+    MobileBodySmall: buildFont('SourceSansPro-Regular', fontSizes.MobileBodySmall, scheme.text.bodyText),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
@@ -215,6 +220,7 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     MobileBody: fontSizes.MobileBody,
     MobileBodyTight: fontSizes.MobileBodyTight,
+    MobileBodySmall: fontSizes.MobileBodySmall,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
