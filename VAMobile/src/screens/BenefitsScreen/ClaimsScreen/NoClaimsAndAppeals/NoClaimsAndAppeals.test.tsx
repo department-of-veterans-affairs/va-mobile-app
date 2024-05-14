@@ -37,7 +37,7 @@ context('NoClaimsAndAppeals', () => {
       .mockResolvedValue(queryPayload)
     const queriesData: QueriesData = [
       {
-        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE'],
         data: queryPayload,
       },
     ]

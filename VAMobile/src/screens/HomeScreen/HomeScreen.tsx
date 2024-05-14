@@ -101,7 +101,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
+  } = useClaimsAndAppeals('ACTIVE', {
     enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount

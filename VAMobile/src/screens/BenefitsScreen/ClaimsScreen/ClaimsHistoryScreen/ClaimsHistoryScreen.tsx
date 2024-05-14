@@ -49,7 +49,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     error: claimsAndAppealsListError,
     isFetching: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
-  } = useClaimsAndAppeals(claimType, 1)
+  } = useClaimsAndAppeals(claimType)
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters

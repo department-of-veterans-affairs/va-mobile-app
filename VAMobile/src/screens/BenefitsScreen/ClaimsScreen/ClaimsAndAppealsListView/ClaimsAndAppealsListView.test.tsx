@@ -71,7 +71,7 @@ context('ClaimsAndAppealsListView', () => {
     const props = mockNavProps({ claimType })
     const queriesData: QueriesData = [
       {
-        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, '1'],
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
         data: isEmpty ? emptyPayload : mockPayload,
       },
     ]

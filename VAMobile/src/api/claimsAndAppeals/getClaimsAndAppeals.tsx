@@ -4,7 +4,7 @@ import { chain, has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
@@ -22,14 +22,12 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
 /**
  * Fetch user ClaimsAndAppeals
  */
-const getClaimsAndAppeals = async (
-  claimType: ClaimType,
-  page: number,
-): Promise<ClaimsAndAppealsListPayload | undefined> => {
+const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
   const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
-    'page[number]': page.toString(),
-    'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    'page[number]': '1',
+    'page[size]': '5000',
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
+    useCache: 'false',
   })
 
   if (response) {
@@ -43,7 +41,7 @@ const getClaimsAndAppeals = async (
 /**
  * Returns a query for user ClaimsAndAppeals
  */
-export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?: { enabled?: boolean }) => {
+export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
@@ -53,8 +51,8 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
   return useQuery({
     ...options,
     enabled: !!(claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled),
-    queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, page],
-    queryFn: () => getClaimsAndAppeals(claimType, page),
+    queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
+    queryFn: () => getClaimsAndAppeals(claimType),
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',
     },
