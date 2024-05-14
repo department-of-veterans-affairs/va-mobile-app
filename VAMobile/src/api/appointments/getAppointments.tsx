@@ -4,7 +4,7 @@ import { has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { ACTIVITY_STALE_TIME, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
@@ -18,15 +18,15 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  page: number,
 ): Promise<AppointmentsGetData | undefined> => {
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
-    'page[number]': page.toString(),
-    'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    'page[number]': '1',
+    'page[size]': '5000',
     sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
     'included[]': 'pending',
+    useCache: 'false',
   } as Params)
 }
 
@@ -37,7 +37,6 @@ export const useAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  page: number,
   options?: { enabled?: boolean },
 ) => {
   const { data: authorizedServices } = useAuthorizedServices()
@@ -47,8 +46,8 @@ export const useAppointments = (
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
-    queryKey: [appointmentsKeys.appointments, timeFrame, page],
-    queryFn: () => getAppointments(startDate, endDate, timeFrame, page),
+    queryKey: [appointmentsKeys.appointments, timeFrame],
+    queryFn: () => getAppointments(startDate, endDate, timeFrame),
     meta: {
       errorName: 'getAppointments: Service error',
     },

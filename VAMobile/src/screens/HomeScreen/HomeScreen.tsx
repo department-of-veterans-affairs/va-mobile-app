@@ -125,7 +125,6 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
-    1,
     {
       enabled: isFocused,
     },

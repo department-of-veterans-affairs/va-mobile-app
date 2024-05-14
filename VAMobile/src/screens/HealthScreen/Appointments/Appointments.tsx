@@ -61,7 +61,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     isFetching: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
   // Resets scroll position to top whenever current page appointment list changes:
