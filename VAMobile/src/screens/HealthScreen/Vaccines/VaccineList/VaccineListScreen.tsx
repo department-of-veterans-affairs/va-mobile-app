@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
+import { Vaccine } from 'api/types'
 import { useVaccines } from 'api/vaccines/getVaccines'
 import {
   Box,
@@ -17,6 +18,7 @@ import {
   PaginationProps,
   TextLine,
 } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -46,7 +48,14 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const vaccineButtons: Array<DefaultListItemObj> = map(vaccines?.data || [], (vaccine, index) => {
+  const [vaccinesToShow, setVaccinesToShow] = useState<Array<Vaccine>>([])
+
+  useEffect(() => {
+    const vaccineList = vaccines?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setVaccinesToShow(vaccineList || [])
+  }, [vaccines?.data, page])
+
+  const vaccineButtons: Array<DefaultListItemObj> = map(vaccinesToShow, (vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
       { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
@@ -75,8 +84,8 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
         setPage(page - 1)
       },
       totalEntries: vaccines?.meta?.pagination?.totalEntries || 0,
-      pageSize: vaccines?.meta?.pagination?.perPage || 0,
-      page: vaccines?.meta?.pagination?.currentPage || 1,
+      pageSize: DEFAULT_PAGE_SIZE,
+      page,
     }
 
     return (
