@@ -143,7 +143,38 @@ export function HomeScreen({}: HomeScreenProps) {
   const unreadMessageCount = foldersData?.inboxUnreadCount
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && apptsData?.meta) {
+      logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
+    }
+  }, [apptsData, apptsPrefetch, loginTimestamp])
+
+  useEffect(() => {
+    if (smPrefetch && foldersData) {
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
+      if (inboxFolder) {
+        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
+      }
+    }
+  }, [smPrefetch, foldersData, loginTimestamp])
+
+  useEffect(() => {
+    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+      logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
+    }
+  }, [rxPrefetch, prescriptionData, loginTimestamp])
+
+  useEffect(() => {
+    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+    }
+  }, [claimsPrefetch, claimsData, loginTimestamp])
+
+  useEffect(() => {
+    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
