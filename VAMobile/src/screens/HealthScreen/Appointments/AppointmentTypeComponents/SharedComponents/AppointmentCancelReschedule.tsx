@@ -161,7 +161,11 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.CanceledAndPending:
           return (
             <Box>
-              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <Box
+                height={theme.dimensions.standardMarginBetween}
+                backgroundColor={'main'}
+                mx={-theme.dimensions.gutter}
+              />
               <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.pending.title')}
               </TextView>
@@ -185,7 +189,11 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Canceled:
           return (
             <Box>
-              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <Box
+                height={theme.dimensions.standardMarginBetween}
+                backgroundColor={'main'}
+                mx={-theme.dimensions.gutter}
+              />
               <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
@@ -209,7 +217,11 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Past:
           return (
             <Box>
-              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <Box
+                height={theme.dimensions.standardMarginBetween}
+                backgroundColor={'main'}
+                mx={-theme.dimensions.gutter}
+              />
               <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.schedule.title')}
               </TextView>
@@ -233,7 +245,11 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Upcoming:
           return (
             <Box>
-              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <Box
+                height={theme.dimensions.standardMarginBetween}
+                backgroundColor={'main'}
+                mx={-theme.dimensions.gutter}
+              />
               <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
