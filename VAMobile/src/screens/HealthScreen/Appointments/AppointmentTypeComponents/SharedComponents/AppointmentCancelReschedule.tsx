@@ -6,11 +6,11 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { BackgroundVariant, Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { AppDispatch } from 'store'
-import { VABackgroundColors, VATheme } from 'styles/theme'
+import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
