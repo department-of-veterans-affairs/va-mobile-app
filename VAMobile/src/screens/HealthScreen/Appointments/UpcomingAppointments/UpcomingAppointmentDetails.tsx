@@ -365,6 +365,15 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
 
+  const subType =
+    isAppointmentCanceled && pendingAppointment
+      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+      : isAppointmentCanceled
+        ? AppointmentDetailsSubTypeConstants.Canceled
+        : pendingAppointment
+          ? AppointmentDetailsSubTypeConstants.Pending
+          : AppointmentDetailsSubTypeConstants.Upcoming
+
   return (
     <FeatureLandingTemplate
       backLabel={t('appointments')}
@@ -389,15 +398,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         <InPersonVAAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
-          subType={
-            isAppointmentCanceled && pendingAppointment
-              ? AppointmentDetailsSubTypeConstants.CanceledAndPending
-              : isAppointmentCanceled
-                ? AppointmentDetailsSubTypeConstants.Canceled
-                : pendingAppointment
-                  ? AppointmentDetailsSubTypeConstants.Pending
-                  : AppointmentDetailsSubTypeConstants.Upcoming
-          }
+          subType={subType}
           goBack={navigation.goBack}
           cancelAppointment={cancelAppointment}
         />

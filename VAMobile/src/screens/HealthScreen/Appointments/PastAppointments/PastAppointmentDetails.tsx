@@ -125,21 +125,21 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
 
+  const subType =
+    appointmentIsCanceled && pendingAppointment
+      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+      : appointmentIsCanceled
+        ? AppointmentDetailsSubTypeConstants.Canceled
+        : pendingAppointment
+          ? AppointmentDetailsSubTypeConstants.Pending
+          : AppointmentDetailsSubTypeConstants.Past
   return (
     <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
       {isInPersonVAAppointment ? (
         <InPersonVAAppointment
           appointmentID={appointment.id}
           attributes={attributes}
-          subType={
-            appointmentIsCanceled && pendingAppointment
-              ? AppointmentDetailsSubTypeConstants.CanceledAndPending
-              : appointmentIsCanceled
-                ? AppointmentDetailsSubTypeConstants.Canceled
-                : pendingAppointment
-                  ? AppointmentDetailsSubTypeConstants.Pending
-                  : AppointmentDetailsSubTypeConstants.Past
-          }
+          subType={subType}
           goBack={navigation.goBack}
         />
       ) : (
