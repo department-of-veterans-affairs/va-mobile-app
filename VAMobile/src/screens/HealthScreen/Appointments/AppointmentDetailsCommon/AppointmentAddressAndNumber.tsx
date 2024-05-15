@@ -16,6 +16,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { isAPendingAppointment } from 'utils/appointments'
 import { getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -44,6 +45,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     serviceCategoryName,
     status,
   } = attributes || ({} as AppointmentAttributes)
+  const theme = useTheme()
   const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
@@ -52,20 +54,21 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     return <></>
   }
 
+  const addressIsShown = Boolean(address?.street || (address?.city && address?.state && address?.zipCode))
   const getAddress = () => {
     return (
-      <>
+      <Box mb={addressIsShown ? theme.dimensions.standardMarginBetween : 0}>
         {!!address?.street && (
-          <TextView variant="MobileBody" selectable={true}>
+          <TextView variant="MobileBodySmall" selectable={true}>
             {address.street}
           </TextView>
         )}
         {!!address?.city && address?.state && address?.zipCode && (
-          <TextView variant="MobileBody" selectable={true}>
+          <TextView variant="MobileBodySmall" selectable={true}>
             {`${address.city}, ${address.state} ${address.zipCode}`}
           </TextView>
         )}
-      </>
+      </Box>
     )
   }
 
@@ -110,7 +113,10 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
         {hasFullAddress ? (
           getAddress()
         ) : (
-          <TextView variant={'MobileBody'} selectable={true} accessibilityLabel={a11yLabelVA(missingBodyText || '')}>
+          <TextView
+            variant={'MobileBodySmall'}
+            selectable={true}
+            accessibilityLabel={a11yLabelVA(missingBodyText || '')}>
             {missingBodyText}
           </TextView>
         )}
@@ -171,7 +177,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     }
 
     return (
-      <TextView variant="MobileBody" selectable={true} accessible={false}>
+      <TextView variant="MobileBodySmall" selectable={true} accessible={false}>
         {location.name}
       </TextView>
     )
@@ -218,7 +224,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
           {getLocationName()}
           {missingAddressMessage ? (
             <TextView
-              variant="MobileBody"
+              variant="MobileBodySmall"
               paragraphSpacing={true}
               accessibilityLabel={missingAddressA11yLabel || undefined}
               selectable={true}

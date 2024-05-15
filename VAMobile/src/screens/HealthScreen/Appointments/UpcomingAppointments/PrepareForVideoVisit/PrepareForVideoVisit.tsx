@@ -21,36 +21,36 @@ function PrepareForVideoVisit({}: PrepareForVideoVisitProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.downloadBasedOnDevice')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" paragraphSpacing={true}>
           {t('prepareForVideoVisit.cameraAndMicrophone')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" paragraphSpacing={true}>
           {t('prepareForVideoVisit.joinBy')}
         </TextView>
 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.toHaveBestExperience')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.connectFromQuietPlace')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" paragraphSpacing={true}>
           {t('prepareForVideoVisit.checkConnection')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" paragraphSpacing={true}>
           {t('prepareForVideoVisit.connectWithWifi')}
         </TextView>
 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.medicationReview')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBodySmall" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.reviewEverything')}
         </TextView>
-        <TextView variant="MobileBody">{t('prepareForVideoVisit.beReadyToTalk')}</TextView>
+        <TextView variant="MobileBodySmall">{t('prepareForVideoVisit.beReadyToTalk')}</TextView>
       </Box>
     </LargePanel>
   )

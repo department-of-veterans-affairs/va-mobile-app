@@ -36,7 +36,7 @@ function PreferredDateAndTime({ attributes }: PreferredDateAndTimeProps) {
           return (
             <TextView
               key={index}
-              variant="MobileBody"
+              variant="MobileBodySmall"
               paragraphSpacing={phoneOnly && index === filteredTimes.length - 1}
               testID="preferredDateAndTimeTestID">
               {t('appointments.pending.dateInSlotTime', { optionDate: date, optionTime: timeSlot })}

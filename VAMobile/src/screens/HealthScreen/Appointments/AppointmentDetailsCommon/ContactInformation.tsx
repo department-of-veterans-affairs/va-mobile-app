@@ -30,19 +30,19 @@ function ContactInformation({ attributes }: ContactInformationProps) {
         {!!patientEmail && (
           <TextView variant="MobileBodyBold">
             {`${t('email')}: `}
-            <TextView variant="MobileBody">{patientEmail}</TextView>
+            <TextView variant="MobileBodySmall">{patientEmail}</TextView>
           </TextView>
         )}
         {!!patientPhoneNumber && (
           <TextView variant="MobileBodyBold">
             {`${t('phoneNumber')}: `}
-            <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
+            <TextView variant="MobileBodySmall">{patientPhoneNumber}</TextView>
           </TextView>
         )}
         {!!bestTimeToCall?.length && appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && (
           <TextView variant="MobileBodyBold">
             {`${t('call')}: `}
-            <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
+            <TextView variant="MobileBodySmall">{bestTimeToCall?.join()}</TextView>
           </TextView>
         )}
       </Box>

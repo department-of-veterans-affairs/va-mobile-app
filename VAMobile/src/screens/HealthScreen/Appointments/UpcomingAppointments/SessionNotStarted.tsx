@@ -19,7 +19,7 @@ function SessionNotStarted({}: SessionNotStartedProps) {
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
       <Box mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold">{t('appointments.sessionNotStarted.title')}</TextView>
-        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBodySmall">
           {t('appointments.joinVideoConnect')}
         </TextView>
       </Box>

@@ -187,7 +187,7 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
         {title}
       </TextView>
       <TextView
-        variant="MobileBody"
+        variant="MobileBodySmall"
         {...testIdProps(bodyA11yLabel || body)}
         mt={theme.dimensions.standardMarginBetween}
         paragraphSpacing={true}

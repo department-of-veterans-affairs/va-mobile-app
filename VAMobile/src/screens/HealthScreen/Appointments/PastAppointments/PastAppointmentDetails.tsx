@@ -90,7 +90,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
               mb={theme.dimensions.condensedMarginBetween}>
               {title}
             </TextView>
-            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(body)} paragraphSpacing={true}>
+            <TextView variant="MobileBodySmall" accessibilityLabel={a11yLabelVA(body)} paragraphSpacing={true}>
               {body}
             </TextView>
             {location?.phone && location.phone.areaCode && location.phone.number ? (
@@ -111,7 +111,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView
-            variant="MobileBody"
+            variant="MobileBodySmall"
             accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
             {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
           </TextView>

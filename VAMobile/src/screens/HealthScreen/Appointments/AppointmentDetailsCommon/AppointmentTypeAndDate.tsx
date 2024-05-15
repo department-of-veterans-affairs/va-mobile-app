@@ -76,7 +76,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {apptTitle}
         </TextView>
-        <TextView variant={'MobileBody'} paragraphSpacing={true}>
+        <TextView variant={'MobileBodySmall'} paragraphSpacing={true}>
           {apptBody}
         </TextView>
         {isAppointmentPending ? undefined : (
@@ -117,7 +117,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {apptTitle}
         </TextView>
-        <TextView variant={'MobileBody'} paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
+        <TextView variant={'MobileBodySmall'} paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
           {apptBody}
         </TextView>
         {isAppointmentPending ? undefined : (
@@ -148,7 +148,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
   } else if (isAppointmentCanceled && serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={'MobileBody'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={'MobileBodySmall'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
         <TextView
@@ -175,7 +175,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
     content = (
       <>
         <TextView
-          variant={isPastAppointment ? 'MobileBody' : 'MobileBodyBold'}
+          variant={isPastAppointment ? 'MobileBodySmall' : 'MobileBodyBold'}
           accessibilityRole={'header'}
           mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
@@ -183,7 +183,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         {isPastAppointment ? (
           <></>
         ) : (
-          <TextView variant={'MobileBody'} paragraphSpacing={true} testID="claimExamExplanationTestID">
+          <TextView variant={'MobileBodySmall'} paragraphSpacing={true} testID="claimExamExplanationTestID">
             {t('appointments.claimExam.explanationText')}
           </TextView>
         )}
@@ -207,7 +207,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
     } else {
       return (
         <TextView
-          variant={'MobileBody'}
+          variant={'MobileBodySmall'}
           mb={theme.dimensions.standardMarginBetween}
           {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
           {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], t)}

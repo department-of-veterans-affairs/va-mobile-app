@@ -32,7 +32,7 @@ function clinicPhysicalLocation(attributes: AppointmentAttributes, theme: VAThem
   const { physicalLocation } = attributes || ({} as AppointmentAttributes)
   if (physicalLocation && physicalLocation.length > 1) {
     return (
-      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodySmall" mb={theme.dimensions.standardMarginBetween}>
         {t('appointments.clinicLocation', { physicalLocation: physicalLocation })}
       </TextView>
     )

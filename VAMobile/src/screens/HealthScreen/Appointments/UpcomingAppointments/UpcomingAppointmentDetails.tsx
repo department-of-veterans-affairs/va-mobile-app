@@ -155,7 +155,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
-          <TextView variant="MobileBody">{comment}</TextView>
+          <TextView variant="MobileBodySmall">{comment}</TextView>
         </Box>
       )
     }
@@ -189,7 +189,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
-          <TextView variant="MobileBody">{getVideoInstructionsTranslationID()}</TextView>
+          <TextView variant="MobileBodySmall">{getVideoInstructionsTranslationID()}</TextView>
         </Box>
       )
     }
@@ -219,7 +219,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
-          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
+          <TextView variant="MobileBodySmall">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
           <Box my={theme.dimensions.standardMarginBetween}>
             <Button
@@ -247,7 +247,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
-          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
+          <TextView variant="MobileBodySmall">{t('upcomingAppointmentDetails.useCode')}</TextView>
         </Box>
       )
     }
@@ -325,7 +325,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
                 {t('appointments.reschedule.title')}
               </TextView>
               <TextView
-                variant="MobileBody"
+                variant="MobileBodySmall"
                 accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}
                 paragraphSpacing={true}>
                 {t('appointments.reschedule.body')}
@@ -344,7 +344,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         ) : (
           <TextArea>
             <TextView
-              variant="MobileBody"
+              variant="MobileBodySmall"
               accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
               {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
             </TextView>

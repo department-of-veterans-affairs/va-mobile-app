@@ -35,7 +35,7 @@ function ProviderName({ attributes }: ProviderNameProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('upcomingAppointmentDetails.provider')}
         </TextView>
-        <TextView>{healthcareProvider || t('appointments.noProvider')}</TextView>
+        <TextView variant="MobileBodySmall">{healthcareProvider || t('appointments.noProvider')}</TextView>
       </Box>
     )
   }
@@ -78,7 +78,7 @@ function ProviderName({ attributes }: ProviderNameProps) {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>
-          <TextView variant="MobileBody">{practitionerName}</TextView>
+          <TextView variant="MobileBodySmall">{practitionerName}</TextView>
         </Box>
       )}
     </>

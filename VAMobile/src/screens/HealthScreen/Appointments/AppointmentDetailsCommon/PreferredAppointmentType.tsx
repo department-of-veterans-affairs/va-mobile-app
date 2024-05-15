@@ -43,7 +43,7 @@ function PreferredAppointmentType({ attributes }: PreferredAppointmentTypeProps)
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredTypeOfAppointment')}
         </TextView>
-        <TextView variant="MobileBody">{preferredTypeofAppointment}</TextView>
+        <TextView variant="MobileBodySmall">{preferredTypeofAppointment}</TextView>
       </Box>
     )
   }

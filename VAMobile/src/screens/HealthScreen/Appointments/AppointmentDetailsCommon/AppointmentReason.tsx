@@ -29,7 +29,7 @@ function AppointmentReason({ attributes }: AppointmentReasonProps) {
             ? t('upcomingAppointmentDetails.sharedProvider')
             : t('upcomingAppointmentDetails.reason')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={phoneOnly && isPendingAppointment}>
+        <TextView variant="MobileBodySmall" paragraphSpacing={phoneOnly && isPendingAppointment}>
           {phoneOnly ||
           (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
             ? t('upcomingAppointmentDetails.reasonDetails', { reason: apptReason })
