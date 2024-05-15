@@ -4,6 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -79,7 +80,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
-          per_page: '5000',
+          per_page: LARGE_PAGE_SIZE.toString(),
           useCache: 'false',
         } as api.Params)
         .mockResolvedValue(messages)
@@ -97,7 +98,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
-          per_page: '5000',
+          per_page: LARGE_PAGE_SIZE.toString(),
           useCache: 'false',
         } as api.Params)
         .mockResolvedValue({
@@ -131,7 +132,7 @@ context('FolderMessages', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.DRAFTS}/messages`, {
           page: '1',
-          per_page: '5000',
+          per_page: LARGE_PAGE_SIZE.toString(),
           useCache: 'false',
         } as api.Params)
         .mockResolvedValue(messages)

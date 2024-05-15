@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 
 import { secureMessagingKeys } from './queryKeys'
@@ -11,7 +12,7 @@ import { secureMessagingKeys } from './queryKeys'
 const getFolderMessages = (folderID: number): Promise<SecureMessagingFolderMessagesGetData | undefined> => {
   return get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
     page: '1',
-    per_page: '5000',
+    per_page: LARGE_PAGE_SIZE.toString(),
     useCache: 'false',
   } as Params)
 }

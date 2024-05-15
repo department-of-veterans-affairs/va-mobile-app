@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { VaccineListPayload } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 
 import { vaccineKeys } from './queryKeys'
@@ -11,7 +12,7 @@ import { vaccineKeys } from './queryKeys'
 const getVaccines = (): Promise<VaccineListPayload | undefined> => {
   return get<VaccineListPayload>('/v1/health/immunizations', {
     'page[number]': '1',
-    'page[size]': '5000',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'date',
     useCache: 'false',
   })

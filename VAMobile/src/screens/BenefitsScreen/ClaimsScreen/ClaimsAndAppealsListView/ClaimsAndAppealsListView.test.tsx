@@ -5,6 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
@@ -87,7 +88,7 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })
@@ -113,7 +114,7 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })
@@ -136,7 +137,7 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })
@@ -157,7 +158,7 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })

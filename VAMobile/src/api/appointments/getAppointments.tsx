@@ -4,7 +4,7 @@ import { has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { ACTIVITY_STALE_TIME } from 'constants/common'
+import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
@@ -23,7 +23,7 @@ const getAppointments = (
     startDate: startDate,
     endDate: endDate,
     'page[number]': '1',
-    'page[size]': '5000',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
     'included[]': 'pending',
     useCache: 'false',

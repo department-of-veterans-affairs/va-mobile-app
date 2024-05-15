@@ -3,7 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
-import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
+import { ClaimsAndAppealsListPayload } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -79,7 +80,7 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })
@@ -94,7 +95,7 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })
@@ -119,7 +120,7 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '5000',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
           useCache: 'false',
         })

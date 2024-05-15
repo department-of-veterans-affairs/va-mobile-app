@@ -4,7 +4,7 @@ import { chain, has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { ACTIVITY_STALE_TIME } from 'constants/common'
+import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
@@ -25,7 +25,7 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
 const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
   const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
     'page[number]': '1',
-    'page[size]': '5000',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
     useCache: 'false',
   })
