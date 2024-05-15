@@ -87,8 +87,9 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '10',
+          'page[size]': '5000',
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(mockPayload)
       initializeTestInstance('ACTIVE')
@@ -112,8 +113,9 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '10',
+          'page[size]': '5000',
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
@@ -134,8 +136,9 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '10',
+          'page[size]': '5000',
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
@@ -154,8 +157,9 @@ context('ClaimsAndAppealsListView', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '10',
+          'page[size]': '5000',
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(emptyPayload)
       initializeTestInstance('ACTIVE', true)
