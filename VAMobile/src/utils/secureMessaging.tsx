@@ -9,7 +9,15 @@ import { TFunction } from 'i18next'
 import _ from 'underscore'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
-import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
+import {
+  Box,
+  InlineTextWithIconsProps,
+  LinkWithAnalytics,
+  MessageListItemObj,
+  PickerItem,
+  TextView,
+  VAIconProps,
+} from 'components'
 import { Events } from 'constants/analytics'
 import {
   EMAIL_REGEX_EXP,
@@ -508,16 +516,15 @@ export const getLinkifiedText = (
         textReconstructedBody.pop()
         textReconstructedBody.pop()
         textReconstructedBody.push(
-          <TouchableWithoutFeedback
-            onPress={() => {
-              launchExternalLink('tel:' + previousText + text + nextText)
-            }}
-            accessibilityRole="link"
-            accessible={true}
-            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
-            accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
-          </TouchableWithoutFeedback>,
+          <LinkWithAnalytics
+            type="call"
+            phoneNumber={previousText + text + nextText}
+            text={previousText + ' ' + text + ' ' + nextText}
+            icon="no icon"
+            disablePadding={true}
+            a11yLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
+            a11yHint={t('openInPhoneMessaging.a11yHint')}
+          />,
         )
         textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
         dontAddNextString = true
@@ -563,16 +570,15 @@ export const getLinkifiedText = (
     } else if (phoneMatch) {
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
       textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('tel:' + getNumbersFromString(text))
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
-          accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+        <LinkWithAnalytics
+          type="call"
+          phoneNumber={getNumbersFromString(text)}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
+          a11yHint={t('openInPhoneMessaging.a11yHint')}
+        />,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (urlMatch) {
