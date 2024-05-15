@@ -51,6 +51,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const [vaccinesToShow, setVaccinesToShow] = useState<Array<Vaccine>>([])
+
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
@@ -26,9 +27,10 @@ import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
+  scrollViewRef: RefObject<ScrollView>
 }
 
-function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
+function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppealsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -131,9 +133,11 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(page + 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
       setPage(page - 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries: totalEntries,
     pageSize: perPage,
