@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -18,6 +19,7 @@ import {
   PaginationProps,
   TextLine,
 } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -49,6 +51,10 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const [vaccinesToShow, setVaccinesToShow] = useState<Array<Vaccine>>([])
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
 
   useEffect(() => {
     const vaccineList = vaccines?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
@@ -79,9 +85,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     const paginationProps: PaginationProps = {
       onNext: () => {
         setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
       onPrev: () => {
         setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
       totalEntries: vaccines?.meta?.pagination?.totalEntries || 0,
       pageSize: DEFAULT_PAGE_SIZE,
@@ -104,7 +112,8 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
-      titleA11y={a11yLabelVA(t('vaVaccines'))}>
+      titleA11y={a11yLabelVA(t('vaVaccines'))}
+      scrollViewProps={scrollViewProps}>
       {loading ? (
         <LoadingComponent text={t('vaccines.loading')} />
       ) : vaccineError || vaccinesInDowntime ? (
