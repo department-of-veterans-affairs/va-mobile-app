@@ -6,11 +6,11 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { BackgroundVariant, Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { AppDispatch } from 'store'
-import { VATheme } from 'styles/theme'
+import { VABackgroundColors, VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
@@ -161,7 +161,8 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.CanceledAndPending:
           return (
             <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.pending.title')}
               </TextView>
               <TextView
@@ -184,7 +185,8 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Canceled:
           return (
             <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
               <TextView
@@ -207,7 +209,8 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Past:
           return (
             <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('appointments.schedule.title')}
               </TextView>
               <TextView
@@ -230,7 +233,8 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Upcoming:
           return (
             <Box>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+              <Box height={theme.dimensions.contentMarginTop} backgroundColor={'main'} mx={-theme.dimensions.gutter} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView
