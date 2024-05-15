@@ -583,32 +583,30 @@ export const getLinkifiedText = (
       // matches any https, http url
       textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
       textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink(text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+        <LinkWithAnalytics
+          type="url"
+          url={text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInBrowser.a11yHint')}
+        />,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (url2Match) {
       // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
       // into a link - may need to update this if we need to include other domains greater than 3 digits)
       textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('https://' + text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+        <LinkWithAnalytics
+          type="url"
+          url={'https://' + text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInBrowser.a11yHint')}
+        />,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else {
