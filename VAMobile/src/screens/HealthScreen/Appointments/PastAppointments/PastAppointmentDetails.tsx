@@ -133,6 +133,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
         : pendingAppointment
           ? AppointmentDetailsSubTypeConstants.Pending
           : AppointmentDetailsSubTypeConstants.Past
+
   return (
     <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
       {isInPersonVAAppointment ? (
