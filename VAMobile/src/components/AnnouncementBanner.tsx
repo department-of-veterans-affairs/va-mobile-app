@@ -17,7 +17,7 @@ interface AnnouncementBannerProps {
   a11yLabel?: string
 }
 
-const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: AnnouncementBannerProps) => {
+const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabel }: AnnouncementBannerProps) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -51,6 +51,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link }: Announ
         onPress={() => launchExternalLink(link)}
         accessible={true}
         accessibilityRole={'link'}
+        accessibilityLabel={a11yLabel}
         testID={title}>
         <Box flexDirection={'row'} flex={1}>
           <Box flex={1}>
