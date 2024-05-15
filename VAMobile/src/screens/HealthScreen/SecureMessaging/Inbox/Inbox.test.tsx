@@ -120,7 +120,6 @@ context('Inbox', () => {
           currentPage: 1,
           folderID: 0,
           messageID: 1,
-          messagesLeft: 1,
         }),
       )
     })

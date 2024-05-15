@@ -62,7 +62,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     const screen = isDraft ? 'EditDraft' : 'ViewMessage'
     const args = isDraft
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
-      : { messageID, folderID, currentPage: page, messagesLeft: messagesToShow.length }
+      : { messageID, folderID, currentPage: page }
 
     navigateTo(screen, args)
   }

@@ -84,7 +84,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const messageID = Number(route.params.messageID)
   const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
-  const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
   const [showModalPicker, setShowModalPicker] = useState(false)
 

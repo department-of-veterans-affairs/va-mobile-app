@@ -43,7 +43,6 @@ function Inbox({ setScrollPage }: InboxProps) {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: page,
-      messagesLeft: inboxMessagesData?.data?.length,
     })
   }
 
