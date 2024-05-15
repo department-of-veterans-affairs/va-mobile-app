@@ -324,10 +324,14 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           )}
         </Box>
-        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
+            mb={
+              !loadingAboutYou && !hasAboutYouInfo
+                ? theme.dimensions.condensedMarginBetween
+                : theme.dimensions.standardMarginBetween
+            }
             variant={'HomeScreenHeader'}
             accessibilityRole="header">
             {t('aboutYou')}
@@ -343,7 +347,7 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box mx={theme.dimensions.condensedMarginBetween}>
+            <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
@@ -406,6 +410,7 @@ export function HomeScreen({}: HomeScreenProps) {
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
             variant={'HomeScreenHeader'}
+            accessibilityLabel={a11yLabelVA(t('vaResources'))}
             accessibilityRole="header">
             {t('vaResources')}
           </TextView>
