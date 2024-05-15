@@ -411,6 +411,7 @@ export function HomeScreen({}: HomeScreenProps) {
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
             variant={'HomeScreenHeader'}
+            accessibilityLabel={a11yLabelVA(t('vaResources'))}
             accessibilityRole="header">
             {t('vaResources')}
           </TextView>
