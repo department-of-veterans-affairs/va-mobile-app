@@ -164,7 +164,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       const inboxMessagesData = queryClient.getQueryData([
         secureMessagingKeys.folderMessages,
         currentFolderIdParam,
-        currentPage,
       ]) as SecureMessagingFolderMessagesGetData
       const newInboxMessages = inboxMessagesData.data.map((m) => {
         if (m.attributes.messageId === message.messageId) {
@@ -182,7 +181,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         return m
       })
       const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
-      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
+      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam], newData)
       if (foldersData) {
         let inboxUnreadCount = foldersData.inboxUnreadCount
         const newFolders = foldersData.data.map((folder) => {
@@ -281,11 +280,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             return 'custom'
         }
       }
-      const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
       const mutateOptions = {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
-          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, page] })
+          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam] })
           logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
           showSnackBar(
             snackbarMessages.successMsg,
@@ -296,7 +294,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 onSuccess: () => {
                   queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
                   queryClient.invalidateQueries({
-                    queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage],
+                    queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam],
                   })
                   logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
                   showSnackBar(

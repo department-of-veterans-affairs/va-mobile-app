@@ -61,7 +61,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     isFetched: inboxFetched,
     refetch: refetchInbox,
     isFetching: refetchingInbox,
-  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, {
     enabled:
       isFocused &&
       screenContentAllowed('WG_SecureMessaging') &&
