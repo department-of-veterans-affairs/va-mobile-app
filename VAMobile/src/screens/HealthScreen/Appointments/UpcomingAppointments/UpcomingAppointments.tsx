@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
@@ -18,9 +19,10 @@ type UpcomingAppointmentsProps = {
   loading: boolean
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
+  scrollViewRef: RefObject<ScrollView>
 }
 
-function UpcomingAppointments({ appointmentsData, loading, page, setPage }: UpcomingAppointmentsProps) {
+function UpcomingAppointments({ appointmentsData, loading, page, setPage, scrollViewRef }: UpcomingAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -59,9 +61,11 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage }: Upco
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(page + 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
       setPage(page - 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries,
     pageSize: perPage,

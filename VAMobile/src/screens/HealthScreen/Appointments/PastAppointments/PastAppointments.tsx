@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { DateTime } from 'luxon'
 
@@ -31,6 +32,7 @@ type PastAppointmentsProps = {
       | 'pastAllLastYear'
     >
   >
+  scrollViewRef: RefObject<ScrollView>
 }
 
 function PastAppointments({
@@ -40,6 +42,7 @@ function PastAppointments({
   setPage,
   setDateRange,
   setTimeFrame,
+  scrollViewRef,
 }: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -201,9 +204,11 @@ function PastAppointments({
   const paginationProps: PaginationProps = {
     onNext: () => {
       setPage(page + 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
       setPage(page - 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries: totalEntries,
     pageSize: perPage,

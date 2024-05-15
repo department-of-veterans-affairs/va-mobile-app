@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -59,7 +59,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     data: apptsData,
     error: appointmentsHasError,
     isFetching: loadingAppointments,
-    isFetched: apptsDataFetched,
     refetch: refetchAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
@@ -69,10 +68,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   // Position reset is necessary to make the pagination component padding look consistent between pages,
   // since the appointment list sizes differ depending on content
   const scrollViewRef = useRef<ScrollView | null>(null)
-
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-  }, [apptsDataFetched, page])
 
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
@@ -175,6 +170,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
                 loading={loadingAppointments}
                 setDateRange={setDateRange}
                 setTimeFrame={setTimeFrame}
+                scrollViewRef={scrollViewRef}
               />
             )}
             {selectedTab === 0 && (
@@ -183,6 +179,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
                 page={page}
                 setPage={setPage}
                 loading={loadingAppointments}
+                scrollViewRef={scrollViewRef}
               />
             )}
           </Box>
