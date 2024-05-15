@@ -6,6 +6,7 @@ labels: bug,qa
 assignees:
 ---
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA. Do not include any personally identifiable information for any real person in bug writeup, including screenshots. -->
+<!-- This template is for members of the VA Health and Benefits team to submit a bug report. Everyone else, please use the External Bug Report template -->
 ## What happened?
 <!-- General overview of what happened and where it happened -->
 

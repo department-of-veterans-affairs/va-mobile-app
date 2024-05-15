@@ -1,7 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
 
 export const DisabilityRatingsIdConstants = {
   COMBINED_DISABILITY_RATING_TEXT: 'Combined disability rating',
@@ -34,7 +34,7 @@ describe('Disability Ratings', () => {
   it('verify About VA disability ratings information', async () => {
     await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
     await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AboutDisabilityRatings')
     await device.launchApp({ newInstance: false })

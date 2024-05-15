@@ -17,7 +17,7 @@ We avoid words that are insensitive to the disabilities faced by our users. For 
 Resources to consider:
 
 - [Gov UK inclusive communications](https://www.gov.uk/government/publications/inclusive-communication/inclusive-language-words-to-use-and-avoid-when-writing-about-disability)
-- [Georgetown University best practices guide](https://beeckcenter.georgetown.edu/wp-content/uploads/2022/01/Accessible-Benefits-Information.pdf)
+- [Georgetown University best practices guide (pdf)](https://beeckcenter.georgetown.edu/wp-content/uploads/2022/01/Accessible-Benefits-Information.pdf)
 - [Microsoft guideline](https://docs.microsoft.com/en-us/style-guide/a-z-word-list-term-collections/term-collections/accessibility-terms)
 
 ## Grammar
