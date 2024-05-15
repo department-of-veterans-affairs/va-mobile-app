@@ -66,7 +66,8 @@ context('Inbox', () => {
     when(api.get as jest.Mock)
       .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
         page: '1',
-        per_page: '10',
+        per_page: '5000',
+        useCache: 'false',
       } as api.Params)
       .mockResolvedValue(messages)
     render(<Inbox setScrollPage={jest.fn()} />)
@@ -81,7 +82,8 @@ context('Inbox', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
-          per_page: '10',
+          per_page: '5000',
+          useCache: 'false',
         } as api.Params)
         .mockResolvedValue({
           data: [],
