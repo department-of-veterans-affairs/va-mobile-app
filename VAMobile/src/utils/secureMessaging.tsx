@@ -540,31 +540,29 @@ export const getLinkifiedText = (
     if (emailMatch) {
       //matches <email address> only
       textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink('mailto:' + text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+        <LinkWithAnalytics
+          type="url"
+          url={'mailto:' + text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInEmailMessaging.a11yHint')}
+        />,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (mailToMatch) {
       // matches mailto:<email address>
       textReconstructedBody.push(
-        <TouchableWithoutFeedback
-          onPress={() => {
-            launchExternalLink(text)
-          }}
-          accessibilityRole="link"
-          accessible={true}
-          accessibilityLabel={text}
-          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
-        </TouchableWithoutFeedback>,
+        <LinkWithAnalytics
+          type="url"
+          url={text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInEmailMessaging.a11yHint')}
+        />,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else if (phoneMatch) {
