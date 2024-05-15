@@ -32,7 +32,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
     case AppointmentDetailsSubTypeConstants.Pending:
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
             {t('appointments.pending.reasonTitle')}
           </TextView>
           <TextView variant="MobileBody" paragraphSpacing={true}>
