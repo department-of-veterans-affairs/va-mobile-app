@@ -30,6 +30,7 @@ const getClaimsAndAppeals = async (
     'page[number]': page.toString(),
     'page[size]': DEFAULT_PAGE_SIZE.toString(),
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
+    useCache: 'false',
   })
 
   if (response) {

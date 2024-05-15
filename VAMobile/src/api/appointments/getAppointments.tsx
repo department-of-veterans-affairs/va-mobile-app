@@ -27,6 +27,7 @@ const getAppointments = (
     'page[size]': DEFAULT_PAGE_SIZE.toString(),
     sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
     'included[]': 'pending',
+    useCache: 'false',
   } as Params)
 }
 

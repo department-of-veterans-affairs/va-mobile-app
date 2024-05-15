@@ -16,6 +16,7 @@ const getFolderMessages = (
   return get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
     page: page.toString(),
     per_page: DEFAULT_PAGE_SIZE.toString(),
+    useCache: 'false',
   } as Params)
 }
 

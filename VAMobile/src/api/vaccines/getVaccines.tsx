@@ -14,6 +14,7 @@ const getVaccines = (page: number): Promise<VaccineListPayload | undefined> => {
     'page[number]': page.toString(),
     'page[size]': DEFAULT_PAGE_SIZE.toString(),
     sort: 'date',
+    useCache: 'false',
   })
 }
 
