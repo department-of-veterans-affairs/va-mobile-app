@@ -5,11 +5,9 @@ import { loginToDemoMode, openAppointments, openHealth, resetInAppReview } from 
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
-  APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_7_ID: 'Canceled  Community care Request type: In-person',
-  APPOINTMENT_8_ID: 'Pending Primary Care Cheyenne VA Medical Center Request type: In-person',
+  APPOINTMENT_4_ID: 'Optometry (routine eye exam) Pending Vilasini Reddy Request type: Community care',
+  APPOINTMENT_5_ID: 'Optometry (routine eye exam) Pending Request type: Community care',
+  APPOINTMENT_6_ID: 'Optometry (routine eye exam) Canceled Request type: Community care',
   ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
   PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
@@ -20,38 +18,42 @@ export const Appointmentse2eConstants = {
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
 
-const checkUpcomingApptDetails = async (appointmentType, appointmentStatus, pastAppointment = false) => {
+const checkUpcomingApptDetails = async (
+  appointmentType: string,
+  appointmentStatus: string,
+  pastAppointment = false,
+) => {
   if (!pastAppointment) {
-    if (appointmentStatus == 'Confirmed') {
+    if (appointmentStatus === 'Confirmed') {
       await expect(element(by.id('addToCalendarTestID'))).toExist()
       await expect(element(by.id('upcomingApptCancellationTestID'))).toExist()
-    } else if (appointmentStatus == 'Canceled') {
+    } else if (appointmentStatus === 'Canceled') {
       await expect(
         element(by.text('To schedule another appointment, please visit VA.gov or call your VA medical center.')),
       ).toExist()
-    } else if (appointmentStatus == 'Pending') {
+    } else if (appointmentStatus === 'Pending') {
       await expect(element(by.text('Preferred type of appointment'))).toExist()
-      if (appointmentType != 'Claim') {
+      if (appointmentType !== 'Claim') {
         await expect(element(by.text('Cancel request'))).toExist()
       }
     }
   }
 
-  if (appointmentType == 'Onsite') {
+  if (appointmentType === 'Onsite') {
     await expect(element(by.text('VA Video Connect\r\nVA location'))).toExist()
     await expect(element(by.id('directionsTestID'))).toExist()
     await expect(element(by.id('CallVATestID')).atIndex(0)).toExist()
     await expect(element(by.id('CallTTYTestID')).atIndex(0)).toExist()
-  } else if (appointmentType == 'ATLAS') {
+  } else if (appointmentType === 'ATLAS') {
     await expect(element(by.text('VA Video Connect\r\nATLAS location'))).toExist()
     await expect(element(by.id('directionsTestID'))).toExist()
   } else if (appointmentType === 'Home') {
     await expect(element(by.text('VA Video Connect\r\nHome'))).toExist()
   } else if (appointmentType === 'GFE') {
     await expect(element(by.text('VA Video Connect\r\nusing a VA device'))).toExist()
-  } else if (appointmentType == 'VA' && !pastAppointment) {
+  } else if (appointmentType === 'VA' && !pastAppointment) {
     await expect(element(by.text('In-person appointment'))).toExist()
-  } else if (appointmentType == 'Claim') {
+  } else if (appointmentType === 'Claim') {
     await expect(element(by.text('Claim exam'))).toExist()
     await expect(element(by.id('directionsTestID'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
@@ -112,8 +114,18 @@ export async function apppointmentVerification(pastAppointment = false) {
   }
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Onsite appt', async () => {
+    if (device.getPlatform() === 'ios') {
+      await resetInAppReview()
+      await openHealth()
+      await openAppointments()
+      await waitFor(element(by.text('Upcoming')))
+        .toExist()
+        .withTimeout(10000)
+    } else {
+      await element(by.text('Health')).atIndex(0).tap()
+      await openAppointments()
+    }
     if (pastAppointment) {
-      await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
         await element(by.text('Past 3 months')).atIndex(1).tap()
@@ -159,7 +171,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await element(by.text('All of 2023')).tap()
       await element(by.text('Done')).tap()
     }
-    await scrollToThenTap('Request type: VA Video Connect - Onsite', pastAppointmentString)
+    await scrollToThenTap('Sami Alsahhar - Onsite - Pending', pastAppointmentString)
     await expect(element(by.text('The time and date of this appointment are still to be determined.'))).toExist()
     if (!pastAppointment) {
       await expect(element(by.text('How to join your video appointment'))).toExist()
@@ -190,7 +202,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
     }
-    await scrollToThenTap('Request type: VA Video Connect - ATLAS', pastAppointmentString)
+    await scrollToThenTap('Sami Alsahhar - ATLAS - Pending', pastAppointmentString)
     await expect(element(by.text('The time and date of this appointment are still to be determined.'))).toExist()
     if (!pastAppointment) {
       await expect(element(by.text('How to join your video appointment'))).toExist()
@@ -245,7 +257,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - Home appt', async () => {
-    await scrollToThenTap('Request type: VA Video Connect - Home', pastAppointmentString)
+    await scrollToThenTap('Sami Alsahhar - HOME - Pending', pastAppointmentString)
     await expect(element(by.text('The time and date of this appointment are still to be determined.'))).toExist()
     if (!pastAppointment) {
       await expect(element(by.text('How to join your virtual session'))).toExist()
@@ -278,7 +290,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - GFE appt', async () => {
-    await scrollToThenTap('Request type: VA Video Connect - GFE', pastAppointmentString)
+    await scrollToThenTap('Sami Alsahhar - GFE - Pending', pastAppointmentString)
     await expect(element(by.text('The time and date of this appointment are still to be determined.'))).toExist()
     if (!pastAppointment) {
       await expect(element(by.text('How to join your video appointment'))).toExist()
@@ -311,7 +323,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
     }
-    await scrollToThenTap('Fort Collins VA Clinic - Claim - Confirmed', pastAppointmentString)
+    await scrollToThenTap('At Fort Collins VA Clinic - Claim - Confirmed', pastAppointmentString)
     if (!pastAppointment) {
       await expect(element(by.id('claimExamExplanationTestID'))).toExist()
       await expect(element(by.id('addToCalendarTestID'))).toExist()
@@ -320,7 +332,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await scrollToThenTap('Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
+    await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
     await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
     await checkUpcomingApptDetails('Claim', 'Canceled', pastAppointment)
   })
@@ -512,7 +524,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
     }
-    await scrollToThenTap('At Houston VA Medical Center', pastAppointmentString)
+    await scrollToThenTap('Valente Nihad', pastAppointmentString)
     await expect(
       element(
         by.text(
@@ -546,7 +558,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
     }
-    await scrollToThenTap('At Salem VA Medical Center', pastAppointmentString)
+    await scrollToThenTap('Sakari Rina', pastAppointmentString)
     await expect(
       element(
         by.text(
