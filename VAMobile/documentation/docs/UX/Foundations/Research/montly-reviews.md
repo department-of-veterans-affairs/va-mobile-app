@@ -18,6 +18,7 @@ sidebar_position: 2
 - _Note: You can duplicate a previous month and remove the data._
 
 ## Step 3: Clean up the import
+
 1. Verify that data pulled in correctly
 2. Add wrapping to the grids
 3. Verify that the conditional formatting for the ratings pulled in (you should see red, green, etc. in the column).
