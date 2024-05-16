@@ -54,7 +54,15 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
       const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
       const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
       return (
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.paragraphSpacing.spacing20FontSize}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          mb={
+            subType === AppointmentDetailsSubTypeConstants.Upcoming
+              ? theme.dimensions.condensedMarginBetween
+              : undefined
+          }
+          paragraphSpacing={subType === AppointmentDetailsSubTypeConstants.Upcoming ? false : true}>
           {`${date}\n${time}`}
         </TextView>
       )
