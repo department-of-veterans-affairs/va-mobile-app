@@ -49,26 +49,18 @@ jobs:
           jq -c '.required_pull_request_reviews.required_approving_review_count')
           echo "Approvers: $approvals"  
           
-          qa_team_members=$(
-            gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members |
-            jq -c '[.[] | .login]'
-          )
           echo "required approval count: $required_approval_count"
-          echo "QA team: $qa_team_members"
-
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]; then
-              qa_team_members_json=$(jq -n --argjson members "$qa_team_members" '$members | join(" ")')
-              if [[ $(jq --argjson qa_team_members "$qa_team_members_json" '[.[] | select(.user.login | IN($qa_team_members[]))] | length' <<< "$approvals") -gt 0 ]]; then
-                echo 'This PR has QA approval to merge.'
+          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
+            then
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+                then
+                echo 'This PR has QA approval to merge'
                 exit 0
               else 
-                echo 'This PR requires QA approval to merge.'
+                echo 'This PR requires QA approval to merge'
                 exit 1
               fi
           else
             echo 'This PR requires 2 approvals, including one QA approval, before merging.'
             exit 1
-          fi
+          fi 
