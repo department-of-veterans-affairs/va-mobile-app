@@ -45,6 +45,7 @@ In the [App Store Reviews folder on Github](https://github.com/department-of-vet
 If you are adding app store reviews for a month in an existing quarter’s folder, select the month that you are updating and edit the file.
 
 ### How to create a folder for a new quarter
+
 1. Create the new folder (add a file in Github and `/` at the end to create a new folder).
     - Follow the naming convention of the previous quarters (four digit year followed by a hyphen and then the quarter).
 2. Create placeholder files for all three months in the quarter. 
