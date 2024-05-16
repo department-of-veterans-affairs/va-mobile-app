@@ -62,7 +62,7 @@ jobs:
             then
               
               if [[ $(jq --argjson qa_team_members "$qa_team_members" '[.[] | select(.user.login IN ($qa_team_members[]))] | length' <<< "$approvals") -gt 0 ]]; then
-                then
+                
                 echo 'This PR has QA approval to merge'
                 exit 0
               else 
