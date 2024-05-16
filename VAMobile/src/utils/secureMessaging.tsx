@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import DocumentPicker from 'react-native-document-picker'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
@@ -44,7 +43,7 @@ import {
   stringToTitleCase,
 } from 'utils/formattingUtils'
 
-import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 
@@ -486,11 +485,7 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const getLinkifiedText = (
-  body: string,
-  t: TFunction,
-  launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
-): ReactNode => {
+export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
   const bodySplit = body.split(' ')
   let dontAddNextString = false
