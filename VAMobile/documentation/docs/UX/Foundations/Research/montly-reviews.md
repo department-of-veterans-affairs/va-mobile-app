@@ -6,6 +6,7 @@ sidebar_position: 2
 # Monthly App Store Review Process
 
 ## Step 1: Download the reviews from the [feedback hub](https://feedback-hub-e659c24714b9.herokuapp.com/)
+
 1. Select App Store or Play Store at the top.
 2. Ensure “All” ratings are selected from the dropdown.
 3. Input the date range for the month you are working on.
