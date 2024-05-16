@@ -43,6 +43,7 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsSubTypeConstants.Past:
       return t('appointments.pastTitle', { appointmentType: appointmentHeaderType.toLowerCase() })
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
         return t('appointments.request.title')
       } else {

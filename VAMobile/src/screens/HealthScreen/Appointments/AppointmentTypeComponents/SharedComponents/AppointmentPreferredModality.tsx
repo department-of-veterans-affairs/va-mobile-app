@@ -22,6 +22,7 @@ function AppointmentPreferredModality({ subType, type }: AppointmentPreferredMod
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       let modality = ''
       switch (type) {
         case AppointmentDetailsTypeConstants.VideoAtlas:

@@ -28,6 +28,7 @@ function AppointmentProvider({ attributes, subType, type }: AppointmentProviderP
     switch (subType) {
       case AppointmentDetailsSubTypeConstants.CanceledAndPending:
       case AppointmentDetailsSubTypeConstants.Pending:
+      case AppointmentDetailsSubTypeConstants.PastPending:
         return <></>
       default:
         heading = t('appointments.provider.title')

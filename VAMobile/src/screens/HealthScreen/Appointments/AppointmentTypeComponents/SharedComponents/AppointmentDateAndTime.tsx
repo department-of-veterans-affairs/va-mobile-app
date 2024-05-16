@@ -19,6 +19,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
   const { proposedTimes, startDateUtc, timeZone } = attributes || ({} as AppointmentAttributes)
 
   switch (subType) {
+    case AppointmentDetailsSubTypeConstants.PastPending:
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
       const filteredTimes = proposedTimes?.filter(({ date }) => {

@@ -104,6 +104,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
     case AppointmentDetailsSubTypeConstants.Canceled:
     case AppointmentDetailsSubTypeConstants.Past:
     case AppointmentDetailsSubTypeConstants.Upcoming:
+    case AppointmentDetailsSubTypeConstants.PastPending:
     default:
       return <></>
   }

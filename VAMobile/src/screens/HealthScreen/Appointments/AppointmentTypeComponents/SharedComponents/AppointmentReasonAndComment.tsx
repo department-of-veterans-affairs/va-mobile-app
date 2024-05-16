@@ -30,6 +30,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       return (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>

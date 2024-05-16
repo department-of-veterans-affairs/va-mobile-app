@@ -28,6 +28,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
     switch (subType) {
       case AppointmentDetailsSubTypeConstants.CanceledAndPending:
       case AppointmentDetailsSubTypeConstants.Pending:
+      case AppointmentDetailsSubTypeConstants.PastPending:
         heading = t('appointments.typeOfCare.pendingTitle')
         break
       default:

@@ -29,6 +29,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       switch (type) {
         case AppointmentDetailsTypeConstants.CommunityCare:
           return undefined
@@ -136,6 +137,7 @@ const getClinicInfo = (
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       return undefined
   }
 

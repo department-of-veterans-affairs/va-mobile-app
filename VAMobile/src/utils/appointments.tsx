@@ -571,7 +571,13 @@ export const AppointmentDetailsTypeConstants: {
   VideoGFE: 'VideoGFE',
 }
 
-export type AppointmentDetailsSubType = 'Pending' | 'Past' | 'Upcoming' | 'Canceled' | 'CanceledAndPending'
+export type AppointmentDetailsSubType =
+  | 'Pending'
+  | 'Past'
+  | 'Upcoming'
+  | 'Canceled'
+  | 'CanceledAndPending'
+  | 'PastPending'
 
 export const AppointmentDetailsSubTypeConstants: {
   Pending: AppointmentDetailsSubType
@@ -579,10 +585,12 @@ export const AppointmentDetailsSubTypeConstants: {
   Upcoming: AppointmentDetailsSubType
   Canceled: AppointmentDetailsSubType
   CanceledAndPending: AppointmentDetailsSubType
+  PastPending: AppointmentDetailsSubType
 } = {
   Pending: 'Pending',
   Past: 'Past',
   Upcoming: 'Upcoming',
   Canceled: 'Canceled',
   CanceledAndPending: 'CanceledAndPending',
+  PastPending: 'PastPending',
 }

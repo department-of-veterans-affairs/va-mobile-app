@@ -20,6 +20,7 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
     case AppointmentDetailsSubTypeConstants.Pending:
+    case AppointmentDetailsSubTypeConstants.PastPending:
       return (
         <Box>
           {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (

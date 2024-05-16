@@ -131,7 +131,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       : appointmentIsCanceled
         ? AppointmentDetailsSubTypeConstants.Canceled
         : pendingAppointment
-          ? AppointmentDetailsSubTypeConstants.Pending
+          ? AppointmentDetailsSubTypeConstants.PastPending
           : AppointmentDetailsSubTypeConstants.Past
 
   return (
