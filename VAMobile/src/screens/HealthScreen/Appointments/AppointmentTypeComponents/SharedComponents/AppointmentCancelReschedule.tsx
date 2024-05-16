@@ -168,12 +168,15 @@ function AppointmentCancelReschedule({
                 backgroundColor={'main'}
                 mx={-theme.dimensions.gutter}
               />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                my={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.reschedule.pending.title')}
               </TextView>
               <TextView
                 variant="MobileBody"
-                mb={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}
                 accessibilityLabel={a11yLabelVA(t('appointments.reschedule.pending.body'))}>
                 {t('appointments.reschedule.pending.body')}
               </TextView>
@@ -196,12 +199,15 @@ function AppointmentCancelReschedule({
                 backgroundColor={'main'}
                 mx={-theme.dimensions.gutter}
               />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                my={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
               <TextView
                 variant="MobileBody"
-                mb={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}
                 accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
                 {t('appointments.reschedule.body')}
               </TextView>
@@ -224,12 +230,15 @@ function AppointmentCancelReschedule({
                 backgroundColor={'main'}
                 mx={-theme.dimensions.gutter}
               />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                my={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.schedule.title')}
               </TextView>
               <TextView
                 variant="MobileBody"
-                mb={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}
                 accessibilityLabel={a11yLabelVA(t('appointments.schedule.body'))}>
                 {t('appointments.schedule.body')}
               </TextView>
@@ -252,12 +261,15 @@ function AppointmentCancelReschedule({
                 backgroundColor={'main'}
                 mx={-theme.dimensions.gutter}
               />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.standardMarginBetween}>
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                my={theme.dimensions.condensedMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView
                 variant="MobileBody"
-                mb={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}
                 testID="upcomingApptCancellationTestID">
                 {cancelId
                   ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')

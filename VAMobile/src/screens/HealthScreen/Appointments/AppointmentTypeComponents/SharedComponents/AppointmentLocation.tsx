@@ -80,15 +80,15 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
         : undefined
   return (
     <>
-      <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
         {locationName}
       </TextView>
       {hasFullAddress ? (
         <Box>
-          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
             {location.address?.street}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
             {`${location.address?.city}, ${location.address?.state} ${location.address?.zipCode}`}
           </TextView>
         </Box>
@@ -97,7 +97,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
           variant={'MobileBody'}
           selectable={true}
           accessibilityLabel={a11yLabelVA(missingBodyText || '')}
-          mb={theme.dimensions.standardMarginBetween}>
+          mb={theme.dimensions.condensedMarginBetween}>
           {missingBodyText}
         </TextView>
       )}
@@ -145,7 +145,7 @@ const getClinicInfo = (
     case AppointmentDetailsTypeConstants.InPersonVA:
       return (
         <Box>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.condensedMarginBetween}>
             {t('appointments.clinic', {
               clinicName:
                 friendlyLocationName && friendlyLocationName.length > 1
@@ -153,7 +153,7 @@ const getClinicInfo = (
                   : t('appointments.notAvailable'),
             })}
           </TextView>
-          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
             {t('appointments.physicalLocation', {
               physicalLocation:
                 physicalLocation && physicalLocation.length > 1 ? physicalLocation : t('appointments.notAvailable'),
@@ -174,7 +174,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
   if (heading) {
     return (
       <Box>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
           {heading}
         </TextView>
         {getLocationNameAddressDirectionsPhone(attributes, t, theme)}

@@ -38,7 +38,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
       case AppointmentDetailsTypeConstants.InPersonVA:
         return (
           <Box>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
               {heading}
             </TextView>
             <TextView variant="MobileBody" paragraphSpacing={true}>

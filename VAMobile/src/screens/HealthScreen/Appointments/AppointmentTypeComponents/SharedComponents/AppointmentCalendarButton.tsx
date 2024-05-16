@@ -88,7 +88,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Upcoming:
       return (
-        <Box mb={theme.paragraphSpacing.spacing20FontSize}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics
             type="calendar"
             text={t('upcomingAppointments.addToCalendar')}

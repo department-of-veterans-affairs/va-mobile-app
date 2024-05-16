@@ -27,7 +27,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
       })
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
             {t('appointments.pending.preferredDateAndTimeFrame')}
           </TextView>
           {filteredTimes?.map(({ date, time }, index) => {
@@ -54,7 +54,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
       const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
       const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
       return (
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
           {`${date}\n${time}`}
         </TextView>
       )
