@@ -80,9 +80,13 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
         : undefined
   return (
     <>
-      <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
-        {locationName}
-      </TextView>
+      {locationName ? (
+        <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
+          {locationName}
+        </TextView>
+      ) : (
+        <></>
+      )}
       {hasFullAddress ? (
         <Box>
           <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
