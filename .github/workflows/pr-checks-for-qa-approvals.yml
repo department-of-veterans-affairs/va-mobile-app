@@ -60,7 +60,8 @@ jobs:
           echo "QA team: $qa_team_members"
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+              
+              if [[ $(jq --argjson qa_team_members "$qa_team_members" '[.[] | select(.user.login IN ($qa_team_members[]))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has QA approval to merge'
                 exit 0
