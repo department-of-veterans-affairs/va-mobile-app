@@ -26,6 +26,7 @@ sidebar_position: 2
     - This allows the spreadsheet to do the math and pull the totals into the overview sheet.
 
 ## Step 4: Analyze the data
+
 1. Update the overview with the correct dates and review totals for the month.
 2. Read each review and add a corresponding tag.
     - Refer to the primary tag list sheet found within the spreadsheet.
