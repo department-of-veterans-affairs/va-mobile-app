@@ -6,7 +6,7 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { AppDispatch } from 'store'
@@ -141,6 +141,16 @@ function AppointmentCancelReschedule({
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
   const { location, cancelId } = attributes || ({} as AppointmentAttributes)
+  const boxProps: BoxProps = {
+    borderStyle: 'solid',
+    borderBottomWidth: 'default',
+    borderBottomColor: 'primary',
+    borderTopWidth: 'default',
+    borderTopColor: 'primary',
+    height: theme.dimensions.standardMarginBetween,
+    backgroundColor: 'main',
+    mx: -theme.dimensions.gutter,
+  }
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
@@ -163,15 +173,12 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.CanceledAndPending:
           return (
             <Box>
-              <Box
-                height={theme.dimensions.standardMarginBetween}
-                backgroundColor={'main'}
-                mx={-theme.dimensions.gutter}
-              />
+              <Box {...boxProps} />
               <TextView
                 variant="MobileBodyBold"
                 accessibilityRole="header"
-                my={theme.dimensions.condensedMarginBetween}>
+                mt={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.reschedule.pending.title')}
               </TextView>
               <TextView
@@ -194,15 +201,12 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Canceled:
           return (
             <Box>
-              <Box
-                height={theme.dimensions.standardMarginBetween}
-                backgroundColor={'main'}
-                mx={-theme.dimensions.gutter}
-              />
+              <Box {...boxProps} />
               <TextView
                 variant="MobileBodyBold"
                 accessibilityRole="header"
-                my={theme.dimensions.condensedMarginBetween}>
+                mt={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
               <TextView
@@ -225,15 +229,12 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Past:
           return (
             <Box>
-              <Box
-                height={theme.dimensions.standardMarginBetween}
-                backgroundColor={'main'}
-                mx={-theme.dimensions.gutter}
-              />
+              <Box {...boxProps} />
               <TextView
                 variant="MobileBodyBold"
                 accessibilityRole="header"
-                my={theme.dimensions.condensedMarginBetween}>
+                mt={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}>
                 {t('appointments.schedule.title')}
               </TextView>
               <TextView
@@ -256,15 +257,12 @@ function AppointmentCancelReschedule({
         case AppointmentDetailsSubTypeConstants.Upcoming:
           return (
             <Box>
-              <Box
-                height={theme.dimensions.standardMarginBetween}
-                backgroundColor={'main'}
-                mx={-theme.dimensions.gutter}
-              />
+              <Box {...boxProps} />
               <TextView
                 variant="MobileBodyBold"
                 accessibilityRole="header"
-                my={theme.dimensions.condensedMarginBetween}>
+                mt={theme.dimensions.standardMarginBetween}
+                mb={theme.dimensions.condensedMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView
