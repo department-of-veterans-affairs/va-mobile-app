@@ -29,7 +29,7 @@ function AppointmentPreferredModality({ subType, type }: AppointmentPreferredMod
         case AppointmentDetailsTypeConstants.VideoGFE:
         case AppointmentDetailsTypeConstants.VideoHome:
         case AppointmentDetailsTypeConstants.VideoVA:
-          modality = t('appointments.pending.video')
+          modality = t('video')
           break
         case AppointmentDetailsTypeConstants.ClaimExam:
         case AppointmentDetailsTypeConstants.CommunityCare:
