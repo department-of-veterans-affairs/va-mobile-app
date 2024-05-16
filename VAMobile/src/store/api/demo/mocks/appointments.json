@@ -941,7 +941,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1069,7 +1069,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1197,7 +1197,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1325,7 +1325,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -2223,7 +2223,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2317,7 +2317,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -3311,7 +3311,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3439,7 +3439,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3566,7 +3566,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3694,7 +3694,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -4591,7 +4591,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -4685,7 +4685,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",

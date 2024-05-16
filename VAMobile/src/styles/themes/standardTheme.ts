@@ -185,6 +185,7 @@ let theme: VATheme = {
     contentMarginBottom: 40,
     standardMarginBetween: 20,
     condensedMarginBetween: 10,
+    tinyMarginBetween: 5,
     cardPadding: 20,
     buttonPadding: 10,
     alertBorderWidth: 8,

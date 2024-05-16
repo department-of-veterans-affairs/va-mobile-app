@@ -23,9 +23,9 @@ const lastYear = lastYearDateTime.get('year')
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
-  APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
+  APPOINTMENT_4_ID: 'Optometry (routine eye exam) Pending Vilasini Reddy Request type: Community care',
+  APPOINTMENT_5_ID: 'Optometry (routine eye exam) Pending Request type: Community care',
+  APPOINTMENT_6_ID: 'Optometry (routine eye exam) Canceled Request type: Community care',
   ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
   PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
@@ -51,11 +51,11 @@ describe('Appointments Screen', () => {
   })
 
   it('verify appointment details information', async () => {
-    await waitFor(element(by.text('Outpatient Clinic')))
+    await waitFor(element(by.text('Community care')).atIndex(0))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
       .scroll(200, 'down')
-    await element(by.text('Outpatient Clinic')).tap()
+    await element(by.text('Community care')).atIndex(0).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
     await expect(element(by.id('Outpatient Clinic 2341 North Ave Commerce, CA 90022'))).toExist()
@@ -119,11 +119,11 @@ describe('Appointments Screen', () => {
   })
 
   it('verify the appointment details/links after cancel', async () => {
-    await waitFor(element(by.id('Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person')))
+    await waitFor(element(by.id('Optometry (routine eye exam) Canceled Vilasini Reddy Request type: Community care')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
       .scroll(200, 'down')
-    await element(by.id('Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person')).tap()
+    await element(by.id('Optometry (routine eye exam) Canceled Vilasini Reddy Request type: Community care')).tap()
     await expect(element(by.text('Test clinic 2 canceled this appointment.'))).toExist()
     await expect(element(by.text('Canceled request for Optometry (routine eye exam) appointment'))).toExist()
     await expect(element(by.text('Vilasini Reddy'))).toExist()

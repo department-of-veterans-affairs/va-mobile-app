@@ -30,7 +30,7 @@ function PreferredAppointmentType({ attributes }: PreferredAppointmentTypeProps)
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-        preferredTypeofAppointment = t('appointments.pending.video')
+        preferredTypeofAppointment = t('video')
         break
       case AppointmentTypeConstants.COMMUNITY_CARE:
       case AppointmentTypeConstants.VA:
