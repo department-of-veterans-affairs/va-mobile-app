@@ -1,7 +1,9 @@
+import { Commands } from 'react-native-webview/lib/RNCWebViewNativeComponent'
+
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openVeteransCrisisLine } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openVeteransCrisisLine } from './utils'
 
 export const VCLConstants = {
   HEADING_TEXT: 'Veterans Crisis Line',
@@ -53,7 +55,7 @@ describe('Veterans Crisis Line', () => {
 
   it('should open chat link', async () => {
     await element(by.text(VCLConstants.CHAT_LINK_TEXT)).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('CrisisLineChat')
     await device.launchApp({ newInstance: false })
@@ -61,7 +63,7 @@ describe('Veterans Crisis Line', () => {
 
   it('should open website link', async () => {
     await element(by.text(VCLConstants.VCL_SITE_LINK_TEXT)).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('VCLWebsite')
     await device.launchApp({ newInstance: false })
