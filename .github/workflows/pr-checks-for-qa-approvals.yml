@@ -58,8 +58,7 @@ jobs:
           )
           echo "required approval count: $required_approval_count"
           echo "QA team: $qa_team_members"
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
-            then
+          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]; then
               
               if [[ $(jq --argjson qa_team_members "$qa_team_members" '[.[] | select(.user.login IN ($qa_team_members[]))] | length' <<< "$approvals") -gt 0 ]]; then
                 
@@ -73,4 +72,3 @@ jobs:
             echo 'This PR requires 2 approvals, including one QA approval, before merging.'
             exit 1
           fi 
-        
