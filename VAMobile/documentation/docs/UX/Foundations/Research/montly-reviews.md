@@ -53,6 +53,7 @@ If you are adding app store reviews for a month in an existing quarter’s folde
 3. Add a readme.md file to the folder (content can be copied from the readme.md file in another folder, but be sure to update the dates in the file to the new quarter).
         
 ## Step 6: Add the overview to Github
+
 1. Back in your app store review sheet, select only your table in the overview and then [convert the overview table to markdown](https://tabletomarkdown.com/convert-spreadsheet-to-markdown/).
 2. Paste the converted markdown table into your Github file.
 3. Above the table, add a title in the following format: **2024 Q1 Summary VA Mobile App Store Reviews**
