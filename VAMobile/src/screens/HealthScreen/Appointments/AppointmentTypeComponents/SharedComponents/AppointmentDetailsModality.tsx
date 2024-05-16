@@ -76,6 +76,7 @@ const supportingModalityBody = (
       return t('appointments.pending.cancelled.theTimeAndDate', { who })
     case AppointmentDetailsSubTypeConstants.Past:
       return t('appointments.pastBody')
+    case AppointmentDetailsSubTypeConstants.PastPending:
     case AppointmentDetailsSubTypeConstants.Pending:
       return t('appointments.pending.body')
     case AppointmentDetailsSubTypeConstants.Upcoming:
