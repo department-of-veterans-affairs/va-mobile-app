@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -7,6 +7,7 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 
 import { appointmentsKeys } from './queryKeys'
@@ -39,6 +40,7 @@ export const useAppointments = (
   timeFrame: TimeFrameType,
   options?: { enabled?: boolean },
 ) => {
+  const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
@@ -47,7 +49,22 @@ export const useAppointments = (
     ...options,
     enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
     queryKey: [appointmentsKeys.appointments, timeFrame],
-    queryFn: () => getAppointments(startDate, endDate, timeFrame),
+    queryFn: () => {
+      if (timeFrame === TimeFrameTypeConstants.UPCOMING) {
+        const pastRange = getPastAppointmentDateRange()
+
+        // Prefetch past appointments when upcoming appointments are being fetched so that the default
+        // appointments list in the `Past` tab will already be loaded if a user views past appointments.
+        queryClient.prefetchQuery({
+          queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS],
+          queryFn: () =>
+            getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
+          staleTime: ACTIVITY_STALE_TIME,
+        })
+      }
+
+      return getAppointments(startDate, endDate, timeFrame)
+    },
     meta: {
       errorName: 'getAppointments: Service error',
     },

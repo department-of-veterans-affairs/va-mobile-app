@@ -5,11 +5,10 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { AppointmentsDateRange, AppointmentsErrorServiceTypesConstants } from 'api/types'
+import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
@@ -18,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -28,16 +28,6 @@ import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
-
-export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
-  const todaysDate = DateTime.local()
-  const futureDate = todaysDate.plus({ days: 390 })
-
-  return {
-    startDate: todaysDate.startOf('day').toISO(),
-    endDate: futureDate.endOf('day').toISO(),
-  }
-}
 
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -75,15 +65,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         setDateRange(getUpcomingAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.UPCOMING)
       } else {
-        const todaysDate = DateTime.local()
-        const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-
-        const pastRange: AppointmentsDateRange = {
-          startDate: threeMonthsEarlier.startOf('day').toISO(),
-          endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
-        }
-
-        setDateRange(pastRange)
+        setDateRange(getPastAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
       }
       setPage(1)

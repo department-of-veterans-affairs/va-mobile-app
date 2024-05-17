@@ -11,6 +11,7 @@ import {
   AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
+  AppointmentsDateRange,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
@@ -536,4 +537,34 @@ export const isAPendingAppointment = (attributes: AppointmentAttributes): boolea
     status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
 
   return !!(isPending && validPendingStatus)
+}
+
+/**
+ * Returns the date rage for upcoming appointments
+ *
+ * @returns {AppointmentsDateRange}
+ */
+export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const futureDate = todaysDate.plus({ days: 390 })
+
+  return {
+    startDate: todaysDate.startOf('day').toISO(),
+    endDate: futureDate.endOf('day').toISO(),
+  }
+}
+
+/**
+ * Returns the date rage for appointments in the past 3 months
+ *
+ * @returns {AppointmentsDateRange}
+ */
+export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+
+  return {
+    startDate: threeMonthsEarlier.startOf('day').toISO(),
+    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+  }
 }
