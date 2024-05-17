@@ -3,22 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { ServiceHistoryData } from 'api/types'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
-import { Events, UserAnalytics } from 'constants/analytics'
+import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
@@ -43,56 +39,14 @@ function SyncScreen({}: SyncScreenProps) {
   const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
   })
-  const { data: militaryServiceHistoryAttributes, isFetching: fetchingServiceHistory } = useServiceHistory({
+  const { isFetching: fetchingServiceHistory } = useServiceHistory({
     enabled: loggedIn && downtimeWindowsFetched,
   })
   const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
     enabled: loggedIn && downtimeWindowsFetched,
   })
-  const { data: personalInfoData } = usePersonalInformation({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
-  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-
-  const SERVICE_INDICATOR_KEY = '@store_service_indicator' + personalInfoData?.id
-
-  const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-    try {
-      serviceHistory.forEach((service) => {
-        if (service.honorableServiceIndicator === 'Y') {
-          logAnalyticsEvent(Events.vama_vet_status_yStatus())
-        } else if (service.honorableServiceIndicator === 'N') {
-          logAnalyticsEvent(Events.vama_vet_status_nStatus())
-        } else if (service.honorableServiceIndicator === 'Z') {
-          logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
-        }
-      })
-      await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
-    } catch (err) {
-      logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-    }
-  }
-
-  const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-    try {
-      const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
-      if (asyncServiceIndicators) {
-        if (asyncServiceIndicators !== serviceIndicators) {
-          setServiceIndicators(serviceIndicators)
-        }
-      } else {
-        setServiceIndicators(serviceIndicators)
-      }
-    } catch (err) {
-      logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-    }
-  }
-
-  const serviceIndicators: string = ''
-  serviceHistory.forEach((service) => {
-    serviceIndicators.concat(service.honorableServiceIndicator)
-  })
-  checkServiceIndicators(serviceIndicators)
 
   useEffect(() => {
     dispatch(checkForDowntimeErrors())
