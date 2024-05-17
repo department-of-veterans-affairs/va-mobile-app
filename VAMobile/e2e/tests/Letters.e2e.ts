@@ -2,6 +2,7 @@ import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
+  CommonE2eIdConstants,
   checkIfElementIsPresent,
   loginToDemoMode,
   openBenefits,
@@ -129,7 +130,7 @@ describe('VA Letters', () => {
         if (isBenefitSummaryLetter) {
           await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom')
           await element(by.text('Go to Ask VA')).tap()
-          await element(by.text('Leave')).tap()
+          await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
