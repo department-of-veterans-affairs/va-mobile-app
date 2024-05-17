@@ -39,11 +39,6 @@ export const Nametag: FC = () => {
   serviceHistory.forEach((service) => {
     if (service.honorableServiceIndicator === 'Y') {
       showVeteranStatus = true
-      logAnalyticsEvent(Events.vama_vet_status_shown())
-    } else if (service.honorableServiceIndicator === 'N') {
-      logAnalyticsEvent(Events.vama_vet_status_nStatus())
-    } else if (service.honorableServiceIndicator === 'Z') {
-      logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
     }
   })
 
