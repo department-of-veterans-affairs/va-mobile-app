@@ -7,9 +7,9 @@ import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { Events, UserAnalytics } from 'constants/analytics'
+import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
