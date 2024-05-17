@@ -60,7 +60,7 @@ function SyncScreen({}: SyncScreenProps) {
     try {
       serviceHistory.forEach((service) => {
         if (service.honorableServiceIndicator === 'Y') {
-          logAnalyticsEvent(Events.vama_vet_status_shown())
+          logAnalyticsEvent(Events.vama_vet_status_yStatus())
         } else if (service.honorableServiceIndicator === 'N') {
           logAnalyticsEvent(Events.vama_vet_status_nStatus())
         } else if (service.honorableServiceIndicator === 'Z') {

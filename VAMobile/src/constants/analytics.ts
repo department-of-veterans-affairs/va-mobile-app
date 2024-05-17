@@ -1106,14 +1106,14 @@ export const Events = {
       name: 'vama_vet_status_nStatus',
     }
   },
-  vama_vet_status_shown: (): Event => {
+  vama_vet_status_yStatus: (): Event => {
     return {
-      name: 'vama_vet_status_shown',
+      name: 'vama_vet_status_yStatus',
     }
   },
   vama_vet_status_zStatus: (charOfDis: string): Event => {
     return {
-      name: 'vama_vet_status_notShown',
+      name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
       },
