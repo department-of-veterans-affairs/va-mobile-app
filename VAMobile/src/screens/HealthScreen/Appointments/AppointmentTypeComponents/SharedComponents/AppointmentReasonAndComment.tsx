@@ -36,7 +36,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
           <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.condensedMarginBetween}>
             {t('appointments.pending.reasonTitle')}
           </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
           </TextView>
         </Box>
@@ -50,7 +50,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
           <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
             {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
           </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {t('upcomingAppointmentDetails.reasonComment', { comment: comment || t('appointments.notAvailable') })}
           </TextView>
         </Box>

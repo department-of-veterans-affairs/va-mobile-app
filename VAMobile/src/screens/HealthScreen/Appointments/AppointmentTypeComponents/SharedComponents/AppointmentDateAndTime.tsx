@@ -39,7 +39,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
               <TextView
                 key={index}
                 variant="MobileBody"
-                paragraphSpacing={index === filteredTimes.length - 1}
+                mb={index === filteredTimes.length - 1 ? theme.dimensions.standardMarginBetween : undefined}
                 testID="preferredDateAndTimeTestID">
                 {t('appointments.pending.dateInSlotTime', { optionDate: date, optionTime: timeSlot })}
               </TextView>
@@ -60,9 +60,8 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
           mb={
             subType === AppointmentDetailsSubTypeConstants.Upcoming
               ? theme.dimensions.condensedMarginBetween
-              : undefined
-          }
-          paragraphSpacing={subType === AppointmentDetailsSubTypeConstants.Upcoming ? false : true}>
+              : theme.dimensions.standardMarginBetween
+          }>
           {`${date}\n${time}`}
         </TextView>
       )

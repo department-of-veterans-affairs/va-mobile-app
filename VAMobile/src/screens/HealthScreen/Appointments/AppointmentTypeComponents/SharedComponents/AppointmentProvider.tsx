@@ -40,7 +40,7 @@ function AppointmentProvider({ attributes, subType, type }: AppointmentProviderP
             <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
               {heading}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
+            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
               {healthcareProvider}
             </TextView>
           </Box>

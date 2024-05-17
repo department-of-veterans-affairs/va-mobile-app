@@ -103,7 +103,7 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
         {heading}
       </TextView>
-      <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
+      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={apptBodyA11yLabel}>
         {body}
       </TextView>
     </Box>

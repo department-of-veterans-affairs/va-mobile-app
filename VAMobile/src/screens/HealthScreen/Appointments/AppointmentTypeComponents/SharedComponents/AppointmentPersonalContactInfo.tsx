@@ -32,9 +32,10 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
             <TextView
               variant="MobileBodyBold"
               mb={
-                !!patientPhoneNumber || !!bestTimeToCall?.length ? theme.dimensions.condensedMarginBetween : undefined
-              }
-              paragraphSpacing={!!patientPhoneNumber || !!bestTimeToCall?.length ? undefined : true}>
+                !!patientPhoneNumber || !!bestTimeToCall?.length
+                  ? theme.dimensions.condensedMarginBetween
+                  : theme.dimensions.standardMarginBetween
+              }>
               {`${t('email')}: `}
               <TextView variant="MobileBody">{patientEmail}</TextView>
             </TextView>
@@ -42,14 +43,17 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
           {!!patientPhoneNumber && (
             <TextView
               variant="MobileBodyBold"
-              mb={bestTimeToCall?.length ? theme.dimensions.condensedMarginBetween : undefined}
-              paragraphSpacing={bestTimeToCall?.length ? undefined : true}>
+              mb={
+                bestTimeToCall?.length
+                  ? theme.dimensions.condensedMarginBetween
+                  : theme.dimensions.standardMarginBetween
+              }>
               {`${t('phoneNumber')}: `}
               <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
             </TextView>
           )}
           {!!bestTimeToCall?.length && (
-            <TextView variant="MobileBodyBold" paragraphSpacing={true}>
+            <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
               {t('appointments.bestTimeToCall')}
               <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
             </TextView>

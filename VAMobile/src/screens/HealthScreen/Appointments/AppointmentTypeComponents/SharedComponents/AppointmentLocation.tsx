@@ -157,7 +157,7 @@ const getClinicInfo = (
                   : t('appointments.notAvailable'),
             })}
           </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {t('appointments.physicalLocation', {
               physicalLocation:
                 physicalLocation && physicalLocation.length > 1 ? physicalLocation : t('appointments.notAvailable'),

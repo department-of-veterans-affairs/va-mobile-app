@@ -41,7 +41,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
             <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
               {heading}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
+            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
               {typeOfCare}
             </TextView>
           </Box>

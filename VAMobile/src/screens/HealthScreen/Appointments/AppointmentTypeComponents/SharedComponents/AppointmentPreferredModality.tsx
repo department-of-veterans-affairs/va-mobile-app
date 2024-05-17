@@ -46,7 +46,7 @@ function AppointmentPreferredModality({ subType, type }: AppointmentPreferredMod
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
             {t('appointments.pending.preferredModality')}
           </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {modality}
           </TextView>
         </Box>
