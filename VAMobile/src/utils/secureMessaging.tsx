@@ -484,7 +484,7 @@ export const getLinkifiedText = (
   launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
 ): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
-  const bodySplit = body.split(' ')
+  const bodySplit = body.split(/\s/)
   let dontAddNextString = false
   _.forEach(bodySplit, (text, index) => {
     if (dontAddNextString) {
@@ -497,14 +497,9 @@ export const getLinkifiedText = (
       //phone number with spaces xxx xxx xxxx format
       const previousText = bodySplit[index - 1]
       const nextText = bodySplit[index + 1]
-      if (
-        previousText.length === 3 &&
-        text.length === 3 &&
-        nextText.length === 4 &&
-        NUMBERS_ONLY_REGEX_EXP.test(previousText) &&
-        NUMBERS_ONLY_REGEX_EXP.test(text) &&
-        NUMBERS_ONLY_REGEX_EXP.test(nextText)
-      ) {
+      const testString = previousText + ' ' + text + ' ' + nextText
+      const phoneMatch = PHONE_REGEX_EXP.exec(testString)
+      if (phoneMatch) {
         textReconstructedBody.pop()
         textReconstructedBody.pop()
         textReconstructedBody.push(
