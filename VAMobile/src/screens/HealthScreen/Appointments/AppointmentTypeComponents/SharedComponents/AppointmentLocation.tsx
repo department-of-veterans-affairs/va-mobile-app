@@ -81,7 +81,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
   return (
     <>
       {locationName ? (
-        <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBody" selectable={true}>
           {locationName}
         </TextView>
       ) : (
@@ -89,7 +89,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
       )}
       {hasFullAddress ? (
         <Box>
-          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBody" selectable={true}>
             {location.address?.street}
           </TextView>
           <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.condensedMarginBetween}>
@@ -101,7 +101,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
           variant={'MobileBody'}
           selectable={true}
           accessibilityLabel={a11yLabelVA(missingBodyText || '')}
-          mb={theme.dimensions.condensedMarginBetween}>
+          paragraphSpacing={true}>
           {missingBodyText}
         </TextView>
       )}
@@ -149,7 +149,7 @@ const getClinicInfo = (
     case AppointmentDetailsTypeConstants.InPersonVA:
       return (
         <Box>
-          <TextView variant="MobileBody" my={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
             {t('appointments.clinic', {
               clinicName:
                 friendlyLocationName && friendlyLocationName.length > 1
@@ -178,7 +178,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
   if (heading) {
     return (
       <Box>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
         {getLocationNameAddressDirectionsPhone(attributes, t, theme)}

@@ -27,7 +27,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
       })
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.preferredDateAndTimeFrame')}
           </TextView>
           {filteredTimes?.map(({ date, time }, index) => {
@@ -58,9 +58,7 @@ function AppointmentDateAndTime({ attributes, subType }: AppointmentDateAndTimeP
           variant="MobileBodyBold"
           accessibilityRole="header"
           mb={
-            subType === AppointmentDetailsSubTypeConstants.Upcoming
-              ? theme.dimensions.condensedMarginBetween
-              : theme.dimensions.standardMarginBetween
+            subType === AppointmentDetailsSubTypeConstants.Upcoming ? undefined : theme.dimensions.standardMarginBetween
           }>
           {`${date}\n${time}`}
         </TextView>

@@ -33,7 +33,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
     case AppointmentDetailsSubTypeConstants.PastPending:
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" my={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.reasonTitle')}
           </TextView>
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
@@ -44,10 +44,10 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
     default:
       return (
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.sharedProvider')}
           </TextView>
-          <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBody">
             {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
           </TextView>
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>

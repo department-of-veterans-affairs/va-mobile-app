@@ -174,11 +174,7 @@ function AppointmentCancelReschedule({
           return (
             <Box>
               <Box {...boxProps} />
-              <TextView
-                variant="MobileBodyBold"
-                accessibilityRole="header"
-                mt={theme.dimensions.standardMarginBetween}
-                mb={theme.dimensions.condensedMarginBetween}>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.pending.title')}
               </TextView>
               <TextView
@@ -202,11 +198,7 @@ function AppointmentCancelReschedule({
           return (
             <Box>
               <Box {...boxProps} />
-              <TextView
-                variant="MobileBodyBold"
-                accessibilityRole="header"
-                mt={theme.dimensions.standardMarginBetween}
-                mb={theme.dimensions.condensedMarginBetween}>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('appointments.reschedule.title')}
               </TextView>
               <TextView
@@ -230,11 +222,7 @@ function AppointmentCancelReschedule({
           return (
             <Box>
               <Box {...boxProps} />
-              <TextView
-                variant="MobileBodyBold"
-                accessibilityRole="header"
-                mt={theme.dimensions.standardMarginBetween}
-                mb={theme.dimensions.condensedMarginBetween}>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('appointments.schedule.title')}
               </TextView>
               <TextView
@@ -258,11 +246,7 @@ function AppointmentCancelReschedule({
           return (
             <Box>
               <Box {...boxProps} />
-              <TextView
-                variant="MobileBodyBold"
-                accessibilityRole="header"
-                mt={theme.dimensions.standardMarginBetween}
-                mb={theme.dimensions.condensedMarginBetween}>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView
