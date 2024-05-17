@@ -93,8 +93,8 @@ const fontSizes = {
     lineHeight: 24,
   },
   HomeScreenHeader: {
-    fontSize: 18,
-    lineHeight: 22,
+    fontSize: 20,
+    lineHeight: 30,
   },
   ProfileScreenHeader: {
     fontSize: 18,
@@ -234,7 +234,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
-    HomeScreenHeader: buildFont('Bitter-Regular', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
+    HomeScreenHeader: buildFont('SourceSansPro-Bold', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
     ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
     LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
     LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
