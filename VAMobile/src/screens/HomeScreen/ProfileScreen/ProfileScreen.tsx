@@ -21,7 +21,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   } = useAuthorizedServices()
 
   const {
-    isFetching: loadingServiceHistory,
+    isLoading: loadingServiceHistory,
     error: serviceHistoryError,
     refetch: refetchServiceHistory,
   } = useServiceHistory()
