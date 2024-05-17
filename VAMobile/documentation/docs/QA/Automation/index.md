@@ -1,3 +1,8 @@
+---
+title: UI Automation Testing
+sidebar_position: 1
+---
+
 # UI Automation Testing
 
 ## Background
@@ -57,7 +62,7 @@ In addition to making sure that the automated tests are functioning well, an eng
 - Creating TestRail cases & steps for automated tests (if needed/not currently written)
 - Confirming all test runs for the new automated script can be recorded in TestRail (preferably automatically, but at least manually)
 - Ensuring the new cases provide artifacts (where necessary) for success or failure
-- Ensuring that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed)
+- Ensuring that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Automation/AddingNewFeatures)
 
 **Additional work for RC automated tests**
 - Confirming that the new script follows the manual RC script test steps
