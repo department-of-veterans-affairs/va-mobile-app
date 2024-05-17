@@ -7,6 +7,7 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         type: string
         required: true
+        
     secrets:
       GH_ACTIONS_PAT:
         description: 'PAT token from composite parent workflow'
@@ -22,6 +23,9 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
+  push: 
+    branches: 
+      - 'chanel-7586-approve-command-failure-alert'      
 
 jobs:
   create_prs:

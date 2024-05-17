@@ -6,9 +6,7 @@ on:
       - 'approve_command.yml'
     types:
       - completed
-  push: 
-    branches: 
-      - 'chanel-7586-approve-command-failure-alert'
+ 
 
 jobs:
   slack_alert:
