@@ -11,14 +11,7 @@ import _ from 'underscore'
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
 import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
-import {
-  EMAIL_REGEX_EXP,
-  MAIL_TO_REGEX_EXP,
-  NUMBERS_ONLY_REGEX_EXP,
-  PHONE_REGEX_EXP,
-  URL2_REGEX_EXP,
-  URL_REGEX_EXP,
-} from 'constants/common'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
