@@ -542,7 +542,7 @@ export const isAPendingAppointment = (attributes: AppointmentAttributes): boolea
 /**
  * Returns the date rage for upcoming appointments
  *
- * @returns {AppointmentsDateRange}
+ * @returns AppointmentsDateRange
  */
 export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   const todaysDate = DateTime.local()
@@ -557,7 +557,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 /**
  * Returns the date rage for appointments in the past 3 months
  *
- * @returns {AppointmentsDateRange}
+ * @returns AppointmentsDateRange
  */
 export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
   const todaysDate = DateTime.local()
