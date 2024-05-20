@@ -147,7 +147,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       const retryStatus = contactInformationError ? 'fail' : 'success'
       logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
     }
-  }, [failureCount, contactInformationError])
+  }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   const navigateTo = useRouteNavigation()
 
