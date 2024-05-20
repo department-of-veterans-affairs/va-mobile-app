@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 
@@ -132,9 +132,22 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     isFetching: loadingContactInformation,
     error: contactInformationError,
     refetch: refetchContactInformation,
+    failureCount,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const [retried, setRetried] = useState(false)
+
+  useEffect(() => {
+    if (failureCount > 0) {
+      setRetried(true)
+    }
+
+    if (retried && !loadingContactInformation) {
+      const retryStatus = contactInformationError ? 'failure' : 'success'
+      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
+    }
+  }, [failureCount, contactInformationError])
 
   const navigateTo = useRouteNavigation()
 
