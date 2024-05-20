@@ -59,6 +59,7 @@ const tapItems = async (items: string, type: string) => {
   if (type === 'url' || type === 'map' || type === 'email') {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
   }
+  await device.disableSynchronization()
   await element(by.text(items)).tap()
   if (type === 'url' || type === 'map') {
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
@@ -66,6 +67,7 @@ const tapItems = async (items: string, type: string) => {
   await setTimeout(2000)
   await device.takeScreenshot(items)
   if (device.getPlatform() === 'android') {
+    await device.enableSynchronization()
     await device.launchApp({ newInstance: false })
   }
   await setTimeout(3000)
