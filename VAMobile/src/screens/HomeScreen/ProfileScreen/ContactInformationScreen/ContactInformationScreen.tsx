@@ -144,7 +144,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     }
 
     if (retried && !loadingContactInformation) {
-      const retryStatus = contactInformationError ? 'failure' : 'success'
+      const retryStatus = contactInformationError ? 'fail' : 'success'
       logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
     }
   }, [failureCount, contactInformationError])
