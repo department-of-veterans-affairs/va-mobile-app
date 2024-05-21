@@ -5,6 +5,9 @@
 name: '[e2e] Android Detox Test Run'
 
 on:
+  push:
+    branches:
+        - 'dependabot/**'
   pull_request:
     types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
@@ -83,7 +86,7 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != '' ]]; then
+          if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
             echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "empty_matrix=" >> "$GITHUB_OUTPUT"
