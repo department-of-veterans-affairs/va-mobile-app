@@ -12,6 +12,18 @@ assignees:
 - High level description of the project and what we are trying to solve
 ### Product Brief:
 - [link to GitHub Product Brief]
+
+
+### Monthly Update for Stakeholders
+
+ 
+|Date|  Progress & Key Accomplishments| Issues/Risks/Blockers|
+|-------| --------|---------|
+|MM/DD/YY| 
+|MM/DD/YY|
+|MM/DD/YY|
+|MM/DD/YY|
+
 ### Current Dependencies / Blockers
 <details>
 <summary>Blockers</summary>
@@ -20,18 +32,6 @@ assignees:
 |-------|---------|-------| 
 | Internal dependency ? |   |
 | External dependency ?  |   |
-</details>
-
-### Monthly Update for Stakeholders
-<details>
-<summary>Updates</summary>
- 
-|Month| Project Health | Progress & Key Accomplishments| Issues/Risks/Blockers|
-|-------| ---------|--------|---------|
-|MM/DD/YY| 
-|MM/DD/YY|
-|MM/DD/YY|
-|MM/DD/YY|
 </details>
 
 ### Team Members
