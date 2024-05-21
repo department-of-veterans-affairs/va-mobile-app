@@ -164,25 +164,9 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run e2e tests for iOS
-        id: run_e2e_tests
-        run: |
-          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
-            echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
-          else
-            echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-          fi
-        continue-on-error: true
-
-      - name: Rerun e2e tests for iOS if failed
-        if: (failure() || success()) && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
-        id: rerun_e2e_tests
-        run: |
-            yarn jest:clear;
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-
+      - name: Run e2e tests for iOS with AF and Nav
+        run: yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+      
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v4

@@ -24,8 +24,8 @@ const navigationDic = {
     [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings'], 'Settings'],
     [
       ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
-      ['Profile', 'Settings', 'Account security'],
-      'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
+      ['Profile', 'Settings', 'Manage account'],
+      'To confirm or update your sign-in email, go to the website where you manage your account information.',
     ],
     [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
   ],
@@ -70,7 +70,7 @@ const navigationDic = {
   ],
   Health: [
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Vilanisi Reddy'], 'Details'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Outpatient Clinic'], 'Community care'],
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
@@ -315,9 +315,9 @@ describe('Navigation', () => {
       let testName = nameArray[2]
       if (
         nameArray[2] ===
-        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
+        'To confirm or update your sign-in email, go to the website where you manage your account information.'
       ) {
-        testName = 'Account security'
+        testName = 'Manage Account'
       }
       let runTest = false
       if (nameArray[0] instanceof Array) {
