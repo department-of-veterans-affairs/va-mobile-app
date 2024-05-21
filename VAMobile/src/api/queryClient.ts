@@ -6,6 +6,7 @@ import { isErrorObject } from 'utils/common'
 export default new QueryClient({
   defaultOptions: {
     queries: {
+      retry: false,
       staleTime: 5000,
     },
   },
