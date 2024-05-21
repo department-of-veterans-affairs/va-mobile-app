@@ -3,34 +3,46 @@ import { setTimeout } from 'timers/promises'
 
 import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
+var navigationValue = process.argv[7]
+
+if (navigationValue === undefined) {
+  navigationValue = process.argv[6]
+}
 const { exec } = require('child_process')
 const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 const navigationDic = {
   Home: [
-    ['Contact VA', 'Contact VA'],
-    [['Profile', 'Personal information'], 'Personal information'],
-    [['Profile', 'Contact information'], 'Contact information'],
-    [['Profile', 'Military information'], 'Military information'],
-    [['Profile', 'Settings'], 'Settings'],
+    ['HomeScreen.e2e', 'Contact VA', 'Contact VA'],
     [
+      ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
+      ['Profile', 'Personal information'],
+      'Personal information',
+    ],
+    [['ProfileScreen.e2e', 'ContactInformation.e2e'], ['Profile', 'Contact information'], 'Contact information'],
+    [['ProfileScreen.e2e', 'MilitaryInformation.e2e'], ['Profile', 'Military information'], 'Military information'],
+    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings'], 'Settings'],
+    [
+      ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
       ['Profile', 'Settings', 'Manage account'],
       'To confirm or update your sign-in email, go to the website where you manage your account information.',
     ],
-    [['Profile', 'Settings', 'Notifications'], 'Notifications'],
+    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
   ],
   Benefits: [
-    ['Disability rating', 'Disability rating'],
-    ['Claims', 'Claims'],
-    [['Claims', 'Claims history'], 'Claims history'],
-    [['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
-    [['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
-    [['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
+    ['DisabilityRatings.e2e', 'Disability rating', 'Disability rating'],
+    ['Claims.e2e', 'Claims', 'Claims'],
+    ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
     [
+      'Claims.e2e',
       ['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'],
       'File requests',
     ],
     [
+      'Claims.e2e',
       [
         'Claims',
         'Claims history',
@@ -40,33 +52,37 @@ const navigationDic = {
       ],
       'Dental disability - More information needed',
     ],
-    [['Claims', 'Claims history', 'Received July 20, 2021', 'Details'], 'Claim type'],
-    [['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
-    [['Claims', 'Claims history', 'Received July 17, 2008', 'Issues'], 'Currently on appeal'],
-    [['Claims', 'Claim letters'], 'Claim letters'],
-    ['VA letters and documents', 'Letters'],
-    [['VA letters and documents', 'Review letters'], 'Review letters'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Details'], 'Claim type'],
+    [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
+      ['Appeals.e2e', 'AppealsExpanded.e2e'],
+      ['Claims', 'Claims history', 'Received July 17, 2008', 'Issues'],
+      'Currently on appeal',
+    ],
+    ['DecisionLetters.e2e', ['Claims', 'Claim letters'], 'Claim letters'],
+    ['VALetters.e2e', 'VA letters and documents', 'Letters'],
+    ['VALetters.e2e', ['VA letters and documents', 'Review letters'], 'Review letters'],
+    [
+      'VALetters.e2e',
       ['VA letters and documents', 'Review letters', 'Benefit summary and service verification letter'],
       'Letter details',
     ],
   ],
   Health: [
-    ['Appointments', 'Appointments'],
-    [['Appointments', 'Outpatient Clinic'], 'Community care'],
-    [['Appointments', 'Past'], 'Past 3 months'],
-    ['Messages', 'Messages'],
-    [['Messages', 'Medication: Naproxen side effects'], 'Review message'],
-    [['Messages', 'Folders', 'Drafts (3)'], 'Drafts'],
-    ['Prescriptions', 'Prescriptions'],
-    [['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-    ['V\ufeffA vaccine records', 'VA vaccines'],
-    [['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Outpatient Clinic'], 'Community care'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
+    ['Messages.e2e', 'Messages', 'Messages'],
+    ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
+    ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
+    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
+    ['VaccineRecords.e2e', 'V\ufeffA vaccine records', 'VA vaccines'],
+    ['VaccineRecords.e2e', ['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
   ],
   Payments: [
-    ['VA payment history', 'History'],
-    [['VA payment history', 'Regular Chapter 31'], 'Regular Chapter 31'],
-    ['Direct deposit information', 'Direct deposit'],
+    ['Payments.e2e', 'VA payment history', 'History'],
+    ['Payments.e2e', ['VA payment history', 'Regular Chapter 31'], 'Regular Chapter 31'],
+    ['DirectDeposit.e2e', 'Direct deposit information', 'Direct deposit'],
   ],
 }
 
@@ -119,8 +135,8 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
   const navigationArray = navigationDicValue
   if (accessibilityFeatureType === 'landscape') {
     await device.setOrientation('landscape')
-    await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[1])
+    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
+    var feature = await device.takeScreenshot(navigationDicValue[2])
     checkImages(feature)
     await device.setOrientation('portrait')
   } else if (accessibilityFeatureType == 'darkMode') {
@@ -131,8 +147,8 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       }
     })
     await setTimeout(2000)
-    await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[1])
+    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
+    var feature = await device.takeScreenshot(navigationDicValue[2])
     checkImages(feature)
   } else if (accessibilityFeatureType === 'textResizing') {
     exec(NavigationE2eConstants.FONT_RESIZING_LARGEST, (error) => {
@@ -154,24 +170,24 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       await navigateToPage(key, navigationDicValue)
     }
 
-    await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[1])
+    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
+    var feature = await device.takeScreenshot(navigationDicValue[2])
     checkImages(feature)
 
     if (device.getPlatform() === 'ios') {
       await element(by.id(key)).atIndex(0).tap()
     }
   } else {
-    if (navigationArray[1] === 'Claim type' || navigationArray[1] === 'Prescriptions') {
+    if (navigationArray[2] === 'Claim type' || navigationArray[2] === 'Prescriptions') {
       await resetInAppReview()
     }
     await navigateToPage(key, navigationDicValue)
-    await expect(element(by.text(navigationArray[1])).atIndex(0)).toExist()
+    await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
     for (let i = 0; i < appTabs.length; i++) {
       if (appTabs[i] != key) {
         await element(by.text(appTabs[i])).tap()
         await element(by.text(key)).tap()
-        await expect(element(by.text(navigationArray[1])).atIndex(0)).toExist()
+        await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
       }
     }
   }
@@ -180,23 +196,23 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
 const navigateToPage = async (key, navigationDicValue) => {
   await element(by.id(key)).tap()
   const navigationArray = navigationDicValue
-  if (typeof navigationArray[0] === 'string') {
-    if (navigationArray[0] in featureID) {
-      scrollID = featureID[navigationArray[0]]
-      await waitFor(element(by.text(navigationArray[0])))
+  if (typeof navigationArray[1] === 'string') {
+    if (navigationArray[1] in featureID) {
+      scrollID = featureID[navigationArray[1]]
+      await waitFor(element(by.text(navigationArray[1])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     } else if (key in featureID) {
       scrollID = featureID[key]
-      await waitFor(element(by.text(navigationArray[0])))
+      await waitFor(element(by.text(navigationArray[1])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
-    await element(by.text(navigationArray[0])).atIndex(0).tap()
+    await element(by.text(navigationArray[1])).atIndex(0).tap()
   } else {
-    const subNavigationArray = navigationArray[0]
+    const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
       if (subNavigationArray[k] === 'Review file requests') {
         await waitFor(element(by.text('Review file requests')))
@@ -259,6 +275,7 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
+  await device.launchApp({ newInstance: false })
   await loginToDemoMode()
 })
 
@@ -291,41 +308,42 @@ afterEach(async () => {
 })
 
 describe('Navigation', () => {
+  let testsRun = false
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
       const nameArray = value[j]
+      let testName = nameArray[2]
       if (
-        nameArray[1] ===
+        nameArray[2] ===
         'To confirm or update your sign-in email, go to the website where you manage your account information.'
       ) {
-        it('verify navigation for: Manage Account', async () => {
+        testName = 'Manage Account'
+      }
+      let runTest = false
+      if (nameArray[0] instanceof Array) {
+        for (let z = 0; z < value.length; z++) {
+          if (navigationValue === nameArray[0][z]) {
+            runTest = true
+          }
+        }
+      } else if (navigationValue === nameArray[0]) {
+        runTest = true
+      }
+      if (runTest === true || navigationValue === undefined) {
+        testsRun = true
+        it('verify navigation for: ' + testName, async () => {
           await accessibilityOption(key, value[j], null)
         })
 
-        it('verify landscape mode for: Manage Account', async () => {
-          await accessibilityOption(key, value[j], 'landscape')
-        })
-
-        it('verify dark mode for: Manage Account', async () => {
-          await accessibilityOption(key, value[j], 'darkMode')
-        })
-        it('verify text resizing for: Manage Account', async () => {
-          await accessibilityOption(key, value[j], 'textResizing')
-        })
-      } else {
-        it('verify navigation for: ' + nameArray[1], async () => {
-          await accessibilityOption(key, value[j], null)
-        })
-
-        if (nameArray[1] !== 'Community care' && nameArray[1] !== 'Claim exam') {
-          it('verify landscape mode for: ' + nameArray[1], async () => {
+        if (testName !== 'Community care' && testName !== 'Claim exam') {
+          it('verify navigation landscape mode for: ' + testName, async () => {
             await accessibilityOption(key, value[j], 'landscape')
           })
 
-          it('verify dark mode for: ' + nameArray[1], async () => {
+          it('verify navigation dark mode for: ' + testName, async () => {
             await accessibilityOption(key, value[j], 'darkMode')
           })
-          it('verify text resizing for: ' + nameArray[1], async () => {
+          it('verify navigation text resizing for: ' + testName, async () => {
             if (device.getPlatform() === 'ios') {
               await accessibilityOption(key, value[j], 'textResizing')
             }
@@ -333,5 +351,8 @@ describe('Navigation', () => {
         }
       }
     }
+  }
+  if (testsRun == false) {
+    it('no Nav changes', async () => {})
   }
 })
