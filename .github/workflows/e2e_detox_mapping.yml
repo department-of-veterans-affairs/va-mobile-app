@@ -10,6 +10,9 @@ on:
         test_matrix:
           description: "The matrix output for the e2e tests"
           value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
+        test_run:
+          description: "String saying test has been run"
+          value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
   
 defaults:
   run:
