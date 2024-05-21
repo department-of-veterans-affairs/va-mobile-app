@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs: 
       output1: ${{ steps.testing_matrix.outputs.TESTING_MATRIX }}
+      output2: ${{ steps.testing_matrix.outputs.TEST_RUN}}
 
     steps: 
       - name: Checkout
@@ -150,3 +151,4 @@ jobs:
           "PersonalInformationScreen", "Prescriptions", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords",
           "VeteransCrisisLine", "VeteranStatusCard")))')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
+          echo "TEST_RUN=true" >> $GITHUB_OUTPUT
