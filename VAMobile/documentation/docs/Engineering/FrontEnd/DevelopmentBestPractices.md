@@ -12,21 +12,28 @@ Every ticket must contain at least the following information:
 - All relevant labels ("front-end" for FE work, "Health" for Health and Benefits work, "Global" for global work, etc)
 - An epic relating to the ticket's larger context
 
-If possible, choose the relevant template for your ticket. For example, the Bug Report Template will help you quickly create a bug report with all the required details. Make sure to include severity in the bug ticket title, labels, and body.
+If possible, choose the relevant template for your ticket. For example, choose the Bug Report Template if you're creating a bug ticket. Make sure to include severity in the bug ticket title, labels, and body.
 
 Before an engineer can begin work, the ticket must contain an estimate. Bugs get an estimate of 1 to start. Other tickets are left to the engineers' discretion.
 
 ### Working on tickets
 
-All engineering work requires a ticket. The ticket must satisfy the requirements in the "Creating tickets" section above. If anything is missing, add it or contact the relevant stakeholders. Once everything is in place, complete the following tasks:
+All engineering work requires a ticket. The ticket must satisfy the requirements in the "Creating tickets" section above. If information is missing, add it or contact the relevant stakeholders. Once everything is in place, complete the following tasks:
 
 - Assign yourself
 - Assign the appropriate QA engineer
 - Move the ticket to In Progress
+- Create a branch as described below.
 
-Then you can begin work. Keep stakeholders up to date as you work by commenting on the ticket with any important details or questions. This will also preserve information so everyone can reference it in the future.
+Then you can begin work.  Keep stakeholders up to date as you work by commenting on the ticket with any important details or questions. This will also preserve information so everyone can reference it in the future.
 
-When you've finished all the work specified in the Acceptance Criteria on a ticket, as well as updated unit and E2E tests, create a Pull Request (PR) from your branch. See the Pull Requests section below for more information.
+On completion of your work, double check the following:
+
+- All items in Acceptance Criteria are implemented
+- Unit and E2E tests are updated or extended to cover your changes
+- Accessibility features are in place (test with screen readers as needed)
+
+Then create a Pull Request. See the Pull Requests section below for more information.
 
 ## Branches
 
@@ -64,10 +71,10 @@ Pull requests move through a series of steps.
 
 1. Creation: you create a PR. See "Pull request creation" below.
 2. Review: another engineer reviews the PR. See "Pull request review" below.
-3. Approval: when the reviewer is satisfied, they'll approve your PR and change the pipeline to "With QA (pre-develop)" so QA knows to begin testing.
-4. QA: a QA engineer tests your branch and updates TestRail. You'll need to fix any issues they find. On approval, they'll comment in the ticket and change the pipeline to "Ready to merge to develop".
-5. Merge: hit the "Merge pull request" button to merge your PR into the develop branch. On the ticket, change the pipeline to "With QA (develop)" and select the current release under "Releases".
-6. Post-merge: QA will complete final testing and close the ticket.
+3. Approval: when the reviewer is satisfied, they approve your PR and change the pipeline to "With QA (pre-develop)" so QA knows to begin testing.
+4. QA: a QA engineer tests your branch and updates TestRail. You'll need to fix any issues they find. On approval, QA comments in the ticket and changes the pipeline to "Ready to merge to develop".
+5. Merge: hit the "Merge pull request" button to merge your branch into the develop branch. On the ticket, change the pipeline to "With QA (develop)" and select the current release under "Releases".
+6. Post-merge: QA completes final testing and closes the ticket.
 
 ### Pull request creation
 
@@ -92,12 +99,11 @@ At least one review is required on every PR.
 
 As a PR creator:
 - Try to keep PRs under 400 lines. The larger a PR, the more difficult it is to review thoroughly.
-- If a reviewer asks questions, add a comment under each with your answer. If they request changes, implement them or add a comment explaining why you disagree.
-- If you've created a PR and no one's reviewed it for 24 hours, request a review on Slack.
+- If a reviewer asks questions, add a comment under each with your answer. Implement any requested changes, or add a comment explaining why you disagree.
+- If no one reviews your PR within 24 hours, request a review on Slack.
 
 As a PR reviewer:
 - Provide constructive feedback in a calm, civil manner. We're all working together to make the app better.
 - Be as precise and clear as possible in your comments. Explain why you're requesting each change.
 - If you find some code confusing or hard to understand, mention it. Other engineers will probably feel the same way.
 - Spread positivity by calling out clean, maintainable code, good documentation, etc.
-
