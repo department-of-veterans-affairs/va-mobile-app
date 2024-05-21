@@ -105,9 +105,15 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
       </TextView>
       <TextView
         variant="MobileBody"
-        paragraphSpacing={subType === AppointmentDetailsSubTypeConstants.Pending ? true : undefined}
+        paragraphSpacing={
+          subType === AppointmentDetailsSubTypeConstants.Pending ||
+          subType === AppointmentDetailsSubTypeConstants.PastPending
+            ? true
+            : undefined
+        }
         mb={
-          subType === AppointmentDetailsSubTypeConstants.Pending || AppointmentDetailsSubTypeConstants.PastPending
+          subType === AppointmentDetailsSubTypeConstants.Pending ||
+          subType === AppointmentDetailsSubTypeConstants.PastPending
             ? undefined
             : theme.dimensions.standardMarginBetween
         }
