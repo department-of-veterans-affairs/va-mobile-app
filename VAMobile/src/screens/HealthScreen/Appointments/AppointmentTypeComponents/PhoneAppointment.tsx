@@ -11,6 +11,7 @@ import {
   AppointmentCancelReschedule,
   AppointmentDateAndTime,
   AppointmentDetailsModality,
+  AppointmentLocation,
   AppointmentPersonalContactInfo,
   AppointmentPreferredModality,
   AppointmentProvider,
@@ -42,6 +43,7 @@ function PhoneAppointment({ appointmentID, attributes, subType, goBack, cancelAp
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
         <AppointmentPreferredModality subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
+        <AppointmentLocation attributes={attributes} subType={subType} type={type} />
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
