@@ -32,7 +32,7 @@ function PhoneAppointment({ appointmentID, attributes, subType, goBack, cancelAp
   return (
     <Box>
       <TextArea>
-        {/* <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
+        <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
         <AppointmentCalendarButton
           appointmentID={appointmentID}
@@ -53,7 +53,7 @@ function PhoneAppointment({ appointmentID, attributes, subType, goBack, cancelAp
           type={type}
           goBack={goBack}
           cancelAppointment={cancelAppointment}
-        /> */}
+        />
       </TextArea>
     </Box>
   )
