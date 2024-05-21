@@ -25,7 +25,7 @@ All engineering work requires a ticket. The ticket must satisfy the requirements
 - Move the ticket to In Progress
 - Create a branch as described below.
 
-Then you can begin work.  Keep stakeholders up to date as you work by commenting on the ticket with any important details or questions. This will also preserve information so everyone can reference it in the future.
+Then you can begin work. Keep stakeholders up to date by commenting on the ticket with any important details or questions. This will also preserve information so everyone can reference it in the future.
 
 On completion of your work, double check the following:
 
@@ -98,7 +98,7 @@ If you have code that's not complete but you want others to take a look, conside
 At least one review is required on every PR.
 
 As a PR creator:
-- Try to keep PRs under 400 lines. The larger a PR, the more difficult it is to review thoroughly.
+- Try to keep PRs under 400 lines. The larger the PR, the more difficult it is to review thoroughly.
 - If a reviewer asks questions, add a comment under each with your answer. Implement any requested changes, or add a comment explaining why you disagree.
 - If no one reviews your PR within 24 hours, request a review on Slack.
 
