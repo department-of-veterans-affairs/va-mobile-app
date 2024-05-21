@@ -249,10 +249,7 @@ function AppointmentCancelReschedule({
               <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
-              <TextView
-                variant="MobileBody"
-                mb={theme.dimensions.condensedMarginBetween}
-                testID="upcomingApptCancellationTestID">
+              <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
                 {cancelId
                   ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
                   : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
