@@ -59,7 +59,7 @@ context('ViewMessageScreen', () => {
           messageId: 3,
           category: CategoryTypeFields.other,
           subject: '',
-          body: 'Last accordion collapsible should be open, so the body text of this message should display',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
           hasAttachments: false,
           attachment: false,
           sentDate: '3',
@@ -105,7 +105,7 @@ context('ViewMessageScreen', () => {
         messageId: 3,
         category: CategoryTypeFields.other,
         subject: '',
-        body: 'Last accordion collapsible should be open, so the body text of this message should display',
+        body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
         hasAttachments: false,
         attachment: false,
         sentDate: '3',
@@ -238,6 +238,7 @@ context('ViewMessageScreen', () => {
         .mockResolvedValue(listOfFolders)
       initializeTestInstance()
       expect(screen.getByText('Loading your message...')).toBeTruthy()
+      await waitFor(() => expect(screen.queryByRole('link', { name: '1-800-698-2411.Thank' })).toBeFalsy())
       await waitFor(() => expect(screen.getAllByRole('tab').length).toBe(2))
       await waitFor(() => expect(screen.getByText('mock sender 1')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('mock sender 2')).toBeTruthy())
