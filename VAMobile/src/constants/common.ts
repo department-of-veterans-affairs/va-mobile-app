@@ -54,7 +54,7 @@ export const MAIL_TO_REGEX_EXP = new RegExp(
 )
 
 export const PHONE_REGEX_EXP = new RegExp(
-  /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(\*|x)(\d+))?,?.?\s*$/,
+  /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
 )
 export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 
