@@ -55,7 +55,7 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
           {!!bestTimeToCall?.length && (
             <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
               {t('appointments.bestTimeToCall')}
-              <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
+              <TextView variant="MobileBody">{bestTimeToCall?.join(', ')}</TextView>
             </TextView>
           )}
         </Box>
