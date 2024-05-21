@@ -154,6 +154,7 @@ function AppointmentCancelReschedule({
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.Phone:
       switch (subType) {
         case AppointmentDetailsSubTypeConstants.PastPending:
           return <></>
