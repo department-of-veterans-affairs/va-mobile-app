@@ -17,12 +17,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
   const {
-    isFetched: useServiceHistoryFetched,
+    isLoading: loadingServiceHistory,
     error: serviceHistoryError,
     refetch: refetchServiceHistory,
   } = useServiceHistory()
@@ -41,9 +40,8 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     }
   }
 
-  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
-  const errorCheck =
-    useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError || serviceHistoryError
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
+  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || serviceHistoryError
 
   return (
     <ChildTemplate
