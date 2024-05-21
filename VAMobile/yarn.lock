@@ -1404,10 +1404,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@department-of-veterans-affairs/eslint-config-mobile@0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.14.0.tgz#555e63b3f1ef6563dcfbd975cf310ae5de07a2cf"
-  integrity sha512-iksdBwBWDeefSuTlDTsFr+Ou08cxEoNiWH/Mz1SB3jVeyZ3TdeznGoMG8jbGnf/DGXWXYWsvjvT0Rvu0HDkETA==
+"@department-of-veterans-affairs/eslint-config-mobile@0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.15.0.tgz#f86b29f5ef8bad6c8a36cea8340e5cfa18ff93a1"
+  integrity sha512-sEFu9Akkommf9y7aDWXjvWfwDfY50cqjMBTAIaYctixGonUX0wKzk2yEhgGzlwF3Feo/zkyLhLBi1VixrhT3xg==
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
@@ -2530,10 +2530,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@reduxjs/toolkit@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.4.tgz#d9c25c2811d5aa92ff18f9483fe2223b0dbd33d5"
-  integrity sha512-EoIC9iC2V/DLRBVMXRHrO/oM3QBT7RuJNeBRx8Cpnz/NHINeZBEqgI8YOxAYUjLp+KYxGgc4Wd6KoAKsaUBGhg==
+"@reduxjs/toolkit@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.5.tgz#c0d2d8482ef80722bebe015ff05b06c34bfb6e0d"
+  integrity sha512-aeFA/s5NCG7NoJe/MhmwREJxRkDs0ZaSqt0MxhWUrwCf1UQXpwR87RROJEql0uAkLI6U7snBOYOcKw83ew3FPg==
   dependencies:
     immer "^10.0.3"
     redux "^5.0.1"
@@ -9086,10 +9086,10 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-devtools-core@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-5.0.0.tgz#50b04a4dbfa62badbe4d86529e9478c396988b31"
-  integrity sha512-SAAMLacNDfFjMJjmbXURNWtrTyARi9xTqGkY48Btw5cIWlr1wgxfWYZKxoUZav1qqmhbpgTzSmmF+cpMHGHY3A==
+react-devtools-core@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-5.2.0.tgz#072ecd2d84d3653817cc11e4b16f60a3c2b705f9"
+  integrity sha512-vZK+/gvxxsieAoAyYaiRIVFxlajb7KXhgBDV7OsoMzaAE+IqGpoxusBjIgq5ibqA2IloKu0p9n7tE68z1xs18A==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
@@ -9102,16 +9102,16 @@ react-devtools-core@^4.27.7:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-devtools@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-5.0.0.tgz#c30da7bc23262dfa6fb97153cfee774cc8075fcb"
-  integrity sha512-AN24OgEHaS06cbVYxTa/DH1B86TlKwIO483WIJ06jYfUL0QCv3oyX+FpP5mzAI4abcBNrtOORKsRsJ0JnhrEsg==
+react-devtools@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-5.2.0.tgz#023dab96004303a6c523eb15ebe4a55bfb5011be"
+  integrity sha512-QdVc0OYS8wh19x0J6ZRDHivuTMnoN+i4MziDiRLk5LID3hkraPR3157MybVdYgYVsKg86PCVjTHLZVUyB13ztg==
   dependencies:
     cross-spawn "^5.0.1"
     electron "^23.1.2"
     ip "^1.1.4"
     minimist "^1.2.3"
-    react-devtools-core "5.0.0"
+    react-devtools-core "5.2.0"
     update-notifier "^2.1.0"
 
 react-freeze@^1.0.0:
