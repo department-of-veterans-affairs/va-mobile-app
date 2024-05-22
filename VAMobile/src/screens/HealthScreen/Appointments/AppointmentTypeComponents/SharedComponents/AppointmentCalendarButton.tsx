@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AppointmentAttributes, AppointmentLocation, UserContactInformation } from 'api/types'
-
 import { Box, LinkWithAnalytics } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
