@@ -47,7 +47,7 @@ jobs:
           echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
           if [ "$resp" == '' ]; then
             if [[ "${{ inputs.testRail_name }}" == "" ]]; then
-              if [[ ${{ inputs.test_specific_OS_needed == true}}]]
+              if [[ ${{ inputs.test_specific_OS_needed}} == true]]
                 OS_name = "${{inputs.test_OS_name}}: "
               else
                 OS_name = ''
