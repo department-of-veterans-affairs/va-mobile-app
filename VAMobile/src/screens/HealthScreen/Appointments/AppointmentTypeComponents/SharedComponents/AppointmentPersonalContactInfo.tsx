@@ -48,7 +48,7 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
                   ? theme.dimensions.condensedMarginBetween
                   : theme.dimensions.standardMarginBetween
               }>
-              {`${t('phoneNumber')}: `}
+              {`${t('appointmentList.phoneOnly')}: `}
               <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
             </TextView>
           )}
