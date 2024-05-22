@@ -27,6 +27,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.InPersonVA:
       appointmentHeaderType = t('appointments.inPersonVA.upcomingTitle')
       break
+    case AppointmentDetailsTypeConstants.VideoVA:
+      appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
+      break
     default:
       appointmentHeaderType = ''
   }
@@ -85,6 +88,8 @@ const supportingModalityBody = (
           return t('appointments.inPersonVA.upcomingBody', {
             facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
           })
+        case AppointmentDetailsTypeConstants.VideoVA:
+          return t('appointments.videoVA.upcomingBody')
         default:
           return ''
       }
@@ -96,11 +101,10 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
   const theme = useTheme()
   const heading = modalityHeader(subType, type, t)
   const body = supportingModalityBody(attributes, subType, type, t)
-  const apptBodyA11yLabel = a11yLabelVA(body || '')
 
   return (
     <Box>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
+      <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={a11yLabelVA(heading || '')}>
         {heading}
       </TextView>
       <TextView
@@ -117,7 +121,7 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
             ? undefined
             : theme.dimensions.standardMarginBetween
         }
-        accessibilityLabel={apptBodyA11yLabel}>
+        accessibilityLabel={a11yLabelVA(body || '')}>
         {body}
       </TextView>
     </Box>

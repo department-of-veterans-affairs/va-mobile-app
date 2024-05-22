@@ -39,6 +39,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
     default:
       switch (type) {
         case AppointmentDetailsTypeConstants.InPersonVA:
+        case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.location.title')
         default:
           undefined
@@ -147,6 +148,7 @@ const getClinicInfo = (
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.VideoVA:
       return (
         <Box>
           <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>

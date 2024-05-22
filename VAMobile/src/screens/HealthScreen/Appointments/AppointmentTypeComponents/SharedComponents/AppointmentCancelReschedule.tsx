@@ -154,6 +154,7 @@ function AppointmentCancelReschedule({
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.VideoVA:
       switch (subType) {
         case AppointmentDetailsSubTypeConstants.PastPending:
           return <></>
@@ -250,7 +251,8 @@ function AppointmentCancelReschedule({
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
-                {cancelId
+                {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
                   ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
                   : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
               </TextView>
@@ -266,6 +268,8 @@ function AppointmentCancelReschedule({
                 />
               )}
               {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA ||
+                  type === AppointmentDetailsTypeConstants.Phone) &&
                 cancelButton(
                   false,
                   appointmentID,
