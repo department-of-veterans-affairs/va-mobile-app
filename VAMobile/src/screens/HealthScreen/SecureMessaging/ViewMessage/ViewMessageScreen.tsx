@@ -185,7 +185,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           let inboxUnreadCount = foldersData.inboxUnreadCount
           const newFolders = foldersData.data.map((folder) => {
             if (folder.attributes.name === FolderNameTypeConstants.inbox) {
-              folder.attributes.unreadCount = folder.attributes.unreadCount - 1
+              folder.attributes.unreadCount = folder.attributes.unreadCount > 0 ? folder.attributes.unreadCount - 1 : 0
               inboxUnreadCount = folder.attributes.unreadCount
             }
             return folder
