@@ -25,7 +25,7 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
         <Box>
           {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
             <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('appointments.pending.yourContactDetails')}
+              {t('appointments.pending.yourContactInfo')}
             </TextView>
           )}
           {!!patientEmail && (
