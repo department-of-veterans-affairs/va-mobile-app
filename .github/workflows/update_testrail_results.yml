@@ -47,10 +47,10 @@ jobs:
           echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
           if [ "$resp" == '' ]; then
             if [[ "${{ inputs.testRail_name }}" == "" ]]; then
-              if [[ ${{ inputs.test_specific_OS_needed}} == true ]]
-                OS_name = "${{inputs.test_OS_name}}: "
+              if [[ ${{ inputs.test_specific_OS_needed}} == true ]]; then
+                OS_name="${{inputs.test_OS_name}}: "
               else
-                OS_name = ''
+                OS_name=''
               fi
               resp=$(curl -X POST -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
