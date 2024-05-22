@@ -150,24 +150,25 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
-      # - name: Run e2e tests for Android
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     working-directory: VAMobile
-      #     api-level: 28
-      #     profile: pixel_6_pro
-      #     force-avd-creation: false
-      #     disable-animations: true
-      #     arch: x86_64
-      #     avd-name: Pixel_4_XL_API_28
-      #     script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+      - name: Run e2e tests for Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          #script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
 
-      # - name: Upload e2e-junit
-      #   if: failure() || success()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{matrix.testsuite}}-e2e-junit
-      #     path: VAMobile/e2e/test_reports/e2e-junit.xml
+      - name: Upload e2e-junit
+        if: failure() || success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{matrix.testsuite}}-e2e-junit
+          path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
         if: failure()
