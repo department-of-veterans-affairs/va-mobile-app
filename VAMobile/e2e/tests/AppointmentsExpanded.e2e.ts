@@ -354,13 +354,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await checkUpcomingApptDetails('VA', 'Confirmed', pastAppointment)
   })
 
-  it(pastAppointmentString + 'verify confirmed VA appt - no provider/typeOfCare/address/number', async () => {
-    await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
-    await expect(element(by.text('Type of care not noted'))).toExist()
-    await expect(element(by.text('Provider not noted'))).toExist()
-    await element(by.text('Appointments')).tap()
-  })
-
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
     if (device.getPlatform() === 'ios') {
       await resetInAppReview()
@@ -402,13 +395,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await expect(element(by.id('CallVATestID')).atIndex(1)).toExist()
     await expect(element(by.id('CallTTYTestID')).atIndex(1)).toExist()
     await expect(element(by.text('Go to VA.gov to schedule'))).toExist()
-    await element(by.text('Appointments')).tap()
-  })
-
-  it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await scrollToThenTap('At VA Palo Alto Health Care System', pastAppointmentString)
-    await expect(element(by.text('Type of care not noted'))).toExist()
-    await expect(element(by.text('Provider not noted'))).toExist()
     await element(by.text('Appointments')).tap()
   })
 

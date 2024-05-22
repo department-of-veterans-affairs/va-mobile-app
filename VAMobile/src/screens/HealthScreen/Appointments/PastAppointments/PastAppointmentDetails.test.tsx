@@ -47,15 +47,6 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
     expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Type of care not noted' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Provider' })).toBeTruthy()
-    expect(screen.getByText('Provider not noted')).toBeTruthy()
-    expect(screen.getAllByRole('header', { name: 'VA Long Beach Healthcare System' })).toBeTruthy()
-    expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
-    expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
-    expect(screen.queryByText('Get directions')).toBeFalsy()
-    expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
-    expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {

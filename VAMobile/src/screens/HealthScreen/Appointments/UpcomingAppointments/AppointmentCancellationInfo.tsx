@@ -126,7 +126,7 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
 
   const onCancelAppointment = () => {
     logAnalyticsEvent(
-      Events.vama_apt_cancel_clicks(
+      Events.vama_apt_cancel_click(
         appointment?.id || '',
         getAppointmentAnalyticsStatus(attributes),
         appointmentType.toString(),
@@ -137,7 +137,7 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
 
     const onPress = () => {
       logAnalyticsEvent(
-        Events.vama_apt_cancel_clicks(
+        Events.vama_apt_cancel_click(
           appointment?.id || '',
           getAppointmentAnalyticsStatus(attributes),
           appointmentType.toString(),

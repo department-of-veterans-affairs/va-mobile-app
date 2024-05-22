@@ -463,3 +463,60 @@ export const isAPendingAppointment = (attributes: AppointmentAttributes): boolea
 
   return !!(isPending && validPendingStatus)
 }
+
+export type AppointmentDetailsScreenType =
+  | 'ClaimExam'
+  | 'CommunityCare'
+  | 'CompensationPension'
+  | 'InPersonVA'
+  | 'Phone'
+  | 'VideoVA'
+  | 'VideoAtlas'
+  | 'VideoHome'
+  | 'VideoGFE'
+
+export const AppointmentDetailsTypeConstants: {
+  ClaimExam: AppointmentDetailsScreenType
+  CommunityCare: AppointmentDetailsScreenType
+  CompensationPension: AppointmentDetailsScreenType
+  InPersonVA: AppointmentDetailsScreenType
+  Phone: AppointmentDetailsScreenType
+  VideoVA: AppointmentDetailsScreenType
+  VideoAtlas: AppointmentDetailsScreenType
+  VideoHome: AppointmentDetailsScreenType
+  VideoGFE: AppointmentDetailsScreenType
+} = {
+  ClaimExam: 'ClaimExam',
+  CommunityCare: 'CommunityCare',
+  CompensationPension: 'CompensationPension',
+  InPersonVA: 'InPersonVA',
+  Phone: 'Phone',
+  VideoVA: 'VideoVA',
+  VideoAtlas: 'VideoAtlas',
+  VideoHome: 'VideoHome',
+  VideoGFE: 'VideoGFE',
+}
+
+export type AppointmentDetailsSubType =
+  | 'Pending'
+  | 'Past'
+  | 'Upcoming'
+  | 'Canceled'
+  | 'CanceledAndPending'
+  | 'PastPending'
+
+export const AppointmentDetailsSubTypeConstants: {
+  Pending: AppointmentDetailsSubType
+  Past: AppointmentDetailsSubType
+  Upcoming: AppointmentDetailsSubType
+  Canceled: AppointmentDetailsSubType
+  CanceledAndPending: AppointmentDetailsSubType
+  PastPending: AppointmentDetailsSubType
+} = {
+  Pending: 'Pending',
+  Past: 'Past',
+  Upcoming: 'Upcoming',
+  Canceled: 'Canceled',
+  CanceledAndPending: 'CanceledAndPending',
+  PastPending: 'PastPending',
+}

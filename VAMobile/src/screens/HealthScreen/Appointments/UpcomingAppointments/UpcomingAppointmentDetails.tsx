@@ -31,7 +31,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
+import {
+  AppointmentDetailsSubTypeConstants,
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  isAPendingAppointment,
+} from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -54,6 +59,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
+import { InPersonVAAppointment } from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -356,6 +362,17 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
 
   const hasError = getApptError || appointmentNotFound
   const isLoading = loadingAppointmentCancellation || loadingAppointments
+  const isInPersonVAAppointment =
+    appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+
+  const subType =
+    isAppointmentCanceled && pendingAppointment
+      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+      : isAppointmentCanceled
+        ? AppointmentDetailsSubTypeConstants.Canceled
+        : pendingAppointment
+          ? AppointmentDetailsSubTypeConstants.Pending
+          : AppointmentDetailsSubTypeConstants.Upcoming
 
   return (
     <FeatureLandingTemplate
@@ -376,6 +393,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
           error={getApptError}
           onTryAgain={refetchAppointments}
+        />
+      ) : isInPersonVAAppointment ? (
+        <InPersonVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>

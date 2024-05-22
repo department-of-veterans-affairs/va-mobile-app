@@ -14,6 +14,7 @@ import { useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
+  AppointmentDetailsSubTypeConstants,
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
   isAPendingAppointment,
@@ -31,6 +32,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
+import { InPersonVAAppointment } from '../AppointmentTypeComponents'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
@@ -120,27 +122,48 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
     )
   }
 
+  const isInPersonVAAppointment =
+    appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+
+  const subType =
+    appointmentIsCanceled && pendingAppointment
+      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+      : appointmentIsCanceled
+        ? AppointmentDetailsSubTypeConstants.Canceled
+        : pendingAppointment
+          ? AppointmentDetailsSubTypeConstants.PastPending
+          : AppointmentDetailsSubTypeConstants.Past
+
   return (
     <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <AppointmentAlert attributes={attributes} />
-        <TextArea>
-          <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-            <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
-          </Box>
-          <TypeOfCare attributes={attributes} />
-          <ProviderName attributes={attributes} />
-          <ClinicNameAndPhysicalLocation attributes={attributes} />
-          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
+      {isInPersonVAAppointment ? (
+        <InPersonVAAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AppointmentAlert attributes={attributes} />
+          <TextArea>
+            <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
+              <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
+            </Box>
+            <TypeOfCare attributes={attributes} />
+            <ProviderName attributes={attributes} />
+            <ClinicNameAndPhysicalLocation attributes={attributes} />
+            <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
-          <PreferredDateAndTime attributes={attributes} />
-          <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} />
-          <ContactInformation attributes={attributes} />
-        </TextArea>
+            <PreferredDateAndTime attributes={attributes} />
+            <PreferredAppointmentType attributes={attributes} />
+            <AppointmentReason attributes={attributes} />
+            <ContactInformation attributes={attributes} />
+          </TextArea>
 
-        {renderScheduleAnotherAppointment()}
-      </Box>
+          {renderScheduleAnotherAppointment()}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }
