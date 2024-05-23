@@ -65,6 +65,8 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
         return t('upcomingAppointments.vaAppointment')
+      case AppointmentDetailsTypeConstants.Phone:
+        return t('appointments.phone.upcomingTitle')
       case AppointmentDetailsTypeConstants.VideoVA:
         return t('upcomingAppointments.connectOnsite')
       default:

@@ -25,7 +25,7 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
         <Box>
           {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
             <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('appointments.pending.yourContactDetails')}
+              {t('appointments.pending.yourContactInfo')}
             </TextView>
           )}
           {!!patientEmail && (
@@ -48,14 +48,14 @@ function AppointmentPersonalContactInfo({ attributes, subType }: AppointmentPers
                   ? theme.dimensions.condensedMarginBetween
                   : theme.dimensions.standardMarginBetween
               }>
-              {`${t('phoneNumber')}: `}
+              {`${t('appointmentList.phoneOnly')}: `}
               <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
             </TextView>
           )}
           {!!bestTimeToCall?.length && (
             <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
               {t('appointments.bestTimeToCall')}
-              <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
+              <TextView variant="MobileBody">{bestTimeToCall?.join(', ')}</TextView>
             </TextView>
           )}
         </Box>
