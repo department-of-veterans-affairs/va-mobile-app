@@ -38,7 +38,7 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
   const confirmAlert = useDestructiveActionSheet()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly, isPending } =
+  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
     attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
