@@ -84,7 +84,3 @@ jobs:
                  -H "Content-Type: application/json" \
                  -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
                  https://slack.com/api/chat.postMessage
-
-                 //
-                 See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.
-  
