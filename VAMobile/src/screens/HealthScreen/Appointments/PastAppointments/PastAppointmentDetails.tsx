@@ -32,7 +32,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { InPersonVAAppointment } from '../AppointmentTypeComponents'
+import { InPersonVAAppointment, PhoneAppointment } from '../AppointmentTypeComponents'
 import ClaimExamAppointment from '../AppointmentTypeComponents/ClaimExamAppointment'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
@@ -125,6 +125,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
 
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+  const isPhoneAppointment = phoneOnly
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
 
   const subType =
@@ -138,7 +139,14 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
 
   return (
     <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-      {isInPersonVAAppointment ? (
+      {isPhoneAppointment ? (
+        <PhoneAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isInPersonVAAppointment ? (
         <InPersonVAAppointment
           appointmentID={appointment.id}
           attributes={attributes}

@@ -27,6 +27,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.InPersonVA:
       appointmentHeaderType = t('appointments.inPersonVA.upcomingTitle')
       break
+    case AppointmentDetailsTypeConstants.Phone:
+      appointmentHeaderType = t('appointments.phone.upcomingTitle')
+      break
     case AppointmentDetailsTypeConstants.ClaimExam:
       appointmentHeaderType = t('appointments.claimExam')
       break
@@ -88,6 +91,8 @@ const supportingModalityBody = (
           return t('appointments.inPersonVA.upcomingBody', {
             facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
           })
+        case AppointmentDetailsTypeConstants.Phone:
+          return t('appointments.phone.upcomingBody')
         case AppointmentDetailsTypeConstants.ClaimExam:
           return t('appointments.claimExam.explanationText')
         default:
