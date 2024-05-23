@@ -45,9 +45,13 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
         return ''
       }
     case AppointmentDetailsSubTypeConstants.Canceled:
-      return t('appointments.canceledTitle', { appointmentType: appointmentHeaderType.toLowerCase() })
+      return t('appointments.canceledTitle', {
+        appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
+      })
     case AppointmentDetailsSubTypeConstants.Past:
-      return t('appointments.pastTitle', { appointmentType: appointmentHeaderType.toLowerCase() })
+      return t('appointments.pastTitle', {
+        appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
+      })
     case AppointmentDetailsSubTypeConstants.Pending:
     case AppointmentDetailsSubTypeConstants.PastPending:
       if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
