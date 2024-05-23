@@ -53,7 +53,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const waygate = getWaygateToggles().WG_UploadFile
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (filesList?.length === 0 || filesUploadedSuccess || !waygate.enabled) {
+    if (filesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
     e.preventDefault()

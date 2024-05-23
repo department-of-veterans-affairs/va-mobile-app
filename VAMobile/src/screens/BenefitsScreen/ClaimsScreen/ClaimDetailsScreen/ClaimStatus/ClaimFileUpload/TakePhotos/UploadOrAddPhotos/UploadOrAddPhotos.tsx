@@ -77,7 +77,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (imagesList?.length === 0 || filesUploadedSuccess || !waygate.enabled) {
+    if (imagesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
     e.preventDefault()
