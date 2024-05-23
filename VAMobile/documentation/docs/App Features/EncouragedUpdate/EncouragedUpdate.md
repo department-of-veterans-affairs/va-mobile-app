@@ -12,7 +12,7 @@ This is potentially a precursor to forced upgrading in the future after so many 
 * Use Case 2: The version on the device is older than what is in the store, and the veteran decided to skip the encourage update for this version so it does not display the alert
 * Use Case 3: The version on the device is the same version in the store or newer (updates from the app store roll out to devices periodically, so it is possible that the app was updated but the store's API is returning an older version) so it displays the [What's New](../WhatsNew/WhatsNew.md) alert if applicable 
 
-## How to force this to apper in Demo Mode
+## How to force this to appear in Demo Mode
 Step 1: Go to the developer screen in the settings part of the app and scroll to the bottom where it has Encouraged Update and What's New versions
 Step 2: Set the Encouraged Update version override to a version that is lower than the store version
 Step 3: logout of the app and log back into demo mode
