@@ -39,6 +39,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const getLocation = (): string => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
+      case AppointmentDetailsTypeConstants.ClaimExam:
         if (isIOS() && lat && long) {
           return name || ''
         } else if (address?.street && address?.city && address?.state && address?.zipCode) {
