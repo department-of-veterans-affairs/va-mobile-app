@@ -201,6 +201,7 @@ function AppointmentCancelReschedule({
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Canceled:
+          const rescheduleText = isClaimExam ? claimExamRescheduleText : t('appointments.reschedule.body')
           return (
             <Box>
               <Box {...boxProps} />
@@ -210,8 +211,8 @@ function AppointmentCancelReschedule({
               <TextView
                 variant="MobileBody"
                 mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
-                {isClaimExam ? claimExamRescheduleText : t('appointments.reschedule.body')}
+                accessibilityLabel={a11yLabelVA(rescheduleText)}>
+                {rescheduleText}
               </TextView>
               {!isClaimExam && (
                 <>
