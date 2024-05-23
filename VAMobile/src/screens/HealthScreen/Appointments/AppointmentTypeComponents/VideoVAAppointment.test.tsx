@@ -484,7 +484,7 @@ context('VideoVAAppointment', () => {
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Your contact details' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
       expect(screen.getByText('Email: test@test.com')).toBeTruthy()
       expect(screen.getByText('Phone Number: (666) 666-6666')).toBeTruthy()
       expect(screen.getByText('Best time to call: Morning')).toBeTruthy()
@@ -601,7 +601,7 @@ context('VideoVAAppointment', () => {
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Your contact details' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
       expect(screen.getByText('Email: test@test.com')).toBeTruthy()
       expect(screen.getByText('Phone Number: (666) 666-6666')).toBeTruthy()
       expect(screen.getByText('Best time to call: Morning')).toBeTruthy()
