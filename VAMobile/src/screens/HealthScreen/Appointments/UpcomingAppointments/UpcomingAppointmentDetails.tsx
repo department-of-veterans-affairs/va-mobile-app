@@ -60,6 +60,7 @@ import {
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import { InPersonVAAppointment } from '../AppointmentTypeComponents'
+import ClaimExamAppointment from '../AppointmentTypeComponents/ClaimExamAppointment'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -364,6 +365,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isLoading = loadingAppointmentCancellation || loadingAppointments
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
 
   const subType =
     isAppointmentCanceled && pendingAppointment
@@ -396,6 +398,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isInPersonVAAppointment ? (
         <InPersonVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}

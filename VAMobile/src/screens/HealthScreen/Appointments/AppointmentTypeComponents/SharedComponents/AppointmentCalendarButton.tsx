@@ -1,7 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentLocation } from 'api/types'
+import { useQueryClient } from '@tanstack/react-query'
+
+import { contactInformationKeys } from 'api/contactInformation'
+import { AppointmentAttributes, AppointmentLocation, UserContactInformation } from 'api/types'
 import { Box, LinkWithAnalytics } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -31,14 +34,29 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const theme = useTheme()
   const { location, minutesDuration, startDateUtc } = attributes || ({} as AppointmentAttributes)
   const { address, lat, long, name } = location || ({} as AppointmentLocation)
+  const queryClient = useQueryClient()
 
   const getLocation = (): string => {
-    if (isIOS() && lat && long) {
-      return name || ''
-    } else if (address?.street && address?.city && address?.state && address?.zipCode) {
-      return `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
-    } else {
-      return name || ''
+    switch (type) {
+      case AppointmentDetailsTypeConstants.InPersonVA:
+        if (isIOS() && lat && long) {
+          return name || ''
+        } else if (address?.street && address?.city && address?.state && address?.zipCode) {
+          return `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+        } else {
+          return name || ''
+        }
+      case AppointmentDetailsTypeConstants.Phone:
+        const userContactInfo = queryClient.getQueryData(
+          contactInformationKeys.contactInformation,
+        ) as UserContactInformation
+        if (userContactInfo.residentialAddress) {
+          return `${userContactInfo.residentialAddress.addressLine1} ${userContactInfo.residentialAddress.city}, ${userContactInfo.residentialAddress.province || userContactInfo.residentialAddress.stateCode} ${userContactInfo.residentialAddress.internationalPostalCode || userContactInfo.residentialAddress.zipCode}`
+        } else {
+          return ''
+        }
+      default:
+        return ''
     }
   }
 

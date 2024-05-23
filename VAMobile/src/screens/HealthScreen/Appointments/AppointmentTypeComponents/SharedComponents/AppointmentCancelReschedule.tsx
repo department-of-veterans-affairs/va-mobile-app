@@ -151,9 +151,14 @@ function AppointmentCancelReschedule({
     backgroundColor: 'main',
     mx: -theme.dimensions.gutter,
   }
+  const isClaimExam = type === AppointmentDetailsTypeConstants.ClaimExam
+  const claimExamRescheduleText = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
+    facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
+  })
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.ClaimExam:
       switch (subType) {
         case AppointmentDetailsSubTypeConstants.PastPending:
           return <></>
@@ -205,21 +210,25 @@ function AppointmentCancelReschedule({
                 variant="MobileBody"
                 mb={theme.dimensions.condensedMarginBetween}
                 accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
-                {t('appointments.reschedule.body')}
+                {isClaimExam ? claimExamRescheduleText : t('appointments.reschedule.body')}
               </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : undefined}
-              <LinkWithAnalytics
-                type="url"
-                url={LINK_URL_VA_SCHEDULING}
-                text={t('appointments.vaSchedule')}
-                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              />
+              {!isClaimExam && (
+                <>
+                  {location?.phone && location.phone.areaCode && location.phone.number ? (
+                    <ClickToCallPhoneNumber phone={location.phone} />
+                  ) : undefined}
+                  <LinkWithAnalytics
+                    type="url"
+                    url={LINK_URL_VA_SCHEDULING}
+                    text={t('appointments.vaSchedule')}
+                    a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+                  />
+                </>
+              )}
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Past:
-          return (
+          return isClaimExam ? null : (
             <Box>
               <Box {...boxProps} />
               <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
@@ -249,12 +258,15 @@ function AppointmentCancelReschedule({
               <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
-                {cancelId
+              <TextView variant="MobileBody" paragraphSpacing={!isClaimExam} testID="upcomingApptCancellationTestID">
+                {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
                   ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
-                  : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
+                  : type === AppointmentDetailsTypeConstants.ClaimExam
+                    ? claimExamRescheduleText
+                    : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
               </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
+              {isClaimExam ? undefined : location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
               ) : (
                 <LinkWithAnalytics
@@ -266,6 +278,8 @@ function AppointmentCancelReschedule({
                 />
               )}
               {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA ||
+                  type === AppointmentDetailsTypeConstants.Phone) &&
                 cancelButton(
                   false,
                   appointmentID,
