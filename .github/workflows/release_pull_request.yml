@@ -23,10 +23,6 @@ on:
         description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
-  push: 
-    branches: 
-      - 'chanel-7586-approve-command-failure-alert'      
-
 jobs:
   create_prs:
     runs-on: ubuntu-latest
