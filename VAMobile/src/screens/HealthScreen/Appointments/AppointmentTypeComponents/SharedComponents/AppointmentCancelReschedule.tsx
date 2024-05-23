@@ -80,6 +80,18 @@ const cancelButton = (
             ),
           )
         },
+        onError: () => {
+          showSnackBar(
+            pendingAppointment ? t('appointments.requestNotCanceled') : t('appointments.appointmentNotCanceled'),
+            dispatch,
+            () => {
+              cancelAppointment(cancelId, mutateOptions)
+            },
+            false,
+            true,
+            true,
+          )
+        },
       }
       cancelAppointment(cancelId, mutateOptions)
     }
