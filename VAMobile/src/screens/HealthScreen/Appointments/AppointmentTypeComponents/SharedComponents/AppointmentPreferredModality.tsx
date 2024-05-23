@@ -38,7 +38,7 @@ function AppointmentPreferredModality({ subType, type }: AppointmentPreferredMod
           modality = t('appointments.pending.officeVisit')
           break
         case AppointmentDetailsTypeConstants.Phone:
-          modality = t(' appointmentList.phoneOnly')
+          modality = t('appointmentList.phoneOnly')
           break
       }
       return (
