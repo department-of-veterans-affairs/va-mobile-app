@@ -46,8 +46,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const abortSignal = abortController.signal
   const {
     data: claim,
-    isLoading: loadingClaim,
-    isError: claimError,
+    isFetching: loadingClaim,
+    error: claimError,
+    refetch: refetchClaim,
   } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
@@ -129,10 +130,14 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       testID="ClaimDetailsScreen">
-      {claimError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
-      ) : loadingClaim ? (
+      {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
+      ) : claimError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}
+          error={claimError}
+          onTryAgain={refetchClaim}
+        />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.gutter}>

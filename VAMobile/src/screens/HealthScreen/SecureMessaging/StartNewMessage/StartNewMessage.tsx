@@ -99,14 +99,18 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
-    isError: recipientsError,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
   } = useMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
   const {
     data: signature,
     isFetched: signatureFetched,
-    isError: signatureError,
+    error: signatureError,
+    refetch: refetchSignature,
+    isFetching: refetchingSignature,
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
@@ -212,17 +216,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (recipientsError || signatureError) {
-    return (
-      <FullScreenSubtask
-        title={t('secureMessaging.startNewMessage')}
-        leftButtonText={t('cancel')}
-        scrollViewRef={scrollViewRef}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
   const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message, signature))
   const isFormValid = !!(
     to &&
@@ -230,33 +223,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     validateMessage(message, signature) &&
     (category !== CategoryTypeFields.other || subject)
   )
-
-  if (!hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : isDiscarded
-        ? t('secureMessaging.deleteDraft.loading')
-        : t('secureMessaging.formMessage.startNewMessage.loading')
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -472,28 +438,58 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const rightButtonProps = noProviderError
-    ? undefined
-    : {
-        rightButtonText: t('save'),
-        onRightButtonPress: () => {
-          setOnSaveDraftClicked(true)
-          setOnSendClicked(true)
-        },
-      }
+  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
+
+  const hasError = recipientsError || signatureError
+  const isLoading =
+    !hasLoadedRecipients ||
+    savingDraft ||
+    !signatureFetched ||
+    isDiscarded ||
+    sendingMessage ||
+    refetchingRecipients ||
+    refetchingSignature
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : isDiscarded
+      ? t('secureMessaging.deleteDraft.loading')
+      : sendingMessage
+        ? t('secureMessaging.formMessage.send.loading')
+        : t('secureMessaging.formMessage.startNewMessage.loading')
+
+  const rightButtonProps =
+    noProviderError || isLoading || hasError
+      ? undefined
+      : {
+          rightButtonText: t('save'),
+          onRightButtonPress: () => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          },
+          rightButtonTestID: 'startNewMessageSaveTestID',
+        }
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('secureMessaging.startNewMessage')}
+      title={isLoading || hasError ? '' : t('secureMessaging.startNewMessage')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}
+      showCrisisLineCta={!(isLoading || hasError)}
       testID="startNewMessageTestID"
-      rightButtonTestID="startNewMessageSaveTestID"
       leftButtonTestID="startNewMessageCancelTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || signatureError}
+          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      )}
     </FullScreenSubtask>
   )
 }

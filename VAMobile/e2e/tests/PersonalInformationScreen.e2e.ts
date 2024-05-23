@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -89,7 +89,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
     await device.launchApp({ newInstance: false })

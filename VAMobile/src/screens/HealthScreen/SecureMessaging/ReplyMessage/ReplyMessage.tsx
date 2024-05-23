@@ -80,7 +80,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const { messageID, attachmentFileToAdd } = route.params
+  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed } = route.params
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -130,9 +130,16 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       origin: FormHeaderTypeConstants.reply,
       replyToID: message.messageId,
       messageData: { body: messageReply, category },
-      isFormValid: true,
+      isFormValid,
     })
   }
+
+  useEffect(() => {
+    if (saveDraftConfirmFailed) {
+      setOnSaveDraftClicked(true)
+      setOnSendClicked(true)
+    }
+  }, [saveDraftConfirmFailed])
 
   useEffect(() => {
     if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
@@ -180,11 +187,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
    */
   useBeforeNavBackListener(navigation, (e) => {
-    if (validateMessage(messageReply, signature)) {
+    if (isFormBlank) {
+      navigation.goBack
+    } else {
       e.preventDefault()
       goToCancel()
-    } else {
-      navigation.goBack
     }
   })
 
@@ -196,32 +203,8 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  if (loadingMessage || savingDraft || !signatureFetched || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : isDiscarded
-        ? t('secureMessaging.deletingChanges.loading')
-        : t('secureMessaging.viewMessage.loading')
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={navigation.goBack}
-        scrollViewRef={scrollViewRef}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
+  const isFormBlank = !(attachmentsList.length || validateMessage(messageReply, signature))
+  const isFormValid = validateMessage(messageReply, signature)
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
@@ -394,23 +377,36 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     )
   }
 
+  const isLoading = loadingMessage || savingDraft || !signatureFetched || isDiscarded || sendingMessage
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : isDiscarded
+      ? t('secureMessaging.deletingChanges.loading')
+      : sendingMessage
+        ? t('secureMessaging.formMessage.send.loading')
+        : t('secureMessaging.viewMessage.loading')
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('reply')}
+      title={isLoading ? '' : t('reply')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={validateMessage(messageReply, signature) ? goToCancel : navigation.goBack}
-      rightButtonText={t('save')}
+      onLeftButtonPress={!isLoading && validateMessage(messageReply, signature) ? goToCancel : navigation.goBack}
+      rightButtonText={isLoading ? '' : t('save')}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       }}
-      showCrisisLineCta={true}
+      showCrisisLineCta={!isLoading}
       testID="replyPageTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box>{renderForm()}</Box>
-        <Box>{renderMessageThread()}</Box>
-      </Box>
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box>{renderForm()}</Box>
+          <Box>{renderMessageThread()}</Box>
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

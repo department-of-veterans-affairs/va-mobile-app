@@ -2,7 +2,7 @@
 
 ## Flipper
 
-We use Flipper to manage feature flags. Instructions for use and best practices can be found [here](https://depo-platform-documentation.scrollhelp.site/developer-docs/Feature-toggles.1859780873.html)
+We use Flipper to manage feature flags. [View instructions for use and best practices](https://depo-platform-documentation.scrollhelp.site/developer-docs/Feature-toggles.1859780873.html).
 
 ## Access
 

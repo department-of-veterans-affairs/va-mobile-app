@@ -39,8 +39,9 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
   const {
     data: vaccines,
-    isLoading: loading,
-    isError: vaccineError,
+    isFetching: loading,
+    error: vaccineError,
+    refetch: refetchVaccines,
   } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -89,52 +90,30 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     )
   }
 
-  if (vaccineError || vaccinesInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <LoadingComponent text={t('vaccines.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (vaccines?.data?.length === 0) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('vaVaccines')}
-        titleA11y={a11yLabelVA(t('vaVaccines'))}>
-        <NoVaccineRecords />
-      </FeatureLandingTemplate>
-    )
-  }
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={vaccineButtons} />
-      </Box>
-      {renderPagination()}
+      {loading ? (
+        <LoadingComponent text={t('vaccines.loading')} />
+      ) : vaccineError || vaccinesInDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
+          error={vaccineError}
+          onTryAgain={refetchVaccines}
+        />
+      ) : vaccines?.data?.length === 0 ? (
+        <NoVaccineRecords />
+      ) : (
+        <>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <DefaultList items={vaccineButtons} />
+          </Box>
+          {renderPagination()}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
