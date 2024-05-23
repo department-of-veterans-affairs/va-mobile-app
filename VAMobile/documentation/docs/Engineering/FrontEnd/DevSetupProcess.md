@@ -17,7 +17,7 @@ You can also consider [using our codespaces setup](https://github.com/features/c
 
 - You have been fully onboarding into the [VA Github organiztion](https://github.com/department-of-veterans-affairs).
 - An SSH key setup with github: [Connect With SSH](https://docs.github.com/en/enterprise-server@3.5/authentication/connecting-to-github-with-ssh/about-ssh).
-- You or your team has been approved to build and release a production feature into the VA Mobile App by a [VA Product Owner](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/Readme.md).
+- You or your team has been approved to build and release a production feature into the VA Mobile App by a [VA Product Owner](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app).
 - **If your feature is approved**, reach out to [Flagship support](https://dsva.slack.com/archives/C018V2JCWRJ) to get access to App Store Connect so you can build the iOS app locally.
 
 ### Software
