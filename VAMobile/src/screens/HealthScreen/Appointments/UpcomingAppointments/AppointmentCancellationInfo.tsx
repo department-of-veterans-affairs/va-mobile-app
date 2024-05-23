@@ -38,7 +38,7 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
   const confirmAlert = useDestructiveActionSheet()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
+  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly, isPending } =
     attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
@@ -158,6 +158,18 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
                 attributes.appointmentType.toString(),
                 getAppointmentAnalyticsDays(attributes),
               ),
+            )
+          },
+          onError: () => {
+            showSnackBar(
+              t('appointments.appointmentNotCanceled'),
+              dispatch,
+              () => {
+                cancelAppointment(cancelId, mutateOptions)
+              },
+              false,
+              true,
+              true,
             )
           },
         }
