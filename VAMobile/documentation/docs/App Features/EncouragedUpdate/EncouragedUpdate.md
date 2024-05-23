@@ -15,7 +15,7 @@ This is potentially a precursor to forced upgrading in the future after so many 
 ## How to force this to appear in Demo Mode
 Step 1: Go to the developer screen in the settings part of the app and scroll to the bottom where it has Encouraged Update and What's New versions
 Step 2: Set the Encouraged Update version override to a version that is lower than the store version
-Step 3: logout of the app and log back into demo mode
+Step 3: Logout of the app and log back into demo mode
 
 ## Screenshot
 
