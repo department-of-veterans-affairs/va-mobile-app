@@ -15,7 +15,7 @@ What's new displays to the veteran what is new in the version that they upgraded
 Step 1: Go to the developer screen in the settings part of the app and scroll to the bottom where it has Encouraged Update and What's New versions
 Step 2: Set the Encouraged Update version override to a version that is equal to or greater than the store version
 Step 3: Set the What's New version override to a version that is a valid version in the `common.json` file in the translations folder (Valid versions at the time of writing this are 2.0, 2.2, 2.3, 2.13, and 2.23)
-Step 4: logout of the app and log back into demo mode
+Step 4: Logout of the app and log back into demo mode
 
 ## Example Screenshot
 
