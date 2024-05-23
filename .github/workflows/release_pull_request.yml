@@ -73,7 +73,7 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           channel_name: va-mobile-build-alerts
-          message: 'The `approve_command.yml` for release: ${{inputs.version}}  workflow has failed. See: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+          message: 'The `/approve` command for release: ${{inputs.version}} has failed. See: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
         run: |
             curl -X POST \
                  -H "Authorization: Bearer $SLACK_API_TOKEN" \
