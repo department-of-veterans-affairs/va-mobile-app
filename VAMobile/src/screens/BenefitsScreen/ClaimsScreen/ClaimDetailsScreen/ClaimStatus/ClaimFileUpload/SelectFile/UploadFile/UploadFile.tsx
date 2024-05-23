@@ -25,6 +25,7 @@ import {
   useRouteNavigation,
   useTheme,
 } from 'utils/hooks'
+import { getWaygateToggles } from 'utils/waygateConfig'
 
 type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
@@ -49,8 +50,10 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     errorMsg: t('fileUpload.submitted.error'),
   }
 
+  const waygate = getWaygateToggles().WG_UploadFile
+
   useBeforeNavBackListener(navigation, (e) => {
-    if (filesList?.length === 0 || filesUploadedSuccess) {
+    if (filesList?.length === 0 || filesUploadedSuccess || !waygate.enabled) {
       return
     }
     e.preventDefault()
