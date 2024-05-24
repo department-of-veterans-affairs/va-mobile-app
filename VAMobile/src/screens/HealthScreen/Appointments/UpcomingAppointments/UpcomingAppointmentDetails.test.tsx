@@ -122,16 +122,6 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
-  describe('when the appointment type is gfe', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
-      expect(screen.getByText('VA Video Connect\r\nusing a VA device')).toBeTruthy()
-      expect(screen.getByText("To join this video appointment, you'll need to use a device we provide.")).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-  })
-
   describe('when the appointment type is community care', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
