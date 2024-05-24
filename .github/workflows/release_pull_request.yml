@@ -71,10 +71,12 @@ jobs:
           echo "::set-output name=dev::${{env.DEV_PR}}"
           echo "::set-output name=release::${{env.RELEASE_HASH}}"
           
-      - name: Notify slack
-        if: ${{ failure() }}
-        uses: ./.github/workflows/start_slack_thread.yml
-        #secrets: inherit
-        with:
-          channel_name: va-mobile-build-alerts
-          message: 'The `/approve` command for release: ${{inputs.version}} has failed. See: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+  start_slack_thread:
+    name: Start Slack thread
+    needs: create_prs
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'The `/approve` command for release: ${{inputs.version}} has failed. See: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+    
