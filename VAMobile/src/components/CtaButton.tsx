@@ -33,7 +33,6 @@ const CtaButton: FC<CtaButtonProps> = ({
   alignItems,
   justifyContent,
   accessibilityLabel,
-  accessibilityHint,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
