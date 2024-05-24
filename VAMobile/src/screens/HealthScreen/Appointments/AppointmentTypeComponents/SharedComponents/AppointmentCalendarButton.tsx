@@ -39,6 +39,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const getLocation = (): string => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
+      case AppointmentDetailsTypeConstants.VideoVA:
         if (isIOS() && lat && long) {
           return name || ''
         } else if (address?.street && address?.city && address?.state && address?.zipCode) {
@@ -66,13 +67,14 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('upcomingAppointments.vaAppointment')
       case AppointmentDetailsTypeConstants.Phone:
         return t('appointments.phone.upcomingTitle')
+      case AppointmentDetailsTypeConstants.VideoVA:
+        return t('upcomingAppointments.connectOnsite')
       default:
         return ''
     }
     //[AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
-    //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
   }
 

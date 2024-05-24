@@ -36,6 +36,7 @@ function AppointmentProvider({ attributes, subType, type }: AppointmentProviderP
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
+      case AppointmentDetailsTypeConstants.VideoVA:
         return (
           <Box>
             <TextView variant="MobileBodyBold" accessibilityRole="header">

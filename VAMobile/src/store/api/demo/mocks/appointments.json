@@ -972,6 +972,20 @@
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": false,
+            "proposedTimes": [
+              {
+                "date": "{{now - 4 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now - 5 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now - 6 days short}}",
+                "time": "AM"
+              }
+            ],
             "isPending": true,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -3342,6 +3356,20 @@
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 4 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 5 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 6 days short}}",
+                "time": "AM"
+              }
+            ],
             "isPending": true,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"

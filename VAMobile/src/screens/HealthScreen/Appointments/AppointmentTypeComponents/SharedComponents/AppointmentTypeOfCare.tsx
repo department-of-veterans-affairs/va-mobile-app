@@ -37,6 +37,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
+      case AppointmentDetailsTypeConstants.VideoVA:
         return (
           <Box>
             <TextView variant="MobileBodyBold" accessibilityRole="header">

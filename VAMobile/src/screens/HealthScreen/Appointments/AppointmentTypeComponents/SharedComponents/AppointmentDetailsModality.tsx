@@ -30,6 +30,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.Phone:
       appointmentHeaderType = t('appointments.phone.upcomingTitle')
       break
+    case AppointmentDetailsTypeConstants.VideoVA:
+      appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
+      break
     default:
       appointmentHeaderType = ''
   }
@@ -42,9 +45,13 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
         return ''
       }
     case AppointmentDetailsSubTypeConstants.Canceled:
-      return t('appointments.canceledTitle', { appointmentType: appointmentHeaderType.toLowerCase() })
+      return t('appointments.canceledTitle', {
+        appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
+      })
     case AppointmentDetailsSubTypeConstants.Past:
-      return t('appointments.pastTitle', { appointmentType: appointmentHeaderType.toLowerCase() })
+      return t('appointments.pastTitle', {
+        appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
+      })
     case AppointmentDetailsSubTypeConstants.Pending:
     case AppointmentDetailsSubTypeConstants.PastPending:
       if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
@@ -90,6 +97,8 @@ const supportingModalityBody = (
           })
         case AppointmentDetailsTypeConstants.Phone:
           return t('appointments.phone.upcomingBody')
+        case AppointmentDetailsTypeConstants.VideoVA:
+          return t('appointments.videoVA.upcomingBody')
         default:
           return ''
       }
@@ -101,11 +110,10 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
   const theme = useTheme()
   const heading = modalityHeader(subType, type, t)
   const body = supportingModalityBody(attributes, subType, type, t)
-  const apptBodyA11yLabel = a11yLabelVA(body || '')
 
   return (
     <Box>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
+      <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={a11yLabelVA(heading || '')}>
         {heading}
       </TextView>
       <TextView
@@ -122,7 +130,7 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
             ? undefined
             : theme.dimensions.standardMarginBetween
         }
-        accessibilityLabel={apptBodyA11yLabel}>
+        accessibilityLabel={a11yLabelVA(body || '')}>
         {body}
       </TextView>
     </Box>
