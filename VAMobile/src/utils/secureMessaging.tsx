@@ -18,16 +18,6 @@ import {
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
-import {
-  Box,
-  InlineTextWithIconsProps,
-  LinkWithAnalytics,
-  MessageListItemObj,
-  PickerItem,
-  TextView,
-  VAIconProps,
-} from 'components'
-import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
   FolderNameTypeConstants,
@@ -486,12 +476,7 @@ export const saveDraftWithAttachmentAlert = (
 
 export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
-  const bodySplit = body.split(/\s/).filter((value) => value !== '')
-  const whiteSpace = body
-    .trim()
-    .split(/\S/)
-    .reverse()
-    .filter((value) => value !== '')
+  const bodySplit = body.split(/\s/)
   let dontAddNextString = false
   _.forEach(bodySplit, (text, index) => {
     if (dontAddNextString) {

@@ -72,6 +72,18 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     navigateTo('IncorrectServiceInfo')
   }
 
+  const linkProps: TextViewProps = {
+    variant: 'MobileBody',
+    color: 'link',
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.contentMarginBottom,
+    accessibilityRole: 'link',
+    testID: t('militaryInformation.incorrectServiceInfo'),
+    onPress: onIncorrectService,
+    textDecoration: 'underline',
+    textDecorationColor: 'link',
+  }
+
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
   return (
