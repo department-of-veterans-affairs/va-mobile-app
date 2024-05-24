@@ -78,6 +78,7 @@ export type HealthStackParamList = WebviewStackParams & {
     messageID: number
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    saveDraftConfirmFailed?: boolean
   }
   EditDraft: {
     messageID: number

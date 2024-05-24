@@ -51,7 +51,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   const {
     data: userAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    isFetching: fetchingAuthServices,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -127,9 +128,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const hasError =
-    ((appointmentsHasError || getUserAuthorizedServicesError) && !loadingAppointments) || !apptsNotInDowntime
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -137,17 +135,22 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
-      {hasError ? (
+      {!apptsNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          onTryAgain={() => {
-            refetchUserAuthorizedServices()
-            refetchAppts()
-          }}
-          error={appointmentsHasError}
+          onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
         />
       ) : !userAuthorizedServices?.appointments ? (
         <NoMatchInRecords />
+      ) : appointmentsHasError && !loadingAppointments ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={refetchAppts}
+          error={appointmentsHasError}
+        />
       ) : (
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -171,13 +174,17 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
               <PastAppointments
                 appointmentsData={apptsData}
                 setPage={setPage}
-                loading={loadingAppointments}
+                loading={loadingAppointments || fetchingAuthServices}
                 setDateRange={setDateRange}
                 setTimeFrame={setTimeFrame}
               />
             )}
             {selectedTab === 0 && (
-              <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+              <UpcomingAppointments
+                appointmentsData={apptsData}
+                setPage={setPage}
+                loading={loadingAppointments || fetchingAuthServices}
+              />
             )}
           </Box>
         </Box>

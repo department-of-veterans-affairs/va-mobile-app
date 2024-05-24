@@ -502,7 +502,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           })
         },
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList, replyToID: replyToID }
       sendMessage(params, mutateOptions)
     }
   }
