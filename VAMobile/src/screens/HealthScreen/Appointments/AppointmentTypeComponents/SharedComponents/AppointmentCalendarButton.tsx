@@ -47,6 +47,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         } else {
           return name || ''
         }
+      case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.Phone:
         const userContactInfo = queryClient.getQueryData(
           contactInformationKeys.contactInformation,
@@ -67,6 +68,8 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('upcomingAppointments.vaAppointment')
       case AppointmentDetailsTypeConstants.Phone:
         return t('appointments.phone.upcomingTitle')
+      case AppointmentDetailsTypeConstants.VideoGFE:
+        return t('upcomingAppointments.connectGFE')
       case AppointmentDetailsTypeConstants.VideoVA:
         return t('upcomingAppointments.connectOnsite')
       default:
@@ -75,7 +78,6 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
     //[AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
     //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
-    //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
   }
 
   const calendarOnPress = async () => {

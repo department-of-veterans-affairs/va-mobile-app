@@ -5,7 +5,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
-import { AppointmentAttributes } from 'api/types'
+import { AppointmentAttributes, AppointmentLocation } from 'api/types'
 import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,6 +34,20 @@ type AppointmentCancelRescheduleProps = {
   type: AppointmentDetailsScreenType
   goBack: () => void
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>
+}
+
+const spacer = (theme: VATheme) => {
+  const boxProps: BoxProps = {
+    borderStyle: 'solid',
+    borderBottomWidth: 'default',
+    borderBottomColor: 'primary',
+    borderTopWidth: 'default',
+    borderTopColor: 'primary',
+    height: theme.dimensions.standardMarginBetween,
+    backgroundColor: 'main',
+    mx: -theme.dimensions.gutter,
+  }
+  return <Box {...boxProps} />
 }
 
 const cancelButton = (
@@ -140,6 +154,218 @@ const cancelButton = (
   )
 }
 
+const canceledPending = (location: AppointmentLocation | undefined, theme: VATheme, t: TFunction) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('appointments.reschedule.pending.title')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.condensedMarginBetween}
+        accessibilityLabel={a11yLabelVA(t('appointments.reschedule.pending.body'))}>
+        {t('appointments.reschedule.pending.body')}
+      </TextView>
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : undefined}
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_VA_SCHEDULING}
+        text={t('appointments.vaSchedule')}
+        a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+      />
+    </Box>
+  )
+}
+
+const inPersonPhoneVideoVACanceled = (location: AppointmentLocation | undefined, theme: VATheme, t: TFunction) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('appointments.reschedule.title')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.condensedMarginBetween}
+        accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
+        {t('appointments.reschedule.body')}
+      </TextView>
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : undefined}
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_VA_SCHEDULING}
+        text={t('appointments.vaSchedule')}
+        a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+      />
+    </Box>
+  )
+}
+
+const inPersonPhoneVideoVAPast = (location: AppointmentLocation | undefined, theme: VATheme, t: TFunction) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('appointments.schedule.title')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.condensedMarginBetween}
+        accessibilityLabel={a11yLabelVA(t('appointments.schedule.body'))}>
+        {t('appointments.schedule.body')}
+      </TextView>
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : undefined}
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_VA_SCHEDULING}
+        text={t('appointments.vaSchedule')}
+        a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+      />
+    </Box>
+  )
+}
+
+const inPersonPhoneVideoVAUpcoming = (
+  appointmentID: string,
+  attributes: AppointmentAttributes,
+  location: AppointmentLocation | undefined,
+  type: AppointmentDetailsScreenType,
+  goBack: () => void,
+  t: TFunction,
+  theme: VATheme,
+  dispatch: AppDispatch,
+  confirmAlert: (props: useDestructiveActionSheetProps) => void,
+  cancelId?: string,
+  cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>,
+) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
+      </TextView>
+      <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
+        {cancelId &&
+        (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
+          ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
+          : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
+      </TextView>
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : (
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('upcomingAppointmentDetails.findYourVALocation')}
+          a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
+          a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
+        />
+      )}
+      {cancelId &&
+        (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone) &&
+        cancelButton(
+          false,
+          appointmentID,
+          attributes,
+          goBack,
+          t,
+          theme,
+          dispatch,
+          confirmAlert,
+          cancelId,
+          cancelAppointment,
+        )}
+    </Box>
+  )
+}
+
+const videoAtlasGFEHomeCanceled = (location: AppointmentLocation | undefined, theme: VATheme, t: TFunction) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('appointments.reschedule.title')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.condensedMarginBetween}
+        accessibilityLabel={a11yLabelVA(t('appointments.rescheduleVideoNonVA.body'))}>
+        {t('appointments.rescheduleVideoNonVA.body')}
+      </TextView>
+      {location?.name && <TextView variant="MobileBody">{location.name}</TextView>}
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : undefined}
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_VA_SCHEDULING}
+        text={t('appointments.vaSchedule')}
+        a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+      />
+    </Box>
+  )
+}
+
+const videoAtlasGFEHomePast = (location: AppointmentLocation | undefined, theme: VATheme, t: TFunction) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('appointments.schedule.title')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.condensedMarginBetween}
+        accessibilityLabel={a11yLabelVA(t('appointments.scheduleVideoNonVA.body'))}>
+        {t('appointments.scheduleVideoNonVA.body')}
+      </TextView>
+      {location?.name && <TextView variant="MobileBody">{location.name}</TextView>}
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : undefined}
+      <LinkWithAnalytics
+        type="url"
+        url={LINK_URL_VA_SCHEDULING}
+        text={t('appointments.vaSchedule')}
+        a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+      />
+    </Box>
+  )
+}
+
+const videoAtlasGFEHomeUpcoming = (location: AppointmentLocation | undefined, t: TFunction, theme: VATheme) => {
+  return (
+    <Box>
+      {spacer(theme)}
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+        {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
+      </TextView>
+      <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
+        {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.videoNonVA.body')}
+      </TextView>
+      {location?.name && <TextView variant="MobileBody">{location.name}</TextView>}
+      {location?.phone && location.phone.areaCode && location.phone.number ? (
+        <ClickToCallPhoneNumber phone={location.phone} />
+      ) : (
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('upcomingAppointmentDetails.findYourVALocation')}
+          a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
+          a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
+        />
+      )}
+    </Box>
+  )
+}
+
 function AppointmentCancelReschedule({
   appointmentID,
   attributes,
@@ -153,16 +379,6 @@ function AppointmentCancelReschedule({
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
   const { location, cancelId } = attributes || ({} as AppointmentAttributes)
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    height: theme.dimensions.standardMarginBetween,
-    backgroundColor: 'main',
-    mx: -theme.dimensions.gutter,
-  }
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
@@ -185,120 +401,52 @@ function AppointmentCancelReschedule({
             cancelAppointment,
           )
         case AppointmentDetailsSubTypeConstants.CanceledAndPending:
-          return (
-            <Box>
-              <Box {...boxProps} />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-                {t('appointments.reschedule.pending.title')}
-              </TextView>
-              <TextView
-                variant="MobileBody"
-                mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.pending.body'))}>
-                {t('appointments.reschedule.pending.body')}
-              </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : undefined}
-              <LinkWithAnalytics
-                type="url"
-                url={LINK_URL_VA_SCHEDULING}
-                text={t('appointments.vaSchedule')}
-                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              />
-            </Box>
-          )
+          return canceledPending(location, theme, t)
         case AppointmentDetailsSubTypeConstants.Canceled:
-          return (
-            <Box>
-              <Box {...boxProps} />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-                {t('appointments.reschedule.title')}
-              </TextView>
-              <TextView
-                variant="MobileBody"
-                mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
-                {t('appointments.reschedule.body')}
-              </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : undefined}
-              <LinkWithAnalytics
-                type="url"
-                url={LINK_URL_VA_SCHEDULING}
-                text={t('appointments.vaSchedule')}
-                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              />
-            </Box>
-          )
+          return inPersonPhoneVideoVACanceled(location, theme, t)
         case AppointmentDetailsSubTypeConstants.Past:
-          return (
-            <Box>
-              <Box {...boxProps} />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-                {t('appointments.schedule.title')}
-              </TextView>
-              <TextView
-                variant="MobileBody"
-                mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.schedule.body'))}>
-                {t('appointments.schedule.body')}
-              </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : undefined}
-              <LinkWithAnalytics
-                type="url"
-                url={LINK_URL_VA_SCHEDULING}
-                text={t('appointments.vaSchedule')}
-                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              />
-            </Box>
-          )
+          return inPersonPhoneVideoVAPast(location, theme, t)
         case AppointmentDetailsSubTypeConstants.Upcoming:
-          return (
-            <Box>
-              <Box {...boxProps} />
-              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-                {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
-              </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
-                {cancelId &&
-                (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
-                  ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
-                  : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
-              </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : (
-                <LinkWithAnalytics
-                  type="url"
-                  url={WEBVIEW_URL_FACILITY_LOCATOR}
-                  text={t('upcomingAppointmentDetails.findYourVALocation')}
-                  a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
-                  a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
-                />
-              )}
-              {cancelId &&
-                (type === AppointmentDetailsTypeConstants.InPersonVA ||
-                  type === AppointmentDetailsTypeConstants.Phone) &&
-                cancelButton(
-                  false,
-                  appointmentID,
-                  attributes,
-                  goBack,
-                  t,
-                  theme,
-                  dispatch,
-                  confirmAlert,
-                  cancelId,
-                  cancelAppointment,
-                )}
-            </Box>
+          return inPersonPhoneVideoVAUpcoming(
+            appointmentID,
+            attributes,
+            location,
+            type,
+            goBack,
+            t,
+            theme,
+            dispatch,
+            confirmAlert,
+            cancelId,
+            cancelAppointment,
           )
       }
-      return <></>
+    case AppointmentDetailsTypeConstants.VideoGFE:
+      switch (subType) {
+        case AppointmentDetailsSubTypeConstants.PastPending:
+          return <></>
+        case AppointmentDetailsSubTypeConstants.Pending:
+          return cancelButton(
+            true,
+            appointmentID,
+            attributes,
+            goBack,
+            t,
+            theme,
+            dispatch,
+            confirmAlert,
+            cancelId,
+            cancelAppointment,
+          )
+        case AppointmentDetailsSubTypeConstants.CanceledAndPending:
+          return canceledPending(location, theme, t)
+        case AppointmentDetailsSubTypeConstants.Canceled:
+          return videoAtlasGFEHomeCanceled(location, theme, t)
+        case AppointmentDetailsSubTypeConstants.Past:
+          return videoAtlasGFEHomePast(location, theme, t)
+        case AppointmentDetailsSubTypeConstants.Upcoming:
+          return videoAtlasGFEHomeUpcoming(location, t, theme)
+      }
     default:
       return <></>
   }
