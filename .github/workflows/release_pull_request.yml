@@ -16,10 +16,7 @@ on:
       devPrUrl:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
       releaseHash:
-        value: ${{jobs.create_prs.outputs.releaseHash}}
-  push: 
-    branches: 
-      - 'chanel-7586-approve-command-failure-alert'        
+        value: ${{jobs.create_prs.outputs.releaseHash}}     
   workflow_dispatch:
     inputs:
       version:
