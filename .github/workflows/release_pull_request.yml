@@ -17,6 +17,9 @@ on:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
       releaseHash:
         value: ${{jobs.create_prs.outputs.releaseHash}}
+  push: 
+    branches: 
+      - 'chanel-7586-approve-command-failure-alert'        
   workflow_dispatch:
     inputs:
       version:
@@ -68,15 +71,10 @@ jobs:
           echo "::set-output name=dev::${{env.DEV_PR}}"
           echo "::set-output name=release::${{env.RELEASE_HASH}}"
           
-      - name: Notify Slack
+      - name: Notify slack
         if: ${{ failure() }}
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        uses: ./.github/workflows/start_slack_thread.yml
+        #secrets: inherit
+        with:
           channel_name: va-mobile-build-alerts
           message: 'The `/approve` command for release: ${{inputs.version}} has failed. See: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-        run: |
-            curl -X POST \
-                 -H "Authorization: Bearer $SLACK_API_TOKEN" \
-                 -H "Content-Type: application/json" \
-                 -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
-                 https://slack.com/api/chat.postMessage
