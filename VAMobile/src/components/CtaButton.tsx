@@ -59,8 +59,7 @@ const CtaButton: FC<CtaButtonProps> = ({
     <TouchableWithoutFeedback
       onPress={onPress}
       {...touchableProps}
-      {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}
-      {...a11yHintProp(accessibilityHint || t('component.crisisLine.hint'))}>
+      {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}>
       <Box {...boxProps}>
         <TextView
           variant="MobileBody"
