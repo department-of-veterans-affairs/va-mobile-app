@@ -100,8 +100,8 @@ context('SettingsScreen', () => {
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Manage account' }))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
+      fireEvent.press(screen.getByRole('button', { name: 'Account security' }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('AccountSecurity')
     })
   })
 

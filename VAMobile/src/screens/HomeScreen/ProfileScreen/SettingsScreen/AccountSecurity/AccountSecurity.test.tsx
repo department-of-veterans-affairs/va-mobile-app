@@ -4,12 +4,12 @@ import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 
-import ManageYourAccount from './ManageYourAccount'
+import AccountSecurity from './AccountSecurity'
 
-context('ManageYourAccount', () => {
+context('AccountSecurity', () => {
   beforeEach(() => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() })
-    render(<ManageYourAccount {...props} />)
+    render(<AccountSecurity {...props} />)
   })
 
   it('initializes correctly', () => {
