@@ -13,10 +13,10 @@ context('AccountSecurity', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Manage account')).toBeTruthy()
+    expect(screen.getByText('Account Security')).toBeTruthy()
     expect(
       screen.getByText(
-        'To confirm or update your sign-in email, go to the website where you manage your account information.',
+        '"accountSecurity.description": "To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
       ),
     ).toBeTruthy()
   })
