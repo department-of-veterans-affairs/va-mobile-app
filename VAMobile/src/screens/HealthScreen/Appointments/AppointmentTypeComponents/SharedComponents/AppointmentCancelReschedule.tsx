@@ -420,6 +420,8 @@ function AppointmentCancelReschedule({
             cancelId,
             cancelAppointment,
           )
+        default:
+          return <></>
       }
     case AppointmentDetailsTypeConstants.VideoGFE:
       switch (subType) {
@@ -446,6 +448,8 @@ function AppointmentCancelReschedule({
           return videoAtlasGFEHomePast(location, theme, t)
         case AppointmentDetailsSubTypeConstants.Upcoming:
           return videoAtlasGFEHomeUpcoming(location, t, theme)
+        default:
+          return <></>
       }
     default:
       return <></>
