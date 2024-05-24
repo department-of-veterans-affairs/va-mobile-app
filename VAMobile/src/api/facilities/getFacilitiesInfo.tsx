@@ -15,7 +15,7 @@ const getFacilitiesInfo = async (): Promise<Array<Facility> | undefined> => {
 }
 
 /**
- * Returns a query for user demographics
+ * Returns a query for a user's facility information
  */
 export const useFacilitiesInfo = (options?: { enabled?: boolean }) => {
   return useQuery({
