@@ -540,6 +540,7 @@
   "downtime.message.2": "If you need help, call our main information line. We're here 24/7.",
   "downtime.message.2.a11yLabel": "If you need help, call our main information line. We're here 24 7.",
   "downtime.title": "Maintenance on mobile app",
+  "draft": "Draft",
   "dynamicField": "{{field}}",
   "editAddress.address": "{{ addressLines }}\n{{ city }}, {{ state }}, {{ postCode }}",
   "editAddress.alertError": "Please check your mailing address",
