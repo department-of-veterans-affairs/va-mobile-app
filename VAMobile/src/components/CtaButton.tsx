@@ -4,7 +4,7 @@ import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-n
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
