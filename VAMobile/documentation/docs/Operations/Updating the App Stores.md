@@ -36,7 +36,8 @@ sidebar_position: 3
 |                                                                                                              | 1        | Feature graphic | 1024 x 500 px  | featureGraphic.png         |
 
 4. Export the images.
-    * __Important:__ Verify that both “ignore overlapping layers” and “include bounding box” are checked before exporting.
+    * __Important:__ Verify that both “ignore overlapping layers” and “include bounding box” are checked before exporting.  
+
     ![Screenshot of Figma export options](/img/app-store/figma-export.png)
     * For __iOS__, images must not include a transparency/alpha layer. Figma does not have a way to remove this from your PNG export, but the [Export Opaque PNG plugin](https://www.figma.com/community/plugin/1052463252412045420/Export-Opaque-PNG) can be installed and used. Alternatively, you can [follow these steps](https://stackoverflow.com/questions/26171739/remove-alpha-channel-in-an-image) using the Preview app on Mac.
 	* For __Android__, images should be exported at 4x and can be up to 8 MB per screen. The
