@@ -70,11 +70,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+      - name: 'Get e2e file names'
+        id: e2e_file_names
+        run: |
+          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests --jq '.[].name')
+          e2eNames=$(echo $e2eNames | jq 'del(.[index("utils.ts")])'
+          echo "$e2eNames" 
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests --jq '.[].name')
-          echo "$e2eNames" 
           if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
             echo "matrix=" >> "$GITHUB_OUTPUT"
             echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
