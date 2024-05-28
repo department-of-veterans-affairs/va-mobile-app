@@ -63,6 +63,7 @@ jobs:
               fi
           else
             echo 'This PR requires at least one engineer approval before QA review.'
+            exit 1
           fi 
 
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
