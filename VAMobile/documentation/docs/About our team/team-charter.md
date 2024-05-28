@@ -50,7 +50,7 @@ Health-related products in the app.
 ### Blue team
 Benefits-related products, global app features like navigation and single sign on (SIS), and incremental improvements and maintenance (aka TLC).
 
-See [Who we are](/docs/About%20our%20team/who-we-are) for the team roster.
+See [teaming information](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for the team roster.
 
 ## How we work
 

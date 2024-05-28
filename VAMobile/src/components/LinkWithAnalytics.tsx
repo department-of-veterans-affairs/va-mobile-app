@@ -14,14 +14,19 @@ export type LinkWithAnalyticsProps = LinkProps & {
   analyticsOnPress?: () => void
   /** optional props to send with analytics event */
   analyticsProps?: { [key: string]: unknown }
+  /** optional boolean to turn off padding */
+  disablePadding?: boolean
 }
 
 /** Wrapper for the Link component which adds analytics */
-const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, ...props }: LinkWithAnalyticsProps) => {
+const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, ...props }: LinkWithAnalyticsProps) => {
   const { locationData, phoneNumber, textNumber, TTYnumber, url, type } = props
   const eventProps = { locationData, phoneNumber, textNumber, TTYnumber, url, type, ...analyticsProps }
   const definedProps = _.pickBy(eventProps, (prop) => prop !== undefined)
   const theme = useTheme()
+
+  const py = disablePadding ? 0 : theme.dimensions.buttonPadding
+  const pr = disablePadding ? 0 : theme.dimensions.gutter
 
   const analytics = {
     onPress: () => {
@@ -32,7 +37,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, ...props }: LinkW
   }
 
   return (
-    <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} pr={theme.dimensions.gutter}>
+    <Box flexDirection={'row'} py={py} pr={pr}>
       <Link analytics={analytics} icon={{ preventScaling: true }} {...props} />
     </Box>
   )

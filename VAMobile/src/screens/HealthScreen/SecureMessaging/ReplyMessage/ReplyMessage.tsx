@@ -80,7 +80,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const { messageID, attachmentFileToAdd } = route.params
+  const { messageID, attachmentFileToAdd, saveDraftConfirmFailed } = route.params
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -130,9 +130,16 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       origin: FormHeaderTypeConstants.reply,
       replyToID: message.messageId,
       messageData: { body: messageReply, category },
-      isFormValid: true,
+      isFormValid,
     })
   }
+
+  useEffect(() => {
+    if (saveDraftConfirmFailed) {
+      setOnSaveDraftClicked(true)
+      setOnSendClicked(true)
+    }
+  }, [saveDraftConfirmFailed])
 
   useEffect(() => {
     if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
@@ -180,11 +187,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
    */
   useBeforeNavBackListener(navigation, (e) => {
-    if (validateMessage(messageReply, signature)) {
+    if (isFormBlank) {
+      navigation.goBack
+    } else {
       e.preventDefault()
       goToCancel()
-    } else {
-      navigation.goBack
     }
   })
 
@@ -195,6 +202,9 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       navigation.setParams({ attachmentFileToAdd: {} })
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
+
+  const isFormBlank = !(attachmentsList.length || validateMessage(messageReply, signature))
+  const isFormValid = validateMessage(messageReply, signature)
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))

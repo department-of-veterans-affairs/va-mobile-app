@@ -73,7 +73,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
@@ -548,14 +549,20 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
-      ) : hasError || getUserAuthorizedServicesError ? (
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.prescriptions ? (
+        <PrescriptionHistoryNotAuthorized />
+      ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
           error={hasError}
           onTryAgain={refetchPrescriptions}
         />
-      ) : !userAuthorizedServices?.prescriptions ? (
-        <PrescriptionHistoryNotAuthorized />
       ) : !allPrescriptions?.length ? (
         <PrescriptionHistoryNoPrescriptions />
       ) : (

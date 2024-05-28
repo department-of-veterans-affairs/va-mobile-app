@@ -35,15 +35,17 @@ sidebar_position: 3
 | [Android](https://support.google.com/googleplay/android-developer/answer/9866151?hl=en#zippy=%2Cscreenshots) | 8        | Images          | 320 x 569 px   | 1_en-US.png                |
 |                                                                                                              | 1        | Feature graphic | 1024 x 500 px  | featureGraphic.png         |
 
-4. Export the images to the [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6)
+4. Export the images.
     * __Important:__ Verify that both “ignore overlapping layers” and “include bounding box” are checked before exporting.
     ![Screenshot of Figma export options](/img/app-store/figma-export.png)
     * For __iOS__, images must not include a transparency/alpha layer. Figma does not have a way to remove this from your PNG export, but the [Export Opaque PNG plugin](https://www.figma.com/community/plugin/1052463252412045420/Export-Opaque-PNG) can be installed and used. Alternatively, you can [follow these steps](https://stackoverflow.com/questions/26171739/remove-alpha-channel-in-an-image) using the Preview app on Mac.
 	* For __Android__, images should be exported at 4x and can be up to 8 MB per screen. The
         * The feature graphic should be exported at 1x and can be up to 1 MB.
 	* Frames in Figma are currently named according to the app store requirements.
-5. In the Github ticket, alert product that the images are located in the [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6) and are ready for review.
-6. After product approval, the branch can be merged into the main [Figma file](https://www.figma.com/file/UOTRHWoB1eNZE0M3P16Su2/%F0%9F%A7%B0-App-Store-Images---Resource---VAMobile%F0%9F%A7%B0?node-id=68%3A62&t=NFKdcdXC3Q52ZkTu-1).
+5. Optimize the images using [Imageoptim](https://imageoptim.com/mac).
+6. Upload the images to the [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6).
+7. In the Github ticket, alert product that the images are located in the [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6) and are ready for review.
+8. After product approval, the branch can be merged into the main [Figma file](https://www.figma.com/file/UOTRHWoB1eNZE0M3P16Su2/%F0%9F%A7%B0-App-Store-Images---Resource---VAMobile%F0%9F%A7%B0?node-id=68%3A62&t=NFKdcdXC3Q52ZkTu-1).
 
 
 ## Product: Publish the content
