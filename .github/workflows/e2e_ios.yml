@@ -75,7 +75,9 @@ jobs:
         run: |
           e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests --jq '.[].name')
           e2eNames=$(echo $e2eNames | jq 'del(.[index("utils.ts")])'
-          echo "$e2eNames" 
+          echo "$e2eNames"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
@@ -86,8 +88,6 @@ jobs:
             echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
             echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
           fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # matrix-e2e-ios:
   #   if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
