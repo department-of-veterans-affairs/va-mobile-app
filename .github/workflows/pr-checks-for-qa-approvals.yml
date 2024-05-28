@@ -58,7 +58,7 @@ jobs:
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
                 exit 0
               else 
-                echo 'This PR requires Engineer approval to merge'
+                echo 'This PR requires Engineer approval before qa review'
                 exit 1
               fi
           else
