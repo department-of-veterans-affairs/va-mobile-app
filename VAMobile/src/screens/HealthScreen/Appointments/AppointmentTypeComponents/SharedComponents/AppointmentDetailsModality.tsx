@@ -32,6 +32,7 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
       break
     case AppointmentDetailsTypeConstants.ClaimExam:
       appointmentHeaderType = t('appointments.claimExam')
+      break
     case AppointmentDetailsTypeConstants.VideoVA:
       appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
       break
