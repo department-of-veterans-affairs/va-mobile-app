@@ -73,7 +73,7 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile)
+          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests --jq '.[].name')
           echo "$e2eNames" 
           if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
             echo "matrix=" >> "$GITHUB_OUTPUT"
