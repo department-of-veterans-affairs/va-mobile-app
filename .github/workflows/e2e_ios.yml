@@ -84,6 +84,9 @@ jobs:
           e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
           echo "$e2eNames"
           echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+          echo "$matrix"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
       #   echo "matrix=" >> "$GITHUB_OUTPUT"
       #   echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
