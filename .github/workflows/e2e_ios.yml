@@ -73,7 +73,7 @@ jobs:
       - name: 'Get e2e file names'
         id: e2e_file_names
         run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | .[].name')
+          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
           echo "$e2eNames"
           echo "E2E_NAMES=$e2eNames" >> "$GITHUB_OUTPUT"
         env:
