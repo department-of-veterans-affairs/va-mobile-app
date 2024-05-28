@@ -51,11 +51,19 @@ jobs:
           
           echo "required approval count: $required_approval_count"
  
-          if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "sparowhawk"))] | length' <<< "$approvals") -eq 0 ]]
-            echo 'This PR requires Engineer approval before qa review'
-            exit 1   
+          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
+            then
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "sparowhawk"))] | length' <<< "$approvals") -gt 0 ]]
+                then
+                echo 'This PR has at least one engineer approval. Now checking for QA approval...'
+                exit 0
+              else 
+                echo 'This PR requires Engineer approval before qa review'
+                exit 1
+              fi
           else
-            echo 'This PR has at least one engineer approval. Now checking for QA approval...'
+            echo 'This PR requires at least one engineer approval before QA review.'
+            exit 1
           fi 
 
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
