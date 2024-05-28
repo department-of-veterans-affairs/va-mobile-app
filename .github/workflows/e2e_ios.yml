@@ -74,7 +74,7 @@ jobs:
         id: e2e_file_names
         run: |
           e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests --jq '.[].name')
-          e2eNames=$(echo $e2eNames | jq 'del(.[index("utils.ts")])'
+          e2eNames=$(echo $e2eNames | jq 'del(.[index("utils.ts")])')
           echo "$e2eNames"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
