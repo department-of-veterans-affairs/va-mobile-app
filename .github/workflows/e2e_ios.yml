@@ -73,7 +73,7 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          e2eNames=$(gh api ./VAMobile/e2e/tests)
+          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/VAMobile/e2e/tests)
           echo "$e2eNames" 
           if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
             echo "matrix=" >> "$GITHUB_OUTPUT"
@@ -83,7 +83,7 @@ jobs:
             echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
           fi
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # matrix-e2e-ios:
   #   if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
