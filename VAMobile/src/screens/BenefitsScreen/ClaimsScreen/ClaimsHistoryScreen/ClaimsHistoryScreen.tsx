@@ -30,7 +30,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
@@ -46,8 +46,8 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const {
     data: claimsAndAppealsListPayload,
-    isError: claimsAndAppealsListError,
-    isLoading: loadingClaimsAndAppealsList,
+    error: claimsAndAppealsListError,
+    isFetching: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
   } = useClaimsAndAppeals(claimType, 1)
 
@@ -122,14 +122,24 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID">
-      {claimsAndAppealsListError ||
-      getUserAuthorizedServicesError ||
-      (!claimsNotInDowntime && !appealsNotInDowntime) ? (
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
+      {!claimsNotInDowntime && !appealsNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          onTryAgain={fetchInfoAgain}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+        />
       ) : !claimsAndAppealsAccess ? (
         <NoClaimsAndAppealsAccess />
+      ) : claimsAndAppealsListError ? (
+        <ErrorComponent
+          onTryAgain={refetchClaimsAndAppealsList}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          error={claimsAndAppealsListError}
+        />
       ) : (
         <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
           {!claimsAndAppealsServiceErrors && (

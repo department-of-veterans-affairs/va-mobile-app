@@ -35,13 +35,15 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
   } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const {
     data: militaryServiceHistoryAttributes,
-    isLoading: loadingServiceHistory,
-    isError: useServiceHistoryError,
+    isFetching: loadingServiceHistory,
+    error: useServiceHistoryError,
+    refetch: refetchServiceHistory,
   } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const navigateTo = useRouteNavigation()
@@ -83,7 +85,6 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     textDecorationColor: 'link',
   }
 
-  const errorCheck = useServiceHistoryError || getUserAuthorizedServicesError
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
   return (
@@ -91,11 +92,25 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('militaryInformation.title')}>
-      {errorCheck || !mhNotInDowntime ? (
+      {!mhNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (
         <LoadingComponent text={t('militaryInformation.loading')} />
-      ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.militaryServiceHistory ? (
+        <NoMilitaryInformationAccess />
+      ) : useServiceHistoryError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
+          error={useServiceHistoryError}
+          onTryAgain={refetchServiceHistory}
+        />
+      ) : serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (
         <>

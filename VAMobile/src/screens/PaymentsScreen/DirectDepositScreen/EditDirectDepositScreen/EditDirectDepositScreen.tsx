@@ -111,14 +111,6 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
     }
   }, [bankInfoUpdated, goBack])
 
-  if (saving) {
-    return (
-      <FullScreenSubtask onLeftButtonPress={goBack} leftButtonText={t('cancel')}>
-        <LoadingComponent text={t('directDeposit.savingInformation')} />
-      </FullScreenSubtask>
-    )
-  }
-
   const onSave = (): void => {
     const updateBankData: PaymentAccountData = {
       accountNumber: accountNumber,
@@ -247,49 +239,53 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         scrollViewRef={scrollViewRef}
         onLeftButtonPress={goBack}
         leftButtonText={t('cancel')}
-        rightButtonText={t('save')}
+        rightButtonText={saving ? '' : t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
-        title={displayTitle}>
-        <Box mb={contentMarginBottom}>
-          {formContainsError && (
-            <Box mb={standardMarginBetween}>
-              <AlertBox
-                scrollViewRef={scrollViewRef}
-                title={t('editDirectDeposit.pleaseCheckDDInfo')}
-                border="error"
-                focusOnError={onSaveClicked}
+        title={saving ? '' : displayTitle}>
+        {saving ? (
+          <LoadingComponent text={t('directDeposit.savingInformation')} />
+        ) : (
+          <Box mb={contentMarginBottom}>
+            {formContainsError && (
+              <Box mb={standardMarginBetween}>
+                <AlertBox
+                  scrollViewRef={scrollViewRef}
+                  title={t('editDirectDeposit.pleaseCheckDDInfo')}
+                  border="error"
+                  focusOnError={onSaveClicked}
+                />
+              </Box>
+            )}
+            {invalidRoutingNumberError && (
+              <Box mb={standardMarginBetween}>
+                <AlertBox
+                  scrollViewRef={scrollViewRef}
+                  title={t('editDirectDeposit.error')}
+                  text={t('editDirectDeposit.errorInvalidRoutingNumber')}
+                  border="error"
+                  focusOnError={onSaveClicked}
+                />
+              </Box>
+            )}
+            <Box mx={gutter} accessible={true}>
+              <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
+            </Box>
+            <Box mt={condensedMarginBetween}>
+              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+                <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+              </CollapsibleView>
+            </Box>
+            <Box mt={standardMarginBetween} mx={gutter}>
+              <FormWrapper
+                fieldsList={formFieldsList}
+                onSave={onSave}
+                setFormContainsError={setFormContainsError}
+                onSaveClicked={onSaveClicked}
+                setOnSaveClicked={setOnSaveClicked}
               />
             </Box>
-          )}
-          {invalidRoutingNumberError && (
-            <Box mb={standardMarginBetween}>
-              <AlertBox
-                scrollViewRef={scrollViewRef}
-                title={t('editDirectDeposit.error')}
-                text={t('editDirectDeposit.errorInvalidRoutingNumber')}
-                border="error"
-                focusOnError={onSaveClicked}
-              />
-            </Box>
-          )}
-          <Box mx={gutter} accessible={true}>
-            <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
           </Box>
-          <Box mt={condensedMarginBetween}>
-            <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-            </CollapsibleView>
-          </Box>
-          <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              setFormContainsError={setFormContainsError}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
-        </Box>
+        )}
       </FullScreenSubtask>
     </>
   )

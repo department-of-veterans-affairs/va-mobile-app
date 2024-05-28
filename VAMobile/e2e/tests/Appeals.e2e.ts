@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 
 export const AppealsIdConstants = {
   APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Received June 12, 2008',
@@ -88,15 +88,17 @@ describe('Appeals', () => {
 
   it('should tap on the links in the need help section', async () => {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text(AppealsIdConstants.APPEAL_NEED_HELP_NUMBER_TEXT)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
+      await device.enableSynchronization()
     }
 
     await device.launchApp({ newInstance: false })
     await device.disableSynchronization()
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
     await device.enableSynchronization()

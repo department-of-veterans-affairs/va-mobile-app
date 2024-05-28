@@ -2,7 +2,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
-import { checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
 
 export async function getDateWithTimeZone(dateString: string) {
   const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
@@ -53,20 +53,21 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  OPEN_URL_TEXT: 'Leave',
 }
 
 const tapItems = async (items: string, type: string) => {
   if (type === 'url' || type === 'map' || type === 'email') {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
   }
+  await device.disableSynchronization()
   await element(by.text(items)).tap()
   if (type === 'url' || type === 'map') {
-    await element(by.text(MessagesE2eIdConstants.OPEN_URL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
   }
   await setTimeout(2000)
   await device.takeScreenshot(items)
   if (device.getPlatform() === 'android') {
+    await device.enableSynchronization()
     await device.launchApp({ newInstance: false })
   }
   await setTimeout(3000)
@@ -379,7 +380,7 @@ describe('Messages Screen', () => {
     await device.launchApp({ newInstance: false })
 
     await element(by.text('Start a confidential chat')).tap()
-    await element(by.text('Leave')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpChat')
     await device.launchApp({ newInstance: false })

@@ -73,13 +73,15 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
   } = useAuthorizedServices()
   const {
     data: prescriptionData,
-    isLoading: loadingHistory,
-    isError: hasError,
+    isFetching: loadingHistory,
+    error: hasError,
     isFetched: prescriptionsFetched,
+    refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
@@ -143,7 +145,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }, [startingFilter, navigation, selectedFilter, selectedSortBy])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
-  // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
   const scrollViewRef = useRef<ScrollView | null>(null)
 
   useEffect(() => {
@@ -203,68 +204,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
     },
   ]
-
-  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
-  // In this case, we need to support multiple screen IDs
-  if (prescriptionInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (hasError || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.prescriptions) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <PrescriptionHistoryNotAuthorized />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingHistory || loadingUserAuthorizedServices) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!allPrescriptions?.length) {
-    return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
-        <PrescriptionHistoryNoPrescriptions />
-      </FeatureLandingTemplate>
-    )
-  }
 
   const prescriptionDetailsClicked = (prescription: PrescriptionData) => {
     logAnalyticsEvent(Events.vama_rx_details(prescription.id))
@@ -596,6 +535,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     },
   }
 
+  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
+  // In this case, we need to support multiple screen IDs
   return (
     <FeatureLandingTemplate
       scrollViewProps={{ scrollViewRef }}
@@ -604,9 +545,33 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory">
-      {getRequestRefillButton()}
-      {getTransferAlert()}
-      {getContent()}
+      {prescriptionInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      ) : loadingHistory || loadingUserAuthorizedServices ? (
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.prescriptions ? (
+        <PrescriptionHistoryNotAuthorized />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchPrescriptions}
+        />
+      ) : !allPrescriptions?.length ? (
+        <PrescriptionHistoryNoPrescriptions />
+      ) : (
+        <>
+          {getRequestRefillButton()}
+          {getTransferAlert()}
+          {getContent()}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

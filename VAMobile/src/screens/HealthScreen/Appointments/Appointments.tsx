@@ -51,14 +51,15 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   const {
     data: userAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    isFetching: fetchingAuthServices,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const {
     data: apptsData,
-    isError: appointmentsHasError,
-    isLoading: loadingAppointments,
+    error: appointmentsHasError,
+    isFetching: loadingAppointments,
     isFetched: apptsDataFetched,
     refetch: refetchAppts,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
@@ -73,34 +74,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [apptsDataFetched, page])
-
-  if (appointmentsHasError || getUserAuthorizedServicesError || !apptsNotInDowntime) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          onTryAgain={() => {
-            refetchUserAuthorizedServices()
-            refetchAppts()
-          }}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.appointments) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
-        <NoMatchInRecords />
-      </FeatureLandingTemplate>
-    )
-  }
 
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
@@ -162,38 +135,60 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabChange}
-            selected={selectedTab}
-            a11yHints={a11yHints}
-          />
-        </Box>
-        {serviceErrorAlert()}
-        {CernerAlert ? (
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <CernerAlert />
-          </Box>
-        ) : (
-          <></>
-        )}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === 1 && (
-            <PastAppointments
-              appointmentsData={apptsData}
-              setPage={setPage}
-              loading={loadingAppointments}
-              setDateRange={setDateRange}
-              setTimeFrame={setTimeFrame}
+      {!apptsNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
+        />
+      ) : !userAuthorizedServices?.appointments ? (
+        <NoMatchInRecords />
+      ) : appointmentsHasError && !loadingAppointments ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={refetchAppts}
+          error={appointmentsHasError}
+        />
+      ) : (
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              labels={controlLabels}
+              onChange={onTabChange}
+              selected={selectedTab}
+              a11yHints={a11yHints}
             />
+          </Box>
+          {serviceErrorAlert()}
+          {CernerAlert ? (
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <CernerAlert />
+            </Box>
+          ) : (
+            <></>
           )}
-          {selectedTab === 0 && (
-            <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
-          )}
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === 1 && (
+              <PastAppointments
+                appointmentsData={apptsData}
+                setPage={setPage}
+                loading={loadingAppointments || fetchingAuthServices}
+                setDateRange={setDateRange}
+                setTimeFrame={setTimeFrame}
+              />
+            )}
+            {selectedTab === 0 && (
+              <UpcomingAppointments
+                appointmentsData={apptsData}
+                setPage={setPage}
+                loading={loadingAppointments || fetchingAuthServices}
+              />
+            )}
+          </Box>
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }
