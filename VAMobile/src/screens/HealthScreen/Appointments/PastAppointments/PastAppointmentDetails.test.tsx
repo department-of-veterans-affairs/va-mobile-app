@@ -59,15 +59,6 @@ context('PastAppointmentDetails', () => {
     })
   })
 
-  describe('when the appointment type is VA_VIDEO_CONNECT_ONSITE', () => {
-    describe('when the practitioner object exists', () => {
-      it('should render a TextView with the practitioners full name', () => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
-        expect(screen.getByText('Larry R. TestDoctor')).toBeTruthy()
-      })
-    })
-  })
-
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)

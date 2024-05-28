@@ -122,17 +122,6 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
-  describe('when the appointment type is onsite', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
-      expect(screen.getByText('VA Video Connect\r\nVA location')).toBeTruthy()
-      expect(screen.getByText('You must join this video meeting from the VA location listed below.')).toBeTruthy()
-      expect(screen.getByText('Larry R. TestDoctor')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-  })
-
   describe('when the appointment type is gfe', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
@@ -149,13 +138,6 @@ context('UpcomingAppointmentDetails', () => {
       expect(screen.getByText('Community care')).toBeTruthy()
       expect(screen.getByText('Special instructions')).toBeTruthy()
       expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-  })
-
-  describe('when the appointment type is va', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA)
-      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
     })
   })
 

@@ -32,7 +32,7 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { InPersonVAAppointment, PhoneAppointment } from '../AppointmentTypeComponents'
+import { InPersonVAAppointment, PhoneAppointment, VideoVAAppointment } from '../AppointmentTypeComponents'
 import ClaimExamAppointment from '../AppointmentTypeComponents/ClaimExamAppointment'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
@@ -127,6 +127,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
 
   const subType =
     appointmentIsCanceled && pendingAppointment
@@ -155,6 +156,13 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
         />
       ) : isClaimExamAppointment ? (
         <ClaimExamAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoVAAppointment ? (
+        <VideoVAAppointment
           appointmentID={appointment.id}
           attributes={attributes}
           subType={subType}

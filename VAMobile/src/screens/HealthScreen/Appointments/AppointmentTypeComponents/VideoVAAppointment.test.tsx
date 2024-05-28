@@ -11,12 +11,12 @@ import {
 import { context, render } from 'testUtils'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
 
-import InPersonVAAppointment from './InPersonVAAppointment'
+import VideoVAAppointment from './VideoVAAppointment'
 
-context('InPersonVAAppointment', () => {
+context('VideoVAAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
-    appointmentType: AppointmentTypeConstants.VA,
+    appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
     status: AppointmentStatusConstants.BOOKED,
     //fields below are used in the subcomponents
     bestTimeToCall: undefined, //pending appointments
@@ -62,7 +62,7 @@ context('InPersonVAAppointment', () => {
   }
   const initializeTestInstance = (attributes: AppointmentAttributes, subType: AppointmentDetailsSubType): void => {
     render(
-      <InPersonVAAppointment
+      <VideoVAAppointment
         appointmentID={'1'}
         attributes={attributes}
         subType={subType}
@@ -72,15 +72,16 @@ context('InPersonVAAppointment', () => {
     )
   }
 
-  describe('InPersonVAAppointment Upcoming', () => {
+  describe('VideoVAAppointment Upcoming', () => {
     it('renders correctly with no null data', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
-      expect(screen.getByText('Go to VA Long Beach Healthcare System for this appointment.')).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A  Long Beach Healthcare System for this appointment.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Video appointment at VA location' })).toBeTruthy()
+      expect(screen.getByLabelText('Video appointment at  V-A  location')).toBeTruthy()
+      expect(screen.getByText('Join this appointment at a VA facility.')).toBeTruthy()
+      expect(screen.getByLabelText('Join this appointment at a  V-A  facility.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -116,12 +117,7 @@ context('InPersonVAAppointment', () => {
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
-      expect(
-        screen.getByText('You can cancel this appointment in the app. But if you need to reschedule, call us.'),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('button', { name: 'Cancel appointment' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Cancel this appointment?')).toBeTruthy()
+      expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -142,9 +138,10 @@ context('InPersonVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
-      expect(screen.getByText('Go to VA facility for this appointment.')).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A  facility for this appointment.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Video appointment at VA location' })).toBeTruthy()
+      expect(screen.getByLabelText('Video appointment at  V-A  location')).toBeTruthy()
+      expect(screen.getByText('Join this appointment at a VA facility.')).toBeTruthy()
+      expect(screen.getByLabelText('Join this appointment at a  V-A  facility.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -189,13 +186,13 @@ context('InPersonVAAppointment', () => {
     })
   })
 
-  describe('InPersonVAAppointment Past', () => {
+  describe('VideoVAAppointment Past', () => {
     it('renders correctly with no null data', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past video appointment at VA location' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -261,7 +258,7 @@ context('InPersonVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past video appointment at VA location' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -307,7 +304,7 @@ context('InPersonVAAppointment', () => {
     })
   })
 
-  describe('InPersonVAAppointment Canceled', () => {
+  describe('VideoVAAppointment Canceled', () => {
     it('renders correctly with no null data', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
@@ -315,7 +312,7 @@ context('InPersonVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled video appointment at VA location' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -384,7 +381,7 @@ context('InPersonVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled video appointment at VA location' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -431,7 +428,7 @@ context('InPersonVAAppointment', () => {
     })
   })
 
-  describe('InPersonVAAppointment Pending', () => {
+  describe('VideoVAAppointment Pending', () => {
     it('renders correctly with no null data', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
@@ -469,7 +466,7 @@ context('InPersonVAAppointment', () => {
       expect(screen.getByText('General check up')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
@@ -524,7 +521,7 @@ context('InPersonVAAppointment', () => {
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
@@ -550,7 +547,7 @@ context('InPersonVAAppointment', () => {
     })
   })
 
-  describe('InPersonVAAppointment canceled pending', () => {
+  describe('VideoVAAppointment canceled pending', () => {
     it('renders correctly with no null data', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
@@ -586,7 +583,7 @@ context('InPersonVAAppointment', () => {
       expect(screen.getByText('General check up')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
@@ -647,7 +644,7 @@ context('InPersonVAAppointment', () => {
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
@@ -680,7 +677,7 @@ context('InPersonVAAppointment', () => {
       expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
     })
   })
-  describe('InPersonVAAppointment Canceled and Canceled Pending different cancel types that are not patient', () => {
+  describe('VideoVAAppointment Canceled and Canceled Pending different cancel types that are not patient', () => {
     it('canceled - clinic cancel', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,

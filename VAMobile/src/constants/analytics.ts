@@ -1101,6 +1101,24 @@ export const Events = {
       },
     }
   },
+  vama_vet_status_nStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_nStatus',
+    }
+  },
+  vama_vet_status_yStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_yStatus',
+    }
+  },
+  vama_vet_status_zStatus: (charOfDis: string): Event => {
+    return {
+      name: 'vama_vet_status_zStatus',
+      params: {
+        charOfDis,
+      },
+    }
+  },
   vama_whatsnew_alert: (): Event => {
     return {
       name: 'vama_whatsnew_alert',

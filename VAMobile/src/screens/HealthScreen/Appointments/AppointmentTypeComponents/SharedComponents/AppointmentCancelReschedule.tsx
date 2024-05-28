@@ -80,6 +80,18 @@ const cancelButton = (
             ),
           )
         },
+        onError: () => {
+          showSnackBar(
+            pendingAppointment ? t('appointments.requestNotCanceled') : t('appointments.appointmentNotCanceled'),
+            dispatch,
+            () => {
+              cancelAppointment(cancelId, mutateOptions)
+            },
+            false,
+            true,
+            true,
+          )
+        },
       }
       cancelAppointment(cancelId, mutateOptions)
     }
@@ -160,6 +172,7 @@ function AppointmentCancelReschedule({
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.Phone:
     case AppointmentDetailsTypeConstants.ClaimExam:
+    case AppointmentDetailsTypeConstants.VideoVA:
       switch (subType) {
         case AppointmentDetailsSubTypeConstants.PastPending:
           return <></>
