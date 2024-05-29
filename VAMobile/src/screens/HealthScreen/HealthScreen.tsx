@@ -93,7 +93,6 @@ export function HealthScreen({}: HealthScreenProps) {
         )}
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
-          a11yHint={t('vaVaccines.a11yHint')}
           onPress={() => navigateTo('VaccineList')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}

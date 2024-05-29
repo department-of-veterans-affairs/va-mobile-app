@@ -47,7 +47,7 @@ const AFNavigationForIndividual = [
     'Military information',
     "What if my military service information doesn't look right?",
   ],
-  ['SettingsScreen.e2e', 'WG_ManageYourAccount', 'Profile', 'Settings', 'Manage account'],
+  ['SettingsScreen.e2e', 'WG_AccountSecurity', 'Profile', 'Settings', 'Manage account'],
   ['SettingsScreen.e2e', 'WG_NotificationsSettings', 'Profile', 'Settings', 'Notifications'],
   ['SettingsScreen.e2e', 'WG_InAppRecruitment', 'Profile', 'Settings', 'Give feedback'],
   ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact VA'],
