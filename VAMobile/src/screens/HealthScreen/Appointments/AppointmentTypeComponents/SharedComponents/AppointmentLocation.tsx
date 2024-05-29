@@ -41,11 +41,12 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
       switch (type) {
         case AppointmentDetailsTypeConstants.InPersonVA:
         case AppointmentDetailsTypeConstants.ClaimExam:
-        case AppointmentDetailsTypeConstants.CommunityCare:
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.location.title')
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('providerInformation')
         default:
-          undefined
+          return undefined
       }
   }
 }
