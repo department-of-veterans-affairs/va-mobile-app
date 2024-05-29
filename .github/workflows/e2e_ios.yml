@@ -76,7 +76,7 @@ jobs:
           if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
             e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
             echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-            echo "individual_matrix=false" >> "$GITHUB_OUTPUT"
+            echo "individual_matrix=" >> "$GITHUB_OUTPUT"
           else
             echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
             echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
@@ -150,11 +150,11 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS with AF and Nav
-        if: ${{needs.output_detox_tests_to_run.outputs.output2}} == true
+        if: ${{needs.output_detox_tests_to_run.outputs.output2}} != ''
         run: yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
       
       - name: Run e2e tests for iOS with AF and Nav
-        if: ${{needs.output_detox_tests_to_run.outputs.output2}} == false
+        if: ${{needs.output_detox_tests_to_run.outputs.output2}} == ''
         run: yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
       
       - name: Upload e2e-junit
