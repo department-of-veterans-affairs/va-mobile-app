@@ -322,7 +322,16 @@ function AppointmentCancelReschedule({
         accessibilityLabel={a11yLabelVA(body)}>
         {body}
       </TextView>
-      {!isClaimExam && phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t)}
+      {!isClaimExam ? (
+        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t)
+      ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_VA_SCHEDULING}
+          text={t('appointments.vaSchedule')}
+          a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+        />
+      ) : undefined}
       {cancelId &&
         subType === AppointmentDetailsSubTypeConstants.Upcoming &&
         (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone) &&
