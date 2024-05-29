@@ -22,10 +22,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { comment, reason } = attributes
-  switch (type) {
-    case AppointmentDetailsTypeConstants.ClaimExam:
-      return <></>
-  }
+  const isClaimExam = type === AppointmentDetailsTypeConstants.ClaimExam
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
@@ -42,7 +39,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
         </Box>
       )
     default:
-      return (
+      return isClaimExam ? null : (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.sharedProvider')}

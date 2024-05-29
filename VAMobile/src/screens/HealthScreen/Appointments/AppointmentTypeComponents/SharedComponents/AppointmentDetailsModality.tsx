@@ -33,6 +33,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.VideoGFE:
       appointmentHeaderType = t('appointments.videoGFEHome.upcomingTitle')
       break
+    case AppointmentDetailsTypeConstants.ClaimExam:
+      appointmentHeaderType = t('appointments.claimExam')
+      break
     case AppointmentDetailsTypeConstants.VideoVA:
       appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
       break
@@ -102,6 +105,8 @@ const supportingModalityBody = (
           return t('appointments.phone.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoGFE:
           return t('appointments.videoGFE.upcomingBody')
+        case AppointmentDetailsTypeConstants.ClaimExam:
+          return t('appointments.claimExam.explanationText')
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.videoVA.upcomingBody')
         default:

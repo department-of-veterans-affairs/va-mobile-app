@@ -60,6 +60,7 @@ import {
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import {
+  ClaimExamAppointment,
   InPersonVAAppointment,
   PhoneAppointment,
   VideoGFEAppointment,
@@ -370,6 +371,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
 
@@ -412,6 +414,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isInPersonVAAppointment ? (
         <InPersonVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}

@@ -295,6 +295,140 @@ function AppointmentCancelReschedule({
         cancelAppointment,
       )
   }
+  
+  const isClaimExam = type === AppointmentDetailsTypeConstants.ClaimExam
+  const claimExamRescheduleText = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
+    facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
+  })
+
+  switch (type) {
+    case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.Phone:
+    case AppointmentDetailsTypeConstants.ClaimExam:
+    case AppointmentDetailsTypeConstants.VideoVA:
+      switch (subType) {
+        case AppointmentDetailsSubTypeConstants.CanceledAndPending:
+          return (
+            <Box>
+              <Box {...boxProps} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+                {t('appointments.reschedule.pending.title')}
+              </TextView>
+              <TextView
+                variant="MobileBody"
+                mb={theme.dimensions.condensedMarginBetween}
+                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.pending.body'))}>
+                {t('appointments.reschedule.pending.body')}
+              </TextView>
+              {location?.phone && location.phone.areaCode && location.phone.number ? (
+                <ClickToCallPhoneNumber phone={location.phone} />
+              ) : undefined}
+              <LinkWithAnalytics
+                type="url"
+                url={LINK_URL_VA_SCHEDULING}
+                text={t('appointments.vaSchedule')}
+                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+              />
+            </Box>
+          )
+        case AppointmentDetailsSubTypeConstants.Canceled:
+          const rescheduleText = isClaimExam ? claimExamRescheduleText : t('appointments.reschedule.body')
+          return (
+            <Box>
+              <Box {...boxProps} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+                {t('appointments.reschedule.title')}
+              </TextView>
+              <TextView
+                variant="MobileBody"
+                mb={theme.dimensions.condensedMarginBetween}
+                accessibilityLabel={a11yLabelVA(rescheduleText)}>
+                {rescheduleText}
+              </TextView>
+              {!isClaimExam && (
+                <>
+                  {location?.phone && location.phone.areaCode && location.phone.number ? (
+                    <ClickToCallPhoneNumber phone={location.phone} />
+                  ) : undefined}
+                  <LinkWithAnalytics
+                    type="url"
+                    url={LINK_URL_VA_SCHEDULING}
+                    text={t('appointments.vaSchedule')}
+                    a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+                  />
+                </>
+              )}
+            </Box>
+          )
+        case AppointmentDetailsSubTypeConstants.Past:
+          return isClaimExam ? null : (
+            <Box>
+              <Box {...boxProps} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+                {t('appointments.schedule.title')}
+              </TextView>
+              <TextView
+                variant="MobileBody"
+                mb={theme.dimensions.condensedMarginBetween}
+                accessibilityLabel={a11yLabelVA(t('appointments.schedule.body'))}>
+                {t('appointments.schedule.body')}
+              </TextView>
+              {location?.phone && location.phone.areaCode && location.phone.number ? (
+                <ClickToCallPhoneNumber phone={location.phone} />
+              ) : undefined}
+              <LinkWithAnalytics
+                type="url"
+                url={LINK_URL_VA_SCHEDULING}
+                text={t('appointments.vaSchedule')}
+                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+              />
+            </Box>
+          )
+        case AppointmentDetailsSubTypeConstants.Upcoming:
+          return (
+            <Box>
+              <Box {...boxProps} />
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+                {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
+              </TextView>
+              <TextView variant="MobileBody" paragraphSpacing={!isClaimExam} testID="upcomingApptCancellationTestID">
+                {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
+                  ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
+                  : type === AppointmentDetailsTypeConstants.ClaimExam
+                    ? claimExamRescheduleText
+                    : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
+              </TextView>
+              {isClaimExam ? undefined : location?.phone && location.phone.areaCode && location.phone.number ? (
+                <ClickToCallPhoneNumber phone={location.phone} />
+              ) : (
+                <LinkWithAnalytics
+                  type="url"
+                  url={WEBVIEW_URL_FACILITY_LOCATOR}
+                  text={t('upcomingAppointmentDetails.findYourVALocation')}
+                  a11yLabel={a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation'))}
+                  a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
+                />
+              )}
+              {cancelId &&
+                (type === AppointmentDetailsTypeConstants.InPersonVA ||
+                  type === AppointmentDetailsTypeConstants.Phone) &&
+                cancelButton(
+                  false,
+                  appointmentID,
+                  attributes,
+                  goBack,
+                  t,
+                  theme,
+                  dispatch,
+                  confirmAlert,
+                  cancelId,
+                  cancelAppointment,
+                )}
+            </Box>
+          )
+      }
+  }
 
   return (
     <Box>

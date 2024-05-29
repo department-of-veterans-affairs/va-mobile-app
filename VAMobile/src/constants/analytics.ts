@@ -812,6 +812,14 @@ export const Events = {
       name: 'vama_prof_update_phone',
     }
   },
+  vama_react_query_retry: (status: string): Event => {
+    return {
+      name: 'vama_react_query_retry',
+      params: {
+        status,
+      },
+    }
+  },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
     return {
       name: 'vama_request_details',
@@ -1098,6 +1106,24 @@ export const Events = {
       name: 'vama_vaccine_details',
       params: {
         groupName,
+      },
+    }
+  },
+  vama_vet_status_nStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_nStatus',
+    }
+  },
+  vama_vet_status_yStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_yStatus',
+    }
+  },
+  vama_vet_status_zStatus: (charOfDis: string): Event => {
+    return {
+      name: 'vama_vet_status_zStatus',
+      params: {
+        charOfDis,
       },
     }
   },

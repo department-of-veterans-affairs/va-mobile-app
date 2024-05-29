@@ -39,6 +39,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const getLocation = (): string => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
+      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoVA:
         if (isIOS() && lat && long) {
           return name || ''
@@ -72,6 +73,8 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('upcomingAppointments.connectGFE')
       case AppointmentDetailsTypeConstants.VideoVA:
         return t('upcomingAppointments.connectOnsite')
+      case AppointmentDetailsTypeConstants.ClaimExam:
+        return t('upcomingAppointments.vaAppointmentClaimExam')
       default:
         return ''
     }
