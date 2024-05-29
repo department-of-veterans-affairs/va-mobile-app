@@ -23,6 +23,7 @@ const getThread = (
 export const useThread = (messageID: number, excludeProvidedMessage: boolean, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
+    staleTime: 0,
     queryKey: [secureMessagingKeys.thread, messageID, excludeProvidedMessage],
     queryFn: () => getThread(messageID, excludeProvidedMessage),
     meta: {
