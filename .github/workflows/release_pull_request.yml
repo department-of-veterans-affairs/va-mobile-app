@@ -15,14 +15,14 @@ on:
       devPrUrl:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
       releaseHash:
-        value: ${{jobs.create_prs.outputs.releaseHash}}     
+        value: ${{jobs.create_prs.outputs.releaseHash}}
   workflow_dispatch:
     inputs:
       version:
         description: 'Version Number (eg. v1.1.0)'
         required: true
         type: string
-        
+
 jobs:
   create_prs:
     runs-on: ubuntu-latest
