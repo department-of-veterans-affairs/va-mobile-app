@@ -149,6 +149,7 @@ const getClinicInfo = (
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.VideoVA:
+    case AppointmentDetailsTypeConstants.CommunityCare:
       return (
         <Box>
           <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>

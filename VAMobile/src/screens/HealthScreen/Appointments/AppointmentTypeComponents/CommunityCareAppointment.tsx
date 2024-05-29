@@ -34,7 +34,7 @@ function CommunityCareAppointment({
   goBack,
   cancelAppointment,
 }: CommunityCareAppointmentProps) {
-  const type = AppointmentDetailsTypeConstants.InPersonVA
+  const type = AppointmentDetailsTypeConstants.CommunityCare
   return (
     <Box>
       <TextArea>

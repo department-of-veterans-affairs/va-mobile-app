@@ -38,6 +38,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
       case AppointmentDetailsTypeConstants.VideoVA:
+      case AppointmentDetailsTypeConstants.CommunityCare:
         return (
           <Box>
             <TextView variant="MobileBodyBold" accessibilityRole="header">

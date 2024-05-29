@@ -163,11 +163,13 @@ function AppointmentCancelReschedule({
     backgroundColor: 'main',
     mx: -theme.dimensions.gutter,
   }
+  const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.Phone:
     case AppointmentDetailsTypeConstants.VideoVA:
+    case AppointmentDetailsTypeConstants.CommunityCare:
       switch (subType) {
         case AppointmentDetailsSubTypeConstants.PastPending:
           return <></>
@@ -209,6 +211,10 @@ function AppointmentCancelReschedule({
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Canceled:
+          const rescheduleBody = isCommunityCareAppointment
+            ? t('appointments.rescheduleCommunityCare.body')
+            : t('appointments.reschedule.body')
+
           return (
             <Box>
               <Box {...boxProps} />
@@ -218,8 +224,8 @@ function AppointmentCancelReschedule({
               <TextView
                 variant="MobileBody"
                 mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.reschedule.body'))}>
-                {t('appointments.reschedule.body')}
+                accessibilityLabel={a11yLabelVA(rescheduleBody)}>
+                {rescheduleBody}
               </TextView>
               {location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
@@ -233,6 +239,10 @@ function AppointmentCancelReschedule({
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Past:
+          const scheduleBody = isCommunityCareAppointment
+            ? t('appointments.scheduleCommunityCare.body')
+            : t('appointments.schedule.body')
+
           return (
             <Box>
               <Box {...boxProps} />
@@ -242,8 +252,8 @@ function AppointmentCancelReschedule({
               <TextView
                 variant="MobileBody"
                 mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(t('appointments.schedule.body'))}>
-                {t('appointments.schedule.body')}
+                accessibilityLabel={a11yLabelVA(scheduleBody)}>
+                {scheduleBody}
               </TextView>
               {location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
@@ -257,6 +267,15 @@ function AppointmentCancelReschedule({
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Upcoming:
+          const isCancellableInApp =
+            cancelId &&
+            (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
+          const inAppCancelText = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
+          const noAppCancelText = isCommunityCareAppointment
+            ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancelCommunityCare.body')
+            : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')
+          const cancelText = isCancellableInApp ? inAppCancelText : noAppCancelText
+
           return (
             <Box>
               <Box {...boxProps} />
@@ -264,10 +283,7 @@ function AppointmentCancelReschedule({
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
               <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
-                {cancelId &&
-                (type === AppointmentDetailsTypeConstants.InPersonVA || type === AppointmentDetailsTypeConstants.Phone)
-                  ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
-                  : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')}
+                {cancelText}
               </TextView>
               {location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
