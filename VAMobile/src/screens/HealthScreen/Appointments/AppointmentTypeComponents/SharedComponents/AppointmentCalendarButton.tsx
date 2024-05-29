@@ -70,6 +70,8 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('appointments.phone.upcomingTitle')
       case AppointmentDetailsTypeConstants.VideoVA:
         return t('upcomingAppointments.connectOnsite')
+      case AppointmentDetailsTypeConstants.ClaimExam:
+        return t('upcomingAppointments.vaAppointmentClaimExam')
       default:
         return ''
     }

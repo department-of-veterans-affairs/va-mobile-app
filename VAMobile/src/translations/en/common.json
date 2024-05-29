@@ -1359,6 +1359,7 @@
   "upcomingAppointments.covidVaccine": "COVID-19 vaccine",
   "upcomingAppointments.vaAppointment": "VA appointment",
   "upcomingAppointments.vaAppointment.a11yLabel": "V-A appointment",
+  "upcomingAppointments.vaAppointmentClaimExam": "VA appointment - claim exam",
   "updateNow": "Update now",
   "uploaded": "uploaded",
   "vaPaymentHistory": "VA payment history",
