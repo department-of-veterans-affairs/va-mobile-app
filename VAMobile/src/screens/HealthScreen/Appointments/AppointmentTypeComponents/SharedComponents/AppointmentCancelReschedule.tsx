@@ -163,11 +163,16 @@ function AppointmentCancelReschedule({
     backgroundColor: 'main',
     mx: -theme.dimensions.gutter,
   }
+  const isClaimExam = type === AppointmentDetailsTypeConstants.ClaimExam
+  const claimExamRescheduleText = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
+    facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
+  })
   const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.Phone:
+    case AppointmentDetailsTypeConstants.ClaimExam:
     case AppointmentDetailsTypeConstants.VideoVA:
     case AppointmentDetailsTypeConstants.CommunityCare:
       switch (subType) {
@@ -211,9 +216,11 @@ function AppointmentCancelReschedule({
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Canceled:
-          const rescheduleBody = isCommunityCareAppointment
-            ? t('appointments.rescheduleCommunityCare.body')
-            : t('appointments.reschedule.body')
+          const rescheduleText = isClaimExam
+            ? claimExamRescheduleText
+            : isCommunityCareAppointment
+              ? t('appointments.rescheduleCommunityCare.body')
+              : t('appointments.reschedule.body')
 
           return (
             <Box>
@@ -224,18 +231,22 @@ function AppointmentCancelReschedule({
               <TextView
                 variant="MobileBody"
                 mb={theme.dimensions.condensedMarginBetween}
-                accessibilityLabel={a11yLabelVA(rescheduleBody)}>
-                {rescheduleBody}
+                accessibilityLabel={a11yLabelVA(rescheduleText)}>
+                {rescheduleText}
               </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
-                <ClickToCallPhoneNumber phone={location.phone} />
-              ) : undefined}
-              <LinkWithAnalytics
-                type="url"
-                url={LINK_URL_VA_SCHEDULING}
-                text={t('appointments.vaSchedule')}
-                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
-              />
+              {!isClaimExam && (
+                <>
+                  {location?.phone && location.phone.areaCode && location.phone.number ? (
+                    <ClickToCallPhoneNumber phone={location.phone} />
+                  ) : undefined}
+                  <LinkWithAnalytics
+                    type="url"
+                    url={LINK_URL_VA_SCHEDULING}
+                    text={t('appointments.vaSchedule')}
+                    a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+                  />
+                </>
+              )}
             </Box>
           )
         case AppointmentDetailsSubTypeConstants.Past:
@@ -243,7 +254,7 @@ function AppointmentCancelReschedule({
             ? t('appointments.scheduleCommunityCare.body')
             : t('appointments.schedule.body')
 
-          return (
+          return isClaimExam ? null : (
             <Box>
               <Box {...boxProps} />
               <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
@@ -274,7 +285,11 @@ function AppointmentCancelReschedule({
           const noAppCancelText = isCommunityCareAppointment
             ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancelCommunityCare.body')
             : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')
-          const cancelText = isCancellableInApp ? inAppCancelText : noAppCancelText
+          const cancelText = isCancellableInApp
+            ? inAppCancelText
+            : isClaimExam
+              ? claimExamRescheduleText
+              : noAppCancelText
 
           return (
             <Box>
@@ -282,10 +297,10 @@ function AppointmentCancelReschedule({
               <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
                 {t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')}
               </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true} testID="upcomingApptCancellationTestID">
+              <TextView variant="MobileBody" paragraphSpacing={!isClaimExam} testID="upcomingApptCancellationTestID">
                 {cancelText}
               </TextView>
-              {location?.phone && location.phone.areaCode && location.phone.number ? (
+              {isClaimExam ? undefined : location?.phone && location.phone.areaCode && location.phone.number ? (
                 <ClickToCallPhoneNumber phone={location.phone} />
               ) : (
                 <LinkWithAnalytics

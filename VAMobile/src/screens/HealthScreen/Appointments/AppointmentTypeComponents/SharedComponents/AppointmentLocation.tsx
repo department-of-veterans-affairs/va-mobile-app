@@ -39,6 +39,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
     default:
       switch (type) {
         case AppointmentDetailsTypeConstants.InPersonVA:
+        case AppointmentDetailsTypeConstants.ClaimExam:
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.location.title')
         default:
@@ -148,6 +149,7 @@ const getClinicInfo = (
 
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
+    case AppointmentDetailsTypeConstants.ClaimExam:
     case AppointmentDetailsTypeConstants.VideoVA:
     case AppointmentDetailsTypeConstants.CommunityCare:
       return (

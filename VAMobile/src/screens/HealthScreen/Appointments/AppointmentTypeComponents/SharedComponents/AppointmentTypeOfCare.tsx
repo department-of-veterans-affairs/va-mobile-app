@@ -22,6 +22,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { typeOfCare } = attributes
+  let isPending = false
 
   if (typeOfCare) {
     let heading
@@ -29,6 +30,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
       case AppointmentDetailsSubTypeConstants.CanceledAndPending:
       case AppointmentDetailsSubTypeConstants.Pending:
       case AppointmentDetailsSubTypeConstants.PastPending:
+        isPending = true
         heading = t('appointments.typeOfCare.pendingTitle')
         break
       default:
@@ -37,9 +39,11 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
+      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoVA:
       case AppointmentDetailsTypeConstants.CommunityCare:
-        return (
+        const isNonPendingClaimExam = !isPending && type === AppointmentDetailsTypeConstants.ClaimExam
+        return isNonPendingClaimExam ? null : (
           <Box>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
               {heading}
