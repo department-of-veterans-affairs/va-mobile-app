@@ -153,8 +153,8 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
-      - name: Run e2e tests for Android
-        id: run_e2e_tests
+      - name: Run e2e tests for Android - Full Test
+        if: ${{needs.output_detox_tests_to_run.outputs.output2 == ''}}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
@@ -164,12 +164,21 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: |
-            if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-              yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}--take-screenshots failing --updateSnapshot --headless
-            else
-              yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-            fi
+          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}--take-screenshots failing --updateSnapshot --headless
+
+      - name: Run e2e tests for Android
+        id: run_e2e_tests
+        if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
 
       - name: Upload e2e-junit
         if: failure() || success()
