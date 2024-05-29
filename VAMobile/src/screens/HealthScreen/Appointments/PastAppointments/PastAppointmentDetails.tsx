@@ -33,6 +33,7 @@ import {
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import { InPersonVAAppointment, PhoneAppointment, VideoVAAppointment } from '../AppointmentTypeComponents'
+import CommunityCareAppointment from '../AppointmentTypeComponents/CommunityCareAppointment'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
@@ -126,6 +127,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
 
   const subType =
     appointmentIsCanceled && pendingAppointment
@@ -154,6 +156,13 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
         />
       ) : isVideoVAAppointment ? (
         <VideoVAAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isCommunityCareAppointment ? (
+        <CommunityCareAppointment
           appointmentID={appointment.id}
           attributes={attributes}
           subType={subType}

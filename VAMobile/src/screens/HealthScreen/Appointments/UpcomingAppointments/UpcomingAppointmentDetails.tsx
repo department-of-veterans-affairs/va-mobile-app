@@ -60,6 +60,7 @@ import {
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import { InPersonVAAppointment, PhoneAppointment, VideoVAAppointment } from '../AppointmentTypeComponents'
+import CommunityCareAppointment from '../AppointmentTypeComponents/CommunityCareAppointment'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -366,6 +367,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
 
   const subType =
     isAppointmentCanceled && pendingAppointment
@@ -414,6 +416,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isVideoVAAppointment ? (
         <VideoVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isCommunityCareAppointment ? (
+        <CommunityCareAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}
