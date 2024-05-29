@@ -5,9 +5,9 @@ import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, open
 
 export const SettingsE2eIdConstants = {
   SETTINGS_SCREEN_TEXT: 'Settings',
-  MANAGE_ACCT_ROW_TEXT: 'Manage account',
+  MANAGE_ACCT_ROW_TEXT: 'Account security',
   MANAGE_ACCT_SCREEN_TEXT:
-    'To confirm or update your sign-in email, go to the website where you manage your account information.',
+    'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
   NOTIFICATIONS_SCREEN_TEXT: "Select which notifications you'd like to receive.",
   NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment reminders',
