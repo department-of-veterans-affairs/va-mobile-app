@@ -1,3 +1,5 @@
+export { default as ClaimExamAppointment } from './ClaimExamAppointment'
+export * from './ClaimExamAppointment'
 export { default as InPersonVAAppointment } from './InPersonVAAppointment'
 export * from './InPersonVAAppointment'
 export { default as PhoneAppointment } from './PhoneAppointment'
