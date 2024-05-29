@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Spacer } from '@department-of-veterans-affairs/mobile-component-library'
 import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
 import { TFunction } from 'i18next'
 
@@ -40,6 +41,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
       switch (type) {
         case AppointmentDetailsTypeConstants.InPersonVA:
         case AppointmentDetailsTypeConstants.ClaimExam:
+        case AppointmentDetailsTypeConstants.CommunityCare:
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.location.title')
         default:
@@ -151,7 +153,6 @@ const getClinicInfo = (
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.ClaimExam:
     case AppointmentDetailsTypeConstants.VideoVA:
-    case AppointmentDetailsTypeConstants.CommunityCare:
       return (
         <Box>
           <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
@@ -171,7 +172,7 @@ const getClinicInfo = (
         </Box>
       )
     default:
-      return undefined
+      return Spacer({ size: theme.dimensions.standardMarginBetween })
   }
 }
 
