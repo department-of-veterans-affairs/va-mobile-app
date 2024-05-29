@@ -44,19 +44,20 @@ export const useAppointments = (
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
     queryKey: [appointmentsKeys.appointments, timeFrame],
     queryFn: () => {
-      if (timeFrame === TimeFrameTypeConstants.UPCOMING) {
+      if (timeFrame === TimeFrameTypeConstants.UPCOMING && !queryClient.getQueryData(pastAppointmentsQueryKey)) {
         const pastRange = getPastAppointmentDateRange()
 
         // Prefetch past appointments when upcoming appointments are being fetched so that the default
         // appointments list in the `Past` tab will already be loaded if a user views past appointments.
         queryClient.prefetchQuery({
-          queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS],
+          queryKey: pastAppointmentsQueryKey,
           queryFn: () =>
             getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
           staleTime: ACTIVITY_STALE_TIME,

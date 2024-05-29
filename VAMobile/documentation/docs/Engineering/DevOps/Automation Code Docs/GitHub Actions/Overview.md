@@ -48,4 +48,4 @@ Access in Actions is granted with [Personal Access Tokens](https://docs.github.c
 
 You can test GitHub Actions on your local machine using [act CLI tool](https://github.com/nektos/act)
 
-You can find saved test data used in my local testing [here](https://github.com/department-of-veterans-affairs/va-mobile-app/tree/develop/.github/test-data)
+[View saved test data used in local testing](https://github.com/department-of-veterans-affairs/va-mobile-app/tree/develop/.github/test-data)

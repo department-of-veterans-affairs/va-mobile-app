@@ -47,19 +47,20 @@ export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: 
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
 
-  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
+  const closedClaimsAndAppealsQueryKey = [claimsAndAppealsKeys.claimsAndAppeals, ClaimTypeConstants.CLOSED]
 
   return useQuery({
     ...options,
     enabled: !!(claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled),
     queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
     queryFn: () => {
-      if (claimType === ClaimTypeConstants.ACTIVE) {
+      if (claimType === ClaimTypeConstants.ACTIVE && !queryClient.getQueryData(closedClaimsAndAppealsQueryKey)) {
         // Prefetch closed claims when active claims are being fetched so that closed
         // claims will already be loaded if a user views the closed claims tab.
         queryClient.prefetchQuery({
-          queryKey: [claimsAndAppealsKeys.claimsAndAppeals, ClaimTypeConstants.CLOSED],
+          queryKey: closedClaimsAndAppealsQueryKey,
           queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED),
           staleTime: ACTIVITY_STALE_TIME,
         })

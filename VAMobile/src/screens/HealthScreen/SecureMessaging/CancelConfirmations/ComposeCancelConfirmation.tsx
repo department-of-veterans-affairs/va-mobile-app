@@ -52,7 +52,16 @@ export function useComposeCancelConfirmation(): [
 
       const onSaveDraft = (): void => {
         if (!isFormValid) {
-          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
+          if (isReply && replyToID) {
+            navigateTo('ReplyMessage', {
+              messageID: replyToID,
+              attachmentFileToAdd: {},
+              attachmentFileToRemove: {},
+              saveDraftConfirmFailed: true,
+            })
+          } else {
+            navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
+          }
         } else {
           const message = {
             ...messageData,
