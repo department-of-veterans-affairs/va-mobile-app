@@ -41,7 +41,7 @@ export type WaygateToggleType =
   | 'WG_MilitaryInformation'
   | 'WG_IncorrectServiceInfo'
   | 'WG_Settings'
-  | 'WG_ManageYourAccount'
+  | 'WG_AccountSecurity'
   | 'WG_NotificationsSettings'
   | 'WG_ContactVA'
   | 'WG_VeteransCrisisLine'
@@ -123,7 +123,7 @@ type WaygateToggleValues = {
   WG_MilitaryInformation: Waygate
   WG_IncorrectServiceInfo: Waygate
   WG_Settings: Waygate
-  WG_ManageYourAccount: Waygate
+  WG_AccountSecurity: Waygate
   WG_NotificationsSettings: Waygate
   WG_ContactVA: Waygate
   WG_VeteransCrisisLine: Waygate
@@ -214,7 +214,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_MilitaryInformation: { ...waygateDefault },
   WG_IncorrectServiceInfo: { ...waygateDefault },
   WG_Settings: { ...waygateDefault },
-  WG_ManageYourAccount: { ...waygateDefault },
+  WG_AccountSecurity: { ...waygateDefault },
   WG_NotificationsSettings: { ...waygateDefault },
   WG_ContactVA: { ...waygateDefault },
   WG_VeteransCrisisLine: { ...waygateDefault },
