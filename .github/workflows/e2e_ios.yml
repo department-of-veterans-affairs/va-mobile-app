@@ -64,36 +64,25 @@ jobs:
     runs-on: macos-latest-xl
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
-      output2: ${{ steps.matrix_value.outputs.empty_matrix}}
+      output2: ${{ steps.matrix_value.outputs.individual_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: 'Get e2e file names'
-        id: e2e_file_names
-        run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
-          echo "$e2eNames"
-          echo "E2E_NAMES=$e2eNames" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
-          echo "$e2eNames"
-          echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-          echo "$matrix"
+          if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+            echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+            echo "individual_matrix=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+            echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-      #   echo "matrix=" >> "$GITHUB_OUTPUT"
-      #   echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-      # else
-      #   echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-      #   echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
-      # fi
 
   matrix-e2e-ios:
     if: (!cancelled())
@@ -161,7 +150,12 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS with AF and Nav
+        if: ${{needs.output_detox_tests_to_run.outputs.output2}} == true
         run: yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+      
+      - name: Run e2e tests for iOS with AF and Nav
+        if: ${{needs.output_detox_tests_to_run.outputs.output2}} == false
+        run: yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
       
       - name: Upload e2e-junit
         if: failure() || success()
