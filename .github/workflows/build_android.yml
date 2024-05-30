@@ -118,6 +118,12 @@ jobs:
         run: |
           bundle update fastlane
           bundle exec fastlane update_plugins
+      - name: Run fastlane with retries
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose   
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
