@@ -16,7 +16,7 @@ import ClaimExamAppointment from './ClaimExamAppointment'
 context('ClaimExamAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
-    appointmentType: AppointmentTypeConstants.VA,
+    appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
     status: AppointmentStatusConstants.BOOKED,
     //fields below are used in the subcomponents
     bestTimeToCall: undefined, //pending appointments
