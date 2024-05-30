@@ -22,6 +22,7 @@ type AppointmentDetailsModalityProps = {
 }
 
 const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDetailsScreenType, t: TFunction) => {
+  const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
   let appointmentHeaderType = ''
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
@@ -45,11 +46,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
-      if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
-        return t('appointments.request.canceledTitle')
-      } else {
-        return ''
-      }
+      return isCommunityCareAppointment
+        ? t('appointments.request.canceledTitle.communityCare')
+        : t('appointments.request.canceledTitle')
     case AppointmentDetailsSubTypeConstants.Canceled:
       return t('appointments.canceledTitle', {
         appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
@@ -60,11 +59,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
       })
     case AppointmentDetailsSubTypeConstants.Pending:
     case AppointmentDetailsSubTypeConstants.PastPending:
-      if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
-        return t('appointments.request.title')
-      } else {
-        return ''
-      }
+      return isCommunityCareAppointment
+        ? t('appointments.request.title.communityCare')
+        : t('appointments.request.title')
     case AppointmentDetailsSubTypeConstants.Upcoming:
       return appointmentHeaderType
   }

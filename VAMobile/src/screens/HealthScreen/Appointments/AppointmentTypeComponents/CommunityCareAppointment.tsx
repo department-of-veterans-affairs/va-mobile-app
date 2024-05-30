@@ -47,7 +47,6 @@ function CommunityCareAppointment({
           type={type}
         />
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
-        <AppointmentPreferredModality subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
         <AppointmentLocation attributes={attributes} subType={subType} type={type} />
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
