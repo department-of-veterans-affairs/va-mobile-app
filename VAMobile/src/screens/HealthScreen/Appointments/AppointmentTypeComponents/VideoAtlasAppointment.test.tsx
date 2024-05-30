@@ -135,8 +135,10 @@ context('VideoAtlasAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Video appointment' })).toBeTruthy()
-      expect(screen.getByText('Join this appointment using the device we provided.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Video appointment at an ATLAS location' })).toBeTruthy()
+      expect(
+        screen.getByText("You'll use this code to find your appointment using the computer provided at the site: "),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -144,8 +146,12 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByAccessibilityHint("Add this appointment to your device's calendar")).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
-      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+        ),
+      ).toBeTruthy()
+      expect(screen.getByText('Go to VA.gov to find your VA facility')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
@@ -174,7 +180,7 @@ context('VideoAtlasAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past video appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past video appointment at an ATLAS location' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -233,7 +239,7 @@ context('VideoAtlasAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past video appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past video appointment at an ATLAS location' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -272,7 +278,7 @@ context('VideoAtlasAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled video appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled video appointment at an ATLAS location' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -333,7 +339,7 @@ context('VideoAtlasAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled video appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled video appointment at an ATLAS location' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -695,7 +701,6 @@ context('VideoAtlasAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
@@ -722,7 +727,6 @@ context('VideoAtlasAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
@@ -753,7 +757,6 @@ context('VideoAtlasAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address or phone number right now. But you can still get directions to the facility. You can also find your facility's information on VA.gov.",
@@ -779,7 +782,6 @@ context('VideoAtlasAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information.",
@@ -804,7 +806,6 @@ context('VideoAtlasAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address right now. Try again later. Or call your facility to get the address.",
