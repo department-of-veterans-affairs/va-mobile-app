@@ -118,4 +118,4 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   )
 }
 
-export default LoadingComponent
+export default React.memo(LoadingComponent)
