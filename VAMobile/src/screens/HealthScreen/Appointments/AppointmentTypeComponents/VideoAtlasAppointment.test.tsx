@@ -245,8 +245,12 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
-      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+        ),
+      ).toBeTruthy()
+      expect(screen.getByText('Go to VA.gov to find your VA facility')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
@@ -345,8 +349,12 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
-      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+        ),
+      ).toBeTruthy()
+      expect(screen.getByText('Go to VA.gov to find your VA facility')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
@@ -412,7 +420,6 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
@@ -529,7 +536,6 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByText('Video')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
