@@ -479,14 +479,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           onSuccess: () => {
             showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
-            queryClient.invalidateQueries(
-              {
-                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
-              },
-              {
-                queryKey: [secureMessagingKeys.message, messageID],
-              },
-            )
+            queryClient.invalidateQueries({
+              queryKey: [secureMessagingKeys.message, messageID],
+            })
+            queryClient.invalidateQueries({
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+            })
             goToDraftFolder(true)
           },
           onError: () => {
