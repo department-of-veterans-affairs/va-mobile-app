@@ -260,49 +260,47 @@ export function HomeScreen({}: HomeScreenProps) {
               </Box>
             </Box>
           ) : (
-            <>
-              <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-                {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
-                  !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
-                    <ActivityButton
-                      title={t('appointments')}
-                      subText={t('appointments.activityButton.subText', {
-                        count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
-                        dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
-                      })}
-                      deepLink={'appointments'}
-                    />
-                  )}
-                {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
+            <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+              {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
+                !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
                   <ActivityButton
-                    title={t('claims.title')}
-                    subText={t('claims.activityButton.subText', {
-                      count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                    title={t('appointments')}
+                    subText={t('appointments.activityButton.subText', {
+                      count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
+                      dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
                     })}
-                    deepLink={'claims'}
+                    deepLink={'appointments'}
                   />
                 )}
-                {!!foldersQuery.data?.inboxUnreadCount && (
-                  <ActivityButton
-                    title={`${t('messages')}`}
-                    subText={t('secureMessaging.activityButton.subText', { count: foldersQuery.data.inboxUnreadCount })}
-                    deepLink={'messages'}
-                  />
-                )}
-                {!!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable && (
-                  <ActivityButton
-                    title={t('prescription.title')}
-                    subText={t('prescriptions.activityButton.subText', {
-                      count: prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable,
-                    })}
-                    deepLink={'prescriptions'}
-                  />
-                )}
-                {(hasActivityError || featureInDowntime) && (
-                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
-                )}
-              </Box>
-            </>
+              {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
+                <ActivityButton
+                  title={t('claims.title')}
+                  subText={t('claims.activityButton.subText', {
+                    count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                  })}
+                  deepLink={'claims'}
+                />
+              )}
+              {!!foldersQuery.data?.inboxUnreadCount && (
+                <ActivityButton
+                  title={`${t('messages')}`}
+                  subText={t('secureMessaging.activityButton.subText', { count: foldersQuery.data.inboxUnreadCount })}
+                  deepLink={'messages'}
+                />
+              )}
+              {!!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable && (
+                <ActivityButton
+                  title={t('prescription.title')}
+                  subText={t('prescriptions.activityButton.subText', {
+                    count: prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable,
+                  })}
+                  deepLink={'prescriptions'}
+                />
+              )}
+              {(hasActivityError || featureInDowntime) && (
+                <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+              )}
+            </Box>
           )}
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
