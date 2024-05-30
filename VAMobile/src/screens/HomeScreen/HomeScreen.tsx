@@ -51,7 +51,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -72,56 +72,20 @@ const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
-  const { data: ratingData, isLoading: loadingDisabilityRating } = useDisabilityRating()
-  const { data: serviceHistory, isLoading: loadingServiceHistory } = useServiceHistory()
-  const { data: facilitiesInfo } = useFacilitiesInfo()
-  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-  const {
-    data: prescriptionData,
-    isError: prescriptionsError,
-    isFetched: rxPrefetch,
-    isFetching: loadingPrescriptions,
-  } = usePrescriptions({
-    enabled: isFocused,
-  })
-  const {
-    data: claimsData,
-    isError: claimsAndAppealsError,
-    isFetched: claimsPrefetch,
-    isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: isFocused,
-  })
-  const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
-  const {
-    data: foldersData,
-    isError: inboxError,
-    isFetched: smPrefetch,
-    isFetching: loadingInbox,
-  } = useFolders({
-    enabled: isFocused,
-  })
-
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const {
-    data: apptsData,
-    isError: appointmentsError,
-    isFetched: apptsPrefetch,
-    isFetching: loadingAppointments,
-  } = useAppointments(
+  const appointmentsQuery = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
@@ -130,52 +94,100 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: isFocused,
     },
   )
-  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
-  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+  const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', 1, { enabled: isFocused })
+  const foldersQuery = useFolders({ enabled: isFocused })
+  const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
+  const facilitiesQuery = useFacilitiesInfo()
+  const cernerFacilities = facilitiesQuery.data?.filter((facility) => facility.cerner) || []
 
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
+  const disabilityRatingQuery = useDisabilityRating()
+  const serviceHistoryQuery = useServiceHistory()
+  const letterBeneficiaryQuery = useLetterBeneficiaryData()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const disRating = !!ratingData?.combinedDisabilityRating
-  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const unreadMessageCount = foldersData?.inboxUnreadCount
 
   useEffect(() => {
-    if (apptsPrefetch && apptsData?.meta) {
+    if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
+      logAnalyticsEvent(Events.vama_hs_appts_count(appointmentsQuery.data.meta.upcomingAppointmentsCount))
     }
-  }, [apptsData, apptsPrefetch, loginTimestamp])
+  }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
-    if (smPrefetch && foldersData) {
-      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+    if (foldersQuery.isFetched && foldersQuery.data) {
+      const inboxFolder = foldersQuery.data.data.find(
+        (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
+      )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
       if (inboxFolder) {
         logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
       }
     }
-  }, [smPrefetch, foldersData, loginTimestamp])
+  }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+    if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
       logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
+      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionsQuery.data.meta.prescriptionStatusCount.isRefillable))
     }
-  }, [rxPrefetch, prescriptionData, loginTimestamp])
+  }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+    if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppealsQuery.data?.meta.activeClaimsCount))
     }
-  }, [claimsPrefetch, claimsData, loginTimestamp])
+  }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
+    if (
+      appointmentsQuery.isFetched &&
+      claimsAndAppealsQuery.isFetched &&
+      prescriptionsQuery.isFetched &&
+      foldersQuery.isFetched
+    ) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
-  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
+  }, [
+    appointmentsQuery.isFetched,
+    claimsAndAppealsQuery.isFetched,
+    prescriptionsQuery.isFetched,
+    foldersQuery.isFetched,
+    loginTimestamp,
+  ])
+
+  const featureInDowntime = !!(
+    (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
+    (authorizedServicesQuery.data?.appeals && appealsInDowntime) ||
+    (authorizedServicesQuery.data?.claims && claimsInDowntime) ||
+    (authorizedServicesQuery.data?.prescriptions && rxInDowntime) ||
+    (authorizedServicesQuery.data?.secureMessaging && smInDowntime)
+  )
+  const loadingActivity =
+    appointmentsQuery.isFetching ||
+    claimsAndAppealsQuery.isFetching ||
+    foldersQuery.isFetching ||
+    prescriptionsQuery.isFetching
+  const hasActivity =
+    !!appointmentsQuery.data?.meta?.upcomingAppointmentsCount ||
+    !!claimsAndAppealsQuery.data?.meta.activeClaimsCount ||
+    !!foldersQuery.data?.inboxUnreadCount ||
+    !!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable
+
+  const claimsError = claimsAndAppealsQuery.isError || !!claimsAndAppealsQuery.data?.meta.errors?.length
+  const hasActivityError = !!(
+    appointmentsQuery.isError ||
+    claimsError ||
+    foldersQuery.isError ||
+    prescriptionsQuery.isError
+  )
+
+  const loadingAboutYou =
+    serviceHistoryQuery.isLoading || disabilityRatingQuery.isLoading || letterBeneficiaryQuery.isLoading
+  const hasAboutYouInfo =
+    !!disabilityRatingQuery.data?.combinedDisabilityRating ||
+    !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
+    !!serviceHistoryQuery.data?.mostRecentBranch
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
@@ -186,26 +198,13 @@ export function HomeScreen({}: HomeScreenProps) {
     })
   }
 
-  const profileIconProps: VAIconProps = {
-    name: 'ProfileSelected',
-  }
-
-  const onProfile = () => {
-    navigateTo('Profile')
-  }
-
   const headerButton = {
     label: t('profile.title'),
-    icon: profileIconProps,
-    onPress: onProfile,
+    icon: {
+      name: 'ProfileSelected',
+    } as VAIconProps,
+    onPress: () => navigateTo('Profile'),
   }
-
-  const loadingAboutYou = loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
-  const hasAboutYouInfo =
-    !!ratingData?.combinedDisabilityRating ||
-    !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
-    !!serviceHistory?.mostRecentBranch
-
   const boxProps: BoxProps = {
     style: {
       shadowColor: colors.black,
@@ -222,21 +221,6 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
-  const featureInDowntime = !!(
-    (userAuthorizedServices?.appointments && appointmentsInDowntime) ||
-    (userAuthorizedServices?.appeals && appealsInDowntime) ||
-    (userAuthorizedServices?.claims && claimsInDowntime) ||
-    (userAuthorizedServices?.prescriptions && rxInDowntime) ||
-    (userAuthorizedServices?.secureMessaging && smInDowntime)
-  )
-  const hasActivity =
-    !!upcomingAppointmentsCount ||
-    !!activeClaimsCount ||
-    !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
-    !!unreadMessageCount
-  const hasActivityError = !!(appointmentsError || claimsError || inboxError || prescriptionsError)
-
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
@@ -249,7 +233,7 @@ export function HomeScreen({}: HomeScreenProps) {
             accessibilityRole="header">
             {t('activity')}
           </TextView>
-          {activityLoading ? (
+          {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <LoadingComponent
                 spinnerWidth={24}
@@ -278,35 +262,38 @@ export function HomeScreen({}: HomeScreenProps) {
           ) : (
             <>
               <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-                {!!upcomingAppointmentsCount && !!upcomingDaysLimit && (
-                  <ActivityButton
-                    title={t('appointments')}
-                    subText={t('appointments.activityButton.subText', {
-                      count: upcomingAppointmentsCount,
-                      dayCount: upcomingDaysLimit,
-                    })}
-                    deepLink={'appointments'}
-                  />
-                )}
-                {!claimsError && !!activeClaimsCount && (
+                {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
+                  !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
+                    <ActivityButton
+                      title={t('appointments')}
+                      subText={t('appointments.activityButton.subText', {
+                        count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
+                        dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
+                      })}
+                      deepLink={'appointments'}
+                    />
+                  )}
+                {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                   <ActivityButton
                     title={t('claims.title')}
-                    subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
+                    subText={t('claims.activityButton.subText', {
+                      count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                    })}
                     deepLink={'claims'}
                   />
                 )}
-                {!!unreadMessageCount && (
+                {!!foldersQuery.data?.inboxUnreadCount && (
                   <ActivityButton
                     title={`${t('messages')}`}
-                    subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
+                    subText={t('secureMessaging.activityButton.subText', { count: foldersQuery.data.inboxUnreadCount })}
                     deepLink={'messages'}
                   />
                 )}
-                {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
+                {!!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable && (
                   <ActivityButton
                     title={t('prescription.title')}
                     subText={t('prescriptions.activityButton.subText', {
-                      count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                      count: prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable,
                     })}
                     deepLink={'prescriptions'}
                   />
@@ -355,13 +342,17 @@ export function HomeScreen({}: HomeScreenProps) {
             <Box>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
-                {disRating && (
+                {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
-                    pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
+                    pb={
+                      letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount
+                        ? 0
+                        : theme.dimensions.standardMarginBetween
+                    }
                     pl={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
                       variant={'VeteranStatusBranch'}>
                       {t('disabilityRating.title')}
                     </TextView>
@@ -370,27 +361,30 @@ export function HomeScreen({}: HomeScreenProps) {
                       importantForAccessibility={'no'}
                       variant={
                         'NametagNumber'
-                      }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
+                      }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
                     <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
                       {t('disabilityRating.serviceConnected')}
                     </TextView>
                   </Box>
                 )}
-                {monthlyPay && disRating && (
+                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount &&
+                  !!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                    <Box
+                      mx={theme.dimensions.standardMarginBetween}
+                      my={theme.dimensions.condensedMarginBetween}
+                      borderBottomWidth={1}
+                      borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+                    />
+                  )}
+                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount && (
                   <Box
-                    mx={theme.dimensions.standardMarginBetween}
-                    my={theme.dimensions.condensedMarginBetween}
-                    borderBottomWidth={1}
-                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                  />
-                )}
-                {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-                  <Box
-                    pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
+                    pt={
+                      disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
+                    }
                     pl={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}
                       variant={'VeteranStatusBranch'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
@@ -399,7 +393,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       importantForAccessibility={'no'}
                       variant={
                         'NametagNumber'
-                      }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                      }>{`$${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}</TextView>
                   </Box>
                 )}
               </Box>
