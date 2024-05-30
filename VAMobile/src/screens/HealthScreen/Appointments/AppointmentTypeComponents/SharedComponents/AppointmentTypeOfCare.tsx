@@ -39,6 +39,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
+      case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoVA:
         const isNonPendingClaimExam = !isPending && type === AppointmentDetailsTypeConstants.ClaimExam

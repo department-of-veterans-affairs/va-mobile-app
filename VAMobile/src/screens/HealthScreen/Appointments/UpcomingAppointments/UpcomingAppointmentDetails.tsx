@@ -59,8 +59,13 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { InPersonVAAppointment, PhoneAppointment, VideoVAAppointment } from '../AppointmentTypeComponents'
-import ClaimExamAppointment from '../AppointmentTypeComponents/ClaimExamAppointment'
+import {
+  ClaimExamAppointment,
+  InPersonVAAppointment,
+  PhoneAppointment,
+  VideoGFEAppointment,
+  VideoVAAppointment,
+} from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -368,6 +373,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isPhoneAppointment = phoneOnly
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
+  const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
 
   const subType =
     isAppointmentCanceled && pendingAppointment
@@ -424,6 +430,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isVideoVAAppointment ? (
         <VideoVAAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isVideoGFEAppointment ? (
+        <VideoGFEAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}
