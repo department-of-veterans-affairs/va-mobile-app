@@ -67,7 +67,6 @@ export type HealthStackParamList = WebviewStackParams & {
     messageID: number
     folderID?: number
     currentPage?: number
-    messagesLeft?: number
   }
   StartNewMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse

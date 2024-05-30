@@ -3,6 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
@@ -100,7 +101,8 @@ context('SecureMessaging', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
-          per_page: '10',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
         })
         .mockRejectedValue({
           json: {

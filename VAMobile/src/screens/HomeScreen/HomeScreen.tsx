@@ -42,13 +42,13 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -101,7 +101,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
+  } = useClaimsAndAppeals('ACTIVE', {
     enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
@@ -125,7 +125,6 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
-    1,
     {
       enabled: isFocused,
     },
