@@ -51,8 +51,15 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
   }
 }
 
-const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes, t: TFunction, theme: VATheme) => {
+const getLocationNameAddressDirectionsPhone = (
+  attributes: AppointmentAttributes,
+  type: AppointmentDetailsScreenType,
+  t: TFunction,
+  theme: VATheme,
+) => {
   const { location } = attributes
+
+  const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
 
   const hasFullAddress = Boolean(
     location?.address?.street && location?.address?.city && location?.address?.state && location?.address?.zipCode,
@@ -64,18 +71,34 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
   let missingBodyText
 
   if (locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noPhone')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.hasDirections.noPhone.communityCare')
+      : t('appointments.inPersonVA.missingAddress.hasDirections.noPhone')
   } else if (locationName && hasDirectionLink && hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly.communityCare')
+      : t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
   } else if (!locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAnything')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.hasDirections.noAnything.communityCare')
+      : t('appointments.inPersonVA.missingAddress.hasDirections.noAnything')
   } else if (locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noPhone')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.noDirections.noPhone.communityCare')
+      : t('appointments.inPersonVA.missingAddress.noDirections.noPhone')
   } else if (locationName && !hasDirectionLink && hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly.communityCare')
+      : t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
   } else if (!locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
+    missingBodyText = isCommunityCareAppointment
+      ? t('appointments.inPersonVA.missingAddress.noDirections.noAnything.communityCare')
+      : t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
   }
+
+  const facilityLocatorLinkText = isCommunityCareAppointment
+    ? t('appointments.inPersonVA.missingAddress.goToVALink.communityCare')
+    : t('appointments.inPersonVA.missingAddress.goToVALink')
 
   const locationData: LocationData | undefined =
     hasDirectionLink && hasLatLong
@@ -83,6 +106,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
       : hasDirectionLink && hasFullAddress
         ? { name: location.name, address: location.address! }
         : undefined
+
   return (
     <>
       {locationName ? (
@@ -125,8 +149,8 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
         <LinkWithAnalytics
           type="url"
           url={WEBVIEW_URL_FACILITY_LOCATOR}
-          text={t('appointments.inPersonVA.missingAddress.goToVALink')}
-          a11yLabel={a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink'))}
+          text={facilityLocatorLinkText}
+          a11yLabel={a11yLabelVA(facilityLocatorLinkText)}
           a11yHint={t('upcomingAppointmentDetails.findYourVAFacility.a11yHint')}
         />
       )}
@@ -188,7 +212,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
-        {getLocationNameAddressDirectionsPhone(attributes, t, theme)}
+        {getLocationNameAddressDirectionsPhone(attributes, type, t, theme)}
         {getClinicInfo(attributes, subType, type, t, theme)}
       </Box>
     )
