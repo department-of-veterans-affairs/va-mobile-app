@@ -1,10 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useQueryClient } from '@tanstack/react-query'
-
-import { contactInformationKeys } from 'api/contactInformation'
-import { AppointmentAttributes, AppointmentLocation, UserContactInformation } from 'api/types'
+import { useContactInformation } from 'api/contactInformation'
+import { AppointmentAttributes, AppointmentLocation } from 'api/types'
 import { Box, LinkWithAnalytics } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,7 +32,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const theme = useTheme()
   const { location, minutesDuration, startDateUtc } = attributes || ({} as AppointmentAttributes)
   const { address, lat, long, name } = location || ({} as AppointmentLocation)
-  const queryClient = useQueryClient()
+  const { data: contactInformation } = useContactInformation()
 
   const getLocation = (): string => {
     switch (type) {
@@ -50,11 +48,8 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         }
       case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.Phone:
-        const userContactInfo = queryClient.getQueryData(
-          contactInformationKeys.contactInformation,
-        ) as UserContactInformation
-        if (userContactInfo.residentialAddress) {
-          return `${userContactInfo.residentialAddress.addressLine1} ${userContactInfo.residentialAddress.city}, ${userContactInfo.residentialAddress.province || userContactInfo.residentialAddress.stateCode} ${userContactInfo.residentialAddress.internationalPostalCode || userContactInfo.residentialAddress.zipCode}`
+        if (contactInformation?.residentialAddress) {
+          return `${contactInformation.residentialAddress.addressLine1} ${contactInformation.residentialAddress.city}, ${contactInformation.residentialAddress.province || contactInformation.residentialAddress.stateCode} ${contactInformation.residentialAddress.internationalPostalCode || contactInformation.residentialAddress.zipCode}`
         } else {
           return ''
         }
