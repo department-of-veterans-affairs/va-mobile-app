@@ -59,8 +59,6 @@ const getLocationNameAddressDirectionsPhone = (
 ) => {
   const { location } = attributes
 
-  const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
-
   const hasFullAddress = Boolean(
     location?.address?.street && location?.address?.city && location?.address?.state && location?.address?.zipCode,
   )
@@ -70,35 +68,23 @@ const getLocationNameAddressDirectionsPhone = (
   const locationName = location?.name
   let missingBodyText
 
+  const communityCareString = type === AppointmentDetailsTypeConstants.CommunityCare ? '.communityCare' : ''
+
   if (locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.hasDirections.noPhone.communityCare')
-      : t('appointments.inPersonVA.missingAddress.hasDirections.noPhone')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noPhone${communityCareString}`)
   } else if (locationName && hasDirectionLink && hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly.communityCare')
-      : t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly${communityCareString}`)
   } else if (!locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.hasDirections.noAnything.communityCare')
-      : t('appointments.inPersonVA.missingAddress.hasDirections.noAnything')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noAnything${communityCareString}`)
   } else if (locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.noDirections.noPhone.communityCare')
-      : t('appointments.inPersonVA.missingAddress.noDirections.noPhone')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noPhone${communityCareString}`)
   } else if (locationName && !hasDirectionLink && hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly.communityCare')
-      : t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noAddressOnly${communityCareString}`)
   } else if (!locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = isCommunityCareAppointment
-      ? t('appointments.inPersonVA.missingAddress.noDirections.noAnything.communityCare')
-      : t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noAnything${communityCareString}`)
   }
 
-  const facilityLocatorLinkText = isCommunityCareAppointment
-    ? t('appointments.inPersonVA.missingAddress.goToVALink.communityCare')
-    : t('appointments.inPersonVA.missingAddress.goToVALink')
+  const facilityLocatorLinkText = t(`appointments.inPersonVA.missingAddress.goToVALink${communityCareString}`)
 
   const locationData: LocationData | undefined =
     hasDirectionLink && hasLatLong
