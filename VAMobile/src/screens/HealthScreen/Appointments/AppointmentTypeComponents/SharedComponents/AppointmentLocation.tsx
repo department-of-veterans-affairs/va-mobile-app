@@ -41,6 +41,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
         case AppointmentDetailsTypeConstants.InPersonVA:
         case AppointmentDetailsTypeConstants.ClaimExam:
         case AppointmentDetailsTypeConstants.VideoVA:
+        case AppointmentDetailsTypeConstants.VideoAtlas:
           return t('appointments.location.title')
         default:
           undefined
@@ -48,7 +49,12 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
   }
 }
 
-const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes, t: TFunction, theme: VATheme) => {
+const getLocationNameAddressDirectionsPhone = (
+  attributes: AppointmentAttributes,
+  type: AppointmentDetailsScreenType,
+  t: TFunction,
+  theme: VATheme,
+) => {
   const { location } = attributes
 
   const hasFullAddress = Boolean(
@@ -57,7 +63,7 @@ const getLocationNameAddressDirectionsPhone = (attributes: AppointmentAttributes
   const hasLatLong = Boolean(location?.lat && location?.long)
   const hasDirectionLink = hasFullAddress || hasLatLong
   const hasPhone = Boolean(location?.phone?.number)
-  const locationName = location?.name
+  const locationName = type !== AppointmentDetailsTypeConstants.VideoAtlas ? location?.name : undefined
   let missingBodyText
 
   if (locationName && hasDirectionLink && !hasPhone) {
@@ -185,7 +191,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
-        {getLocationNameAddressDirectionsPhone(attributes, t, theme)}
+        {getLocationNameAddressDirectionsPhone(attributes, type, t, theme)}
         {getClinicInfo(attributes, subType, type, t, theme)}
       </Box>
     )

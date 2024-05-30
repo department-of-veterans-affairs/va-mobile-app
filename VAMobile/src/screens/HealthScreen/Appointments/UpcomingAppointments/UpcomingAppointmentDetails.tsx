@@ -63,6 +63,7 @@ import {
   ClaimExamAppointment,
   InPersonVAAppointment,
   PhoneAppointment,
+  VideoAtlasAppointment,
   VideoGFEAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
@@ -372,6 +373,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
 
@@ -438,6 +440,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isVideoGFEAppointment ? (
         <VideoGFEAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isVideoAtlasAppointment ? (
+        <VideoAtlasAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}
