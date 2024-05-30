@@ -159,10 +159,15 @@ const phoneFacilitySchedulingLink = (
   isGFEAtlasHomeVideo: boolean,
   location: AppointmentLocation | undefined,
   t: TFunction,
+  theme: VATheme,
 ) => {
   return (
     <Box>
-      {location?.name && isGFEAtlasHomeVideo && <TextView variant="MobileBody">{location.name}</TextView>}
+      {location?.name && isGFEAtlasHomeVideo && (
+        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+          {location.name}
+        </TextView>
+      )}
       {location?.phone && location.phone.areaCode && location.phone.number ? (
         <ClickToCallPhoneNumber phone={location.phone} />
       ) : useFacilityLocatorFallback ? (
@@ -323,7 +328,7 @@ function AppointmentCancelReschedule({
         {body}
       </TextView>
       {!isClaimExam ? (
-        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t)
+        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme)
       ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
           type="url"
