@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { SecureMessagingThreadGetData } from 'api/types'
-import { get } from 'store/api'
+import { Params, get } from 'store/api'
 
 import { secureMessagingKeys } from './queryKeys'
 
@@ -14,6 +14,9 @@ const getThread = (
 ): Promise<SecureMessagingThreadGetData | undefined> => {
   return get<SecureMessagingThreadGetData>(
     `/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`,
+    {
+      useCache: 'false',
+    } as Params,
   )
 }
 
