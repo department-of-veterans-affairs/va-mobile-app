@@ -39,12 +39,6 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
     errorMsg: t('personalInformation.preferredName.notSaved'),
   }
 
-  useEffect(() => {
-    if (preferredNameMutation.isSuccess) {
-      navigation.goBack()
-    }
-  }, [preferredNameMutation.isSuccess, navigation])
-
   const onConfirmCancel = (): void => {
     if (preferredName !== getInitialState()) {
       confirmAlert({
@@ -73,7 +67,10 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
 
   const updatePreferredName = () => {
     const mutateOptions = {
-      onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false),
+      onSuccess: () => {
+        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+        navigation.goBack()
+      },
       onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updatePreferredName, false, true, true),
     }
     preferredNameMutation.mutate(preferredName, mutateOptions)
