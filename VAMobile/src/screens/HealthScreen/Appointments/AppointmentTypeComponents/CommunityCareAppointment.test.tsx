@@ -16,7 +16,7 @@ import CommunityCareAppointment from './CommunityCareAppointment'
 context('CommunityCareAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
-    appointmentType: AppointmentTypeConstants.VA,
+    appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
     status: AppointmentStatusConstants.BOOKED,
     //fields below are used in the subcomponents
     bestTimeToCall: undefined, //pending appointments
@@ -25,9 +25,9 @@ context('CommunityCareAppointment', () => {
     friendlyLocationName: 'Johnson Clinic suite 100',
     healthcareProvider: 'Larry Bird',
     location: {
-      name: 'VA Long Beach Healthcare System',
+      name: 'Community Clinic Association',
       address: {
-        street: '5901 East 7th Street',
+        street: '1412 East Cesar Ave',
         city: 'Long Beach',
         state: 'CA',
         zipCode: '90822',
@@ -78,9 +78,9 @@ context('CommunityCareAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
-      expect(screen.getByText('Go to VA Long Beach Healthcare System for this appointment.')).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A  Long Beach Healthcare System for this appointment.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Community care appointment' })).toBeTruthy()
+      expect(screen.getByText('Ask your provider how to attend this appointment.')).toBeTruthy()
+      expect(screen.getByLabelText('Ask your provider how to attend this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -90,12 +90,9 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
-      expect(screen.getByText('Larry Bird')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -106,9 +103,6 @@ context('CommunityCareAppointment', () => {
       expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
       expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
 
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
-
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
       expect(
@@ -116,12 +110,7 @@ context('CommunityCareAppointment', () => {
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
-      expect(
-        screen.getByText('You can cancel this appointment in the app. But if you need to reschedule, call us.'),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('button', { name: 'Cancel appointment' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Cancel this appointment?')).toBeTruthy()
+      expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -142,16 +131,16 @@ context('CommunityCareAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
-      expect(screen.getByText('Go to VA facility for this appointment.')).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A  facility for this appointment.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Community care appointment' })).toBeTruthy()
+      expect(screen.getByText('Ask your provider how to attend this appointment.')).toBeTruthy()
+      expect(screen.getByLabelText('Ask your provider how to attend this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Add to calendar' })).toBeTruthy()
       expect(screen.getByAccessibilityHint("Add this appointment to your device's calendar")).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
           "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
@@ -195,7 +184,7 @@ context('CommunityCareAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past community care appointment' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -203,12 +192,9 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
-      expect(screen.getByText('Larry Bird')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -218,9 +204,6 @@ context('CommunityCareAppointment', () => {
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
       expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
       expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
-
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -261,12 +244,12 @@ context('CommunityCareAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Past community care appointment' })).toBeTruthy()
       expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
           "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
@@ -315,7 +298,7 @@ context('CommunityCareAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled community care appointment' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
@@ -323,12 +306,9 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
-      expect(screen.getByText('Larry Bird')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -338,9 +318,6 @@ context('CommunityCareAppointment', () => {
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
       expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
       expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
-
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -384,12 +361,12 @@ context('CommunityCareAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled in-person appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled community care appointment' })).toBeTruthy()
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
           "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
@@ -472,8 +449,8 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Office visit')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -589,8 +566,8 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Office visit')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -747,9 +724,9 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         location: {
-          name: 'VA Long Beach Healthcare System',
+          name: 'Community Clinic Association',
           address: {
-            street: '5901 East 7th Street',
+            street: '1412 East Cesar Ave',
             city: 'Long Beach',
             state: 'CA',
             zipCode: '90822',
@@ -760,9 +737,9 @@ context('CommunityCareAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
+      expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
@@ -773,7 +750,7 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         location: {
-          name: 'VA Long Beach Healthcare System',
+          name: 'Community Clinic Association',
           address: undefined,
           phone: {
             areaCode: '123',
@@ -787,8 +764,8 @@ context('CommunityCareAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
@@ -808,7 +785,7 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         location: {
-          name: 'VA Long Beach Healthcare System',
+          name: 'Community Clinic Association',
           address: undefined,
           phone: undefined,
           url: '',
@@ -818,8 +795,8 @@ context('CommunityCareAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address or phone number right now. But you can still get directions to the facility. You can also find your facility's information on VA.gov.",
@@ -836,7 +813,7 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         location: {
-          name: 'VA Long Beach Healthcare System',
+          name: 'Community Clinic Association',
           address: undefined,
           phone: undefined,
           url: '',
@@ -844,8 +821,8 @@ context('CommunityCareAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information.",
@@ -857,7 +834,7 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         location: {
-          name: 'VA Long Beach Healthcare System',
+          name: 'Community Clinic Association',
           address: undefined,
           phone: {
             areaCode: '123',
@@ -869,8 +846,8 @@ context('CommunityCareAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
-      expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
+      expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
           "We can't show your health care facility's address right now. Try again later. Or call your facility to get the address.",
