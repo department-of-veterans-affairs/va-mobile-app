@@ -44,7 +44,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     data: claimsAndAppeals,
     isFetching: loadingClaimsAndAppeals,
     isError: claimsAndAppealsError,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
+  } = useClaimsAndAppeals('ACTIVE', {
     enabled: isFocused,
   })
 

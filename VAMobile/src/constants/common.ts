@@ -3,6 +3,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
+export const LARGE_PAGE_SIZE = 5000
 
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes

@@ -31,7 +31,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
+import {
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  getUpcomingAppointmentDateRange,
+  isAPendingAppointment,
+} from 'utils/appointments'
 import getEnv from 'utils/env'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -54,7 +59,6 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -75,7 +79,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
 
