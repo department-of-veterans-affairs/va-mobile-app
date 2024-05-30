@@ -216,7 +216,7 @@ jobs:
         if: steps.run_e2e_tests.outcome == 'failure'
         run: exit 1
 
-  matrix-send_test_results_to_testrail:r
+  matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
     needs: [matrix-e2e-ios, output_detox_tests_to_run]
     strategy:
