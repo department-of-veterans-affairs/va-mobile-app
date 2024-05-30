@@ -78,6 +78,10 @@ const getLocationNameAddressDirectionsPhone = (
     missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
   } else if (!locationName && !hasDirectionLink && !hasPhone) {
     missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
+  } else if (!locationName && hasDirectionLink && hasPhone) {
+    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
+  } else if (!locationName && !hasDirectionLink && hasPhone) {
+    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
   }
 
   const locationData: LocationData | undefined =
