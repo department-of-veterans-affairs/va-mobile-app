@@ -78,8 +78,12 @@ context('VideoAtlasAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Video appointment' })).toBeTruthy()
-      expect(screen.getByText('Join this appointment using the device we provided.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Video appointment at an ATLAS location' })).toBeTruthy()
+      expect(
+        screen.getByText(
+          "You'll use this code to find your appointment using the computer provided at the site: 123 code",
+        ),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -91,6 +95,10 @@ context('VideoAtlasAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -135,6 +143,10 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByRole('link', { name: 'Add to calendar' })).toBeTruthy()
       expect(screen.getByAccessibilityHint("Add this appointment to your device's calendar")).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
       expect(
@@ -172,6 +184,10 @@ context('VideoAtlasAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -222,6 +238,10 @@ context('VideoAtlasAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
       expect(
@@ -262,6 +282,10 @@ context('VideoAtlasAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -313,6 +337,10 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
+      expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
