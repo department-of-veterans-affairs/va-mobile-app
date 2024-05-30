@@ -103,7 +103,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), onPress: () => navigateTo('ManageYourAccount') },
+    { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
     { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },

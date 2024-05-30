@@ -34,7 +34,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
   } = useAuthorizedServices()
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
   const {
@@ -127,24 +128,31 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     return letterButton
   })
 
-  const errorCheck = getLettersError || getUserAuthorizedServicesError
-  const noLettersCheck = !userAuthorizedServices?.lettersAndDocuments || !letters || letters.length === 0
-
   return (
     <FeatureLandingTemplate
       backLabel={t('letters.overview.title')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
-      {loading || loadingUserAuthorizedServices ? (
+      {!lettersNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+      ) : loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('letters.list.loading')} />
-      ) : errorCheck || !lettersNotInDowntime ? (
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.lettersAndDocuments ? (
+        <NoLettersScreen />
+      ) : getLettersError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}
           error={getLettersError}
           onTryAgain={refetchLetters}
         />
-      ) : noLettersCheck ? (
+      ) : !letters || letters.length === 0 ? (
         <NoLettersScreen />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>

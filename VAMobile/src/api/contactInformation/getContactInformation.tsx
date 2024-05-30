@@ -34,5 +34,6 @@ export const useContactInformation = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getContactInfo: Service error',
     },
+    retry: 1,
   })
 }

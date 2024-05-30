@@ -155,19 +155,16 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched])
 
   useEffect(() => {
-    if (
-      messageFetched &&
-      currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX &&
-      messageData?.data.attributes.readReceipt !== READ &&
-      currentPage
-    ) {
+    if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
+      let updateQueries = false
       const inboxMessagesData = queryClient.getQueryData([
         secureMessagingKeys.folderMessages,
         currentFolderIdParam,
         currentPage,
       ]) as SecureMessagingFolderMessagesGetData
       const newInboxMessages = inboxMessagesData.data.map((m) => {
-        if (m.attributes.messageId === message.messageId) {
+        if (m.attributes.messageId === message.messageId && m.attributes.readReceipt !== READ) {
+          updateQueries = true
           m.attributes.readReceipt = READ
           const oldMessageAttributes = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
           oldMessageAttributes.readReceipt = READ
@@ -181,22 +178,24 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         }
         return m
       })
-      const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
-      queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
-      if (foldersData) {
-        let inboxUnreadCount = foldersData.inboxUnreadCount
-        const newFolders = foldersData.data.map((folder) => {
-          if (folder.attributes.name === FolderNameTypeConstants.inbox) {
-            folder.attributes.unreadCount = folder.attributes.unreadCount - 1
-            inboxUnreadCount = folder.attributes.unreadCount
-          }
-          return folder
-        }) as SecureMessagingFolderList
-        queryClient.setQueryData(secureMessagingKeys.folders, {
-          ...foldersData,
-          data: newFolders,
-          inboxUnreadCount,
-        } as SecureMessagingFoldersGetData)
+      if (updateQueries) {
+        const newData = { ...inboxMessagesData, data: newInboxMessages } as SecureMessagingFolderMessagesGetData
+        queryClient.setQueryData([secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage], newData)
+        if (foldersData) {
+          let inboxUnreadCount = foldersData.inboxUnreadCount
+          const newFolders = foldersData.data.map((folder) => {
+            if (folder.attributes.name === FolderNameTypeConstants.inbox) {
+              folder.attributes.unreadCount = folder.attributes.unreadCount > 0 ? folder.attributes.unreadCount - 1 : 0
+              inboxUnreadCount = folder.attributes.unreadCount
+            }
+            return folder
+          }) as SecureMessagingFolderList
+          queryClient.setQueryData(secureMessagingKeys.folders, {
+            ...foldersData,
+            data: newFolders,
+            inboxUnreadCount,
+          } as SecureMessagingFoldersGetData)
+        }
       }
     }
   }, [

@@ -34,7 +34,7 @@ export type HomeStackParamList = WebviewStackParams & {
   HowWillYou: undefined
   InAppRecruitment: undefined
   IncorrectServiceInfo: undefined
-  ManageYourAccount: undefined
+  AccountSecurity: undefined
   MilitaryInformation: undefined
   NotificationsSettings: undefined
   PersonalInformation: undefined

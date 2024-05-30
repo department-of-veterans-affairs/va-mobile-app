@@ -4,7 +4,7 @@ import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-n
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
@@ -33,7 +33,6 @@ const CtaButton: FC<CtaButtonProps> = ({
   alignItems,
   justifyContent,
   accessibilityLabel,
-  accessibilityHint,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -59,8 +58,7 @@ const CtaButton: FC<CtaButtonProps> = ({
     <TouchableWithoutFeedback
       onPress={onPress}
       {...touchableProps}
-      {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}
-      {...a11yHintProp(accessibilityHint || t('component.crisisLine.hint'))}>
+      {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}>
       <Box {...boxProps}>
         <TextView
           variant="MobileBody"
