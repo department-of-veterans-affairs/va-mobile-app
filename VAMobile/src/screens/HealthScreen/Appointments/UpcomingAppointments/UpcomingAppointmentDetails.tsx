@@ -12,25 +12,31 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import {
-  AppointmentDetailsSubTypeConstants,
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
+  getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
+import getEnv from 'utils/env'
+import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import {
-  ClaimExamAppointment,
-  CommunityCareAppointment,
-  InPersonVAAppointment,
-  PhoneAppointment,
-  VideoAtlasAppointment,
-  VideoGFEAppointment,
-  VideoHomeAppointment,
-  VideoVAAppointment,
-} from '../AppointmentTypeComponents'
-import { getUpcomingAppointmentDateRange } from '../Appointments'
+  AppointmentAddressAndNumber,
+  AppointmentAlert,
+  AppointmentReason,
+  AppointmentTypeAndDate,
+  ContactInformation,
+  PendingAppointmentCancelButton,
+  PreferredAppointmentType,
+  PreferredDateAndTime,
+  ProviderName,
+  TypeOfCare,
+} from '../AppointmentDetailsCommon'
+import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
+import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
@@ -44,7 +50,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
 

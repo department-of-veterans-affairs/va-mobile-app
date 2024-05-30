@@ -13,6 +13,7 @@ import {
   AppointmentTimeZone,
   AppointmentType,
   AppointmentTypeConstants,
+  AppointmentsDateRange,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
@@ -464,59 +465,32 @@ export const isAPendingAppointment = (attributes: AppointmentAttributes): boolea
   return !!(isPending && validPendingStatus)
 }
 
-export type AppointmentDetailsScreenType =
-  | 'ClaimExam'
-  | 'CommunityCare'
-  | 'CompensationPension'
-  | 'InPersonVA'
-  | 'Phone'
-  | 'VideoVA'
-  | 'VideoAtlas'
-  | 'VideoHome'
-  | 'VideoGFE'
+/**
+ * Returns the date rage for upcoming appointments
+ *
+ * @returns AppointmentsDateRange
+ */
+export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const futureDate = todaysDate.plus({ days: 390 })
 
-export const AppointmentDetailsTypeConstants: {
-  ClaimExam: AppointmentDetailsScreenType
-  CommunityCare: AppointmentDetailsScreenType
-  CompensationPension: AppointmentDetailsScreenType
-  InPersonVA: AppointmentDetailsScreenType
-  Phone: AppointmentDetailsScreenType
-  VideoVA: AppointmentDetailsScreenType
-  VideoAtlas: AppointmentDetailsScreenType
-  VideoHome: AppointmentDetailsScreenType
-  VideoGFE: AppointmentDetailsScreenType
-} = {
-  ClaimExam: 'ClaimExam',
-  CommunityCare: 'CommunityCare',
-  CompensationPension: 'CompensationPension',
-  InPersonVA: 'InPersonVA',
-  Phone: 'Phone',
-  VideoVA: 'VideoVA',
-  VideoAtlas: 'VideoAtlas',
-  VideoHome: 'VideoHome',
-  VideoGFE: 'VideoGFE',
+  return {
+    startDate: todaysDate.startOf('day').toISO(),
+    endDate: futureDate.endOf('day').toISO(),
+  }
 }
 
-export type AppointmentDetailsSubType =
-  | 'Pending'
-  | 'Past'
-  | 'Upcoming'
-  | 'Canceled'
-  | 'CanceledAndPending'
-  | 'PastPending'
+/**
+ * Returns the date rage for appointments in the past 3 months
+ *
+ * @returns AppointmentsDateRange
+ */
+export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-export const AppointmentDetailsSubTypeConstants: {
-  Pending: AppointmentDetailsSubType
-  Past: AppointmentDetailsSubType
-  Upcoming: AppointmentDetailsSubType
-  Canceled: AppointmentDetailsSubType
-  CanceledAndPending: AppointmentDetailsSubType
-  PastPending: AppointmentDetailsSubType
-} = {
-  Pending: 'Pending',
-  Past: 'Past',
-  Upcoming: 'Upcoming',
-  Canceled: 'Canceled',
-  CanceledAndPending: 'CanceledAndPending',
-  PastPending: 'PastPending',
+  return {
+    startDate: threeMonthsEarlier.startOf('day').toISO(),
+    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+  }
 }

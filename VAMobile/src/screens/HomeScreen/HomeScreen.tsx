@@ -46,8 +46,7 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
@@ -56,7 +55,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -103,7 +103,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
+  } = useClaimsAndAppeals('ACTIVE', {
     enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
@@ -127,7 +127,6 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
-    1,
     {
       enabled: isFocused,
     },
