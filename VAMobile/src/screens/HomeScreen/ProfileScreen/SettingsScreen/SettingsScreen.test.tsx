@@ -73,7 +73,7 @@ context('SettingsScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('button', { name: 'Manage account' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Account security' })).toBeTruthy()
     expect(screen.getByText('Notifications')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Share the app' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Privacy policy' })).toBeTruthy()
@@ -98,10 +98,10 @@ context('SettingsScreen', () => {
     })
   })
 
-  describe('on manage your account click', () => {
+  describe('on account security click', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Manage account' }))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
+      fireEvent.press(screen.getByRole('button', { name: 'Account security' }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('AccountSecurity')
     })
   })
 

@@ -9,6 +9,8 @@ import {
   AccordionCollapsibleProps,
   AttachmentLink,
   Box,
+  LabelTag,
+  LabelTagTypeConstants,
   LoadingComponent,
   TextView,
   VAIcon,
@@ -155,9 +157,15 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}
-          <TextView accessible={false} variant="MobileBody">
-            {dateTime}
-          </TextView>
+          {sentDate && sentDate.length > 1 ? (
+            <TextView accessible={false} variant="MobileBody">
+              {dateTime}
+            </TextView>
+          ) : (
+            <Box mt={condensedMarginBetween}>
+              <LabelTag text={t('draft')} labelType={LabelTagTypeConstants.tagInactive} />
+            </Box>
+          )}
         </Box>
       </Box>
     )
