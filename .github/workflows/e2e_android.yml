@@ -12,8 +12,12 @@ on:
     types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
+      run_full_test:
+        description: 'Run full e2e test?'
+        type: boolean
+        required: false
       tests_to_run:
-        description: 'List tests to test in ["test name", "test name"] format.  All tests will run if left blank'
+        description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
         required: false
       testRail_name:
@@ -91,7 +95,7 @@ jobs:
         id: matrix_value
         run: |
           if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
-            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+          echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
               echo "matrix=" >> "$GITHUB_OUTPUT"
             else
@@ -99,13 +103,17 @@ jobs:
               echo "matrix=$resp" >> "$GITHUB_OUTPUT"
             fi
           else
-            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
-              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-              echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+              if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "matrix=" >> "$GITHUB_OUTPUT" 
+              fi
             fi
           fi
         env:
