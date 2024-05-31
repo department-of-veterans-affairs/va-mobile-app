@@ -93,7 +93,7 @@ jobs:
               echo "matrix=$resp" >> "$GITHUB_OUTPUT"
             fi
           else
-            if [[ "${{ inputs.run_full_test }}" == "true" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
