@@ -735,7 +735,7 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
+          "We can't show your health care facility's address or phone number right now. But you can still get directions to the facility. You can also find your facility's information on VA.gov.",
         ),
       ).toBeTruthy()
 
@@ -790,7 +790,7 @@ context('VideoAtlasAppointment', () => {
       expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information.",
         ),
       ).toBeTruthy()
     })
