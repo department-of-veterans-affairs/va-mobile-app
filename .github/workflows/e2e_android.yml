@@ -6,8 +6,10 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-      branches:
+    branches:
         - 'dependabot/**'
+  pull_request:
+    types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
       tests_to_run:
@@ -32,7 +34,11 @@ on:
     workflows: ['[Release] New Release Issue']
     types: 
       - in_progress
-  
+
+concurrency:
+  group: android-detox-${{ github.ref }}
+  cancel-in-progress: true  
+
 defaults:
   run:
     working-directory: VAMobile
@@ -65,13 +71,14 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
-  #find_detox_tests_to_run:
-  #  if: ${{github.event_name == 'push'}}
-  #  uses: ./.github/workflows/e2e_detox_mapping.yml
+  find_detox_tests_to_run:
+    if: (github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')
+    uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    if: always()
+    if: (!cancelled())
     runs-on: macos-latest-xl
+    needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.empty_matrix}}
@@ -83,16 +90,27 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
-            echo "matrix=" >> "$GITHUB_OUTPUT"
-            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+          if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
+            echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+              echo "empty_matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            fi
           else
-            echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-            echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            if [[ "${{ inputs.tests_to_run }}" == "" ]]; then
+              echo "matrix=" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+              echo "empty_matrix=false" >> "$GITHUB_OUTPUT"
+            fi
           fi
 
   matrix-e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
+    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != '' && needs.output_detox_tests_to_run.outputs.output2 != ''
     runs-on: macos-latest-xl
     needs: output_detox_tests_to_run
     strategy:
@@ -177,7 +195,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-android:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
+    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 == 'false'
     needs: [start_slack_thread, output_detox_tests_to_run]
     runs-on: macos-latest-xl
     steps:
@@ -285,7 +303,7 @@ jobs:
         run: exit 1
 
   matrix-send_test_results_to_testrail:
-    if: always() && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
+    if: (!cancelled()) && github.event.inputs.run_testRail == 'true' && needs.output_detox_tests_to_run.outputs.output1 != ''
     needs: [matrix-e2e-android, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -302,7 +320,7 @@ jobs:
     secrets: inherit
 
   send_test_results_to_testrail:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
+    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
     needs: [e2e-android, output_detox_tests_to_run]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml

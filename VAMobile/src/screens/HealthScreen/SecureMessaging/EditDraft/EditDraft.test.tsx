@@ -221,7 +221,9 @@ context('EditDraft', () => {
   describe('when no recipients are returned', () => {
     it('should display an AlertBox and on click of Go to inbox it should navigate', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
@@ -245,7 +247,9 @@ context('EditDraft', () => {
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
@@ -259,7 +263,9 @@ context('EditDraft', () => {
   describe('when there are no recent messages', () => {
     it('should display an alert and should hide the Add Files button and Send button', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(oldThread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
@@ -277,7 +283,9 @@ context('EditDraft', () => {
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
@@ -292,7 +300,9 @@ context('EditDraft', () => {
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
@@ -309,7 +319,9 @@ context('EditDraft', () => {
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
