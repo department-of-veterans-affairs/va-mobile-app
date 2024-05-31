@@ -64,11 +64,11 @@ const getLocationNameAddressDirectionsPhone = (
   const hasLatLong = Boolean(location?.lat && location?.long)
   const hasDirectionLink = hasFullAddress || hasLatLong
   const hasPhone = Boolean(location?.phone?.number)
-  const isAtlasOrNotPending =
-    type === AppointmentDetailsTypeConstants.VideoAtlas ||
-    subtype === AppointmentDetailsSubTypeConstants.Canceled ||
-    subtype === AppointmentDetailsSubTypeConstants.Past ||
-    subtype === AppointmentDetailsSubTypeConstants.Upcoming
+  const isAtlasAndNotPending =
+    type === AppointmentDetailsTypeConstants.VideoAtlas &&
+    (subtype === AppointmentDetailsSubTypeConstants.Canceled ||
+      subtype === AppointmentDetailsSubTypeConstants.Past ||
+      subtype === AppointmentDetailsSubTypeConstants.Upcoming)
   let locationName: string | undefined = location?.name
   let missingBodyText
 
@@ -86,7 +86,7 @@ const getLocationNameAddressDirectionsPhone = (
     missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
   }
 
-  if (isAtlasOrNotPending) {
+  if (isAtlasAndNotPending) {
     locationName = undefined
   }
 
