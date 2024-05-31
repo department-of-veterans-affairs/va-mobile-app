@@ -3,6 +3,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
+export const LARGE_PAGE_SIZE = 5000
 
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes
@@ -53,7 +54,9 @@ export const MAIL_TO_REGEX_EXP = new RegExp(
   /^(mailto:([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 )
 
-export const PHONE_REGEX_EXP = new RegExp(/^[-0-9()+]{10,}/)
+export const PHONE_REGEX_EXP = new RegExp(
+  /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
+)
 export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)

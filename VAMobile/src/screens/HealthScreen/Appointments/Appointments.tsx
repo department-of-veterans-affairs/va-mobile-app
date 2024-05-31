@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { AppointmentsDateRange, AppointmentsErrorServiceTypesConstants } from 'api/types'
+import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
@@ -18,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -28,16 +28,6 @@ import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
-
-export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
-  const todaysDate = DateTime.local()
-  const futureDate = todaysDate.plus({ days: 390 })
-
-  return {
-    startDate: todaysDate.startOf('day').toISO(),
-    endDate: futureDate.endOf('day').toISO(),
-  }
-}
 
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -51,7 +41,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   const {
     data: userAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
+    isFetching: fetchingAuthServices,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -59,9 +50,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     data: apptsData,
     error: appointmentsHasError,
     isFetching: loadingAppointments,
-    isFetched: apptsDataFetched,
     refetch: refetchAppts,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
   // Resets scroll position to top whenever current page appointment list changes:
@@ -70,25 +60,13 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   // since the appointment list sizes differ depending on content
   const scrollViewRef = useRef<ScrollView | null>(null)
 
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-  }, [apptsDataFetched, page])
-
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
       if (tab === 0) {
         setDateRange(getUpcomingAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.UPCOMING)
       } else {
-        const todaysDate = DateTime.local()
-        const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-
-        const pastRange: AppointmentsDateRange = {
-          startDate: threeMonthsEarlier.startOf('day').toISO(),
-          endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
-        }
-
-        setDateRange(pastRange)
+        setDateRange(getPastAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
       }
       setPage(1)
@@ -127,9 +105,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const hasError =
-    ((appointmentsHasError || getUserAuthorizedServicesError) && !loadingAppointments) || !apptsNotInDowntime
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -137,17 +112,22 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID">
-      {hasError ? (
+      {!apptsNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
-          onTryAgain={() => {
-            refetchUserAuthorizedServices()
-            refetchAppts()
-          }}
-          error={appointmentsHasError}
+          onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
         />
       ) : !userAuthorizedServices?.appointments ? (
         <NoMatchInRecords />
+      ) : appointmentsHasError && !loadingAppointments ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+          onTryAgain={refetchAppts}
+          error={appointmentsHasError}
+        />
       ) : (
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -170,14 +150,22 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}
+                page={page}
                 setPage={setPage}
-                loading={loadingAppointments}
+                loading={loadingAppointments || fetchingAuthServices}
                 setDateRange={setDateRange}
                 setTimeFrame={setTimeFrame}
+                scrollViewRef={scrollViewRef}
               />
             )}
             {selectedTab === 0 && (
-              <UpcomingAppointments appointmentsData={apptsData} setPage={setPage} loading={loadingAppointments} />
+              <UpcomingAppointments
+                appointmentsData={apptsData}
+                page={page}
+                setPage={setPage}
+                loading={loadingAppointments || fetchingAuthServices}
+                scrollViewRef={scrollViewRef}
+              />
             )}
           </Box>
         </Box>

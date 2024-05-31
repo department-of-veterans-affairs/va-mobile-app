@@ -50,10 +50,12 @@ or proxy objects we've written that communicate with other teams' objects. Usual
 `Common::Client::Base` or are related to configuration for such objects.
 
 ## Workers
+
 ```
 /modules/mobile/app/workers
 ```
-Background workers. For more information, visit this [link](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/BackgroundWorkersAndCaching)
+
+[View information about vackground workers](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/BackgroundWorkersAndCaching)
 
 ## Helpers
 ```

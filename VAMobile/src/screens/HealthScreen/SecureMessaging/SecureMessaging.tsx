@@ -42,7 +42,12 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const [secureMessagingTab, setSecureMessagingTab] = useState(0)
   const [termsAndConditionError, setTermsAndConditionError] = useState(false)
   const isFocused = useIsFocused()
-  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+    isFetching: fetchingAuthServices,
+  } = useAuthorizedServices()
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const {
     data: foldersData,
@@ -61,7 +66,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     isFetched: inboxFetched,
     refetch: refetchInbox,
     isFetching: refetchingInbox,
-  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, {
     enabled:
       isFocused &&
       screenContentAllowed('WG_SecureMessaging') &&
@@ -123,10 +128,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     scrollViewRef: scrollViewRef,
   }
 
-  const otherError =
-    (foldersError || (inboxError && !termsAndConditionError) || getUserAuthorizedServicesError || !smNotInDowntime) &&
-    !refetchingFolders &&
-    !refetchingInbox
+  const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
 
   return (
     <FeatureLandingTemplate
@@ -135,7 +137,17 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
       title={t('messages')}
       testID="messagesTestID"
       scrollViewProps={scrollViewProps}>
-      {termsAndConditionError ? (
+      {!smNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.secureMessaging ? (
+        <NotEnrolledSM />
+      ) : termsAndConditionError ? (
         <TermsAndConditions />
       ) : otherError ? (
         <ErrorComponent
@@ -143,8 +155,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
           error={foldersError || inboxError}
           onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
         />
-      ) : !userAuthorizedServices?.secureMessaging ? (
-        <NotEnrolledSM />
       ) : (
         <>
           <Box mx={theme.dimensions.buttonPadding}>

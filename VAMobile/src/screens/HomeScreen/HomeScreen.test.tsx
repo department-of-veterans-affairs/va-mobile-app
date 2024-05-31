@@ -135,11 +135,11 @@ context('HomeScreen', () => {
         data: mock,
       },
       {
-        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', 1],
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE'],
         data: claimsAppealsPayload,
       },
       {
-        queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING, 1],
+        queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
         data: apptsData,
       },
       {

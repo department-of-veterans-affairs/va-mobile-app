@@ -31,6 +31,7 @@ const mockOverrides = {
   decisionLettersWaygate: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
+  cernerTrueForDemo: false,
 }
 
 describe('activate', () => {

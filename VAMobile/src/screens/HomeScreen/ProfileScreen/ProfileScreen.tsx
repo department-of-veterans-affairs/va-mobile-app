@@ -18,12 +18,11 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
   const {
-    isFetching: loadingServiceHistory,
+    isLoading: loadingServiceHistory,
     error: serviceHistoryError,
     refetch: refetchServiceHistory,
   } = useServiceHistory()
@@ -44,8 +43,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   }
 
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
-  const errorCheck =
-    useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError || serviceHistoryError
+  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || serviceHistoryError
 
   const displayName = !!personalInfo?.fullName && (
     <Box>

@@ -42,13 +42,13 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -101,7 +101,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isError: claimsAndAppealsError,
     isFetched: claimsPrefetch,
     isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', 1, {
+  } = useClaimsAndAppeals('ACTIVE', {
     enabled: isFocused,
   })
   const activeClaimsCount = claimsData?.meta.activeClaimsCount
@@ -125,7 +125,6 @@ export function HomeScreen({}: HomeScreenProps) {
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
-    1,
     {
       enabled: isFocused,
     },
@@ -142,30 +141,34 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {
+      logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
       logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
     }
-  }, [apptsData, apptsPrefetch])
+  }, [apptsData, apptsPrefetch, loginTimestamp])
 
   useEffect(() => {
     if (smPrefetch && foldersData) {
       const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
       if (inboxFolder) {
         logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
       }
     }
-  }, [smPrefetch, foldersData])
+  }, [smPrefetch, foldersData, loginTimestamp])
 
   useEffect(() => {
     if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+      logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
       logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
     }
-  }, [rxPrefetch, prescriptionData])
+  }, [rxPrefetch, prescriptionData, loginTimestamp])
 
   useEffect(() => {
     if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
       logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
     }
-  }, [claimsPrefetch, claimsData])
+  }, [claimsPrefetch, claimsData, loginTimestamp])
 
   useEffect(() => {
     if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
@@ -321,10 +324,14 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           )}
         </Box>
-        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
+            mb={
+              !loadingAboutYou && !hasAboutYouInfo
+                ? theme.dimensions.condensedMarginBetween
+                : theme.dimensions.standardMarginBetween
+            }
             variant={'HomeScreenHeader'}
             accessibilityRole="header">
             {t('aboutYou')}
@@ -340,7 +347,7 @@ export function HomeScreen({}: HomeScreenProps) {
               />
             </Box>
           ) : !hasAboutYouInfo ? (
-            <Box mx={theme.dimensions.condensedMarginBetween}>
+            <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
@@ -403,6 +410,7 @@ export function HomeScreen({}: HomeScreenProps) {
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
             variant={'HomeScreenHeader'}
+            accessibilityLabel={a11yLabelVA(t('vaResources'))}
             accessibilityRole="header">
             {t('vaResources')}
           </TextView>
