@@ -194,6 +194,7 @@ jobs:
         continue-on-error: true
 
       - name: Run e2e tests for Android
+        id: run_e2e_tests_nav_AF
         if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -205,7 +206,33 @@ jobs:
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-        continue-on-error: true
+
+      - name: Clear jest cache
+        if: steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn jest:clear
+
+      - name: Run e2e tests for Android
+        if: steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+
         
       - name: Upload e2e-junit
         if: failure() || success()
