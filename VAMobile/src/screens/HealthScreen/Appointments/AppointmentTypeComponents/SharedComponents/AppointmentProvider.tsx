@@ -38,6 +38,7 @@ function AppointmentProvider({ attributes, subType, type }: AppointmentProviderP
       case AppointmentDetailsTypeConstants.Phone:
       case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.VideoVA:
+      case AppointmentDetailsTypeConstants.VideoAtlas:
         return (
           <Box>
             <TextView variant="MobileBodyBold" accessibilityRole="header">

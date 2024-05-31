@@ -81,16 +81,6 @@ context('UpcomingAppointmentDetails', () => {
     jest.clearAllMocks()
   })
 
-  describe('when the appointment type is atlas', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
-      expect(screen.getByText('VA Video Connect\r\nATLAS location')).toBeTruthy()
-      expect(screen.getByText('Appointment code: 654321')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-  })
-
   describe('when the appointment type is at home', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)

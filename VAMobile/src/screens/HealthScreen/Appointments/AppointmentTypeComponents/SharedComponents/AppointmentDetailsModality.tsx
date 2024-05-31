@@ -39,6 +39,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.VideoVA:
       appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
       break
+    case AppointmentDetailsTypeConstants.VideoAtlas:
+      appointmentHeaderType = t('appointments.videoAtlas.upcomingTitle')
+      break
     default:
       appointmentHeaderType = ''
   }
@@ -109,6 +112,8 @@ const supportingModalityBody = (
           return t('appointments.claimExam.explanationText')
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.videoVA.upcomingBody')
+        case AppointmentDetailsTypeConstants.VideoAtlas:
+          return t('appointments.videoAtlas.upcomingBody', { code: location.code || '' })
         default:
           return ''
       }
