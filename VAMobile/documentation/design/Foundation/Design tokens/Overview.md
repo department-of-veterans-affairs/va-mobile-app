@@ -48,7 +48,7 @@ If you’re looking to use a semantic token in your designs, you can find the ap
     * **on-light**: Used for light mode
     * **on-dark**: Used for dark mode
 
-For example, let’s look at the Alert component. This component is placed on the background (**vads-color-bg-default-on-light**) and is comprised of multiple tokens for the surface (**vads-color-feedback-surface-success-on-light**), border (**vads-color-feedback-border-success-on-light**), and foreground (**vads-color-fg-default-on-light**).
+For example, let’s look at the Alert component. This component is placed on the background (**vads-color-background-default-on-light**) and is comprised of multiple tokens for the surface (**vads-color-feedback-surface-success-on-light**), border (**vads-color-feedback-border-success-on-light**), and foreground (**vads-color-foreground-default-on-light**).
 
 ![Image of the alert component with semantic tokens applied](/img/design-system/tokens-semantic-alert.png)
 
