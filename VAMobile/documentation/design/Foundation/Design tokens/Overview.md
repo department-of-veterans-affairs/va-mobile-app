@@ -34,9 +34,9 @@ If you’re looking to use a semantic token in your designs, you can find the ap
     * **action**: Used for interactive elements
     * **feedback**: Used to inform users of important changes
 * Property
-    * **bg** (background): Used for background elements
+    * **background**: Used for background elements
     * **border**: Used for borders, strokes, and dividers
-    * **fg** (foreground): Used for foreground elements such as text and icons
+    * **foreground**: Used for foreground elements such as text and icons
     * **surface**: Used for surface elements such as alerts, cards, and rows
 * Variant
     * **default, inverse, secondary**: Used for any elements
