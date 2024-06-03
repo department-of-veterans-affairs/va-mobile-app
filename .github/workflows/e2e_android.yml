@@ -221,7 +221,7 @@ jobs:
           script: yarn jest:clear
 
       - name: Run e2e tests for Android
-        if: steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
