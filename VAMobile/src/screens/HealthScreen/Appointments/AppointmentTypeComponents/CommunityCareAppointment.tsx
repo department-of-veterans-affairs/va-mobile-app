@@ -13,7 +13,6 @@ import {
   AppointmentDetailsModality,
   AppointmentLocation,
   AppointmentPersonalContactInfo,
-  AppointmentPreferredModality,
   AppointmentProvider,
   AppointmentReasonAndComment,
   AppointmentTypeOfCare,
