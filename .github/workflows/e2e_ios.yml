@@ -186,8 +186,8 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: Run e2e tests for iOS
-        if: success() && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+      - name: Rerun e2e tests for iOS if failed
+        if: failure() && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
         run: |
             yarn jest:clear;
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
