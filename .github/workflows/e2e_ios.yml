@@ -181,13 +181,13 @@ jobs:
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
           fi
         continue-on-error: true
 
       - name: Rerun e2e tests for iOS if failed
-        if: success() && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        if: (failure() || success()) && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
         run: |
             yarn jest:clear;
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
