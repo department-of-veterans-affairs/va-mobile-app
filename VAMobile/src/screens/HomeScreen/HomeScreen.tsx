@@ -69,8 +69,8 @@ import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/Notifica
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
-type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 const MemoizedLoadingComponent = React.memo(LoadingComponent)
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
