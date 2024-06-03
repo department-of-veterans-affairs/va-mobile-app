@@ -37,9 +37,9 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const getLocation = (): string => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
-      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoAtlas:
       case AppointmentDetailsTypeConstants.VideoVA:
+      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.CommunityCare:
         if (isIOS() && lat && long) {
           return name || ''

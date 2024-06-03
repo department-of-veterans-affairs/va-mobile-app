@@ -373,11 +373,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
-  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
-  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
 
   const subType =
     isAppointmentCanceled && pendingAppointment
