@@ -93,7 +93,7 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: isFocused,
     },
   )
-  const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', 1, { enabled: isFocused })
+  const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
   const foldersQuery = useFolders({ enabled: isFocused })
   const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
   const facilitiesQuery = useFacilitiesInfo()
