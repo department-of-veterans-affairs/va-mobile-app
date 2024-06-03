@@ -4,8 +4,9 @@ import { UseMutateFunction } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
-import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
+import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants, isAPendingAppointment } from 'utils/appointments'
 
+import CommunityCarePendingLocation from './CommunityCarePendingLocation'
 import {
   AppointmentCalendarButton,
   AppointmentCancelReschedule,
@@ -34,6 +35,7 @@ function CommunityCareAppointment({
   cancelAppointment,
 }: CommunityCareAppointmentProps) {
   const type = AppointmentDetailsTypeConstants.CommunityCare
+  const isPending = isAPendingAppointment(attributes)
   return (
     <Box>
       <TextArea>
@@ -47,7 +49,11 @@ function CommunityCareAppointment({
         />
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
-        <AppointmentLocation attributes={attributes} subType={subType} type={type} />
+        {isPending ? (
+          <CommunityCarePendingLocation attributes={attributes} />
+        ) : (
+          <AppointmentLocation attributes={attributes} subType={subType} type={type} />
+        )}
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
