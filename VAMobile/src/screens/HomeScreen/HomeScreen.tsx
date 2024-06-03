@@ -70,6 +70,7 @@ import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/Notifica
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
+const MemoizedLoadingComponent = React.memo(LoadingComponent)
 
 export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -234,7 +235,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </TextView>
           {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <LoadingComponent
+              <MemoizedLoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
                 text={t('activity.loading')}
@@ -323,7 +324,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </TextView>
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <LoadingComponent
+              <MemoizedLoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
                 text={t('aboutYou.loading')}
