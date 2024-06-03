@@ -31,11 +31,17 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.Phone:
       appointmentHeaderType = t('appointments.phone.upcomingTitle')
       break
-    case AppointmentDetailsTypeConstants.ClaimExam:
-      appointmentHeaderType = t('appointments.claimExam')
+    case AppointmentDetailsTypeConstants.VideoGFE:
+      appointmentHeaderType = t('appointments.videoGFEHome.upcomingTitle')
       break
     case AppointmentDetailsTypeConstants.VideoVA:
       appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
+      break
+    case AppointmentDetailsTypeConstants.VideoAtlas:
+      appointmentHeaderType = t('appointments.videoAtlas.upcomingTitle')
+      break
+    case AppointmentDetailsTypeConstants.ClaimExam:
+      appointmentHeaderType = t('appointments.claimExam')
       break
     case AppointmentDetailsTypeConstants.CommunityCare:
       appointmentHeaderType = t('appointments.communityCare.upcomingTitle')
@@ -100,10 +106,14 @@ const supportingModalityBody = (
           })
         case AppointmentDetailsTypeConstants.Phone:
           return t('appointments.phone.upcomingBody')
-        case AppointmentDetailsTypeConstants.ClaimExam:
-          return t('appointments.claimExam.explanationText')
+        case AppointmentDetailsTypeConstants.VideoGFE:
+          return t('appointments.videoGFE.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.videoVA.upcomingBody')
+        case AppointmentDetailsTypeConstants.VideoAtlas:
+          return t('appointments.videoAtlas.upcomingBody', { code: location.code || '' })
+        case AppointmentDetailsTypeConstants.ClaimExam:
+          return t('appointments.claimExam.explanationText')
         case AppointmentDetailsTypeConstants.CommunityCare:
           return t('appointments.communityCare.upcomingBody')
         default:

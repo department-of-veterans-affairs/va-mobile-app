@@ -49,11 +49,8 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
   })
 
-  describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
+  describe('when the appointment type is VA_VIDEO_CONNECT_HOME', () => {
     it('should render only 7 TextViews to display appointment type, date information, and the schedule text', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
-      expect(screen.getByText('VA Video Connect\r\nusing a VA device')).toBeTruthy()
-
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       expect(screen.getByText('VA Video Connect\r\nHome')).toBeTruthy()
     })

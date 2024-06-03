@@ -214,7 +214,9 @@ context('ViewMessageScreen', () => {
   describe('when latest message is older than 45 days', () => {
     it('should have the Start new message button', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(oldThread)
         .calledWith(`/v0/messaging/health/messages/${45}`)
         .mockResolvedValue(oldMessage)
@@ -230,7 +232,9 @@ context('ViewMessageScreen', () => {
   describe('Should load the screen correctly', () => {
     it('renders correct amount of CollapsibleMessages', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)

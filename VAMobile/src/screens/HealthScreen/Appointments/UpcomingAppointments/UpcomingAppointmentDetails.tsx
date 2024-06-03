@@ -59,9 +59,15 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import { InPersonVAAppointment, PhoneAppointment, VideoVAAppointment } from '../AppointmentTypeComponents'
-import ClaimExamAppointment from '../AppointmentTypeComponents/ClaimExamAppointment'
-import CommunityCareAppointment from '../AppointmentTypeComponents/CommunityCareAppointment'
+import {
+  ClaimExamAppointment,
+  CommunityCareAppointment,
+  InPersonVAAppointment,
+  PhoneAppointment,
+  VideoAtlasAppointment,
+  VideoGFEAppointment,
+  VideoVAAppointment,
+} from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 
@@ -368,8 +374,10 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
   const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+  const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
 
   const subType =
     isAppointmentCanceled && pendingAppointment
@@ -416,16 +424,32 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           goBack={navigation.goBack}
           cancelAppointment={cancelAppointment}
         />
-      ) : isClaimExamAppointment ? (
-        <ClaimExamAppointment
+      ) : isVideoVAAppointment ? (
+        <VideoVAAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}
           goBack={navigation.goBack}
           cancelAppointment={cancelAppointment}
         />
-      ) : isVideoVAAppointment ? (
-        <VideoVAAppointment
+      ) : isVideoGFEAppointment ? (
+        <VideoGFEAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isVideoAtlasAppointment ? (
+        <VideoAtlasAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}

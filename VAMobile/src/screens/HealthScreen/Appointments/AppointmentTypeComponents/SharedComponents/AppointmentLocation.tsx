@@ -42,6 +42,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
         case AppointmentDetailsTypeConstants.InPersonVA:
         case AppointmentDetailsTypeConstants.ClaimExam:
         case AppointmentDetailsTypeConstants.VideoVA:
+        case AppointmentDetailsTypeConstants.VideoAtlas:
           return t('appointments.location.title')
         case AppointmentDetailsTypeConstants.CommunityCare:
           return t('providerInformation')
@@ -53,6 +54,7 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
 
 const getLocationNameAddressDirectionsPhone = (
   attributes: AppointmentAttributes,
+  subtype: AppointmentDetailsSubType,
   type: AppointmentDetailsScreenType,
   t: TFunction,
   theme: VATheme,
@@ -65,7 +67,12 @@ const getLocationNameAddressDirectionsPhone = (
   const hasLatLong = Boolean(location?.lat && location?.long)
   const hasDirectionLink = hasFullAddress || hasLatLong
   const hasPhone = Boolean(location?.phone?.number)
-  const locationName = location?.name
+  const isAtlasAndNotPending =
+    type === AppointmentDetailsTypeConstants.VideoAtlas &&
+    (subtype === AppointmentDetailsSubTypeConstants.Canceled ||
+      subtype === AppointmentDetailsSubTypeConstants.Past ||
+      subtype === AppointmentDetailsSubTypeConstants.Upcoming)
+  let locationName: string | undefined = location?.name
   let missingBodyText
 
   const communityCareString = type === AppointmentDetailsTypeConstants.CommunityCare ? '.communityCare' : ''
@@ -85,6 +92,9 @@ const getLocationNameAddressDirectionsPhone = (
   }
 
   const facilityLocatorLinkText = t(`appointments.inPersonVA.missingAddress.goToVALink${communityCareString}`)
+  if (isAtlasAndNotPending) {
+    locationName = undefined
+  }
 
   const locationData: LocationData | undefined =
     hasDirectionLink && hasLatLong
@@ -198,7 +208,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
-        {getLocationNameAddressDirectionsPhone(attributes, type, t, theme)}
+        {getLocationNameAddressDirectionsPhone(attributes, subType, type, t, theme)}
         {getClinicInfo(attributes, subType, type, t, theme)}
       </Box>
     )
