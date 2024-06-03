@@ -143,16 +143,16 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
+          "We can't show your provider's address right now. Try again later. Or call your provider to get the address.",
         ),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's address right now. Try again later. Or call your provider to get the address.",
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
       expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
 
@@ -166,7 +166,7 @@ context('CommunityCareAppointment', () => {
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
-      expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
+      expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Find your VA location' })).toBeTruthy()
       expect(screen.getByLabelText('Find your  V-A  location')).toBeTruthy()
@@ -214,12 +214,12 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Need to schedule another appointment?' })).toBeTruthy()
       expect(
         screen.getByText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on VA.gov.',
+          'If you need to schedule another appointment, call your provider or schedule a new appointment on VA.gov.',
         ),
       ).toBeTruthy()
       expect(
         screen.getByLabelText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on  V-A .gov .',
+          'If you need to schedule another appointment, call your provider or schedule a new appointment on  V-A .gov .',
         ),
       ).toBeTruthy()
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
@@ -252,16 +252,16 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to  V-A .gov to find your provider's information.",
         ),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to VA.gov to find your provider's information.",
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
       expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
 
@@ -277,12 +277,12 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Need to schedule another appointment?' })).toBeTruthy()
       expect(
         screen.getByText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on VA.gov.',
+          'If you need to schedule another appointment, call your provider or schedule a new appointment on VA.gov.',
         ),
       ).toBeTruthy()
       expect(
         screen.getByLabelText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on  V-A .gov .',
+          'If you need to schedule another appointment, call your provider or schedule a new appointment on  V-A .gov .',
         ),
       ).toBeTruthy()
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
@@ -328,12 +328,12 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.',
+          'If you need to reschedule this appointment, call your provider or schedule a new appointment on VA.gov.',
         ),
       ).toBeTruthy()
       expect(
         screen.getByLabelText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on  V-A .gov .',
+          'If you need to reschedule this appointment, call your provider or schedule a new appointment on  V-A .gov .',
         ),
       ).toBeTruthy()
 
@@ -369,16 +369,16 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Provider information' })).toBeTruthy()
       expect(
         screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to  V-A .gov to find your provider's information.",
         ),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to VA.gov to find your provider's information.",
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
       expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
 
@@ -394,12 +394,12 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.',
+          'If you need to reschedule this appointment, call your provider or schedule a new appointment on VA.gov.',
         ),
       ).toBeTruthy()
       expect(
         screen.getByLabelText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on  V-A .gov .',
+          'If you need to reschedule this appointment, call your provider or schedule a new appointment on  V-A .gov .',
         ),
       ).toBeTruthy()
 
@@ -431,7 +431,7 @@ context('CommunityCareAppointment', () => {
         ],
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
-      expect(screen.getByRole('header', { name: 'Request for appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Request for community care' })).toBeTruthy()
       expect(
         screen.getByText(
           "We'll try to schedule your appointment in the next 2 business days. Check back here or call your facility for updates.",
@@ -445,21 +445,16 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Type of care' })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Scheduling facility' })).toBeTruthy()
+      expect(
+        screen.getByText('This facility will contact you if we need more information about your request.'),
+      ).toBeTruthy()
+      expect(screen.getByText('Johnson Clinic suite 100')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Preferred community care provider' })).toBeTruthy()
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: '123-456-7890' })).toBeTruthy()
-      expect(screen.getByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getByLabelText('TTY: 7 1 1')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
@@ -491,7 +486,7 @@ context('CommunityCareAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
-      expect(screen.getByRole('header', { name: 'Request for appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Request for community care' })).toBeTruthy()
       expect(
         screen.getByText(
           "We'll try to schedule your appointment in the next 2 business days. Check back here or call your facility for updates.",
@@ -500,22 +495,18 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
         screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to  V-A .gov to find your provider's information.",
         ),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to VA.gov to find your provider's information.",
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
       expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
 
@@ -552,7 +543,7 @@ context('CommunityCareAppointment', () => {
         ],
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByRole('header', { name: 'Canceled request for appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled request for community care' })).toBeTruthy()
       expect(screen.getByText('You canceled this request.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
@@ -562,10 +553,13 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Type of care' })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Scheduling facility' })).toBeTruthy()
+      expect(
+        screen.getByText('This facility will contact you if we need more information about your request.'),
+      ).toBeTruthy()
+      expect(screen.getByText('Johnson Clinic suite 100')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Preferred community care provider' })).toBeTruthy()
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(screen.getByText('1412 East Cesar Ave')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
@@ -588,10 +582,14 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Need to request another appointment?' })).toBeTruthy()
       expect(
-        screen.getByText('If you still need an appointment, call us or request a new appointment on VA.gov.'),
+        screen.getByText(
+          'If you still need an appointment, call your provider or request a new appointment on VA.gov.',
+        ),
       ).toBeTruthy()
       expect(
-        screen.getByLabelText('If you still need an appointment, call us or request a new appointment on  V-A .gov .'),
+        screen.getByLabelText(
+          'If you still need an appointment, call your provider or request a new appointment on  V-A .gov .',
+        ),
       ).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
@@ -618,27 +616,26 @@ context('CommunityCareAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByRole('header', { name: 'Canceled request for appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Canceled request for community care' })).toBeTruthy()
       expect(screen.getByText('You canceled this request.')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Office visit')).toBeTruthy()
+      expect(screen.queryByRole('header', { name: 'Scheduling facility' })).toBeFalsy()
+      expect(screen.queryByRole('header', { name: 'Preferred community care provider' })).toBeFalsy()
 
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
       expect(
         screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to  V-A .gov to find your provider's information.",
         ),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's information right now. Try again later. Or go to VA.gov to find your provider's information.",
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
       expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
 
@@ -647,10 +644,14 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Need to request another appointment?' })).toBeTruthy()
       expect(
-        screen.getByText('If you still need an appointment, call us or request a new appointment on VA.gov.'),
+        screen.getByText(
+          'If you still need an appointment, call your provider or request a new appointment on VA.gov.',
+        ),
       ).toBeTruthy()
       expect(
-        screen.getByLabelText('If you still need an appointment, call us or request a new appointment on  V-A .gov .'),
+        screen.getByLabelText(
+          'If you still need an appointment, call your provider or request a new appointment on  V-A .gov .',
+        ),
       ).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
@@ -768,7 +769,7 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
+          "We can't show your provider's address right now. But you can still get directions to the facility. You can also call your provider to get the address.",
         ),
       ).toBeTruthy()
 
@@ -799,14 +800,14 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show your health care facility's address or phone number right now. But you can still get directions to the facility. You can also find your facility's information on VA.gov.",
+          "We can't show your provider's address or phone number right now. But you can still get directions to the facility. You can also find your provider's information on VA.gov.",
         ),
       ).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
       expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
 
-      expect(screen.getAllByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: "Go to VA.gov to find your provider's information" })).toBeTruthy()
     })
 
     it('no directions, no phone', () => {
@@ -825,7 +826,7 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information.",
+          "We can't show your provider's address or phone number right now. Try again later. Or go to VA.gov to find your provider's information.",
         ),
       ).toBeTruthy()
     })
@@ -850,7 +851,7 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Community Clinic Association')).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show your health care facility's address right now. Try again later. Or call your facility to get the address.",
+          "We can't show your provider's address right now. Try again later. Or call your provider to get the address.",
         ),
       ).toBeTruthy()
 
