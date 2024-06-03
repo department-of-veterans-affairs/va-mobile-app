@@ -315,7 +315,7 @@ describe('Navigation', () => {
       let testName = nameArray[2]
       if (
         nameArray[2] ===
-        'To confirm or update your sign-in email, go to the website where you manage your account information.'
+        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
       ) {
         testName = 'Account security'
       }
