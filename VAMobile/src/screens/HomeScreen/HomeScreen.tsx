@@ -311,7 +311,11 @@ export function HomeScreen({}: HomeScreenProps) {
                   />
                 )}
                 {(hasActivityError || featureInDowntime) && (
-                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+                  <CategoryLandingAlert
+                    text={t('activity.error.cantShowAllActivity')}
+                    isError={hasActivityError}
+                    bypassHaptics={false}
+                  />
                 )}
               </Box>
             </>
@@ -348,7 +352,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : !hasAboutYouInfo ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-              <CategoryLandingAlert text={t('aboutYou.noInformation')} />
+              <CategoryLandingAlert text={t('aboutYou.noInformation')} bypassHaptics={false} />
             </Box>
           ) : (
             <Box>
