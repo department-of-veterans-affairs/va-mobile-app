@@ -4,7 +4,11 @@ import { UseMutateFunction } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
-import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants, isAPendingAppointment } from 'utils/appointments'
+import {
+  AppointmentDetailsSubType,
+  AppointmentDetailsSubTypeConstants,
+  AppointmentDetailsTypeConstants,
+} from 'utils/appointments'
 
 import CommunityCarePendingLocation from './CommunityCarePendingLocation'
 import {
@@ -35,7 +39,12 @@ function CommunityCareAppointment({
   cancelAppointment,
 }: CommunityCareAppointmentProps) {
   const type = AppointmentDetailsTypeConstants.CommunityCare
-  const isPending = isAPendingAppointment(attributes)
+  const isPending = [
+    AppointmentDetailsSubTypeConstants.CanceledAndPending,
+    AppointmentDetailsSubTypeConstants.Pending,
+    AppointmentDetailsSubTypeConstants.PastPending,
+  ].includes(subType)
+
   return (
     <Box>
       <TextArea>
