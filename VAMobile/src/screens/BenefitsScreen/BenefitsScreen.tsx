@@ -86,13 +86,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
         />
         <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
         <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
-        {showAlert && (
-          <CategoryLandingAlert
-            text={alertMessage}
-            isError={claimsAndAppealsError || !!nonFatalErrors}
-            bypassHaptics={false}
-          />
-        )}
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={claimsAndAppealsError || !!nonFatalErrors} />}
       </Box>
     </CategoryLanding>
   )

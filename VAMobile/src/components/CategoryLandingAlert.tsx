@@ -12,25 +12,17 @@ interface CategoryLandingAlertProps {
   text: string
   /** Optional boolean for indicating an error by setting the text color to red */
   isError?: boolean
-  /** Boolean to determine whether haptics should fire */
-  bypassHaptics: boolean
 }
 
 /**
  * Component for alerts displayed on CategoryLanding screens
  */
-const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({
-  text,
-  isError,
-  bypassHaptics,
-}: CategoryLandingAlertProps) => {
+const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: CategoryLandingAlertProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const vibrate = (): void => {
-    if (!bypassHaptics) {
-      triggerHaptic(isError ? HapticFeedbackTypes.notificationError : HapticFeedbackTypes.notificationWarning)
-    }
+    triggerHaptic(isError ? HapticFeedbackTypes.notificationError : HapticFeedbackTypes.notificationWarning)
   }
 
   const alertVariant = isError ? 'CategoryLandingError' : 'CategoryLandingWarning'
