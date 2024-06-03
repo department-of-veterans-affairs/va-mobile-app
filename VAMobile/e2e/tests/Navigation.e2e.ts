@@ -24,8 +24,8 @@ const navigationDic = {
     [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings'], 'Settings'],
     [
       ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
-      ['Profile', 'Settings', 'Manage account'],
-      'To confirm or update your sign-in email, go to the website where you manage your account information.',
+      ['Profile', 'Settings', 'Account security'],
+      'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
     ],
     [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
   ],
@@ -93,7 +93,7 @@ const featureID = {
   'Contact information': 'profileID',
   'Military information': 'profileID',
   Settings: 'profileID',
-  'Manage account': 'settingsID',
+  'Account security': 'settingsID',
   Notifications: 'settingsID',
   Benefits: 'benefitsTestID',
   'Received July 20, 2021': 'claimsHistoryID',
@@ -317,7 +317,7 @@ describe('Navigation', () => {
         nameArray[2] ===
         'To confirm or update your sign-in email, go to the website where you manage your account information.'
       ) {
-        testName = 'Manage Account'
+        testName = 'Account security'
       }
       let runTest = false
       if (nameArray[0] instanceof Array) {
