@@ -181,7 +181,7 @@ jobs:
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
           fi
         continue-on-error: true
