@@ -33,39 +33,15 @@ jobs:
         
         shell: bash
         run: |
-          set -euo pipefail
-
-          if [[ -z "${{ secrets.GITHUB_TOKEN }}" ]]; then
-            echo "Error: GITHUB_TOKEN is not set."
-            exit 1
-          fi
-          echo "Repository: ${{ github.repository }}"
-          echo "Pull Request Number: ${{ github.event.pull_request.number }}"
-
-          response=$(curl --silent --fail --request GET \
+          approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json') || {
-          echo "Failed to fetch pull request reviews. HTTP status code: $?"
-          exit 1
-          }
-
-          if [ $? -ne 0 ]; then
-            echo "Failed to fetch pull request reviews."
+          --header 'Content-Type: application/json' |
+          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]') || {
+            echo " Don't worry about this error.  It might mean there are no reviews yet."
             exit 1
-          fi
-
-          echo "Response: $response"
-
-
-          approvals=$(echo "$response" | jq -r '[.[] | select(.state == "APPROVED") | .user.login] | @csv')
-
-          if [ -z "$approvals" ]; then
-            echo "No approvals found."
-          else
-            echo "Approved by: $approvals"
-          fi
-          
+          }
+       
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
