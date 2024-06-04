@@ -18,3 +18,5 @@ export { default as AppointmentReasonAndComment } from './AppointmentReasonAndCo
 export * from './AppointmentReasonAndComment'
 export { default as AppointmentTypeOfCare } from './AppointmentTypeOfCare'
 export * from './AppointmentTypeOfCare'
+export { default as CommunityCarePendingLocation } from './CommunityCarePendingLocation'
+export * from './CommunityCarePendingLocation'

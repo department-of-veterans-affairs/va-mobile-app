@@ -10,7 +10,6 @@ import {
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
 
-import CommunityCarePendingLocation from './CommunityCarePendingLocation'
 import {
   AppointmentCalendarButton,
   AppointmentCancelReschedule,
@@ -21,6 +20,7 @@ import {
   AppointmentProvider,
   AppointmentReasonAndComment,
   AppointmentTypeOfCare,
+  CommunityCarePendingLocation,
 } from './SharedComponents'
 
 type CommunityCareAppointmentProps = {
