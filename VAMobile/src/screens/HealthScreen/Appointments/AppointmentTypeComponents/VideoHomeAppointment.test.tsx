@@ -79,7 +79,9 @@ context('VideoHomeAppointment', () => {
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
       expect(screen.getByRole('header', { name: 'Video appointment' })).toBeTruthy()
-      expect(screen.getByText('Join this appointment using the device we provided.')).toBeTruthy()
+      expect(screen.getByText('You can join this appointment now.')).toBeTruthy()
+      expect(screen.getByRole('Button', { name: 'Join session' })).toBeTruthy()
+      expect(screen.getByRole('Button', { name: 'How to prepare for your video appointment' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
@@ -129,6 +131,8 @@ context('VideoHomeAppointment', () => {
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
       expect(screen.getByRole('header', { name: 'Video appointment' })).toBeTruthy()
       expect(screen.getByText('Join this appointment using the device we provided.')).toBeTruthy()
+      expect(screen.getByRole('Button', { name: 'Join session' })).toBeTruthy()
+      expect(screen.getByRole('Button', { name: 'How to prepare for your video appointment' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
