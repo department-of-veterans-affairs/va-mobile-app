@@ -107,7 +107,7 @@ jobs:
       - name: Bundle app
         run: yarn bundle:ios
       - name: Install gems
-        run: bundle 
+        run: bundle install
       - name: Update fastlane
         run: bundle update fastlane
       - name: Run fastlane with retries
@@ -115,7 +115,7 @@ jobs:
         with:
           timeout_minutes: 20
           max_attempts: 3
-          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" --verbose
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
