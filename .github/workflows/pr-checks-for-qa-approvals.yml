@@ -57,21 +57,21 @@ jobs:
  
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
-            if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "Sparowhawk"))] | length' <<< "$approvals") -gt 0 ]]
-              then
-              echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
-                echo 'This PR has QA and engineer approval to merge'
-                exit 0
-              else 
-                echo 'This PR requires QA approval to merge'
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "Sparowhawk"))] | length' <<< "$approvals") -gt 0 ]]
+                then
+                echo 'This PR has at least one engineer approval. Now checking for QA approval...'
+                if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+                  echo 'This PR has QA and engineer approval to merge'
+                  exit 0
+                else 
+                  echo 'This PR requires QA approval to merge'
+                  exit 1
+                fi
+              else
+                echo 'This PR requires Engineer approval before QA review'
                 exit 1
-              fi
-            else
-              echo 'This PR requires Engineer approval before QA review'
-              exit 1
-            fi 
+              fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
-          fi 
+          fi  
