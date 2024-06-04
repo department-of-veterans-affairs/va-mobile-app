@@ -14,14 +14,7 @@ import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { isErrorObject, showSnackBar } from 'utils/common'
-import {
-  useAlert,
-  useAppDispatch,
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useIsScreenReaderEnabled,
-  useTheme,
-} from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
@@ -39,7 +32,6 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()
-  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -197,7 +189,6 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
           onPress: onDelete,
         },
       ],
-      screenReaderEnabled: screenReaderEnabled,
     })
   }
 

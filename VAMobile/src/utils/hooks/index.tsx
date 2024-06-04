@@ -331,8 +331,6 @@ export type UseAlertProps = {
   message?: string
   /** options to show in alert */
   buttons: Array<AlertButton>
-  /** screenReaderEnabled boolean */
-  screenReaderEnabled: boolean
 }
 /**
  * Hook to create standard alert for a destructive event
