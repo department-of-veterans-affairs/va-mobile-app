@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { AppointmentAttributes, AppointmentStatusDetailTypeConsts } from 'api/types'
 import { Box, TextView } from 'components'
@@ -13,6 +14,7 @@ import {
   AppointmentDetailsSubTypeConstants,
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
+import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentDetailsModalityProps = {
@@ -31,6 +33,7 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
       appointmentHeaderType = t('appointments.phone.upcomingTitle')
       break
     case AppointmentDetailsTypeConstants.VideoGFE:
+    case AppointmentDetailsTypeConstants.VideoHome:
       appointmentHeaderType = t('appointments.videoGFEHome.upcomingTitle')
       break
     case AppointmentDetailsTypeConstants.ClaimExam:
@@ -79,7 +82,7 @@ const supportingModalityBody = (
   type: AppointmentDetailsScreenType,
   t: TFunction,
 ) => {
-  const { healthcareProvider, location, statusDetail } = attributes
+  const { healthcareProvider, location, statusDetail, startDateUtc } = attributes
   let who = t('appointments.canceled.whoCanceled.you')
   if (
     statusDetail === AppointmentStatusDetailTypeConsts.CLINIC ||
@@ -87,7 +90,6 @@ const supportingModalityBody = (
   ) {
     who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
   }
-
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
       return t('appointments.canceled.request', { who })
@@ -114,6 +116,13 @@ const supportingModalityBody = (
           return t('appointments.videoVA.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoAtlas:
           return t('appointments.videoAtlas.upcomingBody', { code: location.code || '' })
+        case AppointmentDetailsTypeConstants.VideoHome:
+          const thirtyMinuteFutureDateSeconds = DateTime.now().toUTC().toSeconds() + 1800 // 30 minutes
+          const startDateSeconds = getEpochSecondsOfDate(startDateUtc)
+          if (thirtyMinuteFutureDateSeconds >= startDateSeconds) {
+            return t('appointments.videoHome.timeToJoin.upcomingBody')
+          }
+          return t('appointments.videoHome.tooEarly.upcomingBody')
         default:
           return ''
       }

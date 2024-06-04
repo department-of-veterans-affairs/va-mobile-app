@@ -221,6 +221,7 @@ const getBody = (
           return t('appointments.reschedule.body')
         case AppointmentDetailsTypeConstants.VideoGFE:
         case AppointmentDetailsTypeConstants.VideoAtlas:
+        case AppointmentDetailsTypeConstants.VideoHome:
           return t('appointments.rescheduleVideoNonVA.body')
         case AppointmentDetailsTypeConstants.ClaimExam:
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
@@ -236,6 +237,7 @@ const getBody = (
           return t('appointments.schedule.body')
         case AppointmentDetailsTypeConstants.VideoGFE:
         case AppointmentDetailsTypeConstants.VideoAtlas:
+        case AppointmentDetailsTypeConstants.VideoHome:
           return t('appointments.scheduleVideoNonVA.body')
       }
       break
@@ -250,6 +252,7 @@ const getBody = (
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')
         case AppointmentDetailsTypeConstants.VideoGFE:
         case AppointmentDetailsTypeConstants.VideoAtlas:
+        case AppointmentDetailsTypeConstants.VideoHome:
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.videoNonVA.body')
         case AppointmentDetailsTypeConstants.ClaimExam:
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
@@ -271,6 +274,7 @@ const getIsGFEAtlasHomeVideo = (subType: AppointmentDetailsSubType, type: Appoin
   switch (type) {
     case AppointmentDetailsTypeConstants.VideoGFE:
     case AppointmentDetailsTypeConstants.VideoAtlas:
+    case AppointmentDetailsTypeConstants.VideoHome:
       return true
   }
 
