@@ -68,6 +68,6 @@ jobs:
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d'{"channel": "mob", "text": "Version ${{ github.ref_name }} experienced a failure for Android", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               -d'{"channel": "va-mobile-app", "text": "Version ${{ github.ref_name }} experienced a failure for Android", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage    
   
