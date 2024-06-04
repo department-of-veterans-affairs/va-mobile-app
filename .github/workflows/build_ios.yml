@@ -107,7 +107,7 @@ jobs:
       - name: Bundle app
         run: yarn bundle:ios
       - name: Install gems
-        run: bundle install
+        run: bundle 
       - name: Update fastlane
         run: bundle update fastlane
       - name: Run fastlane with retries
