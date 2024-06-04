@@ -2,6 +2,8 @@ import React, { Ref, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import {
@@ -35,6 +37,7 @@ export type ThreadMessageProps = {
 
 function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
+  const isFocused = useIsFocused()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const { condensedMarginBetween } = theme.dimensions
@@ -47,7 +50,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     isFetched: fetchedMessage,
     refetch: fetchMessage,
   } = useMessage(message.messageId, {
-    enabled: false,
+    enabled: false && isFocused,
   })
   const { refetch: refetchFile, isFetching: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
