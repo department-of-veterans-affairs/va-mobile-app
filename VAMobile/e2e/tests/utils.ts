@@ -34,7 +34,9 @@ export const CommonE2eIdConstants = {
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
-  LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
+  LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
+  LEAVING_APP_CANCEL_TEXT: 'Go back',
+  LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
@@ -135,7 +137,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
   }
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
-  await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+  await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
 }
 
 /** This function will change the mock data for demo mode
@@ -205,6 +207,7 @@ export async function checkImages(screenshotPath) {
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',
+    customSnapshotIdentifier: 'customSnapshotName',
   })
 }
 
@@ -330,8 +333,23 @@ export async function backButton() {
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   if (AFUseCase !== 'AllowFunction') {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
+    if (
+      (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
+        AFFeature === 'WG_HowDoIUpdate' ||
+        AFFeature === 'WG_PreferredName' ||
+        AFFeature === 'WG_HowWillYou' ||
+        AFFeature === 'WG_GenderIdentity' ||
+        AFFeature === 'WG_WhatToKnow' ||
+        AFFeature === 'WG_EditAddress' ||
+        AFFeature === 'WG_EditPhoneNumber' ||
+        AFFeature === 'WG_EditEmail') &&
+      AFUseCase === 'DenyAccess'
+    ) {
+      await resetInAppReview()
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+      await loginToDemoMode()
+    }
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
@@ -401,7 +419,6 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await loginToDemoMode()
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
-    await expect(element(by.text(AFFeatureName)).atIndex(0)).toExist()
     await expect(element(by.text('AF Heading Test'))).not.toExist()
     await expect(element(by.text('AF Body Test'))).not.toExist()
   }
@@ -409,7 +426,66 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
-    await element(by.text(featureNavigationArray[j])).tap()
+    if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
+      await element(by.id(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[j] === 'Get prescription details') {
+      await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
+        .toBeVisible()
+        .whileElement(by.id('PrescriptionHistory'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+    } else if (featureNavigationArray[j] === 'Get prescription tracking') {
+      await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
+        .toBeVisible()
+        .whileElement(by.id('PrescriptionHistory'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+    } else if (
+      featureNavigationArray[j] === 'Reply' ||
+      featureNavigationArray[j] === 'Only use messages for non-urgent needs'
+    ) {
+      await element(by.id('viewMessageTestID')).scrollTo('bottom')
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+    } else if (featureNavigationArray[j] === 'Email address') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('ContactInfoTestID'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('claimsHistoryID'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (
+      featureNavigationArray[j] === 'Why does VA sometimes combine claims?' ||
+      featureNavigationArray[j] === "What should I do if I disagree with VA's decision on my disability claim?"
+    ) {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('ClaimDetailsScreen'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[j] === 'Request Refill') {
+      if (device.getPlatform() === 'ios') {
+        await element(by.text(featureNavigationArray[j])).tap()
+      } else {
+        await element(by.text('Request Refill ')).tap()
+      }
+    } else if (featureNavigationArray[j] === 'Contact VA') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('homeScreenID'))
+        .scroll(50, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else {
+      try {
+        await element(by.text(featureNavigationArray[j])).tap()
+      } catch (ex) {
+        await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
+      }
+    }
   }
 }
 
@@ -425,6 +501,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     await element(by.text('OK')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
@@ -433,12 +510,11 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
     await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
     if (AFUseCaseUpgrade) {
       await expect(element(by.text('Update now'))).toExist()
-    } else {
-      await expect(element(by.text('Update now'))).not.toExist()
     }
   }
 

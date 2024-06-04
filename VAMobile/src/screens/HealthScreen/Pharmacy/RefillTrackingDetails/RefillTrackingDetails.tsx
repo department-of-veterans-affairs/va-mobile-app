@@ -13,12 +13,12 @@ import {
   Box,
   ErrorComponent,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
   TextView,
 } from 'components'
-import { ClickForActionLink } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -57,8 +57,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const {
     data: trackingInfo,
-    isLoading: loadingTrackingInfo,
-    isError: hasError,
+    isFetching: loadingTrackingInfo,
+    error: hasError,
+    refetch: refetchTracking,
   } = useTrackingInfo(prescription.id, {
     enabled: screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime,
   })
@@ -70,34 +71,6 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   useBeforeNavBackListener(navigation, () => {
     logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
   })
-
-  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
-  // In this case, we need to support two different screenIDs:
-  // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
-  // 2. Error message specific to this page
-  if (prescriptionInDowntime) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (hasError) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingTrackingInfo) {
-    return (
-      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
-        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
-      </FullScreenSubtask>
-    )
-  }
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
@@ -144,16 +117,15 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
       const [shippedDateMMddyyyy, shippedDateA11yLabel] = getDateTextAndLabel(t, shippedDate)
       const trackingNumberA11yLabel = a11yLabelID(trackingNumber)
-      console.log(trackingNumberA11yLabel)
 
       const mainContent = (
         <>
           <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
           {trackingLink && trackingNumber ? (
-            <ClickForActionLink
-              displayedText={trackingNumber}
-              linkType="externalLink"
-              numberOrUrlLink={trackingLink + trackingNumber}
+            <LinkWithAnalytics
+              type="url"
+              url={trackingLink + trackingNumber}
+              text={trackingNumber}
               a11yLabel={trackingNumberA11yLabel}
             />
           ) : (
@@ -210,25 +182,41 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     )
   }
 
+  // ErrorComponent normally handles both downtime and error but only for 1 screenID.
+  // In this case, we need to support two different screenIDs:
+  // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
+  // 2. Error message specific to this page
   return (
     <FullScreenSubtask
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
       testID="refillTrackingDetailsTestID">
-      <Box mx={gutter} mb={contentMarginBottom}>
-        {renderHeader()}
-        <Box mt={standardMarginBetween}>
-          <TextView variant="HelperText" paragraphSpacing={true}>
-            {t('prescriptions.refillTracking.upTo15Days')}
+      {prescriptionInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      ) : loadingTrackingInfo ? (
+        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID}
+          error={hasError}
+          onTryAgain={refetchTracking}
+        />
+      ) : (
+        <Box mx={gutter} mb={contentMarginBottom}>
+          {renderHeader()}
+          <Box mt={standardMarginBetween}>
+            <TextView variant="HelperText" paragraphSpacing={true}>
+              {t('prescriptions.refillTracking.upTo15Days')}
+            </TextView>
+          </Box>
+          <TextView
+            variant="HelperText"
+            accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
+            {t('prescriptions.refillTracking.deliveryChanges')}
           </TextView>
+          {renderTrackingCards()}
         </Box>
-        <TextView
-          variant="HelperText"
-          accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
-          {t('prescriptions.refillTracking.deliveryChanges')}
-        </TextView>
-        {renderTrackingCards()}
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }

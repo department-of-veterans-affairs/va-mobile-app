@@ -4,17 +4,18 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import {
   AppointmentAttributes,
   AppointmentData,
+  AppointmentStatus,
+  AppointmentStatusConstants,
   AppointmentType,
   AppointmentTypeConstants,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
-} from 'store/api'
-import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+} from 'api/types'
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -166,7 +167,7 @@ export const getAppointmentTypeIcon = (
 /**
  * Returns list of appointments
  *
- * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
+ * @param appointments - list of appointments unsorted
  * @param theme - type VATheme, the theme object to set some properties
  * @param translate - function, the translate function
  * @param onAppointmentPress - function, the function that will be triggered on appointment press
@@ -176,17 +177,17 @@ export const getAppointmentTypeIcon = (
  * @returns list of appointments
  */
 export const getGroupedAppointments = (
-  appointmentsByYear: AppointmentsGroupedByYear,
+  appointments: AppointmentsList,
   theme: VATheme,
   translations: { t: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
-  if (!appointmentsByYear) {
+  if (!appointments) {
     return <></>
   }
-
+  const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointments)
   const sortedYears = _.keys(appointmentsByYear).sort()
   if (isReverseSort) {
     sortedYears.reverse()
@@ -219,6 +220,24 @@ export const getGroupedAppointments = (
   })
 }
 
+export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
+  const appointmentsByYear: AppointmentsGroupedByYear = {}
+
+  // Group appointments by year, resulting object is { year: [ list of appointments for year ] }
+  const initialAppointmentsByYear = _.groupBy(appointmentsList || [], (appointment) => {
+    return getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
+  })
+
+  // Group appointments by year by month next, resulting object is { year: { month1: [ list for month1 ], month2: [ list for month2 ] } }
+  _.each(initialAppointmentsByYear, (listOfAppointmentsInYear, year) => {
+    appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): number => {
+      return new Date(appointment.attributes.startDateUtc).getUTCMonth()
+    })
+  })
+
+  return appointmentsByYear
+}
+
 /**
  * Returns item list of appointments
  *
@@ -234,7 +253,7 @@ export const getGroupedAppointments = (
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
   translations: { t: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  onAppointmentPress: (appointment: AppointmentData) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
@@ -252,7 +271,7 @@ const getListItemsForAppointments = (
     listItems.push({
       textLines,
       a11yValue,
-      onPress: () => onAppointmentPress(appointment.id),
+      onPress: () => onAppointmentPress(appointment),
       a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })
@@ -313,7 +332,6 @@ export const getTextLinesForAppointmentListItem = (
     typeOfCare,
     healthcareProvider,
     serviceCategoryName,
-    healthcareService,
   } = attributes
   const textLines: Array<TextLineWithIconProps> = []
   const { condensedMarginBetween } = theme.dimensions
@@ -344,9 +362,7 @@ export const getTextLinesForAppointmentListItem = (
       },
       {
         text: t('text.raw', {
-          text: isCovidVaccine
-            ? t('upcomingAppointments.covidVaccine')
-            : typeOfCare || healthcareService || t('appointments.noTypeOfCare'),
+          text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || t('appointments.noTypeOfCare'),
         }),
         variant: 'HelperText',
         mb: 5,

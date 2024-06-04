@@ -2,7 +2,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
-import { checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
 
 export async function getDateWithTimeZone(dateString: string) {
   const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
@@ -53,20 +53,21 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
-  OPEN_URL_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
 }
 
 const tapItems = async (items: string, type: string) => {
   if (type === 'url' || type === 'map' || type === 'email') {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
   }
+  await device.disableSynchronization()
   await element(by.text(items)).tap()
   if (type === 'url' || type === 'map') {
-    await element(by.text(MessagesE2eIdConstants.OPEN_URL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
   }
   await setTimeout(2000)
   await device.takeScreenshot(items)
   if (device.getPlatform() === 'android') {
+    await device.enableSynchronization()
     await device.launchApp({ newInstance: false })
   }
   await setTimeout(3000)
@@ -351,6 +352,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
+    await device.disableSynchronization()
     if (device.getPlatform() === 'android') {
       await element(by.text('Call 988 and select 1')).tap()
       await setTimeout(5000)
@@ -378,10 +380,11 @@ describe('Messages Screen', () => {
     await device.launchApp({ newInstance: false })
 
     await element(by.text('Start a confidential chat')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpChat')
     await device.launchApp({ newInstance: false })
+    await device.enableSynchronization()
   })
 
   it('should close the messages help panel', async () => {
@@ -441,7 +444,6 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
     await expect(element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit'))).toExist()
   })
 

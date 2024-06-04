@@ -5,13 +5,13 @@ import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, open
 
 export const SettingsE2eIdConstants = {
   SETTINGS_SCREEN_TEXT: 'Settings',
-  MANAGE_ACCT_ROW_TEXT: 'Manage account',
+  MANAGE_ACCT_ROW_TEXT: 'Account security',
   MANAGE_ACCT_SCREEN_TEXT:
-    'To confirm or update your sign-in email, go to the website where you manage your account information.',
+    'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
   NOTIFICATIONS_SCREEN_TEXT: "Select which notifications you'd like to receive.",
-  NOTIFICATIONS_APPOINTMENT_TEXT: 'Upcoming appointments',
-  NOTIFICATIONS_MESSAGING_TEXT: 'New messages',
+  NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment reminders',
+  NOTIFICATIONS_MESSAGING_TEXT: 'New secure messages',
   SHARE_APP_ROW_TEXT: 'Share the app',
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -104,7 +104,7 @@ describe('Settings Screen', () => {
 
   it('should show Privacy Policy page', async () => {
     await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('SettingsPrivacyPolicy')
     await device.launchApp({ newInstance: false })

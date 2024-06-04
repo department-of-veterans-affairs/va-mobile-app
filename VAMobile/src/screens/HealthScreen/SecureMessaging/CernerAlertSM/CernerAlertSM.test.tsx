@@ -1,17 +1,9 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { context, fireEvent, render, screen } from 'testUtils'
 
 import CernerAlertSM from './CernerAlertSM'
-
-const mockExternalLinkSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
   const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
@@ -88,6 +80,6 @@ context('CernerAlertSM', () => {
     expect(screen.queryByText('FacilityTwo')).toBeFalsy()
 
     fireEvent.press(screen.getByText('Go to My VA Health'))
-    expect(mockExternalLinkSpy).toBeCalledWith('https://patientportal.myhealth.va.gov/')
+    expect(Alert.alert).toBeCalled()
   })
 })

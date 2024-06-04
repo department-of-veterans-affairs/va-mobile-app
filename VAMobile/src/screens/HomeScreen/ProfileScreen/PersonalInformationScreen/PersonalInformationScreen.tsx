@@ -63,19 +63,24 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
-  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation({
+  const {
+    data: personalInfo,
+    isFetching: loadingPersonalInfo,
+    isError: personalInfoError,
+    refetch: refetchPersonalInfo,
+  } = usePersonalInformation({
     enabled: isScreenContentAllowed,
   })
   const {
     data: demographics,
     isFetching: loadingDemographics,
-    isError: getDemographicsError,
+    error: getDemographicsError,
     refetch: refetchDemographics,
   } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
-    isLoading: loadingGenderIdentityOptions,
-    isError: getGenderIdentityOptionsError,
+    isFetching: loadingGenderIdentityOptions,
+    error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
@@ -139,6 +144,9 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     if (getGenderIdentityOptionsError) {
       refetchGenderIdentityOptions()
     }
+    if (personalInfoError) {
+      refetchPersonalInfo()
+    }
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
@@ -151,10 +159,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID">
-      {errorCheck ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
-      ) : loadingCheck ? (
+      {loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
+      ) : errorCheck ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
+          onTryAgain={onTryAgain}
+          error={getDemographicsError || getGenderIdentityOptionsError}
+        />
       ) : (
         <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
@@ -179,9 +191,9 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
               <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
             </Pressable>
           </Box>
+          {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
         </>
       )}
-      {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
     </FeatureLandingTemplate>
   )
 }

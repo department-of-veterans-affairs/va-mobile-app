@@ -1,20 +1,11 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 
 import WhatDoIDoIfDisagreement from './WhatDoIDoIfDisagreement'
-
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 context('WhatDoIDoIfDisagreement', () => {
   beforeEach(() => {
@@ -31,8 +22,8 @@ context('WhatDoIDoIfDisagreement', () => {
         'If you disagree with a claim decision that you received on or after February 19, 2019, you can ask us to review the decision. You have 3 decision review options to choose from.',
       ),
     ).toBeTruthy()
-    expect(screen.getByText('Learn about your decision review options.')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Learn about your decision review options.' }))
-    expect(mockExternalLinkSpy).toHaveBeenCalled()
+    expect(screen.getByText('Learn more about decision reviews and appeals')).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Learn more about decision reviews and appeals' }))
+    expect(Alert.alert).toHaveBeenCalled()
   })
 })

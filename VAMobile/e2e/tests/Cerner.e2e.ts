@@ -1,7 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openAppointments, openHealth, openMessages } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, openMessages } from './utils'
 
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
@@ -35,7 +35,7 @@ describe(':android: Cerner Notice', () => {
   it('verify the correct webpage My Health link is opened', async () => {
     await element(by.id(CernerIdConstants.HEALTH_CATEGORY_ID)).scrollTo('bottom')
     await element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID)).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('cernerVAHealthLink')
     await device.launchApp({ newInstance: false })

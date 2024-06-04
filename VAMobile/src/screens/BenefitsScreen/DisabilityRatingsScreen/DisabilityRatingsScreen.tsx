@@ -11,14 +11,11 @@ import { IndividualRatingData } from 'api/types'
 import {
   Box,
   ChildTemplate,
-  ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
+  LinkWithAnalytics,
   LoadingComponent,
   TextArea,
   TextLine,
@@ -46,10 +43,11 @@ function DisabilityRatingsScreen() {
   const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
   const {
     data: ratingData,
-    isLoading: loading,
-    isError: useDisabilityRatingError,
+    isFetching: loading,
+    error: useDisabilityRatingError,
+    refetch: refetchDisabilityRating,
   } = useDisabilityRating({
-    enabled: screenContentAllowed('WG_DisabilityRatings') && drNotInDowntime,
+    enabled: screenContentAllowed('WG_DisabilityRatings'),
   })
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -138,7 +136,14 @@ function DisabilityRatingsScreen() {
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
         </Box>
-        <ClickForActionLink {...clickToCallProps} />
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_ABOUT_DISABILITY_RATINGS}
+          text={t('disabilityRating.learnAboutLinkTitle')}
+          a11yLabel={a11yLabelVA(t('disabilityRating.learnAboutLinkTitle'))}
+          a11yHint={t('disabilityRating.learnAboutLinkTitle.a11yHint')}
+          testID="aboutDisabilityRatingsTestID"
+        />
       </TextArea>
     )
   }
@@ -165,16 +170,6 @@ function DisabilityRatingsScreen() {
     )
   }
 
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: t('disabilityRating.learnAboutLinkTitle'),
-    linkType: LinkTypeOptionsConstants.url,
-    linkUrlIconType: LinkUrlIconType.Arrow,
-    numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
-    accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
-    a11yLabel: a11yLabelVA(t('disabilityRating.learnAboutLinkTitle')),
-    testID: 'aboutDisabilityRatingsTestID',
-  }
-
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
     mx: gutter,
@@ -188,10 +183,14 @@ function DisabilityRatingsScreen() {
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
       testID="disabilityRatingTestID">
-      {useDisabilityRatingError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
-      ) : loading ? (
+      {loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
+      ) : useDisabilityRatingError || !drNotInDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID}
+          error={useDisabilityRatingError}
+          onTryAgain={refetchDisabilityRating}
+        />
       ) : individualRatingsList.length === 0 ? (
         <NoDisabilityRatings />
       ) : (

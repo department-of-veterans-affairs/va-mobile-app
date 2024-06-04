@@ -27,6 +27,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,12 +35,13 @@ import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
@@ -243,7 +245,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
-          text: t('cancel'),
+          text: t('leavingApp.cancel'),
           style: 'cancel',
         },
         { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },
@@ -406,14 +408,16 @@ export function useAutoScrollToElement(): [
  *
  * @returns message state and the setMessage function
  */
-export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+export function useMessageWithSignature(
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+  signatureFetched: boolean,
+): [string, React.Dispatch<React.SetStateAction<string>>] {
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
-  }, [loadingSignature, signature])
+  }, [signatureFetched, signature])
   return [message, setMessage]
 }
 
@@ -423,10 +427,11 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * @param message - the message to be validated
  * @returns boolean if the message is valid
  */
-export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
-  return (message: string): boolean => {
+export function useValidateMessageWithSignature(): (
+  message: string,
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+) => boolean {
+  return (message: string, signature: SecureMessagingSignatureDataAttributes | undefined): boolean => {
     let isMessageBlank = !!message
     if (signature && signature.includeSignature) {
       isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
@@ -614,4 +619,16 @@ export function usePrevious<T>(value: T): T {
     ref.current = value
   }, [value])
   return ref.current as T
+}
+/**
+ * Opens the app listing in the device's respective app store.
+ *
+ * @returns An alert asking the user whether they'd like to leave the app to the app store.
+ */
+export function useOpenAppStore(): () => void {
+  const launchExternalLink = useExternalLink()
+  const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
+  const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+
+  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
 }

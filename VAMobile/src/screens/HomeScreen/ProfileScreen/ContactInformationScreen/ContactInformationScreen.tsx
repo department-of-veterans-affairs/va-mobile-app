@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 
@@ -129,12 +129,25 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const theme = useTheme()
   const {
     data: contactInformation,
-    isLoading: loadingContactInformation,
-    isError: contactInformationError,
+    isFetching: loadingContactInformation,
+    error: contactInformationError,
     refetch: refetchContactInformation,
+    failureCount,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const [retried, setRetried] = useState(false)
+
+  useEffect(() => {
+    if (failureCount > 0) {
+      setRetried(true)
+    }
+
+    if (retried && !loadingContactInformation) {
+      const retryStatus = contactInformationError ? 'fail' : 'success'
+      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
+    }
+  }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   const navigateTo = useRouteNavigation()
 
@@ -211,13 +224,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID">
-      {contactInformationInDowntime || contactInformationError ? (
+      {loadingContactInformation ? (
+        <LoadingComponent text={t('contactInformation.loading')} />
+      ) : contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
           onTryAgain={refetchContactInformation}
+          error={contactInformationError}
         />
-      ) : loadingContactInformation ? (
-        <LoadingComponent text={t('contactInformation.loading')} />
       ) : (
         <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>

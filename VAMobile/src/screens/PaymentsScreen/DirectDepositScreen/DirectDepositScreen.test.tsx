@@ -2,8 +2,10 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { directDepositKeys } from 'api/directDeposit'
+import { DirectDepositData } from 'api/types'
 import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import DirectDepositScreen from './index'
 
@@ -16,7 +18,15 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const mockData = {
+jest.mock('@react-navigation/native', () => {
+  const original = jest.requireActual('@react-navigation/native')
+  return {
+    ...original,
+    useFocusEffect: () => jest.fn(),
+  }
+})
+
+const mockData: DirectDepositData = {
   data: {
     type: 'checking',
     id: '1',
@@ -47,8 +57,14 @@ const noData = {
 }
 
 context('DirectDepositScreen', () => {
-  const initializeTestInstance = () => {
-    render(<DirectDepositScreen {...mockNavProps()} />)
+  const initializeTestInstance = (data?: DirectDepositData) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: directDepositKeys.directDeposit,
+        data: data,
+      },
+    ]
+    render(<DirectDepositScreen {...mockNavProps()} />, { queriesData: queriesData })
   }
 
   describe('when there is bank data', () => {
@@ -56,8 +72,7 @@ context('DirectDepositScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/payment-information/benefits')
         .mockResolvedValue(mockData)
-      initializeTestInstance()
-      expect(screen.getByText('Loading your direct deposit information...')).toBeTruthy()
+      initializeTestInstance(mockData)
       await waitFor(() => expect(screen.getByText('Account')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('BoA')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('******1234')).toBeTruthy())
@@ -83,9 +98,9 @@ context('DirectDepositScreen', () => {
     it('should render error component', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/payment-information/benefits')
-        .mockRejectedValue('failure')
+        .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })

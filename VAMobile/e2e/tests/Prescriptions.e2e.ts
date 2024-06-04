@@ -1,7 +1,14 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { changeMockData, checkImages, loginToDemoMode, openHealth, openPrescriptions } from './utils'
+import {
+  CommonE2eIdConstants,
+  changeMockData,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openPrescriptions,
+} from './utils'
 
 export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
@@ -38,6 +45,8 @@ export const PrescriptionsE2eIdConstants = {
 }
 
 let tempPath
+
+const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -147,9 +156,9 @@ describe('Prescriptions Screen', () => {
         ),
       ),
     ).toExist()
-    await expect(element(by.label('Go to My  V-A  Health'))).toExist()
-    await element(by.label('Go to My  V-A  Health')).tap()
-    await element(by.text('Ok')).tap()
+    await expect(element(by.label('Go to My  V-A  Health')).atIndex(trackingIndex)).toExist()
+    await element(by.label('Go to My  V-A  Health')).atIndex(trackingIndex).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionVAHealthLink')
     await device.launchApp({ newInstance: false })
@@ -256,7 +265,7 @@ describe('Prescriptions Screen', () => {
       ),
     ).toExist()
     await expect(element(by.text('Tracking number'))).toExist()
-    await expect(element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6'))).toExist()
+    await expect(element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex)).toExist()
     await expect(element(by.text('Delivery service: DHL'))).toExist()
     await expect(element(by.label('Date shipped: June 14, 2022'))).toExist()
     await expect(element(by.text('Other prescriptions in this package:'))).toExist()
@@ -267,8 +276,8 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify tracking link for DHL works', async () => {
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteDHL')
     await device.launchApp({ newInstance: false })
@@ -282,8 +291,8 @@ describe('Prescriptions Screen', () => {
       .scroll(500, 'down')
     await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(1).tap()
     await expect(element(by.text('Delivery service: FEDEX'))).toExist()
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteFedex')
     await device.launchApp({ newInstance: false })
@@ -303,8 +312,8 @@ describe('Prescriptions Screen', () => {
   })
 
   it(':android: verify tracking link for UPS works', async () => {
-    await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).tap()
-    await element(by.text('Ok')).tap()
+    await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).atIndex(trackingIndex).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteUPS')
     await device.launchApp({ newInstance: true, permissions: { location: 'always' } })
@@ -318,13 +327,10 @@ describe('Prescriptions Screen', () => {
     await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(2).tap()
   })
 
-  it('verify tracking link for DHL works', async () => {
-    await waitFor(element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0')))
-      .toBeVisible()
-      .whileElement(by.id('refillTrackingDetailsTestID'))
-      .scroll(50, 'down')
-    await element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0')).tap()
-    await element(by.text('Ok')).tap()
+  it('verify tracking link for USPS works', async () => {
+    await element(by.id('refillTrackingDetailsTestID')).scrollTo('bottom')
+    await element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0')).atIndex(trackingIndex).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteUSPS')
     await device.launchApp({ newInstance: false })

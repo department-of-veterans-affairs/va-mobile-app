@@ -45,24 +45,25 @@ Some Lighthouse APIs use an authorization flow called, client credentials grant 
 
 Adding a new service will require the following steps:
 (For questions on the first two steps, contact Derek Brown.)
-  1. Request sandbox access [here](https://developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. Client ids can be shared by anyone with the same VASI number. All of Vets-api uses the same VASI number so if possible, try to use an existing one. If a new client id is required, follow these steps:
-  * install pem-jwk tool: https://www.npmjs.com/package/pem-jwk
-  * In terminal, execute `openssl genrsa -out private.pem 2048`
-  * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
-  * `cat public.pem | pem-jwk > public.jwk`
-  * Use the generated public.jwk file as your Oauth submission to Lighthouse and save the `private.pem` file for a later step.
-  * client_id will be provided upon submission of the lighthouse onboarding form
+
+  1. [Request sandbox access](https://developer.va.gov/onboarding/request-sandbox-access) or ask Lighthouse to expand the permissions of an existing client id we have with them to include the new API. Client ids can be shared by anyone with the same VASI number. All of Vets-api uses the same VASI number so if possible, try to use an existing one. If a new client id is required, follow these steps:
+     * install [pem-jwk tool](https://www.npmjs.com/package/pem-jwk)
+     * In terminal, execute `openssl genrsa -out private.pem 2048`
+     * `openssl rsa -in private.pem -out public.pem -outform PEM -pubout`
+     * `cat public.pem | pem-jwk > public.jwk`
+     * Use the generated public.jwk file as your Oauth submission to Lighthouse and save the `private.pem` file for a later step.
+     * client_id will be provided upon submission of the lighthouse onboarding form
   2. Add a new settings to `config/settings.yml` in the vets-api.
-  * See section [Adding Local Settings](./Devops.md)
-  * to find the config values, go [here](https://dev-developer.va.gov/explore/authorization/docs/client-credentials)
-  * select the the desired service from the "Select an API" dropdown menu and click "Update page"
-  * the `aud_claim_url` can be found in the "aud" section of the page
-  * the `access_token_url` can be found in the "Retrieving an access token" section. It will be the url in the example POST.
-  * the `api_scopes` can be found in the "scopes" section. Only include the ones you need.
-  * to get the other values, use the left nav bar to navigate to the documentation for the correct API. For example, if you want information for the Appeals Status API, you would go [here](https://dev-developer.va.gov/explore/appeals/docs/appeals?version=current).
-  * Near the top of the page, there should be a link to that APIs openapi.json. Click this link to reveal the json in a new tab. The `api_url` should be in that page as `url`.
+     * See section [Adding Local Settings](./Devops.md)
+     * find the [config values](https://dev-developer.va.gov/explore/authorization/docs/client-credentials)
+     * select the the desired service from the "Select an API" dropdown menu and click "Update page"
+     * the `aud_claim_url` can be found in the "aud" section of the page
+     * the `access_token_url` can be found in the "Retrieving an access token" section. It will be the url in the example POST.
+     * the `api_scopes` can be found in the "scopes" section. Only include the ones you need.
+     * to get the other values, use the left nav bar to navigate to the documentation for the correct API. For example the [Appeals Status API](https://dev-developer.va.gov/explore/appeals/docs/appeals?version=current).
+     * Near the top of the page, there should be a link to that APIs openapi.json. Click this link to reveal the json in a new tab. The `api_url` should be in that page as `url`.
   3. Add new AWS RSA key if new client id was generated as well as any other sensitive information that can't be publicly shared.
-  * See section [AWS](./Devops.md)
-  * The formatting of the private RSA key is very particular. the key string should have a new line for every 64 characters. Reference formatting of another RSA key in AWS to see an example. 
+     * See section [AWS](./Devops.md)
+     * The formatting of the private RSA key is very particular. the key string should have a new line for every 64 characters. Reference formatting of another RSA key in AWS to see an example. 
   4. Add new variables Manifests repo and Devops repo as instructed in See section [Devops](./Devops.md)
   5. Once sandbox is working, you must request production access separately though the same onboarding link above.

@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { CategoryTypeFields, SecureMessagingFormData } from 'api/types'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
-import { SecureMessagingFormData } from 'store/api'
-import { CategoryTypeFields } from 'store/api/types'
 import { context, render } from 'testUtils'
 import { useDestructiveActionSheetProps } from 'utils/hooks'
 
@@ -49,6 +48,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+    resetSendMessageFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetReplyTriageError: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
   }
 })
 
@@ -82,7 +99,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', () => {
         discardButtonSpy!()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
       })
     })
 

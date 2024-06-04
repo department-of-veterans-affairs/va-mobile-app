@@ -19,7 +19,7 @@ function SandboxScreen({ navigation }: SandboxScreenSettingsScreenProps) {
   const theme = useTheme()
 
   // Component Picker
-  const defaultComponent = 'ClickForActionLink'
+  const defaultComponent = 'AlertBox'
   const [selectedOption, setSelectedOption] = useState(defaultComponent)
   const [dynamicProps, setDynamicProps] = useState(CommonComponentWhiteList[defaultComponent].defaultProps)
 

@@ -1,24 +1,31 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { useClaim } from 'api/claimsAndAppeals'
+import { ClaimEventData } from 'api/types'
+import {
+  Box,
+  ChildTemplate,
+  ErrorComponent,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import { ClaimEventData } from 'store/api'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -27,7 +34,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
-  const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: claim, error: claimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
@@ -89,8 +96,14 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       backLabelOnPress={navigation.goBack}
       title={t('fileRequest.title')}
       testID="fileRequestPageTestID">
-      {useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID) ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
+      {loadingClaim ? (
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
+      ) : claimError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID}
+          error={claimError}
+          onTryAgain={refetchClaim}
+        />
       ) : (
         <Box mb={contentMarginBottom}>
           <TextView

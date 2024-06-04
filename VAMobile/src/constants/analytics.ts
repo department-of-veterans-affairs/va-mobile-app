@@ -1,4 +1,4 @@
-import { CategoryTypes } from 'store/api'
+import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
 /**
@@ -130,15 +130,6 @@ export const Events = {
         claim_id,
         claim_type,
         claim_step,
-      },
-    }
-  },
-  vama_claim_count: (closed_claims: number, open_claims: number): Event => {
-    return {
-      name: 'vama_claim_count',
-      params: {
-        closed_claims,
-        open_claims,
       },
     }
   },
@@ -448,11 +439,6 @@ export const Events = {
   vama_eu_updated: (): Event => {
     return {
       name: 'vama_eu_updated',
-    }
-  },
-  vama_eu_updated_success: (): Event => {
-    return {
-      name: 'vama_eu_updated_success',
     }
   },
   vama_evidence_cancel_1: (
@@ -811,39 +797,26 @@ export const Events = {
       name: 'vama_pref_name_success',
     }
   },
-  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_address: (): Event => {
     return {
       name: 'vama_prof_update_address',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_email: (): Event => {
     return {
       name: 'vama_prof_update_email',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
-  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_gender',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_phone: (): Event => {
     return {
       name: 'vama_prof_update_phone',
+    }
+  },
+  vama_react_query_retry: (status: string): Event => {
+    return {
+      name: 'vama_react_query_retry',
       params: {
-        totalTime,
-        actionTime,
+        status,
       },
     }
   },
@@ -1067,27 +1040,18 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
+  vama_sm_save_draft: (messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
       },
     }
   },
-  vama_sm_send_message: (
-    totalTime: number,
-    actionTime: number,
-    messageCategory: CategoryTypes,
-    replyToID: number | undefined,
-  ): Event => {
+  vama_sm_send_message: (messageCategory: CategoryTypes, replyToID: number | undefined): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
-        totalTime,
-        actionTime,
         messageCategory,
         replyToID,
       },
@@ -1124,14 +1088,6 @@ export const Events = {
       },
     }
   },
-  vama_ttv_cap_details: (totalTime: number): Event => {
-    return {
-      name: 'vama_ttv_cap_details',
-      params: {
-        totalTime,
-      },
-    }
-  },
   vama_update_dir_dep: (): Event => {
     return {
       name: 'vama_update_dir_dep',
@@ -1150,6 +1106,24 @@ export const Events = {
       name: 'vama_vaccine_details',
       params: {
         groupName,
+      },
+    }
+  },
+  vama_vet_status_nStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_nStatus',
+    }
+  },
+  vama_vet_status_yStatus: (): Event => {
+    return {
+      name: 'vama_vet_status_yStatus',
+    }
+  },
+  vama_vet_status_zStatus: (charOfDis: string): Event => {
+    return {
+      name: 'vama_vet_status_zStatus',
+      params: {
+        charOfDis,
       },
     }
   },

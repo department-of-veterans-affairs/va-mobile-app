@@ -15,13 +15,11 @@ import {
   getLocalVersion,
   getStoreVersion,
   getVersionSkipped,
-  openAppStore,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useTheme } from 'utils/hooks'
+import { useOpenAppStore, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-import { requestStorePopup } from 'utils/rnInAppUpdate'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
@@ -31,6 +29,15 @@ export const EncourageUpdateAlert = () => {
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const openAppStore = useOpenAppStore()
+
+  const displayEU =
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -61,20 +68,15 @@ export const EncourageUpdateAlert = () => {
     }
   }, [demoMode])
 
-  const callRequestStorePopup = async () => {
-    const result = await requestStorePopup()
-    if (result && isIOS()) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      openAppStore()
-    } else if (result) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      setVersionName(storeVersion ? storeVersion : '0.0')
+  useEffect(() => {
+    if (displayEU) {
+      logAnalyticsEvent(Events.vama_eu_shown())
     }
-  }
+  }, [displayEU])
 
   const onUpdatePressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_updated())
-    callRequestStorePopup()
+    openAppStore()
   }
 
   const onSkipPressed = (): void => {
@@ -83,15 +85,7 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (
-    featureEnabled('inAppUpdates') &&
-    storeVersion &&
-    localVersionName &&
-    skippedVersion &&
-    skippedVersion !== storeVersion &&
-    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
-  ) {
-    logAnalyticsEvent(Events.vama_eu_shown())
+  if (displayEU) {
     return (
       <Box mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">

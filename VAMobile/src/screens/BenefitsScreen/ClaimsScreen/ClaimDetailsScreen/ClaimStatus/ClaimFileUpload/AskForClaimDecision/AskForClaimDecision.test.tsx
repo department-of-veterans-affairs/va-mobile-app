@@ -1,18 +1,11 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {
-  ErrorsState,
-  InitialState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  submitClaimDecision,
-} from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 import AskForClaimDecision from './AskForClaimDecision'
 
@@ -25,134 +18,123 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    submitClaimDecision: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+when(api.get as jest.Mock)
+  .calledWith(`/v0/claim/600156928/request-decision`, {}, expect.anything())
+  .mockResolvedValue({})
 
 context('AskForClaimDecision', () => {
-  const navigateSpy = jest.fn()
-  const initializeTestInstance = (
-    submittedDecision: boolean,
-    error?: Error,
-    errorsState: ErrorsState = initialErrorsState,
-    decisionLetterSent = true,
-  ): void => {
+  const initializeTestInstance = (): void => {
     const props = mockNavProps(
       undefined,
       {
-        navigate: navigateSpy,
+        navigate: jest.fn(),
         goBack: jest.fn(),
       },
       {
-        params: { claimID: 'id' },
+        params: { claimID: '600156928' },
       },
     )
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '600156928'],
+        data: {
+          ...claim,
+          id: '600156928',
+          type: 'evss_claims',
+          attributes: {
+            ...claim.attributes,
+            open: false,
+          },
+        },
+      },
+    ]
+    render(<AskForClaimDecision {...props} />, { queriesData })
+  }
 
-    render(<AskForClaimDecision {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          submittedDecision,
-          error,
-          claim: {
+  it('should initialize', async () => {
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/claim/600156928`, {}, undefined)
+      .mockResolvedValue({
+        data: {
+          ...claim,
+          id: '600156928',
+          type: 'evss_claims',
+          attributes: {
+            ...claim.attributes,
+            open: false,
+          },
+        },
+      })
+    initializeTestInstance()
+    await waitFor(() => expect(screen.getByText('Claim evaluation')).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('header', { name: 'Evaluation details' })).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'We sent you a letter in the mail asking for more evidence to support your claim. We’ll wait 30 days for your evidence. If you don’t have anything more you want to submit, let us know and we’ll go ahead and make a decision on your claim.',
+        ),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText('Taking the full 30 days won’t affect:')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Whether you get VA benefits')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('The payment amount')).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByText('Whether you get our help to gather evidence to support your claim')).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText('The date benefits will begin if we approve your claim')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
+        ),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Request claim evaluation' })).toBeTruthy())
+  })
+
+  describe('when submitted decision is false or there is an erroror check box is not checked', () => {
+    it('should not call navigation go back and display a field error when not checked', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .mockResolvedValue({
+          data: {
+            ...claim,
             id: '600156928',
             type: 'evss_claims',
             attributes: {
-              ...Claim.attributes,
-              decisionLetterSent,
+              ...claim.attributes,
               open: false,
             },
           },
-        },
-        errors: errorsState,
-      },
-    })
-  }
-
-  beforeEach(() => {
-    initializeTestInstance(false)
-  })
-
-  it('should initialize', () => {
-    expect(screen.getByText('Claim evaluation')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Evaluation details' })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'We sent you a letter in the mail asking for more evidence to support your claim. We’ll wait 30 days for your evidence. If you don’t have anything more you want to submit, let us know and we’ll go ahead and make a decision on your claim.',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByText('Taking the full 30 days won’t affect:')).toBeTruthy()
-    expect(screen.getByText('Whether you get VA benefits')).toBeTruthy()
-    expect(screen.getByText('The payment amount')).toBeTruthy()
-    expect(screen.getByText('Whether you get our help to gather evidence to support your claim')).toBeTruthy()
-    expect(screen.getByText('The date benefits will begin if we approve your claim')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Request claim evaluation' })).toBeTruthy()
-  })
-
-  describe('on click of the back button', () => {
-    describe('when submittedDecision is true and there is no error', () => {
-      describe('if the claim is closed', () => {
-        it('should call navigation navigate for the ClaimDetailsScreen with claimType set to CLOSED', () => {
-          initializeTestInstance(true)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', {
-            claimID: 'id',
-            claimType: 'CLOSED',
-            focusOnSnackbar: true,
-          })
         })
-      })
-    })
-
-    describe('when submitted decision is false or there is an error', () => {
-      it('should not call navigation go back', () => {
-        initializeTestInstance(true, { name: 'ERROR', message: 'ERROR' })
-        expect(navigateSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
-          claimID: 'id',
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(mockNavigationSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '600156928',
           claimType: 'CLOSED',
           focusOnSnackbar: true,
-        })
-      })
-    })
-  })
-
-  describe('on click of submit', () => {
-    describe('if the check box is not checked', () => {
-      it('should display the field error', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Request claim evaluation' }))
-        expect(submitClaimDecision).not.toHaveBeenCalled()
-        expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy()
-      })
+        }),
+      )
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Request claim evaluation' })))
+      await waitFor(() => expect(api.post).not.toBeCalledWith(`/v0/claim/600156928/request-decision`))
+      await waitFor(() =>
+        expect(mockNavigationSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
+          claimID: '600156928',
+          claimType: 'CLOSED',
+          focusOnSnackbar: true,
+        }),
+      )
+      await waitFor(() => expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy())
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(false, undefined, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    it('should render error component when the stores screenID matches the components screenID', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })

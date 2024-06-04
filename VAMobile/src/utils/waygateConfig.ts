@@ -41,7 +41,7 @@ export type WaygateToggleType =
   | 'WG_MilitaryInformation'
   | 'WG_IncorrectServiceInfo'
   | 'WG_Settings'
-  | 'WG_ManageYourAccount'
+  | 'WG_AccountSecurity'
   | 'WG_NotificationsSettings'
   | 'WG_ContactVA'
   | 'WG_VeteransCrisisLine'
@@ -83,7 +83,7 @@ export type WaygateToggleType =
   | 'WG_EditDirectDeposit'
   | 'WG_Benefits'
   | 'WG_DisabilityRatings'
-  | 'WG_ClaimsHistory'
+  | 'WG_ClaimsHistoryScreen'
   | 'WG_LettersOverview'
   | 'WG_LettersList'
   | 'WG_BenefitSummaryServiceVerificationLetter'
@@ -123,7 +123,7 @@ type WaygateToggleValues = {
   WG_MilitaryInformation: Waygate
   WG_IncorrectServiceInfo: Waygate
   WG_Settings: Waygate
-  WG_ManageYourAccount: Waygate
+  WG_AccountSecurity: Waygate
   WG_NotificationsSettings: Waygate
   WG_ContactVA: Waygate
   WG_VeteransCrisisLine: Waygate
@@ -165,7 +165,7 @@ type WaygateToggleValues = {
   WG_EditDirectDeposit: Waygate
   WG_Benefits: Waygate
   WG_DisabilityRatings: Waygate
-  WG_ClaimsHistory: Waygate
+  WG_ClaimsHistoryScreen: Waygate
   WG_LettersOverview: Waygate
   WG_LettersList: Waygate
   WG_BenefitSummaryServiceVerificationLetter: Waygate
@@ -214,7 +214,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_MilitaryInformation: { ...waygateDefault },
   WG_IncorrectServiceInfo: { ...waygateDefault },
   WG_Settings: { ...waygateDefault },
-  WG_ManageYourAccount: { ...waygateDefault },
+  WG_AccountSecurity: { ...waygateDefault },
   WG_NotificationsSettings: { ...waygateDefault },
   WG_ContactVA: { ...waygateDefault },
   WG_VeteransCrisisLine: { ...waygateDefault },
@@ -256,7 +256,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_EditDirectDeposit: { ...waygateDefault },
   WG_Benefits: { ...waygateDefault },
   WG_DisabilityRatings: { ...waygateDefault },
-  WG_ClaimsHistory: { ...waygateDefault },
+  WG_ClaimsHistoryScreen: { ...waygateDefault },
   WG_LettersOverview: { ...waygateDefault },
   WG_LettersList: { ...waygateDefault },
   WG_BenefitSummaryServiceVerificationLetter: { ...waygateDefault },

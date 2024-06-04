@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -25,6 +25,7 @@ const scrollToThenTap = async (text: string) => {
 }
 
 const checkLocatorAndContactLinks = async () => {
+  await device.disableSynchronization()
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
   await setTimeout(5000)
   await device.takeScreenshot('PersonalInformationFindVALocations')
@@ -39,6 +40,7 @@ const checkLocatorAndContactLinks = async () => {
   await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationTTY')
   await device.launchApp({ newInstance: false })
+  await device.enableSynchronization()
 }
 
 export async function updateGenderIdentify(genderIdentityOption) {
@@ -87,8 +89,10 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await setTimeout(5000)
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
-    await element(by.text('Done')).tap()
+    await device.launchApp({ newInstance: false })
 
     if (device.getPlatform() === 'android') {
       await checkLocatorAndContactLinks()

@@ -133,7 +133,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  }, [titleShowing, titleFade])
+  }) // Removed dependency array to fix screen reader issue #8310
 
   const zIndex = {
     zIndex: 1,
@@ -201,7 +201,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   if (title) {
     titleTextViewProps = {
       variant: transition ? 'MobileBodyTight' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
-      textAlign: 'center',
+      textAlign: title.type !== 'VA' ? 'center' : undefined,
       allowFontScaling: false,
     }
   }

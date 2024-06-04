@@ -1,22 +1,21 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ClaimsAndAppealsState, prefetchClaimsAndAppeals } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useDowntime, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -28,29 +27,29 @@ type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHist
 function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const {
-    claimsAndAppealsByClaimType,
-    loadingClaimsAndAppeals,
-    finishedLoadingClaimsAndAppeals,
-    claimsServiceError,
-    appealsServiceError,
-  } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
+    error: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
-  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistory') })
+  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(0)
+  const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
+  const [appealsServiceErrors, setAppealsServiceErrors] = useState(false)
+  const [claimsAndAppealsServiceErrors, setClaimsAndAppealsServiceErrors] = useState(false)
   const claimType =
     selectedTab === controlLabels.indexOf(t('claimsTab.active')) ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
-  const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const {
+    data: claimsAndAppealsListPayload,
+    error: claimsAndAppealsListError,
+    isFetching: loadingClaimsAndAppealsList,
+    refetch: refetchClaimsAndAppealsList,
+  } = useClaimsAndAppeals(claimType, 1)
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
@@ -61,37 +60,27 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       ? t('claims.title')
       : t('benefits.title')
 
-  // load claims and appeals and filter upon mount
-  // fetch the first page of Active and Closed
-  useEffect(() => {
-    // only block api call if claims and appeals are both down
-    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
-    }
-  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
-
-  useEffect(() => {
-    if (finishedLoadingClaimsAndAppeals) {
-      logAnalyticsEvent(
-        Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length),
-      )
-    }
-  }, [
-    claimsAndAppealsByClaimType.ACTIVE.length,
-    claimsAndAppealsByClaimType.CLOSED.length,
-    finishedLoadingClaimsAndAppeals,
-  ])
-
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
     if (claimsAndAppealsAccess) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
+      refetchClaimsAndAppealsList()
     }
   }
 
+  useEffect(() => {
+    const nonFatalErros = claimsAndAppealsListPayload?.meta.errors
+    const claimsError = !!nonFatalErros?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsError = !!nonFatalErros?.find(
+      (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+    )
+    setClaimsAndAppealsServiceErrors(claimsError && appealsError)
+    setClaimsServiceErrors(claimsError)
+    setAppealsServiceErrors(appealsError)
+  }, [claimsAndAppealsListPayload, setClaimsAndAppealsServiceErrors, setClaimsServiceErrors, setAppealsServiceErrors])
+
   const serviceErrorAlert = (): ReactElement => {
     // if there is a claims service error or an appeals service error
-    if (!!claimsServiceError || !!appealsServiceError) {
+    if (claimsServiceErrors || appealsServiceErrors) {
       let alertTitle, alertText
 
       // if both services failed
@@ -100,12 +89,12 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
         alertText = t('claimsAndAppeal.troubleLoadingClaimsAndAppeals')
 
         // if claims service fails but appeals did not
-      } else if (!!claimsServiceError && !appealsServiceError) {
+      } else if (claimsServiceErrors && !appealsServiceErrors) {
         alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
         alertText = t('claimsAndAppeal.troubleLoadingClaims')
 
         // if appeals service fails but claims does not
-      } else if (!!appealsServiceError && !claimsServiceError) {
+      } else if (appealsServiceErrors && !claimsServiceErrors) {
         alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
         alertText = t('claimsAndAppeal.troubleLoadingAppeals')
       }
@@ -133,12 +122,24 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID">
-      {useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError ? (
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      ) : loadingClaimsAndAppeals || loadingUserAuthorizedServices ? (
+      {!claimsNotInDowntime && !appealsNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
+      ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          onTryAgain={fetchInfoAgain}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+        />
       ) : !claimsAndAppealsAccess ? (
         <NoClaimsAndAppealsAccess />
+      ) : claimsAndAppealsListError ? (
+        <ErrorComponent
+          onTryAgain={refetchClaimsAndAppealsList}
+          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+          error={claimsAndAppealsListError}
+        />
       ) : (
         <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
           {!claimsAndAppealsServiceErrors && (

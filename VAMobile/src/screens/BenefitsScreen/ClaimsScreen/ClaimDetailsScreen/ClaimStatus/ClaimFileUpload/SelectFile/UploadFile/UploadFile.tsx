@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
+import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -14,11 +15,7 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { RootState } from 'store'
-import { ClaimEventData } from 'store/api'
-import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
+import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
 import {
@@ -28,20 +25,24 @@ import {
   useRouteNavigation,
   useTheme,
 } from 'utils/hooks'
+import { getWaygateToggles } from 'utils/waygateConfig'
 
 type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
 function UploadFile({ navigation, route }: UploadFileProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { request: originalRequest, fileUploaded } = route.params
-  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<
-    RootState,
-    ClaimsAndAppealsState
-  >((state) => state.claimsAndAppeals)
+  const { claimID, request: originalRequest, fileUploaded } = route.params
+  const { data: claim } = useClaim(claimID)
+  const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
+  const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
+    claimID,
+    originalRequest,
+    filesList,
+  )
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
@@ -49,8 +50,10 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     errorMsg: t('fileUpload.submitted.error'),
   }
 
+  const waygate = getWaygateToggles().WG_UploadFile
+
   useBeforeNavBackListener(navigation, (e) => {
-    if (filesList?.length === 0 || filesUploadedSuccess) {
+    if (filesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
     e.preventDefault()
@@ -74,15 +77,10 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   })
 
   useEffect(() => {
-    if (fileUploadedFailure || filesUploadedSuccess) {
-      dispatch(fileUploadSuccess())
-    }
-
     if (filesUploadedSuccess) {
-      setFilesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, filesList])
+  }, [filesUploadedSuccess, claim, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -99,7 +97,20 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
+    const mutateOptions = {
+      onMutate: () => {
+        logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'file'))
+      },
+      onSuccess: () => {
+        setFilesList([])
+        setFilesUploadedSuccess(true)
+        logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'file'))
+        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
+      },
+      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
+    }
+    const params: UploadFileToClaimParamaters = { claimID, request, files: filesList }
+    uploadFileToClaim(params, mutateOptions)
   }
 
   const onUpload = (): void => {

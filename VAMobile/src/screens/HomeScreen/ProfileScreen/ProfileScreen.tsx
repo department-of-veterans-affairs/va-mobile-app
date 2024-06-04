@@ -8,8 +8,8 @@ import { useServiceHistory } from 'api/militaryService'
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -17,14 +17,14 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
-  })
+  const {
+    isLoading: loadingServiceHistory,
+    error: serviceHistoryError,
+    refetch: refetchServiceHistory,
+  } = useServiceHistory()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -35,10 +35,13 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
+    if (serviceHistoryError) {
+      refetchServiceHistory()
+    }
   }
 
-  const loadingCheck = !useServiceHistoryFetched || loadingUserAuthorizedServices
-  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
+  const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
+  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || serviceHistoryError
 
   return (
     <ChildTemplate
@@ -46,9 +49,18 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       backLabel={t('home.title')}
       backLabelOnPress={navigation.goBack}
       testID="profileID">
-      {errorCheck ? (
+      {loadingCheck ? (
         <Box>
-          <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
+          <NameTag />
+          <LoadingComponent text={t('profile.loading')} />
+        </Box>
+      ) : errorCheck ? (
+        <Box>
+          <ErrorComponent
+            onTryAgain={getInfoTryAgain}
+            screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
+            error={serviceHistoryError}
+          />
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             <LargeNavButton
               title={t('settings.title')}
@@ -59,11 +71,6 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
               borderStyle={'solid'}
             />
           </Box>
-        </Box>
-      ) : loadingCheck ? (
-        <Box>
-          <NameTag />
-          <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
         <>

@@ -2,13 +2,20 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { DateTime } from 'luxon'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useServiceHistory } from 'api/militaryService'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
+import { ServiceHistoryData } from 'api/types'
 import {
   Box,
   CategoryLanding,
@@ -20,23 +27,17 @@ import {
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import {
-  AnalyticsState,
-  AppointmentsState,
-  ClaimsAndAppealsState,
-  SecureMessagingState,
-  getClaimsAndAppeals,
-  getInbox,
-  prefetchAppointments,
-} from 'store/slices'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -48,11 +49,11 @@ import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
+import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
-import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -63,37 +64,48 @@ export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
-  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
-    enabled: userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch'),
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const { data: apptsData, isFetched: apptsPrefetch } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    1,
+    {
+      enabled: featureEnabled('homeScreenPrefetch'),
+    },
+  )
+  const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
+    enabled: featureEnabled('homeScreenPrefetch'),
   })
-  useEffect(() => {
-    if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
-      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-    }
-  }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
+  const { data: foldersData, isFetched: smPrefetch } = useFolders({
+    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
+  })
+  const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
+    enabled: featureEnabled('homeScreenPrefetch'),
+  })
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory({
+    enabled: false,
+  })
+  const { data: personalInfoData } = usePersonalInformation({ enabled: false })
 
   useEffect(() => {
-    if (
-      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
-      !claimsInDowntime &&
-      featureEnabled('homeScreenPrefetch')
-    ) {
-      dispatch(getClaimsAndAppeals('ACTIVE', undefined, undefined, true))
+    if (apptsPrefetch && apptsData?.meta) {
+      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
     }
-  }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
+  }, [apptsData, apptsPrefetch])
+
+  useEffect(() => {
+    if (smPrefetch && foldersData) {
+      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+      if (inboxFolder) {
+        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
+      }
+    }
+  }, [smPrefetch, foldersData])
 
   useEffect(() => {
     if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
@@ -102,16 +114,65 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [rxPrefetch, prescriptionData])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
-      dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
+    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
     }
-  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+  }, [claimsPrefetch, claimsData])
 
   useEffect(() => {
-    if (apptsPrefetch && !claimsPrefetch && rxPrefetch && !smPrefetch) {
+    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
+
+  useEffect(() => {
+    const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInfoData?.id}`
+    const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+
+    const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
+      try {
+        serviceHistory.forEach((service) => {
+          if (service.honorableServiceIndicator === 'Y') {
+            logAnalyticsEvent(Events.vama_vet_status_yStatus())
+          } else if (service.honorableServiceIndicator === 'N') {
+            logAnalyticsEvent(Events.vama_vet_status_nStatus())
+          } else if (service.honorableServiceIndicator === 'Z') {
+            logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
+          }
+        })
+        await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
+        console.log('setStorage: ', SERVICE_INDICATOR_KEY, serviceIndicators)
+      } catch (err) {
+        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+      }
+    }
+
+    const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
+      if (!serviceIndicators) {
+        return
+      }
+
+      try {
+        const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
+        if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
+          console.log('asyncServiceIndicators: ', asyncServiceIndicators)
+          setServiceIndicators(serviceIndicators)
+        }
+      } catch (err) {
+        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+      }
+    }
+
+    if (serviceHistory) {
+      let serviceIndicators = ''
+      serviceHistory.forEach((service) => {
+        console.log('service: ', JSON.stringify(service, undefined, 2))
+        serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
+      })
+      console.log('serviceIndicators: ', serviceIndicators)
+      checkServiceIndicators(serviceIndicators)
+    }
+  }, [militaryServiceHistoryAttributes?.serviceHistory, personalInfoData?.id])
 
   const navigateTo = useRouteNavigation()
 
@@ -227,8 +288,8 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen
-        name="ManageYourAccount"
-        component={ManageYourAccount}
+        name="AccountSecurity"
+        component={AccountSecurity}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen

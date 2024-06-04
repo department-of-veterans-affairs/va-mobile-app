@@ -7,11 +7,17 @@ name: '[e2e] Android Detox Test Run'
 on:
   push:
     branches:
-      - 'dependabot/**'
+        - 'dependabot/**'
+  pull_request:
+    types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
+      run_full_test:
+        description: 'Run full e2e test?'
+        type: boolean
+        required: false
       tests_to_run:
-        description: 'List tests to test in ["test name", "test name"] format.  All tests will run if left blank'
+        description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
         required: false
       testRail_name:
@@ -22,13 +28,21 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
+      device_specific:
+        description: 'Is your testRail run Android only? (only check if adding results to testRail)'
+        type: boolean
+        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
     workflows: ['[Release] New Release Issue']
     types: 
       - in_progress
-  
+
+concurrency:
+  group: android-detox-${{ github.ref }}
+  cancel-in-progress: true  
+
 defaults:
   run:
     working-directory: VAMobile
@@ -61,13 +75,58 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
-  matrix-e2e-android:
-    if: github.event.inputs.tests_to_run != ''
+  find_detox_tests_to_run:
+    if: (github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')
+    uses: ./.github/workflows/e2e_detox_mapping.yml
+  
+  output_detox_tests_to_run:
+    if: (!cancelled())
     runs-on: macos-latest-xl
+    needs: find_detox_tests_to_run
+    outputs: 
+      output1: ${{ steps.matrix_value.outputs.matrix }}
+      output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: 'Get Matrix Value'
+        id: matrix_value
+        run: |
+          if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
+          echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+              echo "matrix=" >> "$GITHUB_OUTPUT"
+            else
+              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+              echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+              echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+            else
+              if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "matrix=" >> "$GITHUB_OUTPUT" 
+              fi
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  matrix-e2e-android:
+    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
+    runs-on: macos-latest-xl
+    needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
       matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_run) }}
+        testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
       - uses: actions/checkout@v3
@@ -119,7 +178,9 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
-      - name: Run e2e tests for Android
+      - name: Run e2e tests for Android - Full Test
+        id: run_e2e_tests
+        if: ${{needs.output_detox_tests_to_run.outputs.output2 == ''}}
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
@@ -129,8 +190,23 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+        continue-on-error: true
 
+      - name: Run e2e tests for Android
+        if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+        continue-on-error: true
+        
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
@@ -138,89 +214,9 @@ jobs:
           name: ${{matrix.testsuite}}-e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Upload artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
-          path: VAMobile/artifacts
-
-  e2e-android:
-    if: always() && github.event.inputs.tests_to_run == ''
-    needs: start_slack_thread
-    runs-on: macos-latest-xl
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Set git config
-        run: |
-            git config --global user.name 'VA Automation Bot'
-            git config --global user.email 'va-mobileapp@adhocteam.us'
-
-      - name: Decode base64 encoded keys
-        working-directory: VAMobile/android
-        run: |
-          mkdir keys
-          cd keys
-          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
-
-      - name: Setup ruby and restore bundler cache
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
-          bundler-cache: true
-          working-directory: VAMobile/android
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'microsoft'
-
-      - name: Setup node and restore yarn cache
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
-
-      - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Set app environment variables
-        run: yarn env:staging
-
-      - name: Bundle Android app
-        run: yarn e2e:android-build
-
-      - name: Run e2e tests for Android
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
-
-      - name: Upload e2e-junit
-        if: failure() || success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: -e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
-          
       - name: Inform Slack of Failure
         id: post_failure
-        if: failure() && github.event_name == 'schedule'
+        if: steps.run_e2e_tests.outcome == 'failure' && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -231,7 +227,7 @@ jobs:
 
       - name: Inform Slack of success
         id: post_success
-        if: ${{ success() }} && github.event_name == 'schedule'
+        if: steps.run_e2e_tests.outcome == 'success' && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -241,15 +237,19 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure()
+        if: steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v3
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
 
+      - name: Fail workflow if needed(View e2e step for details)
+        if: steps.run_e2e_tests.outcome == 'failure'
+        run: exit 1
+
   matrix-send_test_results_to_testrail:
-    if: always() && github.event.inputs.run_testRail == 'true' && github.event.inputs.tests_to_run != ''
-    needs: matrix-e2e-android
+    if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
+    needs: [matrix-e2e-android, output_detox_tests_to_run]
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -260,14 +260,6 @@ jobs:
     with: 
       test_names: "${{matrix.testsuite}}"
       testRail_name: ${{ inputs.testRail_name }}
-    secrets: inherit
-
-  send_test_results_to_testrail:
-    if: always() && github.event.inputs.tests_to_run == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
-    needs: e2e-android
-    name: Update testRail Results
-    uses: ./.github/workflows/update_testrail_results.yml
-    with: 
-      test_names: ""
-      testRail_name: ${{ inputs.testRail_name }}
+      test_specific_OS_needed: ${{ inputs.device_specific}}
+      test_OS_name: "Android"
     secrets: inherit
