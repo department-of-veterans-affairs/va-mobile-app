@@ -6,7 +6,12 @@
 name: '[Utils] QA required approval'
 
 on:
-  
+  pull_request:
+    types: [opened, edited, converted_to_draft, ready_for_review, reopened]
+    paths:
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - '!VAMobile/src/**.test.*'
   pull_request_review:
     types: [submitted, dismissed]
   pull_request_target:
@@ -28,16 +33,23 @@ jobs:
         
         shell: bash
         run: |
-          approvals=$(curl --request GET \
+          
+          approvals_request=(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' |
-          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          --header 'Content-Type: application/json')
 
-          if [[ $(jq 'length' <<< "$approvals") -eq 0 ]]; then
-              echo 'No reviews found for this pull request.'
-              exit 1
+          echo "$approvals_request"
+
+          if [ -z "$approvals_request" ] || [ "$approvals_request" == "[]" ]; then
+            echo "No approvals found. Exiting."
+            exit 
           fi
+
+          approvals=$(echo "$approvals_request" | jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+         
+          
+          
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
