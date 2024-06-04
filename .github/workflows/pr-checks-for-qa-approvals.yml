@@ -38,11 +38,9 @@ jobs:
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json' |
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]') || {
-            echo " Don't worry about this error.  It might mean there are no reviews yet."
+            echo " There are no reviews yet."
             exit 1
           }
-       
-
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
