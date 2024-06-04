@@ -51,9 +51,7 @@ import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -303,8 +301,6 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         component={RemoteConfigScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }
