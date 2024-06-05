@@ -86,17 +86,14 @@ describe('Home Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT))).toExist()
   })
 
-  //Uncomment when I've accounted for Cerner popup on health screen
-  /*
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text('COVID-19 updates'))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
-*/
 
   it('payments tab tap: verify the payments screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
@@ -109,7 +106,10 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT)).scroll(300, 'down')
+    await waitFor(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
     const militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
@@ -117,7 +117,7 @@ describe('Home Screen', () => {
   })
 
   it('should show home page VA Resources content', async () => {
-    await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scroll(300, 'down')
+    await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scrollTo('bottom')
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
   })
