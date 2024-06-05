@@ -34,19 +34,24 @@ jobs:
         shell: bash
         run: |
           
-          approvals=$(curl --request GET \
-          --url https://api.github.com/repos/department-of-veterans-affairs/va-mobile-app/pulls//reviews?per_page=100 \
-          --header 'Authorization: ***' \
-          --header 'Content-Type: application/json' |
-          jq -r '[.[] | select(.state == "APPROVED") | .user.login]')
-        
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          REPO_NAME=$(jq --raw-output .repository.full_name "$GITHUB_EVENT_PATH")
+
+          reviews=$(curl --request GET \
+          --url "https://api.github.com/repos/$REPO_NAME/pulls/$PR_NUMBER/reviews?per_page=100" \
+          --header "Authorization: Bearer ${{ secrets.GH_ACTIONS_PAT }}" \
+          --header 'Content-Type: application/json')
+
+          approvals=$(jq -r '[.[] | select(.state == "APPROVED") | .user.login]' <<< "$reviews")
+  
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
+          
           echo "Approvers: $approvals"  
           
           echo "required approval count: $required_approval_count"
