@@ -52,6 +52,18 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
   }
 }
 
+const getCommunityCareProvider = (attributes: AppointmentAttributes, type: AppointmentDetailsScreenType) => {
+  const { healthcareProvider } = attributes
+
+  if (type === AppointmentDetailsTypeConstants.CommunityCare && healthcareProvider) {
+    return (
+      <TextView variant="MobileBody" selectable={true}>
+        {healthcareProvider}
+      </TextView>
+    )
+  }
+}
+
 const getLocationNameAddressDirectionsPhone = (
   attributes: AppointmentAttributes,
   subtype: AppointmentDetailsSubType,
@@ -208,6 +220,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
+        {getCommunityCareProvider(attributes, type)}
         {getLocationNameAddressDirectionsPhone(attributes, subType, type, t, theme)}
         {getClinicInfo(attributes, subType, type, t, theme)}
       </Box>
