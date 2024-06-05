@@ -310,7 +310,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     deepLink={'prescriptions'}
                   />
                 )}
-                {(hasActivityError || featureInDowntime) && (
+                {(hasActivityError || featureInDowntime) && isFocused && (
                   <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
                 )}
               </Box>
@@ -346,7 +346,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasAboutYouInfo ? (
+          ) : !hasAboutYouInfo && isFocused ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
