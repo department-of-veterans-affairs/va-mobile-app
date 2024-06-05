@@ -117,7 +117,11 @@ describe('Home Screen', () => {
   })
 
   it('should show home page VA Resources content', async () => {
-    await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scrollTo('bottom')
+    await waitFor(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
+    // await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scrollTo('bottom')
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
   })
