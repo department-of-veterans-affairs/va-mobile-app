@@ -39,6 +39,7 @@ import {
   PhoneAppointment,
   VideoAtlasAppointment,
   VideoGFEAppointment,
+  VideoHomeAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
 
@@ -138,6 +139,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+  const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   const subType =
     appointmentIsCanceled && pendingAppointment
@@ -194,6 +196,13 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
         />
       ) : isCommunityCareAppointment ? (
         <CommunityCareAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoHomeAppointment ? (
+        <VideoHomeAppointment
           appointmentID={appointment.id}
           attributes={attributes}
           subType={subType}

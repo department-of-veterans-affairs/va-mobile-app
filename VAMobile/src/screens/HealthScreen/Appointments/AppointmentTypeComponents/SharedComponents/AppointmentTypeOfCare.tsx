@@ -40,6 +40,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
       case AppointmentDetailsTypeConstants.InPersonVA:
       case AppointmentDetailsTypeConstants.Phone:
       case AppointmentDetailsTypeConstants.VideoGFE:
+      case AppointmentDetailsTypeConstants.VideoHome:
       case AppointmentDetailsTypeConstants.VideoVA:
       case AppointmentDetailsTypeConstants.VideoAtlas:
       case AppointmentDetailsTypeConstants.ClaimExam:

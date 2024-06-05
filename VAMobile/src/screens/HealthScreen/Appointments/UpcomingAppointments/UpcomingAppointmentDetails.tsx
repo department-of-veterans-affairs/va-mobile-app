@@ -66,6 +66,7 @@ import {
   PhoneAppointment,
   VideoAtlasAppointment,
   VideoGFEAppointment,
+  VideoHomeAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
@@ -378,6 +379,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
   const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+  const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   const subType =
     isAppointmentCanceled && pendingAppointment
@@ -458,6 +460,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isCommunityCareAppointment ? (
         <CommunityCareAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isVideoHomeAppointment ? (
+        <VideoHomeAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}

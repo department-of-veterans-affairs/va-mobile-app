@@ -1,7 +1,6 @@
 import React from 'react'
-import { Alert } from 'react-native'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
 import {
   AppointmentPhone,
@@ -79,37 +78,6 @@ context('UpcomingAppointmentDetails', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
-  })
-
-  describe('when the appointment type is at home', () => {
-    it('should display the appointment details', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
-      expect(screen.getByText('VA Video Connect\r\nHome')).toBeTruthy()
-      expect(screen.getByText('How to join your virtual session')).toBeTruthy()
-      expect(screen.getByText('You can join VA Video Connect 30 minutes prior to the start time.')).toBeTruthy()
-      expect(screen.getByText('Join session')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
-    })
-
-    it('should prompt an alert for leaving the app when the URL is present', () => {
-      initializeTestInstance(
-        AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        true,
-      )
-      fireEvent.press(screen.getByText('Join session'))
-      expect(Alert.alert).toHaveBeenCalled()
-    })
-
-    it('should navigate to the SessionNotStarted screen when the URL is empty', () => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
-      fireEvent.press(screen.getByText('Join session'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('SessionNotStarted')
-    })
   })
 
   describe('when the appointment type is community care', () => {

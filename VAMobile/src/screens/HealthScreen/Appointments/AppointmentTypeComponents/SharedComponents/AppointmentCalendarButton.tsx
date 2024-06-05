@@ -50,6 +50,7 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         }
       case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.Phone:
+      case AppointmentDetailsTypeConstants.VideoHome:
         if (contactInformation?.residentialAddress) {
           return `${contactInformation.residentialAddress.addressLine1} ${contactInformation.residentialAddress.city}, ${contactInformation.residentialAddress.province || contactInformation.residentialAddress.stateCode} ${contactInformation.residentialAddress.internationalPostalCode || contactInformation.residentialAddress.zipCode}`
         } else {
@@ -76,10 +77,11 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('upcomingAppointments.vaAppointmentClaimExam')
       case AppointmentDetailsTypeConstants.CommunityCare:
         return t('upcomingAppointments.communityCare')
+      case AppointmentDetailsTypeConstants.VideoHome:
+        return t('upcomingAppointments.connectAtHome')
       default:
         return ''
     }
-    //   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
   }
 
   const calendarOnPress = async () => {
