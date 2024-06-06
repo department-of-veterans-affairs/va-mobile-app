@@ -75,6 +75,9 @@ export function useComposeCancelConfirmation(): [
               queryClient.invalidateQueries({
                 queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
               })
+              queryClient.invalidateQueries({
+                queryKey: [secureMessagingKeys.message, draftMessageID],
+              })
               navigateTo('FolderMessages', {
                 folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
                 folderName: FolderNameTypeConstants.drafts,
