@@ -38,8 +38,8 @@ jobs:
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
 
-          engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members | jq -r '.[].login')
-          qa=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members | jq -r '.[].login')
+          engineers=$(gh api orgs/department/teams/mob-reviewers/members | jq -r '.[].login' | jq -s -c .)
+          qa=$(gh api orgs/department/teams/qa/members | jq -r '.[].login' | jq -s -c .)
 
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
