@@ -8,8 +8,7 @@
       "setupTimeout": 300000,
       "reportSpecs": false,
       "reportWorkerAssign": false
-    },
-    "retries": 2
+    }
   },
   "skipLegacyWorkersInjection": true,
   "apps": {
