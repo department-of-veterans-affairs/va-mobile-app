@@ -48,14 +48,19 @@ jobs:
           jq -c '.required_pull_request_reviews.required_approving_review_count')
           
           echo "Approvers: $approvals"  
+          echo "Engineer team members: $engineers"
+          echo "QA team members: $qa"
           echo "required approval count: $required_approval_count"
  
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
-            if [[ $(jq --argjson engineers "$(echo "$engineers" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($engineers | index(.))] | length' <<< "$approvals") -gt 0 ]]
+            engineer_approval_count=$(jq --argjson engineers "$engineers" '[.[] | select($engineers | index(.))] | length' <<< "$approvals")
+            if [[ $engineer_approval_count -gt 0 ]]
               then
               echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-              if [[ $(jq --argjson qa "$(echo "$qa" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($qa | index(.))] | length' <<< "$approvals") -gt 0 ]]
+              
+              qa_approval_count=$(jq --argjson qa "$qa" '[.[] | select($qa | index(.))] | length' <<< "$approvals")
+              if [[ $qa_approval_count -gt 0 ]]
                 then
                 echo 'This PR has QA and engineer approval to merge'
                 exit 0
