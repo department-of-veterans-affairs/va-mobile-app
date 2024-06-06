@@ -79,7 +79,7 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           tagCount={inboxUnreadCount}
-          tagCountA11y={t('secureMessaging.tag.a11y', { inboxUnreadCount })}
+          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount: inboxUnreadCount || t('no') })}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
