@@ -133,16 +133,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       testID="developerScreenTestID">
       <Box>
         <TextArea>
-          <Button onPress={() => navigateTo('Sandbox')} label={'Sandbox'} />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
-          <Button onPress={() => navigateTo('HapticsDemo')} label={'Haptics demo'} />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
           <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
         </TextArea>
       </Box>
