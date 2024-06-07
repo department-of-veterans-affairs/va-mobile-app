@@ -598,7 +598,8 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       )
       textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else {
-      textReconstructedBody.push(<TextView variant="MobileBody">{text + whiteSpace.pop() || ''}</TextView>)
+      const spacing = whiteSpace.pop() || ''
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + spacing}</TextView>)
     }
   })
   return (
