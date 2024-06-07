@@ -40,6 +40,8 @@ jobs:
 
           engineers=$(gh api orgs/department/teams/mob-reviewers/members | jq -r '.[].login' | jq -s -c .)
           qa=$(gh api orgs/department/teams/qa/members | jq -r '.[].login' | jq -s -c .)
+          engineer_approval_count=$(jq --argjson engineers "$engineers" '[.[] | select($engineers | index(.))] | length' <<< "$approvals")
+          qa_approval_count=$(jq --argjson qa "$qa" '[.[] | select($qa | index(.))] | length' <<< "$approvals")
 
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
@@ -51,15 +53,15 @@ jobs:
           echo "Engineer team members: $engineers"
           echo "QA team members: $qa"
           echo "required approval count: $required_approval_count"
- 
+          echo "engineer_approval_count: $engineer_approval_count"
+          echo "qa_approval_count: $qa_approval_count
+          "
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
-            engineer_approval_count=$(jq --argjson engineers "$engineers" '[.[] | select($engineers | index(.))] | length' <<< "$approvals")
             if [[ $engineer_approval_count -gt 0 ]]
               then
               echo 'This PR has at least one engineer approval. Now checking for QA approval...'
               
-              qa_approval_count=$(jq --argjson qa "$qa" '[.[] | select($qa | index(.))] | length' <<< "$approvals")
               if [[ $qa_approval_count -gt 0 ]]
                 then
                 echo 'This PR has QA and engineer approval to merge'
