@@ -172,7 +172,7 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('VaccineList')}
         />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
-        {showAlert && isFocused && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} isFocused={isFocused} />}
       </Box>
       {cernerExist && (
         <Box mx={theme.dimensions.buttonPadding}>

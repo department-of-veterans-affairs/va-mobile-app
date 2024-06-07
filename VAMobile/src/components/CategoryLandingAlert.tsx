@@ -12,12 +12,18 @@ interface CategoryLandingAlertProps {
   text: string
   /** Optional boolean for indicating an error by setting the text color to red */
   isError?: boolean
+  /** trigger vibration if focused */
+  isFocused: boolean
 }
 
 /**
  * Component for alerts displayed on CategoryLanding screens
  */
-const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: CategoryLandingAlertProps) => {
+const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({
+  text,
+  isError,
+  isFocused,
+}: CategoryLandingAlertProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -53,7 +59,7 @@ const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: 
         flex={1}>
         {text}
       </TextView>
-      {vibrate()}
+      {isFocused && vibrate()}
     </Box>
   )
 }
