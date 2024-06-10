@@ -75,10 +75,12 @@ export const getMessagesListItems = (
           textAlign: 'left',
         },
         leftIconProps: unreadIconProps,
-        rightTextProps: {
+      },
+      {
+        leftTextProps: {
           text: t('text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
-          textAlign: 'right',
+          textAlign: 'left',
         },
       },
       {
