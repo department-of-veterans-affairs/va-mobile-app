@@ -3,6 +3,7 @@ import { has, max } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { MilitaryServiceHistoryData, ServiceData, ServiceHistoryAttributes, ServiceHistoryData } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getDateFromString } from 'utils/formattingUtils'
@@ -44,5 +45,6 @@ export const useServiceHistory = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getServiceHistory: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }
