@@ -163,11 +163,21 @@ export function HomeScreen({}: HomeScreenProps) {
     (authorizedServicesQuery.data?.prescriptions && rxInDowntime) ||
     (authorizedServicesQuery.data?.secureMessaging && smInDowntime)
   )
+
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const activityNotFetched =
+    !appointmentsQuery.isFetched &&
+    !claimsAndAppealsQuery.isFetched &&
+    !foldersQuery.isFetched &&
+    !prescriptionsQuery.isFetched
+
   const loadingActivity =
+    activityNotFetched ||
     appointmentsQuery.isFetching ||
     claimsAndAppealsQuery.isFetching ||
     foldersQuery.isFetching ||
     prescriptionsQuery.isFetching
+
   const hasActivity =
     !!appointmentsQuery.data?.meta?.upcomingAppointmentsCount ||
     !!claimsAndAppealsQuery.data?.meta.activeClaimsCount ||
@@ -182,8 +192,16 @@ export function HomeScreen({}: HomeScreenProps) {
     prescriptionsQuery.isError
   )
 
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const aboutYouNotFetched =
+    !serviceHistoryQuery.isFetched && !disabilityRatingQuery.isFetched && !letterBeneficiaryQuery.isFetched
+
   const loadingAboutYou =
-    serviceHistoryQuery.isLoading || disabilityRatingQuery.isLoading || letterBeneficiaryQuery.isLoading
+    aboutYouNotFetched ||
+    serviceHistoryQuery.isLoading ||
+    disabilityRatingQuery.isLoading ||
+    letterBeneficiaryQuery.isLoading
+
   const hasAboutYouInfo =
     !!disabilityRatingQuery.data?.combinedDisabilityRating ||
     !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
