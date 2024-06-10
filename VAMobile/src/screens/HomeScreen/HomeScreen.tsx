@@ -311,11 +311,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   />
                 )}
                 {(hasActivityError || featureInDowntime) && (
-                  <CategoryLandingAlert
-                    text={t('activity.error.cantShowAllActivity')}
-                    isError={hasActivityError}
-                    isFocused={isFocused}
-                  />
+                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
                 )}
               </Box>
             </>
@@ -352,7 +348,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : !hasAboutYouInfo ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-              <CategoryLandingAlert text={t('aboutYou.noInformation')} isFocused={isFocused} />
+              <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
           ) : (
             <Box>

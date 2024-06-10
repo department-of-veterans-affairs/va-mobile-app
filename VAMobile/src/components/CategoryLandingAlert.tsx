@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
@@ -12,20 +14,15 @@ interface CategoryLandingAlertProps {
   text: string
   /** Optional boolean for indicating an error by setting the text color to red */
   isError?: boolean
-  /** trigger vibration if focused */
-  isFocused: boolean
 }
 
 /**
  * Component for alerts displayed on CategoryLanding screens
  */
-const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({
-  text,
-  isError,
-  isFocused,
-}: CategoryLandingAlertProps) => {
+const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: CategoryLandingAlertProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
 
   const vibrate = (): void => {
     triggerHaptic(isError ? HapticFeedbackTypes.notificationError : HapticFeedbackTypes.notificationWarning)
