@@ -29,8 +29,8 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
   const themes = useTheme()
   return (
     <Box flexDirection={'row'} flexGrow={1}>
-      <Box ml={leftIconProps ? 0 : 16} mt={7} mr={themes.dimensions.condensedMarginBetween}>
-        {!inlineIcon && leftIconProps && (
+      {!inlineIcon && leftIconProps && (
+        <Box mt={7} mr={themes.dimensions.condensedMarginBetween}>
           <VAIcon
             name={leftIconProps.name}
             width={leftIconProps.width}
@@ -38,8 +38,8 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
             fill={leftIconProps.fill}
             testID={leftIconProps.testID}
           />
-        )}
-      </Box>
+        </Box>
+      )}
       {inlineIcon && leftIconProps ? (
         <VAIcon
           name={leftIconProps.name}
