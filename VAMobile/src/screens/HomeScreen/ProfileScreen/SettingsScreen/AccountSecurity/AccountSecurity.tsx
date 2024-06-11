@@ -8,9 +8,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useTheme } from 'utils/hooks'
 
-type ManageYourAccountProps = StackScreenProps<HomeStackParamList, 'ManageYourAccount'>
+type AccountSecurityProps = StackScreenProps<HomeStackParamList, 'AccountSecurity'>
 
-function ManageYourAccount({ navigation }: ManageYourAccountProps) {
+function AccountSecurity({ navigation }: AccountSecurityProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -18,17 +18,17 @@ function ManageYourAccount({ navigation }: ManageYourAccountProps) {
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('manageAccount.title')}>
+      title={t('accountSecurity')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('manageAccount.title')}
+            {t('accountSecurity.signIn')}
           </TextView>
-          <TextView variant="MobileBody">{t('manageAccount.toConfirmOrUpdateEmail')}</TextView>
+          <TextView variant="MobileBody">{t('accountSecurity.description')}</TextView>
         </TextArea>
       </Box>
     </FeatureLandingTemplate>
   )
 }
 
-export default ManageYourAccount
+export default AccountSecurity
