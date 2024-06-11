@@ -573,7 +573,7 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
     })
 
-    it('does not display monthly payment amount when veteran does not have monthly compensation payment', async () => {
+    it('does not display monthly payment amount when the beneficiary API call fails', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/letters/beneficiary')
         .mockRejectedValue('fail')
