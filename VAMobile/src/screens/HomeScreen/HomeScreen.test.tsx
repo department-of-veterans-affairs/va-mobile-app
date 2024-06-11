@@ -6,8 +6,6 @@ import { DateTime } from 'luxon'
 
 import {
   AppointmentsGetData,
-  ClaimsAndAppealsGetDataMetaError,
-  ClaimsAndAppealsListPayload,
   DisabilityRatingData,
   FacilitiesPayload,
   LetterBeneficiaryDataPayload,
@@ -17,6 +15,7 @@ import {
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { getClaimsAndAppealsPayload } from 'utils/tests/personalization'
 
 import { HomeScreen } from './HomeScreen'
 
@@ -36,22 +35,6 @@ const getAppointmentsPayload = (upcomingAppointmentsCount: number): Appointments
   meta: {
     upcomingAppointmentsCount,
     upcomingDaysLimit,
-  },
-})
-
-const getClaimsAndAppealsPayload = (
-  activeClaimsCount: number,
-  serviceErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
-): ClaimsAndAppealsListPayload => ({
-  data: [],
-  meta: {
-    pagination: {
-      currentPage: 1,
-      totalEntries: 3,
-      perPage: 10,
-    },
-    activeClaimsCount,
-    errors: serviceErrors,
   },
 })
 
