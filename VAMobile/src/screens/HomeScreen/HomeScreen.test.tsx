@@ -4,18 +4,17 @@ import { Linking } from 'react-native'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import {
-  AppointmentsGetData,
-  DisabilityRatingData,
-  FacilitiesPayload,
-  LetterBeneficiaryDataPayload,
-  PrescriptionsGetData,
-  SecureMessagingFoldersGetData,
-} from 'api/types'
+import { DisabilityRatingData, FacilitiesPayload, LetterBeneficiaryDataPayload } from 'api/types'
+import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
-import { getClaimsAndAppealsPayload } from 'utils/tests/personalization'
+import {
+  getAppointmentsPayload,
+  getClaimsAndAppealsPayload,
+  getFoldersPayload,
+  getPrescriptionsPayload,
+} from 'utils/tests/personalization'
 
 import { HomeScreen } from './HomeScreen'
 
@@ -27,79 +26,6 @@ jest.mock('utils/hooks', () => {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
   }
-})
-
-const upcomingDaysLimit = 7
-const getAppointmentsPayload = (upcomingAppointmentsCount: number): AppointmentsGetData => ({
-  data: [],
-  meta: {
-    upcomingAppointmentsCount,
-    upcomingDaysLimit,
-  },
-})
-
-const getFoldersPayload = (inboxUnreadCount: number): SecureMessagingFoldersGetData => ({
-  data: [
-    {
-      id: '0',
-      type: 'folders',
-      attributes: {
-        folderId: 0,
-        name: 'Inbox',
-        count: 12,
-        unreadCount: inboxUnreadCount,
-        systemFolder: true,
-      },
-    },
-  ],
-  links: {
-    self: '',
-    first: '',
-    prev: '',
-    next: '',
-    last: '',
-  },
-  inboxUnreadCount,
-  meta: {
-    pagination: {
-      currentPage: 1,
-      perPage: 10,
-      totalPages: 1,
-      totalEntries: 3,
-    },
-  },
-})
-
-const getPrescriptionsPayload = (refillablePrescriptionsCount: number): PrescriptionsGetData => ({
-  data: [],
-  links: {
-    self: '',
-    first: '',
-    prev: null,
-    next: null,
-    last: '',
-  },
-  meta: {
-    pagination: {
-      currentPage: 1,
-      perPage: 10,
-      totalPages: 1,
-      totalEntries: 3,
-    },
-    prescriptionStatusCount: {
-      active: 6,
-      isRefillable: refillablePrescriptionsCount,
-      discontinued: 10,
-      expired: 80,
-      historical: 0,
-      pending: 1,
-      transferred: 3,
-      submitted: 0,
-      hold: 0,
-      unknown: 0,
-      total: 20,
-    },
-  },
 })
 
 const getFacilitiesPayload = (isCernerPatient: boolean): FacilitiesPayload => ({
@@ -151,7 +77,7 @@ const getLetterBeneficiaryPayload = (monthlyAwardAmount: number): LetterBenefici
 context('HomeScreen', () => {
   const initializeTestInstance = (options?: RenderParams) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />, { preloadedState: options?.preloadedState })
+    render(<HomeScreen {...props} />, { ...options })
   }
 
   it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
@@ -261,7 +187,9 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.getByRole('link', { name: 'Appointments' })).toBeTruthy())
       await waitFor(() =>
         expect(
-          screen.getByRole('link', { name: `${upcomingAppointmentsCount} in the next ${upcomingDaysLimit} days` }),
+          screen.getByRole('link', {
+            name: `${upcomingAppointmentsCount} in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`,
+          }),
         ).toBeTruthy(),
       )
     })
