@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsGetDataMetaError } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
+import { RootState } from 'store'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
@@ -27,15 +28,17 @@ context('BenefitsScreen', () => {
   const initializeTestInstance = (
     activeClaimsCount?: number,
     serviceErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
-    preloadedState?: any,
+    preloadedState?: Partial<RootState>,
   ) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    const queriesData = activeClaimsCount && [
-      {
-        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, ClaimTypeConstants.ACTIVE],
-        data: getClaimsAndAppealsPayload(activeClaimsCount, serviceErrors),
-      },
-    ]
+    const queriesData = activeClaimsCount
+      ? [
+          {
+            queryKey: [claimsAndAppealsKeys.claimsAndAppeals, ClaimTypeConstants.ACTIVE],
+            data: getClaimsAndAppealsPayload(activeClaimsCount, serviceErrors),
+          },
+        ]
+      : undefined
     render(<BenefitsScreen {...props} />, { preloadedState, queriesData })
   }
 
