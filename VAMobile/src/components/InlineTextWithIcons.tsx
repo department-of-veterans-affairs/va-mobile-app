@@ -26,11 +26,11 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
   leftTextProps,
   rightTextProps,
 }) => {
-  const themes = useTheme()
+  const theme = useTheme()
   return (
     <Box flexDirection={'row'} flexGrow={1}>
       {!inlineIcon && leftIconProps && (
-        <Box mt={7} mr={themes.dimensions.condensedMarginBetween}>
+        <Box mt={7} mr={theme.dimensions.condensedMarginBetween}>
           <VAIcon
             name={leftIconProps.name}
             width={leftIconProps.width}
@@ -50,7 +50,7 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
         />
       ) : (
         <TextView
-          mr={themes.dimensions.condensedMarginBetween}
+          mr={theme.dimensions.condensedMarginBetween}
           flex={7}
           variant={leftTextProps.variant}
           textAlign={leftTextProps.textAlign}

@@ -90,12 +90,6 @@ export const getMessagesListItems = (
           textAlign: 'left',
         },
         leftIconProps: paperClipProps,
-        rightIconProps: {
-          name: 'ChevronRight',
-          width: theme.dimensions.chevronListItemWidth,
-          height: theme.dimensions.chevronListItemHeight,
-          fill: theme.colors.icon.chevronListItem,
-        } as VAIconProps,
       },
     ]
 
