@@ -33,7 +33,8 @@ jobs:
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' | jq -c '[.[] | select(.state == "APPROVED")]')
+          --header 'Content-Type: application/json' | \
+          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
          
           
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
@@ -49,20 +50,26 @@ jobs:
           jq -c '.required_pull_request_reviews.required_approving_review_count')
    
 
-          engineer_approvals=$(echo "$approvals" | jq --argjson engineers "$(echo "$engineers" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($engineers | index(.user.login))]')
-          qa_approvals=$(echo "$approvals" | jq --argjson qa "$(echo "$qa" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($qa | index(.user.login))]')
+          engineers=$(echo "$approvals" | jq --argjson engineers "$(echo "$engineers" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($engineers | index(.user.login))]')
+          qa=$(echo "$approvals" | jq --argjson qa "$(echo "$qa" | jq -R -s -c 'split("\n")[:-1]')" '[.[] | select($qa | index(.user.login))]')
 
-          echo "Engineer Approvals: $engineer_approvals"
-          echo "QA Approvals: $qa_approvals"
+          echo "Engineer Approvals: $engineers"
+          echo "QA Approvals: $qa"
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
  
           if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
-            if [[ $(jq '. | length' <<< "$engineer_approvals") -gt 0 ]]
+            engineer_approved=$(jq --argjson engineers "$(echo "$engineers" | jq -R -s -c 'split("\n")[:-1]')" \
+                                '[.[] | select($engineers | index(.))] | length' <<< "$approvals")
+            
+            if [[ $engineer_approved -gt 0 ]]
               then
               echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-              if [[ $(jq '. | length' <<< "$qa_approvals") -gt 0 ]]
+              qa_approved=$(jq --argjson qa "$(echo "$qa" | jq -R -s -c 'split("\n")[:-1]')" \
+                              '[.[] | select($qa | index(.))] | length' <<< "$approvals")
+              
+              if [[ $qa_approved -gt 0 ]]
                 then
                 echo 'This PR has QA and engineer approval to merge'
                 exit 0
