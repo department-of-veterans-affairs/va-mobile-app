@@ -2,6 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -16,22 +17,33 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const authorizedServicesMockData = { lettersAndDocuments: true }
-jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: authorizedServicesMockData,
-    }),
-  }
-})
-
 context('LettersOverviewScreen', () => {
   const initializeTestInstance = (isAuthorized = true) => {
-    authorizedServicesMockData.lettersAndDocuments = isAuthorized
-    render(<LettersOverviewScreen {...mockNavProps()} />)
+    render(<LettersOverviewScreen {...mockNavProps()} />, {
+      queriesData: [
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            appeals: true,
+            appointments: true,
+            claims: true,
+            decisionLetters: true,
+            directDepositBenefits: true,
+            directDepositBenefitsUpdate: true,
+            disabilityRating: true,
+            genderIdentity: true,
+            lettersAndDocuments: isAuthorized,
+            militaryServiceHistory: true,
+            paymentHistory: true,
+            preferredName: true,
+            prescriptions: true,
+            scheduleAppointments: true,
+            secureMessaging: true,
+            userProfileUpdate: true,
+          },
+        },
+      ],
+    })
   }
 
   beforeEach(() => {

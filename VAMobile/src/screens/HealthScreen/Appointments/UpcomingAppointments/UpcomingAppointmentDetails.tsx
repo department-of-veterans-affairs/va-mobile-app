@@ -23,7 +23,6 @@ import {
   LoadingComponent,
   TextArea,
   TextView,
-  TextViewProps,
 } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -221,13 +220,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         }
       }
 
-      const prepareForVideoVisitLinkProps: TextViewProps = {
-        py: theme.dimensions.buttonPadding,
-        variant: 'MobileBodyLink',
-        onPress: () => navigateTo('PrepareForVideoVisit'),
-        accessibilityRole: 'link',
-      }
-
       return (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -244,9 +236,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
             />
           </Box>
 
-          <TextView {...prepareForVideoVisitLinkProps} testID="prepareForVideoVisitTestID">
-            {t('upcomingAppointmentDetails.prepareForVideoVisit')}
-          </TextView>
+          <Box py={theme.dimensions.buttonPadding}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('upcomingAppointmentDetails.prepareForVideoVisit')}
+              onPress={() => navigateTo('PrepareForVideoVisit')}
+              testID="prepareForVideoVisitTestID"
+            />
+          </Box>
         </Box>
       )
     }
