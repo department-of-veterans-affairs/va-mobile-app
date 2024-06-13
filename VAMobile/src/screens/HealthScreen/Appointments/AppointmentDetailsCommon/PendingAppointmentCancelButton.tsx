@@ -60,6 +60,18 @@ function PendingAppointmentCancelButton({
               ),
             )
           },
+          onError: () => {
+            showSnackBar(
+              t('appointments.requestNotCanceled'),
+              dispatch,
+              () => {
+                cancelAppointment(cancelId, mutateOptions)
+              },
+              false,
+              true,
+              true,
+            )
+          },
         }
         cancelAppointment(cancelId, mutateOptions)
       }

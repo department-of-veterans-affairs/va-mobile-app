@@ -14,10 +14,9 @@ import {
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   TextLine,
-  TextView,
-  TextViewProps,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -73,18 +72,6 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     navigateTo('IncorrectServiceInfo')
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'MobileBody',
-    color: 'link',
-    mx: theme.dimensions.gutter,
-    mb: theme.dimensions.contentMarginBottom,
-    accessibilityRole: 'link',
-    testID: t('militaryInformation.incorrectServiceInfo'),
-    onPress: onIncorrectService,
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-  }
-
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
   return (
@@ -117,7 +104,14 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
           <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
-          <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('militaryInformation.incorrectServiceInfo')}
+              onPress={onIncorrectService}
+              testID={t('militaryInformation.incorrectServiceInfo')}
+            />
+          </Box>
         </>
       )}
     </FeatureLandingTemplate>

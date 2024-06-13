@@ -480,6 +480,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
+              queryKey: [secureMessagingKeys.message, messageID],
+            })
+            queryClient.invalidateQueries({
               queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
             })
             goToDraftFolder(true)
@@ -495,14 +498,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         onSuccess: () => {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-          navigateTo('FolderMessages', {
-            folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-            folderName: FolderNameTypeConstants.drafts,
-            draftSaved: false,
+          queryClient.invalidateQueries({
+            queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
           })
+          goToDraftFolder(false)
         },
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList, replyToID: replyToID }
       sendMessage(params, mutateOptions)
     }
   }

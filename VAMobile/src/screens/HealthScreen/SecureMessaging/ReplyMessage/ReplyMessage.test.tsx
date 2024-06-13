@@ -134,7 +134,9 @@ context('ReplyMessage', () => {
     )
 
     when(api.get as jest.Mock)
-      .calledWith(`/v1/messaging/health/messages/3/thread?excludeProvidedMessage=${false}`)
+      .calledWith(`/v1/messaging/health/messages/3/thread?excludeProvidedMessage=${false}`, {
+        useCache: 'false',
+      })
       .mockResolvedValue(thread)
       .calledWith(`/v0/messaging/health/messages/3`)
       .mockResolvedValue(message)

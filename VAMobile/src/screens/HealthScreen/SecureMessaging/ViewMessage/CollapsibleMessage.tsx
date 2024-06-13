@@ -2,6 +2,8 @@ import React, { Ref, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import {
@@ -9,6 +11,8 @@ import {
   AccordionCollapsibleProps,
   AttachmentLink,
   Box,
+  LabelTag,
+  LabelTagTypeConstants,
   LoadingComponent,
   TextView,
   VAIcon,
@@ -33,6 +37,7 @@ export type ThreadMessageProps = {
 
 function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
+  const isFocused = useIsFocused()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const { condensedMarginBetween } = theme.dimensions
@@ -45,7 +50,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     isFetched: fetchedMessage,
     refetch: fetchMessage,
   } = useMessage(message.messageId, {
-    enabled: false,
+    enabled: false && isFocused,
   })
   const { refetch: refetchFile, isFetching: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
@@ -155,9 +160,15 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}
-          <TextView accessible={false} variant="MobileBody">
-            {dateTime}
-          </TextView>
+          {sentDate && sentDate.length > 1 ? (
+            <TextView accessible={false} variant="MobileBody">
+              {dateTime}
+            </TextView>
+          ) : (
+            <Box mt={condensedMarginBetween}>
+              <LabelTag text={t('draft')} labelType={LabelTagTypeConstants.tagInactive} />
+            </Box>
+          )}
         </Box>
       </Box>
     )

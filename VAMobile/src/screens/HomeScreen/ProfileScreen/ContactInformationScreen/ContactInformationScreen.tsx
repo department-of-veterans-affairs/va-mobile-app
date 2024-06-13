@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -10,14 +9,15 @@ import { useContactInformation } from 'api/contactInformation/getContactInformat
 import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import {
+  Box,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   TextLine,
   TextView,
-  TextViewProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -132,9 +132,22 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     isFetching: loadingContactInformation,
     error: contactInformationError,
     refetch: refetchContactInformation,
+    failureCount,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const [retried, setRetried] = useState(false)
+
+  useEffect(() => {
+    if (failureCount > 0) {
+      setRetried(true)
+    }
+
+    if (retried && !loadingContactInformation) {
+      const retryStatus = contactInformationError ? 'fail' : 'success'
+      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
+    }
+  }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   const navigateTo = useRouteNavigation()
 
@@ -194,12 +207,6 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     navigateTo('HowWillYou')
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    mx: gutter,
-    mt: condensedMarginBetween,
-  }
-
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onMailingAddress },
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
@@ -224,11 +231,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
-          <Pressable onPress={onHowWillYou} accessibilityRole="link" accessible={true}>
-            <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
-              {t('contactInformation.howWillYouUseContactInfo')}
-            </TextView>
-          </Pressable>
+          <Box mx={gutter} mt={condensedMarginBetween}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('contactInformation.howWillYouUseContactInfo')}
+              onPress={onHowWillYou}
+              testID="howWeUseContactInfoLinkTestID"
+            />
+          </Box>
           <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
           <DefaultList
             items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)}
