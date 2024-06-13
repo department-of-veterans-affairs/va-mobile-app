@@ -8,34 +8,6 @@ import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import Appointments from './Appointments'
 
-jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true,
-      },
-    }),
-  }
-})
-
 jest.mock('utils/remoteConfig')
 
 context('AppointmentsScreen', () => {
