@@ -43,6 +43,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
 
     if (error && isErrorObject(error)) {
       const reactQueryErrorType = getCommonErrorFromAPIError(error, screenID)
+      const custom = error.json?.errors[0]
       switch (reactQueryErrorType) {
         case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
           return <NetworkConnectionError onTryAgain={tryAgain} />
@@ -74,6 +75,27 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
               onTryAgain={tryAgain}
               titleText={t('errors.callHelpCenter.vaAppNotWorking')}
               callPhone={displayedTextPhoneNumber(t('8006982411'))}
+            />
+          )
+        case CommonErrorTypesConstants.CUSTOM_ERROR:
+          return (
+            <CallHelpCenter
+              titleText={custom?.title}
+              titleA11yHint={custom?.title}
+              errorText={custom?.body}
+              errorA11y={custom?.body}
+              callPhone={custom?.telephone}
+            />
+          )
+        case CommonErrorTypesConstants.CUSTOM_ERROR_WITH_REFRESH:
+          return (
+            <CallHelpCenter
+              onTryAgain={tryAgain}
+              titleText={custom?.title}
+              titleA11yHint={custom?.title}
+              errorText={custom?.body}
+              errorA11y={custom?.body}
+              callPhone={custom?.telephone}
             />
           )
         default:
