@@ -306,9 +306,17 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     showActionSheetWithOptions(
       {
         title: props.title,
-        titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+        titleTextStyle: {
+          fontWeight: 'bold',
+          textAlign: isIOS() ? 'center' : 'left',
+          color: currentTheme.colors.text.primary,
+        },
         message: props.message,
-        messageTextStyle: { fontWeight: 'normal', textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: {
+          fontWeight: 'normal',
+          textAlign: isIOS() ? 'center' : 'left',
+          color: currentTheme.colors.text.primary,
+        },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
@@ -514,8 +522,12 @@ export function useShowActionSheet(): (
     })
 
     const casedOptions: ActionSheetOptions = {
-      titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
-      messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: isIOS() ? 'center' : 'left',
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: isIOS() ? 'center' : 'left', color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
