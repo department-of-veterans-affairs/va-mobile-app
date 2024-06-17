@@ -39,7 +39,6 @@ import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
@@ -332,8 +331,6 @@ export type UseAlertProps = {
   message?: string
   /** options to show in alert */
   buttons: Array<AlertButton>
-  /** screenReaderEnabled boolean */
-  screenReaderEnabled: boolean
 }
 /**
  * Hook to create standard alert for a destructive event
@@ -346,11 +343,7 @@ export type UseAlertProps = {
  */
 export function useAlert(): (props: UseAlertProps) => void {
   return (props: UseAlertProps) => {
-    Alert.alert(
-      props.screenReaderEnabled ? a11yLabelVA(props.title) : props.title,
-      props.screenReaderEnabled && props.message ? a11yLabelVA(props.message) : props.message,
-      props.buttons,
-    )
+    Alert.alert(props.title, props.message, props.buttons)
   }
 }
 
