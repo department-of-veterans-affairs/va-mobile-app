@@ -2,6 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { context, render } from 'testUtils'
 
 import PaymentsScreen from './index'
@@ -15,65 +16,38 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest
-      .fn()
-      .mockReturnValueOnce({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: false,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      })
-      .mockReturnValue({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      }),
-  }
-})
-
 context('PaymentsScreen', () => {
-  const initializeTestInstance = (): void => {
-    render(<PaymentsScreen />)
+  const initializeTestInstance = (authorized = true): void => {
+    render(<PaymentsScreen />, {
+      queriesData: [
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            appeals: true,
+            appointments: true,
+            claims: true,
+            decisionLetters: true,
+            directDepositBenefits: true,
+            directDepositBenefitsUpdate: authorized,
+            disabilityRating: true,
+            genderIdentity: true,
+            lettersAndDocuments: true,
+            militaryServiceHistory: true,
+            paymentHistory: true,
+            preferredName: true,
+            prescriptions: true,
+            scheduleAppointments: true,
+            secureMessaging: true,
+            userProfileUpdate: true,
+          },
+        },
+      ],
+    })
   }
 
   describe('when user does not have directDepositBenefits', () => {
     it('should navigate to HowToUpdateDirectDeposit', () => {
-      initializeTestInstance()
+      initializeTestInstance(false)
       fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('HowToUpdateDirectDeposit')
     })
