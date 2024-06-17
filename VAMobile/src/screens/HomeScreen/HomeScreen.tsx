@@ -237,7 +237,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const hasActivityError = !!(appointmentsError || claimsError || inboxError || prescriptionsError)
 
   return (
-    <CategoryLanding headerButton={headerButton} testID="homeScreenID" scrollViewProps={scrollViewProps}>
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
