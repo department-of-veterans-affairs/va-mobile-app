@@ -3,9 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { AuthState, completeSync, logInDemoMode } from 'store/slices'
+import { useAppointments } from 'api/appointments'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDisabilityRating } from 'api/disabilityRating'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useLetterBeneficiaryData } from 'api/letters'
+import { useServiceHistory } from 'api/militaryService'
+import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
@@ -14,6 +23,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
@@ -34,14 +44,27 @@ function SyncScreen({}: SyncScreenProps) {
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { isFetched: authorizedServicesFetched } = useAuthorizedServices()
 
-  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices()
-  const { isFetching: fetchingServiceHistory } = useServiceHistory({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
-  const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
+  // Prefetch data for `Activity` section
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    {
+      enabled: loggedIn && downtimeWindowsFetched,
+    },
+  )
+  useClaimsAndAppeals('ACTIVE', { enabled: loggedIn && downtimeWindowsFetched })
+  useFolders({ enabled: loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: loggedIn && downtimeWindowsFetched })
+  useFacilitiesInfo({ enabled: loggedIn })
+
+  // Prefetch data for `About you` section
+  useServiceHistory({ enabled: loggedIn && downtimeWindowsFetched })
+  useDisabilityRating({ enabled: loggedIn && downtimeWindowsFetched })
+  useLetterBeneficiaryData({ enabled: loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -85,11 +108,11 @@ function SyncScreen({}: SyncScreenProps) {
       setDisplayMessage('')
     }
 
-    const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
+      setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
+  }, [dispatch, loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, ENVIRONMENT])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>

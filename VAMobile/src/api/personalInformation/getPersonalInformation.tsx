@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { getAllFieldsThatExist } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -42,5 +43,6 @@ export const usePersonalInformation = (options?: { enabled?: boolean }) => {
     meta: {
       errorName: 'getPersonalInformation: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }
