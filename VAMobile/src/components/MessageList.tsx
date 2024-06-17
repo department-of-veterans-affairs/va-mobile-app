@@ -57,7 +57,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
           {isSentReadTag && (
-            <Box ml={23} mt={7}>
+            <Box mt={7}>
               <LabelTag text={t('secureMessaging.folders.read.tag')} labelType={LabelTagTypeConstants.tagInactive} />
             </Box>
           )}
