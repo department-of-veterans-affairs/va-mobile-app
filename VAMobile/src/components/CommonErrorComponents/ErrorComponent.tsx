@@ -12,6 +12,7 @@ import { isErrorObject } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
+import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -82,8 +83,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             <CallHelpCenter
               titleText={custom?.title}
               titleA11yHint={custom?.title}
-              errorText={custom?.body}
-              errorA11y={custom?.body}
+              errorText={fixedWhiteSpaceString(custom?.body)}
+              errorA11y={fixedWhiteSpaceString(custom?.body)}
               callPhone={custom?.telephone}
             />
           )
@@ -93,8 +94,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
               onTryAgain={tryAgain}
               titleText={custom?.title}
               titleA11yHint={custom?.title}
-              errorText={custom?.body}
-              errorA11y={custom?.body}
+              errorText={fixedWhiteSpaceString(custom?.body)}
+              errorA11y={fixedWhiteSpaceString(custom?.body)}
               callPhone={custom?.telephone}
             />
           )
