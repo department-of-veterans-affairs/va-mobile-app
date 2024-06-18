@@ -27,9 +27,9 @@ jobs:
       - name: Test build
         working-directory: VAMobile
         run: |
-          yarn install --frozen-lockfile
+          yarn install 
           cd documentation
-          yarn install --frozen-lockfile
+          yarn install
           yarn build
       - name: Start web server
         working-directory: VAMobile/documentation

@@ -25,9 +25,9 @@ jobs:
         working-directory: VAMobile
         run: |
           git checkout develop
-          yarn install --frozen-lockfile
+          yarn install
           cd documentation
-          yarn install --frozen-lockfile
+          yarn install
           yarn build
 
       # Popular action to deploy to GitHub Pages:
