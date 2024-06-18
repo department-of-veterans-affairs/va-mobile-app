@@ -13,6 +13,8 @@ export type TextAreaProps = {
   onPress?: () => void
   /** prop to remove border */
   noBorder?: boolean
+
+  children: React.ReactNode
 }
 
 /**

@@ -31,6 +31,8 @@ export type CategoryLandingProps = {
   scrollViewProps?: VAScrollViewProps
   /** optional testID for scrollView */
   testID?: string
+
+  children: React.ReactNode
 }
 
 export const CategoryLanding: FC<CategoryLandingProps> = ({

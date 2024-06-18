@@ -31,6 +31,7 @@ export type AccordionCollapsibleProps = {
   noBorder?: boolean
   /** Ref for the header section */
   headerRef?: Ref<View>
+  children: React.ReactNode
 }
 
 /**

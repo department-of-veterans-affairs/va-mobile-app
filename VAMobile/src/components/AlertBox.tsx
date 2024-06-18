@@ -27,6 +27,8 @@ export type AlertBoxProps = {
   titleRole?: AccessibilityRole
   /** optional testID */
   testId?: string
+
+  children: React.ReactNode
 }
 
 /**

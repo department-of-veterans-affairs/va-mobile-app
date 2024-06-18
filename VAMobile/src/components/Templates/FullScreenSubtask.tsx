@@ -65,6 +65,8 @@ export type FullScreenSubtaskProps = {
   showCrisisLineCta?: boolean
   /** Optional testID */
   testID?: string
+
+  children: React.ReactNode
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
