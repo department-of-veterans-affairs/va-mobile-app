@@ -1,7 +1,21 @@
+import { initReactI18next } from 'react-i18next'
 import { Alert, NativeModules } from 'react-native'
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 
+import i18next from 'i18next'
+
+import common from '../src/translations/en/common.json'
+
 const globalAny: any = global
+
+i18next.use(initReactI18next).init({
+  lng: 'en',
+  fallbackLng: 'en',
+  ns: ['common'],
+  defaultNS: 'common',
+})
+
+i18next.addResources('en', 'common', common)
 
 NativeModules.RNCheckVoiceOver = {
   isVoiceOverRunning: jest.fn(() => Promise.resolve({ data: false })),
