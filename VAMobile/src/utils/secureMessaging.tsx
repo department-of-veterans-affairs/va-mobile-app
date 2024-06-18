@@ -483,7 +483,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
   const bodySplit = body.split(/\s/).filter((value) => value !== '')
   const whiteSpace = body
     .trim()
-    .split(/[^\s]/)
+    .split(/\S/)
     .reverse()
     .filter((value) => value !== '')
   let dontAddNextString = false
