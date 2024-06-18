@@ -20,6 +20,8 @@ export type WaygateWrapperProps = {
   waygateName?: WaygateToggleType
   /** flag for template footer buttons to not double up alertbox display */
   bypassAlertBox?: boolean
+
+  children?: React.ReactNode
 }
 
 export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {

@@ -17,10 +17,13 @@ import { useAppDispatch } from 'utils/hooks'
 
 const foregroundNotifications: Array<string> = []
 
+type NotificationManagerProps = {
+  children?: React.ReactNode
+}
 /**
  * notification manager component to handle all push logic
  */
-const NotificationManager: FC = ({ children }) => {
+const NotificationManager: FC<NotificationManagerProps> = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const dispatch = useAppDispatch()
