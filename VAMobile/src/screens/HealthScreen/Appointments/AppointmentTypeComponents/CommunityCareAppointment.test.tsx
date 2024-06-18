@@ -448,7 +448,9 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(
+        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
       expect(screen.getByText('Email: test@test.com')).toBeTruthy()
@@ -463,6 +465,7 @@ context('CommunityCareAppointment', () => {
       const attributes: AppointmentAttributes = {
         ...defaultAppointmentAttributes,
         cancelId: undefined,
+        comment: '',
         friendlyLocationName: undefined,
         healthcareProvider: null,
         location: {
@@ -487,7 +490,7 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
+      expect(screen.getByText('Other details: Not available')).toBeTruthy()
 
       expect(screen.getByRole('button', { name: 'Cancel request' })).toBeTruthy()
       expect(screen.getByAccessibilityHint('Cancel this appointment request')).toBeTruthy()
@@ -541,7 +544,9 @@ context('CommunityCareAppointment', () => {
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(
+        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
       expect(screen.getByText('Email: test@test.com')).toBeTruthy()
