@@ -278,7 +278,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasActivity && !hasActivityError ? (
+          ) : !hasActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <Box
                 flexDirection="row"
