@@ -69,12 +69,13 @@ const AlertBox: FC<AlertBoxProps> = ({
     testID: testId,
   }
 
-  const vibrate = (): void => {
+  const vibrate = () => {
     if (border === 'error') {
       triggerHaptic(HapticFeedbackTypes.notificationError)
     } else if (border === 'warning') {
       triggerHaptic(HapticFeedbackTypes.notificationWarning)
     }
+    return <></>
   }
 
   const titleAccessibilityRole = titleRole ? titleRole : text || children ? 'header' : undefined

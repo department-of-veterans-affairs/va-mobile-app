@@ -130,6 +130,7 @@ interface Props {
   style?: StyleProp<ViewStyle>
   /** method to run when menu is hidden */
   onHidden?: () => Record<string, unknown>
+  children?: React.ReactNode
 }
 
 type AnimationType = {

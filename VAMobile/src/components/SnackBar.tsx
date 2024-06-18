@@ -133,12 +133,13 @@ const SnackBar: FC<ToastProps> = (toast) => {
     mt: 2,
   }
 
-  const vibrate = (): void => {
+  const vibrate = () => {
     if (!isUndo) {
       triggerHaptic(HapticFeedbackTypes.notificationError)
     } else {
       triggerHaptic(HapticFeedbackTypes.notificationSuccess)
     }
+    return <></>
   }
 
   return (
