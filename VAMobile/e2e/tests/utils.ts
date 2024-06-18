@@ -18,7 +18,7 @@ export const CommonE2eIdConstants = {
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
-  VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
+  VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -235,7 +235,7 @@ export async function resetInAppReview() {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
 }
 
 export async function openProfile() {
@@ -426,8 +426,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
-    if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
-      await element(by.id(featureNavigationArray[j])).tap()
+    if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
+      await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()

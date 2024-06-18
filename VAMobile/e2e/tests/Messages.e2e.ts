@@ -250,7 +250,7 @@ describe('Messages Screen', () => {
   })
 
   it('reply: verify talk to the veterans crisis line now is displayed', async () => {
-    await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
   })
@@ -341,7 +341,7 @@ describe('Messages Screen', () => {
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
-    await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
   })

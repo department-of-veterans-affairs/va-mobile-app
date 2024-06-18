@@ -415,11 +415,12 @@ export function HomeScreen({}: HomeScreenProps) {
             {t('vaResources')}
           </TextView>
           <Box mx={theme.dimensions.condensedMarginBetween}>
-            <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
+            <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} testID={'contactVALinkRowID'} />
             <LinkRow
               title={t('findLocation.title')}
               titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
               onPress={onFacilityLocator}
+              testID={'findLocationLinkRowID'}
             />
           </Box>
         </Box>

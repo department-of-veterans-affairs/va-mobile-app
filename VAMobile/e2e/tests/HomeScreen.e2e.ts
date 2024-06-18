@@ -16,8 +16,8 @@ import {
 export const HomeE2eIdConstants = {
   PAYMENTS_BTN_ID: 'Payments',
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
-  LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
-  CONTACT_VA_ROW_ID: 'Contact  V-A ',
+  LOCATION_FINDER_ROW_ID: 'findLocationLinkRowID',
+  CONTACT_VA_ROW_ID: 'contactVALinkRowID',
   COVID_ROW_ID: 'COVID-19 updates',
   HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
   CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
@@ -54,7 +54,7 @@ describe('Home Screen', () => {
   })
 
   it('should show primary home page header content', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
   })
 
