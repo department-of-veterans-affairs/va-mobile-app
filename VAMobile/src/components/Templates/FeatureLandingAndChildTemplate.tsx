@@ -36,6 +36,8 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+
+  children: React.ReactNode
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
