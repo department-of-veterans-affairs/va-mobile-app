@@ -32,7 +32,7 @@ export type CategoryLandingProps = {
   /** optional testID for scrollView */
   testID?: string
 
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const CategoryLanding: FC<CategoryLandingProps> = ({

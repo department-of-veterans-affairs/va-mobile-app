@@ -45,7 +45,7 @@ export type LargePanelProps = {
   /** scrollview insets removal - used for when wanting to extend background color when in landscape mode across the screen, default is false */
   removeInsets?: boolean
 
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const LargePanel: FC<LargePanelProps> = ({

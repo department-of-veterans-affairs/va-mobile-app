@@ -28,7 +28,7 @@ export type AlertBoxProps = {
   /** optional testID */
   testId?: string
 
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 /**

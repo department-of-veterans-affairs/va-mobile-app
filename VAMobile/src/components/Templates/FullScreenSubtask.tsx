@@ -66,7 +66,7 @@ export type FullScreenSubtaskProps = {
   /** Optional testID */
   testID?: string
 
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({

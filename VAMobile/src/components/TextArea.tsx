@@ -14,7 +14,7 @@ export type TextAreaProps = {
   /** prop to remove border */
   noBorder?: boolean
 
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 /**

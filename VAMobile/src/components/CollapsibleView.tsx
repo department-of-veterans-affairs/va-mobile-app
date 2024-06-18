@@ -25,7 +25,7 @@ export type CollapsibleViewProps = {
   showInTextArea?: boolean
   /** Option Test ID */
   testID?: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 /**
