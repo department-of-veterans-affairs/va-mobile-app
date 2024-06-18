@@ -46,6 +46,7 @@ import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
+const textAlightment = isIOS() ? 'center' : 'left'
 /**
  * Hook to determine if an error should be shown for a given screen id
  * @param currentScreenID - the id of the screen being check for errors
@@ -308,13 +309,13 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         title: props.title,
         titleTextStyle: {
           fontWeight: 'bold',
-          textAlign: isIOS() ? 'center' : 'left',
+          textAlign: textAlightment,
           color: currentTheme.colors.text.primary,
         },
         message: props.message,
         messageTextStyle: {
           fontWeight: 'normal',
-          textAlign: isIOS() ? 'center' : 'left',
+          textAlign: textAlightment,
           color: currentTheme.colors.text.primary,
         },
         textStyle: { color: currentTheme.colors.text.primary },
@@ -524,10 +525,10 @@ export function useShowActionSheet(): (
     const casedOptions: ActionSheetOptions = {
       titleTextStyle: {
         fontWeight: 'bold',
-        textAlign: isIOS() ? 'center' : 'left',
+        textAlign: textAlightment,
         color: currentTheme.colors.text.primary,
       },
-      messageTextStyle: { textAlign: isIOS() ? 'center' : 'left', color: currentTheme.colors.text.primary },
+      messageTextStyle: { textAlign: textAlightment, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
