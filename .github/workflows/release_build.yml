@@ -43,7 +43,7 @@ jobs:
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-app", "text": "The release build failed for ios Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.}' \
+               -d '{"channel": "va-mobile-app", "text": "Version ${{ github.ref_name }} experienced a failure for iOS", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage
               
   android:
@@ -68,5 +68,5 @@ jobs:
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-app", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.}' \
+               -d '{"channel": "va-mobile-app", "text": "Version ${{ github.ref_name }} experienced a failure for iOS", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage    
