@@ -110,12 +110,14 @@ jobs:
         run: bundle install
       - name: Update fastlane
         run: bundle update fastlane
+      - name: Intentionally fail to trigger retries
+        run: exit 1   
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 20
           max_attempts: 3
-          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"" --verbose
+          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
