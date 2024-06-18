@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonDecoratorType } from 'components'
+import { ButtonDecoratorType, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
+import { useTheme } from 'utils/hooks'
 
 import { READ } from '../constants/secureMessaging'
 import Box from './Box'
@@ -38,6 +39,7 @@ export type MessageListProps = {
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item
@@ -49,17 +51,24 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
 
     const content = (
       // Package individual textLineWithIcon components together into one message
-      <Box flex={1}>
-        <Box flexDirection="column" mb={7}>
+      <Box flex={1} flexDirection="row" alignItems="center">
+        <Box flex={1} flexDirection="column" mb={7}>
           {inlineTextWithIcons?.map((textObj: InlineTextWithIconsProps, index: number) => {
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
           {isSentReadTag && (
-            <Box ml={23} mt={7}>
+            <Box mt={7}>
               <LabelTag text={t('secureMessaging.folders.read.tag')} labelType={LabelTagTypeConstants.tagInactive} />
             </Box>
           )}
         </Box>
+        <VAIcon
+          name="ChevronRight"
+          width={theme.dimensions.chevronListItemWidth}
+          height={theme.dimensions.chevronListItemHeight}
+          fill={theme.colors.icon.chevronListItem}
+          testID="ChevronRight"
+        />
       </Box>
     )
 

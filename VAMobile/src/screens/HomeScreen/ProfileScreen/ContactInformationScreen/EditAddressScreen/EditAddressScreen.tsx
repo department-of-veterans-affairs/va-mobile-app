@@ -30,14 +30,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { States } from 'constants/states'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { showSnackBar } from 'utils/common'
-import {
-  useAlert,
-  useAppDispatch,
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useIsScreenReaderEnabled,
-  useTheme,
-} from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
@@ -99,7 +92,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const deleteAddressAlert = useAlert()
   const destructiveActionSheet = useDestructiveActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
-  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
@@ -558,7 +550,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           onPress: onDelete,
         },
       ],
-      screenReaderEnabled: screenReaderEnabled,
     })
   }
 
