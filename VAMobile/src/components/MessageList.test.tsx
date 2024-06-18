@@ -80,4 +80,8 @@ context('MessageList', () => {
     expect(screen.getByTestId('Unread')).toBeTruthy()
     expect(screen.getByTestId('PaperClip')).toBeTruthy()
   })
+
+  it('should render chevron icons', () => {
+    expect(screen.getAllByTestId('ChevronRight')).toHaveLength(3)
+  })
 })
