@@ -31,7 +31,7 @@ Once everything is in place, complete the following tasks:
 - Assign yourself
 - Assign the appropriate QA engineer if not already assigned
 - Move the ticket to In Progress
-- Create a branch as described below.
+- Create a branch as described below in the Branches section
 
 Then you can begin work. Keep stakeholders up to date as you work by commenting on the ticket with any important details or questions. This will also preserve information so everyone can reference it in the future.
 
@@ -46,39 +46,31 @@ Then create a Pull Request. See the Pull Requests section below for more informa
 
 ## Branches
 
-Every code change to the app takes place in a feature branch. We use feature-xl branches for extra-large changes.
+Feature branches are temporary branches where we develop and test new features. We implement every code change in a feature branch before merging it into the default branch.
 
-### Feature branches
+:::info
+For features that must be rolled out gradually, or where precise feature activation timing is required, use a [remote config flag](https://firebase.google.com/docs/remote-config/).
+:::
 
 Our default branch is `develop`. Create your feature branch from there, named as follows:
 
 ```
-type/ticketnumber-yourname-description-of-work
+type/ticketnumber-description-of-work
 ```
 
-For example:
+The ticket number lets us track back to the relevant ticket. The type and description show the branch's purpose at a glance. Here are some example branch names:
 
-```
-feature/1234-anna-add-contact-information-analytics
-```
+- `feature/1234-description-of-feature-being-done`
+- `chore/1234-description-of-chore-being-done`
+- `bugfix/1234-description-of-bug-being-fixed`
+- `hotfix/1234-description-of-critical-fix`
 
 After completing work in your branch, create a PR as described in "Pull Requests" below.
 
-### Feature-xl branches
+### Sources
 
-Use a feature-xl branch when you are working on a large feature that requires multiple sprints and tickets to complete. It contains all your work prior to release of the feature.
-
-:::info
-For features that must be rolled out gradually, or where precise feature activation timing is required, use a feature flag instead of a feature-xl branch.
-:::
-
-Before you start work, create a branch with the "feature-xl" prefix like:
-
-```
-feature-xl/my-big-new-feature
-```
-
-Then create a smaller branch off the feature-xl branch for each ticket. When all the work is complete and the smaller branches are merged back into the feature-xl branch, QA will perform a final check on the feature-xl branch. Then you can merge the feature-xl branch back into the develop branch.
+- [Naming git branches](https://gist.github.com/jefffederman/1d492f98b8e3913a75ca)
+- [Branch naming](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4)
 
 ## Pull Requests
 
@@ -86,13 +78,13 @@ A Pull Request (PR) is a request to merge code. All pull requests must include c
 
 ### Pull request process
 
-Pull requests move through a series of steps.
+Each pull request moves through a series of steps.
 
 1. Creation: an engineer creates a PR. See "Pull request creation" below.
 2. Review: a different engineer reviews the PR. See "Pull request review" below.
 3. Approval: when the reviewer is satisfied, they approve the PR and change the pipeline to "With QA (pre-develop)" so QA knows to begin testing.
 4. QA: a QA engineer tests the branch and updates TestRail. QA informs the PR creator of any issues they find. On approval, QA comments in the ticket and changes the pipeline to "Ready to merge to develop".
-5. Merge: PR creator hits "Merge pull request" to merge their branch into the develop branch. On the ticket, PR creator changes the pipeline to "With QA (develop)" and selects the current release under "Releases".
+5. Merge: the PR creator hits "Merge pull request" to merge their branch into the develop branch. On the ticket, the PR creator changes the pipeline to "With QA (develop)" and selects the current release under "Releases".
 6. Post-merge: QA completes final testing and closes the ticket.
 
 ### Pull request creation
@@ -104,19 +96,19 @@ When creating a PR, fill out each section in the PR template, including:
 - Reviewer validations: tell reviewers what to check. You can usually copy the Acceptance Criteria from the ticket
 - Complete all PR checklist items
 
+:::info
+If you're actively working on your branch, create a draft PR. Move the PR out of draft status when it's complete and ready for review.
+:::
+
 Immediately after creating the PR, click the "Connect issue" button and choose the associated ticket. You must be logged into ZenHub to see the "Connect issue" button.
 
 :::important
-It's critical to link the PR to the ticket with the "Connect" issue" button so we can track the work performed.
+It's critical to link the PR to the ticket with the "Connect issue" button so we can track the work performed.
 :::
 
-Add the "FE-Needs Review" label. This indicates to other engineers that your PR is ready for review. If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
+If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
 
-GitHub Actions automatically runs linting checks, unit tests, and E2E tests on your branch. Fix any failures, and make sure unit and E2E tests are modified or extended to cover your changes. See our Unit Tests documentation for best practices.
-
-:::info
-If you have code that's not complete but you want others to take a look, consider creating a draft PR. You can move the PR out of draft status when it's done.
-:::
+When you create a PR, GitHub Actions automatically runs linting checks, unit tests, and E2E tests on your branch. Fix any failures, and make sure unit and E2E tests are modified or extended to cover your changes. See our Unit Tests documentation for best practices.
 
 ### Pull request review
 
