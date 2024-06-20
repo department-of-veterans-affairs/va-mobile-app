@@ -120,7 +120,7 @@ jobs:
           bundle exec fastlane update_plugins
       - name: Intentionally fail to trigger retries
         run: exit 1  
-          
+
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
@@ -129,5 +129,5 @@ jobs:
         with:
           timeout_minutes: 20
           max_attempts: 3
-          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"{{ inputs.ps_track }}"  
+          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"  
     
