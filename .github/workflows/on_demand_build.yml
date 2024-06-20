@@ -45,7 +45,7 @@ jobs:
 
   notify_ios_failure:
     name: Notify ios Failure
-    needs: [ios]
+    needs: [start_slack_thread, ios]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +54,7 @@ jobs:
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-app", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage
 
   android:
@@ -71,15 +71,16 @@ jobs:
 
   notify_android_failure:
     name: Notify Android Failure
-    needs: [android]
+    needs: [start_slack_thread, android]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
+      
       - name: Notify Slack on Android failure
         run: |
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-app", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage    
     
