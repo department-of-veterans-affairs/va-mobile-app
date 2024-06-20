@@ -23,10 +23,18 @@ on:
       - 'develop'
       
 jobs:
+  
   check_for_qa_approval:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
+      - name: Check if PR is from Dependabot
+        shell: bash
+        run: |
+          if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            echo "PR opened by Dependabot. Skipping QA approval check."
+            exit 0
+          fi
       - name: Check QA approval
         shell: bash
         run: |
