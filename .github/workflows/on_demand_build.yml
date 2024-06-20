@@ -45,7 +45,7 @@ jobs:
 
   notify_ios_failure:
     name: Notify ios Failure
-    needs: [start_slack_thread, ios]
+    needs: [ios]
     if: ${{ needs.ios.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
@@ -54,9 +54,9 @@ jobs:
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-app", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
                https://slack.com/api/chat.postMessage
-                   
+
   android:
     name: Android On Demand Build
     needs: [queue_build, start_slack_thread]
@@ -71,7 +71,7 @@ jobs:
 
   notify_android_failure:
     name: Notify Android Failure
-    needs: [start_slack_thread, android]
+    needs: [android]
     if: ${{ needs.android.result == 'failure' }}
     runs-on: ubuntu-latest
     steps:
