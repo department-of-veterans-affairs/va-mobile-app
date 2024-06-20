@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { LettersList } from 'api/types'
 import * as api from 'store/api'
 import { APIError } from 'store/api/types'
@@ -15,17 +16,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
     useRouteNavigation: () => mockNavigationSpy,
-  }
-})
-
-jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest
-      .fn()
-      .mockReturnValue({ status: 'success', data: { lettersAndDocuments: true } })
-      .mockReturnValueOnce({ status: 'success', data: { lettersAndDocuments: false } }),
   }
 })
 
@@ -65,7 +55,7 @@ const lettersData: LettersList = [
 ]
 
 context('LettersListScreen', () => {
-  const initializeTestInstance = (lettersList: LettersList | null, throwError: boolean = false) => {
+  const initializeTestInstance = (lettersList: LettersList | null, throwError: boolean = false, authorized = true) => {
     if (throwError) {
       when(api.get as jest.Mock)
         .calledWith('/v0/letters')
@@ -76,7 +66,31 @@ context('LettersListScreen', () => {
         .mockResolvedValue({ data: { attributes: { letters: lettersList } } })
     }
 
-    render(<LettersListScreen {...mockNavProps()} />)
+    render(<LettersListScreen {...mockNavProps()} />, {
+      queriesData: [
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            appeals: true,
+            appointments: true,
+            claims: true,
+            decisionLetters: true,
+            directDepositBenefits: true,
+            directDepositBenefitsUpdate: true,
+            disabilityRating: true,
+            genderIdentity: true,
+            lettersAndDocuments: authorized,
+            militaryServiceHistory: true,
+            paymentHistory: true,
+            preferredName: true,
+            prescriptions: true,
+            scheduleAppointments: true,
+            secureMessaging: true,
+            userProfileUpdate: true,
+          },
+        },
+      ],
+    })
   }
 
   afterEach(() => {
@@ -84,9 +98,9 @@ context('LettersListScreen', () => {
   })
 
   describe('when lettersAndDocuments is set to false', () => {
-    it('should show noLettersScreen', () => {
-      initializeTestInstance(lettersData)
-      expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy()
+    it('should show noLettersScreen', async () => {
+      initializeTestInstance(lettersData, false, false)
+      await waitFor(() => expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy())
     })
   })
 

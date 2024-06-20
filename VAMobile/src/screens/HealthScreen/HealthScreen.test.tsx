@@ -12,34 +12,6 @@ import { HealthScreen } from './HealthScreen'
 
 const mockNavigationSpy = jest.fn()
 
-jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true,
-      },
-    }),
-  }
-})
-
 jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
@@ -170,5 +142,13 @@ context('HealthScreen', () => {
       .mockResolvedValue(inboxData)
     initializeTestInstance()
     await waitFor(() => expect(screen.getByText('13')).toBeTruthy())
+  })
+
+  it('should render messagesCountTag with the correct a11yLabel', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/messaging/health/folders')
+      .mockResolvedValue(inboxData)
+    initializeTestInstance()
+    await waitFor(() => expect(screen.getByLabelText('Messages You have 13 unread messages')).toBeTruthy())
   })
 })
