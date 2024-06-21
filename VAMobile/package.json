@@ -56,6 +56,7 @@
     "jsc-android": "^250231.0.0",
     "lottie-react-native": "^5.1.6",
     "luxon": "^3.4.4",
+    "medallia-digital-rn": "https://repository.medallia.com/digital-npm/medallia-digital-rn/medallia-digital-rn-4.5.1.tgz",
     "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
     "react-i18next": "^14.0.1",
