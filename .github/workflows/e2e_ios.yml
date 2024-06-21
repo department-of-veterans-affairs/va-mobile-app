@@ -8,6 +8,7 @@ on:
   push:
     branches:
         - 'dependabot/**'
+        - 'chore/upgrade-e2e'
   pull_request:
     types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
