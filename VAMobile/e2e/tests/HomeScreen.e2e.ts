@@ -152,6 +152,10 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
+    await waitFor(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
