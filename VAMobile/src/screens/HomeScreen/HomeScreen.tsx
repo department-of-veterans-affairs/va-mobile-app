@@ -74,6 +74,7 @@ import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/Notifica
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
+const MemoizedLoadingComponent = React.memo(LoadingComponent)
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
@@ -88,6 +89,16 @@ export function HomeScreen({}: HomeScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
+  const {
+    data: ratingData,
+    isLoading: loadingDisabilityRating,
+    isFetched: disabilityRatingFetched,
+  } = useDisabilityRating()
+  const {
+    data: serviceHistory,
+    isLoading: loadingServiceHistory,
+    isFetched: serviceHistoryFetched,
+  } = useServiceHistory()
   const { data: facilitiesInfo } = useFacilitiesInfo()
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
   const {
@@ -134,7 +145,11 @@ export function HomeScreen({}: HomeScreenProps) {
   const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
   const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
 
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData()
+  const {
+    data: letterBeneficiaryData,
+    isLoading: loadingLetterBeneficiaryData,
+    isFetched: letterBeneficiaryFetched,
+  } = useLetterBeneficiaryData()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const disRating = !!ratingData?.combinedDisabilityRating
@@ -233,7 +248,10 @@ export function HomeScreen({}: HomeScreenProps) {
     onPress: onProfile,
   }
 
-  const loadingAboutYou = loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const aboutYouNotFetched = !serviceHistoryFetched && !disabilityRatingFetched && !letterBeneficiaryFetched
+  const loadingAboutYou =
+    aboutYouNotFetched || loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
   const hasAboutYouInfo =
     !!ratingData?.combinedDisabilityRating ||
     !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
@@ -255,7 +273,11 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const activityLoading = loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const activityNotFetched = !apptsPrefetch && !claimsPrefetch && !smPrefetch && !rxPrefetch
+  const activityLoading =
+    activityNotFetched || loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
+
   const featureInDowntime = !!(
     (userAuthorizedServices?.appointments && appointmentsInDowntime) ||
     (userAuthorizedServices?.appeals && appealsInDowntime) ||
@@ -284,7 +306,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </TextView>
           {activityLoading ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <LoadingComponent
+              <MemoizedLoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
                 text={t('activity.loading')}
@@ -372,7 +394,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </TextView>
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <LoadingComponent
+              <MemoizedLoadingComponent
                 spinnerWidth={24}
                 spinnerHeight={24}
                 text={t('aboutYou.loading')}
