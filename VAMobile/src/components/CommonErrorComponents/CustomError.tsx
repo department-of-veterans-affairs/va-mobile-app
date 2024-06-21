@@ -10,35 +10,26 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
+import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 
 export type CustomErrorProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
   /** optional text for the title */
   titleText?: string
-  /** optional title a11y hint*/
-  titleA11yHint?: string
   /** optional text for the error */
   errorText?: string
-  /** optional a11y hint for the error */
-  errorA11y?: string
   /** optional phone number */
   callPhone?: string
 }
 
 /**A common component to show the help center contact info for when an error happens*/
-const CustomError: FC<CustomErrorProps> = ({
-  onTryAgain,
-  titleText,
-  titleA11yHint,
-  errorText,
-  errorA11y,
-  callPhone,
-}) => {
+const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, callPhone }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const titleA11y = a11yLabelVA(fixedWhiteSpaceString(titleText))
+  const errorA11y = a11yLabelVA(fixedWhiteSpaceString(errorText))
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
@@ -65,8 +56,8 @@ const CustomError: FC<CustomErrorProps> = ({
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
-          title={titleText ? titleText : t('errors.callHelpCenter.vaAppNotWorking')}
-          titleA11yLabel={titleA11yHint ? titleA11yHint : a11yLabelVA(t('errors.callHelpCenter.vaAppNotWorking'))}
+          title={fixedWhiteSpaceString(titleText)}
+          titleA11yLabel={titleA11y}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error">
           <Box>
@@ -74,14 +65,10 @@ const CustomError: FC<CustomErrorProps> = ({
               variant="MobileBody"
               paragraphSpacing={true}
               mt={theme.paragraphSpacing.spacing20FontSize}
-              accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
-              {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
+              accessibilityLabel={errorA11y}>
+              {fixedWhiteSpaceString(errorText)}
             </TextView>
-            <ClickToCallPhoneNumber
-              a11yLabel={a11yLabelID(callPhone || t('8006982411'))}
-              displayedText={callPhone ? undefined : displayedTextPhoneNumber(t('8006982411'))}
-              phone={callPhone ? callPhone : t('8006982411')}
-            />
+            <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
