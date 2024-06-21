@@ -19,6 +19,8 @@ declare module 'react-native-keyboard-manager' {
   export function setEnableAutoToolbar(arg: boolean): void
 }
 
+declare module 'medallia-digital-rn'
+
 // this makes it posible to call the snackbar from outside react components and also types the data object
 type ToastOptions = import('react-native-toast-notifications/lib/typescript/toast').ToastOptions
 type ToastType = import('react-native-toast-notifications').ToastType
