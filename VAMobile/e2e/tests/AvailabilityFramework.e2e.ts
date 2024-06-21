@@ -50,7 +50,7 @@ const AFNavigationForIndividual = [
   ['SettingsScreen.e2e', 'WG_ManageYourAccount', 'Profile', 'Settings', 'Manage account'],
   ['SettingsScreen.e2e', 'WG_NotificationsSettings', 'Profile', 'Settings', 'Notifications'],
   ['SettingsScreen.e2e', 'WG_InAppRecruitment', 'Profile', 'Settings', 'Give feedback'],
-  ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact VA'],
+  ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact us'],
   ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'Talk to the Veterans Crisis Line now'],
   ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],

@@ -473,6 +473,11 @@ const navigateToFeature = async (featureNavigationArray) => {
       } else {
         await element(by.text('Request Refill ')).tap()
       }
+    } else if (featureNavigationArray[j] === 'Contact us') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('homeScreenID'))
+        .scroll(200, 'down')
     } else {
       try {
         await element(by.text(featureNavigationArray[j])).tap()
