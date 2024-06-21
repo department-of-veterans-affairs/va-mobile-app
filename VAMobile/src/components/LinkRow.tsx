@@ -11,8 +11,6 @@ type LinkRowProps = {
   titleA11yLabel?: string
   /** Function called when pressed */
   onPress: () => void
-  /** optional testID for linkRow */
-  testID?: string
 }
 const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowProps) => {
   const theme = useTheme()
