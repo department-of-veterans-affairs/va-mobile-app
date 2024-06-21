@@ -16,10 +16,10 @@ import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 export type CustomErrorProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
-  /** optional text for the title */
-  titleText?: string
-  /** optional text for the error */
-  errorText?: string
+  /** text for the title */
+  titleText: string
+  /** text for the error */
+  errorText: string
   /** optional phone number */
   callPhone?: string
 }

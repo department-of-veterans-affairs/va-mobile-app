@@ -78,13 +78,15 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             />
           )
         case CommonErrorTypesConstants.CUSTOM_ERROR:
-          return <CustomError titleText={custom?.title} errorText={custom?.body} callPhone={custom?.telephone} />
+          return (
+            <CustomError titleText={custom?.title || ''} errorText={custom?.body || ''} callPhone={custom?.telephone} />
+          )
         case CommonErrorTypesConstants.CUSTOM_ERROR_WITH_REFRESH:
           return (
             <CustomError
               onTryAgain={tryAgain}
-              titleText={custom?.title}
-              errorText={custom?.body}
+              titleText={custom?.title || ''}
+              errorText={custom?.body || ''}
               callPhone={custom?.telephone}
             />
           )
