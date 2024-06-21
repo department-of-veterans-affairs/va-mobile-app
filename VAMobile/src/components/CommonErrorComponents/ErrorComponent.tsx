@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { CallHelpCenter, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
+import { CallHelpCenter, CustomError, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -80,7 +80,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
           )
         case CommonErrorTypesConstants.CUSTOM_ERROR:
           return (
-            <CallHelpCenter
+            <CustomError
               titleText={custom?.title}
               titleA11yHint={custom?.title}
               errorText={fixedWhiteSpaceString(custom?.body)}
@@ -90,7 +90,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
           )
         case CommonErrorTypesConstants.CUSTOM_ERROR_WITH_REFRESH:
           return (
-            <CallHelpCenter
+            <CustomError
               onTryAgain={tryAgain}
               titleText={custom?.title}
               titleA11yHint={custom?.title}
