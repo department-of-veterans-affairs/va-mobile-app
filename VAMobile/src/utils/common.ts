@@ -7,6 +7,7 @@ import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-
 
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
+import { MedalliaDigital } from 'medallia-digital-rn'
 import { contains, isEmpty, map } from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
@@ -22,6 +23,7 @@ import theme from 'styles/themes/standardTheme'
 
 import { logAnalyticsEvent } from './analytics'
 import { formatPhoneNumber } from './formattingUtils'
+import { isIOS } from './platform'
 
 /**
  * Generates testID string for reusable components
@@ -451,4 +453,20 @@ export function fullPanelCardStyleInterpolator({
     },
     overlayStyle: { opacity: overlayOpacity },
   }
+}
+
+export function showMedalliaForm() {
+  let token = ''
+  let formId = ''
+
+  if (isIOS()) {
+    token = 'iOS token'
+    formId = 'iOS formId'
+  } else {
+    token = 'Android token'
+    formId = 'Android formId'
+  }
+
+  MedalliaDigital.initialize(token)
+  MedalliaDigital.showForm(formId)
 }
