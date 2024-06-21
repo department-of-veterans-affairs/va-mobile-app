@@ -40,13 +40,13 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
     mb: theme.dimensions.contentMarginBottom,
   }
   useEffect(() => {
-    logAnalyticsEvent(Events.vama_fail())
+    logAnalyticsEvent(Events.vama_be_af_shown())
   }, [])
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   const tryAgain = () => {
-    logAnalyticsEvent(Events.vama_fail_refresh())
+    logAnalyticsEvent(Events.vama_be_af_refresh())
     if (onTryAgain) {
       onTryAgain()
     }
@@ -55,20 +55,16 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox
-          title={fixedWhiteSpaceString(titleText)}
-          titleA11yLabel={titleA11y}
-          text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
-          border="error">
+        <AlertBox title={fixedWhiteSpaceString(titleText)} titleA11yLabel={titleA11y} border="error">
           <Box>
             <TextView
               variant="MobileBody"
               paragraphSpacing={true}
-              mt={theme.paragraphSpacing.spacing20FontSize}
+              mt={theme.dimensions.standardMarginBetween}
               accessibilityLabel={errorA11y}>
               {fixedWhiteSpaceString(errorText)}
             </TextView>
-            <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />
+            {!!callPhone && <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />}
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
