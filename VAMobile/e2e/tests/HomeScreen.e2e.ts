@@ -17,6 +17,7 @@ export const HomeE2eIdConstants = {
   PAYMENTS_BTN_ID: 'Payments',
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
   LOCATION_FINDER_ROW_ID: 'findLocationLinkRowID',
+  LOCATION_FINDER_ROW_TEXT: 'Find a VA location',
   CONTACT_VA_ROW_ID: 'contactVALinkRowID',
   COVID_ROW_ID: 'COVID-19 updates',
   HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
@@ -121,7 +122,6 @@ describe('Home Screen', () => {
       .toBeVisible()
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')
-    // await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).scrollTo('bottom')
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
   })
@@ -153,7 +153,8 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID)).tap()
+    // await element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID)).tap() trying text instead
+    await element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
   })
