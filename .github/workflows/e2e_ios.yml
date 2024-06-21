@@ -6,11 +6,7 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    branches:
-        - 'dependabot/**'
-        - 'chore/upgrade-e2e'
   pull_request:
-    types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
       run_full_test:
