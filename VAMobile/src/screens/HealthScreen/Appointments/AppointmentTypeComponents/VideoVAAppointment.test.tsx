@@ -542,8 +542,7 @@ context('VideoVAAppointment', () => {
       expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
       expect(screen.getByText('Reason: Not available')).toBeTruthy()
 
-      expect(screen.getByRole('button', { name: 'Cancel request' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Cancel this appointment request')).toBeTruthy()
+      expect(screen.queryByRole('button', { name: 'Cancel request' })).toBeFalsy()
     })
   })
 
