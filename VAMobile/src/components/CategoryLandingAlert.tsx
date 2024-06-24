@@ -1,8 +1,12 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
+
+import { useIsFocused } from '@react-navigation/native'
 
 import { Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
 
 interface CategoryLandingAlertProps {
@@ -18,6 +22,11 @@ interface CategoryLandingAlertProps {
 const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: CategoryLandingAlertProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
+
+  const vibrate = (): void => {
+    triggerHaptic(isError ? HapticFeedbackTypes.notificationError : HapticFeedbackTypes.notificationWarning)
+  }
 
   const alertVariant = isError ? 'CategoryLandingError' : 'CategoryLandingWarning'
 
@@ -47,6 +56,7 @@ const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: 
         flex={1}>
         {text}
       </TextView>
+      {isFocused && vibrate()}
     </Box>
   )
 }
