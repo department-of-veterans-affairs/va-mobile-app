@@ -478,6 +478,7 @@ const navigateToFeature = async (featureNavigationArray) => {
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
         .scroll(200, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
     } else {
       try {
         await element(by.text(featureNavigationArray[j])).tap()
