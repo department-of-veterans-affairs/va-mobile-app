@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, ViewStyle } from 'react-native'
 
-import { Box, VAIcon, VAScrollView } from 'components'
+import { Box, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useOrientation, useTheme } from 'utils/hooks'
 
