@@ -35,6 +35,7 @@ export type VAButtonTextColors = {
 }
 
 export type VATextColors = {
+  appVersionAndBuild: string
   descriptiveBackButton: string
   footerButton: string
   footerButtonActive: string
@@ -149,6 +150,7 @@ export type VABackgroundColors = {
   currentPhase: string
   upcomingPhase: string
   splashScreen: string
+  loginScreen: string
   carousel: string
   unreadMessagesTag: string
   navHeader: string

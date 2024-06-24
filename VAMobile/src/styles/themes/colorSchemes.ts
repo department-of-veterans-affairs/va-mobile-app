@@ -20,6 +20,7 @@ export const lightTheme = {
     currentPhase: colors.primary,
     upcomingPhase: colors.grayLight,
     splashScreen: colors.primaryDarker,
+    loginScreen: colors.white,
     carousel: colors.primaryDark,
     unreadMessagesTag: colors.grayDark,
     navHeader: colors.primaryDarker,
@@ -109,6 +110,7 @@ export const lightTheme = {
     transparent: colors.transparent,
   },
   text: {
+    appVersionAndBuild: colors.black,
     footerButton: colors.primary,
     footerButtonActive: colors.white,
     navBar: colors.white,
@@ -217,6 +219,7 @@ export const darkTheme = {
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
     splashScreen: colors.primaryDarker,
+    loginScreen: colors.primaryDarker,
     carousel: colors.primaryDark,
     unreadMessagesTag: colors.grayMedium,
     navHeader: colors.base,
@@ -305,6 +308,7 @@ export const darkTheme = {
     transparent: colors.transparent,
   },
   text: {
+    appVersionAndBuild: colors.white,
     descriptiveBackButton: colors.darkmodeLightBlue,
     footerButton: colors.darkmodeLightBlue,
     footerButtonActive: colors.darkmodeLightBlue,
