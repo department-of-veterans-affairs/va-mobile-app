@@ -27,7 +27,8 @@
     "simulator": {
       "type": "ios.simulator",
       "device": {
-        "type": "iPhone 15 Pro Max"
+        "type": "iPhone 15 Pro Max",
+        "os": "iOS 15.4"
       }
     },
     "emulator": {
