@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ViewStyle } from 'react-native'
+import { Image, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -24,7 +24,7 @@ function SyncScreen({}: SyncScreenProps) {
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme.colors.background.loginScreen,
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -101,10 +101,20 @@ function SyncScreen({}: SyncScreenProps) {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
-        <VAIcon name={'Logo'} />
+        <Image
+          style={{ width: 254, height: 57 }}
+          source={
+            theme.mode === 'dark'
+              ? require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
+              : require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')
+          }
+        />
 
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
-          <LoadingComponent justTheSpinnerIcon={true} spinnerColor={colors.grayLightest} />
+          <LoadingComponent
+            justTheSpinnerIcon={true}
+            spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+          />
           <TextView
             variant={'MobileBody'}
             justifyContent={'center'}

@@ -219,7 +219,7 @@ export const darkTheme = {
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
     splashScreen: colors.primaryDarker,
-    loginScreen: colors.primaryDarker,
+    loginScreen: colors.primaryDarkest,
     carousel: colors.primaryDark,
     unreadMessagesTag: colors.grayMedium,
     navHeader: colors.base,
