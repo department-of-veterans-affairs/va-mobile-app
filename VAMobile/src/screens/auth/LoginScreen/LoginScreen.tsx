@@ -63,17 +63,6 @@ function LoginScreen() {
     navigateTo('VeteransCrisisLine')
   }
 
-  const findLocationProps: BoxProps = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.buttonPadding,
-    testID: 'findVALocationTestID',
-  }
-
   const handleUpdateDemoMode = () => {
     dispatch(updateDemoMode(true))
   }
