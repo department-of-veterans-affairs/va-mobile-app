@@ -14,7 +14,6 @@ import { useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
-  AppointmentDetailsSubTypeConstants,
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
   isAPendingAppointment,
@@ -32,15 +31,6 @@ import {
   TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
-import {
-  ClaimExamAppointment,
-  InPersonVAAppointment,
-  PhoneAppointment,
-  VideoAtlasAppointment,
-  VideoGFEAppointment,
-  VideoHomeAppointment,
-  VideoVAAppointment,
-} from '../AppointmentTypeComponents'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
@@ -111,6 +101,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
               url={LINK_URL_VA_SCHEDULING}
               text={t('appointments.vaSchedule')}
               a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+              testID="vaLinkApptsPastTestID"
             />
           </TextArea>
         </Box>
@@ -130,96 +121,27 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
     )
   }
 
-  const isInPersonVAAppointment =
-    appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
-  const isPhoneAppointment = phoneOnly
-  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
-  const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
-  const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
-  const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
-  const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
-
-  const subType =
-    appointmentIsCanceled && pendingAppointment
-      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
-      : appointmentIsCanceled
-        ? AppointmentDetailsSubTypeConstants.Canceled
-        : pendingAppointment
-          ? AppointmentDetailsSubTypeConstants.PastPending
-          : AppointmentDetailsSubTypeConstants.Past
-
   return (
     <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-      {isPhoneAppointment ? (
-        <PhoneAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isInPersonVAAppointment ? (
-        <InPersonVAAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isClaimExamAppointment ? (
-        <ClaimExamAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoVAAppointment ? (
-        <VideoVAAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoGFEAppointment ? (
-        <VideoGFEAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoAtlasAppointment ? (
-        <VideoAtlasAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoHomeAppointment ? (
-        <VideoHomeAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <AppointmentAlert attributes={attributes} />
-          <TextArea>
-            <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-              <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
-            </Box>
-            <TypeOfCare attributes={attributes} />
-            <ProviderName attributes={attributes} />
-            <ClinicNameAndPhysicalLocation attributes={attributes} />
-            <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <AppointmentAlert attributes={attributes} />
+        <TextArea>
+          <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
+            <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
+          </Box>
+          <TypeOfCare attributes={attributes} />
+          <ProviderName attributes={attributes} />
+          <ClinicNameAndPhysicalLocation attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
-            <PreferredDateAndTime attributes={attributes} />
-            <PreferredAppointmentType attributes={attributes} />
-            <AppointmentReason attributes={attributes} />
-            <ContactInformation attributes={attributes} />
-          </TextArea>
+          <PreferredDateAndTime attributes={attributes} />
+          <PreferredAppointmentType attributes={attributes} />
+          <AppointmentReason attributes={attributes} />
+          <ContactInformation attributes={attributes} />
+        </TextArea>
 
-          {renderScheduleAnotherAppointment()}
-        </Box>
-      )}
+        {renderScheduleAnotherAppointment()}
+      </Box>
     </FeatureLandingTemplate>
   )
 }

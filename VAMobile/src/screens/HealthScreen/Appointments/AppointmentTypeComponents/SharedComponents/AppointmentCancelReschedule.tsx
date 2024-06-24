@@ -185,6 +185,7 @@ const phoneFacilitySchedulingLink = (
           url={LINK_URL_VA_SCHEDULING}
           text={t('appointments.vaSchedule')}
           a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+          testID="vaLinkApptsCancelTestID"
         />
       )}
     </Box>
@@ -305,17 +306,21 @@ function AppointmentCancelReschedule({
     case AppointmentDetailsSubTypeConstants.PastPending:
       return <></>
     case AppointmentDetailsSubTypeConstants.Pending:
-      return cancelButton(
-        true,
-        appointmentID,
-        attributes,
-        goBack,
-        t,
-        theme,
-        dispatch,
-        confirmAlert,
-        cancelId,
-        cancelAppointment,
+      return cancelId ? (
+        cancelButton(
+          true,
+          appointmentID,
+          attributes,
+          goBack,
+          t,
+          theme,
+          dispatch,
+          confirmAlert,
+          cancelId,
+          cancelAppointment,
+        )
+      ) : (
+        <></>
       )
     case AppointmentDetailsSubTypeConstants.Past:
       if (isClaimExam) {
