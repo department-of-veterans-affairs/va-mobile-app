@@ -28,7 +28,8 @@ As part of this story we want to:
 - [ ]  Create new app description for Apple
 - [ ]  Create new Whats New description for Google
 - [ ]  Create new Whats New description for Apple
-- [ ]  Sent Mobile.Va.Gov an email and Microsoft Teams communication with Mobile's update request 
+- [ ]  Sent Mobile.Va.Gov an email and Microsoft Teams communication with Mobile's update request
+- [ ]  Update [alt text for Va.gov app page](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management%20/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use/Alt%20Text%20Image.md)
 
 ## Notes 
 - Determine what images and / or content need to be updated - UX to create images - [VA Moble Doc Site - Updating the app stores doc ](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores#designer-update-the-app-store-images)
