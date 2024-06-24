@@ -48,6 +48,7 @@ export function HealthScreen({}: HealthScreenProps) {
     enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
   })
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
+  const inboxUnreadCountA11y = foldersData && t('secureMessaging.tag.a11y', { unreadCount: inboxUnreadCount })
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('health_screen'))
@@ -79,7 +80,7 @@ export function HealthScreen({}: HealthScreenProps) {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           tagCount={inboxUnreadCount}
-          tagCountA11y={t('secureMessaging.tag.a11y', { inboxUnreadCount })}
+          tagCountA11y={inboxUnreadCountA11y}
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
