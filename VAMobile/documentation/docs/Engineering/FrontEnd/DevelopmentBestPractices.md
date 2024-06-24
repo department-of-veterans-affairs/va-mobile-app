@@ -38,7 +38,7 @@ Then you can begin work. Keep stakeholders up to date as you work by commenting 
 On completion of your work, double check the following:
 
 - All items in Acceptance Criteria are implemented
-- Accessibility features are in place (test with iOS and Android screen readers)
+- Confirm screen screen reader functionality on both iOS and Android for accessibility
 - Unit and E2E tests are updated or extended to cover your changes
 - Relevant documentation is updated to reflect the changes in your PR
 
