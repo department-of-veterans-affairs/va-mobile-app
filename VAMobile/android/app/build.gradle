@@ -81,7 +81,8 @@ apply plugin: 'com.google.firebase.firebase-perf'
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
+    hermesFlags: ["-O", "-output-source-map"]
 ]
 
 /**
