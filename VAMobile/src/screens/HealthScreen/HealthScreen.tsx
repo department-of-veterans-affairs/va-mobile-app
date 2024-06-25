@@ -142,7 +142,6 @@ export function HealthScreen({}: HealthScreenProps) {
                 })
               : undefined
           }
-          testID="apptsNavButtonTestID"
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
@@ -151,14 +150,12 @@ export function HealthScreen({}: HealthScreenProps) {
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
-          testID="messagingNavButtonTestID"
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
             showLoading={fetchingPrescriptions}
-            testID="prescriptionsNavButtonTestID"
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {
@@ -172,9 +169,8 @@ export function HealthScreen({}: HealthScreenProps) {
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={() => navigateTo('VaccineList')}
-          testID="vaccinesNavButtonTestID"
         />
-        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} testID="covidNavButtonTestID" />
+        <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {cernerExist && (
