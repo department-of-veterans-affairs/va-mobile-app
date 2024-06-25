@@ -23,6 +23,11 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { comment, reason } = attributes
   const isClaimExam = type === AppointmentDetailsTypeConstants.ClaimExam
+  const isCommunityCare = type === AppointmentDetailsTypeConstants.CommunityCare
+  const reasonText = t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })
+  const commentText = t('upcomingAppointmentDetails.reasonComment', {
+    comment: comment || t('appointments.notAvailable'),
+  })
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
@@ -34,7 +39,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
             {t('appointments.pending.reasonTitle')}
           </TextView>
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-            {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
+            {isCommunityCare ? commentText : reasonText}
           </TextView>
         </Box>
       )
@@ -44,11 +49,9 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.sharedProvider')}
           </TextView>
-          <TextView variant="MobileBody">
-            {t('upcomingAppointmentDetails.reasonDetails', { reason: reason || t('appointments.notAvailable') })}
-          </TextView>
+          <TextView variant="MobileBody">{reasonText}</TextView>
           <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-            {t('upcomingAppointmentDetails.reasonComment', { comment: comment || t('appointments.notAvailable') })}
+            {commentText}
           </TextView>
         </Box>
       )

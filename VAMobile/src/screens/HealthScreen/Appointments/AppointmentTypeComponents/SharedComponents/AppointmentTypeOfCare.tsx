@@ -41,9 +41,10 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
       case AppointmentDetailsTypeConstants.Phone:
       case AppointmentDetailsTypeConstants.VideoGFE:
       case AppointmentDetailsTypeConstants.VideoHome:
-      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoVA:
       case AppointmentDetailsTypeConstants.VideoAtlas:
+      case AppointmentDetailsTypeConstants.ClaimExam:
+      case AppointmentDetailsTypeConstants.CommunityCare:
         const isNonPendingClaimExam = !isPending && type === AppointmentDetailsTypeConstants.ClaimExam
         return isNonPendingClaimExam ? null : (
           <Box>

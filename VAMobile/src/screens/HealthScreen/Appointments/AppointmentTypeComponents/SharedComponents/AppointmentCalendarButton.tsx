@@ -37,9 +37,10 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
   const getLocation = (): string => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
-      case AppointmentDetailsTypeConstants.ClaimExam:
       case AppointmentDetailsTypeConstants.VideoAtlas:
       case AppointmentDetailsTypeConstants.VideoVA:
+      case AppointmentDetailsTypeConstants.ClaimExam:
+      case AppointmentDetailsTypeConstants.CommunityCare:
         if (isIOS() && lat && long) {
           return name || ''
         } else if (address?.street && address?.city && address?.state && address?.zipCode) {
@@ -74,12 +75,13 @@ function AppointmentCalendarButton({ appointmentID, attributes, subType, type }:
         return t('upcomingAppointments.connectOnsite')
       case AppointmentDetailsTypeConstants.ClaimExam:
         return t('upcomingAppointments.vaAppointmentClaimExam')
+      case AppointmentDetailsTypeConstants.CommunityCare:
+        return t('upcomingAppointments.communityCare')
       case AppointmentDetailsTypeConstants.VideoHome:
         return t('upcomingAppointments.connectAtHome')
       default:
         return ''
     }
-    //[AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare',
   }
 
   const calendarOnPress = async () => {

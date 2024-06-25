@@ -228,6 +228,8 @@ const getBody = (
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
             facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
           })
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('appointments.rescheduleCommunityCare.body')
       }
       break
     case AppointmentDetailsSubTypeConstants.Past:
@@ -240,6 +242,8 @@ const getBody = (
         case AppointmentDetailsTypeConstants.VideoAtlas:
         case AppointmentDetailsTypeConstants.VideoHome:
           return t('appointments.scheduleVideoNonVA.body')
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('appointments.scheduleCommunityCare.body')
       }
       break
     case AppointmentDetailsSubTypeConstants.Upcoming:
@@ -259,6 +263,8 @@ const getBody = (
           return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.claimExam.body', {
             facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
           })
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancelCommunityCare.body')
       }
       break
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:

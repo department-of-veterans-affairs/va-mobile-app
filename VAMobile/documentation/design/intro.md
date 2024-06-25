@@ -14,7 +14,9 @@ A system to help you write, design, and build digital services on the VA Mobile 
 
 ## Foundation
 
-- [Design Tokens](/va-mobile-app/design/Foundation)
+- [Design Tokens](/va-mobile-app/design/Foundation/Design%20tokens/)
+- [Icons](/va-mobile-app/design/Foundation/Icons)
+- [Logos](/va-mobile-app/design/Foundation/Logos)
 
 ## Components
 
