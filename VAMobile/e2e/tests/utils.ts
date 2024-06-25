@@ -22,9 +22,6 @@ export const CommonE2eIdConstants = {
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
-  APPOINTMENTS_BUTTON_ID: 'apptsNavButtonTestID',
-  MESSAGES_BUTTON_ID: 'messagingNavButtonTestID',
-  VACCINES_BUTTON_ID: 'vaccinesNavButtonTestID',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
@@ -41,7 +38,7 @@ export const CommonE2eIdConstants = {
   LEAVING_APP_CANCEL_TEXT: 'Go back',
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  PRESCRIPTIONS_BUTTON_ID: 'prescriptionsNavButtonTestID',
+  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
   CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
@@ -278,7 +275,7 @@ export async function openDirectDeposit() {
 }
 
 export async function openPrescriptions() {
-  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
 }
 
 export async function openContactInfo() {
