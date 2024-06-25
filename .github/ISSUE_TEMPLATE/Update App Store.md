@@ -29,7 +29,9 @@ Determine what, if any, changes are needed to Apple, Google and VA.gov App Store
 - [ ]  Create new app description for [VA.gov app page](https://mobile.va.gov/app/va-health-and-benefits)
 - [ ]  Create new App Store Whats New description for [Google Play Store](https://play.google.com/store/apps/details?id=gov.va.mobileapp&hl=en_US&gl=US)
 - [ ]  Create new App Store Whats New description for [Apple Store](https://apps.apple.com/us/app/va-health-and-benefits/id1559609596?platform=iphone)
+- [ ]  Sent Mobile.Va.Gov an email and Microsoft Teams communication with Mobile's update request
 - [ ]  Flagship PM to validate any app store (image, content) changes 
+- [ ]  Update [alt text for Va.gov app page](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management%20/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use/Alt%20Text%20Image.md)
 
 ## Notes 
 - All work to be done before the end of the sprint that the feature is going out
