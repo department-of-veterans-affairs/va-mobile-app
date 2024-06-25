@@ -83,9 +83,11 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is community care', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
-      expect(screen.getByText('Community care')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
+      expect(screen.getByText('Community care appointment')).toBeTruthy()
+      expect(
+        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+      ).toBeTruthy()
+      expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
     })
   })
 

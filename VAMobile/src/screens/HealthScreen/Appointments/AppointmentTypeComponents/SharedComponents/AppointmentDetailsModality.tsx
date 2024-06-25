@@ -24,6 +24,7 @@ type AppointmentDetailsModalityProps = {
 }
 
 const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDetailsScreenType, t: TFunction) => {
+  const isCommunityCareAppointment = type === AppointmentDetailsTypeConstants.CommunityCare
   let appointmentHeaderType = ''
   switch (type) {
     case AppointmentDetailsTypeConstants.InPersonVA:
@@ -36,14 +37,17 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
     case AppointmentDetailsTypeConstants.VideoHome:
       appointmentHeaderType = t('appointments.videoGFEHome.upcomingTitle')
       break
-    case AppointmentDetailsTypeConstants.ClaimExam:
-      appointmentHeaderType = t('appointments.claimExam')
-      break
     case AppointmentDetailsTypeConstants.VideoVA:
       appointmentHeaderType = t('appointments.videoVA.upcomingTitle')
       break
     case AppointmentDetailsTypeConstants.VideoAtlas:
       appointmentHeaderType = t('appointments.videoAtlas.upcomingTitle')
+      break
+    case AppointmentDetailsTypeConstants.ClaimExam:
+      appointmentHeaderType = t('appointments.claimExam')
+      break
+    case AppointmentDetailsTypeConstants.CommunityCare:
+      appointmentHeaderType = t('appointments.communityCare.upcomingTitle')
       break
     default:
       appointmentHeaderType = ''
@@ -51,11 +55,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
-      if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
-        return t('appointments.request.canceledTitle')
-      } else {
-        return ''
-      }
+      return isCommunityCareAppointment
+        ? t('appointments.request.canceledTitle.communityCare')
+        : t('appointments.request.canceledTitle')
     case AppointmentDetailsSubTypeConstants.Canceled:
       return t('appointments.canceledTitle', {
         appointmentType: appointmentHeaderType.charAt(0).toLowerCase() + appointmentHeaderType.slice(1),
@@ -66,11 +68,9 @@ const modalityHeader = (subType: AppointmentDetailsSubType, type: AppointmentDet
       })
     case AppointmentDetailsSubTypeConstants.Pending:
     case AppointmentDetailsSubTypeConstants.PastPending:
-      if (type !== AppointmentDetailsTypeConstants.CommunityCare) {
-        return t('appointments.request.title')
-      } else {
-        return ''
-      }
+      return isCommunityCareAppointment
+        ? t('appointments.request.title.communityCare')
+        : t('appointments.request.title')
     case AppointmentDetailsSubTypeConstants.Upcoming:
       return appointmentHeaderType
   }
@@ -110,12 +110,14 @@ const supportingModalityBody = (
           return t('appointments.phone.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoGFE:
           return t('appointments.videoGFE.upcomingBody')
-        case AppointmentDetailsTypeConstants.ClaimExam:
-          return t('appointments.claimExam.explanationText')
         case AppointmentDetailsTypeConstants.VideoVA:
           return t('appointments.videoVA.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoAtlas:
           return t('appointments.videoAtlas.upcomingBody', { code: location.code || '' })
+        case AppointmentDetailsTypeConstants.ClaimExam:
+          return t('appointments.claimExam.explanationText')
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('appointments.communityCare.upcomingBody')
         case AppointmentDetailsTypeConstants.VideoHome:
           const thirtyMinuteFutureDateSeconds = DateTime.now().toUTC().toSeconds() + 1800 // 30 minutes
           const startDateSeconds = getEpochSecondsOfDate(startDateUtc)

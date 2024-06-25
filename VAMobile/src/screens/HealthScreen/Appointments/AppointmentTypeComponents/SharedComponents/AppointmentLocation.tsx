@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Spacer } from '@department-of-veterans-affairs/mobile-component-library'
 import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
 import { TFunction } from 'i18next'
 
@@ -43,9 +44,23 @@ const locationHeading = (subType: AppointmentDetailsSubType, type: AppointmentDe
         case AppointmentDetailsTypeConstants.VideoVA:
         case AppointmentDetailsTypeConstants.VideoAtlas:
           return t('appointments.location.title')
+        case AppointmentDetailsTypeConstants.CommunityCare:
+          return t('providerInformation')
         default:
-          undefined
+          return undefined
       }
+  }
+}
+
+const getCommunityCareProvider = (attributes: AppointmentAttributes, type: AppointmentDetailsScreenType) => {
+  const { healthcareProvider } = attributes
+
+  if (type === AppointmentDetailsTypeConstants.CommunityCare && healthcareProvider) {
+    return (
+      <TextView variant="MobileBody" selectable={true}>
+        {healthcareProvider}
+      </TextView>
+    )
   }
 }
 
@@ -72,20 +87,23 @@ const getLocationNameAddressDirectionsPhone = (
   let locationName: string | undefined = location?.name
   let missingBodyText
 
+  const communityCareString = type === AppointmentDetailsTypeConstants.CommunityCare ? '.communityCare' : ''
+
   if (locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noPhone')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noPhone${communityCareString}`)
   } else if (locationName && hasDirectionLink && hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly${communityCareString}`)
   } else if (!locationName && hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAnything')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.hasDirections.noAnything${communityCareString}`)
   } else if (locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noPhone')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noPhone${communityCareString}`)
   } else if (locationName && !hasDirectionLink && hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noAddressOnly${communityCareString}`)
   } else if (!locationName && !hasDirectionLink && !hasPhone) {
-    missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
+    missingBodyText = t(`appointments.inPersonVA.missingAddress.noDirections.noAnything${communityCareString}`)
   }
 
+  const facilityLocatorLinkText = t(`appointments.inPersonVA.missingAddress.goToVALink${communityCareString}`)
   if (isAtlasAndNotPending) {
     locationName = undefined
   }
@@ -96,6 +114,7 @@ const getLocationNameAddressDirectionsPhone = (
       : hasDirectionLink && hasFullAddress
         ? { name: location.name, address: location.address! }
         : undefined
+
   return (
     <>
       {locationName ? (
@@ -138,8 +157,8 @@ const getLocationNameAddressDirectionsPhone = (
         <LinkWithAnalytics
           type="url"
           url={WEBVIEW_URL_FACILITY_LOCATOR}
-          text={t('appointments.inPersonVA.missingAddress.goToVALink')}
-          a11yLabel={a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink'))}
+          text={facilityLocatorLinkText}
+          a11yLabel={a11yLabelVA(facilityLocatorLinkText)}
           a11yHint={t('upcomingAppointmentDetails.findYourVAFacility.a11yHint')}
         />
       )}
@@ -186,7 +205,7 @@ const getClinicInfo = (
         </Box>
       )
     default:
-      return undefined
+      return Spacer({ size: theme.dimensions.standardMarginBetween })
   }
 }
 
@@ -201,6 +220,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {heading}
         </TextView>
+        {getCommunityCareProvider(attributes, type)}
         {getLocationNameAddressDirectionsPhone(attributes, subType, type, t, theme)}
         {getClinicInfo(attributes, subType, type, t, theme)}
       </Box>

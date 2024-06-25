@@ -60,6 +60,7 @@ import {
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import {
   ClaimExamAppointment,
+  CommunityCareAppointment,
   InPersonVAAppointment,
   PhoneAppointment,
   VideoAtlasAppointment,
@@ -370,10 +371,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
-  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
   const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   const subType =
@@ -421,14 +423,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           goBack={navigation.goBack}
           cancelAppointment={cancelAppointment}
         />
-      ) : isClaimExamAppointment ? (
-        <ClaimExamAppointment
-          appointmentID={trueAppointment?.id || ''}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-          cancelAppointment={cancelAppointment}
-        />
       ) : isVideoVAAppointment ? (
         <VideoVAAppointment
           appointmentID={trueAppointment?.id || ''}
@@ -447,6 +441,22 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         />
       ) : isVideoAtlasAppointment ? (
         <VideoAtlasAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
+          appointmentID={trueAppointment?.id || ''}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+          cancelAppointment={cancelAppointment}
+        />
+      ) : isCommunityCareAppointment ? (
+        <CommunityCareAppointment
           appointmentID={trueAppointment?.id || ''}
           attributes={attributes}
           subType={subType}

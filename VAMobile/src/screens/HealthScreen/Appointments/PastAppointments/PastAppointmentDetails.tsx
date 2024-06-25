@@ -34,6 +34,7 @@ import {
 import ClinicNameAndPhysicalLocation from '../AppointmentDetailsCommon/ClinicNameAndPhysicalLocation'
 import {
   ClaimExamAppointment,
+  CommunityCareAppointment,
   InPersonVAAppointment,
   PhoneAppointment,
   VideoAtlasAppointment,
@@ -133,10 +134,11 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
   const isPhoneAppointment = phoneOnly
-  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
   const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
   const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
   const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   const subType =
@@ -164,13 +166,6 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           subType={subType}
           goBack={navigation.goBack}
         />
-      ) : isClaimExamAppointment ? (
-        <ClaimExamAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
       ) : isVideoVAAppointment ? (
         <VideoVAAppointment
           appointmentID={appointment.id}
@@ -187,6 +182,20 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
         />
       ) : isVideoAtlasAppointment ? (
         <VideoAtlasAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isCommunityCareAppointment ? (
+        <CommunityCareAppointment
           appointmentID={appointment.id}
           attributes={attributes}
           subType={subType}
