@@ -25,5 +25,5 @@ PTS#	Size	    Rough Timing
 <!-- Please indicate to the best of your ability areas QA should test for this ticket, this sometimes means X area functions the same -->
 
 ## Checklist
-- [ ] Add the relevant team label (Health, global, etc.)
-- [ ] Attach to the [Engineering Initiatives (Frontend)](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/5139) epic
+- [ ] Add the relevant team label (Health, global, design system, API, Qa and Release etc.)
+- [ ] Attach to ticket to the relevant Team Tech Debt Epic epic (old frontend engineering epic is no longer in use as each team is managing their code's technical debt and code upkeep work)

@@ -31,6 +31,21 @@ jobs:
       lane: review
       slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
       version: ${{ github.ref_name }}
+  notify_ios_failure:
+    name: Notify ios Failure
+    needs: [start_slack_thread, ios]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack on iOS failure
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d '{"channel": "va-mobile-app", "text": "The release build failed for iOS version ${{ github.ref_name }}. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               https://slack.com/api/chat.postMessage  
   android:
     name: Android Release Build
     needs: start_slack_thread
@@ -41,3 +56,18 @@ jobs:
       lane: review
       slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
       version: ${{ github.ref_name }}
+  notify_android_failure:
+    name: Notify Android Failure
+    needs: [start_slack_thread, android]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack on Android failure
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d '{"channel": "va-mobile-app", "text": "The release build failed for Android version ${{ github.ref_name }}. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               https://slack.com/api/chat.postMessage
