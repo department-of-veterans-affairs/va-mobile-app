@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, BoxProps, CrisisLineCta, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, CrisisLineCta, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
