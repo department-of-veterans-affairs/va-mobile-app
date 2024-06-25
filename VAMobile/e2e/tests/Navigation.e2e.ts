@@ -70,7 +70,11 @@ const navigationDic = {
   ],
   Health: [
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Podiatry'], 'Community care'],
+    [
+      ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
+      ['Appointments', 'Podiatry'],
+      'Canceled community care appointment',
+    ],
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
