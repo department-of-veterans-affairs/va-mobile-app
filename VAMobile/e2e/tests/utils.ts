@@ -22,7 +22,7 @@ export const CommonE2eIdConstants = {
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
-  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments 123',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
