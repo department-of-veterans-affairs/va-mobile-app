@@ -1,10 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, FeatureLandingTemplate, TextArea, TextView, TextViewProps } from 'components'
+import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateUtc } from 'utils/formattingUtils'
@@ -29,14 +28,6 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
       return false
     }
     return /\d/.test(accountNumber)
-  }
-
-  const textViewProps: TextViewProps = {
-    variant: 'MobileBody',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    color: 'link',
-    accessibilityRole: 'link',
   }
 
   const isDirectDeposit = paymentMethod === DIRECT_DEPOSIT
@@ -83,15 +74,14 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
           )}
         </TextArea>
         <Box mx={gutter} mt={contentMarginTop}>
-          <Pressable
+          <LinkWithAnalytics
+            type="custom"
+            text={t('payments.ifMyPaymentDoesNotLookRight')}
             onPress={() => {
               navigateTo('PaymentIssue')
             }}
             testID="paymentInfoIncorrectTestID"
-            accessibilityRole="link"
-            accessible={true}>
-            <TextView {...textViewProps}>{t('payments.ifMyPaymentDoesNotLookRight')}</TextView>
-          </Pressable>
+          />
         </Box>
       </Box>
     </FeatureLandingTemplate>
