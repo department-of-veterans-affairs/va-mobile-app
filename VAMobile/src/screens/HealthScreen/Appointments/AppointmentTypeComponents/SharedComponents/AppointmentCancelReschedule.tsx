@@ -311,17 +311,21 @@ function AppointmentCancelReschedule({
     case AppointmentDetailsSubTypeConstants.PastPending:
       return <></>
     case AppointmentDetailsSubTypeConstants.Pending:
-      return cancelButton(
-        true,
-        appointmentID,
-        attributes,
-        goBack,
-        t,
-        theme,
-        dispatch,
-        confirmAlert,
-        cancelId,
-        cancelAppointment,
+      return cancelId ? (
+        cancelButton(
+          true,
+          appointmentID,
+          attributes,
+          goBack,
+          t,
+          theme,
+          dispatch,
+          confirmAlert,
+          cancelId,
+          cancelAppointment,
+        )
+      ) : (
+        <></>
       )
     case AppointmentDetailsSubTypeConstants.Past:
       if (isClaimExam) {
