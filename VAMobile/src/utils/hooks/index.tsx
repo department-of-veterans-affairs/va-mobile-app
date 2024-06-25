@@ -45,6 +45,7 @@ import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
+const textAlign = isIOS() ? 'center' : 'left'
 /**
  * Hook to determine if an error should be shown for a given screen id
  * @param currentScreenID - the id of the screen being check for errors
@@ -305,9 +306,17 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     showActionSheetWithOptions(
       {
         title: props.title,
-        titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+        titleTextStyle: {
+          fontWeight: 'bold',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
         message: props.message,
-        messageTextStyle: { fontWeight: 'normal', textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: {
+          fontWeight: 'normal',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
@@ -507,8 +516,12 @@ export function useShowActionSheet(): (
     })
 
     const casedOptions: ActionSheetOptions = {
-      titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
-      messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: textAlign,
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
