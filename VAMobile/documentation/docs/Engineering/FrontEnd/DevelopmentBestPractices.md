@@ -16,7 +16,7 @@ Every ticket must contain at least the following information:
 - All relevant labels ("front-end" for FE work, "Health" for Health and Benefits work, "Global" for global work, etc)
 - An epic relating to the ticket's larger context
 
-If possible, choose the relevant template for your ticket. For example,  if you're creating a bug ticket, choose the Bug Report Template and include severity in the title, labels, and body.
+If possible, choose the relevant template for your ticket. For example, if you're creating a bug ticket, choose the Bug Report Template and include severity in the title, labels, and body.
 
 ### Working on tickets
 
@@ -90,6 +90,7 @@ Each pull request moves through a series of steps.
 ### Pull request creation
 
 When creating a PR, fill out each section in the PR template, including:
+
 - Description: provide context so a code reviewer or future developer understands why the PR exists and what it does
 - Screenshots: add before/after screenshots or videos showing the changes
 - Testing information: confirm testing on iOS and Android. Document any special considerations like edge cases or areas of focus for QA
@@ -108,19 +109,21 @@ It's critical to link the PR to the ticket with the "Connect issue" button so we
 
 If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
 
-When you create a PR, GitHub Actions automatically runs linting checks, unit tests, and E2E tests on your branch. Fix any failures, and make sure unit and E2E tests are modified or extended to cover your changes. See our Unit Tests documentation for best practices.
+When you create a PR, GitHub Actions automatically runs linting checks, unit tests, and E2E tests on your branch. Fix any failures, and make sure unit and E2E tests are modified or extended to cover your changes. See our [Unit Tests documentation](/docs/Engineering/FrontEnd/Testing/UnitTesting) for best practices.
 
 ### Pull request review
 
 At least one review is required on every PR. Here are some guidelines for creating and reviewing PRs.
 
 As a PR creator:
+
 - Try to keep PRs under 400 lines. The larger the PR, the more difficult it is to review thoroughly.
 - If a reviewer asks questions, add a comment under each question with your answer.
 - If a reviewer requests changes, implement them or explain why you disagree.
 - If no one reviews your PR within 24 hours, request a review on Slack.
 
 As a PR reviewer:
+
 - Provide constructive feedback in a calm, civil manner. We're all working together to make the app better.
 - Be as precise and clear as possible in your comments. Explain why you're requesting each change.
 - If you find some code confusing or hard to understand, mention it. Other engineers will probably feel the same way.
