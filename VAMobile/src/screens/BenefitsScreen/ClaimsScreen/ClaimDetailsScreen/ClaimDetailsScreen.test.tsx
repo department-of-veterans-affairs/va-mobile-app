@@ -1,4 +1,5 @@
 import React from 'react'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -78,6 +79,37 @@ context('ClaimDetailsScreen', () => {
 
       await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
     })
+  })
+
+  describe('need help section', () => {
+    it('should always display on claim status tab', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData({
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: '800-827-1000' })))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
+    })
+
+    //ToDo: when feature flag is added by Binny
+    // it('should display on claim details, to be renamed files and only when feature flag is true', async () => {
+
+    // })
   })
 
   describe('when common error occurs', () => {
