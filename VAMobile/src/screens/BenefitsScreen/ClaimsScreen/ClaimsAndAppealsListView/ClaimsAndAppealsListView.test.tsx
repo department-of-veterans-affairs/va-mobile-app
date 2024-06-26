@@ -26,27 +26,27 @@ jest.mock('utils/hooks', () => {
 const mockPayload: ClaimsAndAppealsListPayload = {
   data: [
     {
-      id: '0',
-      type: 'appeal',
-      attributes: {
-        subtype: 'supplementalClaim',
-        completed: false,
-        decisionLetterSent: false,
-        dateFiled: '2020-10-22',
-        updatedAt: '2020-10-28',
-        displayTitle: 'supplemental claim for disability compensation',
-      },
-    },
-    {
-      id: '2',
+      id: '1',
       type: 'claim',
       attributes: {
         subtype: 'Compensation',
         completed: false,
         decisionLetterSent: false,
-        dateFiled: '2020-10-22',
-        updatedAt: '2020-10-30',
+        dateFiled: '2020-10-01',
+        updatedAt: '2020-10-05',
         displayTitle: 'Compensation',
+      },
+    },
+    {
+      id: '2',
+      type: 'appeal',
+      attributes: {
+        subtype: 'legacyAppeal',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-12-22',
+        updatedAt: '2020-12-28',
+        displayTitle: 'Insurance on docket appeal',
       },
     },
   ],
@@ -54,7 +54,7 @@ const mockPayload: ClaimsAndAppealsListPayload = {
     pagination: {
       currentPage: 1,
       perPage: 10,
-      totalEntries: 3,
+      totalEntries: 2,
     },
   },
 }
@@ -98,13 +98,15 @@ context('ClaimsAndAppealsListView', () => {
       initializeTestInstance('ACTIVE')
       await waitFor(() => expect(screen.getByText('Your active claims, decision reviews, and appeals')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('Your closed claims, decision reviews, and appeals')).toBeFalsy())
+
       await waitFor(() =>
-        expect(
-          screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020'),
-        ).toBeTruthy(),
+        expect(screen.getByText('Insurance on docket appeal updated on December 28, 2020')).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getAllByText('Received October 22, 2020')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
+
+      await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
+
       initializeTestInstance('CLOSED')
       await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('Your active claims, decision reviews, and appeals')).toBeFalsy())
@@ -123,12 +125,12 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Claim for compensation updated on October 30, 2020 Received October 22, 2020',
+            name: 'Compensation Received October 01, 2020',
           }),
         ),
       )
       await waitFor(() =>
-        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' }),
+        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '1', claimType: 'ACTIVE' }),
       )
     })
   })
@@ -145,11 +147,11 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Supplemental claim for disability compensation updated on October 28, 2020 Received October 22, 2020',
+            name: 'Insurance on docket appeal updated on December 28, 2020 Received December 22, 2020',
           }),
         ),
       )
-      await waitFor(() => expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' }))
+      await waitFor(() => expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '2' }))
     })
   })
 
