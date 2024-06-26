@@ -276,8 +276,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 15 days}}",
-            "startDateUtc": "{{now - 15 days utc}}",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -331,8 +331,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
@@ -475,108 +475,6 @@
             "status": "CANCELLED",
             "timeZone": "America/New_York",
             "vetextId": "1184;20210408.080000"
-          }
-        },
-        {
-          "id": "202103290000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 165 days}}",
-            "startDateUtc": "{{now - 165 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210329.170030"
-          }
-        },
-        {
-          "id": "202102070000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 177 days}}",
-            "startDateUtc": "{{now - 177 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210207.170030"
-          }
-        },
-        {
-          "id": "202102060000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 179 days}}",
-            "startDateUtc": "{{now - 179 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210206.170030"
           }
         },
         {
@@ -739,7 +637,7 @@
                 "extension": null
               },
               "url": null,
-              "code": null
+              "code": "12345"
             },
             "minutesDuration": 30,
             "phoneOnly": false,
@@ -941,7 +839,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1078,7 +976,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1938,7 +1836,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2032,7 +1930,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2556,8 +2454,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 15 days}}",
-            "startDateUtc": "{{now - 15 days utc}}",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -2611,8 +2509,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
@@ -2720,7 +2618,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -2789,7 +2687,7 @@
                 "extension": null
               },
               "url": null,
-              "code": null
+              "code": "12345"
             },
             "minutesDuration": 30,
             "phoneOnly": false,
@@ -2854,7 +2752,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -2990,7 +2888,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3127,7 +3025,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3537,7 +3435,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "New Issue",
+            "reason": null,
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": [
@@ -3957,7 +3855,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -4051,7 +3949,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",

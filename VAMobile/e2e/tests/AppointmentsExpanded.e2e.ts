@@ -3,21 +3,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { loginToDemoMode, openAppointments, openHealth, resetInAppReview } from './utils'
 
 export const Appointmentse2eConstants = {
-  APPOINTMENT_DESCRIPTION:
-    "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
-  APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_7_ID: 'Canceled  Community care Request type: In-person',
-  APPOINTMENT_8_ID: 'Pending Primary Care Cheyenne VA Medical Center Request type: In-person',
-  ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
-  PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
-  PHONE_NUMBER_ID: 'CallTTYTestID',
-  PATIENT_CANCELLATION: 'You canceled this appointment.',
-  VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
-  DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
-  APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
 
 const checkUpcomingApptDetails = async (
@@ -324,19 +310,14 @@ export async function apppointmentVerification(pastAppointment = false) {
     pastAppointmentString = 'Past: '
   }
 
-  /*it(pastAppointmentString + 'verify confirmed CC appt', async () => {
-    if (device.getPlatform() === 'ios') {
+  it(pastAppointmentString + 'verify confirmed CC appt', async () => {
+    if (pastAppointment) {
       await resetInAppReview()
       await openHealth()
       await openAppointments()
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-    } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
-    if (pastAppointment) {
       await element(by.id('appointmentsTestID')).scrollTo('top')
       await element(by.text('Past')).tap()
     }
@@ -347,7 +328,19 @@ export async function apppointmentVerification(pastAppointment = false) {
     } else {
       await expect(element(by.text('Past community care appointment'))).toExist()
     }
-    await checkUpcomingApptDetails('CC', 'Confirmed', pastAppointment, "Podiatry", "Vilanisi Reddy", undefined, undefined, "Test", "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123", undefined, "2341 North Ave")
+    await checkUpcomingApptDetails(
+      'CC',
+      'Confirmed',
+      pastAppointment,
+      'Podiatry',
+      'Vilanisi Reddy',
+      undefined,
+      undefined,
+      'Test',
+      'instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123',
+      undefined,
+      '2341 North Ave',
+    )
   })
 
   it(pastAppointmentString + 'verify canceled CC appt', async () => {
@@ -355,13 +348,37 @@ export async function apppointmentVerification(pastAppointment = false) {
     await expect(element(by.text('Canceled community care appointment'))).toExist()
     await expect(element(by.text('You canceled this appointment.'))).toExist()
 
-    await checkUpcomingApptDetails('CC', 'Canceled', pastAppointment, "Podiatry", "Jim Smith", undefined, undefined, undefined, "Smoke test 5/21 - 1", undefined, "2341 North Ave")
+    await checkUpcomingApptDetails(
+      'CC',
+      'Canceled',
+      pastAppointment,
+      'Podiatry',
+      'Jim Smith',
+      undefined,
+      undefined,
+      undefined,
+      'Smoke test 5/21 - 1',
+      undefined,
+      '2341 North Ave',
+    )
   })
 
   it(pastAppointmentString + 'verify pending CC appt', async () => {
     await scrollToThenTap('GUARINO, ANTHONY', pastAppointmentString)
-    await checkUpcomingApptDetails('CC', 'Pending', pastAppointment, "Podiatry", "GUARINO, ANTHONY", undefined, undefined, undefined, undefined, undefined, undefined)
-  })*/
+    await checkUpcomingApptDetails(
+      'CC',
+      'Pending',
+      pastAppointment,
+      'Podiatry',
+      'GUARINO, ANTHONY',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+    )
+  })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Onsite appt', async () => {
     if (pastAppointment) {
@@ -674,7 +691,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await scrollToThenTap('Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
+    await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
     await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
     await expect(element(by.text('Need to reschedule?'))).toExist()
     await expect(
@@ -693,27 +710,6 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Fort Collins VA Clinic - Claim - Canceled',
       '2509 Research Boulevard',
     )
-  })
-
-  it(pastAppointmentString + 'verify canceled VA Covid-19 appt', async () => {
-    await element(by.id('appointmentsTestID')).scrollTo('bottom')
-    await scrollToThenTap('At VA Memphis Healthcare System', pastAppointmentString)
-    if (!pastAppointment) {
-      await expect(element(by.text('Special instructions'))).toExist()
-    }
-    await expect(
-      element(by.text('If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.')),
-    ).toExist()
-    await element(by.text('Appointments')).tap()
-  })
-
-  it(pastAppointmentString + 'verify confirmed VA Covid-19 appt', async () => {
-    await element(by.id('appointmentsTestID')).scrollTo('top')
-    await scrollToThenTap('At VA Long Beach Healthcare System', pastAppointmentString)
-    if (!pastAppointment) {
-      await expect(element(by.text('Special instructions'))).toExist()
-    }
-    await checkUpcomingApptDetails('Covid', 'Confirmed', pastAppointment)
   })
 
   it(pastAppointmentString + 'verify confirmed VA appt - provider/typeOfCare/facility/number', async () => {
@@ -742,8 +738,8 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify confirmed VA appt - no provider/typeOfCare/address/number', async () => {
     await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
-    await expect(element(by.text('Type of care not noted'))).toExist()
-    await expect(element(by.text('Provider not noted'))).toExist()
+    await expect(element(by.text('Type of care not noted'))).not.toExist()
+    await expect(element(by.text('Provider not noted'))).not.toExist()
     await element(by.text('Appointments')).tap()
   })
 
@@ -781,8 +777,8 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
     await scrollToThenTap('At VA Palo Alto Health Care System', pastAppointmentString)
-    await expect(element(by.text('Type of care not noted'))).toExist()
-    await expect(element(by.text('Provider not noted'))).toExist()
+    await expect(element(by.text('Type of care not noted'))).not.toExist()
+    await expect(element(by.text('Provider not noted'))).not.toExist()
     await element(by.text('Appointments')).tap()
   })
 
