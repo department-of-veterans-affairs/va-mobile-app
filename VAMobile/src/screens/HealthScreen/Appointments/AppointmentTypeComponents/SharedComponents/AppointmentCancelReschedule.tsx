@@ -185,6 +185,7 @@ const phoneFacilitySchedulingLink = (
           url={LINK_URL_VA_SCHEDULING}
           text={t('appointments.vaSchedule')}
           a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+          testID="vaLinkApptsCancelTestID"
         />
       )}
     </Box>
