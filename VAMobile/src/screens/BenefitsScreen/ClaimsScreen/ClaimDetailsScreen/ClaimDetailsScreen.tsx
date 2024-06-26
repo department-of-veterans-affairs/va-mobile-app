@@ -164,7 +164,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
-          {featureFlagEnabled || (claim && selectedTab === 0) ? <NeedHelpData /> : undefined}
+          {featureFlagEnabled || (claim && selectedTab === 0) ? (
+            <Box mt={theme.dimensions.condensedMarginBetween}>
+              <NeedHelpData />
+            </Box>
+          ) : undefined}
         </Box>
       )}
     </FeatureLandingTemplate>

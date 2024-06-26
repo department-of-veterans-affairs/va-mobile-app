@@ -73,7 +73,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <Box>
@@ -119,7 +119,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       }
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
               {claimDecidedOn}
