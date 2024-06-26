@@ -8,6 +8,7 @@ import {
   AppState,
   Dimensions,
   EmitterSubscription,
+  Keyboard,
   Linking,
   PixelRatio,
   ScrollView,
@@ -302,6 +303,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
       newDestructiveButtonIndex = destructiveButtonIndex - 1
     }
 
+    Keyboard.dismiss()
     // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
     showActionSheetWithOptions(
       {
