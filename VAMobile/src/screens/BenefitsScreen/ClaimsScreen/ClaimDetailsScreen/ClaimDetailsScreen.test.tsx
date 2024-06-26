@@ -107,7 +107,10 @@ context('ClaimDetailsScreen', () => {
     })
 
     //ToDo: when feature flag is added by Binny
-    // it('should display on claim details, to be renamed files and only when feature flag is true', async () => {
+    // it('should display on claim details, to be renamed files and when feature flag is true', async () => {
+
+    // })
+    // it('should not display on claim details, to be renamed files and when feature flag is false', async () => {
 
     // })
   })
