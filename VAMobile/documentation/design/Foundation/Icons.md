@@ -61,7 +61,7 @@ Use icons to communicate meaning, action, status, or feedback.
 
 The Icon component should be used to display icons in the mobile app. It includes all icons from the Icon Library. See the component in [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/icon--docs).
 
-### Accessibility considerations
+## Accessibility considerations
 
 Icon usage typically falls into two categories, decorative and semantic.
 
