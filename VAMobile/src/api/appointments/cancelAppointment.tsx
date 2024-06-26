@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
 import { AppointmentStatusConstants, AppointmentsGetData } from 'api/types'
-import { TimeFrameTypeConstants } from 'constants/appointments'
+import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
 import { put } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
@@ -15,7 +15,7 @@ import { appointmentsKeys } from './queryKeys'
  */
 const isWithinDaysLimit = (date: string, upcomingDaysLimit?: number) => {
   const currentDate = DateTime.now()
-  return DateTime.fromISO(date).diff(currentDate, 'days').days <= (upcomingDaysLimit || 7)
+  return DateTime.fromISO(date).diff(currentDate, 'days').days <= (upcomingDaysLimit || DEFAULT_UPCOMING_DAYS_LIMIT)
 }
 
 /**
