@@ -116,7 +116,9 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
-  const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
+  const yourClaimsAndAppealsHeader = featureEnabled('claimPhaseExpansion')
+    ? t('claims.yourClaims', { claimType: claimType.toLowerCase() })
+    : t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
   const paginationProps: PaginationProps = {
     onNext: () => {

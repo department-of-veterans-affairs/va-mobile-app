@@ -7,8 +7,12 @@ import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -92,8 +96,8 @@ context('ClaimsAndAppealsListView', () => {
         })
         .mockResolvedValue(mockPayload)
       initializeTestInstance('ACTIVE')
-      await waitFor(() => expect(screen.getByText('Your active claims and appeals')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Your closed claims and appeals')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Your active claims, decision reviews, and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your closed claims, decision reviews, and appeals')).toBeFalsy())
       await waitFor(() =>
         expect(
           screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020'),
@@ -102,8 +106,8 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() => expect(screen.getAllByText('Received October 22, 2020')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy())
       initializeTestInstance('CLOSED')
-      await waitFor(() => expect(screen.getByText('Your closed claims and appeals')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Your active claims and appeals')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your active claims, decision reviews, and appeals')).toBeFalsy())
     })
   })
 
