@@ -1,6 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -12,11 +11,10 @@ import {
   Box,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   Pagination,
   PaginationProps,
-  TextView,
-  TextViewProps,
   VAModalPicker,
   VAModalPickerProps,
 } from 'components'
@@ -89,14 +87,6 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     navigateTo('PaymentDetails', { payment })
   }
 
-  const textViewProps: TextViewProps = {
-    variant: 'MobileBody',
-    textDecoration: 'underline',
-    textDecorationColor: 'link',
-    color: 'link',
-    accessibilityRole: 'link',
-  }
-
   const pickerProps: VAModalPickerProps = {
     labelKey: 'payments.pickerLabel',
     selectedValue: yearPickerOption?.value || '',
@@ -162,13 +152,12 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
       ) : (
         <>
           <Box mx={gutter} mb={standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('payments.ifIAmMissingPayemt')}
               onPress={() => navigateTo('PaymentMissing')}
-              accessibilityRole="link"
-              accessible={true}
-              testID="missingPaymentsTestID">
-              <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
-            </Pressable>
+              testID="missingPaymentsTestID"
+            />
           </Box>
           <Box mx={gutter} mb={standardMarginBetween}>
             <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -17,8 +18,10 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
+import { ServiceHistoryData } from 'api/types'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -47,7 +50,7 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
@@ -60,11 +63,9 @@ import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
+import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
-import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
@@ -91,7 +92,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: disabilityRatingFetched,
   } = useDisabilityRating()
   const {
-    data: serviceHistory,
+    data: militaryServiceHistoryAttributes,
     isLoading: loadingServiceHistory,
     isFetched: serviceHistoryFetched,
   } = useServiceHistory()
@@ -151,6 +152,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
   const unreadMessageCount = foldersData?.inboxUnreadCount
+  const { data: personalInfoData } = usePersonalInformation({ enabled: false })
 
   useEffect(() => {
     if (apptsPrefetch && apptsData?.meta) {
@@ -189,6 +191,55 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
 
+  useEffect(() => {
+    const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInfoData?.id}`
+    const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+
+    const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
+      try {
+        serviceHistory.forEach((service) => {
+          if (service.honorableServiceIndicator === 'Y') {
+            logAnalyticsEvent(Events.vama_vet_status_yStatus())
+          } else if (service.honorableServiceIndicator === 'N') {
+            logAnalyticsEvent(Events.vama_vet_status_nStatus())
+          } else if (service.honorableServiceIndicator === 'Z') {
+            logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
+          }
+        })
+        await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
+        console.log('setStorage: ', SERVICE_INDICATOR_KEY, serviceIndicators)
+      } catch (err) {
+        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+      }
+    }
+
+    const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
+      if (!serviceIndicators) {
+        return
+      }
+
+      try {
+        const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
+        if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
+          console.log('asyncServiceIndicators: ', asyncServiceIndicators)
+          setServiceIndicators(serviceIndicators)
+        }
+      } catch (err) {
+        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+      }
+    }
+
+    if (serviceHistory) {
+      let serviceIndicators = ''
+      serviceHistory.forEach((service) => {
+        console.log('service: ', JSON.stringify(service, undefined, 2))
+        serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
+      })
+      console.log('serviceIndicators: ', serviceIndicators)
+      checkServiceIndicators(serviceIndicators)
+    }
+  }, [militaryServiceHistoryAttributes?.serviceHistory, personalInfoData?.id])
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -219,7 +270,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const hasAboutYouInfo =
     !!ratingData?.combinedDisabilityRating ||
     !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
-    !!serviceHistory?.mostRecentBranch
+    !!militaryServiceHistoryAttributes?.mostRecentBranch
 
   const boxProps: BoxProps = {
     style: {
@@ -503,8 +554,8 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen
-        name="ManageYourAccount"
-        component={ManageYourAccount}
+        name="AccountSecurity"
+        component={AccountSecurity}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen
@@ -518,8 +569,6 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         component={RemoteConfigScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }
