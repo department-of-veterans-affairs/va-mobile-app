@@ -17,7 +17,6 @@ const CrisisLineButton: FC = () => {
   const touchableProps: TouchableWithoutFeedbackProps = {
     accessible: true,
     accessibilityRole: 'link',
-    accessibilityHint: t('crisisLineButton.hint'),
   }
 
   const boxProps: BoxProps = {

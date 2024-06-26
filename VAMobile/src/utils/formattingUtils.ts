@@ -73,7 +73,7 @@ export const getFormattedMessageTime = (dateTime: string): string => {
   if (DateTime.now().day === date.day && DateTime.now().month === date.month && DateTime.now().year === date.year) {
     return date.toFormat('t')
   } else {
-    return date.toFormat('D')
+    return date.toFormat('DDD')
   }
 }
 

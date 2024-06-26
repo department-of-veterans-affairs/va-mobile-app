@@ -160,6 +160,18 @@ function AppointmentCancellationInfo({ appointment, goBack, cancelAppointment }:
               ),
             )
           },
+          onError: () => {
+            showSnackBar(
+              t('appointments.appointmentNotCanceled'),
+              dispatch,
+              () => {
+                cancelAppointment(cancelId, mutateOptions)
+              },
+              false,
+              true,
+              true,
+            )
+          },
         }
         cancelAppointment(cancelId, mutateOptions)
       }

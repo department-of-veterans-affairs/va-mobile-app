@@ -17,14 +17,16 @@ context('InlineTextWithIcons', () => {
         textAlign: 'left',
       },
       leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true, testID: 'Unread' } as VAIconProps,
-      rightTextProps: {
-        text: '9/10/2022',
+    } as InlineTextWithIconsProps
+    const testLine2 = {
+      leftTextProps: {
+        text: 'September 10, 2022',
         variant: 'MobileBody',
         textAlign: 'right',
         color: 'primary',
       },
     } as InlineTextWithIconsProps
-    const testLine2 = {
+    const testLine3 = {
       leftTextProps: {
         text: 'Test Subject',
         variant: 'MobileBodyBold',
@@ -45,13 +47,14 @@ context('InlineTextWithIcons', () => {
       <Box>
         <InlineTextWithIcons {...testLine1} />
         <InlineTextWithIcons {...testLine2} />
+        <InlineTextWithIcons {...testLine3} />
       </Box>,
     )
   })
 
   it('renders text', () => {
     expect(screen.getByText('Test Email')).toBeTruthy()
-    expect(screen.getByText('9/10/2022')).toBeTruthy()
+    expect(screen.getByText('September 10, 2022')).toBeTruthy()
     expect(screen.getByText('Test Subject')).toBeTruthy()
   })
 

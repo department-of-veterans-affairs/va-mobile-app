@@ -41,7 +41,7 @@ export type WaygateToggleType =
   | 'WG_MilitaryInformation'
   | 'WG_IncorrectServiceInfo'
   | 'WG_Settings'
-  | 'WG_ManageYourAccount'
+  | 'WG_AccountSecurity'
   | 'WG_NotificationsSettings'
   | 'WG_ContactVA'
   | 'WG_VeteransCrisisLine'
@@ -103,8 +103,6 @@ export type WaygateToggleType =
   | 'WG_LoaGate'
   | 'WG_GenericLetter'
   | 'WG_Webview'
-  | 'WG_Sandbox'
-  | 'WG_HapticsDemoScreen'
   | 'WG_InAppRecruitment'
   | 'WG_HealthHelp'
 
@@ -124,7 +122,7 @@ type WaygateToggleValues = {
   WG_MilitaryInformation: Waygate
   WG_IncorrectServiceInfo: Waygate
   WG_Settings: Waygate
-  WG_ManageYourAccount: Waygate
+  WG_AccountSecurity: Waygate
   WG_NotificationsSettings: Waygate
   WG_ContactVA: Waygate
   WG_VeteransCrisisLine: Waygate
@@ -186,8 +184,6 @@ type WaygateToggleValues = {
   WG_LoaGate: Waygate
   WG_GenericLetter: Waygate
   WG_Webview: Waygate
-  WG_Sandbox: Waygate
-  WG_HapticsDemoScreen: Waygate
   WG_InAppRecruitment: Waygate
   WG_HealthHelp: Waygate
 }
@@ -216,7 +212,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_MilitaryInformation: { ...waygateDefault },
   WG_IncorrectServiceInfo: { ...waygateDefault },
   WG_Settings: { ...waygateDefault },
-  WG_ManageYourAccount: { ...waygateDefault },
+  WG_AccountSecurity: { ...waygateDefault },
   WG_NotificationsSettings: { ...waygateDefault },
   WG_ContactVA: { ...waygateDefault },
   WG_VeteransCrisisLine: { ...waygateDefault },
@@ -278,8 +274,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_LoaGate: { ...waygateDefault },
   WG_GenericLetter: { ...waygateDefault },
   WG_Webview: { ...waygateDefault },
-  WG_Sandbox: { ...waygateDefault },
-  WG_HapticsDemoScreen: { ...waygateDefault },
   WG_InAppRecruitment: { ...waygateDefault },
   WG_HealthHelp: { ...waygateDefault },
 }
