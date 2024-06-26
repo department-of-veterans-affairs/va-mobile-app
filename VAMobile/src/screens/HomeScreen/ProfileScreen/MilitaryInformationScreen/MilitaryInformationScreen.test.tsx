@@ -3,63 +3,13 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 import MilitaryInformationScreen from './index'
-
-jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest
-      .fn()
-      .mockReturnValue({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      })
-      .mockReturnValueOnce({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: false,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      }),
-  }
-})
 
 context('MilitaryInformationScreen', () => {
   const serviceHistoryMock: ServiceHistoryAttributes = {
@@ -84,12 +34,33 @@ context('MilitaryInformationScreen', () => {
       addListener: jest.fn(),
     },
   )
-  const initializeTestInstance = (serviceHistory = serviceHistoryMock) => {
+  const initializeTestInstance = (serviceHistory = serviceHistoryMock, authorized = true) => {
     const queriesData: QueriesData = [
       {
         queryKey: militaryServiceHistoryKeys.serviceHistory,
         data: {
           ...serviceHistory,
+        },
+      },
+      {
+        queryKey: authorizedServicesKeys.authorizedServices,
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: authorized,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
         },
       },
     ]
@@ -110,7 +81,7 @@ context('MilitaryInformationScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(militaryServiceHistoryData)
-      initializeTestInstance()
+      initializeTestInstance(undefined, false)
       await waitFor(() => expect(screen.getByText("We can't access your military information")).toBeTruthy())
     })
   })

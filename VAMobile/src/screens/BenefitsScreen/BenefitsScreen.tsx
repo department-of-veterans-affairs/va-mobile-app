@@ -20,7 +20,7 @@ import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScr
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
-import { DowntimeFeatureTypeConstants } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -30,7 +30,7 @@ import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersSc
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
-function BenefitsScreen({}: BenefitsScreenProps) {
+export function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

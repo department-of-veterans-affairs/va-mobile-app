@@ -42,6 +42,7 @@ import {
   useShowActionSheet,
   useTheme,
 } from 'utils/hooks'
+import { getWaygateToggles } from 'utils/waygateConfig'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
 
@@ -73,8 +74,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     errorMsg: t('fileUpload.submitted.error'),
   }
 
+  const waygate = getWaygateToggles().WG_UploadOrAddPhotos
+
   useBeforeNavBackListener(navigation, (e) => {
-    if (imagesList?.length === 0 || filesUploadedSuccess) {
+    if (imagesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
     e.preventDefault()

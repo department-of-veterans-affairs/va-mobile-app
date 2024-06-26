@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -16,9 +15,9 @@ import {
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   TextView,
-  TextViewProps,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -91,17 +90,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     setReviewEventRegistered(true)
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    mx: gutter,
-    mt: condensedMarginBetween,
-  }
-
-  const dobLinkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    mb: formMarginBetween,
-  }
-
   const personalInformationItems = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = [
       {
@@ -172,24 +160,24 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
-          <Pressable
-            onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })}
-            accessibilityRole="link"
-            accessible={true}>
-            <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
-          </Pressable>
+          <Box mx={gutter} mt={condensedMarginBetween}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('personalInformation.howToFixLegalName')}
+              onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })}
+            />
+          </Box>
           <Box
             my={theme.dimensions.standardMarginBetween}
             mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
             <DefaultList items={birthdateItems()} />
           </Box>
-          <Box mx={theme.dimensions.gutter}>
-            <Pressable
+          <Box mx={theme.dimensions.gutter} mb={formMarginBetween}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('personalInformation.howToFixDateOfBirth')}
               onPress={() => navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
-              accessibilityRole="link"
-              accessible={true}>
-              <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
-            </Pressable>
+            />
           </Box>
           {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
         </>

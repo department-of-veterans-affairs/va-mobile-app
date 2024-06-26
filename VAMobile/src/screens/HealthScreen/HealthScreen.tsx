@@ -165,11 +165,7 @@ export function HealthScreen({}: HealthScreenProps) {
             }
           />
         )}
-        <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          a11yHint={t('vaVaccines.a11yHint')}
-          onPress={() => navigateTo('VaccineList')}
-        />
+        <LargeNavButton title={t('vaVaccines.buttonTitle')} onPress={() => navigateTo('VaccineList')} />
         <LargeNavButton title={t('covid19Updates.title')} onPress={onCoronaVirusFAQ} />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
