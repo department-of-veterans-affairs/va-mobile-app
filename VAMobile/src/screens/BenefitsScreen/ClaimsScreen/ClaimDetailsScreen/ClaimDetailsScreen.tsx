@@ -24,6 +24,7 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -53,6 +54,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
+
+  const featureFlagEnabled = true
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -140,10 +143,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mx={theme.dimensions.gutter}>
+          <Box mx={featureFlagEnabled ? theme.dimensions.condensedMarginBetween : theme.dimensions.gutter}>
             <TextView
-              variant="BitterBoldHeading"
-              mb={theme.dimensions.condensedMarginBetween}
+              variant={featureFlagEnabled ? 'MobileBodyBold' : 'BitterBoldHeading'}
+              mb={featureFlagEnabled ? undefined : theme.dimensions.condensedMarginBetween}
               accessibilityRole="header">
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
@@ -161,6 +164,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
+          {featureFlagEnabled && <NeedHelpData />}
         </Box>
       )}
     </FeatureLandingTemplate>
