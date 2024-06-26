@@ -10,7 +10,6 @@ import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'componen
 import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -38,8 +37,6 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: decisionLetterData } = useDecisionLetters()
   const sentEvent = useRef(false)
-
-  const featureFlagEnabled = true
 
   function renderActiveClaimStatusDetails() {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
@@ -145,7 +142,6 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
     <Box testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
       {renderClosedClaimStatusDetails()}
-      {!featureFlagEnabled && <NeedHelpData />}
     </Box>
   )
 }
