@@ -48,7 +48,7 @@ context('PaymentsScreen', () => {
   describe('when user does not have directDepositBenefits', () => {
     it('should navigate to HowToUpdateDirectDeposit', () => {
       initializeTestInstance(false)
-      fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Direct deposit information' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('HowToUpdateDirectDeposit')
     })
   })
