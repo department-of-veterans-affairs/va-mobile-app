@@ -92,7 +92,7 @@ export function HomeScreen({}: HomeScreenProps) {
     isFetched: disabilityRatingFetched,
   } = useDisabilityRating()
   const {
-    data: serviceHistory,
+    data: militaryServiceHistoryAttributes,
     isLoading: loadingServiceHistory,
     isFetched: serviceHistoryFetched,
   } = useServiceHistory()
@@ -152,9 +152,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const disRating = !!ratingData?.combinedDisabilityRating
   const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
   const unreadMessageCount = foldersData?.inboxUnreadCount
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory({
-    enabled: false,
-  })
   const { data: personalInfoData } = usePersonalInformation({ enabled: false })
 
   useEffect(() => {
@@ -273,7 +270,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const hasAboutYouInfo =
     !!ratingData?.combinedDisabilityRating ||
     !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
-    !!serviceHistory?.mostRecentBranch
+    !!militaryServiceHistoryAttributes?.mostRecentBranch
 
   const boxProps: BoxProps = {
     style: {
