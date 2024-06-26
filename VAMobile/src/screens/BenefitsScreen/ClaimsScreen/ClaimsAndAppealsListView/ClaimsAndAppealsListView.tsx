@@ -53,7 +53,9 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
+        return featureEnabled('claimPhaseExpansion')
+          ? displayTitle
+          : t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
         return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }
