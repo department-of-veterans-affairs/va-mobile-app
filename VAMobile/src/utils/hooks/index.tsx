@@ -39,13 +39,13 @@ import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
+const textAlign = isIOS() ? 'center' : 'left'
 /**
  * Hook to determine if an error should be shown for a given screen id
  * @param currentScreenID - the id of the screen being check for errors
@@ -306,9 +306,17 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     showActionSheetWithOptions(
       {
         title: props.title,
-        titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+        titleTextStyle: {
+          fontWeight: 'bold',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
         message: props.message,
-        messageTextStyle: { fontWeight: 'normal', textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: {
+          fontWeight: 'normal',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
@@ -332,8 +340,6 @@ export type UseAlertProps = {
   message?: string
   /** options to show in alert */
   buttons: Array<AlertButton>
-  /** screenReaderEnabled boolean */
-  screenReaderEnabled: boolean
 }
 /**
  * Hook to create standard alert for a destructive event
@@ -346,11 +352,7 @@ export type UseAlertProps = {
  */
 export function useAlert(): (props: UseAlertProps) => void {
   return (props: UseAlertProps) => {
-    Alert.alert(
-      props.screenReaderEnabled ? a11yLabelVA(props.title) : props.title,
-      props.screenReaderEnabled && props.message ? a11yLabelVA(props.message) : props.message,
-      props.buttons,
-    )
+    Alert.alert(props.title, props.message, props.buttons)
   }
 }
 
@@ -514,8 +516,12 @@ export function useShowActionSheet(): (
     })
 
     const casedOptions: ActionSheetOptions = {
-      titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
-      messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: textAlign,
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },

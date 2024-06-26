@@ -2,6 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
@@ -9,59 +10,8 @@ import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import SecureMessaging from './SecureMessaging'
 
-jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest
-      .fn()
-      .mockReturnValue({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: true,
-          userProfileUpdate: true,
-        },
-      })
-      .mockReturnValueOnce({
-        status: 'success',
-        data: {
-          appeals: true,
-          appointments: true,
-          claims: true,
-          decisionLetters: true,
-          directDepositBenefits: true,
-          directDepositBenefitsUpdate: true,
-          disabilityRating: true,
-          genderIdentity: true,
-          lettersAndDocuments: true,
-          militaryServiceHistory: true,
-          paymentHistory: true,
-          preferredName: true,
-          prescriptions: true,
-          scheduleAppointments: true,
-          secureMessaging: false,
-          userProfileUpdate: true,
-        },
-      }),
-  }
-})
-
 context('SecureMessaging', () => {
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (authorized = true) => {
     render(
       <SecureMessaging
         {...mockNavProps(
@@ -74,13 +24,40 @@ context('SecureMessaging', () => {
           { params: { activeTab: 0 } },
         )}
       />,
+      {
+        queriesData: [
+          {
+            queryKey: authorizedServicesKeys.authorizedServices,
+            data: {
+              appeals: true,
+              appointments: true,
+              claims: true,
+              decisionLetters: true,
+              directDepositBenefits: true,
+              directDepositBenefitsUpdate: true,
+              disabilityRating: true,
+              genderIdentity: true,
+              lettersAndDocuments: true,
+              militaryServiceHistory: true,
+              paymentHistory: true,
+              preferredName: true,
+              prescriptions: true,
+              scheduleAppointments: true,
+              secureMessaging: authorized,
+              userProfileUpdate: true,
+            },
+          },
+        ],
+      },
     )
   }
 
   describe('when user is not authorized for secure messaging', () => {
-    it('should display NotEnrolledSM component', () => {
-      initializeTestInstance()
-      expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy()
+    it('should display NotEnrolledSM component', async () => {
+      initializeTestInstance(false)
+      await waitFor(() =>
+        expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy(),
+      )
     })
   })
 

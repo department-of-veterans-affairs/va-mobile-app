@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -39,13 +40,14 @@ function FolderMessages({ route }: FolderMessagesProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [page, setPage] = useState(1)
+  const isFocused = useIsFocused()
   const {
     data: folderMessagesData,
     isFetching: loadingFolderMessages,
     error: folderMessagesError,
     refetch: refetchFolderMessages,
   } = useFolderMessages(folderID, {
-    enabled: screenContentAllowed('WG_FolderMessages'),
+    enabled: isFocused && screenContentAllowed('WG_FolderMessages'),
   })
   const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
 
