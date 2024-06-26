@@ -71,31 +71,33 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     navigateTo('AppealDetailsScreen', { appealID: id })
   }
 
+  const decisionLetterTag = {
+    text: t('claims.decisionLetterReady'),
+    textTag: { labelType: LabelTagTypeConstants.tagBlue },
+    mt: theme.dimensions.condensedMarginBetween,
+    mb: theme.dimensions.condensedMarginBetween,
+  }
+
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
     claimsAndAppeals?.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
-
-      const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
-      const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
-        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
-      ]
-
-      if (
+      const showDecisionLetterTag =
         featureEnabled('decisionLettersWaygate') &&
         userAuthorizedServices?.decisionLetters &&
         attributes.decisionLetterSent &&
         (decisionLetterData?.data.length || 0) > 0
-      ) {
-        const margin = theme.dimensions.condensedMarginBetween
-        textLines.push({
-          text: t('claims.decisionLetterReady'),
-          textTag: { labelType: LabelTagTypeConstants.tagBlue },
-          mt: margin,
-          mb: margin,
-        })
-      }
+
+      const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
+      const textLines: Array<TextLine> = [
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
+      ]
+
+      featureEnabled('claimPhaseExpansion') && showDecisionLetterTag && textLines.push(decisionLetterTag)
+
+      textLines.push({ text: t('claimDetails.receivedOn', { date: formattedDateFiled }) })
+
+      !featureEnabled('claimPhaseExpansion') && showDecisionLetterTag && textLines.push(decisionLetterTag)
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
