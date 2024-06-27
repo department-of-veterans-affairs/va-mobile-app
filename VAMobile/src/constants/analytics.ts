@@ -90,7 +90,7 @@ export const Events = {
       },
     }
   },
-  vama_apt_cancel_clicks: (
+  vama_apt_cancel_click: (
     apt_id: string,
     apt_status: string,
     apt_type: string,

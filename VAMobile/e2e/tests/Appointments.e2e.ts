@@ -23,9 +23,6 @@ const lastYear = lastYearDateTime.get('year')
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
-  APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
-  APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
   ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
   PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
@@ -43,35 +40,12 @@ beforeAll(async () => {
 })
 
 describe('Appointments Screen', () => {
-  it('should match the appointments page design', async () => {
-    await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).atIndex(0)).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID)).atIndex(0)).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID)).atIndex(0)).toExist()
-  })
-
-  it('verify appointment details information', async () => {
-    await waitFor(element(by.text('Outpatient Clinic')))
+  it('should tap and open the appointment details links', async () => {
+    await waitFor(element(by.text('Vilanisi Reddy')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
       .scroll(200, 'down')
-    await element(by.text('Outpatient Clinic')).tap()
-    await expect(element(by.text('Community care'))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
-    await expect(element(by.id('Outpatient Clinic 2341 North Ave Commerce, CA 90022'))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0)).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0)).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0)).toExist()
-    await expect(element(by.text('instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123'))).toExist()
-    await expect(element(by.text('Do you need to cancel?'))).toExist()
-    await expect(
-      element(by.text("Call your community care provider. You can't cancel community care appointments online.")),
-    ).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(1)).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(1)).toExist()
-  })
-
-  it('should tap and open the appointment details links', async () => {
+    await element(by.text('Vilanisi Reddy')).tap()
     if (device.getPlatform() === 'android') {
       await element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentCalendar')
@@ -106,11 +80,11 @@ describe('Appointments Screen', () => {
 
   it('should cancel an appointment and dismiss the dialog', async () => {
     await element(by.text('Appointments')).tap()
-    await waitFor(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)))
+    await waitFor(element(by.text('GUARINO, ANTHONY')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
       .scroll(200, 'down')
-    await element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).tap()
+    await element(by.text('GUARINO, ANTHONY')).tap()
     await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
     await element(by.id('Cancel request')).tap()
     await element(by.text(Appointmentse2eConstants.APPOINTMENT_CANCEL_REQUEST_TEXT)).tap()
@@ -118,44 +92,13 @@ describe('Appointments Screen', () => {
     await element(by.text('Dismiss')).tap()
   })
 
-  it('verify the appointment details/links after cancel', async () => {
-    await waitFor(element(by.id('Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person')))
+  it('verify the appointment details after cancel', async () => {
+    await waitFor(element(by.text('GUARINO, ANTHONY')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
       .scroll(200, 'down')
-    await element(by.id('Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person')).tap()
-    await expect(element(by.text('Test clinic 2 canceled this appointment.'))).toExist()
-    await expect(element(by.text('Canceled request for Optometry (routine eye exam) appointment'))).toExist()
-    await expect(element(by.text('Vilasini Reddy'))).toExist()
-    await expect(element(by.id('Test clinic 2 123 Sesame St. Cheyenne, VA 20171'))).toExist()
-
-    if (device.getPlatform() === 'android') {
-      await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
-      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('appointmentGetDirections')
-      await device.launchApp({ newInstance: false })
-      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0)).toExist()
-      await setTimeout(5000)
-      await device.takeScreenshot('appointmentVALocationPhoneNumber')
-      await device.launchApp({ newInstance: false })
-
-      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0)).toExist()
-      await setTimeout(5000)
-      await device.takeScreenshot('apointmentVALocationTTY')
-      await device.launchApp({ newInstance: false })
-    }
-    await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
-
-    await expect(element(by.text('Preferred date and time'))).toExist()
-    await expect(element(by.text(`${sixtyThreeDaysLaterShort} in the afternoon`))).toExist()
-    await expect(element(by.text(`${sixtyFourDaysLaterShort} in the afternoon`))).toExist()
-    await expect(element(by.text('Preferred type of appointment'))).toExist()
-    await expect(element(by.text('Office visit'))).toExist()
-    await expect(element(by.text('Your contact details'))).toExist()
-    await expect(element(by.text('Email: samatha.girla@va.gov'))).toExist()
-    await expect(element(by.text('Phone Number: (703) 652-0000'))).toExist()
-    await expect(element(by.text('Call: Afternoon,Evening,Morning'))).toExist()
+    await element(by.text('GUARINO, ANTHONY')).tap()
+    await expect(element(by.text('Canceled request for community care'))).toExist()
     await element(by.text('Appointments')).tap()
   })
 

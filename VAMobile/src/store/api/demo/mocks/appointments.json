@@ -204,125 +204,149 @@
           }
         },
         {
-          "id": "8a48e8db6d70a38a016d72b354240004",
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": {
-              "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
-              },
-              "lat": 41.148027,
-              "long": -104.7862575,
-              "phone": {
-                "areaCode": "307",
-                "number": "778-7550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 15 days}}",
-            "startDateUtc": "{{now - 15 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "New Issue",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 44 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 15 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 14 days short}}",
-                "time": "AM"
-              }
-            ],
-            "typeOfCare": "Primary Care",
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning", "Afternoon", "Evening"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48912a6d02b0fc016d20b4ccb9001b",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
+            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "healthcareProvider": "Vilanisi Reddy",
+            "healthcareService": "Outpatient Clinic",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Outpatient Clinic",
               "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
               },
               "lat": null,
               "long": null,
               "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
+                "areaCode": "323",
+                "number": "723-9322",
                 "extension": null
               },
               "url": null,
               "code": null
             },
-            "minutesDuration": null,
+            "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 33 days}}",
-            "startDateUtc": "{{now - 33 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY PATIENT",
-            "timeZone": "America/Denver",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "typeOfCare": "Podiatry"
+          }
+        },
+        {
+          "id": "40977d8c1f4f0ed3f692403bed8d69cd4c8e47d44087c2cec9fbff842b82185d",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": "123",
+            "comment": null,
+            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareService": null,
+            "location": {
+              "id": null,
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": "442;3240628.12",
+            "reason": null,
+            "isCovidVaccine": false,
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now - 33 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 32 days short}}",
-                "time": "PM"
+                "date": "05/16/2024",
+                "time": "AM"
               }
             ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "724-316-5274",
+            "patientEmail": "christopher.ray3@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening"],
+            "friendlyLocationName": "Denver VA Medical Center",
+            "serviceCategoryName": null
+          }
+        },
+        {
+          "id": "7b21f45ff6f899127bf1e28fc557ed402a53a28c3e78fb084913aa1959a4cc5c",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": null,
+            "comment": "Smoke test 5/21 - 1",
+            "healthcareProvider": "Jim Smith",
+            "healthcareService": null,
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": "552;3240527.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Evening"],
+            "friendlyLocationName": null,
+            "serviceCategoryName": null
           }
         },
         {
@@ -383,142 +407,6 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Routine Check up. Reminder to bring your ID card",
-            "healthcareProvider": null,
-            "healthcareService": "Community Clinic Association",
-            "location": {
-              "id": null,
-              "name": "Community Clinic Association",
-              "address": {
-                "street": "1412 East Cesar Ave",
-                "city": "East Lost Angeles",
-                "state": "CA",
-                "zipCode": "93344"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "323",
-                "number": "458-9423",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 93 days}}",
-            "startDateUtc": "{{now - 93 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001d",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 101 days}}",
-            "startDateUtc": "{{now - 101 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 101 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 100 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48dc927956f6030179632426bc001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Test",
-            "healthcareProvider": null,
-            "healthcareService": "Outpatient Clinic",
-            "location": {
-              "id": null,
-              "name": "Outpatient Clinic",
-              "address": {
-                "street": "11201 Benton Street",
-                "city": "Loma Linda",
-                "state": "CA",
-                "zipCode": "92357"
-              },
-              "lat": 34.05025,
-              "long": -117.25072,
-              "phone": {
-                "areaCode": "323",
-                "number": "723-9322",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 112 days}}",
-            "startDateUtc": "{{now - 112 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
           }
         },
         {
@@ -587,267 +475,6 @@
             "status": "CANCELLED",
             "timeZone": "America/New_York",
             "vetextId": "1184;20210408.080000"
-          }
-        },
-        {
-          "id": "202103290000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 165 days}}",
-            "startDateUtc": "{{now - 165 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210329.170030"
-          }
-        },
-        {
-          "id": "202102070000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 177 days}}",
-            "startDateUtc": "{{now - 177 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210207.170030"
-          }
-        },
-        {
-          "id": "202102060000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "{{now - 179 days}}",
-            "startDateUtc": "{{now - 179 days utc}}",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210206.170030"
-          }
-        },
-        {
-          "id": "100",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
-            "healthcareProvider": null,
-            "healthcareService": "Outpatient Clinic",
-            "location": {
-              "id": null,
-              "name": "Outpatient Clinic",
-              "address": {
-                "street": "2341 North Ave",
-                "city": "Commerce",
-                "state": "CA",
-                "zipCode": "90022"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "323",
-                "number": "723-9322",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/Los_Angeles",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
-          }
-        },
-        {
-          "id": "101",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": "14",
-            "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-
-            "proposedTimes": [
-              {
-                "date": "{{now - 63 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 64 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
-          }
-        },
-        {
-          "id": "102",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 32 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 33 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
         {
@@ -940,8 +567,8 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
-            "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "comment": "105",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -970,8 +597,14 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Test",
             "isCovidVaccine": false,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
             "isPending": true,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -984,7 +617,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": null,
+            "comment": "Other details test",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -1004,7 +637,7 @@
                 "extension": null
               },
               "url": null,
-              "code": null
+              "code": "12345"
             },
             "minutesDuration": 30,
             "phoneOnly": false,
@@ -1014,7 +647,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -1026,7 +659,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": null,
+            "comment": "Other details test",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -1053,10 +686,10 @@
             "startDateLocal": "{{now - 6 days}}",
             "startDateUtc": "{{now - 6 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -1068,8 +701,8 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "comment": "Other details test",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1098,11 +731,20 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Reason test",
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
           }
         },
 
@@ -1181,7 +823,7 @@
             "startDateLocal": "{{now - 7 days}}",
             "startDateUtc": "{{now - 7 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC & AUTO RE-BOOK",
+            "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
             "reason": null,
@@ -1197,7 +839,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1230,7 +872,16 @@
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
           }
         },
 
@@ -1273,7 +924,7 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": null
           }
         },
         {
@@ -1309,7 +960,7 @@
             "startDateLocal": "{{now - 8 days}}",
             "startDateUtc": "{{now - 8 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
             "timeZone": "America/New_York",
             "vetextId": null,
             "reason": null,
@@ -1325,7 +976,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1358,6 +1009,15 @@
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"],
             "typeOfCare": "Mental Health"
           }
         },
@@ -1390,6 +1050,7 @@
               "url": null,
               "code": null
             },
+            "physicalLocation": "FORT COLLINS AUDIO",
             "minutesDuration": 60,
             "phoneOnly": false,
             "startDateLocal": "{{now - 12 days}}",
@@ -1401,6 +1062,7 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
             "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
@@ -1485,7 +1147,7 @@
           "type": "appointment",
           "attributes": {
             "appointmentType": "VA",
-            "cancelId": null,
+            "cancelId": "118",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Physical",
@@ -1521,16 +1183,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now - 4 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now - 5 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 6 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -1568,6 +1222,7 @@
               "url": null,
               "code": null
             },
+            "physicalLocation": "FORT COLLINS AUDIO",
             "minutesDuration": 60,
             "phoneOnly": false,
             "startDateLocal": "{{now - 10 days}}",
@@ -1579,49 +1234,7 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
-          }
-        },
-        {
-          "id": "120",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": "C&P BEV AUDIO FTC",
-            "location": {
-              "id": "983GC",
-              "name": "Fort Collins VA Clinic - Claim - Pending",
-              "address": {
-                "street": "2509 Research Boulevard",
-                "city": "Fort Collins",
-                "state": "CO",
-                "zipCode": "80526-8108"
-              },
-              "lat": 40.553875,
-              "long": -105.08795,
-              "phone": {
-                "areaCode": "970",
-                "number": "224-1550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 10 days}}",
-            "startDateUtc": "{{now - 10 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false,
-            "isPending": true,
-            "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
             "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
@@ -2223,7 +1836,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2317,7 +1930,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2539,16 +2152,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now - 86 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now - 87 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 88 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -2599,16 +2204,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now - 86 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now - 87 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now - 88 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -2616,46 +2213,6 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "141",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Routine Check up. Reminder to bring your ID card",
-            "healthcareProvider": null,
-            "healthcareService": "Community Clinic Association",
-            "location": {
-              "id": null,
-              "name": "Community Clinic Association",
-              "address": {
-                "street": "11201 Benton Street",
-                "city": "Loma Linda",
-                "state": "CA",
-                "zipCode": "92357"
-              },
-              "lat": 34.05025,
-              "long": -117.25072,
-              "phone": {
-                "areaCode": "323",
-                "number": "458-9423",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
           }
         },
         {
@@ -2697,20 +2254,11 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes": [
-              {
-                "date": "{{now - 16 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 17 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Phone consultation",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Confirmed",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
@@ -2753,20 +2301,11 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes": [
-              {
-                "date": "{{now - 16 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 17 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Phone consultation",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Canceled",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
@@ -2811,178 +2350,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now - 16 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 17 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Phone consultation",
+            "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "145",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": "13",
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 16 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 17 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "146",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now - 32 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now - 33 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "147",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "",
-              "address": {
-                "street": "",
-                "city": "",
-                "state": "",
-                "zipCode": ""
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 95 days}}",
-            "startDateUtc": "{{now - 95 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [],
-            "typeOfCare": "",
-            "patientPhoneNumber": "",
-            "patientEmail": "",
-            "bestTimeToCall": [],
-            "friendlyLocationName": ""
           }
         }
       ],
@@ -3012,7 +2388,7 @@
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
-            "healthcareProvider": null,
+            "healthcareProvider": "Vilanisi Reddy",
             "healthcareService": "Outpatient Clinic",
             "location": {
               "id": null,
@@ -3041,183 +2417,114 @@
             "statusDetail": null,
             "timeZone": "America/Los_Angeles",
             "vetextId": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "typeOfCare": "Podiatry"
+          }
+        },
+        {
+          "id": "40977d8c1f4f0ed3f692403bed8d69cd4c8e47d44087c2cec9fbff842b82185d",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": "123",
+            "comment": null,
+            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareService": null,
+            "location": {
+              "id": null,
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": "442;3240628.12",
             "reason": null,
-            "isCovidVaccine": false
-          }
-        },
-        {
-          "id": "9a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": "14",
-            "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 45 minutes}}",
-            "startDateUtc": "{{now + 45 minutes utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-
-            "proposedTimes": [
-              {
-                "date": "{{now + 63 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 64 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
-          }
-        },
-        {
-          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": "13",
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 45 minutes}}",
-            "startDateUtc": "{{now + 45 minutes utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
+            "isCovidVaccine": false,
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 16 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 17 days short}}",
-                "time": "PM"
+                "date": "05/16/2024",
+                "time": "AM"
               }
             ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "724-316-5274",
+            "patientEmail": "christopher.ray3@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening"],
+            "friendlyLocationName": "Denver VA Medical Center",
+            "serviceCategoryName": null
           }
         },
         {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001a",
+          "id": "7b21f45ff6f899127bf1e28fc557ed402a53a28c3e78fb084913aa1959a4cc5c",
           "type": "appointment",
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
             "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
+            "comment": "Smoke test 5/21 - 1",
+            "healthcareProvider": "Jim Smith",
+            "healthcareService": null,
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Outpatient Clinic",
               "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
               },
               "lat": null,
               "long": null,
               "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
+                "areaCode": "323",
+                "number": "723-9322",
                 "extension": null
               },
               "url": null,
               "code": null
             },
-            "minutesDuration": null,
+            "physicalLocation": null,
+            "minutesDuration": 60,
             "phoneOnly": false,
             "startDateLocal": "{{now + 45 minutes}}",
             "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now + 32 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 33 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": "552;3240527.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Evening"],
+            "friendlyLocationName": null,
+            "serviceCategoryName": null
           }
         },
         {
@@ -3311,7 +2618,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3340,8 +2647,14 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Test",
             "isCovidVaccine": false,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
             "isPending": true,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -3354,7 +2667,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": null,
+            "comment": "Other details test",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -3374,7 +2687,7 @@
                 "extension": null
               },
               "url": null,
-              "code": null
+              "code": "12345"
             },
             "minutesDuration": 30,
             "phoneOnly": false,
@@ -3384,7 +2697,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -3396,7 +2709,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": null,
+            "comment": "Other details test",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -3423,10 +2736,10 @@
             "startDateLocal": "{{now + 6 days}}",
             "startDateUtc": "{{now + 6 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -3439,7 +2752,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3468,11 +2781,20 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": null,
+            "reason": "Test",
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
           }
         },
         {
@@ -3550,7 +2872,7 @@
             "startDateLocal": "{{now + 7 days}}",
             "startDateUtc": "{{now + 7 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC & AUTO RE-BOOK",
+            "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
             "reason": null,
@@ -3566,7 +2888,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3599,7 +2921,16 @@
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
           }
         },
 
@@ -3642,7 +2973,7 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": null
           }
         },
         {
@@ -3678,7 +3009,7 @@
             "startDateLocal": "{{now + 8 days}}",
             "startDateUtc": "{{now + 8 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
             "timeZone": "America/New_York",
             "vetextId": null,
             "reason": null,
@@ -3694,7 +3025,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -3727,7 +3058,16 @@
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
           }
         },
         {
@@ -3758,6 +3098,7 @@
               "url": null,
               "code": null
             },
+            "physicalLocation": "FORT COLLINS AUDIO",
             "minutesDuration": 60,
             "phoneOnly": false,
             "startDateLocal": "{{now + 12 days}}",
@@ -3769,6 +3110,7 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
             "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
@@ -3800,6 +3142,7 @@
               "url": null,
               "code": null
             },
+            "physicalLocation": "FORT COLLINS AUDIO",
             "minutesDuration": 60,
             "phoneOnly": false,
             "startDateLocal": "{{now + 13 days}}",
@@ -3811,79 +3154,8 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
             "typeOfCare": "Audiology and speech (including hearing aid support)"
-          }
-        },
-        {
-          "id": "66",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": "C&P BEV AUDIO FTC",
-            "location": {
-              "id": "983GC",
-              "name": "Fort Collins VA Clinic - Claim - Pending",
-              "address": {
-                "street": "2509 Research Boulevard",
-                "city": "Fort Collins",
-                "state": "CO",
-                "zipCode": "80526-8108"
-              },
-              "lat": 40.553875,
-              "long": -105.08795,
-              "phone": {
-                "areaCode": "970",
-                "number": "224-1550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 14 days}}",
-            "startDateUtc": "{{now + 14 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false,
-            "isPending": true,
-            "serviceCategoryName": "COMPENSATION & PENSION",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
-          }
-        },
-        {
-          "id": "8a48e8db6d70a38a016d72b35424000321",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": null,
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 15 days}}",
-            "startDateUtc": "{{now + 15 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": null,
-            "isPending": false,
-            "proposedTimes": null,
-            "typeOfCare": null,
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
           }
         },
         {
@@ -3938,7 +3210,7 @@
           "type": "appointment",
           "attributes": {
             "appointmentType": "VA",
-            "cancelId": null,
+            "cancelId": "8a48e8db6d70a38a016d72b354240003",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Physical",
@@ -3974,16 +3246,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 4 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now + 5 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now + 6 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -4171,7 +3435,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "New Issue",
+            "reason": null,
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": [
@@ -4591,7 +3855,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Valente Nihad",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -4685,7 +3949,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "John Smith",
+            "healthcareProvider": "Sakari Rina",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -4907,16 +4171,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 46 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now + 48 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -4967,16 +4223,8 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 46 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
-                "time": "AM"
-              },
-              {
-                "date": "{{now + 48 days short}}",
-                "time": "AM"
               }
             ],
             "typeOfCare": "Primary Care",
@@ -4987,51 +4235,11 @@
           }
         },
         {
-          "id": "8a4872aa7883bc4b01788d9788d9003c",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Routine Check up. Reminder to bring your ID card",
-            "healthcareProvider": null,
-            "healthcareService": "Community Clinic Association",
-            "location": {
-              "id": null,
-              "name": "Community Clinic Association",
-              "address": {
-                "street": "11201 Benton Street",
-                "city": "Loma Linda",
-                "state": "CA",
-                "zipCode": "92357"
-              },
-              "lat": 34.05025,
-              "long": -117.25072,
-              "phone": {
-                "areaCode": "323",
-                "number": "458-9423",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 44 days}}",
-            "startDateUtc": "{{now + 44 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
-          }
-        },
-        {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
           "type": "appointment",
           "attributes": {
             "appointmentType": "VA",
-            "cancelId": "12",
+            "cancelId": null,
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Phone consultation",
@@ -5065,20 +4273,11 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes": [
-              {
-                "date": "{{now + 46 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Phone consultation",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Confirmed",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
@@ -5121,20 +4320,11 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes": [
-              {
-                "date": "{{now + 46 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Phone consultation",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Canceled",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
@@ -5179,178 +4369,15 @@
             "isPending": true,
             "proposedTimes": [
               {
-                "date": "{{now + 46 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
+                "date": "05/16/2024",
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Phone consultation",
+            "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": "13",
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 48 days}}",
-            "startDateUtc": "{{now + 48 days utc}}",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now + 46 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 47 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "Test clinic 2",
-              "address": {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 49 days}}",
-            "startDateUtc": "{{now + 49 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [
-              {
-                "date": "{{now + 49 days short}}",
-                "time": "PM"
-              },
-              {
-                "date": "{{now + 50 days short}}",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001z",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location": {
-              "id": null,
-              "name": "",
-              "address": {
-                "street": "",
-                "city": "",
-                "state": "",
-                "zipCode": ""
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "{{now + 50 days}}",
-            "startDateUtc": "{{now + 50 days utc}}",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes": [],
-            "typeOfCare": "",
-            "patientPhoneNumber": "",
-            "patientEmail": "",
-            "bestTimeToCall": [],
-            "friendlyLocationName": ""
           }
         }
       ],
