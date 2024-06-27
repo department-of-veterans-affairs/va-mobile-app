@@ -299,6 +299,7 @@ export type VATheme = {
     contentMarginBottom: number
     standardMarginBetween: number
     condensedMarginBetween: number
+    tinyMarginBetween: number
     cardPadding: number
     buttonPadding: number
     alertBorderWidth: number
