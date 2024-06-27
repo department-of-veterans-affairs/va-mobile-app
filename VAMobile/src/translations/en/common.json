@@ -1218,6 +1218,7 @@
   "reviewMessage": "Review message",
   "save": "Save",
   "saveChanges": "Save changes",
+  "schedulingFacility": "Scheduling facility",
   "secureMessaging.activityButton.subText": "{{count}} unread",
   "secureMessaging.attachments.duplicateFileError": "You already attached this file",
   "secureMessaging.attachments.fileSizeError": "Attach a file that's smaller than 6 MB",

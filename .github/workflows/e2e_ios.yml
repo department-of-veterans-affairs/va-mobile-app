@@ -174,32 +174,9 @@ jobs:
             name: ${{matrix.testsuite}}-e2e-junit
             path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Upload artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
-          path: VAMobile/artifacts
-
-  e2e-ios:
-    if: always() && needs.output_detox_tests_to_run.outputs.output1 == '' && needs.output_detox_tests_to_run.outputs.output2 != ''
-    needs: start_slack_thread
-    runs-on: macos-14-xlarge
-    env:
-      # Path to write secret key to. Also used by fastlane
-      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
-      # Xcode project file name
-      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
-      # Xcode scheme to build
-      IOS_SCHEME: 'VAMobileRelease'
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
-        working-directory: VAMobile/ios
+      - name: Rerun e2e tests for iOS if failed
+        if: (failure() || success()) && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        id: rerun_e2e_tests
         run: |
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
@@ -248,10 +225,10 @@ jobs:
 
       - name: Upload e2e-junit
         if: failure() || success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: -e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
+        uses: actions/upload-artifact@v4
+        with: 
+            name: ${{matrix.testsuite}}-e2e-junit
+            path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Inform Slack of Failure
         id: post_failure
