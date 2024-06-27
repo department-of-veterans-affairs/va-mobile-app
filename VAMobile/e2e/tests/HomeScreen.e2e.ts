@@ -132,7 +132,7 @@ describe('Home Screen', () => {
   })
 
   it('should show home page VA Resources content', async () => {
-    await waitFor(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT)))
+    await waitFor(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)))
       .toBeVisible()
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')

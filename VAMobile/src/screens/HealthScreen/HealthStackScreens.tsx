@@ -16,7 +16,6 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
-import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
 import HealthHelp from './HealthHelp/HealthHelp'
@@ -37,9 +36,7 @@ export type HealthStackParamList = WebviewStackParams & {
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
     vetextID?: string
-    page?: number
   }
-  ConfirmContactInfo: undefined
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
     appointment: AppointmentData
@@ -173,12 +170,6 @@ export const getHealthScreens = () => {
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <HealthStack.Screen key={'ReplyHelp'} name="ReplyHelp" component={ReplyHelp} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen
-      key={'ConfirmContactInfo'}
-      name="ConfirmContactInfo"
-      component={ConfirmContactInfo}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
-    />,
     <HealthStack.Screen
       key={'RefillRequestSummary'}
       name="RefillRequestSummary"
