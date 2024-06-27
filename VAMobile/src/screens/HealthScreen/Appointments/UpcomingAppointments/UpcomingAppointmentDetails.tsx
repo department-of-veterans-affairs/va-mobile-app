@@ -67,7 +67,6 @@ const { LINK_URL_VA_SCHEDULING } = getEnv()
 
 function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   const { appointment, vetextID } = route.params
-  const { page } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -82,7 +81,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     enabled: !appointment,
   })
 
-  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment(page || 1)
+  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment()
 
   const trueAppointment =
     appointment ||
