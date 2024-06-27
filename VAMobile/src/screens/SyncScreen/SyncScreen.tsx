@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, ImageProps, ViewStyle } from 'react-native'
+import { Image, ImageProps, StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -99,6 +99,11 @@ function SyncScreen({}: SyncScreenProps) {
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <Box
         justifyContent="center"
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}

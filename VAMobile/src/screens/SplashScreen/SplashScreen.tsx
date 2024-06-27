@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, ImageProps, ViewStyle } from 'react-native'
+import { Image, ImageProps, StatusBar, ViewStyle } from 'react-native'
 
 import { Box, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
@@ -21,6 +21,11 @@ function SplashScreen({}: SplashScreenProps) {
 
   return (
     <VAScrollView {...testIdProps('Splash-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <Box
         justifyContent="center"
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
