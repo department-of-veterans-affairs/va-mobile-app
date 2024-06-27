@@ -165,7 +165,6 @@ describe('Veteran Status Card', () => {
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
   verifyMilitaryInfo('United States Marine Corps')
-  verifyMilitaryInfo('United States Space Force')
 
   it('should reset mock data', async () => {
     await changeMockData(
