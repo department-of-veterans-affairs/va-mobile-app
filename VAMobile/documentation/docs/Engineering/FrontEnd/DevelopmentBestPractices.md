@@ -24,7 +24,7 @@ All engineering work requires a ticket.
 
 Every ticket must satisfy the requirements in the "Creating tickets" section above. If information is missing, add it or contact the relevant stakeholders.
 
-Before an engineer can begin work on a ticket, it must contain an estimate. Bugs get an initial estimate of 1 to cover a short investigation. Other tickets are left to the engineers' discretion.
+Before an engineer can begin work on a ticket, it must contain an estimate. Bugs get an initial estimate of 1 to cover a short investigation. Other tickets are left to the engineers' discretion, following our [estimation guidelines](/docs/About%20our%20team/team-charter/#estimation).
 
 Once everything is in place, complete the following tasks:
 
@@ -38,8 +38,8 @@ Then you can begin work. Keep stakeholders up to date as you work by commenting 
 On completion of your work, double check the following:
 
 - All items in Acceptance Criteria are implemented
-- Confirm screen screen reader functionality on both iOS and Android for accessibility
-- Unit and E2E tests are updated or extended to cover your changes
+- Confirm screen reader functionality on both iOS and Android for accessibility
+- Unit tests are updated or extended to cover your changes. See our [Unit Tests documentation](/docs/Engineering/FrontEnd/Testing/UnitTesting) for best practices.
 - Relevant documentation is updated to reflect the changes in your PR
 
 Then create a Pull Request. See the Pull Requests section below for more information.
@@ -55,15 +55,15 @@ For features that must be rolled out gradually, or where precise feature activat
 Our default branch is `develop`. Create your feature branch from there, named as follows:
 
 ```
-type/ticketnumber-description-of-work
+type/ticketnumber-DescriptionOfWork
 ```
 
 The ticket number lets us track back to the relevant ticket. The type and description show the branch's purpose at a glance. Here are some example branch names:
 
-- `feature/1234-description-of-feature-being-done`
-- `chore/1234-description-of-chore-being-done`
-- `bugfix/1234-description-of-bug-being-fixed`
-- `hotfix/1234-description-of-critical-fix`
+- `feature/1234-DescriptionOfNewFeature-OptionalAdditionalInfo`
+- `chore/1234-DescriptionOfChore`
+- `bug/1234-DescriptionOfBugfix`
+- `hotfix/1234-DescriptionOfCriticalFix`
 
 After completing work in your branch, create a PR as described in "Pull Requests" below.
 
@@ -84,7 +84,7 @@ Each pull request moves through a series of steps.
 2. Review: a different engineer reviews the PR. See "Pull request review" below.
 3. Approval: when the reviewer is satisfied, they approve the PR and change the pipeline to "With QA (pre-develop)" so QA knows to begin testing.
 4. QA: a QA engineer tests the branch and updates TestRail. QA informs the PR creator of any issues they find. On approval, QA comments in the ticket and changes the pipeline to "Ready to merge to develop".
-5. Merge: the PR creator hits "Merge pull request" to merge their branch into the develop branch. On the ticket, the PR creator changes the pipeline to "With QA (develop)" and selects the current release under "Releases".
+5. Merge: the PR creater merges the PR. See "Merging pull requests" below.
 6. Post-merge: QA completes final testing and closes the ticket.
 
 ### Pull request creation
@@ -97,19 +97,21 @@ When creating a PR, fill out each section in the PR template, including:
 - Reviewer validations: tell reviewers what to check. You can usually copy the Acceptance Criteria from the ticket
 - Complete all PR checklist items
 
-:::info
-If you're actively working on your branch, create a draft PR. Move the PR out of draft status when it's complete and ready for review.
-:::
-
-Immediately after creating the PR, click the "Connect issue" button and choose the associated ticket. You must be logged into ZenHub to see the "Connect issue" button.
+Click the "Connect issue" button and choose the associated ticket. You must be logged into ZenHub to see the "Connect issue" button.
 
 :::important
 It's critical to link the PR to the ticket with the "Connect issue" button so we can track the work performed.
 :::
 
-If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
+Hit "Create pull request" when everything is ready. If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
 
-When you create a PR, GitHub Actions automatically runs linting checks, unit tests, and E2E tests on your branch. Fix any failures, and make sure unit and E2E tests are modified or extended to cover your changes. See our [Unit Tests documentation](/docs/Engineering/FrontEnd/Testing/UnitTesting) for best practices.
+:::info
+If you're still actively working on your branch, create a draft PR. Move the PR out of draft status when it's complete and ready for review.
+:::
+
+GitHub Actions automatically runs linting checks, unit tests, and E2E tests on PR creation. Fix any issues surfaced by these checks. Revert the PR to draft status if you need more time to make fixes.
+
+When all the checks pass, your PR is ready for review.
 
 ### Pull request review
 
@@ -128,3 +130,41 @@ As a PR reviewer:
 - Be as precise and clear as possible in your comments. Explain why you're requesting each change.
 - If you find some code confusing or hard to understand, mention it. Other engineers will probably feel the same way.
 - Spread positivity by calling out clean, maintainable code, good documentation, etc.
+
+### Merging pull requests
+
+You can merge your PR after QA approves it. Choose the "Squash and merge" option to squash your commits down to a single commit in the base branch.
+
+:::info
+You can choose to preserve all your commits if they contain critical information. However, squashing is usually preferred to avoid clutter.
+:::
+
+Format the commit message using the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Example commit messages:
+
+```
+feat: add analytics to cerner alerts
+fix: preserve whitespace in secure messages
+chore: run compression over all app store images
+docs: add a new, nested page under research
+```
+
+You can use `!` to denote breaking changes:
+
+```
+chore!: upgrade React Native to 0.73
+```
+
+After merging:
+
+- Change the pipeline on your ticket to "With QA (develop)" so QA can perform final testing
+- Select the current release under "Releases" so we can track which tickets went into each release
