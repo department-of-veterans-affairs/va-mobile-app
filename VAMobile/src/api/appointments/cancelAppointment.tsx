@@ -28,7 +28,7 @@ const cancelAppointment = (cancelID: string) => {
 /**
  * Returns a mutation for canceling an appointment
  */
-export const useCancelAppointment = (currentPage: number) => {
+export const useCancelAppointment = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -38,7 +38,6 @@ export const useCancelAppointment = (currentPage: number) => {
       const oldAppointments = queryClient.getQueryData([
         appointmentsKeys.appointments,
         TimeFrameTypeConstants.UPCOMING,
-        currentPage,
       ]) as AppointmentsGetData
       let appointmentStartDate = ''
 
@@ -65,10 +64,7 @@ export const useCancelAppointment = (currentPage: number) => {
         },
       }
 
-      queryClient.setQueryData(
-        [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING, currentPage],
-        newAppointments,
-      )
+      queryClient.setQueryData([appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING], newAppointments)
     },
     onError: (error) => {
       if (isErrorObject(error)) {

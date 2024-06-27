@@ -36,7 +36,6 @@ export type HealthStackParamList = WebviewStackParams & {
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
     vetextID?: string
-    page?: number
   }
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {

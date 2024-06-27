@@ -42,7 +42,6 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 
 function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   const { appointment, vetextID } = route.params
-  const { page } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dateRange = getUpcomingAppointmentDateRange()
   const {
@@ -54,7 +53,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     enabled: !appointment,
   })
 
-  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment(page || 1)
+  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment()
 
   const trueAppointment =
     appointment ||
