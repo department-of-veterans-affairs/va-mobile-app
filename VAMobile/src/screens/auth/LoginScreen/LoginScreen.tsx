@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, StyleProp, ViewStyle } from 'react-native'
+import { Image, ImageProps, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
@@ -46,6 +46,11 @@ function LoginScreen() {
   const mainViewStyle: StyleProp<ViewStyle> = {
     flexGrow: 1,
     backgroundColor: theme.colors.background.loginScreen,
+  }
+
+  const logoProps: ImageProps = {
+    width: 254,
+    height: 57,
   }
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -104,7 +109,7 @@ function LoginScreen() {
           my={theme.dimensions.standardMarginBetween}
           testID="va-icon">
           <Image
-            style={{ width: 254, height: 57 }}
+            style={logoProps}
             source={
               theme.mode === 'dark'
                 ? require('../../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')

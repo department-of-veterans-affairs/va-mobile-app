@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, ViewStyle } from 'react-native'
+import { Image, ImageProps, ViewStyle } from 'react-native'
 
 import { Box, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
@@ -13,6 +13,10 @@ function SplashScreen({}: SplashScreenProps) {
     justifyContent: 'center',
     backgroundColor: theme.colors.background.loginScreen,
   }
+  const logoProps: ImageProps = {
+    width: 254,
+    height: 57,
+  }
   const isPortrait = useOrientation()
 
   return (
@@ -24,7 +28,7 @@ function SplashScreen({}: SplashScreenProps) {
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
         <Image
-          style={{ width: 254, height: 57 }}
+          style={logoProps}
           source={
             theme.mode === 'dark'
               ? require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
