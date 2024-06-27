@@ -37,7 +37,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-component-library": "0.16.0",
+    "@department-of-veterans-affairs/mobile-component-library": "0.19.0",
     "@expo/react-native-action-sheet": "^4.1.0",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-firebase/analytics": "^18.9.0",
@@ -90,7 +90,7 @@
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@babel/runtime": "^7.24.7",
-    "@department-of-veterans-affairs/eslint-config-mobile": "0.15.0",
+    "@department-of-veterans-affairs/eslint-config-mobile": "0.18.0",
     "@react-native/babel-preset": "0.74.83",
     "@react-native/eslint-config": "^0.73.2",
     "@react-native/metro-config": "^0.74.84",
