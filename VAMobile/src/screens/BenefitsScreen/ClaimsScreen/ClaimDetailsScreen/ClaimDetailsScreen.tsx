@@ -5,12 +5,14 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, ButtonProps, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaim } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
+import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -19,7 +21,7 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -36,7 +38,7 @@ type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDe
 function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
+  const navigateTo = useRouteNavigation()
   const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(0)
 
@@ -50,9 +52,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     error: claimError,
     refetch: refetchClaim,
   } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
+
+  const featureFlagEnabled = true
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -124,6 +129,41 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') }),
   ]
 
+  const onDecisionLetterPress = () => {
+    logAnalyticsEvent(Events.vama_ddl_status_click())
+    navigateTo('ClaimLettersScreen')
+  }
+
+  const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
+    if (claimType === 'CLOSED') {
+      const isDecisionLetterReady =
+        featureEnabled('decisionLettersWaygate') &&
+        userAuthorizedServices?.decisionLetters &&
+        claim.attributes.decisionLetterSent &&
+        (decisionLetterData?.data.length || 0) > 0
+
+      const buttonProps: ButtonProps = {
+        buttonType: ButtonVariants.primary,
+        label: t('claimDetails.getClaimLetters'),
+        onPress: onDecisionLetterPress,
+      }
+
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <Alert
+            variant="info"
+            description={isDecisionLetterReady ? t('claims.decisionLetterReady.alertBody') : undefined}
+            header={isDecisionLetterReady ? t('claims.decisionLetterReady') : t('claims.decisionLetterMailed')}
+            expandable={isDecisionLetterReady}
+            initializeExpanded={isDecisionLetterReady}
+            primaryButton={isDecisionLetterReady ? buttonProps : undefined}
+          />
+        </Box>
+      )
+    }
+    return <></>
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
@@ -148,6 +188,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
+            {featureFlagEnabled && getActiveClosedClaimInformationAlertOrSubmitButton()}
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}
