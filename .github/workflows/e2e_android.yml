@@ -235,7 +235,7 @@ jobs:
         
       - name: Upload e2e-junit
         if: failure() || success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{matrix.testsuite}}-e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
@@ -263,8 +263,8 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: steps.run_e2e_tests.outcome == 'failure'
-        uses: actions/upload-artifact@v3
+        if: failure() && steps.run_e2e_tests.outcome == 'failure'
+        uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts

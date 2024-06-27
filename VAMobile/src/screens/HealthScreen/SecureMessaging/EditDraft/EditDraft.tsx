@@ -483,9 +483,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               queryKey: [secureMessagingKeys.message, messageID],
             })
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.message, messageID],
-            })
-            queryClient.invalidateQueries({
               queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             goToDraftFolder(true)

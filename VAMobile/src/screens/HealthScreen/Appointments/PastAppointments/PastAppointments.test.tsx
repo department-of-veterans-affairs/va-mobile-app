@@ -64,26 +64,22 @@ context('PastAppointments', () => {
     expect(screen.getByText('Select a date range')).toBeTruthy()
     expect(screen.getAllByText('Past 3 months')).toBeTruthy()
     expect(
-      screen.getByTestId(
-        'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
-      ),
+      screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
     ).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', () => {
+    it('shows loading screen', () => {
       initializeTestInstance(undefined, true)
       expect(screen.getByText('Loading your appointments...')).toBeTruthy()
     })
   })
 
   describe('when a appointment is clicked', () => {
-    it('should call useRouteNavigation', () => {
+    it('calls useRouteNavigation', () => {
       initializeTestInstance({ data: appointmentData() })
       fireEvent.press(
-        screen.getByTestId(
-          'Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System',
-        ),
+        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
       )
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', {
         appointment: appointmentData()[0],
@@ -92,28 +88,28 @@ context('PastAppointments', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', () => {
+    it('renders the "Canceled" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED) })
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', () => {
+    it('renders the "Canceled" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED, true) })
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Pending"', () => {
+    it('renders the "Pending" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.SUBMITTED, true) })
       expect(screen.getByText('Pending')).toBeTruthy()
     })
   })
 
   describe('when there are no appointments', () => {
-    it('should render NoAppointments', () => {
+    it('renders NoAppointments', () => {
       initializeTestInstance()
       expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
