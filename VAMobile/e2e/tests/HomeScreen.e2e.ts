@@ -159,12 +159,20 @@ describe('Home Screen', () => {
 
   it('taps home then jumps to messages from messages button', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await waitFor(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
 
   it('taps home then jumps to prescriptions from prescriptions button', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await waitFor(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT))).toExist()
   })
