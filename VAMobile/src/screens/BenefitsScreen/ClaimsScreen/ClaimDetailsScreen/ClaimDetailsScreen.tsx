@@ -14,8 +14,9 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
+import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -135,7 +136,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
-    if (claimType === 'CLOSED') {
+    if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
         (featureEnabled('decisionLettersWaygate') &&
           userAuthorizedServices?.decisionLetters &&
@@ -165,19 +166,30 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     return <></>
   }
 
-  // const whatShouldOnPress = () => {
-  //   logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
-  //   navigateTo('WhatDoIDoIfDisagreement', {
-  //     claimID: claim.id,
-  //     claimType: claim.attributes.claimType,
-  //     claimStep: claim.attributes.phase,
-  //   })
-  // }
-  //     {
-  //       text: t('claimDetails.whatShouldIDoIfDisagree'),
-  //       onPress: whatShouldOnPress,
-  //       testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')),
-  //     },
+  function renderActiveClosedClaimStatusHelpLink() {
+    const whatShouldOnPress = () => {
+      logAnalyticsEvent(Events.vama_claim_disag(claimID, claimType, attributes.phase))
+      navigateTo('WhatDoIDoIfDisagreement', {
+        claimID: claimID,
+        claimType: claimType,
+        claimStep: attributes.phase,
+      })
+    }
+
+    if (claimType === ClaimTypeConstants.CLOSED) {
+      return (
+        <Box mb={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('claimDetails.learnWhatToDoIfDisagree')}
+            onPress={whatShouldOnPress}
+          />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
 
   return (
     <FeatureLandingTemplate
@@ -217,6 +229,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
+          {claimPhaseExpansionFlag && renderActiveClosedClaimStatusHelpLink()}
         </Box>
       )}
     </FeatureLandingTemplate>

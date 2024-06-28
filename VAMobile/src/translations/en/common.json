@@ -390,6 +390,7 @@
   "claimDetails.details": "Details",
   "claimDetails.estimatedDecisionDate": "Estimated decision date:",
   "claimDetails.getClaimLetters": "Get claim letters",
+  "claimDetails.learnWhatToDoIfDisagree": "Learn what to do if you disagree with our decision",
   "claimDetails.needHelp": "Need help?",
   "claimDetails.noEstimatedDecisionDate": "Claim completion dates aren't available right now.",
   "claimDetails.receivedOn": "Received {{date}}",
