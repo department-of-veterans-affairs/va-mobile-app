@@ -110,7 +110,6 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
     })
 
-    //ToDo: when feature flag is added by Binny
     it('should display on claim details, to be renamed files and when feature flag is true', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claim/0`, {}, expect.anything())
@@ -134,9 +133,12 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
-        ...claimData,
-      })
+      renderWithData(
+        {
+          ...claimData,
+        },
+        false,
+      )
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => expect(screen.queryByRole('header', { name: 'Need help?' })).toBeFalsy())
