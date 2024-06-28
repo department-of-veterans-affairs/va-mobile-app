@@ -57,7 +57,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const featureFlagEnabled = true
+  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -188,7 +188,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-            {featureFlagEnabled && getActiveClosedClaimInformationAlertOrSubmitButton()}
+            {claimPhaseExpansionFlag && getActiveClosedClaimInformationAlertOrSubmitButton()}
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}
