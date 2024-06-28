@@ -93,24 +93,38 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
-          echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-            if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-              if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
-                e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
-                echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-                echo "individual_matrix=" >> "$GITHUB_OUTPUT"
-              else
-                if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-                  echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-                  echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-                else
-                  echo "matrix=" >> "$GITHUB_OUTPUT" 
-                fi
-              fi
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+              echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+              echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
-              resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-              echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "matrix=" >> "$GITHUB_OUTPUT" 
+              fi
+            fi
+          else
+            if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
+              echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+              if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+                  echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+                  echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+                else
+                  if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                    echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "matrix=" >> "$GITHUB_OUTPUT" 
+                  fi
+                fi
+              else
+                resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+                echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              fi
             fi
           fi
         env:
