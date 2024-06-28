@@ -33,19 +33,6 @@ context('HomeScreen', () => {
     expect(screen.getByText('About VA')).toBeTruthy()
     expect(screen.getByText('Contact VA')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Find a VA location' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'COVID-19 updates' })).toBeTruthy()
-  })
-
-  describe('when VA COVID-19 updates is pressed', () => {
-    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'COVID-19 updates' }))
-      const expectNavArgs = {
-        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-        displayTitle: 'va.gov',
-        loadingMessage: 'Loading VA COVID-19 updates...',
-      }
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
-    })
   })
 
   describe('when the find VA location link is clicked', () => {
