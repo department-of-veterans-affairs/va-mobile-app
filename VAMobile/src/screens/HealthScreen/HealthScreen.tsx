@@ -156,7 +156,6 @@ export function HealthScreen({}: HealthScreenProps) {
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
             showLoading={fetchingPrescriptions}
-            testID="prescriptionsNavButtonTestID"
             subText={
               prescriptionData?.meta.prescriptionStatusCount.isRefillable
                 ? t('prescriptions.activityButton.subText', {
