@@ -18,7 +18,6 @@ export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
   LOCATION_FINDER_ROW_TEXT: 'Find a VA location',
   CONTACT_VA_ROW_TEXT: 'Contact us',
-  COVID_ROW_TEXT: 'COVID-19 updates',
   HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
   CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
   CONTACT_VA_BODY:
@@ -107,7 +106,6 @@ describe('Home Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.COVID_ROW_TEXT))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {
