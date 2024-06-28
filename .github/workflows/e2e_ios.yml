@@ -70,7 +70,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    if: (!cancelled())
+    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || (github.event_name == 'schedule' || github.event.inputs.run_full_test == 'true' || github.event.inputs.tests_to_run != '')
     runs-on: macos-latest-xl
     needs: find_detox_tests_to_run
     outputs: 
