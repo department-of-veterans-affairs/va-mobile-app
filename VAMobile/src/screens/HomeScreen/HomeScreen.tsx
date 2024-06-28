@@ -207,7 +207,6 @@ export function HomeScreen({}: HomeScreenProps) {
           }
         })
         await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
-        console.log('setStorage: ', SERVICE_INDICATOR_KEY, serviceIndicators)
       } catch (err) {
         logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
       }
@@ -221,7 +220,6 @@ export function HomeScreen({}: HomeScreenProps) {
       try {
         const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
         if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
-          console.log('asyncServiceIndicators: ', asyncServiceIndicators)
           setServiceIndicators(serviceIndicators)
         }
       } catch (err) {
@@ -232,10 +230,8 @@ export function HomeScreen({}: HomeScreenProps) {
     if (serviceHistory) {
       let serviceIndicators = ''
       serviceHistory.forEach((service) => {
-        console.log('service: ', JSON.stringify(service, undefined, 2))
         serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
       })
-      console.log('serviceIndicators: ', serviceIndicators)
       checkServiceIndicators(serviceIndicators)
     }
   }, [militaryServiceHistoryAttributes?.serviceHistory, personalInfoData?.id])
@@ -395,7 +391,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           )}
         </Box>
-        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
             mb={
@@ -476,7 +472,7 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           )}
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
           <TextView
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}
