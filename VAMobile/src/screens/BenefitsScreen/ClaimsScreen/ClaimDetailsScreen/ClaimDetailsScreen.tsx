@@ -55,7 +55,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const featureFlagEnabled = true
+  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -143,10 +143,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mx={featureFlagEnabled ? theme.dimensions.condensedMarginBetween : theme.dimensions.gutter}>
+          <Box mx={claimPhaseExpansionFlag ? theme.dimensions.condensedMarginBetween : theme.dimensions.gutter}>
             <TextView
-              variant={featureFlagEnabled ? 'MobileBodyBold' : 'BitterBoldHeading'}
-              mb={featureFlagEnabled ? undefined : theme.dimensions.condensedMarginBetween}
+              variant={claimPhaseExpansionFlag ? 'MobileBodyBold' : 'BitterBoldHeading'}
+              mb={claimPhaseExpansionFlag ? undefined : theme.dimensions.condensedMarginBetween}
               accessibilityRole="header">
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
@@ -164,7 +164,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
-          {featureFlagEnabled || (claim && selectedTab === 0) ? (
+          {claimPhaseExpansionFlag || (claim && selectedTab === 0) ? (
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <NeedHelpData />
             </Box>
