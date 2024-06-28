@@ -153,7 +153,6 @@ context('HealthScreen', () => {
       expect(screen.getByText('Messages')).toBeTruthy()
       expect(screen.queryByText('Prescriptions')).toBeFalsy()
       expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
-      expect(screen.getByText('COVID-19 updates')).toBeTruthy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -249,15 +248,5 @@ context('HealthScreen', () => {
     initializeTestInstance()
     fireEvent.press(screen.getByRole('link', { name: 'V\ufeffA vaccine records' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
-  })
-
-  it("navigates to COVID FAQ webpage when the 'Covid-19 updates' button is pressed", () => {
-    initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'COVID-19 updates' }))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-      url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-      displayTitle: 'va.gov',
-      loadingMessage: 'Loading VA COVID-19 updates...',
-    })
   })
 })
