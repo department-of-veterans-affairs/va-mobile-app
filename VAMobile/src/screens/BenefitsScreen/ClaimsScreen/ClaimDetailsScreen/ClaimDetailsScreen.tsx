@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { Alert, ButtonProps, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
@@ -137,13 +137,14 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === 'CLOSED') {
       const isDecisionLetterReady =
-        featureEnabled('decisionLettersWaygate') &&
-        userAuthorizedServices?.decisionLetters &&
-        claim.attributes.decisionLetterSent &&
-        (decisionLetterData?.data.length || 0) > 0
+        (featureEnabled('decisionLettersWaygate') &&
+          userAuthorizedServices?.decisionLetters &&
+          claim?.attributes.decisionLetterSent &&
+          (decisionLetterData?.data.length || 0) > 0) ||
+        false
 
       const buttonProps: ButtonProps = {
-        buttonType: ButtonVariants.primary,
+        buttonType: ButtonVariants.Primary,
         label: t('claimDetails.getClaimLetters'),
         onPress: onDecisionLetterPress,
       }
@@ -154,7 +155,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             variant="info"
             description={isDecisionLetterReady ? t('claims.decisionLetterReady.alertBody') : undefined}
             header={isDecisionLetterReady ? t('claims.decisionLetterReady') : t('claims.decisionLetterMailed')}
-            expandable={isDecisionLetterReady}
+            expandable={true}
             initializeExpanded={isDecisionLetterReady}
             primaryButton={isDecisionLetterReady ? buttonProps : undefined}
           />
@@ -163,6 +164,20 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     }
     return <></>
   }
+
+  // const whatShouldOnPress = () => {
+  //   logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
+  //   navigateTo('WhatDoIDoIfDisagreement', {
+  //     claimID: claim.id,
+  //     claimType: claim.attributes.claimType,
+  //     claimStep: claim.attributes.phase,
+  //   })
+  // }
+  //     {
+  //       text: t('claimDetails.whatShouldIDoIfDisagree'),
+  //       onPress: whatShouldOnPress,
+  //       testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')),
+  //     },
 
   return (
     <FeatureLandingTemplate
