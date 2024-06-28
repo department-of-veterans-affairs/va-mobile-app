@@ -24,6 +24,16 @@ export const HomeE2eIdConstants = {
   CONTACT_VA_BODY:
     'My V-A 4 1 1 is our main V-A information line. We can help connect you to any of our V-A contact centers.',
   WEBVIEW_ID: 'Webview-web',
+  APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '3 in the next 7 days',
+  CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
+  MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
+  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
+  ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
+  DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
+  DISABILITY_RATING_PERCENT_TEXT: '100%',
+  DISABILITY_RATING_SUBTEXT_TEXT: 'service connected',
+  MONTHLY_PAYMENT_TITLE_TEXT: 'Monthly compensation payment',
+  MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.75',
 }
 
 beforeAll(async () => {
@@ -74,11 +84,18 @@ describe('Home Screen', () => {
   })
 
   it('should verify the nav bar at the bottom of the screen', async () => {
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)))
+    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT))).toExist()
+  })
+
+  it('should verify the activity section content', async () => {
+    await expect(element(by.text(HomeE2eIdConstants.APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT))).toExist()
   })
 
   it('profile tab tap: verify the profile screen tab items', async () => {
@@ -116,12 +133,48 @@ describe('Home Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
   })
 
-  it('should tap home then show home page About You content', async () => {
+  it('personalization: verify the health screen subtext', async () => {
+    await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
+    await expect(element(by.text(HomeE2eIdConstants.APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT))).toExist()
+  })
+
+  it('personalization: verify the benefits screen subtext', async () => {
+    await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
+    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT))).toExist()
+  })
+
+  it('taps home then jumps to appointments from appointments button', async () => {
+    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.APPOINTMENTS_BUTTON_SUBTEXT_TEXT)).atIndex(0).tap()
+    await expect(element(by.text(CommonE2eIdConstants.UPCOMING_APPT_BUTTON_TEXT))).toExist()
+  })
+
+  it('taps home then jumps to claims from claims button', async () => {
+    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT))).toExist()
+  })
+
+  it('taps home then jumps to messages from messages button', async () => {
+    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT)).tap()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+  })
+
+  it('taps home then jumps to prescriptions from prescriptions button', async () => {
+    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT))).toExist()
+  })
+
+  it('should tap home then show home page about you section content', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await waitFor(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT)))
+    await waitFor(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT)))
       .toBeVisible()
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')
@@ -129,6 +182,11 @@ describe('Home Screen', () => {
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
     const militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
     checkImages(militaryBadge)
+    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_TITLE_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_TITLE_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT))).toExist()
   })
 
   it('should show home page VA Resources content', async () => {
@@ -167,18 +225,17 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await waitFor(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id('homeScreenID'))
-      .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
   })
 
-  it('should tap on done and verify the home screen is displayed', async () => {
+  it('should tap on done and verify announcements banner exists', async () => {
     await element(by.text('Done')).tap()
-    await expect(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT))).toExist()
+    await waitFor(element(by.text(HomeE2eIdConstants.ANNOUNCEMENT_BANNER_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
+    await expect(element(by.text(HomeE2eIdConstants.ANNOUNCEMENT_BANNER_TEXT))).toExist()
   })
 })
