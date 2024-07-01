@@ -8,7 +8,6 @@ import {
   openClaims,
   openClaimsHistory,
   resetInAppReview,
-  toggleRemoteConfigFlag,
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
@@ -38,8 +37,6 @@ export const ClaimsE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
