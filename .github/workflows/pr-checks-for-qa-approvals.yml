@@ -15,14 +15,6 @@ on:
       - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
-  pull_request_target:
-    paths:
-      - 'VAMobile/src/**'
-      - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
-      - '!.github/**'
-    branches:
-      - 'develop'
       
 jobs:
   
