@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -32,7 +32,6 @@ import {
 import {
   AlertBox,
   Box,
-  CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -592,15 +591,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
               onPress={navigateToReplyHelp}
-              accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+            />
           </Box>
           {!replyDisabled && renderButton()}
         </TextArea>

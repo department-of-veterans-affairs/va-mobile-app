@@ -12,6 +12,7 @@ on:
       - 'VAMobile/src/**'
       - 'VAMobile/package.json'
       - '!VAMobile/src/**.test.*'
+      - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
   pull_request_target:
@@ -19,6 +20,7 @@ on:
       - 'VAMobile/src/**'
       - 'VAMobile/package.json'
       - '!VAMobile/src/**.test.*'
+      - '!.github/**'
     branches:
       - 'develop'
       
