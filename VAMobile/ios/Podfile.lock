@@ -1261,7 +1261,7 @@ PODS:
     - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNGestureHandler (2.16.2):
+  - RNGestureHandler (2.17.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1632,7 +1632,7 @@ SPEC CHECKSUMS:
   RNFBPerf: 9cd7430cb90e4b8aebcd86312f1eb3aae28bd0e7
   RNFBRemoteConfig: bfb9f6a04a0269038a352d8386e5c77f4ff98125
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
-  RNGestureHandler: 96439cf6543defdde87459e48cd1a3f0e45a008e
+  RNGestureHandler: 67d3f1f69d4d0c98d6e83f4229e3bbf997d1dc72
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
@@ -1641,7 +1641,7 @@ SPEC CHECKSUMS:
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   SDWebImageWebPCoder: c94f09adbca681822edad9e532ac752db713eabf
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  Yoga: e5b887426cee15d2a326bdd34afc0282fc0486ad
+  Yoga: 2a16e58450c48e110211dae1159fb114bbcdcfc0
 
 PODFILE CHECKSUM: a2aca3d0b349c3f3445211d8f84e40a1584a8947
 
