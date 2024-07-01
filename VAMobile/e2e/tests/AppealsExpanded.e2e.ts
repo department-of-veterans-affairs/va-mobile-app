@@ -184,25 +184,27 @@ describe('AppealsExpanded', () => {
         if (i >= 4 && i <= 13) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 14 && i <= 23) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 24 && i <= 33) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 34) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         }
       }
     })
