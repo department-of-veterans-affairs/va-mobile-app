@@ -47,6 +47,9 @@ export const CommonE2eIdConstants = {
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
+  REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
+  REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
+  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
 }
 
@@ -121,6 +124,19 @@ export async function checkIfElementIsPresent(
   } catch (e) {
     return false
   }
+}
+
+/* Scroll down inside container until specified text is found, then tap the text
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToThenTap(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+  await element(by.text(text)).tap()
 }
 
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
@@ -361,7 +377,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
-    .whileElement(by.id('remoteConfigTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
     .scroll(500, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
@@ -410,7 +426,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Remote Config')).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
-    .whileElement(by.id('remoteConfigTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
     .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
@@ -523,4 +539,18 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
     }
   }
+}
+
+/* Toggle the specified remote config feature flag
+ *
+ * @param flagName - name of flag to toggle
+ */
+export async function toggleRemoteConfigFlag(flagName: string) {
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
+  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
