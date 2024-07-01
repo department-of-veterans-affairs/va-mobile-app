@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDecisionLetters } from 'api/decisionLetters'
-import { ClaimOrAppealConstants } from 'api/types'
+import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -18,7 +18,7 @@ import {
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -48,6 +48,19 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     }
   }, [claimType, previousClaimType])
 
+  const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
+    const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
+
+    switch (type) {
+      case ClaimOrAppealConstants.claim:
+        return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
+      case ClaimOrAppealConstants.appeal:
+        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
+    }
+
+    return ''
+  }
+
   const onClaimDetails = (id: string) => {
     navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
   }
@@ -61,7 +74,11 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     claimsAndAppeals?.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
-      const textLines: Array<TextLine> = [{ text: attributes.displayTitle, variant: 'MobileBodyBold' }]
+      const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
+      const textLines: Array<TextLine> = [
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
+        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
+      ]
 
       if (
         featureEnabled('decisionLettersWaygate') &&
@@ -77,8 +94,6 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
           mb: margin,
         })
       }
-
-      textLines.push({ text: t('claimDetails.receivedOn', { date: formatDateMMMMDDYYYY(attributes.dateFiled) }) })
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
@@ -101,7 +116,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
-  const yourClaimsAndAppealsHeader = t('claims.yourClaims', { claimType: claimType.toLowerCase() })
+  const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
   const paginationProps: PaginationProps = {
     onNext: () => {
