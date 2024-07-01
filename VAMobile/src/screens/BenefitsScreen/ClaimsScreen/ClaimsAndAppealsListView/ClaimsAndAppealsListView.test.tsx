@@ -99,9 +99,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() => expect(screen.getByText('Your active claims, decision reviews, and appeals')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('Your closed claims, decision reviews, and appeals')).toBeFalsy())
 
-      await waitFor(() =>
-        expect(screen.getByText('Insurance on docket appeal updated on December 28, 2020')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText('Insurance on docket appeal')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
 
       await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
@@ -147,7 +145,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Insurance on docket appeal updated on December 28, 2020 Received December 22, 2020',
+            name: 'Insurance on docket appeal Received December 22, 2020',
           }),
         ),
       )
