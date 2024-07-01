@@ -90,7 +90,7 @@ export const Events = {
       },
     }
   },
-  vama_apt_cancel_clicks: (
+  vama_apt_cancel_click: (
     apt_id: string,
     apt_status: string,
     apt_type: string,
@@ -368,14 +368,6 @@ export const Events = {
         text_clicked,
         screen_name,
         additional_details,
-      },
-    }
-  },
-  vama_covid_links: (referringScreen: string): Event => {
-    return {
-      name: 'vama_covid_links',
-      params: {
-        referringScreen,
       },
     }
   },
