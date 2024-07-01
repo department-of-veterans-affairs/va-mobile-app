@@ -51,6 +51,7 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  HOME_ACTIVITY_HEADER_TEXT: 'Activity',
 }
 
 /** Log the automation into demo mode

@@ -273,8 +273,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
         .scroll(250, 'up')
     }
   } else {
-    //Add back in when pagination is fixed
-    /*if (
+    if (
       text === 'Sami Alsahhar - HOME - Confirmed' ||
       text === 'At VA Memphis Healthcare System' ||
       text === 'At Northport VA Medical Center' ||
@@ -287,7 +286,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
     await waitFor(element(by.text(text)))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
-      .scroll(300, 'down')*/
+      .scroll(300, 'down')
 
     try {
       await waitFor(element(by.text(text)))
