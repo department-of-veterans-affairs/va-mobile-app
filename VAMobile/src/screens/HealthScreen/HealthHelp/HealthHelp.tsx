@@ -95,6 +95,7 @@ function HealthHelp({}: HealthHelpProps) {
           url={LINK_URL_GO_TO_PATIENT_PORTAL}
           text={t('goToMyVAHealth')}
           a11yLabel={a11yLabelVA(t('goToMyVAHealth'))}
+          testID={'goToMyVAHealthTestID'}
         />
       </Box>
     </LargePanel>
