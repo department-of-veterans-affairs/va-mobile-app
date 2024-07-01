@@ -49,18 +49,18 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   }, [claimType, previousClaimType])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
-    const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
-
-    switch (type) {
-      case ClaimOrAppealConstants.claim:
-        return featureEnabled('claimPhaseExpansion')
-          ? displayTitle
-          : t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
-      case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
+    if (featureEnabled('claimPhaseExpansion')) {
+      return displayTitle
+    } else {
+      const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
+      switch (type) {
+        case ClaimOrAppealConstants.claim:
+          return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
+        case ClaimOrAppealConstants.appeal:
+          return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
+      }
+      return ''
     }
-
-    return ''
   }
 
   const onClaimDetails = (id: string) => {
