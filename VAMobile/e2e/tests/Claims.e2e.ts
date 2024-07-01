@@ -35,11 +35,10 @@ export const ClaimsE2eIdConstants = {
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   CLAIMS_HISTORY_TEXT: 'Claims history',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(ClaimsE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
 
   await loginToDemoMode()
   await openBenefits()

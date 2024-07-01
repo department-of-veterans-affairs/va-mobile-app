@@ -22,11 +22,10 @@ export const AppealsIdConstants = {
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
   APPEAL_VISIT_VA_TEXT: 'Go to VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(AppealsIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
 
   await loginToDemoMode()
   await openBenefits()

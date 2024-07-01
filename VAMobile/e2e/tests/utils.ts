@@ -51,6 +51,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
 }
 
 /** Log the automation into demo mode

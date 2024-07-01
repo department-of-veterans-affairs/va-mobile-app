@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, resetInAppReview, toggleRemoteConfigFlag } from './utils'
 
 var navigationValue = process.argv[7]
 
@@ -33,12 +33,12 @@ const navigationDic = {
     ['DisabilityRatings.e2e', 'Disability rating', 'Disability rating'],
     ['Claims.e2e', 'Claims', 'Claims'],
     ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
     [
       'Claims.e2e',
-      ['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'],
+      ['Claims', 'Claims history', 'Compensation Received January 01, 2021', 'Review file requests'],
       'File requests',
     ],
     [
@@ -46,7 +46,7 @@ const navigationDic = {
       [
         'Claims',
         'Claims history',
-        'Claim for compensation updated on May 05, 2021',
+        'Compensation Received January 01, 2021',
         'Review file requests',
         'Dental disability - More information needed',
       ],
@@ -275,6 +275,8 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+
   await device.launchApp({ newInstance: false })
   await loginToDemoMode()
 })
