@@ -48,6 +48,9 @@ export const CommonE2eIdConstants = {
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
+  START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
+  PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
 }
 
 /** Log the automation into demo mode
