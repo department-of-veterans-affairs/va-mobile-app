@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
 import { GenderIdentityOptions, GenderIdentityOptionsPayload } from 'api/types/DemographicsData'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { useDowntime } from 'utils/hooks'
 
 import { demographicsKeys } from './queryKeys'
 
@@ -26,8 +29,12 @@ const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions> => {
  * Returns a query for gender identity options
  */
 export const useGenderIdentityOptions = (options?: { enabled?: boolean }) => {
+  const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+
   return useQuery({
     ...options,
+    enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: demographicsKeys.genderIdentityOptions,
     queryFn: () => getGenderIdentityOptions(),
     meta: {
