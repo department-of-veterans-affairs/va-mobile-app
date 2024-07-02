@@ -14,7 +14,6 @@ on:
       - 'VAMobile/package.json'
       - 'VAMobile/.detoxrc.json'
       - '!VAMobile/src/*.test.tsx'
-      - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
  
@@ -70,6 +69,6 @@ jobs:
                 exit 1
               fi 
           else
-            echo 'This PR requires two approvals, including one engineer and one QA approval, before merging.'
+            echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
           fi 
