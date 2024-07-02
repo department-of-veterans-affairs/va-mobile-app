@@ -18,7 +18,7 @@ import {
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -61,7 +61,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     claimsAndAppeals?.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
-      const textLines: Array<TextLine> = [{ text: attributes.displayTitle, variant: 'MobileBodyBold' }]
+      const textLines: Array<TextLine> = [{ text: capitalizeWord(attributes.displayTitle), variant: 'MobileBodyBold' }]
 
       if (
         featureEnabled('decisionLettersWaygate') &&
