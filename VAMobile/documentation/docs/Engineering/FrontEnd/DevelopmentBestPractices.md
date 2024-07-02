@@ -58,11 +58,11 @@ Our default branch is `develop`. Create your feature branch from there, named as
 type/ticketnumber-DescriptionOfWork
 ```
 
-The ticket number lets us track back to the relevant ticket. The type and description show the branch's purpose at a glance. Here are some example branch names:
+The ticket number lets us track back to the relevant ticket. The type and description show the branch's purpose at a glance. Types are `feature`, `bug`, `chore`, and `hotfix`. Description is CamelCase with optional dashes to add further details. Here are some example branch names:
 
 - `feature/1234-DescriptionOfNewFeature-OptionalAdditionalInfo`
-- `chore/1234-DescriptionOfChore`
 - `bug/1234-DescriptionOfBugfix`
+- `chore/1234-DescriptionOfChore`
 - `hotfix/1234-DescriptionOfCriticalFix`
 
 After completing work in your branch, create a PR as described in "Pull Requests" below.
@@ -126,9 +126,11 @@ As a PR creator:
 
 As a PR reviewer:
 
-- Provide constructive feedback in a calm, civil manner. We're all working together to make the app better.
 - Be as precise and clear as possible in your comments. Explain why you're requesting each change.
+- Target your feedback towards best practices. Avoid matters of opinion.
+- If you're just commenting and not requesting changes, keep things moving by approving the PR or saying something like "leaving approval to (person) because I don't know enough about this code".
 - If you find some code confusing or hard to understand, mention it. Other engineers will probably feel the same way.
+- Provide constructive feedback in a calm, civil manner. We're all working together to make the app better.
 - Spread positivity by calling out clean, maintainable code, good documentation, etc.
 
 ### Merging pull requests
