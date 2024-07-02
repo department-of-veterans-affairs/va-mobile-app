@@ -222,7 +222,8 @@ export async function checkImages(screenshotPath) {
  * @param cancelPopUp - boolean to either cancel the popUp or leave the app
  */
 export async function resetInAppReview() {
-  await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(0).tap()
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -365,7 +366,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
-    .scroll(500, 'down')
+    .scroll(700, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
