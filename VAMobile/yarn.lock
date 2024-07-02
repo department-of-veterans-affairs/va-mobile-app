@@ -1398,23 +1398,21 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.20.0.tgz#0019ec298e84ccfcbaf8e35ee3f7c9296a565136"
-  integrity sha512-rs+86JIoL1MNF2OfVy8ZgfYiJaAkwt85oYsHFNlneNLTUop/nCmFHQhL6ohmeMqRTfzLkeYtf3spFYfxRT0ptA==
+"@department-of-veterans-affairs/mobile-component-library@0.19.1-alpha.2":
+  version "0.19.1-alpha.2"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1-alpha.2.tgz#f533e82272de1b54f140b0ee72a259dfeaa7f600"
+  integrity sha512-Lh4eTp08C3+kvL34hYDLtyyxL+3Lrloq1fMfV8pYN1bKbLBhHFaWf2t5MVf+MZYdp3bAl5qyMZq/aS8WhYWU+A==
   dependencies:
     "@department-of-veterans-affairs/mobile-assets" "0.12.0"
-    "@department-of-veterans-affairs/mobile-tokens" "0.13.0"
+    "@department-of-veterans-affairs/mobile-tokens" "0.12.0"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
-    i18next "^23.8.2"
-    react-i18next "^14.0.5"
     react-native-svg "15.2.0"
     styled-components "^6.1.8"
 
-"@department-of-veterans-affairs/mobile-tokens@0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.13.0.tgz#5dbc25e256b8364293c8ac5468d815ae0ca9d24f"
-  integrity sha512-XnR6xlZGt0nzQG/Gs3RWV6dggk/7uK+vwnLAb+OHZO9xuoieOuq8NBYcJuBHL2wEvmxgHLPq8+kquECjwYt4LQ==
+"@department-of-veterans-affairs/mobile-tokens@0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.12.0.tgz#df255401790dbb8ac0ecac02f956d6512a1645b2"
+  integrity sha512-cACiKuaU1154l42U+cnnSOa1bRedFiQPG9lX/s+Sb8eJZjCsEmQW4SkqEbRzy5lViYj/59ACnY5JCD7+wslvRw==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -6405,13 +6403,6 @@ i18next@^23.7.18:
   dependencies:
     "@babel/runtime" "^7.23.2"
 
-i18next@^23.8.2:
-  version "23.11.5"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.11.5.tgz#d71eb717a7e65498d87d0594f2664237f9e361ef"
-  integrity sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==
-  dependencies:
-    "@babel/runtime" "^7.23.2"
-
 iconv-lite@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
@@ -9164,7 +9155,7 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.0.tgz#b21c65fe1783743007c8c9a2952b1c8879a77354"
   integrity sha512-yQaiOqDmoKqks56LN9MTgY06O0qQHgV4FUrikH357DydArSZHQhl0BJFqGKIZoTqi8JizF9Dxhuk1FIZD6qCaw==
 
-react-i18next@^14.0.5, react-i18next@^14.1.2:
+react-i18next@^14.1.2:
   version "14.1.2"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.2.tgz#cd57a755f25a32a5fcc3dbe546cf3cc62b4f3ebd"
   integrity sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==
