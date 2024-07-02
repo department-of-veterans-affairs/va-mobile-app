@@ -179,6 +179,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
 export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should open the ' + phoneType + ' phone number', async () => {
     if (phoneType === 'Mobile') {
+      await element(by.text('Profile')).tap() //to avoid tapping into home phone with resetInAppReview
       await resetInAppReview()
       await openProfile()
       await openContactInfo()
@@ -443,6 +444,7 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
 
   it('should open the email address', async () => {
+    await element(by.text('Profile')).tap() //to avoid tapping into home phone with resetInAppReview
     await resetInAppReview()
     await openProfile()
     await openContactInfo()
