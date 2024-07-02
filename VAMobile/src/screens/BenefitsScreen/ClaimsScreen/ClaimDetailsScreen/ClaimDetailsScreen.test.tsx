@@ -7,16 +7,12 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 
-jest.mock('utils/remoteConfig')
-
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (claim?: Partial<ClaimData>, claimPhaseOn: boolean = true): void => {
-    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(claimPhaseOn)
+  const renderWithData = (claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -124,24 +120,6 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
-    })
-    it('should not display on claim details, to be renamed files and when feature flag is false', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(
-        {
-          ...claimData,
-        },
-        false,
-      )
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-      await waitFor(() => expect(screen.queryByRole('header', { name: 'Need help?' })).toBeFalsy())
     })
   })
 
