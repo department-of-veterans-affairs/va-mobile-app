@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -8,7 +7,7 @@ import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
-import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
+import { AttachmentLink, Box, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
@@ -121,15 +120,11 @@ function MessageCard({ message }: MessageCardProps) {
   function getMessageHelp() {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <Pressable
+        <LinkWithAnalytics
+          type="custom"
+          text={t('secureMessaging.replyHelp.onlyUseMessages')}
           onPress={navigateToReplyHelp}
-          accessibilityRole={'button'}
-          accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-          importantForAccessibility={'yes'}>
-          <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-            <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-          </Box>
-        </Pressable>
+        />
       </Box>
     )
   }
