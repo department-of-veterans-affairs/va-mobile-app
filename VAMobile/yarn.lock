@@ -1398,14 +1398,16 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.20.2-alpha.0":
-  version "0.20.2-alpha.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.20.2-alpha.0.tgz#307b715765e2d3d6c62f46d8cc8c150bf2fccff0"
-  integrity sha512-/eKw0FuOpF5lGg1zq0f2SpHQJBCGQqSV/OjTMW9P4Yahg6px6I5Lvl7U72/vHYKmn8KMtSK/R04t9oAtS5qX2w==
+"@department-of-veterans-affairs/mobile-component-library@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.20.0.tgz#0019ec298e84ccfcbaf8e35ee3f7c9296a565136"
+  integrity sha512-rs+86JIoL1MNF2OfVy8ZgfYiJaAkwt85oYsHFNlneNLTUop/nCmFHQhL6ohmeMqRTfzLkeYtf3spFYfxRT0ptA==
   dependencies:
     "@department-of-veterans-affairs/mobile-assets" "0.12.0"
     "@department-of-veterans-affairs/mobile-tokens" "0.13.0"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
+    i18next "^23.8.2"
+    react-i18next "^14.0.5"
     react-native-svg "15.2.0"
     styled-components "^6.1.8"
 
@@ -6403,6 +6405,13 @@ i18next@^23.7.18:
   dependencies:
     "@babel/runtime" "^7.23.2"
 
+i18next@^23.8.2:
+  version "23.11.5"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.11.5.tgz#d71eb717a7e65498d87d0594f2664237f9e361ef"
+  integrity sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==
+  dependencies:
+    "@babel/runtime" "^7.23.2"
+
 iconv-lite@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
@@ -9155,7 +9164,7 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.0.tgz#b21c65fe1783743007c8c9a2952b1c8879a77354"
   integrity sha512-yQaiOqDmoKqks56LN9MTgY06O0qQHgV4FUrikH357DydArSZHQhl0BJFqGKIZoTqi8JizF9Dxhuk1FIZD6qCaw==
 
-react-i18next@^14.1.2:
+react-i18next@^14.0.5, react-i18next@^14.1.2:
   version "14.1.2"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.2.tgz#cd57a755f25a32a5fcc3dbe546cf3cc62b4f3ebd"
   integrity sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==
