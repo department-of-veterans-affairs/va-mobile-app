@@ -18,7 +18,6 @@ export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
   LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
   CONTACT_VA_ROW_ID: 'Contact  V-A ',
-  COVID_ROW_ID: 'COVID-19 updates',
   HOME_PAGE_USER_NAME: 'Kimberly Washington',
   HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
   CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
@@ -79,7 +78,6 @@ describe('Home Screen', () => {
     checkImages(militaryBadge)
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
 
   it('should verify the nav bar at the bottom of the screen', async () => {
@@ -102,7 +100,6 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
 
   it('benefits tab tap: verify the benefits screen tab items', async () => {
@@ -118,7 +115,6 @@ describe('Home Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text('COVID-19 updates'))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {
@@ -163,17 +159,9 @@ describe('Home Screen', () => {
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
   })
 
-  it('should tap on done then VA Covid-19 updates', async () => {
-    await element(by.text('Done')).tap()
-    await element(by.id(HomeE2eIdConstants.COVID_ROW_ID)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('HomeCovide19Screenshot')
-  })
-
   it('should tap on done and verify the home screen is displayed', async () => {
     await element(by.text('Done')).tap()
     await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
     await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-    await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
   })
 })

@@ -79,7 +79,6 @@ context('HealthScreen', () => {
         expect(screen.getByText('Messages')).toBeTruthy()
         expect(screen.queryByText('Prescriptions')).toBeFalsy()
         expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
-        expect(screen.getByText('COVID-19 updates')).toBeTruthy()
       })
     })
 
@@ -90,7 +89,6 @@ context('HealthScreen', () => {
         expect(screen.getByText('Messages')).toBeTruthy()
         expect(screen.getByText('Prescriptions')).toBeTruthy()
         expect(screen.getByTestId('V\ufeffA vaccine records')).toBeTruthy()
-        expect(screen.getByText('COVID-19 updates')).toBeTruthy()
       })
     })
   })
@@ -121,18 +119,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       fireEvent.press(screen.getByText('V\ufeffA vaccine records'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
-    })
-  })
-
-  describe('on click of the covid-19 updates button', () => {
-    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      fireEvent.press(screen.getByText('COVID-19 updates'))
-      const expectNavArgs = {
-        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-        displayTitle: 'va.gov',
-        loadingMessage: 'Loading VA COVID-19 updates...',
-      }
-      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 
