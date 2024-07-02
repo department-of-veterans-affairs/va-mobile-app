@@ -51,6 +51,7 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  HOME_ACTIVITY_HEADER_TEXT: 'Activity',
 }
 
 /** Log the automation into demo mode
@@ -365,7 +366,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
-    .scroll(500, 'down')
+    .scroll(700, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
