@@ -1,8 +1,11 @@
-# Error Handling
+---
+title: Error Handling
+---
 
 ## The request lifecycle
 
 The vets-api mobile endpoints generally follow the following pattern:
+
 - request is received and routed to the controller
 - the controller verifies the validity of the user's bearer token
 - the controller runs any other necessary validations, such as confirming the user has access to the content and that any provided parameters are valid
