@@ -12,6 +12,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import ClaimDetailsScreenOld from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreenOld'
 import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
@@ -138,6 +139,11 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen
         name="ClaimDetailsScreen"
         component={ClaimDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="ClaimDetailsScreenOld"
+        component={ClaimDetailsScreenOld}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <BenefitsScreenStack.Screen

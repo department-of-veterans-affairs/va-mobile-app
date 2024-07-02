@@ -24,17 +24,16 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
-import ClaimStatus from './ClaimStatus/ClaimStatus'
+import ClaimStatusOld from './ClaimStatus/ClaimStatusOld'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
 }
 
-type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
+type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreenOld'>
 
-function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
+function ClaimDetailsScreenOld({ navigation, route }: ClaimDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -141,8 +140,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mx={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'} mb={undefined} accessibilityRole="header">
+          <Box mx={theme.dimensions.gutter}>
+            <TextView
+              variant={'BitterBoldHeading'}
+              mb={theme.dimensions.condensedMarginBetween}
+              accessibilityRole="header">
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
@@ -156,11 +158,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             </Box>
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+            {claim && selectedTab === 0 && <ClaimStatusOld claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
-          </Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <NeedHelpData />
           </Box>
         </Box>
       )}
@@ -168,4 +167,4 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   )
 }
 
-export default ClaimDetailsScreen
+export default ClaimDetailsScreenOld
