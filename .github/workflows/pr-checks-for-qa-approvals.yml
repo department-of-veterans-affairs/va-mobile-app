@@ -9,12 +9,15 @@ on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src/**'
+      - 'VAMobile/src'
+      - 'VAMobile/e2e'
       - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
+      - 'VAMobile/.detoxrc.json'
+      - '!VAMobile/src/*.test.tsx'
       - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
+ 
       
 jobs:
   
@@ -25,8 +28,7 @@ jobs:
       - name: Check if PR is from Dependabot
         shell: bash
         run: |
-          if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
-            then
+          if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
             echo "PR opened by Dependabot. Skipping QA approval check."
             exit 0
           fi
@@ -68,6 +70,6 @@ jobs:
                 exit 1
               fi 
           else
-            echo 'This PR requires two approvals, including one QA approval, before merging.'
+            echo 'This PR requires two approvals, including one engineer and one QA approval, before merging.'
             exit 1
           fi 
