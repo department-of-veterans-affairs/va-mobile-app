@@ -11,7 +11,7 @@ title: Services
 | Service | Slack Channel | Contacts |
 | ----------- | ----------- | ----------- |
 | Caseflow | [#caseflow-support-team](https://dsva.slack.com/archives/C0200QGKPKR) | n/a |
-| CDC | n/a | [iisinfo@cdc.gov](iisinfo@cdc.gov) |
+| CDC | n/a | <iisinfo@cdc.gov> |
 | Check-in | [#check-in-experience](https://dsva.slack.com/archives/C022AC2STBM)| n/a |
 | DSLogon | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | n/a |
 | EVSS | [#evss-prod](https://dsva.slack.com/archives/C8R3JS8BU) | n/a |
