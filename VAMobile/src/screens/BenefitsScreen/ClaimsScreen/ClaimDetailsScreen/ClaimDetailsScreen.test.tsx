@@ -106,7 +106,7 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
     })
 
-    it('should display on claim details, to be renamed files and when feature flag is true', async () => {
+    it('should display on claim details, to be renamed files tab', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claim/0`, {}, expect.anything())
         .mockResolvedValue({
