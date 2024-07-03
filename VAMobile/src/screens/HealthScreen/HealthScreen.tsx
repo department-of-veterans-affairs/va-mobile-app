@@ -1,16 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -18,7 +28,6 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import CernerAlert from './CernerAlert'
 import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
@@ -28,71 +37,144 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
+const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
+
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isScreenContentAllowed = screenContentAllowed('WG_Health')
   const isFocused = useIsFocused()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const { data: foldersData } = useFolders({
-    enabled: isFocused && isScreenContentAllowed && userAuthorizedServices?.secureMessaging && smNotInDowntime,
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+  const cernerExist = cernerFacilities.length >= 1
+  const allCerner = facilitiesInfo?.length === cernerFacilities.length
+  const mixedCerner = cernerExist && !allCerner
+
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const {
+    data: prescriptionData,
+    isFetching: fetchingPrescriptions,
+    isError: prescriptionsError,
+  } = usePrescriptions({
+    enabled: isFocused,
   })
-  const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
-  const inboxUnreadCountA11y = foldersData && t('secureMessaging.tag.a11y', { unreadCount: inboxUnreadCount })
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const {
+    data: apptsData,
+    isFetching: loadingAppointments,
+    isError: appointmentsError,
+  } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    {
+      enabled: isFocused,
+    },
+  )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+  const {
+    data: foldersData,
+    isFetching: loadingInbox,
+    isError: inboxError,
+  } = useFolders({
+    enabled: isFocused,
+  })
+  const unreadMessageCount = foldersData?.inboxUnreadCount || 0
+
+  useEffect(() => {
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
+
+      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
+      }
+    }
+
+    healthHelpScreenCheck()
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+
+  const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
+  const activityError = appointmentsError || inboxError || prescriptionsError
+  const showAlert = featureInDowntime || activityError
+  const alertMessage = featureInDowntime ? t('health.activity.downtime') : t('health.activity.error')
+
+  const enrolledInVAHealthCare =
+    userAuthorizedServices?.appointments ||
+    userAuthorizedServices?.secureMessaging ||
+    userAuthorizedServices?.prescriptions ||
+    userAuthorizedServices?.scheduleAppointments
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box
-        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
-        mx={theme.dimensions.gutter}>
+      <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          showLoading={loadingAppointments}
+          subText={
+            upcomingAppointmentsCount && upcomingDaysLimit
+              ? t('appointments.activityButton.subText', {
+                  count: upcomingAppointmentsCount,
+                  dayCount: upcomingDaysLimit,
+                })
+              : undefined
+          }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          tagCount={inboxUnreadCount}
-          tagCountA11y={inboxUnreadCountA11y}
+          showLoading={loadingInbox}
+          subText={
+            unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
+          }
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
             onPress={() => navigateTo('PrescriptionHistory')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
+            showLoading={fetchingPrescriptions}
+            subText={
+              prescriptionData?.meta.prescriptionStatusCount.isRefillable
+                ? t('prescriptions.activityButton.subText', {
+                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                  })
+                : undefined
+            }
           />
         )}
-        <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('vaVaccines.buttonTitle')} onPress={() => navigateTo('VaccineList')} />
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      {CernerAlert ? (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <CernerAlert />
+      {cernerExist && (
+        <Box mx={theme.dimensions.buttonPadding}>
+          <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
+          <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileFooterLink" paragraphSpacing={true}>
+              {t('healthHelp.checkFacility')}
+            </TextView>
+          </Pressable>
         </Box>
-      ) : (
-        <></>
+      )}
+      {!enrolledInVAHealthCare && (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('applyForHealthCare')}
+            link={LINK_URL_APPLY_FOR_HEALTH_CARE}
+            a11yLabel={a11yLabelVA(t('applyForHealthCare'))}
+          />
+        </Box>
       )}
     </CategoryLanding>
   )

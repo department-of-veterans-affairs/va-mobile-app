@@ -23,6 +23,7 @@ import ChevronUp from './svgs/ChevronUp.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
 import Ellipsis from './svgs/Ellipsis.svg'
+import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import Folder from './svgs/Folder.svg'
@@ -53,6 +54,7 @@ import Army from './svgs/dodBranch/Army.svg'
 import CoastGuard from './svgs/dodBranch/CoastGuard.svg'
 import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
 import Navy from './svgs/dodBranch/Navy.svg'
+import SpaceForce from './svgs/dodBranch/SpaceForce.svg'
 // Links
 import Calendar from './svgs/links/Calendar.svg'
 import Chat from './svgs/links/Chat.svg'
@@ -102,6 +104,7 @@ export const VA_ICON_MAP = {
   Compose,
   Directions,
   Ellipsis,
+  ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
   Folder,
@@ -130,6 +133,7 @@ export const VA_ICON_MAP = {
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
   Sort,
+  SpaceForce,
   Text,
   Trash,
   Truck,

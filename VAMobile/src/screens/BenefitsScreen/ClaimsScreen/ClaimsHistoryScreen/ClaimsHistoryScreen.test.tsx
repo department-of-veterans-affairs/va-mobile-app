@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ClaimsAndAppealsListPayload } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -49,14 +48,8 @@ const mockPayload: ClaimsAndAppealsListPayload = {
 }
 
 context('ClaimsHistoryScreen', () => {
-  const initializeTestInstance = (authorized: boolean = true, errors?: Array<ClaimsAndAppealsGetDataMetaError>) => {
-    const queryPayload = mockPayload
-    queryPayload.meta.errors = errors
+  const initializeTestInstance = (authorized: boolean = true) => {
     const queriesData: QueriesData = [
-      {
-        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
-        data: queryPayload,
-      },
       {
         queryKey: authorizedServicesKeys.authorizedServices,
         data: {
@@ -87,37 +80,11 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(mockPayload)
-        .calledWith('/v0/user/authorized-services')
-        .mockResolvedValue({
-          data: {
-            type: 'user',
-            id: 'abe3f152-90b0-45cb-8776-4958bad0e0ef',
-            attributes: {
-              authorizedServices: {
-                appeals: false,
-                appointments: true,
-                claims: false,
-                decisionLetters: true,
-                directDepositBenefits: true,
-                directDepositBenefitsUpdate: true,
-                disabilityRating: true,
-                genderIdentity: true,
-                lettersAndDocuments: true,
-                militaryServiceHistory: true,
-                paymentHistory: true,
-                preferredName: true,
-                prescriptions: true,
-                scheduleAppointments: true,
-                secureMessaging: true,
-                userProfileUpdate: true,
-              },
-            },
-          },
-        })
       initializeTestInstance(false)
       await waitFor(() => expect(screen.getByText("We can't find any claims information for you")).toBeTruthy())
     })
@@ -128,8 +95,9 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockRejectedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
       initializeTestInstance()
@@ -152,11 +120,12 @@ context('ClaimsHistoryScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/claims-and-appeals-overview`, {
           showCompleted: 'false',
-          'page[size]': '10',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
           'page[number]': '1',
+          useCache: 'false',
         })
         .mockResolvedValue(payload)
-      initializeTestInstance(true, error)
+      initializeTestInstance()
       await waitFor(() => expect(screen.getByText('Claims and appeal status are unavailable')).toBeTruthy())
       await waitFor(() => expect(screen.queryByText('Active')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Closed')).toBeFalsy())
