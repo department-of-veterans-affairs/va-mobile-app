@@ -7,7 +7,7 @@ import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
 export const ColorSchemeConstantType: {
   none: ColorSchemeTypes
@@ -40,20 +40,64 @@ export const getTheme = (): VATheme => {
 }
 
 const fontSizes = {
+  AboutYou: {
+    fontSize: 18,
+    lineHeight: 22,
+  },
   ActionBar: {
     fontSize: 20,
     lineHeight: 30,
+  },
+  ActivityButtonSubtext: {
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  ActivityFooter: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  AnnouncementBannerTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  LargeButtonHeader: {
+    fontSize: 22,
+    lineHeight: 24,
+  },
+  BitterHeading: {
+    fontSize: 26,
+    lineHeight: 28,
   },
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
   },
+  CategoryLandingAlert: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
   ClaimPhase: {
     fontSize: 20,
     lineHeight: 30,
   },
+  CrisisLineButton: {
+    fontSize: 16,
+    lineHeight: 20,
+  },
   DescriptiveBackButton: {
     fontSize: 16,
+    lineHeight: 22,
+  },
+  HomeScreen: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  HomeScreenHeader: {
+    fontSize: 20,
+    lineHeight: 30,
+  },
+  ProfileScreenHeader: {
+    fontSize: 18,
     lineHeight: 22,
   },
   HelperText: {
@@ -71,6 +115,10 @@ const fontSizes = {
   MobileBodyTight: {
     fontSize: 20,
     lineHeight: 24,
+  },
+  NametagNumbers: {
+    fontSize: 36,
+    lineHeight: 43,
   },
   SnackBarBtnText: {
     fontSize: 16,
@@ -109,6 +157,26 @@ const fontSizes = {
     fontSize: 12,
     lineHeight: 12,
   },
+  veteranStatus: {
+    fontSize: 16,
+    lineHeight: 18,
+  },
+  largeNavSubext: {
+    fontSize: 16,
+    lineHeight: 20,
+  },
+  cernerPanelSubtext: {
+    fontSize: 20,
+    lineHeight: 25,
+  },
+  cernerPanelHeader: {
+    fontSize: 19,
+    lineHeight: 22,
+  },
+  FooterText: {
+    fontSize: 14,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -134,9 +202,30 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
+    AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    ActivityButtonHeader: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.activityButton),
+    ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
+    ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
+    AnnouncementBannerTitle: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.AnnouncementBannerTitle,
+      scheme.text.announcementBanner,
+    ),
+    BitterHeading: buildFont('Bitter-Regular', fontSizes.BitterHeading, scheme.text.homeScreen),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    CategoryLandingError: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.CategoryLandingAlert,
+      scheme.text.categoryLandingError,
+    ),
+    CategoryLandingWarning: buildFont(
+      'SourceSansPro-Regular',
+      fontSizes.CategoryLandingAlert,
+      scheme.text.categoryLandingWarning,
+    ),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
     DescriptiveBackButton: buildFont(
       'SourceSansPro-Regular',
       fontSizes.DescriptiveBackButton,
@@ -144,11 +233,17 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
+    HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
+    HomeScreenHeader: buildFont('SourceSansPro-Bold', fontSizes.HomeScreenHeader, scheme.text.homeScreen),
+    ProfileScreenHeader: buildFont('Bitter-Regular', fontSizes.ProfileScreenHeader, scheme.text.profileScreen),
+    LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
+    LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
     MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
+    NametagNumber: buildFont('Bitter-Regular', fontSizes.NametagNumbers, scheme.text.veteranStatusBranch),
     SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
@@ -161,7 +256,18 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
+    VeteranStatusBranch: buildFont(
+      'SourceSansPro-Regular',
+      fontSizes.ActivityButtonSubtext,
+      scheme.text.veteranStatusBranch,
+    ),
+    VeteranStatusProof: buildFont('SourceSansPro-Regular', fontSizes.veteranStatus, scheme.text.veteranStatusProof),
     webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
+    cernerPanelHeader: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelHeader, scheme.text.cernerPanel),
+    cernerPanelSubtext: buildFont('SourceSansPro-Regular', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
+    cernerPanelFacility: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
+    cernerFooterText: buildFont('SourceSansPro-Regular', fontSizes.FooterText, scheme.text.cernerFooter),
+    MobileFooterLink: buildFont('SourceSansPro-Regular', fontSizes.FooterText, scheme.text.link, true),
   }
 }
 
@@ -197,6 +303,7 @@ let theme: VATheme = {
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
     chevronListItemWidth: 10,
     chevronListItemHeight: 15,
+    linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
     fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
@@ -210,8 +317,13 @@ let theme: VATheme = {
   },
 
   fontSizes: {
+    ActivityButtonSubtext: fontSizes.ActivityButtonSubtext,
+    AnnouncementBannerTitle: fontSizes.AnnouncementBannerTitle,
+    BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
+    CategoryLandingAlert: fontSizes.CategoryLandingAlert,
     ClaimPhase: fontSizes.ClaimPhase,
+    CrisisLineButton: fontSizes.CrisisLineButton,
     HelperText: fontSizes.HelperText,
     LabelTag: fontSizes.LabelTag,
     MobileBody: fontSizes.MobileBody,
@@ -221,6 +333,9 @@ let theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
+    cernerPanelSubtext: fontSizes.cernerPanelSubtext,
+    cernerPanelHeader: fontSizes.cernerPanelHeader,
+    FooterText: fontSizes.FooterText,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   paragraphSpacing: {
