@@ -29,6 +29,7 @@ export type FeatureToggleType =
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'claimPhaseExpansion'
+  | 'cernerTrueForDemo'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -44,6 +45,7 @@ type FeatureToggleValues = {
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   claimPhaseExpansion: boolean
+  cernerTrueForDemo: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -60,6 +62,7 @@ export const defaults: FeatureToggleValues = {
   patientCheckIn: false,
   patientCheckInWaygate: true,
   claimPhaseExpansion: false,
+  cernerTrueForDemo: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults

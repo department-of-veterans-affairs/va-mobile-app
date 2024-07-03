@@ -1,12 +1,18 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
+import { DateTime } from 'luxon'
 
-import { SecureMessagingFoldersGetData } from 'api/types'
-import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import { appointmentsKeys } from 'api/appointments'
+import { prescriptionKeys } from 'api/prescriptions'
+import { secureMessagingKeys } from 'api/secureMessaging'
+import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
+import { get } from 'store/api'
+import { ErrorsState } from 'store/slices'
+import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
 import { HealthScreen } from './HealthScreen'
 
@@ -29,112 +35,218 @@ context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-  const inboxData: SecureMessagingFoldersGetData = {
-    data: [
-      {
-        id: '1',
-        type: 'hah',
-        attributes: {
-          folderId: 1,
-          name: 'Inbox',
-          count: 22,
-          unreadCount: 13,
-          systemFolder: true,
-        },
-      },
-    ],
-    links: {
-      self: '1',
-      first: '1',
-      prev: '1',
-      next: '1',
-      last: '1',
-    },
-    meta: {
-      pagination: {
-        currentPage: 1,
-        perPage: 1,
-        totalPages: 1,
-        totalEntries: 1,
-      },
-    },
-    inboxUnreadCount: 13,
-  }
 
-  const initializeTestInstance = (prescriptionsEnabled = false) => {
-    when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
-
+  const initializeTestInstance = (options?: RenderParams) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
-    render(<HealthScreen {...props} />)
+    render(<HealthScreen {...props} />, { ...options })
   }
-  beforeEach(() => {
-    initializeTestInstance()
-  })
 
-  describe('prescriptions', () => {
-    describe('feature disabled', () => {
-      it('does not display prescriptions button if feature toggle disabled', async () => {
-        expect(screen.getByText('Appointments')).toBeTruthy()
-        expect(screen.getByText('Messages')).toBeTruthy()
-        expect(screen.queryByText('Prescriptions')).toBeFalsy()
-        expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
-      })
-    })
-
-    describe('feature enabled', () => {
-      it('does not display prescriptions button if feature toggle enabled', () => {
-        initializeTestInstance(true)
-        expect(screen.getByText('Appointments')).toBeTruthy()
-        expect(screen.getByText('Messages')).toBeTruthy()
-        expect(screen.getByText('Prescriptions')).toBeTruthy()
-        expect(screen.getByTestId('V\ufeffA vaccine records')).toBeTruthy()
-      })
-    })
-  })
-
-  describe('on click of the prescriptions button', () => {
-    it('should call useRouteNavigation', () => {
-      initializeTestInstance(true)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
-    })
-  })
-
-  describe('on click of the appointments button', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByText('Appointments'))
+  describe('Appointments button', () => {
+    it('navigates to Appointments screen when pressed', () => {
+      initializeTestInstance()
+      fireEvent.press(screen.getByRole('link', { name: 'Appointments' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('Appointments')
     })
+
+    it('displays upcoming appointment count when there are upcoming appointments', () => {
+      const upcomingAppointmentsCount = 3
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
+            data: getAppointmentsPayload(upcomingAppointmentsCount),
+          },
+        ],
+      })
+      expect(screen.getByRole('link', { name: 'Appointments' })).toBeTruthy()
+      expect(
+        screen.getByRole('link', {
+          name: `${upcomingAppointmentsCount} in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`,
+        }),
+      ).toBeTruthy()
+    })
+
+    it('does not display upcoming appointment count when there are no upcoming appointments', () => {
+      const upcomingAppointmentsCount = 0
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
+            data: getAppointmentsPayload(upcomingAppointmentsCount),
+          },
+        ],
+      })
+      expect(
+        screen.queryByRole('link', {
+          name: `${upcomingAppointmentsCount} in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`,
+        }),
+      ).toBeFalsy()
+    })
+
+    it('does not display upcoming appointment count when the appointments API call throws an error', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockRejectedValue('fail')
+      initializeTestInstance()
+      await waitFor(() => expect(get).toHaveBeenCalledWith('/v0/appointments', expect.anything()))
+      await waitFor(() =>
+        expect(screen.queryByText(`in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`, { exact: false })).toBeFalsy(),
+      )
+    })
   })
 
-  describe('on click of the secure messaging button', () => {
-    it('should call useRouteNavigation', () => {
+  describe('Messages button', () => {
+    it('navigates to Messages screen when pressed', () => {
+      initializeTestInstance()
       fireEvent.press(screen.getByText('Messages'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 })
     })
-  })
 
-  describe('on click of the vaccines button', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByText('V\ufeffA vaccine records'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
+    it('displays unread message count when there are unread messages', () => {
+      const unreadMessageCount = 3
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: secureMessagingKeys.folders,
+            data: getFoldersPayload(unreadMessageCount),
+          },
+        ],
+      })
+      expect(
+        screen.getByRole('link', {
+          name: `${unreadMessageCount} unread`,
+        }),
+      ).toBeTruthy()
+    })
+
+    it('does not display unread message count when there are no unread messages', () => {
+      const unreadMessageCount = 0
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: secureMessagingKeys.folders,
+            data: getFoldersPayload(unreadMessageCount),
+          },
+        ],
+      })
+      expect(
+        screen.queryByRole('link', {
+          name: `${unreadMessageCount} unread`,
+        }),
+      ).toBeFalsy()
     })
   })
 
-  it('should render messagesCountTag with the correct count number', async () => {
-    when(api.get as jest.Mock)
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(inboxData)
-    initializeTestInstance()
-    await waitFor(() => expect(screen.getByText('13')).toBeTruthy())
+  describe('Prescriptions button', () => {
+    it('navigates to Prescription history screen when pressed', () => {
+      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
+      initializeTestInstance()
+      fireEvent.press(screen.getByText('Prescriptions'))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
+    })
+
+    it('is not displayed if feature toggle is disabled', () => {
+      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(false)
+      initializeTestInstance()
+      expect(screen.getByText('Appointments')).toBeTruthy()
+      expect(screen.getByText('Messages')).toBeTruthy()
+      expect(screen.queryByText('Prescriptions')).toBeFalsy()
+      expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
+      initializeTestInstance()
+      expect(screen.getByText('Prescriptions')).toBeTruthy()
+    })
+
+    it('displays refill count when there are refillable prescriptions', () => {
+      const refillCount = 3
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: prescriptionKeys.prescriptions,
+            data: getPrescriptionsPayload(refillCount),
+          },
+        ],
+      })
+      expect(
+        screen.getByRole('link', {
+          name: `${refillCount} ready to refill`,
+        }),
+      ).toBeTruthy()
+    })
+
+    it('does not display refill count when there are no refillable prescriptions', () => {
+      const refillCount = 0
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: prescriptionKeys.prescriptions,
+            data: getPrescriptionsPayload(refillCount),
+          },
+        ],
+      })
+      expect(
+        screen.queryByRole('link', {
+          name: `${refillCount} ready to refill`,
+        }),
+      ).toBeFalsy()
+    })
   })
 
-  it('should render messagesCountTag with the correct a11yLabel', async () => {
-    when(api.get as jest.Mock)
+  it('displays error message when one of the API calls fail', async () => {
+    when(get as jest.Mock)
+      .calledWith('/v0/appointments', expect.anything())
+      .mockResolvedValue(getAppointmentsPayload(3))
       .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(inboxData)
+      .mockResolvedValue(getFoldersPayload(3))
+      .calledWith('/v0/health/rx/prescriptions', expect.anything())
+      .mockRejectedValue('failure')
+
     initializeTestInstance()
-    await waitFor(() => expect(screen.getByLabelText('Messages You have 13 unread messages')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          "We can't get some of your information right now. Health activity may not be accurate. Check back later.",
+        ),
+      ).toBeTruthy(),
+    )
+  })
+
+  it('displays error message when one of the health features are in downtime', async () => {
+    when(get as jest.Mock)
+      .calledWith('/v0/appointments', expect.anything())
+      .mockResolvedValue(getAppointmentsPayload(3))
+      .calledWith('/v0/messaging/health/folders')
+      .mockResolvedValue(getFoldersPayload(3))
+      .calledWith('/v0/health/rx/prescriptions', expect.anything())
+      .mockResolvedValue(getPrescriptionsPayload(3))
+
+    initializeTestInstance({
+      preloadedState: {
+        errors: {
+          downtimeWindowsByFeature: {
+            rx_refill: {
+              startTime: DateTime.now(),
+              endTime: DateTime.now().plus({ minutes: 1 }),
+            },
+          },
+        } as ErrorsState,
+      },
+    })
+    await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
+    await waitFor(() =>
+      expect(
+        screen.getByText("We're working on the mobile app. Health activity may not be accurate. Check back later."),
+      ).toBeTruthy(),
+    )
+  })
+
+  it("navigates to Vaccines screen when 'VA vaccine records' button is pressed", () => {
+    initializeTestInstance()
+    fireEvent.press(screen.getByRole('link', { name: 'V\ufeffA vaccine records' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
   })
 })

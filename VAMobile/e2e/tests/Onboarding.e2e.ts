@@ -1,6 +1,6 @@
 import { by, device, element, expect } from 'detox'
 
-import { checkImages, loginToDemoMode } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
 
 export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',
@@ -74,8 +74,7 @@ describe('Onboarding Screen', () => {
     await element(by.text('Next')).tap()
     await element(by.text('Next')).tap()
     await element(by.text('Done')).tap()
-    await expect(element(by.text('Contact VA'))).toExist()
-    await expect(element(by.text('Find a VA location'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
 
   it('verify the home page is displayed after skipping', async () => {
@@ -84,7 +83,6 @@ describe('Onboarding Screen', () => {
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode(false)
     await element(by.text('Skip')).tap()
-    await expect(element(by.text('Contact VA'))).toExist()
-    await expect(element(by.text('Find a VA location'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
 })

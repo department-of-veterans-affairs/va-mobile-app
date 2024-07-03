@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
 import { paymentsKeys } from 'api/payments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
@@ -84,7 +85,7 @@ context('PaymentHistoryScreen', () => {
           startDate: startDate,
           endDate: endDate,
           'page[number]': '1',
-          'page[size]': '10',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
@@ -102,7 +103,7 @@ context('PaymentHistoryScreen', () => {
           startDate: startDate,
           endDate: endDate,
           'page[number]': '1',
-          'page[size]': '10',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
@@ -167,7 +168,7 @@ context('PaymentHistoryScreen', () => {
           startDate: startDate,
           endDate: endDate,
           'page[number]': '1',
-          'page[size]': '10',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
@@ -186,7 +187,7 @@ context('PaymentHistoryScreen', () => {
           startDate: startDate,
           endDate: endDate,
           'page[number]': '1',
-          'page[size]': '10',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()

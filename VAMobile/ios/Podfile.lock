@@ -1054,7 +1054,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.10.4):
     - React-Core
-  - react-native-webview (13.8.6):
+  - react-native-webview (13.10.4):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1601,7 +1601,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: b3ba58c691bc503b33480cef8ab987f78e310c15
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-safe-area-context: 399a5859f6acbdf67f671c69b53113f535f3b5b0
-  react-native-webview: d6607cbbe7bad689cc08d6d5e35cbf9938093223
+  react-native-webview: dbc8171113daa2abb2499da5f327a8d0cdfcd61c
   React-nativeconfig: 2e44d0d2dd222b12a5183f4bcaa4a91881497acb
   React-NativeModulesApple: 8aa032fe6c92c1a3c63e4809d42816284a56a9b0
   React-perflogger: f9367428cf475f4606b5965c1d5a71781bb95299
@@ -1641,7 +1641,7 @@ SPEC CHECKSUMS:
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   SDWebImageWebPCoder: c94f09adbca681822edad9e532ac752db713eabf
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  Yoga: 2a16e58450c48e110211dae1159fb114bbcdcfc0
+  Yoga: e5b887426cee15d2a326bdd34afc0282fc0486ad
 
 PODFILE CHECKSUM: a2aca3d0b349c3f3445211d8f84e40a1584a8947
 
