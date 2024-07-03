@@ -34,7 +34,6 @@ export const ClaimsE2eIdConstants = {
   ACCEPTED_FILE_TYPES_TEXT: 'PDF (unlocked), GIF, JPEG, JPG, BMP, TXT',
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
-  CLAIMS_HISTORY_TEXT: 'Claims history',
 }
 
 beforeAll(async () => {
@@ -114,7 +113,7 @@ describe('Claims Screen', () => {
   })
 
   it('should navigate back to the claims history page', async () => {
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should tap on a claim and verify the dates match', async () => {
@@ -230,7 +229,7 @@ describe('Claims Screen', () => {
   it('should navigate back to the claims history screen', async () => {
     await element(by.text('Cancel')).tap()
     await element(by.text('Claim')).tap()
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 1', async () => {
@@ -238,7 +237,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id('Step 1 of 5. current. Claim received December 4, 2023'))).toExist()
     await element(by.id('Step 1 of 5. current. Claim received December 4, 2023')).tap()
     await expect(element(by.text('Thank you. VA recieved your claim')))
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 2', async () => {
@@ -254,7 +253,7 @@ describe('Claims Screen', () => {
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
       ),
     ).toExist()
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 3 w/ waiver', async () => {
@@ -274,7 +273,7 @@ describe('Claims Screen', () => {
         ),
       ),
     ).toExist()
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 4', async () => {
@@ -290,7 +289,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id('Step 4 of 5. current. Preparation for notification '))).toExist()
     await element(by.id('Step 4 of 5. current. Preparation for notification ')).tap()
     await expect(element(by.text('We are preparing your claim decision packet to be mailed.'))).toExist()
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 5', async () => {
@@ -300,7 +299,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id('Step 5 of 5. completed. Complete '))).toExist()
     await element(by.id('Step 5 of 5. completed. Complete ')).tap()
     await expect(element(by.text('Complete')).atIndex(1)).toExist()
-    await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should tap on the closed tab', async () => {

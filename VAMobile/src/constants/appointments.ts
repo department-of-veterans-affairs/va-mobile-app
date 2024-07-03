@@ -16,3 +16,5 @@ export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
   PAST_ALL_CURRENT_YEAR: 'pastAllCurrentYear',
   PAST_ALL_LAST_YEAR: 'pastAllLastYear',
 }
+
+export const DEFAULT_UPCOMING_DAYS_LIMIT = 7
