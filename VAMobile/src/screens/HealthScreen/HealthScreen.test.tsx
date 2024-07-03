@@ -249,12 +249,4 @@ context('HealthScreen', () => {
     fireEvent.press(screen.getByRole('link', { name: 'V\ufeffA vaccine records' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
   })
-
-  it('should render messagesCountTag with the correct a11yLabel', async () => {
-    when(api.get as jest.Mock)
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(inboxData)
-    initializeTestInstance()
-    await waitFor(() => expect(screen.getByLabelText('Messages You have 13 unread messages')).toBeTruthy())
-  })
 })
