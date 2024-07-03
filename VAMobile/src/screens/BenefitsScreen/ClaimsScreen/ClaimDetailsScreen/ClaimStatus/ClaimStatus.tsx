@@ -123,7 +123,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
               {claimDecidedOn}
             </TextView>
-            <TextView variant="MobileBody" accessible={true} paragraphSpacing={showButton ? true : false}>
+            <TextView variant="MobileBody" accessible={true} paragraphSpacing={showButton}>
               {letterAvailable}
             </TextView>
             {showButton && (
