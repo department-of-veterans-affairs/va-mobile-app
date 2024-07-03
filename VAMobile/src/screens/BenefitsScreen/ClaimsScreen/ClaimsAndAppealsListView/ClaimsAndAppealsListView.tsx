@@ -40,7 +40,6 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
-  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
 
   useEffect(() => {
     if (previousClaimType !== claimType) {
@@ -63,11 +62,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   }
 
   const onClaimDetails = (id: string) => {
-    if (claimPhaseExpansionFlag) {
-      navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
-    } else {
-      navigateTo('ClaimDetailsScreenOld', { claimID: id, claimType })
-    }
+    navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
   }
 
   const onAppealDetails = (id: string) => {

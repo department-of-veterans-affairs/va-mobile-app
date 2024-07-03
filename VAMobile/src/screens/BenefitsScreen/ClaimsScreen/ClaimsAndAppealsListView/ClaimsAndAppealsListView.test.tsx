@@ -7,11 +7,8 @@ import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
-
-jest.mock('utils/remoteConfig')
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -71,7 +68,6 @@ const emptyPayload: ClaimsAndAppealsListPayload = {
 
 context('ClaimsAndAppealsListView', () => {
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
-    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
     const props = mockNavProps({ claimType })
     const queriesData: QueriesData = [
       {
