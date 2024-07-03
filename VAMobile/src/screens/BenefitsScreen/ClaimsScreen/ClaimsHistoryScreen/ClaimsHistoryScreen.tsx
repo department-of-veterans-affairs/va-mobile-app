@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -101,7 +101,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} border="error" />
+          <Alert variant="error" header={alertTitle} description={alertText} />
         </Box>
       )
     }

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import { Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -101,7 +101,7 @@ function LoginScreen() {
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
-      {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
+      {demoMode && <Alert variant="info" header="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}

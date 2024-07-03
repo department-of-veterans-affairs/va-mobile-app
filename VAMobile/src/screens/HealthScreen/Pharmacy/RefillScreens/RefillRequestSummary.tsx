@@ -3,21 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
 
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
-import {
-  AlertBox,
-  AlertBoxProps,
-  Box,
-  BoxProps,
-  LoadingComponent,
-  TextArea,
-  TextView,
-  VAIcon,
-  VAIconProps,
-} from 'components'
+import { Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -80,28 +71,28 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   })
 
   const renderAlert = (): ReactElement => {
-    let alertBoxProps: AlertBoxProps
+    let alertBoxProps: AlertProps
     switch (status) {
       case REQUEST_STATUS.SUCCESS:
         alertBoxProps = {
-          border: 'success',
-          title: t('prescriptions.refillRequestSummary.success'),
+          variant: 'success',
+          header: t('prescriptions.refillRequestSummary.success'),
         }
         break
       case REQUEST_STATUS.MIX:
       case REQUEST_STATUS.FAILED:
       default:
         alertBoxProps = {
-          border: 'error',
-          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
-          text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          variant: 'error',
+          header: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
+          description: t('prescriptions.refillRequestSummary.tryAgain'),
+          descriptionA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
         }
         break
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertBox {...alertBoxProps}>
+        <Alert {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Button
@@ -115,7 +106,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
               />
             </Box>
           )}
-        </AlertBox>
+        </Alert>
       </Box>
     )
   }

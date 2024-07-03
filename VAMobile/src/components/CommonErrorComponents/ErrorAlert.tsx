@@ -2,9 +2,9 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, VAScrollView } from 'components'
+import { Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -33,11 +33,11 @@ const ErrorAlert: FC<ErrorAlertProps> = ({ onTryAgain, title, text }) => {
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox border="error" title={title || t('errorAlert.title')} text={text}>
+        <Alert variant="error" header={title || t('errorAlert.title')} description={text}>
           <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
             <Button onPress={onTryAgain} label={t('refresh')} testID={t('refresh')} />
           </Box>
-        </AlertBox>
+        </Alert>
       </Box>
     </VAScrollView>
   )

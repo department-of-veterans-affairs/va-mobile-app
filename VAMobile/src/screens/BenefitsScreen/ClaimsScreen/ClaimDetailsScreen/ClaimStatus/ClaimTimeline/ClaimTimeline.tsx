@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { useFocusEffect } from '@react-navigation/native'
 
+import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { ClaimAttributesData } from 'api/types'
-import { AlertBox, Box } from 'components'
+import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -37,10 +39,10 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box my={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            border={'warning'}
-            titleA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
-            title={t('claimPhase.youHaveFileRequest', { count })}
+          <Alert
+            variant={'warning'}
+            headerA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
+            header={t('claimPhase.youHaveFileRequest', { count })}
           />
         </Box>
       )}

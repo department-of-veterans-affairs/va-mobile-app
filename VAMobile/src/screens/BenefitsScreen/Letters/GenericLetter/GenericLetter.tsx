@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
 import { LetterTypeConstants, LettersDownloadParams } from 'api/types'
-import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import { BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { testIdProps } from 'utils/accessibility'
@@ -51,9 +51,9 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <Box mb={theme.dimensions.contentMarginBottom}>
       {letterType === LetterTypeConstants.serviceVerification && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox border="informational">
+          <Alert variant="info">
             <TextView variant="MobileBody">{t('letters.serviceVerificationLetter.informational')}</TextView>
-          </AlertBox>
+          </Alert>
         </Box>
       )}
       <TextArea>
