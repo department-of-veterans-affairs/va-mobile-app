@@ -364,17 +364,34 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .whileElement(by.id('remoteConfigTestID'))
     .scroll(500, 'down')
   await element(by.text(AFFeature)).tap()
+
   if (AFAppUpdate) {
-    await element(by.text('appUpdateButton')).tap()
+    try {
+      await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
+    } catch (ex) {
+      await element(by.text('appUpdateButton')).tap()
+    }
   } else if (AFFeature === 'WG_Health') {
-    await element(by.text('Enabled')).tap()
+    try {
+      await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+    } catch (ex) {
+      await element(by.text('Enabled')).tap()
+    }
   }
 
   if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
-      await element(by.text('Enabled')).tap()
+      try {
+        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      } catch (ex) {
+        await element(by.text('Enabled')).tap()
+      }
     } else if (AFUseCase === 'DenyAccess') {
-      await element(by.text('Enabled')).tap()
+      try {
+        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      } catch (ex) {
+        await element(by.text('Enabled')).tap()
+      }
     }
   }
   await element(by.id('AFTypeTestID')).replaceText(AFUseCase)
