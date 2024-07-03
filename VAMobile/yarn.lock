@@ -1398,14 +1398,16 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.19.1-alpha.2":
-  version "0.19.1-alpha.2"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1-alpha.2.tgz#f533e82272de1b54f140b0ee72a259dfeaa7f600"
-  integrity sha512-Lh4eTp08C3+kvL34hYDLtyyxL+3Lrloq1fMfV8pYN1bKbLBhHFaWf2t5MVf+MZYdp3bAl5qyMZq/aS8WhYWU+A==
+"@department-of-veterans-affairs/mobile-component-library@0.19.1-alpha.8":
+  version "0.19.1-alpha.8"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1-alpha.8.tgz#45c3d996c426b092ef97e1298a9cc1f23fb08847"
+  integrity sha512-tInrFEeCMnCZ4ZsQJW0I79UILmrdQvxUF/UDSAuOH6otV2yKrbn7HeBqQCX9ErtjyofRMrsL0as8RN35FK/nRA==
   dependencies:
     "@department-of-veterans-affairs/mobile-assets" "0.12.0"
     "@department-of-veterans-affairs/mobile-tokens" "0.12.0"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
+    i18next "^23.11.5"
+    react-i18next "^14.1.2"
     react-native-svg "15.2.0"
     styled-components "^6.1.8"
 
@@ -6396,10 +6398,10 @@ husky@^9.0.11:
   resolved "https://registry.yarnpkg.com/husky/-/husky-9.0.11.tgz#fc91df4c756050de41b3e478b2158b87c1e79af9"
   integrity sha512-AB6lFlbwwyIqMdHYhwPe+kjOC3Oc5P3nThEoW/AaO2BX3vJDjWPFxYLxokUZOo6RNX20He3AaT8sESs9NJcmEw==
 
-i18next@^23.7.18:
-  version "23.7.18"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.7.18.tgz#4f219e3702b08342c5519bc2cda7d09c67edebb9"
-  integrity sha512-b9N2KjRCYQNlUvE1Kc83g8knyUkL5NiZQOp9BsTR/v/LXk6Fzz+doOzTg2/826XK28mCgBkYLNAtixjE58qpCw==
+i18next@^23.11.5, i18next@^23.7.18:
+  version "23.11.5"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.11.5.tgz#d71eb717a7e65498d87d0594f2664237f9e361ef"
+  integrity sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
