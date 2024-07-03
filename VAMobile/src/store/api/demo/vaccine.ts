@@ -3,7 +3,7 @@ import { VaccineListPayload, VaccineLocationPayload } from 'api/types/VaccineDat
 import { Params } from '..'
 import { DemoStore } from './store'
 
-type VaccinePageNumber = '1' | '2'
+type VaccinePageNumber = '1'
 
 /**
  * Type denoting the demo data store
@@ -11,7 +11,6 @@ type VaccinePageNumber = '1' | '2'
 export type VaccineList = {
   '/v1/health/immunizations': {
     '1': VaccineListPayload
-    '2': VaccineListPayload
   }
 }
 

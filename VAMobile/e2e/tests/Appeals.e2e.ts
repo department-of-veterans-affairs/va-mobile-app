@@ -26,15 +26,14 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
-    //Uncomment when 8101 is completed
-    /*await element(by.id('claimsHistoryID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()*/
+    await element(by.id('next-page')).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
     await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID)))
       .toBeVisible()
       .whileElement(by.id('claimsHistoryID'))
