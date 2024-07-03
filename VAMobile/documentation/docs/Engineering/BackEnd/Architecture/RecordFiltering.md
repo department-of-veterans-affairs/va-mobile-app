@@ -1,4 +1,6 @@
-# Record Filtering
+---
+title: Record Filtering
+---
 
 ## Overview
 
@@ -32,4 +34,3 @@ As discussed [below](#error-handling), error behavior can be defined on a per-en
 Any errors encountered during the filter process, either due to invalid filters or other causes, will cancel the filtering process. The filter library will return all records as well as the error encountered. What we do with that information can be determined on a per-endpoint basis. It is up to the controller to determine whether to re-raise the error or pass it back to the client in the metadata.
 
 This approach was chosen in order to keep our endpoints as stable as possible until we determine that filtering is reliable and error-free. As we develop greater confidence in the filtering and our requirements become clearer, we may later decide to always allow the error to be raised.
-

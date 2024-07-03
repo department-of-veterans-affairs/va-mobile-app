@@ -330,29 +330,7 @@
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
           }
-        }
-      ],
-      "links": {
-        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?",
-        "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "prev": null,
-        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2&per_page=10",
-        "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
-      },
-      "meta": {
-        "sort": {
-          "sentDate": "DESC"
         },
-        "pagination": {
-          "currentPage": 1,
-          "perPage": 10,
-          "totalPages": 2,
-          "totalEntries": 12
-        }
-      }
-    },
-    "2": {
-      "data": [
         {
           "id": "2060013",
           "type": "messages",
@@ -397,10 +375,10 @@
         }
       ],
       "links": {
-        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2",
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?",
         "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "prev": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10",
+        "prev": null,
+        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2&per_page=10",
         "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
       },
       "meta": {
@@ -408,9 +386,9 @@
           "sentDate": "DESC"
         },
         "pagination": {
-          "currentPage": 2,
+          "currentPage": 1,
           "perPage": 10,
-          "totalPages": 2,
+          "totalPages": 1,
           "totalEntries": 12
         }
       }
@@ -424,7 +402,7 @@
         "messageId": 2092809,
         "category": "MEDICATIONS",
         "subject": "Naproxen side effects",
-        "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+        "body": "Upset stomach is a common side effect of this medication.\nMild stomach pain is normal, but if            you are having severe stomach pains, please let us know or seek in-person care.\tIf you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
         "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-26T22:22:06.000Z",

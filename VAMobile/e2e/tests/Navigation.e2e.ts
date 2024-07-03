@@ -13,7 +13,7 @@ const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 const navigationDic = {
   Home: [
-    ['HomeScreen.e2e', 'Contact VA', 'Contact VA'],
+    ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
     [
       ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
       ['Profile', 'Personal information'],
@@ -70,7 +70,7 @@ const navigationDic = {
   ],
   Health: [
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Outpatient Clinic'], 'Community care'],
+    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Vilanisi Reddy'], 'Details'],
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
@@ -104,7 +104,7 @@ const featureID = {
   'Review letters': 'lettersPageID',
   Health: 'healthCategoryTestID',
   Appointments: 'appointmentsTestID',
-  'Outpatient Clinic': 'appointmentsTestID',
+  'Vilanisi Reddy': 'appointmentsTestID',
   'Claim exam': 'appointmentsTestID',
   'Medication: Naproxen side effects': 'messagesTestID',
   'Drafts (3)': 'messagesTestID',
