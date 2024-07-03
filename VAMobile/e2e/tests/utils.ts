@@ -18,7 +18,7 @@ export const CommonE2eIdConstants = {
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
-  VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
+  VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -51,6 +51,10 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
+  START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
+  PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
 }
 
@@ -252,7 +256,7 @@ export async function resetInAppReview() {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
 }
 
 export async function openProfile() {
@@ -379,7 +383,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-    .scroll(500, 'down')
+    .scroll(700, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
@@ -443,8 +447,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
-    if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
-      await element(by.id(featureNavigationArray[j])).tap()
+    if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
+      await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -490,11 +494,11 @@ const navigateToFeature = async (featureNavigationArray) => {
       } else {
         await element(by.text('Request Refill ')).tap()
       }
-    } else if (featureNavigationArray[j] === 'Contact VA') {
+    } else if (featureNavigationArray[j] === 'Contact us') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
-        .scroll(50, 'down')
+        .scroll(200, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else {
       try {

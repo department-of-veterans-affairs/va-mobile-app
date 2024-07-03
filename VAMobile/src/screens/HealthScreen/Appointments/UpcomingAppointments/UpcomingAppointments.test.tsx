@@ -32,7 +32,13 @@ context('UpcomingAppointments', () => {
     const props = mockNavProps()
 
     render(
-      <UpcomingAppointments {...props} appointmentsData={appointmentsData} setPage={jest.fn()} loading={loading} />,
+      <UpcomingAppointments
+        {...props}
+        appointmentsData={appointmentsData}
+        page={1}
+        setPage={jest.fn()}
+        loading={loading}
+      />,
     )
   }
 

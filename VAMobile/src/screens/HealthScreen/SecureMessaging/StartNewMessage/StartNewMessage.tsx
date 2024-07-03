@@ -344,7 +344,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             navigateTo('SecureMessaging', { activeTab: 1 })
             navigateTo('FolderMessages', {
@@ -433,8 +433,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
-
   const hasError = recipientsError || signatureError
   const isLoading =
     !hasLoadedRecipients ||
@@ -471,7 +469,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (
