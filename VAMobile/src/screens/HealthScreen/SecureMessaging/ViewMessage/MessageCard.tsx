@@ -148,17 +148,13 @@ function MessageCard({ message }: MessageCardProps) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired ? (
-          <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-          </Box>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onStartMessagePress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          <Button
+            label={t('secureMessaging.startNewMessage')}
+            onPress={onStartMessagePress}
+            testID={'startNewMessageButtonTestID'}
+          />
         )}
       </Box>
     )
