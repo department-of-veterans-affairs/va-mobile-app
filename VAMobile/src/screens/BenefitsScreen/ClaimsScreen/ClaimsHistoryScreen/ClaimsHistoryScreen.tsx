@@ -20,7 +20,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import ClaimsAndAppealsListViewOld from '../ClaimsAndAppealsListView/ClaimsAndAppealsListViewOld'
+import DEPRECATED_ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/DEPRECATED_ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
@@ -159,7 +159,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
               {featureEnabled('claimPhaseExpansion') ? (
                 <ClaimsAndAppealsListView claimType={claimType} />
               ) : (
-                <ClaimsAndAppealsListViewOld claimType={claimType} />
+                <DEPRECATED_ClaimsAndAppealsListView claimType={claimType} />
               )}
             </Box>
           )}

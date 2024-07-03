@@ -28,7 +28,7 @@ type ClaimsAndAppealsListProps = {
   claimType: ClaimType
 }
 
-function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
+function DEPRECATED_ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -141,4 +141,4 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   )
 }
 
-export default ClaimsAndAppealsListView
+export default DEPRECATED_ClaimsAndAppealsListView
