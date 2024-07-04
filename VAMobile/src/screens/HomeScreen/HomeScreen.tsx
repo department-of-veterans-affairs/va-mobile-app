@@ -162,23 +162,6 @@ export function HomeScreen({}: HomeScreenProps) {
     const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInformationQuery?.data?.id}`
     const serviceHistory = serviceHistoryQuery?.data?.serviceHistory || ([] as ServiceHistoryData)
 
-    const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-      try {
-        serviceHistory.forEach((service) => {
-          if (service.honorableServiceIndicator === 'Y') {
-            logAnalyticsEvent(Events.vama_vet_status_yStatus())
-          } else if (service.honorableServiceIndicator === 'N') {
-            logAnalyticsEvent(Events.vama_vet_status_nStatus())
-          } else if (service.honorableServiceIndicator === 'Z') {
-            logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
-          }
-        })
-        await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
-      } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-      }
-    }
-
     const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
       if (!serviceIndicators) {
         return
@@ -187,18 +170,24 @@ export function HomeScreen({}: HomeScreenProps) {
       try {
         const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
         if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
-          setServiceIndicators(serviceIndicators)
+          serviceHistory.forEach((service) => {
+            if (service.honorableServiceIndicator === 'Y') {
+              logAnalyticsEvent(Events.vama_vet_status_yStatus())
+            } else if (service.honorableServiceIndicator === 'N') {
+              logAnalyticsEvent(Events.vama_vet_status_nStatus())
+            } else if (service.honorableServiceIndicator === 'Z') {
+              logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
+            }
+          })
+          AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
         }
       } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+        logNonFatalErrorToFirebase(err, 'checkServiceIndicators: AsyncStorage error')
       }
     }
 
     if (serviceHistory) {
-      let serviceIndicators = ''
-      serviceHistory.forEach((service) => {
-        serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
-      })
+      const serviceIndicators = serviceHistory.map((service) => service.honorableServiceIndicator).join('')
       checkServiceIndicators(serviceIndicators)
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
