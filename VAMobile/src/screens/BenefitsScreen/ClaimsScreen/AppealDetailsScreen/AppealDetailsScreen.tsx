@@ -19,6 +19,7 @@ import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
@@ -122,10 +123,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.gutter}>
-            <TextView
-              variant="BitterBoldHeading"
-              mb={theme.dimensions.condensedMarginBetween}
-              accessibilityRole="header">
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
               {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
             </TextView>
             <TextView variant="MobileBody" testID="appealsUpToDateTestID">
@@ -155,6 +153,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
               />
             )}
             {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
+          </Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <NeedHelpData isAppeal={true} />
           </Box>
         </Box>
       )}

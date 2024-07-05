@@ -142,7 +142,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'} mb={undefined} accessibilityRole="header">
+            <TextView variant={'MobileBodyBold'} accessibilityRole="header">
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
