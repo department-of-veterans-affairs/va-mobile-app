@@ -95,7 +95,13 @@ const VASelector: FC<VASelectorProps> = ({
 
   const getCheckBoxIcon = (): React.ReactNode => {
     if (disabled && selectorType === SelectorType.Radio) {
-      return <VAIcon {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')} testID="RadioEmpty" />
+      return (
+        <VAIcon
+          {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')}
+          testID="RadioEmpty"
+          accessibilityLabel="RadioEmpty"
+        />
+      )
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
@@ -103,6 +109,7 @@ const VASelector: FC<VASelectorProps> = ({
         <VAIcon
           {...getIconsProps('CheckBoxError', theme.colors.icon.error, 'checkboxDisabledContrast')}
           testID="CheckBoxError"
+          accessibilityLabel="CheckBoxError"
         />
       )
     }
@@ -114,7 +121,7 @@ const VASelector: FC<VASelectorProps> = ({
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
     const stroke = selected ? undefined : 'checkboxDisabled'
 
-    return <VAIcon {...getIconsProps(name, stroke, fill)} testID={name} />
+    return <VAIcon {...getIconsProps(name, stroke, fill)} testID={name} accessibilityLabel={name} />
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
