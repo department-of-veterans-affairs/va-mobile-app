@@ -74,6 +74,7 @@ jobs:
   
   debug:
     name: Debug Output
+    if: ${{ failure() }}
     runs-on: ubuntu-latest
     needs: axe-scan
     steps:
