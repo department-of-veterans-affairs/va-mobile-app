@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
@@ -98,7 +98,8 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
       <StyledPressable
         onPress={onPressCallback}
         accessibilityRole="button"
-        {...testIdProps(translation(buttonText))}
+        accessibilityLabel={translation(buttonText)}
+        testID={translation(buttonText)}
         {...a11yHintProp(allyHint || '')}>
         <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto" selectable={false}>
           {translation(buttonText)}
@@ -123,7 +124,8 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
       <StyledPressable
         onPress={onContinue}
         accessibilityRole="button"
-        {...testIdProps(translation(buttonText))}
+        accessibilityLabel={translation(buttonText)}
+        testID={translation(buttonText)}
         {...a11yHintProp(allyHint || '')}>
         <TextView
           variant="MobileBodyBold"
@@ -161,7 +163,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
           {goBackOrSkipBtn()}
         </Box>
         <Box
-          {...testIdProps(translation('carouselIndicators'))}
+          testID={'carouselIndicators'}
           {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')}
           {...progressBarContainerProps}>
           {getProgressBar()}

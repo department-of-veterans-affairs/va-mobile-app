@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
@@ -84,7 +84,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({
   const touchableRow = (
     <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Pressable
-        {...testIdProps(text)}
+        accessibilityLabel={text}
         {...a11yHintProp(a11yHint || '')}
         style={pressableStyles}
         {...pressableProps}

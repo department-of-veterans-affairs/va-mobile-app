@@ -2,8 +2,6 @@ import React, { FC } from 'react'
 import { Image, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { testIdProps } from 'utils/accessibility'
-
 /**
  * Add images to android('res/drawable') and in xcode('Images.xcassets') when new ones are added.
  * Android and IOS are not rendering using local path(ex. require('./images/asset.png')) and needs to be added as an asset resource.
@@ -53,10 +51,10 @@ const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
     <Image
       source={imageProps.source}
       style={{ width: width, height: imageProps.height * ratio }}
-      {...testIdProps(a11yLabel)}
       accessibilityLabel={a11yLabel}
       accessible={true}
       accessibilityRole={'image'}
+      testID={a11yLabel}
     />
   )
 }

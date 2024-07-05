@@ -6,7 +6,6 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type BasicErrorProps = {
@@ -54,7 +53,7 @@ const BasicError: FC<BasicErrorProps> = ({
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
           <TextView
-            {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)}
+            accessibilityLabel={headerA11yLabel}
             variant="MobileBodyBold"
             accessibilityRole="header"
             textAlign="center">

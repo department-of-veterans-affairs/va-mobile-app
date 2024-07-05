@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 import Box from './Box'
@@ -67,7 +67,7 @@ export const BackButton: FC<BackButtonProps> = ({
     <TouchableWithoutFeedback
       ref={focusRef}
       onPress={onPress}
-      {...testIdProps(label)}
+      accessibilityLabel={label}
       {...a11yHintProp(a11yHintPropParam)}
       accessibilityRole="button"
       accessible={true}

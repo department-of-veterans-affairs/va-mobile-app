@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { TouchableWithoutFeedback } from 'react-native'
 
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -95,16 +95,14 @@ const VASelector: FC<VASelectorProps> = ({
 
   const getCheckBoxIcon = (): React.ReactNode => {
     if (disabled && selectorType === SelectorType.Radio) {
-      return (
-        <VAIcon {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')} {...testIdProps('RadioEmpty')} />
-      )
+      return <VAIcon {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')} testID="RadioEmpty" />
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
       return (
         <VAIcon
           {...getIconsProps('CheckBoxError', theme.colors.icon.error, 'checkboxDisabledContrast')}
-          {...testIdProps('CheckBoxError')}
+          testID="CheckBoxError"
         />
       )
     }
@@ -116,7 +114,7 @@ const VASelector: FC<VASelectorProps> = ({
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
     const stroke = selected ? undefined : 'checkboxDisabled'
 
-    return <VAIcon {...getIconsProps(name, stroke, fill)} {...testIdProps(name)} />
+    return <VAIcon {...getIconsProps(name, stroke, fill)} testID={name} />
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
@@ -135,7 +133,7 @@ const VASelector: FC<VASelectorProps> = ({
       <Box>
         {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
         <Box flexDirection="row">
-          <Box {...testIdProps('checkbox-with-label')} mt={5}>
+          <Box testID="checkbox-with-label" mt={5}>
             {getCheckBoxIcon()}
           </Box>
           <Box {...selectorBoxProps}>
