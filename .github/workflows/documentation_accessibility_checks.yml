@@ -62,7 +62,6 @@ jobs:
           echo "Accessibility issues detected: $num_issues"
 
           # Set output for number of issues
-          echo "::set-output name=num_issues::$num_issues"
           echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
 
           # Fail the workflow if accessibility issues are detected
@@ -72,24 +71,13 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
-  
-  debug:
-    name: Debug Output
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    needs: axe-scan
-    steps:
-      - name: Print number of issues
-        run: echo "Number of accessibility issues:" ${{ needs.axe-scan.outputs.num_issues }}
 
   start_slack_thread:
     name: Start Slack thread
     if: ${{ failure() }}
-    needs: [axe-scan, debug]
+    needs: axe-scan
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of accessibility issues: ${{ needs.axe-scan.outputs.num_issues }}'
-            
-      
+      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of accessibility issues detected: ${{ needs.axe-scan.outputs.num_issues }}'
