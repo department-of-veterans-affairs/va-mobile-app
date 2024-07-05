@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -79,12 +80,18 @@ function MessageCard({ message }: MessageCardProps) {
 
   function getAttachment() {
     if (attachmentFetchPending && !attachments?.length) {
+      const loadingScrollViewStyle: ViewStyle = {
+        backgroundColor: theme.colors.background.contentBox,
+      }
       return (
         <Box
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.contentMarginTop}
           mb={theme.dimensions.contentMarginBottom}>
-          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+          <LoadingComponent
+            text={t('secureMessaging.viewMessage.loadingAttachment')}
+            scrollViewStyle={loadingScrollViewStyle}
+          />
         </Box>
       )
     } else if (attachments?.length) {
@@ -141,17 +148,13 @@ function MessageCard({ message }: MessageCardProps) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired ? (
-          <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-          </Box>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onStartMessagePress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          <Button
+            label={t('secureMessaging.startNewMessage')}
+            onPress={onStartMessagePress}
+            testID={'startNewMessageButtonTestID'}
+          />
         )}
       </Box>
     )

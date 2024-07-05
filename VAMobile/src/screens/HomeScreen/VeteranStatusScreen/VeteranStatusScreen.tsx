@@ -22,6 +22,7 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { darkTheme } from 'styles/themes/colorSchemes'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
@@ -99,6 +100,8 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
         return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
         return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
+      case BranchesOfServiceConstants.SpaceForce:
+        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" fill2={darkTheme.icon.ussf} {...dimensions} />
     }
   }
 

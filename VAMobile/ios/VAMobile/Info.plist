@@ -62,7 +62,7 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>This allows you to securely sign into the app after going through the login process.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs this permission in order to upload your photos from the camera roll for claims or Secure Messages.</string>
 	<key>UIAppFonts</key>
@@ -72,6 +72,7 @@
 		<string>SourceSansPro-Italic.ttf</string>
 		<string>SourceSansPro-Regular.ttf</string>
 		<string>SourceSansPro-SemiBold.ttf</string>
+		<string>Bitter-Regular.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
