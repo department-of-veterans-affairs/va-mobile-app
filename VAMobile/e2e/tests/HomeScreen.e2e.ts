@@ -176,7 +176,6 @@ describe('Home Screen', () => {
   })
 
   it('should tap home then show home page about you section content', async () => {
-
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     try {
       await element(by.text('Skip this update')).tap()
