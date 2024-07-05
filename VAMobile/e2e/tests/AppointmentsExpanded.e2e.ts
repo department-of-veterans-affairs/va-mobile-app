@@ -261,14 +261,14 @@ const checkUpcomingApptDetails = async (
 
 const scrollToThenTap = async (text: string, pastAppointment: string) => {
   //Add back in when pagination is fixed
-  /*if (
+  if (
     text === 'Sami Alsahhar - HOME - Canceled' ||
     text === 'At VA Palo Alto Health Care System' ||
     text === 'At Hampton VA Medical Center'
   ) {
     await element(by.id('appointmentsTestID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
-  }*/
+  }
   if (pastAppointment !== '') {
     try {
       await waitFor(element(by.text(text)))
@@ -655,12 +655,12 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      //await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      //await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
       await element(by.text('Past')).tap()
-      //await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      //await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
     await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
     await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
@@ -748,12 +748,12 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      //await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      //await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
       await element(by.text('Past')).tap()
-      //await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      //await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
 
     await scrollToThenTap('At Central California VA Health Care System', pastAppointmentString)
@@ -847,16 +847,16 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      /*await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()*/
+      await element(by.id('next-page')).tap()
     } else {
       await element(by.text('Past')).tap()
-      /*await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()*/
+      await element(by.id('next-page')).tap()
     }
 
     await scrollToThenTap('John Jones', pastAppointmentString)
@@ -949,20 +949,20 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      /*await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()*/
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
       await element(by.text('Past')).tap()
-      /*await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
       await element(by.id('next-page')).tap()
       await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()*/
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
 
     await scrollToThenTap('Jane Jones', pastAppointmentString)
