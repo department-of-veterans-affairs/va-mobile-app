@@ -21,7 +21,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -132,8 +131,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     <FeatureLandingTemplate
       backLabel={t('letters.overview.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('letters.overview.viewLetters')}
-      {...testIdProps('Letters-list-page')}>
+      title={t('letters.overview.viewLetters')}>
       {!lettersNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
       ) : loading || loadingUserAuthorizedServices ? (

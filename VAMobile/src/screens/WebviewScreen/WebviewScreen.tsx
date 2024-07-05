@@ -10,7 +10,6 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 
@@ -157,7 +156,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   return (
-    <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
+    <Box {...mainViewBoxProps}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
@@ -178,7 +177,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           setCanGoForward(navState.canGoForward)
           setCurrentUrl(navState.url)
         }}
-        {...testIdProps('Webview-web', true)}
       />
       <WebviewControls {...controlProps} />
     </Box>

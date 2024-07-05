@@ -4,7 +4,6 @@ import { View, ViewStyle } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
-import { testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
@@ -59,14 +58,14 @@ function GenericOnboarding({
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
           <View ref={focusRef} accessible={true}>
-            <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
+            <TextView {...headerProps} accessibilityLabel={headerA11yLabel}>
               {header}
             </TextView>
           </View>
         </Box>
         {text && (
           <TextView
-            {...testIdProps(textA11yLabel || text)}
+            accessibilityLabel={textA11yLabel}
             variant="MobileBody"
             color="primaryContrast"
             mt={theme.dimensions.standardMarginBetween}>

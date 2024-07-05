@@ -16,7 +16,6 @@ import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -110,7 +109,7 @@ function LoginScreen() {
         }
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
+    <VAScrollView contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
@@ -133,7 +132,7 @@ function LoginScreen() {
           <Button onPress={onLoginInit} label={t('signin')} buttonType={ButtonVariants.White} />
           <Pressable
             onPress={onFacilityLocator}
-            {...testIdProps(a11yLabelVA(t('findLocation.title')))}
+            accessibilityLabel={a11yLabelVA(t('findLocation.title'))}
             accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView

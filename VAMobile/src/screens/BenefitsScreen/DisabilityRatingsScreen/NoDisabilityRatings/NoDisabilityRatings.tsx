@@ -5,7 +5,6 @@ import { StyleProp, ViewStyle } from 'react-native'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 function NoDisabilityRatings() {
@@ -27,11 +26,7 @@ function NoDisabilityRatings() {
           accessibilityLabel={a11yLabelVA(t('disabilityRating.noDisabilityRatings.title'))}>
           {t('disabilityRating.noDisabilityRatings.title')}
         </TextView>
-        <TextView
-          variant="MobileBody"
-          textAlign="center"
-          my={theme.dimensions.standardMarginBetween}
-          {...testIdProps(bodyText)}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {bodyText}
         </TextView>
       </Box>

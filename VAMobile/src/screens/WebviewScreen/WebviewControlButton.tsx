@@ -4,7 +4,7 @@ import { StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'r
 import { Box, BoxProps, VA_ICON_MAP } from 'components'
 import { VAIcon } from 'components'
 import { VAIconColors } from 'styles/theme'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 /**
@@ -26,12 +26,24 @@ type ControlButtonProps = {
   testID?: string
   /** optional accessibility hint for the button */
   a11yHint?: string
+  /** optional accessibility label for the button */
+  a11yLabel?: string
 }
 
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-function WebviewControlButton({ icon, onPress, disabled, width, height, fill, testID, a11yHint }: ControlButtonProps) {
+function WebviewControlButton({
+  icon,
+  onPress,
+  disabled,
+  width,
+  height,
+  fill,
+  testID,
+  a11yHint,
+  a11yLabel,
+}: ControlButtonProps) {
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
@@ -54,7 +66,11 @@ function WebviewControlButton({ icon, onPress, disabled, width, height, fill, te
   }
 
   return (
-    <TouchableOpacity {...touchableOpacityProps} {...testIdProps(testID || '')} {...a11yHintProp(a11yHint || '')}>
+    <TouchableOpacity
+      {...touchableOpacityProps}
+      accessibilityLabel={a11yLabel}
+      testID={testID}
+      {...a11yHintProp(a11yHint || '')}>
       <Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
         <VAIcon name={icon} width={width} height={height} fill={fill} preventScaling={true} />
       </Box>
