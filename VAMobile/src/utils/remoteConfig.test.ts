@@ -32,6 +32,7 @@ const mockOverrides = {
   patientCheckIn: false,
   patientCheckInWaygate: true,
   cernerTrueForDemo: false,
+  claimPhaseExpansion: true,
 }
 
 describe('activate', () => {
