@@ -15,7 +15,7 @@ function SplashScreen({}: SplashScreenProps) {
   const isPortrait = useOrientation()
 
   return (
-    <VAScrollView contentContainerStyle={splashStyles} removeInsets={true}>
+    <VAScrollView testID="Splash-page" contentContainerStyle={splashStyles} removeInsets={true}>
       <Box
         justifyContent="center"
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
