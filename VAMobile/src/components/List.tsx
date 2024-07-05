@@ -71,7 +71,11 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
-        <TextView {...titleProps} accessibilityLabel={titleA11yLabel} accessible={true}>
+        <TextView
+          {...titleProps}
+          accessibilityLabel={titleA11yLabel}
+          testID={titleA11yLabel || title}
+          accessible={true}>
           {title}
         </TextView>
       )}

@@ -156,7 +156,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   return (
-    <Box {...mainViewBoxProps}>
+    <Box {...mainViewBoxProps} testID="Webview-page">
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
@@ -177,6 +177,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           setCanGoForward(navState.canGoForward)
           setCurrentUrl(navState.url)
         }}
+        testID="Webview-web"
       />
       <WebviewControls {...controlProps} />
     </Box>
