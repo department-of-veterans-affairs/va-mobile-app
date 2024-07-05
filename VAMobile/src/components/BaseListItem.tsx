@@ -3,7 +3,7 @@ import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, P
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
-import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
 
