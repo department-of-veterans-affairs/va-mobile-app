@@ -1398,10 +1398,10 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.19.1-alpha.8":
-  version "0.19.1-alpha.8"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1-alpha.8.tgz#45c3d996c426b092ef97e1298a9cc1f23fb08847"
-  integrity sha512-tInrFEeCMnCZ4ZsQJW0I79UILmrdQvxUF/UDSAuOH6otV2yKrbn7HeBqQCX9ErtjyofRMrsL0as8RN35FK/nRA==
+"@department-of-veterans-affairs/mobile-component-library@0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1.tgz#fa543b98bb4f904cc9bbdf1387c775a47dce92b7"
+  integrity sha512-zWZoMRj5XG5HQYqrP5pNhSi/esaVqGB1+zpy3xKiXSfK6zt89GGKmwa6Q5cva55hoxOWhHuVt2j8wJz+2JCa0A==
   dependencies:
     "@department-of-veterans-affairs/mobile-assets" "0.12.0"
     "@department-of-veterans-affairs/mobile-tokens" "0.12.0"
