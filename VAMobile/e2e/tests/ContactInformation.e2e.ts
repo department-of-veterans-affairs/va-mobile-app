@@ -122,11 +122,11 @@ export async function validateAddresses(addressID: string, addressType: string) 
       .toBeVisible()
       .withTimeout(4000)
     if (addressType === 'Home') {
-      /* deliberately introducing breaking change to find problem
       await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
+      /* moving the deliberately-introduced breaking change to find problem
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
         .toBeVisible()
         .whileElement(by.id('EditAddressTestID'))
