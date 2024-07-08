@@ -126,7 +126,6 @@ export async function validateAddresses(addressID: string, addressType: string) 
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
-      /* moving the deliberately-introduced breaking change to find problem
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
         .toBeVisible()
         .whileElement(by.id('EditAddressTestID'))
@@ -134,7 +133,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
       await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
-      */
+      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
       await element(by.id('EditAddressTestID')).scrollTo('top')
       await updateAddress()
     }
