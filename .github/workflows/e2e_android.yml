@@ -133,7 +133,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -243,8 +243,7 @@ jobs:
 
       - name: Create artifact
         if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
-        run: |
-          echo > VAMobile/artifacts/failure.txt
+        run: echo "" > failure.txt
       
       - name: Output test failure
         id: post_failure
@@ -252,7 +251,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           overwrite: true
-          path: VAMobile/artifacts/failure.txt
+          path: failure.txt
           retention-days: 1
 
       - name: Upload artifacts on failure
@@ -277,10 +276,10 @@ jobs:
       - name: Download results
         uses: actions/download-artifact@v4
         with:
-            path: VAMobile/artifacts
+            path: artifacts
       - name: Inform Slack
         run: |
-          list=find ./VAMobile/artifacts -name "failure.txt"
+          list=find ./artifacts -name "failure.txt"
           echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
