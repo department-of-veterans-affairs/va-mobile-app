@@ -455,6 +455,7 @@
   "claims.viewYourActiveClaims": "Review your active claims and appeals",
   "claims.viewYourClosedClaims": "Review your closed claims and appeals",
   "claims.youClaimsAndAppeals": "Your {{claimType}} claims and appeals",
+  "claims.yourClaims": "Your {{claimType}} claims, decision reviews, and appeals",
   "claimsAndAppeal.appealStatusUnavailable": "Appeal status is unavailable",
   "claimsAndAppeal.claimAndAppealStatusUnavailable": "Claims and appeal status are unavailable",
   "claimsAndAppeal.claimStatusUnavailable": "Claims status is unavailable",
