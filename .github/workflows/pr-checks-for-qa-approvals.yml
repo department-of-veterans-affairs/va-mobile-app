@@ -18,25 +18,25 @@ on:
     types: [submitted, dismissed]
 
 jobs:
-  dependabot_pr_check:
-    name: Dependabot PR
-    runs-on: ubuntu-latest  
-    steps:
-      - name: Check if PR is from Dependabot
-        shell: bash
-        run: |
-          if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
-            then
-            echo "PR opened by Dependabot. Skipping QA approval check."
-            exit 0
-          fi
   check_for_qa_approval:
     name: Requires QA approval
     runs-on: ubuntu-latest
-    if: ${{ failure() }}
-    needs: dependabot_pr_check
     steps:
+      - name: Check if PR is from Dependabot
+        id: check_dependabot
+        run: |
+          if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            echo "PR opened by Dependabot. Skipping QA approval check."
+            echo "::set-output name=dependabot::true"
+          else
+            echo "::set-output name=dependabot::false"
+          fi
+      - name: Exit if Dependabot
+        if: steps.check_dependabot.outputs.dependabot == 'true'
+        run: exit 0
+        
       - name: Check QA approval
+        if: steps.check_dependabot.outputs.dependabot == 'false'
         shell: bash
         run: |
           approvals=$(curl --request GET \
