@@ -4,12 +4,12 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -267,7 +267,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
+          <Alert variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
               <AlertBox

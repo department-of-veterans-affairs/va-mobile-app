@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -30,7 +30,6 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertBox,
   Box,
   ErrorComponent,
   FieldType,
@@ -511,11 +510,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
-        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+        <Alert variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
           <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
             {t('secureMessaging.reply.olderThan45Days')}
           </TextView>
-        </AlertBox>
+        </Alert>
       </Box>
     )
   }

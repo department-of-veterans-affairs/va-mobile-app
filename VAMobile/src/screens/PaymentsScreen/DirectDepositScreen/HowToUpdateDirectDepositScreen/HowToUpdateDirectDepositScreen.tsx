@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { AlertBox, Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
+import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -25,7 +27,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
         backLabel={t('payments.title')}
         backLabelOnPress={navigation.goBack}
         title={t('directDeposit.title')}>
-        <AlertBox border="warning">
+        <Alert variant="warning">
           <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
             {t('howToUpdateDirectDeposit.alert.title')}
           </TextView>
@@ -33,7 +35,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
             {t('howToUpdateDirectDeposit.alert.body.1')}
           </TextView>
           <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.alert.body.2')}</TextView>
-        </AlertBox>
+        </Alert>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
             <TextView

@@ -1,7 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AlertBox, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -13,7 +15,7 @@ function NoPaymentsScreen() {
 
   return (
     <VAScrollView>
-      <AlertBox border="informational">
+      <Alert variant="info">
         <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('payments.noPayments.title'))}>
           {t('payments.noPayments.title')}
         </TextView>
@@ -37,7 +39,7 @@ function NoPaymentsScreen() {
           {t('payments.noPayments.body.2')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
-      </AlertBox>
+      </Alert>
     </VAScrollView>
   )
 }

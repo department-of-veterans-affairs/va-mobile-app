@@ -2,9 +2,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ErrorsState } from 'store/slices'
@@ -21,11 +21,11 @@ function IndividualMessageErrorComponent() {
   return (
     <VAScrollView>
       <Box justifyContent="center">
-        <AlertBox
-          title={t('secureMessaging.viewMessage.errorTitle')}
-          titleA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
-          text={t('errors.callHelpCenter.sorryWithRefresh')}
-          border="error">
+        <Alert
+          variant="error"
+          header={t('secureMessaging.viewMessage.errorTitle')}
+          headerA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
+          description={t('errors.callHelpCenter.sorryWithRefresh')}>
           <Box>
             <TextView
               variant="MobileBody"
@@ -40,7 +40,7 @@ function IndividualMessageErrorComponent() {
               </Box>
             )}
           </Box>
-        </AlertBox>
+        </Alert>
       </Box>
     </VAScrollView>
   )
