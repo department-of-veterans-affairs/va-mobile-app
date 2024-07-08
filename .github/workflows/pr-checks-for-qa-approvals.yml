@@ -16,12 +16,11 @@ on:
       - '!VAMobile/src/*.test.tsx'
   pull_request_review:
     types: [submitted, dismissed]
-        
+
 jobs:
-  
-  check_for_qa_approval:
-    name: Requires QA approval
-    runs-on: ubuntu-latest
+  dependabot_pr_check:
+    name: Dependabot PR
+    runs-on: ubuntu-latest  
     steps:
       - name: Check if PR is from Dependabot
         shell: bash
@@ -31,8 +30,13 @@ jobs:
             echo "PR opened by Dependabot. Skipping QA approval check."
             exit 0
           fi
+  check_for_qa_approval:
+    name: Requires QA approval
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    needs: dependabot_pr_check
+    steps:
       - name: Check QA approval
-        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         shell: bash
         run: |
           approvals=$(curl --request GET \
