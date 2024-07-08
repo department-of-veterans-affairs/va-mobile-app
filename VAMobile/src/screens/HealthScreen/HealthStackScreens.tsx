@@ -16,9 +16,9 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
-import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
+import HealthHelp from './HealthHelp/HealthHelp'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
@@ -36,9 +36,7 @@ export type HealthStackParamList = WebviewStackParams & {
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
     vetextID?: string
-    page?: number
   }
-  ConfirmContactInfo: undefined
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
     appointment: AppointmentData
@@ -66,7 +64,6 @@ export type HealthStackParamList = WebviewStackParams & {
     messageID: number
     folderID?: number
     currentPage?: number
-    messagesLeft?: number
   }
   StartNewMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
@@ -135,6 +132,7 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   PrescriptionHelp: undefined
   SessionNotStarted: undefined
+  HealthHelp: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -173,12 +171,6 @@ export const getHealthScreens = () => {
     />,
     <HealthStack.Screen key={'ReplyHelp'} name="ReplyHelp" component={ReplyHelp} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen
-      key={'ConfirmContactInfo'}
-      name="ConfirmContactInfo"
-      component={ConfirmContactInfo}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
-    />,
-    <HealthStack.Screen
       key={'RefillRequestSummary'}
       name="RefillRequestSummary"
       component={RefillRequestSummary}
@@ -214,5 +206,6 @@ export const getHealthScreens = () => {
       component={SessionNotStarted}
       options={LARGE_PANEL_OPTIONS}
     />,
+    <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

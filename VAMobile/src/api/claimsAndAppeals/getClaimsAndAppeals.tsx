@@ -1,11 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 import { claimsAndAppealsKeys } from './queryKeys'
@@ -21,14 +22,12 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
 /**
  * Fetch user ClaimsAndAppeals
  */
-const getClaimsAndAppeals = async (
-  claimType: ClaimType,
-  page: number,
-): Promise<ClaimsAndAppealsListPayload | undefined> => {
+const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
   const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
-    'page[number]': page.toString(),
-    'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    'page[number]': '1',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
+    useCache: 'false',
   })
 
   if (response) {
@@ -42,20 +41,36 @@ const getClaimsAndAppeals = async (
 /**
  * Returns a query for user ClaimsAndAppeals
  */
-export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?: { enabled?: boolean }) => {
+export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: boolean }) => {
+  const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
-  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
-  const claimsInDowntime = useDowntime('claims')
-  const appealsInDowntime = useDowntime('appeals')
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
+  const closedClaimsAndAppealsQueryKey = [claimsAndAppealsKeys.claimsAndAppeals, ClaimTypeConstants.CLOSED]
 
   return useQuery({
     ...options,
     enabled: !!(claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled),
-    queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, page],
-    queryFn: () => getClaimsAndAppeals(claimType, page),
+    queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
+    queryFn: () => {
+      if (claimType === ClaimTypeConstants.ACTIVE && !queryClient.getQueryData(closedClaimsAndAppealsQueryKey)) {
+        // Prefetch closed claims when active claims are being fetched so that closed
+        // claims will already be loaded if a user views the closed claims tab.
+        queryClient.prefetchQuery({
+          queryKey: closedClaimsAndAppealsQueryKey,
+          queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED),
+          staleTime: ACTIVITY_STALE_TIME,
+        })
+      }
+
+      return getClaimsAndAppeals(claimType)
+    },
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

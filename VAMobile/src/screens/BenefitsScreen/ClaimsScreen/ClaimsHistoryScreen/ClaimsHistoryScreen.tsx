@@ -1,5 +1,6 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -9,6 +10,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,6 +22,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import DEPRECATED_ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/DEPRECATED_ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
@@ -49,7 +52,12 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     error: claimsAndAppealsListError,
     isFetching: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
-  } = useClaimsAndAppeals(claimType, 1)
+  } = useClaimsAndAppeals(claimType)
+
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
@@ -121,7 +129,8 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={title}
-      testID="claimsHistoryID">
+      testID="claimsHistoryID"
+      scrollViewProps={scrollViewProps}>
       {!claimsNotInDowntime && !appealsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
@@ -155,7 +164,11 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
           {serviceErrorAlert()}
           {!claimsAndAppealsServiceErrors && (
             <Box flex={1}>
-              <ClaimsAndAppealsListView claimType={claimType} />
+              {featureEnabled('claimPhaseExpansion') ? (
+                <ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
+              ) : (
+                <DEPRECATED_ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
+              )}
             </Box>
           )}
         </Box>
