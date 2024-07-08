@@ -9,21 +9,14 @@ on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src/**'
+      - 'VAMobile/src'
+      - 'VAMobile/e2e'
       - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
-      - '!.github/**'
+      - 'VAMobile/.detoxrc.json'
+      - '!VAMobile/src/*.test.tsx'
   pull_request_review:
     types: [submitted, dismissed]
-  pull_request_target:
-    paths:
-      - 'VAMobile/src/**'
-      - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
-      - '!.github/**'
-    branches:
-      - 'develop'
-      
+        
 jobs:
   
   check_for_qa_approval:
@@ -39,6 +32,7 @@ jobs:
             exit 0
           fi
       - name: Check QA approval
+        if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' }}
         shell: bash
         run: |
           approvals=$(curl --request GET \
