@@ -22,7 +22,7 @@ describe('Sign In', () => {
       .withTimeout(20000)
 
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
-    await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P1_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_TEXT))).toExist()
@@ -32,7 +32,7 @@ describe('Sign In', () => {
   it(':ios: should show webview with log in options', async () => {
     await element(by.text('Close')).tap()
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await element(by.text('Done')).tap()
     await element(by.text(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_TEXT)).tap()
     await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P1))).toExist()

@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, resetInAppReview, toggleRemoteConfigFlag } from './utils'
 
 var navigationValue = process.argv[7]
 
@@ -13,7 +13,7 @@ const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 const navigationDic = {
   Home: [
-    ['HomeScreen.e2e', 'Contact VA', 'Contact VA'],
+    ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
     [
       ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
       ['Profile', 'Personal information'],
@@ -33,20 +33,16 @@ const navigationDic = {
     ['DisabilityRatings.e2e', 'Disability rating', 'Disability rating'],
     ['Claims.e2e', 'Claims', 'Claims'],
     ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
-    [
-      'Claims.e2e',
-      ['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'],
-      'File requests',
-    ],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received January 01, 2021', 'Review file requests'], 'File requests'],
     [
       'Claims.e2e',
       [
         'Claims',
         'Claims history',
-        'Claim for compensation updated on May 05, 2021',
+        'Received January 01, 2021',
         'Review file requests',
         'Dental disability - More information needed',
       ],
@@ -275,6 +271,8 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+
   await device.launchApp({ newInstance: false })
   await loginToDemoMode()
 })

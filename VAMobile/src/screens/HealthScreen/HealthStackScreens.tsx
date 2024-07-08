@@ -18,6 +18,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
+import HealthHelp from './HealthHelp/HealthHelp'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
@@ -35,7 +36,6 @@ export type HealthStackParamList = WebviewStackParams & {
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
     vetextID?: string
-    page?: number
   }
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
@@ -64,7 +64,6 @@ export type HealthStackParamList = WebviewStackParams & {
     messageID: number
     folderID?: number
     currentPage?: number
-    messagesLeft?: number
   }
   StartNewMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
@@ -133,6 +132,7 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   PrescriptionHelp: undefined
   SessionNotStarted: undefined
+  HealthHelp: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -206,5 +206,6 @@ export const getHealthScreens = () => {
       component={SessionNotStarted}
       options={LARGE_PANEL_OPTIONS}
     />,
+    <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]
 }
