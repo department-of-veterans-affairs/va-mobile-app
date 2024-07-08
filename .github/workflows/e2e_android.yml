@@ -242,13 +242,13 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Create artifact
-        if: steps.run_e2e_tests.outcome == 'failure'
+        if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
         run: |
           echo > VAMobile/artifacts/failure.txt
       
       - name: Output test failure
         id: post_failure
-        if: steps.run_e2e_tests.outcome == 'failure'
+        if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           overwrite: true
@@ -280,7 +280,7 @@ jobs:
             path: VAMobile/artifacts
       - name: Inform Slack
         run: |
-          list=find . -maxdepth 1 -name "VAMobile/artifacts/failure.txt"
+          list=find ./VAMobile/artifacts -name "failure.txt"
           echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
