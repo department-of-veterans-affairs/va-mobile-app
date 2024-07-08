@@ -61,9 +61,8 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
             width={24}
             height={24}
             preventScaling={true}
-            name={'ExternalLink'}
+            name={'Launch'}
             fill={theme.colors.icon.announcementBanner}
-            fill2={theme.colors.icon.transparent}
           />
         </Box>
       </Pressable>
