@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { loginToDemoMode, openAppointments, openHealth, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, resetInAppReview } from './utils'
 
 export const Appointmentse2eConstants = {
   GET_DIRECTIONS_ID: 'directionsTestID',
@@ -273,8 +273,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
         .scroll(250, 'up')
     }
   } else {
-    //Add back in when pagination is fixed
-    /*if (
+    if (
       text === 'Sami Alsahhar - HOME - Confirmed' ||
       text === 'At VA Memphis Healthcare System' ||
       text === 'At Northport VA Medical Center' ||
@@ -287,7 +286,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
     await waitFor(element(by.text(text)))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
-      .scroll(300, 'down')*/
+      .scroll(300, 'down')
 
     try {
       await waitFor(element(by.text(text)))
@@ -437,7 +436,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await resetInAppReview()
       await openHealth()
       await openAppointments()
-      await waitFor(element(by.text('Upcoming')))
+      await waitFor(element(by.text(CommonE2eIdConstants.UPCOMING_APPT_BUTTON_TEXT)))
         .toExist()
         .withTimeout(10000)
     } else {

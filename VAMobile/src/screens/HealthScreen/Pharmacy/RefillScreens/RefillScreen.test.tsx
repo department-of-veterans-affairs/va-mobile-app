@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { PrescriptionsGetData } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
@@ -93,7 +94,7 @@ context('RefillScreen', () => {
     it('should show NoRefills component', async () => {
       const params = {
         'page[number]': '1',
-        'page[size]': '5000',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
         sort: 'refill_status', // Parameters are snake case for the back end
       }
       when(api.get as jest.Mock)
@@ -108,7 +109,7 @@ context('RefillScreen', () => {
     it('should show alert for no prescription selected', async () => {
       const params = {
         'page[number]': '1',
-        'page[size]': '5000',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
         sort: 'refill_status', // Parameters are snake case for the back end
       }
       when(api.get as jest.Mock)

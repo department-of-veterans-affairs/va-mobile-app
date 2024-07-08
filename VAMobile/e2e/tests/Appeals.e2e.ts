@@ -1,10 +1,17 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openClaimsHistory,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const AppealsIdConstants = {
-  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Received June 12, 2008',
+  APPEAL_1_ID: 'Disability compensation appeal Received June 12, 2008',
   REVIEW_PAST_EVENTS_ID: 'reviewPastEventsTestID',
   ISSUES_TAB_TEXT: 'Issues',
   STATUS_TAB_TEXT: 'Status',
@@ -18,6 +25,8 @@ export const AppealsIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -26,15 +35,14 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
-    //Uncomment when 8101 is completed
-    /*await element(by.id('claimsHistoryID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id('next-page')).tap()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()*/
+    await element(by.id('next-page')).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
     await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID)))
       .toBeVisible()
       .whileElement(by.id('claimsHistoryID'))

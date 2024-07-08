@@ -10,7 +10,7 @@
             "name": "Cary VA Medical Center",
             "city": "Cary",
             "state": "WY",
-            "cerner": true,
+            "cerner": false,
             "miles": "3.63"
           },
           {
@@ -18,7 +18,7 @@
             "name": "Cheyenne VA Medical Center",
             "city": "Cheyenne",
             "state": "WY",
-            "cerner": true,
+            "cerner": false,
             "miles": "3.17"
           }
         ]

@@ -1,3 +1,7 @@
+---
+title: Authentication Diagrams
+---
+
 ```mermaid
 sequenceDiagram
     title: Username and Password Authorization Flow

@@ -3,6 +3,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
+export const LARGE_PAGE_SIZE = 5000
 
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes
@@ -62,3 +63,5 @@ export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
 export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'
 export const DESCENDING = 'descending'
+
+export const ACTIVITY_STALE_TIME = 300000 // 5 minutes
