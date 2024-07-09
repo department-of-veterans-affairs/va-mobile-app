@@ -142,10 +142,12 @@ export const loadPushPreferences =
     const systemNotificationsOn = await notificationsEnabled()
     try {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-      const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-      dispatch(
-        dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }),
-      )
+      let preferences
+      if (endpoint_sid) {
+        const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
+        preferences = response?.data.attributes.preferences
+      }
+      dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
