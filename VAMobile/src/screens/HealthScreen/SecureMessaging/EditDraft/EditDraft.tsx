@@ -30,6 +30,7 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
+  AlertWithScroll,
   Box,
   ErrorComponent,
   FieldType,
@@ -522,14 +523,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderForm() {
     if (noProviderError) {
       return (
-        <AlertBox
-          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
-          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
-          border="error"
+        <AlertWithScroll
+          variant="error"
+          header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertBox>
+        </AlertWithScroll>
       )
     }
 
@@ -558,7 +559,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
           scrollViewRef={scrollViewRef}
-          focusOnError={onSendClicked}
+          isFocused={onSendClicked}
           errorList={errorList}
           replyTriageError={replyTriageError}
         />

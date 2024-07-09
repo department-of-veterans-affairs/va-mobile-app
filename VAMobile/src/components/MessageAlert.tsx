@@ -2,19 +2,19 @@ import React, { FC, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { AlertBox, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { AlertWithScroll, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
-  /** Optional boolean for determining when to focus on error alert boxes. */
-  focusOnError?: boolean
+  /** ref for parent scroll view */
+  scrollViewRef: RefObject<ScrollView>
+  /** Optional boolean indicating when Alert is focused. Default is true */
+  isFocused?: boolean
   /**sets if there is validation errors */
   hasValidationError?: boolean
   /**sets if attempted to save a draft */
   saveDraftAttempted?: boolean
-  /** optional ref for parent scroll view */
-  scrollViewRef?: RefObject<ScrollView>
   /** optional list of alertbox failed reasons, supplied by FormWrapper component */
   errorList?: { [key: number]: string }
   /** sets if triage error returned from api */
@@ -26,7 +26,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
   hasValidationError,
   saveDraftAttempted,
   scrollViewRef,
-  focusOnError,
+  isFocused = true,
   errorList,
   replyTriageError,
 }) => {
@@ -53,24 +53,22 @@ const MessageAlert: FC<MessageAlertProps> = ({
 
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox
-        border={'error'}
-        title={t('secureMessaging.formMessage.weNeedMoreInfo')}
-        text={text}
-        titleRole={'header'}
+      <AlertWithScroll
+        variant="error"
+        header={t('secureMessaging.formMessage.weNeedMoreInfo')}
+        description={text}
         scrollViewRef={scrollViewRef}
-        focusOnError={focusOnError}>
+        isFocused={isFocused}>
         <VABulletList listOfText={bulletedListOfText} />
-      </AlertBox>
+      </AlertWithScroll>
     </Box>
   ) : replyTriageError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox
-        border={'error'}
-        title={t('secureMessaging.sendError.title')}
-        titleRole={'header'}
+      <AlertWithScroll
+        variant="error"
+        header={t('secureMessaging.sendError.title')}
         scrollViewRef={scrollViewRef}
-        focusOnError={focusOnError}>
+        isFocused={isFocused}>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.reply.error.youCantSend')}
         </TextView>
@@ -81,7 +79,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
         <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-      </AlertBox>
+      </AlertWithScroll>
     </Box>
   ) : (
     <></>

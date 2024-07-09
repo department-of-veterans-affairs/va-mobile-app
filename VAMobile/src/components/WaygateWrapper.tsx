@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
+import { Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -49,14 +49,13 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox
-          border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
-          title={waygate.errorMsgTitle}
-          titleA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
-          text={text}
-          textA11yLabel={a11yLabelVA(text || '')}
-          focusOnError={false}
-          testId="AFUseCase2TestID">
+        <Alert
+          variant={waygate.type === 'DenyContent' ? 'error' : 'warning'}
+          header={waygate.errorMsgTitle}
+          headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
+          description={text}
+          descriptionA11yLabel={a11yLabelVA(text || '')}
+          testID="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber
               displayedText={displayedTextPhoneNumber(phoneNumber)}
@@ -65,7 +64,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
             />
           </Box>
           {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
-        </AlertBox>
+        </Alert>
       </Box>
     )
   }

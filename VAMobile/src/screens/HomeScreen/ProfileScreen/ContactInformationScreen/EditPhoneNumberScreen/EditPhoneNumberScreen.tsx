@@ -9,7 +9,15 @@ import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/m
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
-import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import {
+  AlertWithScroll,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  FullScreenSubtask,
+  LoadingComponent,
+} from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -270,11 +278,11 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
           <Alert variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertBox
+              <AlertWithScroll
+                variant="error"
+                header={t('editPhoneNumber.checkPhoneNumber')}
+                isFocused={onSaveClicked}
                 scrollViewRef={scrollViewRef}
-                title={t('editPhoneNumber.checkPhoneNumber')}
-                border="error"
-                focusOnError={onSaveClicked}
               />
             </Box>
           )}

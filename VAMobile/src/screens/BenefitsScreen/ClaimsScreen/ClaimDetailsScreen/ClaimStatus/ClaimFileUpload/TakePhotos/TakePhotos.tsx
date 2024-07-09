@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { AlertWithScroll, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
@@ -81,7 +81,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
       testID="takePhotosTestID">
       {!!error && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
+          <AlertWithScroll variant="error" description={error} scrollViewRef={scrollViewRef} />
         </Box>
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>

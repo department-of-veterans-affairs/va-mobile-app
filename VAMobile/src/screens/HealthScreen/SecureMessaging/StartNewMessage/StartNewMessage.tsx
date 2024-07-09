@@ -395,7 +395,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
           scrollViewRef={scrollViewRef}
-          focusOnError={onSendClicked}
+          isFocused={onSendClicked}
           errorList={errorList}
           replyTriageError={replyTriageError}
         />

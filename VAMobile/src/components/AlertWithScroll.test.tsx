@@ -2,11 +2,11 @@ import React from 'react'
 
 import { context, render, screen } from 'testUtils'
 
-import AlertBox from './AlertBox'
+import AlertWithScroll from './AlertWithScroll'
 
-context('AlertBox', () => {
+context('AlertWithScroll', () => {
   beforeEach(() => {
-    render(<AlertBox border="warning" text={'My warning'} title={'Warning title'} />)
+    render(<AlertWithScroll variant="warning" header={'Warning title'} description={'My warning'} />)
   })
 
   it('initializes correctly', () => {
