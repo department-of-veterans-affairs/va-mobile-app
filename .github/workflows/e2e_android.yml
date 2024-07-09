@@ -268,8 +268,10 @@ jobs:
       - name: Inform Slack
         shell: bash
         run: |
-          list=$(find . -name "*e2e-junit")
-          echo "$list" 
+          list=$(grep -r "<failure>" ./test_reports)
+          echo "$list"
+# list=$(find . -name "*e2e-junit")
+# echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
 #  -H 'Content-type: application/json' \
