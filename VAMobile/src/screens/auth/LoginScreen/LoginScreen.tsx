@@ -5,9 +5,18 @@ import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, CrisisLineButton, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  BoxProps,
+  CrisisLineButton,
+  TextView,
+  VAIcon,
+  VAScrollView,
+  WaygateWrapper,
+} from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -113,7 +122,7 @@ function LoginScreen() {
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
-      {demoMode && <Alert variant="info" header="DEMO MODE" />}
+      {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}

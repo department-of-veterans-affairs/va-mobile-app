@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
-
 import {
+  AlertWithHaptics,
   Box,
   BoxProps,
   ClickToCallPhoneNumber,
@@ -55,7 +54,7 @@ function PrescriptionHistoryNoPrescriptions() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <Alert
+        <AlertWithHaptics
           variant="info"
           header={t('prescriptions.notFound.title')}
           headerA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
@@ -68,7 +67,7 @@ function PrescriptionHistoryNoPrescriptions() {
           <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )

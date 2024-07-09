@@ -6,9 +6,10 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import {
+  AlertWithHaptics,
   Box,
   ButtonDecoratorType,
   ErrorComponent,
@@ -109,14 +110,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               {preferenceList()}
             </>
           ) : (
-            <Alert
+            <AlertWithHaptics
               variant="info"
               header={t('notifications.settings.alert.title')}
               description={t('notifications.settings.alert.text')}>
               <Box mt={standardMarginBetween}>
                 <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
               </Box>
-            </Alert>
+            </AlertWithHaptics>
           )}
           <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
             {t('notifications.settings.privacy')}

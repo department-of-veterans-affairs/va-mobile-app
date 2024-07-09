@@ -11,7 +11,7 @@ import { useContactInformation } from 'api/contactInformation'
 import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import {
-  AlertWithScroll,
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
@@ -593,10 +593,10 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           )}
           {formContainsError && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithScroll
+              <AlertWithHaptics
                 variant="error"
                 header={t('editAddress.alertError')}
-                isFocused={onSaveClicked}
+                focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />
             </Box>

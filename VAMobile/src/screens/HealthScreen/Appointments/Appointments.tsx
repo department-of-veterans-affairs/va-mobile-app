@@ -9,7 +9,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertWithScroll, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -86,7 +86,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     if (serviceError) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertWithScroll
+          <AlertWithHaptics
             variant="error"
             header={t('appointments.appointmentsStatusSomeUnavailable')}
             headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}

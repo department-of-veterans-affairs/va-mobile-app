@@ -9,7 +9,7 @@ import { filter } from 'underscore'
 
 import { usePrescriptions, useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
-import { AlertWithScroll, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import SelectionList from 'components/SelectionList'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -199,7 +199,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         <>
           {showAlert && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithScroll
+              <AlertWithHaptics
                 variant="error"
                 header={t('prescriptions.refill.pleaseSelect')}
                 scrollViewRef={scrollViewRef}

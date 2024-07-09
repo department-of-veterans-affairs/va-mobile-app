@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import {
+  AlertWithHaptics,
   Box,
   BoxProps,
   ClickToCallPhoneNumber,
@@ -59,7 +59,7 @@ function PrescriptionHistoryNotAuthorized() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <Alert
+        <AlertWithHaptics
           variant="warning"
           header={t('prescriptions.notAuthorized.warning')}
           headerA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}

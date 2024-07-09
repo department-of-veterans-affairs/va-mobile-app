@@ -9,7 +9,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useContactInformation, useDeleteEmail, useSaveEmail } from 'api/contactInformation'
 import { SaveEmailData } from 'api/types'
 import {
-  AlertWithScroll,
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
@@ -230,10 +230,10 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
           )}
           {formContainsError && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithScroll
+              <AlertWithHaptics
                 variant="error"
                 header={t('editEmail.alertError')}
-                isFocused={onSaveClicked}
+                focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />
             </Box>

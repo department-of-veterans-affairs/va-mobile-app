@@ -2,9 +2,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ErrorsState } from 'store/slices'
@@ -21,7 +21,7 @@ function IndividualMessageErrorComponent() {
   return (
     <VAScrollView>
       <Box justifyContent="center">
-        <Alert
+        <AlertWithHaptics
           variant="error"
           header={t('secureMessaging.viewMessage.errorTitle')}
           headerA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
@@ -40,7 +40,7 @@ function IndividualMessageErrorComponent() {
               </Box>
             )}
           </Box>
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )

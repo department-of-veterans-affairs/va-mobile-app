@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -23,6 +22,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   ChildTemplate,
   ErrorComponent,
@@ -405,11 +405,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           )}
           {replyExpired && (
             <Box my={theme.dimensions.standardMarginBetween}>
-              <Alert variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
+              <AlertWithHaptics variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
                 <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
                   {t('secureMessaging.reply.olderThan45Days')}
                 </TextView>
-              </Alert>
+              </AlertWithHaptics>
             </Box>
           )}
           <MessageCard message={message} />

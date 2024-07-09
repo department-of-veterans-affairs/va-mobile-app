@@ -2,11 +2,11 @@ import React from 'react'
 
 import { context, render, screen } from 'testUtils'
 
-import AlertWithScroll from './AlertWithScroll'
+import AlertWithHaptics from './AlertWithHaptics'
 
-context('AlertWithScroll', () => {
+context('AlertWithHaptics', () => {
   beforeEach(() => {
-    render(<AlertWithScroll variant="warning" header={'Warning title'} description={'My warning'} />)
+    render(<AlertWithHaptics variant="warning" header={'Warning title'} description={'My warning'} />)
   })
 
   it('initializes correctly', () => {

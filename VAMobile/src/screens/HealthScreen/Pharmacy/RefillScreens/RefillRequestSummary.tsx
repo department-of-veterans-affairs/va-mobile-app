@@ -3,12 +3,21 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
-import { Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
+import {
+  AlertWithHaptics,
+  AlertWithHapticsProps,
+  Box,
+  BoxProps,
+  LoadingComponent,
+  TextArea,
+  TextView,
+  VAIcon,
+  VAIconProps,
+} from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -71,7 +80,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   })
 
   const renderAlert = (): ReactElement => {
-    let alertBoxProps: AlertProps
+    let alertBoxProps: AlertWithHapticsProps
     switch (status) {
       case REQUEST_STATUS.SUCCESS:
         alertBoxProps = {
@@ -92,7 +101,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <Alert {...alertBoxProps}>
+        <AlertWithHaptics {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Button
@@ -106,7 +115,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
               />
             </Box>
           )}
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     )
   }

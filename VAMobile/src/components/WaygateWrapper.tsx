@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, ClickToCallPhoneNumber } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -49,7 +49,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <Alert
+        <AlertWithHaptics
           variant={waygate.type === 'DenyContent' ? 'error' : 'warning'}
           header={waygate.errorMsgTitle}
           headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
@@ -64,7 +64,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
             />
           </Box>
           {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     )
   }

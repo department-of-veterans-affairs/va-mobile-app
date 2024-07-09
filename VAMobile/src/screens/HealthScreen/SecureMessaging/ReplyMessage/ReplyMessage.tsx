@@ -294,7 +294,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           scrollViewRef={scrollViewRef}
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          isFocused={onSendClicked}
+          focusOnError={onSendClicked}
           errorList={errorList}
           replyTriageError={replyTriageError}
         />

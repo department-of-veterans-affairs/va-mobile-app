@@ -1,10 +1,10 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
-import { Box, TextArea, TextView } from 'components'
+import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
@@ -30,7 +30,7 @@ function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisi
   //Opting to leave this code in place...because removing it will clearly kickstart pandemic part 4000.
   if (showCovidMessage) {
     return (
-      <Alert variant="warning" description={t('claimDetails.covidMessage')}>
+      <AlertWithHaptics variant="warning" description={t('claimDetails.covidMessage')}>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <Button
             onPress={onAlertLinkPress}
@@ -39,7 +39,7 @@ function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisi
             a11yHint={t('claimDetails.reviewLocationsA11yHint')}
           />
         </Box>
-      </Alert>
+      </AlertWithHaptics>
     )
   }
 

@@ -4,12 +4,12 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
@@ -109,7 +109,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Alert variant="error" header={alertTitle} description={alertText} />
+          <AlertWithHaptics variant="error" header={alertTitle} description={alertText} />
         </Box>
       )
     }

@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -64,7 +64,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <Alert
+        <AlertWithHaptics
           variant="error"
           header={titleText ? titleText : t('errors.callHelpCenter.vaAppNotWorking')}
           headerA11yLabel={titleA11yHint ? titleA11yHint : a11yLabelVA(t('errors.callHelpCenter.vaAppNotWorking'))}
@@ -88,7 +88,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
               </Box>
             )}
           </Box>
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )

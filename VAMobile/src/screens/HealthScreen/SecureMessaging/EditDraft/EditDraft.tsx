@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -30,7 +30,7 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertWithScroll,
+  AlertWithHaptics,
   Box,
   ErrorComponent,
   FieldType,
@@ -511,11 +511,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
-        <Alert variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
+        <AlertWithHaptics variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
           <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
             {t('secureMessaging.reply.olderThan45Days')}
           </TextView>
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     )
   }
@@ -523,14 +523,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderForm() {
     if (noProviderError) {
       return (
-        <AlertWithScroll
+        <AlertWithHaptics
           variant="error"
           header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertWithScroll>
+        </AlertWithHaptics>
       )
     }
 
@@ -559,7 +559,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
           scrollViewRef={scrollViewRef}
-          isFocused={onSendClicked}
+          focusOnError={onSendClicked}
           errorList={errorList}
           replyTriageError={replyTriageError}
         />

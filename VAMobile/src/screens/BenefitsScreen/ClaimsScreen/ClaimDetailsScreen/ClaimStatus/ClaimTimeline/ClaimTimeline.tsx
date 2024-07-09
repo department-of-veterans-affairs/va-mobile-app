@@ -3,10 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { ClaimAttributesData } from 'api/types'
-import { Box } from 'components'
+import { AlertWithHaptics, Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -39,7 +37,7 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box my={theme.dimensions.standardMarginBetween}>
-          <Alert
+          <AlertWithHaptics
             variant={'warning'}
             headerA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
             header={t('claimPhase.youHaveFileRequest', { count })}

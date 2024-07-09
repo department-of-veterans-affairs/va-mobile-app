@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
@@ -52,7 +50,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <Alert
+        <AlertWithHaptics
           variant="warning"
           header={t('downtime.title')}
           headerA11yLabel={t('downtime.title')}
@@ -66,7 +64,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
             phone={t('8006982411')}
             a11yLabel={a11yLabelID(t('8006982411'))}
           />
-        </Alert>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )

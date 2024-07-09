@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
@@ -24,6 +24,7 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   ErrorComponent,
   FieldType,
@@ -374,13 +375,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   function renderContent() {
     if (noProviderError) {
       return (
-        <Alert
+        <AlertWithHaptics
           variant="error"
           header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </Alert>
+        </AlertWithHaptics>
       )
     }
 
@@ -395,7 +396,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
           scrollViewRef={scrollViewRef}
-          isFocused={onSendClicked}
+          focusOnError={onSendClicked}
           errorList={errorList}
           replyTriageError={replyTriageError}
         />

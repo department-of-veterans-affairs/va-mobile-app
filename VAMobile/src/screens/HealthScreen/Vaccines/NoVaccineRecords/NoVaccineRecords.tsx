@@ -1,9 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -15,7 +13,7 @@ function NoVaccineRecords() {
 
   return (
     <VAScrollView>
-      <Alert
+      <AlertWithHaptics
         variant="info"
         header={t('noVaccineRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('noVaccineRecords.alert.title'))}
@@ -24,7 +22,7 @@ function NoVaccineRecords() {
           {t('noVaccineRecords.alert.text.2')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8006982411')} displayedText={displayedTextPhoneNumber(t('8006982411'))} />
-      </Alert>
+      </AlertWithHaptics>
     </VAScrollView>
   )
 }

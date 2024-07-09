@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithScroll, Box, TextArea, TextView } from 'components'
+import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -115,7 +115,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       <Box mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertWithScroll variant="error" description={error} scrollViewRef={scrollViewRef} />
+            <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <TextArea>

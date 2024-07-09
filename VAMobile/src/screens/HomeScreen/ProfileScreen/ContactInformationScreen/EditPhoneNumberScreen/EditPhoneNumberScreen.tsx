@@ -4,13 +4,13 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Alert, Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
 import {
-  AlertWithScroll,
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
@@ -275,13 +275,13 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <Alert variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
+          <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertWithScroll
+              <AlertWithHaptics
                 variant="error"
                 header={t('editPhoneNumber.checkPhoneNumber')}
-                isFocused={onSaveClicked}
+                focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />
             </Box>

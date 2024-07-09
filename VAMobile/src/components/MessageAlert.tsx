@@ -2,15 +2,15 @@ import React, { FC, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { AlertWithScroll, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
   /** ref for parent scroll view */
   scrollViewRef: RefObject<ScrollView>
-  /** Optional boolean indicating when Alert is focused. Default is true */
-  isFocused?: boolean
+  /** Optional boolean for determining when to focus on error alert boxes (e.g. onSaveClicked). Default is true */
+  focusOnError?: boolean
   /**sets if there is validation errors */
   hasValidationError?: boolean
   /**sets if attempted to save a draft */
@@ -26,7 +26,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
   hasValidationError,
   saveDraftAttempted,
   scrollViewRef,
-  isFocused = true,
+  focusOnError = true,
   errorList,
   replyTriageError,
 }) => {
@@ -53,22 +53,22 @@ const MessageAlert: FC<MessageAlertProps> = ({
 
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertWithScroll
+      <AlertWithHaptics
         variant="error"
         header={t('secureMessaging.formMessage.weNeedMoreInfo')}
         description={text}
         scrollViewRef={scrollViewRef}
-        isFocused={isFocused}>
+        focusOnError={focusOnError}>
         <VABulletList listOfText={bulletedListOfText} />
-      </AlertWithScroll>
+      </AlertWithHaptics>
     </Box>
   ) : replyTriageError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertWithScroll
+      <AlertWithHaptics
         variant="error"
         header={t('secureMessaging.sendError.title')}
         scrollViewRef={scrollViewRef}
-        isFocused={isFocused}>
+        focusOnError={focusOnError}>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.reply.error.youCantSend')}
         </TextView>
@@ -79,7 +79,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
         <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-      </AlertWithScroll>
+      </AlertWithHaptics>
     </Box>
   ) : (
     <></>
