@@ -7,14 +7,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
-  /** ref for parent scroll view */
-  scrollViewRef: RefObject<ScrollView>
-  /** Optional boolean for determining when to focus on error alert boxes (e.g. onSaveClicked). Default is true */
+  /** Optional boolean for determining when to focus on error alert boxes. */
   focusOnError?: boolean
   /**sets if there is validation errors */
   hasValidationError?: boolean
   /**sets if attempted to save a draft */
   saveDraftAttempted?: boolean
+  /** optional ref for parent scroll view */
+  scrollViewRef?: RefObject<ScrollView>
   /** optional list of alertbox failed reasons, supplied by FormWrapper component */
   errorList?: { [key: number]: string }
   /** sets if triage error returned from api */
@@ -26,7 +26,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
   hasValidationError,
   saveDraftAttempted,
   scrollViewRef,
-  focusOnError = true,
+  focusOnError,
   errorList,
   replyTriageError,
 }) => {
