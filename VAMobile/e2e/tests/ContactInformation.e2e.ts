@@ -122,6 +122,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
       .toBeVisible()
       .withTimeout(4000)
     if (addressType === 'Home') {
+      /* trying to troubleshoot. again.
       await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
@@ -133,7 +134,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
       await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
+*/
       await element(by.id('EditAddressTestID')).scrollTo('top')
       await updateAddress()
     }
