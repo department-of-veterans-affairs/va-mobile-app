@@ -268,11 +268,10 @@ jobs:
       - name: Inform Slack
         shell: bash
         run: |
-          list="$(grep -r "<failure>" .)"
-          if [[ "$list" ]] then;
+          if [[ $(grep -q -r "<failure>" .) ]]; then
             echo "found"
           else
-            echo "notFound"
+            echo "not found"
           fi
 # list=$(find . -name "*e2e-junit")
 # echo "$list" 
