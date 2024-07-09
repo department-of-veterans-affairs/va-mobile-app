@@ -1,4 +1,6 @@
-# API Tokens
+---
+title: API Tokens
+---
 
 ## Authorization and token types
 
@@ -16,11 +18,15 @@ We host a web app on heroku for fetching api tokens. You can fetch tokens in two
 
 2. Automated: These requests use basic auth (ask teammates for username and password) and will only work if the test user has previously been logged in via the manual approach and the user's refresh token is still valid. There are routes for fetching IAM tokens:
 
-`GET https://va-mobile-cutter.herokuapp.com/auth/iam/token/judy.morrison@id.me`
+```bash
+GET https://va-mobile-cutter.herokuapp.com/auth/iam/token/judy.morrison@id.me
+```
 
 And SIS tokens:
 
-`GET https://va-mobile-cutter.herokuapp.com/auth/sis/token/judy.morrison@id.me`
+```bash
+GET https://va-mobile-cutter.herokuapp.com/auth/sis/token/judy.morrison@id.me
+```
 
 ## Working on the token app
 

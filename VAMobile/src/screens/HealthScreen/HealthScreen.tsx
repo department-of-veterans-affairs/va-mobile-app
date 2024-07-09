@@ -7,13 +7,10 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFolders } from 'api/secureMessaging'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
-import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -31,8 +28,6 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
-
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
 export function HealthScreen({}: HealthScreenProps) {
@@ -49,15 +44,6 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
   const inboxUnreadCountA11y = foldersData && t('secureMessaging.tag.a11y', { unreadCount: inboxUnreadCount })
-
-  const onCoronaVirusFAQ = () => {
-    logAnalyticsEvent(Events.vama_covid_links('health_screen'))
-    navigateTo('Webview', {
-      url: WEBVIEW_URL_CORONA_FAQ,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('webview.covidUpdates.loading'),
-    })
-  }
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
@@ -95,14 +81,6 @@ export function HealthScreen({}: HealthScreenProps) {
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           onPress={() => navigateTo('VaccineList')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          onPress={onCoronaVirusFAQ}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
