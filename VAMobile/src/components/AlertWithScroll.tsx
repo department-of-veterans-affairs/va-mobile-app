@@ -20,12 +20,11 @@ export type AlertWithScrollProps = AlertProps & {
 const AlertWithScroll: FC<AlertWithScrollProps> = ({ children, scrollViewRef, isFocused = true, ...props }) => {
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
   const { variant, header, description } = props
-  const boxPadding = 20
 
   useEffect(() => {
     if (variant === 'error' && scrollViewRef?.current && (header || description)) {
       scrollRef.current = scrollViewRef.current
-      scrollToAlert(-boxPadding)
+      scrollToAlert()
     }
   }, [variant, scrollRef, scrollViewRef, scrollToAlert, header, description])
 
