@@ -383,7 +383,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-    .scroll(700, 'down')
+    .scroll(100, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
