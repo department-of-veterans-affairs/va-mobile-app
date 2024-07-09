@@ -28,7 +28,7 @@ jobs:
         run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
             then
-            echo "PR opened by Dependabot. Skipping QA approval checking. test"
+            echo "PR opened by Dependabot. Skipping QA approval checking."
             exit 0
           fi
           approvals=$(curl --request GET \
