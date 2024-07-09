@@ -64,6 +64,8 @@ jobs:
           echo "Total Accessibility issues detected: $num_issues"
 
           # Set output for number of issues
+          echo "num_issues=$num_issues" >> $GITHUB_ENV
+          echo "::set-output name=num_issues::$num_issues"
           echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
 
           # Fail the workflow if accessibility issues are detected
