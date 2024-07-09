@@ -59,6 +59,7 @@ jobs:
             else
               echo "No accessibility issues found in $url"
             fi
+          done  
       
           echo "Total Accessibility issues detected: $num_issues"
 
@@ -75,6 +76,7 @@ jobs:
   debug:
     name: Debug Output
     runs-on: ubuntu-latest
+    if: ${{ failure() }}
     needs: axe-scan
     steps:
       - name: Print number of issues
@@ -84,7 +86,7 @@ jobs:
   start_slack_thread:
     name: Start Slack thread
     if: ${{ failure() }}
-    needs: axe-scan
+    needs: [axe-scan, debug]
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
