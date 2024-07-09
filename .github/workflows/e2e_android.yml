@@ -268,7 +268,7 @@ jobs:
       - name: Inform Slack
         shell: bash
         run: |
-          list=$(grep -r "<failure>" ./test_reports)
+          list=$(grep -r "<failure>" .)
           echo "$list"
 # list=$(find . -name "*e2e-junit")
 # echo "$list" 
