@@ -1398,16 +1398,16 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.0.tgz#65f6baf164f569875867c2835a711deee5d881e2"
-  integrity sha512-l9WT4Zl8f/yQPqG74GoUfVEDU1aNuEsc6jxJeomqlOHlI7abXuDMojuZHJVg3+YD0h2XQXfWbprdl1mKe2VF1w==
+"@department-of-veterans-affairs/mobile-component-library@0.19.1":
+  version "0.19.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1.tgz#fa543b98bb4f904cc9bbdf1387c775a47dce92b7"
+  integrity sha512-zWZoMRj5XG5HQYqrP5pNhSi/esaVqGB1+zpy3xKiXSfK6zt89GGKmwa6Q5cva55hoxOWhHuVt2j8wJz+2JCa0A==
   dependencies:
     "@department-of-veterans-affairs/mobile-assets" "0.12.0"
     "@department-of-veterans-affairs/mobile-tokens" "0.12.0"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
-    i18next "^23.8.2"
-    react-i18next "^14.0.5"
+    i18next "^23.11.5"
+    react-i18next "^14.1.2"
     react-native-svg "15.2.0"
     styled-components "^6.1.8"
 
@@ -6391,17 +6391,17 @@ husky@^9.0.11:
   resolved "https://registry.yarnpkg.com/husky/-/husky-9.0.11.tgz#fc91df4c756050de41b3e478b2158b87c1e79af9"
   integrity sha512-AB6lFlbwwyIqMdHYhwPe+kjOC3Oc5P3nThEoW/AaO2BX3vJDjWPFxYLxokUZOo6RNX20He3AaT8sESs9NJcmEw==
 
+i18next@^23.11.5:
+  version "23.11.5"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.11.5.tgz#d71eb717a7e65498d87d0594f2664237f9e361ef"
+  integrity sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==
+  dependencies:
+    "@babel/runtime" "^7.23.2"
+
 i18next@^23.7.18:
   version "23.7.18"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.7.18.tgz#4f219e3702b08342c5519bc2cda7d09c67edebb9"
   integrity sha512-b9N2KjRCYQNlUvE1Kc83g8knyUkL5NiZQOp9BsTR/v/LXk6Fzz+doOzTg2/826XK28mCgBkYLNAtixjE58qpCw==
-  dependencies:
-    "@babel/runtime" "^7.23.2"
-
-i18next@^23.8.2:
-  version "23.10.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.10.0.tgz#fb328794ae692e6fdde0564259e421f4203c4a2c"
-  integrity sha512-/TgHOqsa7/9abUKJjdPeydoyDc0oTi/7u9F8lMSj6ufg4cbC1Oj3f/Jja7zj7WRIhEQKB7Q4eN6y68I9RDxxGQ==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
@@ -9165,10 +9165,10 @@ react-i18next@^14.0.1:
     "@babel/runtime" "^7.22.5"
     html-parse-stringify "^3.0.1"
 
-react-i18next@^14.0.5:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.0.tgz#44da74fbffd416f5d0c5307ef31735cf10cc91d9"
-  integrity sha512-3KwX6LHpbvGQ+sBEntjV4sYW3Zovjjl3fpoHbUwSgFHf0uRBcbeCBLR5al6ikncI5+W0EFb71QXZmfop+J6NrQ==
+react-i18next@^14.1.2:
+  version "14.1.2"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.2.tgz#cd57a755f25a32a5fcc3dbe546cf3cc62b4f3ebd"
+  integrity sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==
   dependencies:
     "@babel/runtime" "^7.23.9"
     html-parse-stringify "^3.0.1"
