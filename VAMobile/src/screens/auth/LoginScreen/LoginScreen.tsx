@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, ImageProps, StatusBar, StyleProp, ViewStyle } from 'react-native'
+import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -48,11 +48,6 @@ function LoginScreen() {
   const mainViewStyle: StyleProp<ViewStyle> = {
     flexGrow: 1,
     backgroundColor: theme.colors.background.loginScreen,
-  }
-
-  const logoProps: ImageProps = {
-    width: 254,
-    height: 57,
   }
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -125,14 +120,7 @@ function LoginScreen() {
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
           testID="va-icon">
-          <Image
-            style={logoProps}
-            source={
-              theme.mode === 'dark'
-                ? require('../../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
-                : require('../../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')
-            }
-          />
+          <VALogo />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <Button onPress={onLoginInit} label={t('signin')} />

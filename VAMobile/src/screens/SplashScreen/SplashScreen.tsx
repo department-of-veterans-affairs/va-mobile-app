@@ -1,7 +1,7 @@
 import React from 'react'
-import { Image, ImageProps, StatusBar, ViewStyle } from 'react-native'
+import { StatusBar, ViewStyle } from 'react-native'
 
-import { Box, VAScrollView } from 'components'
+import { Box, VALogo, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useOrientation, useTheme } from 'utils/hooks'
 
@@ -12,10 +12,6 @@ function SplashScreen({}: SplashScreenProps) {
     flexGrow: 1,
     justifyContent: 'center',
     backgroundColor: theme.colors.background.loginScreen,
-  }
-  const logoProps: ImageProps = {
-    width: 254,
-    height: 57,
   }
   const isPortrait = useOrientation()
 
@@ -32,14 +28,7 @@ function SplashScreen({}: SplashScreenProps) {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
-        <Image
-          style={logoProps}
-          source={
-            theme.mode === 'dark'
-              ? require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
-              : require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')
-          }
-        />
+        <VALogo />
       </Box>
     </VAScrollView>
   )

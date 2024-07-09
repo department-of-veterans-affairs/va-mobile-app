@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, ImageProps, StatusBar, ViewStyle } from 'react-native'
+import { StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAppointments } from 'api/appointments'
@@ -12,7 +12,7 @@ import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { Box, LoadingComponent, TextView, VAScrollView } from 'components'
+import { Box, LoadingComponent, TextView, VALogo, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,10 +33,6 @@ function SyncScreen({}: SyncScreenProps) {
     flexGrow: 1,
     justifyContent: 'center',
     backgroundColor: theme.colors.background.loginScreen,
-  }
-  const logoProps: ImageProps = {
-    width: 254,
-    height: 57,
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -111,15 +107,7 @@ function SyncScreen({}: SyncScreenProps) {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
-        <Image
-          style={logoProps}
-          source={
-            theme.mode === 'dark'
-              ? require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
-              : require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')
-          }
-        />
-
+        <VALogo />
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
           <LoadingComponent
             justTheSpinnerIcon={true}
