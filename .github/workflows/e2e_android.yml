@@ -235,17 +235,10 @@ jobs:
       #     script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
         
       - name: Upload e2e-junit
-        if: success()
+        if: failure() || success()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{matrix.testsuite}}-pass-e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
-      
-      - name: Upload failure e2e-junit
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{matrix.testsuite}}-failure-e2e-junit
+          name: ${{matrix.testsuite}}-e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
@@ -271,11 +264,11 @@ jobs:
       - name: Download results
         uses: actions/download-artifact@v4
         with:
-          pattern: *-failure-e2e-junit
+            path: VAMobile/e2e/test_reports
       - name: Inform Slack
         shell: bash
         run: |
-          list=$(find . -name "*failure*")
+          list=$(find . -name "*e2e-junit")
           echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
