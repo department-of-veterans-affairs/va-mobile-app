@@ -268,7 +268,7 @@ jobs:
       - name: Inform Slack
         shell: bash
         run: |
-          list=$(find ./VAMobile/artifacts -name "*detox-artifacts*")
+          list=$(find . -name "*detox-artifacts*")
           echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
