@@ -31,8 +31,8 @@ context('FeatureLandingAndChildTemplate', () => {
   })
 
   it('should render a back label and onPress', () => {
-    expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy()
-    fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByRole('link', { name: 'Back' })).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Back' }))
     expect(onBackPressSpy).toHaveBeenCalled()
   })
 
