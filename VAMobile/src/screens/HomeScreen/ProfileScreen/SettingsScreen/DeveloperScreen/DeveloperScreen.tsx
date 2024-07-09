@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, Link } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
