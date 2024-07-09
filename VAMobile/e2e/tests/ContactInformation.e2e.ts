@@ -62,10 +62,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
     await element(by.id(addressID)).tap()
   })
 
-  it('should update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
-    if (addressType === 'Home') {
+  export async function fillHomeAddressFields() {
       await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
@@ -81,6 +78,13 @@ export async function validateAddresses(addressID: string, addressType: string) 
       await element(by.text('Done')).tap()
       await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
       await element(by.id('EditAddressTestID')).scrollTo('top')
+  }
+
+  it('should update the ' + addressType + ' address', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    if (addressType === 'Home') {
+      await fillHomeAddressFields()
     }
     await updateAddress()
   })
@@ -122,21 +126,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
       .toBeVisible()
       .withTimeout(4000)
     if (addressType === 'Home') {
-      await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-      await expect(element(by.text('United States'))).toExist()
-      await element(by.text('United States')).tap()
-      await element(by.text('Done')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
-        .toBeVisible()
-        .whileElement(by.id('EditAddressTestID'))
-        .scroll(100, 'down', NaN, 0.8)
-      await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
-      await element(by.text('Arizona')).tap()
-      await element(by.text('Done')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
-      await element(by.id('EditAddressTestID')).scrollTo('top')
+      await fillHomeAddressFields()
       await updateAddress()
     }
   })
