@@ -11,6 +11,6 @@ context('AlertWithHaptics', () => {
 
   it('initializes correctly', () => {
     expect(screen.getByText('My warning')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Warning title' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Warning title' })).toBeTruthy()
   })
 })
