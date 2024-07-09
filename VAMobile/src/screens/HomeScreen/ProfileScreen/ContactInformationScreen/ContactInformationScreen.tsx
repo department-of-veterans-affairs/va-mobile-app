@@ -80,19 +80,19 @@ const getPhoneNumberData = (
       textLines: homeText,
       a11yHintText: t('contactInformation.editOrAddHomeNumber'),
       onPress: onHomePhone,
-      testId: 'homePhoneTestID',
+      testId: 'homePhone',
     },
     {
       textLines: workText,
       a11yHintText: t('contactInformation.editOrAddWorkNumber'),
       onPress: onWorkPhone,
-      testId: 'workPhoneTestID',
+      testId: 'workPhone',
     },
     {
       textLines: cellText,
       a11yHintText: t('contactInformation.editOrAddCellNumber'),
       onPress: onCellPhone,
-      testId: 'mobilePhoneTestID',
+      testId: 'mobilePhone',
     },
   ]
 }
@@ -117,7 +117,7 @@ const getEmailAddressData = (
       textLines: textLines,
       a11yHintText: t('contactInformation.editOrAddEmailAddress'),
       onPress: onEmailAddress,
-      testId: 'emailAddressTestID',
+      testId: 'emailAddress',
     },
   ]
 }
