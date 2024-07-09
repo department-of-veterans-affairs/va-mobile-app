@@ -7,7 +7,10 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
-
+  push:
+    branches:
+      [chanel-8524-automation-accessibility-checks-number-issues]
+  
 jobs:
   axe-scan:
     name: Acessibility Check
@@ -48,16 +51,16 @@ jobs:
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            if axe "$url" --exit; then
-              echo "No accessibility issues found in $url"
+            result=$(axe "$url" --exit || true)
+            issues=$(echo "$result" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+            if [ -n "$issues" ]; then
+              echo "Accessibility issues found in $url: $issues"
+              num_issues=$((num_issues + issues))
             else
-              echo "Accessibility issues found in $url"
-              echo "$url" >> accessibility_issues.txt
-              num_issues=$((num_issues+1))
+              echo "No accessibility issues found in $url"
             fi
-          done
       
-          echo "Accessibility issues detected: $num_issues"
+          echo "Total Accessibility issues detected: $num_issues"
 
           # Set output for number of issues
           echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
@@ -69,6 +72,14 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
+  debug:
+    name: Debug Output
+    runs-on: ubuntu-latest
+    needs: axe-scan
+    steps:
+      - name: Print number of issues
+        run: echo "Number of accessibility issues:" ${{ needs.axe-scan.outputs.num_issues }}
+               
 
   start_slack_thread:
     name: Start Slack thread
