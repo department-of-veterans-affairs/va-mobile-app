@@ -100,7 +100,7 @@ const AFNavigationForIndividual = [
   ],
   ['Payments.e2e', 'WG_PaymentMissing', 'Payments', 'VA payment history', "What if I'm missing a payment?"],
   [
-    'Payments.e2e',
+    'DirectDeposit.e2e',
     'WG_EditDirectDeposit',
     'Payments',
     'Direct deposit information',

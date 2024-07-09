@@ -8,17 +8,17 @@ import {
   openClaims,
   openClaimsHistory,
   resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
-  CLAIM_1_ID: 'Claim for compensation updated on December 05, 2021 Received December 05, 2021',
-  CLAIM_2_ID: 'Claim for compensation updated on December 04, 2021 Received December 04, 2021',
-  CLAIM_3_ID: 'Claim for compensation updated on July 20, 2021 Received July 20, 2021',
-  CLAIM_4_ID: 'Claim for compensation updated on May 05, 2021 Received January 01, 2021',
-  CLAIM_5_ID: 'Claim for compensation updated on May 04, 2021 Received January 01, 2021',
-  CLAIM_6_ID: 'Claim for dependency updated on July 30, 2016 Received January 01, 2016',
-  CLOSED_CLAIM_DECISION_LETTER_ID:
-    'Claim for compensation updated on April 09, 2021 Received January 01, 2021 Decision letter ready',
+  CLAIM_1_ID: 'Compensation Received December 05, 2021',
+  CLAIM_2_ID: 'Compensation Received December 04, 2021',
+  CLAIM_3_ID: 'Compensation Received July 20, 2021',
+  CLAIM_4_ID: 'Compensation Received January 01, 2021',
+  CLAIM_5_ID: 'Compensation Received March 22, 2019',
+  CLAIM_6_ID: 'Dependency Received January 01, 2016',
+  CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
   CLAIM_1_STATUS_STEP_1_ID: 'Step 1 of 5. completed. Claim received July 20, 2021',
   CLAIM_1_STATUS_STEP_2_ID: 'Step 2 of 5. current. Initial review July 20, 2021',
   CLAIM_1_STATUS_STEP_3_ID: 'Step 3 of 5.  Evidence gathering, review, and decision',
@@ -37,6 +37,8 @@ export const ClaimsE2eIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -45,7 +47,7 @@ beforeAll(async () => {
 
 describe('Claims Screen', () => {
   it('should match the Claims history page design', async () => {
-    await expect(element(by.text('Your active claims and appeals'))).toExist()
+    await expect(element(by.text('Your active claims, decision reviews, and appeals'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID))).toExist()
