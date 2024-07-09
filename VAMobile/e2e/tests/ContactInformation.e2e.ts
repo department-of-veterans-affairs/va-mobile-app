@@ -52,16 +52,6 @@ export async function updateAddress() {
     .withTimeout(4000)
 }
 
-export async function validateAddresses(addressID: string, addressType: string) {
-  it('update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-    await waitFor(element(by.id(addressID)))
-      .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
-      .scroll(50, 'down')
-    await element(by.id(addressID)).tap()
-  })
-
 export async function fillHomeAddressFields() {
   await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
   await expect(element(by.text('United States'))).toExist()
@@ -78,7 +68,17 @@ export async function fillHomeAddressFields() {
   await element(by.text('Done')).tap()
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
   await element(by.id('EditAddressTestID')).scrollTo('top')
-  }
+}
+
+export async function validateAddresses(addressID: string, addressType: string) {
+  it('update the ' + addressType + ' address', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(addressID)))
+      .toBeVisible()
+      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .scroll(50, 'down')
+    await element(by.id(addressID)).tap()
+  })
 
   it('should update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
