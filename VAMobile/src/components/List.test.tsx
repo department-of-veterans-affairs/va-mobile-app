@@ -30,7 +30,7 @@ context('List', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'Hello' }))
+    fireEvent.press(screen.getByRole('menuitems', { name: 'Hello' }))
     expect(onPressSpy).toBeCalled()
   })
 })

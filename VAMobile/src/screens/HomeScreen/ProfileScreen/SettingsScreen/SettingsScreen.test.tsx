@@ -73,24 +73,24 @@ context('SettingsScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('button', { name: 'Account security' })).toBeTruthy()
-    expect(screen.getByText('Notifications')).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Share the app' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Privacy policy' })).toBeTruthy()
-    expect(screen.getByText('Developer Screen')).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Account security' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Notifications' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Share the app' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Privacy policy' })).toBeTruthy()
+    expect(screen.getByRole('menuitem', { name: 'Developer Screen' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeTruthy()
   })
 
   describe('when privacy policy is clicked', () => {
     it('should launch external link', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Privacy policy' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Privacy policy' }))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
   describe('when "Share the app" is clicked', () => {
     it('should call Share.share', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Share the app' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Share the app' }))
       expect(Share.share).toBeCalledWith({
         message:
           'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -100,7 +100,7 @@ context('SettingsScreen', () => {
 
   describe('on account security click', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Account security' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Account security' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('AccountSecurity')
     })
   })
