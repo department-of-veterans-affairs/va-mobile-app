@@ -115,7 +115,11 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               title={t('notifications.settings.alert.title')}
               text={t('notifications.settings.alert.text')}>
               <Box mt={standardMarginBetween}>
-                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
+                <Button
+                  onPress={goToSettings}
+                  label={t('notifications.settings.alert.openSettings')}
+                  a11yHint={t('notifications.settings.alert.openSettings.a11yHint')}
+                />
               </Box>
             </AlertBox>
           )}
