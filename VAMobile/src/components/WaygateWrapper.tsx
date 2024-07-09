@@ -55,6 +55,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
           description={text}
           descriptionA11yLabel={a11yLabelVA(text || '')}
+          focusOnError={false}
           testID="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber

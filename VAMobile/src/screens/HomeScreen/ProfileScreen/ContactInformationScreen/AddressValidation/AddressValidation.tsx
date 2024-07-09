@@ -10,8 +10,7 @@ import { map, pick } from 'underscore'
 
 import { useContactInformation } from 'api/contactInformation'
 import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
-import { Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
-import CollapsibleAlert from 'components/CollapsibleAlert'
+import { AlertWithHaptics, Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { NAMESPACE } from 'constants/namespaces'
 import { EditResponseData } from 'store/api'
@@ -228,13 +227,15 @@ function AddressValidation({
   return (
     <VAScrollView testID="AddressVerificationTestID" contentContainerStyle={scrollStyles}>
       <Box flex={1}>
-        <CollapsibleAlert
-          border="warning"
-          headerText={t('editAddress.validation.verifyAddress.title')}
-          body={getAlert()}
-          a11yLabel={t('editAddress.validation.verifyAddress.title')}
-          testID="verifyYourAddressTestID"
-        />
+        <AlertWithHaptics
+          variant="warning"
+          expandable={true}
+          focusOnError={false}
+          header={t('editAddress.validation.verifyAddress.title')}
+          headerA11yLabel={t('editAddress.validation.verifyAddress.title')}
+          testID="verifyYourAddressTestID">
+          {getAlert()}
+        </AlertWithHaptics>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>
       <Box {...containerStyles}>{getFooterButtons()}</Box>

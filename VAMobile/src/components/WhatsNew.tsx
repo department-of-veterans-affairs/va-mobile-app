@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -60,15 +60,10 @@ export const WhatsNew = () => {
     }
   }, [displayWN])
 
-  const expandCollapsible = (): void => {
-    logAnalyticsEvent(Events.vama_whatsnew_more())
-  }
+  const expandCollapsible = () => logAnalyticsEvent(Events.vama_whatsnew_more())
+  const closeCollapsible = () => logAnalyticsEvent(Events.vama_whatsnew_close())
 
-  const closeCollapsible = (): void => {
-    logAnalyticsEvent(Events.vama_whatsnew_close())
-  }
-
-  const onPress = (): void => {
+  const onPress = () => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
     setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
     setSkippedVersionHomeScreen(localVersion || '0.0')
@@ -97,31 +92,25 @@ export const WhatsNew = () => {
 
   const bullets = getBullets() || []
 
-  const props: CollapsibleAlertProps = {
-    border: 'informational',
-    headerText: t('whatsNew.title'),
-    body: (
-      <>
-        <Box my={theme.dimensions.standardMarginBetween}>
-          <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
-          {bullets.length ? (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <VABulletList listOfText={bullets} />
-            </Box>
-          ) : undefined}
-        </Box>
-        <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
-      </>
-    ),
-    a11yLabel: t('whatsNew.title'),
-    onExpand: expandCollapsible,
-    onCollapse: closeCollapsible,
-  }
-
   if (displayWN) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert {...props} />
+        <AlertWithHaptics
+          variant="info"
+          expandable={true}
+          header={t('whatsNew.title')}
+          headerA11yLabel={t('whatsNew.title')}
+          analytics={{ onExpand: expandCollapsible, onCollapse: closeCollapsible }}>
+          <Box my={theme.dimensions.standardMarginBetween}>
+            <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
+            {bullets.length ? (
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <VABulletList listOfText={bullets} />
+              </Box>
+            ) : undefined}
+          </Box>
+          <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
+        </AlertWithHaptics>
       </Box>
     )
   } else {

@@ -5,7 +5,7 @@ import { LinkProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import { Box, CollapsibleAlert, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -77,13 +77,15 @@ function CernerAlertSM() {
   }
 
   return (
-    <CollapsibleAlert
-      border="warning"
-      headerText={headerText}
-      body={accordionContent()}
-      a11yLabel={headerText}
-      onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
-    />
+    <AlertWithHaptics
+      variant="warning"
+      expandable={true}
+      focusOnError={false}
+      header={headerText}
+      headerA11yLabel={headerText}
+      analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
+      {accordionContent()}
+    </AlertWithHaptics>
   )
 }
 
