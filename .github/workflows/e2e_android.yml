@@ -256,7 +256,7 @@ jobs:
   output-slack-results:
     if: (!cancelled())
     needs: [matrix-e2e-android, start_slack_thread]
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
         with:
@@ -266,8 +266,9 @@ jobs:
         with:
             path: VAMobile/artifacts
       - name: Inform Slack
+        shell: bash
         run: |
-          list=find . -name "*detox-artifacts*"
+          list=$(find /VAMobile/artifacts -name "*detox-artifacts*")
           echo "$list" 
 #if [[ "$list" == "" ]] then;
 #  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
