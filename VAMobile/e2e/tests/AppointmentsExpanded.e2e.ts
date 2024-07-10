@@ -260,6 +260,15 @@ const checkUpcomingApptDetails = async (
 }
 
 const scrollToThenTap = async (text: string, pastAppointment: string) => {
+  //Add back in when pagination is fixed
+  if (
+    text === 'Sami Alsahhar - HOME - Canceled' ||
+    text === 'At VA Palo Alto Health Care System' ||
+    text === 'At Hampton VA Medical Center'
+  ) {
+    await element(by.id('appointmentsTestID')).scrollTo('bottom')
+    await element(by.id('next-page')).tap()
+  }
   if (pastAppointment !== '') {
     try {
       await waitFor(element(by.text(text)))
@@ -273,16 +282,6 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
         .scroll(250, 'up')
     }
   } else {
-    if (
-      text === 'Sami Alsahhar - HOME - Confirmed' ||
-      text === 'At VA Memphis Healthcare System' ||
-      text === 'At Northport VA Medical Center' ||
-      text === 'At Nashville VA Medical Center'
-    ) {
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-    }
-
     await waitFor(element(by.text(text)))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
@@ -648,22 +647,43 @@ export async function apppointmentVerification(pastAppointment = false) {
     await element(by.text('Appointments')).tap()
   })
 
-  it(pastAppointmentString + 'verify confirmed claim exam', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
+  it(pastAppointmentString + 'verify canceled claim exam', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openAppointments()
+    if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
-    if (pastAppointment) {
       await element(by.text('Past')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
+    await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
+    await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
+    await expect(element(by.text('Need to reschedule?'))).toExist()
+    await expect(
+      element(by.text('Call the compensation and pension office at Fort Collins VA Clinic - Claim - Canceled.')),
+    )
+    await checkUpcomingApptDetails(
+      'Claim',
+      'Canceled',
+      pastAppointment,
+      undefined,
+      undefined,
+      'Fort Collins VA Clinic',
+      'FORT COLLINS AUDIO',
+      undefined,
+      undefined,
+      'Fort Collins VA Clinic - Claim - Canceled',
+      '2509 Research Boulevard',
+    )
+  })
 
+  it(pastAppointmentString + 'verify confirmed claim exam', async () => {
     await scrollToThenTap('At Fort Collins VA Clinic - Claim - Confirmed', pastAppointmentString)
     if (!pastAppointment) {
       await expect(element(by.text('Claim exam'))).toExist()
@@ -685,28 +705,6 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       'Fort Collins VA Clinic - Claim - Confirmed',
-      '2509 Research Boulevard',
-    )
-  })
-
-  it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
-    await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
-    await expect(element(by.text('Need to reschedule?'))).toExist()
-    await expect(
-      element(by.text('Call the compensation and pension office at Fort Collins VA Clinic - Claim - Canceled.')),
-    )
-    await checkUpcomingApptDetails(
-      'Claim',
-      'Canceled',
-      pastAppointment,
-      undefined,
-      undefined,
-      'Fort Collins VA Clinic',
-      'FORT COLLINS AUDIO',
-      undefined,
-      undefined,
-      'Fort Collins VA Clinic - Claim - Canceled',
       '2509 Research Boulevard',
     )
   })
@@ -743,19 +741,19 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
+    await resetInAppReview()
+    await openHealth()
+    await openAppointments()
+    if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
-    if (pastAppointment) {
       await element(by.text('Past')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
 
     await scrollToThenTap('At Central California VA Health Care System', pastAppointmentString)
@@ -842,21 +840,25 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
+    await resetInAppReview()
+    await openHealth()
+    await openAppointments()
+    if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
+      await element(by.text('Past')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
 
-    if (pastAppointment) {
-      await element(by.text('Past')).tap()
-    }
     await scrollToThenTap('John Jones', pastAppointmentString)
     await expect(
       element(
@@ -940,19 +942,27 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
+    await resetInAppReview()
+    await openHealth()
+    await openAppointments()
+    if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
-    if (pastAppointment) {
       await element(by.text('Past')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
+      await element(by.id('appointmentsTestID')).scrollTo('bottom')
+      await element(by.id('next-page')).tap()
     }
 
     await scrollToThenTap('Jane Jones', pastAppointmentString)
