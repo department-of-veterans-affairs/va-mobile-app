@@ -71,6 +71,6 @@ describe('Veterans Crisis Line', () => {
 
   it('should close panel', async () => {
     await element(by.text('Done')).tap()
-    await expect(element(by.text('About VA'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
 })

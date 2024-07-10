@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -26,7 +26,6 @@ import {
 import {
   AlertBox,
   Box,
-  CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -345,7 +344,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             navigateTo('SecureMessaging', { activeTab: 1 })
             navigateTo('FolderMessages', {
@@ -413,16 +412,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             setErrorList={setErrorList}
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
               onPress={navigateToReplyHelp}
-              accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}
-              testID="startNewMessageOnlyUseMessagesTestID">
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+              testID="startNewMessageOnlyUseMessagesTestID"
+            />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
@@ -437,8 +432,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       </Box>
     )
   }
-
-  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
 
   const hasError = recipientsError || signatureError
   const isLoading =
@@ -476,7 +469,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (

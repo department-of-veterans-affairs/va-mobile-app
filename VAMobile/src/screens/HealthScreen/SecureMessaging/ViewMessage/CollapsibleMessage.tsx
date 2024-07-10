@@ -1,6 +1,6 @@
 import React, { Ref, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
@@ -110,6 +110,9 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   }
 
   function getExpandedContent() {
+    const loadingScrollViewStyle: ViewStyle = {
+      backgroundColor: theme.colors.background.contentBox,
+    }
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
@@ -119,7 +122,10 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
               mx={theme.dimensions.gutter}
               mt={theme.dimensions.contentMarginTop}
               mb={theme.dimensions.contentMarginBottom}>
-              <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+              <LoadingComponent
+                text={t('secureMessaging.viewMessage.loadingAttachment')}
+                scrollViewStyle={loadingScrollViewStyle}
+              />
             </Box>
           ) : undefined}
         </Box>

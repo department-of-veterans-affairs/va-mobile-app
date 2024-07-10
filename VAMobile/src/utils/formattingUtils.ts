@@ -73,7 +73,7 @@ export const getFormattedMessageTime = (dateTime: string): string => {
   if (DateTime.now().day === date.day && DateTime.now().month === date.month && DateTime.now().year === date.year) {
     return date.toFormat('t')
   } else {
-    return date.toFormat('D')
+    return date.toFormat('DDD')
   }
 }
 
@@ -243,7 +243,7 @@ export const stringToTitleCase = (str: string): string => {
  * @returns string of number rounded to the hundredths place
  */
 export const roundToHundredthsPlace = (num: number): string => {
-  return (Math.round(num * 100) / 100).toFixed(2)
+  return Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(num)
 }
 
 /**

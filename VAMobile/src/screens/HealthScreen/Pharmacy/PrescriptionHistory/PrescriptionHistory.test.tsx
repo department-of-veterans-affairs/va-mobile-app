@@ -3,38 +3,11 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { PrescriptionsGetData } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import PrescriptionHistory from './PrescriptionHistory'
-
-jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true,
-      },
-    }),
-  }
-})
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -283,7 +256,7 @@ context('PrescriptionHistory', () => {
     it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
       const params = {
         'page[number]': '1',
-        'page[size]': '5000',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
         sort: 'refill_status', // Parameters are snake case for the back end
       }
       when(api.get as jest.Mock)

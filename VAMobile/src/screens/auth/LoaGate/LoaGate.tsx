@@ -37,7 +37,7 @@ function LoaGate({}: LoaGateProps) {
       leftButtonText={t('close')}
       title={t('signin')}
       onLeftButtonPress={navigation.goBack}
-      showCrisisLineCta={true}>
+      showCrisisLineButton={true}>
       <Box
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
