@@ -31,7 +31,7 @@ Determine what, if any, changes are needed to Apple, Google and VA.gov App Store
 - [ ]  Create new App Store Whats New description for [Apple Store](https://apps.apple.com/us/app/va-health-and-benefits/id1559609596?platform=iphone)
 - [ ]  Sent Mobile.Va.Gov an email and Microsoft Teams communication with Mobile's update request
 - [ ]  Flagship PM to validate any app store (image, content) changes 
-- [ ]  Update [alt text for Va.gov app page](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management%20/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use/Alt%20Text%20Image.md)
+- [ ]  Update [alt text for Va.gov app page](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use/Alt%20Text%20Image.md)
 
 ## Notes 
 - All work to be done before the end of the sprint that the feature is going out
@@ -41,14 +41,14 @@ Determine what, if any, changes are needed to Apple, Google and VA.gov App Store
 
 ### Images
 - Includes: iPad, iPhone and Android Phone (and a description image) 
-- Process for [Updating the App Stores](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores/)
+- Process for [Updating the App Stores](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management/Go%20to%20Market/App%20Store%20Updates.md)
 - Historically - UX creates the images backed on this [process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores/#designer-update-the-app-store-images) then Flagship PM validates the images and then works with their FE to submit the PR to update the images
 - Images should be the same across Google, Apple and Va.Gov
 - UX to create a new folder with YYYY Mon and Feature in this [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6)
 - Note if new feature is added then may need to consider how we list them in the first image which contains a list of features "Use this app to:"
 - Work is done outside of the Release Ticket process
 - As of June 2024 - new images need to be compressed through something like ImageOptim per Tim before being added into the repo to remove any metadata that might be bloating the files
-- [Process doc for Update Va.Gov App Store ](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/releases/Va.Gov%20APp%20Store)
+- [Process doc for Update Va.Gov App Store ](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management/Go%20to%20Market/VA.Gov%20App%20Store%20Page)
 
 ### Content
 - Inclues: App Store Whats New and App Description 
@@ -57,8 +57,8 @@ Determine what, if any, changes are needed to Apple, Google and VA.gov App Store
  
 
 ### Va.Gov Marketing Page
-- Its a VA Marketing Page that will need to be updated by Flagship PM and has its own [process](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management%20/Go%20to%20Market/VA%20Call%20Center%20Process)
-- Images need to be stored in [Images in Use Github folder](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management%20/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use) as VA pulls images from here
+- Its a VA Marketing Page that will need to be updated by Flagship PM and has its own [process](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management/Go%20to%20Market/VA.Gov%20App%20Store%20Page)
+- Images need to be stored in [Images in Use Github folder](hhttps://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management/Go%20to%20Market/VA.Gov%20App%20Store%20Page/Images%20In%20Use) as VA pulls images from here
 
 
  
