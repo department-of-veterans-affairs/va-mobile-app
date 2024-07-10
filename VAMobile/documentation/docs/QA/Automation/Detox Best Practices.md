@@ -37,4 +37,4 @@ easily fix the detox mapping.
 - Tests usually follow the same initial format where you import the necessary variables, have a dictionary of any constants, and run a beforeAll statement that navigates to the specific feature in the app
 - Any global functions/constants should be placed in utils.ts.  Utils.ts is also where all the navigation to a specific page functions live.
 - Set your demo mode password to '' (null) before running the tests
-- Use by.id in your tests (and add the associated testID to the code) where possible.  This makes the tests less flaky
+- Use `by.id` in your tests (and add the associated testID to the code) where possible.  This makes the tests less flaky
