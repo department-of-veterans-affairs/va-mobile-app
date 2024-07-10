@@ -60,7 +60,7 @@ jobs:
               # Extract number of issues from axe output
               issues=$(axe "$url" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
               if [ -n "$issues" ]; then
-                num_issues=$((total_issues + issues))
+                total_issues=$((total_issues + issues))
               fi
             fi
           done
