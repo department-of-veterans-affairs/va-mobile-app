@@ -223,36 +223,36 @@ jobs:
         if: steps.run_e2e_tests.outcome == 'failure'
         run: exit 1
   
-  output-slack-results:
-    if: (!cancelled()) && github.event_name == 'schedule'
-    needs: [matrix-e2e-ios, start_slack_thread]
-    runs-on: macos-latest-xl
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - name: Download results
-        uses: actions/download-artifact@v4
-        with:
-            path: VAMobile/e2e/test_reports
-      - name: Inform Slack
-        shell: bash
-        run: |
-          if grep -rq "<failure>" .; then
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-              -H 'Content-type: application/json' \
-              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-              https://slack.com/api/chat.postMessage|
-              jq -r '.ts')
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-          else
-            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
-          fi
+  # output-slack-results:
+  #   if: (!cancelled()) && github.event_name == 'schedule'
+  #   needs: [matrix-e2e-ios, start_slack_thread]
+  #   runs-on: macos-latest-xl
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref }}
+  #     - name: Download results
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #           path: VAMobile/e2e/test_reports
+  #     - name: Inform Slack
+  #       shell: bash
+  #       run: |
+  #         if grep -rq "<failure>" .; then
+  #           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+  #           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+  #             -H 'Content-type: application/json' \
+  #             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+  #             https://slack.com/api/chat.postMessage|
+  #             jq -r '.ts')
+  #           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+  #         else
+  #           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+  #           -H 'Content-type: application/json' \
+  #           --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+  #           https://slack.com/api/chat.postMessage|
+  #           jq -r '.ts')
+  #         fi
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
