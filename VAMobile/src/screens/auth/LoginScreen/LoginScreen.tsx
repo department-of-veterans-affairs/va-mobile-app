@@ -109,7 +109,7 @@ function LoginScreen() {
         }
 
   return (
-    <VAScrollView contentContainerStyle={mainViewStyle} removeInsets={true}>
+    <VAScrollView testID="Login-page" contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
