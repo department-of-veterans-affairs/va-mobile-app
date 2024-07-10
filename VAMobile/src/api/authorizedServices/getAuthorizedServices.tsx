@@ -1,12 +1,9 @@
-import { useSelector } from 'react-redux'
-
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
-import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types'
-import { RootState } from 'store'
+import { authKeys } from 'api/auth/queryKeys'
+import { AuthorizedServicesPayload, UserAuthSettings, UserAuthorizedServicesData } from 'api/types'
 import { get } from 'store/api'
-import { AuthState } from 'store/slices'
 
 import { authorizedServicesKeys } from './queryKeys'
 
@@ -22,12 +19,13 @@ export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesDat
  * Returns a query for user demographics
  */
 export const useAuthorizedServices = (options?: { enabled?: boolean }) => {
-  const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
+  const queryClient = useQueryClient()
+  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,
-    enabled: !!(loggedIn && queryEnabled),
+    enabled: !!(userSettings.loggedIn && queryEnabled),
     queryKey: authorizedServicesKeys.authorizedServices,
     queryFn: () => getAuthorizedServices(),
     meta: {
