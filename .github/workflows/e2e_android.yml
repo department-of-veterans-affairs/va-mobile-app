@@ -139,8 +139,6 @@ jobs:
       fail-fast: false
       matrix:
         testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
-    outputs: 
-      output1: ${{ steps.post_failure.outputs.test_failure }}
 
     steps:
       - uses: actions/checkout@v3
@@ -221,18 +219,18 @@ jobs:
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
 
-      # - name: Run e2e tests for Android
-      #   if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     working-directory: VAMobile
-      #     api-level: 28
-      #     profile: pixel_6_pro
-      #     force-avd-creation: false
-      #     disable-animations: true
-      #     arch: x86_64
-      #     avd-name: Pixel_4_XL_API_28
-      #     script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+      - name: Run e2e tests for Android
+        if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 28
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_4_XL_API_28
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
         
       - name: Upload e2e-junit
         if: failure() || success()
@@ -254,7 +252,7 @@ jobs:
         run: exit 1
   
   output-slack-results:
-    if: (!cancelled())
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
@@ -269,27 +267,20 @@ jobs:
         shell: bash
         run: |
           if grep -rq "<failure>" .; then
-            echo "found"
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
           else
-            echo "not found"
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
           fi
-# list=$(find . -name "*e2e-junit")
-# echo "$list" 
-#if [[ "$list" == "" ]] then;
-#  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-#  -H 'Content-type: application/json' \
-#  --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-#  https://slack.com/api/chat.postMessage|
-#  jq -r '.ts')
-#else 
-#  echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-#  ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-#    -H 'Content-type: application/json' \
-#    --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-#    https://slack.com/api/chat.postMessage|
-#    jq -r '.ts')
-#  echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-#fi
     
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
