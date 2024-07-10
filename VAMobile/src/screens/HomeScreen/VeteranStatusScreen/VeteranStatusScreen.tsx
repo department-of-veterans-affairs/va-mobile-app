@@ -132,7 +132,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
-            <Box display="flex" flexDirection="row">
+            <Box display="flex" flexDirection="row" flexWrap="wrap">
               {getBranchSeal()}
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
