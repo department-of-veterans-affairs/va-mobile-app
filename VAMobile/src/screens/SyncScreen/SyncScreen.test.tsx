@@ -3,37 +3,10 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { authKeys } from 'api/auth'
-import { QueriesData, context, render } from 'testUtils'
+import * as api from 'store/api'
+import { QueriesData, context, render, when } from 'testUtils'
 
 import { SyncScreen } from './index'
-
-jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true,
-      },
-    }),
-  }
-})
 
 context('SyncScreen', () => {
   const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
@@ -59,6 +32,32 @@ context('SyncScreen', () => {
   }
 
   beforeEach(() => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/authorized-services')
+      .mockResolvedValue({
+        data: {
+          attributes: {
+            authorizedServices: {
+              appeals: true,
+              appointments: true,
+              claims: true,
+              decisionLetters: true,
+              directDepositBenefits: true,
+              directDepositBenefitsUpdate: true,
+              disabilityRating: true,
+              genderIdentity: true,
+              lettersAndDocuments: true,
+              militaryServiceHistory: true,
+              paymentHistory: true,
+              preferredName: true,
+              prescriptions: true,
+              scheduleAppointments: true,
+              secureMessaging: true,
+              userProfileUpdate: true,
+            },
+          },
+        },
+      })
     initializeTestInstance()
   })
 

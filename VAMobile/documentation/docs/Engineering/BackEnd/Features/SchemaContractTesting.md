@@ -1,4 +1,6 @@
-# Schema Contract Testing
+---
+title: Schema Contract Testing
+---
 
 ## Background
 

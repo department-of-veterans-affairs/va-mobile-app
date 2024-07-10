@@ -120,6 +120,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     maxLength,
     disableFullscreenUI: true,
     placeholderTextColor: theme.colors.text.placeholder,
+    textAlignVertical: isTextArea ? 'top' : undefined,
     onChangeText: (newVal) => {
       if ((newVal.length > 0 && keyboardType === 'number-pad') || keyboardType === 'numeric') {
         onChange(newVal.replace(/\D/g, ''))

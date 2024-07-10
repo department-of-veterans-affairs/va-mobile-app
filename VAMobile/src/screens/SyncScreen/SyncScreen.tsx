@@ -5,12 +5,19 @@ import { useSelector } from 'react-redux'
 
 import { useQueryClient } from '@tanstack/react-query'
 
+import { useAppointments } from 'api/appointments'
 import { useAuthSettings } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
+import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
@@ -18,6 +25,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { completeSync, loginFinish } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
@@ -43,16 +51,27 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { isFetched: authorizedServicesFetched } = useAuthorizedServices()
 
-  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices({
-    enabled: loggedIn,
-  })
-  const { isFetching: fetchingServiceHistory } = useServiceHistory({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
-  const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
+  // Prefetch data for `Activity` section
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    {
+      enabled: loggedIn && downtimeWindowsFetched,
+    },
+  )
+  useClaimsAndAppeals('ACTIVE', { enabled: loggedIn && downtimeWindowsFetched })
+  useFolders({ enabled: loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: loggedIn && downtimeWindowsFetched })
+  useFacilitiesInfo({ enabled: loggedIn })
+
+  // Prefetch data for `About you` section
+  useServiceHistory({ enabled: loggedIn && downtimeWindowsFetched })
+  useDisabilityRating({ enabled: loggedIn && downtimeWindowsFetched })
+  useLetterBeneficiaryData({ enabled: loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -77,29 +96,11 @@ function SyncScreen({}: SyncScreenProps) {
       setDisplayMessage('')
     }
 
-    if (
-      !loggingOut &&
-      loggedIn &&
-      downtimeWindowsFetched &&
-      !fetchingUserAuthorizedServices &&
-      !fetchingServiceHistory &&
-      !fetchingDisabilityRating
-    ) {
+    if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
       completeSync(queryClient)
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
-  }, [
-    loggedIn,
-    loggingOut,
-    downtimeWindowsFetched,
-    fetchingUserAuthorizedServices,
-    fetchingServiceHistory,
-    fetchingDisabilityRating,
-    t,
-    syncing,
-    queryClient,
-    ENVIRONMENT,
-  ])
+  }, [loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, queryClient, ENVIRONMENT])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>

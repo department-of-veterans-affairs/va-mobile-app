@@ -7,7 +7,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthSettings } from 'api/auth'
-import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, BoxProps, CrisisLineButton, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -54,10 +54,6 @@ function LoginScreen() {
     })
   }
 
-  const onCrisisLine = () => {
-    navigateTo('VeteransCrisisLine')
-  }
-
   const findLocationProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -94,7 +90,7 @@ function LoginScreen() {
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
-      <CrisisLineCta onPress={onCrisisLine} />
+      <CrisisLineButton />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box

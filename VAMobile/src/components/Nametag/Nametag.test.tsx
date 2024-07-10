@@ -17,34 +17,6 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
-  return {
-    ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: 'success',
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true,
-      },
-    }),
-  }
-})
-
 context('Nametag', () => {
   const renderWithBranch = (serviceHistory: ServiceHistoryAttributes) => {
     const queriesData: QueriesData = [
@@ -80,14 +52,14 @@ context('Nametag', () => {
       }
       renderWithBranch(serviceHistoryMock)
       expect(screen.getByTestId(branch)).toBeTruthy()
-      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
-      fireEvent.press(screen.getByRole('button', { name: branch }))
+      expect(screen.getByRole('link', { name: branch })).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: branch }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
     })
   }
 
   it('does not display branch when service history is empty', () => {
     renderWithBranch({} as ServiceHistoryAttributes)
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 })

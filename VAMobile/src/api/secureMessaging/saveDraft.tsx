@@ -34,7 +34,7 @@ export const useSaveDraft = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: secureMessagingKeys.folders })
       queryClient.invalidateQueries({
-        queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+        queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
       })
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       registerReviewEvent()

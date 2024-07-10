@@ -75,10 +75,12 @@ export const getMessagesListItems = (
           textAlign: 'left',
         },
         leftIconProps: unreadIconProps,
-        rightTextProps: {
+      },
+      {
+        leftTextProps: {
           text: t('text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
-          textAlign: 'right',
+          textAlign: 'left',
         },
       },
       {
@@ -88,12 +90,6 @@ export const getMessagesListItems = (
           textAlign: 'left',
         },
         leftIconProps: paperClipProps,
-        rightIconProps: {
-          name: 'ChevronRight',
-          width: theme.dimensions.chevronListItemWidth,
-          height: theme.dimensions.chevronListItemHeight,
-          fill: theme.colors.icon.chevronListItem,
-        } as VAIconProps,
       },
     ]
 
@@ -480,7 +476,12 @@ export const saveDraftWithAttachmentAlert = (
 
 export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
-  const bodySplit = body.split(/\s/)
+  const bodySplit = body.split(/\s/).filter((value) => value !== '')
+  const whiteSpace = body
+    .trim()
+    .split(/\S/)
+    .reverse()
+    .filter((value) => value !== '')
   let dontAddNextString = false
   _.forEach(bodySplit, (text, index) => {
     if (dontAddNextString) {
@@ -509,7 +510,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
             a11yHint={t('openInPhoneMessaging.a11yHint')}
           />,
         )
-        textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+        textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
         dontAddNextString = true
         return
       }
@@ -533,7 +534,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInEmailMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else if (mailToMatch) {
       // matches mailto:<email address>
       textReconstructedBody.push(
@@ -547,7 +548,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInEmailMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else if (phoneMatch) {
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
       textReconstructedBody.push(
@@ -561,7 +562,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInPhoneMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else if (urlMatch) {
       // matches any https, http url
       textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
@@ -576,7 +577,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInBrowser.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else if (url2Match) {
       // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
       // into a link - may need to update this if we need to include other domains greater than 3 digits)
@@ -591,9 +592,10 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInBrowser.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
     } else {
-      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
+      const spacing = whiteSpace.pop() || ''
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + spacing}</TextView>)
     }
   })
   return (
