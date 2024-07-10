@@ -240,12 +240,11 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
-        if: failure()
+        if: failure() && steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
-          retention-days: 3
 
       - name: Fail workflow if needed(View e2e step for details)
         if: steps.run_e2e_tests.outcome == 'failure'
