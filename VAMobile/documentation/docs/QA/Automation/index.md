@@ -52,27 +52,3 @@ Each release, someone from the QA team is responsible for 'babysitting' the auto
 3. Some automated cases failed: (list of which cases & why). These failures are breaking changes in the app, and I have written up bug ticket(s): (links to relevant tickets). These bugs SHOULD / SHOULD NOT prevent release of the app.
 
 We create additional tickets, even for test script maintenance issues, to avoid pushing changes onto the RC branch during the release process.
-
-### Writing new cases
-Creating new cases for UI automation is ticketed work, as atomic as possible, & well-documented (as per [our engineering philosophy](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/Philosphy)).
-
-In addition to making sure that the automated tests are functioning well, an engineer writing new tests is also responsible for:
-
-**All new automated tests**
-- Creating TestRail cases & steps for automated tests (if needed/not currently written)
-- Confirming all test runs for the new automated script can be recorded in TestRail (preferably automatically, but at least manually)
-- Ensuring the new cases provide artifacts (where necessary) for success or failure
-- Ensuring that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Automation/AddingNewFeatures)
-
-**Additional work for RC automated tests**
-- Confirming that the new script follows the manual RC script test steps
-- Moving all manual cases replaced by automation to the "Automated" section of the RC script (could involve moving the full case, or splitting an existing case into manual and automated portions)
-
-> [!NOTE]
-> - All detox scripts are located in the e2e folder.
-> - For most tests, you should have the same initial format where you import the necessary variables, have a dictionary of any constants, and run a _beforeAll_ statement that navigates to the specific place in the app before running your tests.
-> - Utils.ts is where the global functions/constants live.  It is also is where all the navigation to a specific page functions live.
-> - Detox help can be found here: https://wix.github.io/Detox/docs/19.x/api/matchers
-> - Because our test case suite is so large, it may be best to exclusively run just the test you are working on by doing `yarn e2e:<android/ios>-test /e2e/tests/<yourName.e2e.ts>`.
-> - If you change anything in the app code, you will need to run `yarn e2e:<android/ios>-build` beforehand
-> - Your demo mode password locally must be set to '' (null) in order to successfully run detox cases.
