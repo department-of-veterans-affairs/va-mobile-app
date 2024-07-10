@@ -59,9 +59,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <Box mb={theme.dimensions.contentMarginBottom}>
       {letterType === LetterTypeConstants.serviceVerification && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertWithHaptics variant="info">
-            <TextView variant="MobileBody">{t('letters.serviceVerificationLetter.informational')}</TextView>
-          </AlertWithHaptics>
+          <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
         </Box>
       )}
       <TextArea>

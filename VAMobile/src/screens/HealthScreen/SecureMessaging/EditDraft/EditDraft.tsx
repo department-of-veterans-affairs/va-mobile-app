@@ -511,11 +511,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
-        <AlertWithHaptics variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
-          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-            {t('secureMessaging.reply.olderThan45Days')}
-          </TextView>
-        </AlertWithHaptics>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.youCanNoLonger')}
+          description={t('secureMessaging.reply.olderThan45Days')}
+        />
       </Box>
     )
   }

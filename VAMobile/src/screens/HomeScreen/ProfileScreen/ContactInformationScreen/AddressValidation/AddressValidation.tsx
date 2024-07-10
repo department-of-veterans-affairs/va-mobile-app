@@ -232,7 +232,6 @@ function AddressValidation({
           expandable={true}
           focusOnError={false}
           header={t('editAddress.validation.verifyAddress.title')}
-          headerA11yLabel={t('editAddress.validation.verifyAddress.title')}
           testID="verifyYourAddressTestID">
           {getAlert()}
         </AlertWithHaptics>

@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { AlertWithHaptics, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -55,6 +53,9 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
           description={text}
           descriptionA11yLabel={a11yLabelVA(text || '')}
+          primaryButton={
+            waygate.appUpdateButton === true ? { label: t('updateNow'), onPress: onUpdateButtonPress } : undefined
+          }
           focusOnError={false}
           testID="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
@@ -64,7 +65,6 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
               a11yLabel={a11yLabelID(phoneNumber)}
             />
           </Box>
-          {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
         </AlertWithHaptics>
       </Box>
     )

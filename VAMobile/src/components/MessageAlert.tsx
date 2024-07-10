@@ -67,11 +67,9 @@ const MessageAlert: FC<MessageAlertProps> = ({
       <AlertWithHaptics
         variant="error"
         header={t('secureMessaging.sendError.title')}
+        description={t('secureMessaging.reply.error.youCantSend')}
         scrollViewRef={scrollViewRef}
         focusOnError={focusOnError}>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.reply.error.youCantSend')}
-        </TextView>
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}

@@ -13,21 +13,17 @@ function NoPaymentsScreen() {
 
   return (
     <VAScrollView>
-      <AlertWithHaptics variant="info">
-        <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('payments.noPayments.title'))}>
-          {t('payments.noPayments.title')}
-        </TextView>
-        <TextView
-          variant="MobileBody"
-          mt={theme.dimensions.standardMarginBetween}
-          paragraphSpacing={true}
-          accessibilityLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
-          {t('payments.noPayments.body.1')}
-        </TextView>
+      <AlertWithHaptics
+        variant="info"
+        header={t('payments.noPayments.title')}
+        headerA11yLabel={a11yLabelVA(t('payments.noPayments.title'))}
+        description={t('payments.noPayments.body.1')}
+        descriptionA11yLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}
-          accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}>
+          accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}
+          mt={theme.dimensions.contentMarginTop}>
           {t('payments.missingOrNoPayments.body.1')}
         </TextView>
         <TextView

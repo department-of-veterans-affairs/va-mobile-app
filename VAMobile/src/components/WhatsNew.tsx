@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertWithHaptics, Box, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -99,17 +97,13 @@ export const WhatsNew = () => {
           variant="info"
           expandable={true}
           header={t('whatsNew.title')}
-          headerA11yLabel={t('whatsNew.title')}
+          description={body}
+          descriptionA11yLabel={bodyA11yLabel}
+          secondaryButton={{ label: t('whatsNew.dismissMessage'), onPress }}
           analytics={{ onExpand: expandCollapsible, onCollapse: closeCollapsible }}>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
-            {bullets.length ? (
-              <Box mt={theme.dimensions.standardMarginBetween}>
-                <VABulletList listOfText={bullets} />
-              </Box>
-            ) : undefined}
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            {bullets.length ? <VABulletList listOfText={bullets} /> : undefined}
           </Box>
-          <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
         </AlertWithHaptics>
       </Box>
     )

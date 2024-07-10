@@ -405,11 +405,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           )}
           {replyExpired && (
             <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics variant="warning" header={t('secureMessaging.reply.youCanNoLonger')}>
-                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-                  {t('secureMessaging.reply.olderThan45Days')}
-                </TextView>
-              </AlertWithHaptics>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.youCanNoLonger')}
+                description={t('secureMessaging.reply.olderThan45Days')}
+              />
             </Box>
           )}
           <MessageCard message={message} />

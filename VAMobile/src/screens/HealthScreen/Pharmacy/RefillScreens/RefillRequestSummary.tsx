@@ -96,26 +96,21 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
           header: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
           description: t('prescriptions.refillRequestSummary.tryAgain'),
           descriptionA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          primaryButton: {
+            label: t('tryAgain'),
+            onPress: () => {
+              requestRefill(requestFailed)
+              const prescriptionIds = requestFailed.map((prescription) => prescription.id)
+              logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
+            },
+            a11yHint: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
+          },
         }
         break
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertWithHaptics {...alertBoxProps}>
-          {status !== REQUEST_STATUS.SUCCESS && (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <Button
-                onPress={() => {
-                  requestRefill(requestFailed)
-                  const prescriptionIds = requestFailed.map((prescription) => prescription.id)
-                  logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
-                }}
-                label={t('tryAgain')}
-                a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
-              />
-            </Box>
-          )}
-        </AlertWithHaptics>
+        <AlertWithHaptics {...alertBoxProps} />
       </Box>
     )
   }

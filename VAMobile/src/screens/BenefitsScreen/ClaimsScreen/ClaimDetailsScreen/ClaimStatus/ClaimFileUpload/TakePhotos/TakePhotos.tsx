@@ -84,11 +84,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         </Box>
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertWithHaptics
-          variant="info"
-          expandable={true}
-          header={t('fileUpload.accessibilityAlert.title')}
-          headerA11yLabel={t('fileUpload.accessibilityAlert.title')}>
+        <AlertWithHaptics variant="info" expandable={true} header={t('fileUpload.accessibilityAlert.title')}>
           {collapsibleContent}
         </AlertWithHaptics>
       </Box>

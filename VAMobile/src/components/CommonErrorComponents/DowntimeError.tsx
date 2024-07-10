@@ -53,7 +53,6 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
         <AlertWithHaptics
           variant="warning"
           header={t('downtime.title')}
-          headerA11yLabel={t('downtime.title')}
           description={t('downtime.message.1', { endTime })}
           descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
           <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>

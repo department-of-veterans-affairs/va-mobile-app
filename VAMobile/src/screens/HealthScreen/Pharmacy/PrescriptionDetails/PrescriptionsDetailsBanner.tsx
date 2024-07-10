@@ -70,7 +70,6 @@ function PrescriptionsDetailsBanner() {
           expandable={true}
           focusOnError={false}
           header={t('prescription.details.banner.title')}
-          headerA11yLabel={t('prescription.details.banner.title')}
           analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
           {getContent()}
         </AlertWithHaptics>

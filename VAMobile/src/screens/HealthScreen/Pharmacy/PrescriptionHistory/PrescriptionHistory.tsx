@@ -410,17 +410,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           focusOnError={false}
           header={t('prescription.history.transferred.title')}
-          headerA11yLabel={t('prescription.history.transferred.title')}
+          description={t('prescription.history.transferred.instructions')}
+          descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
           analytics={{
             onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
           }}>
           <TextView
             mt={theme.dimensions.standardMarginBetween}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
-            paragraphSpacing={true}>
-            {t('prescription.history.transferred.instructions')}
-          </TextView>
-          <TextView
             paragraphSpacing={true}
             accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
