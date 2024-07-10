@@ -380,8 +380,8 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.text('Remote Config')).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
-    .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-    .scroll(700, 'down')
+    .whileElement(by.id('remoteConfigTestID'))
+    .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
 
   if (AFAppUpdate) {
