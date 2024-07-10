@@ -41,36 +41,8 @@ beforeAll(async () => {
 
 describe('Home Screen', () => {
   it(':android: should enable AF use case 3', async () => {
-    try {
-      await expect(element(by.text('Update app to fix issue'))).toExist()
-      await device.disableSynchronization()
-      await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('Home Screen AFUseCase2PhoneNumber')
-      await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('Home Screen AFUseCase2TTY')
-      await device.launchApp({ newInstance: false })
-      await device.enableSynchronization()
-      await expect(element(by.text('Update now'))).toExist()
-    } catch (e) {
-      await openProfile()
-      await openSettings()
-      await openDeveloperScreen()
-      await waitFor(element(by.text('Remote Config')))
-        .toBeVisible()
-        .whileElement(by.id('developerScreenTestID'))
-        .scroll(200, 'down')
-      await element(by.text('Remote Config')).tap()
-      await enableAF('WG_Home', 'AllowFunction')
-      await device.launchApp({ newInstance: true })
-      await loginToDemoMode()
-      try {
-        await element(by.text('Skip this update')).tap()
-      } catch (e) {}
-      await verifyAF(undefined, 'AllowFunction', undefined)
-    }
+    await enableAF('WG_Home', 'AllowFunction')
+    await verifyAF(undefined, 'AllowFunction', undefined)
   })
 
   it(':android: should disable AF use case 3', async () => {
