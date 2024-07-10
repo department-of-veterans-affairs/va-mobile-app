@@ -15,13 +15,13 @@ For any new feature work detox work needs to either be:
 
 The following must be done for all new feature detox work no matter whether you are updating an existing detox test or creating a new one. 
 
-- Ensure that the test encompasses any new changes to the manual RC script and test steps where possible
+- Ensure that the test encompasses any new changes to the manual release candidate (RC) script and test steps where possible
 	- Anything that happens outside of the app itself can't be automated with Detox.  In the past this has included stuff like opening and selecting an attachment in messages etc.
 - Inform QA what has been automated.  This allows QA to:
 	- Move the correct manual cases to the automated folder/split a case if needed in testRail
 	- Confirm that all test runs for the new automated script can be recorded in TestRail (preferably automatically, but at least manually)
 - Ensure the new/updating script provides artifacts (where necessary) for success and failure
-- Ensure that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Automation/AddingNewFeatures)
+- Ensure that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](/docs/QA/Automation/AddingNewFeatures)
 - Ensure that the test is named for the screen/feature its automating ('Prescriptions', 'HomeScreen', etc.) and that the test has been placed in the e2e folder.
 
 ### Updating Detox tests for non feature work
