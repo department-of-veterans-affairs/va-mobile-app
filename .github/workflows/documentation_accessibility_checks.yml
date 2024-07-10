@@ -51,17 +51,15 @@ jobs:
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            output=$(axe "$url" --json)
-            issue_count=$(echo "$output" | jq '[.violations[].nodes | length] | add')
-            if [ -z "$issue_count" ]; then
-              issue_count=0
-            fi
-            if [ "$issue_count" -eq 0 ]; then
-              echo "No accessibility issues found in $url"
+            axe_output=$(axe "$url")
+            echo "$axe_output"
+            issues=$(echo "$axe_output" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+            if [ -n "$issues" ]; then
+              total_issues=$((total_issues+issues))
+              echo "Accessibility issues found in $url: $issues"
+              echo "$url" >> accessibility_issues.txt
             else
-              echo "Accessibility issues found in $url: $issue_count"
-              echo "$url: $issue_count issues" >> accessibility_issues.txt
-              total_issues=$((total_issues + issue_count))
+              echo "No accessibility issues found in $url"
             fi
           done
       
