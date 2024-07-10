@@ -58,7 +58,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
     borderRadius: 5,
   }
   return (
-    <Pressable {...pressableProps} testID={testID}>
+    <Pressable {...pressableProps} testID={testID} accessibilityLabel={testID}>
       <Box {...boxProps}>
         <VAIcon fill={theme.colors.icon.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
       </Box>
