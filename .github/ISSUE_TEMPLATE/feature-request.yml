@@ -40,6 +40,7 @@ body:
   attributes:
     label: 5.) Please explain what problem you are trying to solve.  
     description: Describe the problem and its impact on Veteran experience so we can assess mobile implementation. 
+  validations:
     required: true
 - type: textarea
   id: description
