@@ -9,11 +9,9 @@ on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src'
-      - 'VAMobile/e2e'
+      - 'VAMobile/src/**'
       - 'VAMobile/package.json'
-      - 'VAMobile/.detoxrc.json'
-      - '!VAMobile/src/*.test.tsx'
+      - '!VAMobile/src/**.test.*'
       - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
