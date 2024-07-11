@@ -8,7 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useFolderMessages } from 'api/secureMessaging'
-import { SecureMessagingMessageList } from 'api/types'
+import { SecureMessagingMessageData, SecureMessagingMessageList } from 'api/types'
 import {
   Box,
   ChildTemplate,
@@ -20,6 +20,7 @@ import {
 } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -45,9 +46,16 @@ function FolderMessages({ route }: FolderMessagesProps) {
     isFetching: loadingFolderMessages,
     error: folderMessagesError,
     refetch: refetchFolderMessages,
-  } = useFolderMessages(folderID, page, {
+  } = useFolderMessages(folderID, {
     enabled: isFocused && screenContentAllowed('WG_FolderMessages'),
   })
+  const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
+
+  useEffect(() => {
+    const messagesList = folderMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setMessagesToShow(messagesList || [])
+  }, [folderMessagesData?.data, page])
+
   const messages = folderMessagesData?.data || ([] as SecureMessagingMessageList)
   const paginationMetaData = folderMessagesData?.meta.pagination
   const title = t('text.raw', { text: folderName })
@@ -56,7 +64,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
     const screen = isDraft ? 'EditDraft' : 'ViewMessage'
     const args = isDraft
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
-      : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
+      : { messageID, folderID, currentPage: page }
 
     navigateTo(screen, args)
   }
@@ -79,7 +87,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
         setPage(page - 1)
       },
       totalEntries: paginationMetaData?.totalEntries || 0,
-      pageSize: paginationMetaData?.perPage || 0,
+      pageSize: DEFAULT_PAGE_SIZE,
       page,
       tab: 'folder messages',
     }
@@ -132,7 +140,7 @@ function FolderMessages({ route }: FolderMessagesProps) {
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
+            <MessageList items={getMessagesListItems(messagesToShow, t, onMessagePress, folderName)} />
           </Box>
           {renderPagination()}
         </>
