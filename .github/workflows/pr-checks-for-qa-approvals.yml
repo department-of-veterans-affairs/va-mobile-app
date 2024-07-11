@@ -6,26 +6,20 @@ on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src/**'
+      - 'VAMobile/src'
+      - 'VAMobile/e2e'
       - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
-      - '!.github/**'
+      - 'VAMobile/.detoxrc.json'
+      - '!VAMobile/src/*.test.tsx'
   pull_request_review:
     types: [submitted, dismissed]
-  pull_request_target:
-    paths:
-      - 'VAMobile/src/**'
-      - 'VAMobile/package.json'
-      - '!VAMobile/src/**.test.*'
-      - '!.github/**'
-    branches:
-      - 'develop'
+
 jobs:
   check_for_qa_approval:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
-      - name: Check if PR is from Dependabot
+      - name: Check QA approval
         shell: bash
         run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
@@ -33,14 +27,12 @@ jobs:
             echo "PR opened by Dependabot. Skipping QA approval check."
             exit 0
           fi
-      - name: Check QA approval
-        shell: bash
-        run: |
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json' |
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
@@ -50,7 +42,8 @@ jobs:
           jq -c '.required_pull_request_reviews.required_approving_review_count')
           echo "Approvers: $approvals"
           echo "required approval count: $required_approval_count"
-          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
+ 
+          if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
               if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "Sparowhawk"))] | length' <<< "$approvals") -gt 0 ]]
                 then
@@ -70,4 +63,4 @@ jobs:
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
-          fi
+          fi 
