@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
@@ -40,7 +40,13 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
-    Linking.openSettings()
+    Alert.alert(t('leavingApp.title'), t('leavingApp.body.settings'), [
+      {
+        text: t('leavingApp.cancel'),
+        style: 'cancel',
+      },
+      { text: t('leavingApp.ok'), onPress: () => Linking.openSettings(), style: 'default' },
+    ])
   }
   const dispatch = useAppDispatch()
 
@@ -115,11 +121,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               title={t('notifications.settings.alert.title')}
               text={t('notifications.settings.alert.text')}>
               <Box mt={standardMarginBetween}>
-                <Button
-                  onPress={goToSettings}
-                  label={t('notifications.settings.alert.openSettings')}
-                  a11yHint={t('notifications.settings.alert.openSettings.a11yHint')}
-                />
+                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
               </Box>
             </AlertBox>
           )}
