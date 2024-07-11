@@ -7,7 +7,7 @@ body:
 - type: input
   id: fullname
   attributes:
-    label: Full Name
+    label: Requestor's Name
     description: Add your full name here
     placeholder: Example Name
   validations:
@@ -15,7 +15,7 @@ body:
 - type: input
   id: email
   attributes:
-    label: Email
+    label: Requestor's Email
     description: Your email address so we can contact you with any follow-up questions.
     placeholder: 'example@va.gov'
   validations:
@@ -24,22 +24,14 @@ body:
   id: VA_Team
   attributes:
     label: VA Team
-    description: The VA Team or Department you are part of.
-    placeholder: Identity, CAIA, Health Products, VA Notify, Contact Center, Benefits Tools Crew, etc
+    description: The VA Team you are with (Health Products, Benefit Tools Crew, CAIA, Identity, Contact Center, CAIA, etc) 
+    placeholder: 
   validations:
     required: true    
 - type: input
-  id: Feature
-  attributes:
-    label: Features Impacted
-    description: What features or functionality does this involve?
-    placeholder: Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc. If this is a new feature request put NA. 
-  validations:
-    required: true  
-- type: input
   id: change_request_label
   attributes:
-    label: What is the name of the project or change being requested? 
+    label: What is the name of the project or change? 
     description: Give us a short name or description for this feature, so we know what to call it.
   validations:
     required: true
@@ -57,6 +49,14 @@ body:
     description: Giving us an explanation what the current problem is and what the current Veteran experience is will help us better assess mobile implementation, planning and scoping. 
   validations:
     required: true
+- type: input
+  id: Feature
+  attributes:
+    label: Features Impacted
+    description: What features will this change involve (Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc.)
+    placeholder: If this is a new feature request put NA. 
+  validations:
+    required: true  
 - type: textarea
   id: existing_documentation
   attributes:
@@ -64,26 +64,27 @@ body:
     description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to further research and review existing materials.  
   validations:
     required: true
+- type: textarea
+  id: mobile_readiness
+  attributes:
+    label: Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
+    description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile will be blocked until future work is completed in order to better asses planning, scoping, and prioritization. 
+  validations:
+    required: true
 - type: input
   id: discussion_VAHB_PO
   attributes:
-    label: Talked with VAHB PO (Rachel, Ryan, or Don) about this change request? 
-    description: Have you talked to any of the Mobile POs regarding this change? 
-    placeholder: Yes / No
+    label: Has this change been discussed with VAHB POs (Rachel, Ryan, or Don)? 
+    description: Have you talked to any of the Mobile VA POs regarding this change? 
+    placeholder: VAHB PO Name  - Yes / No
   validations:
     required: true
 - type: input
   id: duedate
   attributes:
     label: What is your ideal due date for this change request? 
-    description: Have you talked to any of the Mobile POs regarding this change? 
+    description: Understanding requested due date will help us better assess planning, scoping, and prioritization. 
     placeholder: MM/DD/YYYY or Quarter 
   validations:
     required: true    
-- type: textarea
-  id: mobile_readiness
-  attributes:
-    label: Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
-    description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile is currently blocked until future work is completed in order to better asses planning and scoping the request.
-  validations:
-    required: true
+
