@@ -51,7 +51,7 @@ body:
 - type: input
   id: Feature
   attributes:
-    label:7.) Features Impacted
+    label: 7.) Features Impacted
     description: What features will this change involve (Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc.)
     placeholder: If this is a new feature request put NA. 
   validations:
