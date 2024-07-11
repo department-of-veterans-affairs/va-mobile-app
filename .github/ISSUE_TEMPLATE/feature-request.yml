@@ -1,7 +1,7 @@
-name: Feature Request
-description: Use this template to formally request a feature for the VA Mobile App team to evaluate.
-title: "Feature Request: [name of feature]"
-labels: [ feature-request ]
+name: VAHB Mobile App Change Request Form
+description: Use this template to formally request a new feature, enhancement to a feature, discovery, research, analytics request or other ask/change for the VA Mobile App team to evaluate.
+title: "Change Request: [name of change]"
+labels: [ change-request ]
 assignees: [ timwright12, Hallm13 ]
 body:
 - type: input
@@ -21,17 +21,69 @@ body:
   validations:
     required: true
 - type: input
-  id: featurelabel
+  id: VA_Team
   attributes:
-    label: What would you like to add as a new feature?
+    label: VA Team
+    description: The VA Team or Department you are part of.
+    placeholder: Identity, CAIA, Health Products, VA Notify, Contact Center, Benefits Tools Crew, etc
+  validations:
+    required: true    
+- type: input
+  id: Feature
+  attributes:
+    label: Features Impacted
+    description: What features or functionality does this involve?
+    placeholder: Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc. If this is a new feature request put NA. 
+  validations:
+    required: true  
+- type: input
+  id: change_request_label
+  attributes:
+    label: What is the name of the project or change being requested? 
     description: Give us a short name or description for this feature, so we know what to call it.
   validations:
     required: true
 - type: textarea
   id: description
   attributes:
-    label: Please explain how it would work.
-    description: Giving us an explanation of how you feel this feature should work will help us better in planning and scoping the request.
+    label: Please explain how this change would work.
+    description: Giving us an explanation of how you feel this feature should work will help us better assess mobile implementation, planning and scoping. 
   validations:
     required: true
-
+- type: textarea
+  id: problem
+  attributes:
+    label: Please explain what problem you are trying to solve.  
+    description: Giving us an explanation what the current problem is and what the current Veteran experience is will help us better assess mobile implementation, planning and scoping. 
+  validations:
+    required: true
+- type: textarea
+  id: existing_documentation
+  attributes:
+    label: Please include all existing relevant documentation links for this change request?  
+    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to further research and review existing materials.  
+  validations:
+    required: true
+- type: input
+  id: discussion_VAHB_PO
+  attributes:
+    label: Talked with VAHB PO (Rachel, Ryan, or Don) about this change request? 
+    description: Have you talked to any of the Mobile POs regarding this change? 
+    placeholder: Yes / No
+  validations:
+    required: true
+- type: input
+  id: duedate
+  attributes:
+    label: What is your ideal due date for this change request? 
+    description: Have you talked to any of the Mobile POs regarding this change? 
+    placeholder: MM/DD/YYYY or Quarter 
+  validations:
+    required: true    
+- type: textarea
+  id: mobile_readiness
+  attributes:
+    label: Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
+    description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile is currently blocked until future work is completed in order to better asses planning and scoping the request.
+  validations:
+    required: true
