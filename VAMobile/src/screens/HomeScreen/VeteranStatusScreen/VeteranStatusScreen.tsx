@@ -87,6 +87,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     const dimensions = {
       width: 34,
       height: 34,
+      preventScaling: true,
     }
 
     switch (branch) {
