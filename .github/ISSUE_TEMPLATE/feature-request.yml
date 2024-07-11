@@ -7,7 +7,7 @@ body:
 - type: input
   id: fullname
   attributes:
-    label: Requestor's Name
+    label: 1.) Requestor's Name
     description: Add your full name here
     placeholder: Example Name
   validations:
@@ -15,7 +15,7 @@ body:
 - type: input
   id: email
   attributes:
-    label: Requestor's Email
+    label: 2.) Requestor's Email
     description: Your email address so we can contact you with any follow-up questions.
     placeholder: 'example@va.gov'
   validations:
@@ -23,36 +23,35 @@ body:
 - type: input
   id: VA_Team
   attributes:
-    label: VA Team
-    description: The VA Team you are with (Health Products, Benefit Tools Crew, CAIA, Identity, Contact Center, CAIA, etc) 
+    label: 3.) VA Team
+    description: The VA Team you are with (Health Products, Benefit Tools Crew, Identity, Contact Center, CAIA, etc) 
     placeholder: 
   validations:
     required: true    
 - type: input
   id: change_request_label
   attributes:
-    label: What is the name of the project or change? 
+    label: 4.) What is the name of the project or change? 
     description: Give us a short name or description for this feature, so we know what to call it.
-  validations:
-    required: true
-- type: textarea
-  id: description
-  attributes:
-    label: Please explain how this change would work.
-    description: Giving us an explanation of how you feel this feature should work will help us better assess mobile implementation, planning and scoping. 
   validations:
     required: true
 - type: textarea
   id: problem
   attributes:
-    label: Please explain what problem you are trying to solve.  
-    description: Giving us an explanation what the current problem is and what the current Veteran experience is will help us better assess mobile implementation, planning and scoping. 
+    label: 5.) Please explain what problem you are trying to solve.  
+    description: Describe the problem and its impact on Veteran experience so we can assess mobile implementation. 
+    required: true
+- type: textarea
+  id: description
+  attributes:
+    label: 6.) Please explain how this change would work.
+    description: Please explain how this change or feature would solve the problem. 
   validations:
     required: true
 - type: input
   id: Feature
   attributes:
-    label: Features Impacted
+    label:7.) Features Impacted
     description: What features will this change involve (Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc.)
     placeholder: If this is a new feature request put NA. 
   validations:
@@ -60,30 +59,39 @@ body:
 - type: textarea
   id: existing_documentation
   attributes:
-    label: Please include all existing relevant documentation links for this change request?  
-    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to further research and review existing materials.  
+    label: 8.) Please include all relevant documentation links for this change request.  
+    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to research and review existing materials.  
   validations:
     required: true
-- type: textarea
+- type: input
   id: mobile_readiness
   attributes:
-    label: Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
+    label: 9.) Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
     description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile will be blocked until future work is completed in order to better asses planning, scoping, and prioritization. 
+    placeholder: Yes / No
   validations:
     required: true
 - type: input
   id: discussion_VAHB_PO
   attributes:
-    label: Has this change been discussed with VAHB POs (Rachel, Ryan, or Don)? 
-    description: Have you talked to any of the Mobile VA POs regarding this change? 
+    label: 10.) Has this change been discussed with VAHB POs (Rachel, Ryan, or Don)? 
+    description: 
     placeholder: VAHB PO Name  - Yes / No
+  validations:
+    required: true
+- type: input
+  id: va_stakedholer_alignment
+  attributes:
+    label: 11.) Has this change been agreed upon by all impacted VA Stakeholders? 
+    description: 
+    placeholder: Yes / No
   validations:
     required: true
 - type: input
   id: duedate
   attributes:
-    label: What is your ideal due date for this change request? 
-    description: Understanding requested due date will help us better assess planning, scoping, and prioritization. 
+    label: 12.) What is your ideal due date for this change request? 
+    description: 
     placeholder: MM/DD/YYYY or Quarter 
   validations:
     required: true    
