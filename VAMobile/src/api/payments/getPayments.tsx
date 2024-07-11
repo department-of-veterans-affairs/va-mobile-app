@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { has } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
@@ -35,8 +37,11 @@ const getPayments = async (year: string | undefined, page: number): Promise<Paym
  * Returns a query for user payments history
  */
 export const usePayments = (year: string | undefined, page: number, options?: { enabled?: boolean }) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   return useQuery({
     ...options,
+    enabled: !!(authorizedServices?.paymentHistory && queryEnabled),
     queryKey: [paymentsKeys.payments, year, page],
     queryFn: () => getPayments(year, page),
     meta: {
