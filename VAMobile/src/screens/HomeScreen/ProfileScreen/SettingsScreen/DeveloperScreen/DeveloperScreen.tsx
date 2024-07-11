@@ -147,7 +147,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     }
   }
 
-  const toggles: Array<SimpleListItemObj> = [
+  const firebaseList: Array<SimpleListItemObj> = [
     {
       text: 'Firebase debug mode',
       decorator: ButtonDecoratorType.Switch,
@@ -194,7 +194,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           my={theme.dimensions.standardMarginBetween}>
           Firebase
         </TextView>
-        <SimpleList items={toggles} />
+        <SimpleList items={firebaseList} />
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
