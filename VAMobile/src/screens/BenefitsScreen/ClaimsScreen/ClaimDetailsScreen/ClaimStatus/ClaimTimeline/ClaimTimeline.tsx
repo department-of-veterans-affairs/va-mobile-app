@@ -9,8 +9,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimPhase from './ClaimPhase'
+import DEPRECATED_ClaimPhase from './DEPRECATED_ClaimPhase'
 
 export type ClaimTimelineProps = {
   /** attributes object from ClaimData */
@@ -49,15 +51,25 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
         borderTopWidth={theme.dimensions.borderWidth}
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
-        {[1, 2, 3, 4, 5].map((phase) => (
-          <ClaimPhase
-            phase={phase}
-            current={getUserPhase(attributes.phase)}
-            attributes={attributes}
-            claimID={claimID}
-            key={phase}
-          />
-        ))}
+        {[1, 2, 3, 4, 5].map((phase) =>
+          featureEnabled('claimPhaseExpansion') ? (
+            <ClaimPhase
+              phase={phase}
+              current={getUserPhase(attributes.phase)}
+              attributes={attributes}
+              claimID={claimID}
+              key={phase}
+            />
+          ) : (
+            <DEPRECATED_ClaimPhase
+              phase={phase}
+              current={getUserPhase(attributes.phase)}
+              attributes={attributes}
+              claimID={claimID}
+              key={phase}
+            />
+          ),
+        )}
       </Box>
     </Box>
   )

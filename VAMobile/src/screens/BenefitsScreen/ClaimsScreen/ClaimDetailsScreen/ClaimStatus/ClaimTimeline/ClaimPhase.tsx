@@ -1,38 +1,13 @@
-import React, { ReactNode, useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
-
-import { ClaimAttributesData, ClaimEventData } from 'api/types'
-import { AccordionCollapsible, Box, TextView } from 'components'
+import { ClaimAttributesData } from 'api/types'
+import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { sortByDate } from 'utils/common'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import PhaseIndicator from './PhaseIndicator'
-
-/**
- * takes the events array, sorts is and returns the latest updated date
- * @param events - events array from the claim attributes
- * @param phase - phase that this component is rendering for
- * @returns a string representing the date that this phase was last updated
- */
-const updatedLast = (events: ClaimEventData[], phase: number): string => {
-  const phases = groupTimelineActivity(events)
-  const currentPhase = (phases[`${phase}`] as unknown as Array<{ [key: string]: string }>) || []
-  sortByDate(currentPhase, 'date', true)
-
-  const lastUpdate = currentPhase.length > 0 && currentPhase[0]?.date
-  return lastUpdate
-    ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' })
-    : ''
-}
+import { useTheme } from 'utils/hooks'
 
 /**
  * props for ClaimPhase components
@@ -54,62 +29,46 @@ export type ClaimPhaseProps = {
 function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
-  const { eventsTimeline } = attributes
 
-  const phaseLessThanEqualToCurrent = phase <= current
-  const heading = t(`claimPhase.heading.phase${phase}`)
-  const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
-  const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
+  const isCompleted = phase < current
+  const isCurrent = phase === current
+  /*************** NOTE: Need to determine if type is disability. How?  *********************/
+  const isDisabilityClaim = true
+  const translationStepString = isDisabilityClaim ? '8step' : '5step'
+  const heading = t(`claimPhase.${translationStepString}.heading.phase${phase}`)
 
-  useEffect(() => {
-    if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
-      logAnalyticsEvent(Events.vama_claim_file_request(claimID))
-    }
-  }, [phase, current, showClaimFileUploadBtn, claimID])
-
-  const getPhaseHeader = (): ReactNode => {
-    return (
-      <Box flexDirection={'row'} importantForAccessibility={'no-hide-descendants'}>
-        <PhaseIndicator phase={phase} current={current} />
-        <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'} selectable={!phaseLessThanEqualToCurrent}>
-            {heading}
-          </TextView>
-          {phaseLessThanEqualToCurrent && <TextView variant={'MobileBody'}>{updatedLastDate}</TextView>}
+  const phaseHeader = (
+    <Box flexDirection="column">
+      <Box flexDirection="row" alignItems="center" mb={condensedMarginBetween}>
+        {isCompleted && <VAIcon name="CircleCheckMark" fill={theme.colors.icon.success} width={24} height={24} />}
+        <TextView variant="MobileBodyBold" ml={isCompleted ? condensedMarginBetween : 0}>{`Step ${phase}`}</TextView>
+      </Box>
+      <TextView>{heading}</TextView>
+      {isCurrent && (
+        <Box mt={7}>
+          <LabelTag text={t('currentStep')} labelType={LabelTagTypeConstants.tagGreen} />
         </Box>
-      </Box>
-    )
-  }
+      )}
+    </Box>
+  )
 
-  const getPhaseExpandedContent = (): ReactNode => {
-    return (
-      <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
-        <TextView variant={'MobileBody'}>{detailsText}</TextView>
-      </Box>
-    )
-  }
+  const detailsText = t(`claimPhase.${translationStepString}.details.phase${phase}`)
+  const phaseExpandedContent = (
+    <TextView mt={standardMarginBetween} accessibilityLabel={a11yLabelVA(detailsText)}>
+      {detailsText}
+    </TextView>
+  )
 
   let status = ''
 
-  if (phase === current) {
+  if (isCurrent) {
     status = t('claimPhase.heading.a11y.current')
-  } else if (phase < current) {
+  } else if (isCompleted) {
     status = t('claimPhase.heading.a11y.completed')
   }
 
-  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
-
-  if (phaseLessThanEqualToCurrent) {
-    testID = `${testID} ${updatedLastDate}`
-  }
-
-  const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
-
-  const detailsText = t(`claimPhase.details.phase${phase}`)
-  const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phase1')) : detailsText
-  const youHaveFileRequestsText = t('claimPhase.youHaveFileRequest', { count })
+  const testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
 
   const accordionPress = (isExpanded: boolean | undefined) => {
     logAnalyticsEvent(
@@ -124,39 +83,15 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
     )
   }
 
-  const fileRequestsPress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })
-  }
-
   return (
     <AccordionCollapsible
       noBorder={true}
-      header={getPhaseHeader()}
-      expandedContent={getPhaseExpandedContent()}
-      hideArrow={!phaseLessThanEqualToCurrent}
+      header={phaseHeader}
+      expandedContent={phaseExpandedContent}
+      expandedInitialValue={isCurrent}
       customOnPress={accordionPress}
-      testID={testID}>
-      {phase === 3 && showClaimFileUploadBtn && (
-        <Box mt={standardMarginBetween}>
-          <TextView
-            variant={'MobileBodyBold'}
-            accessibilityLabel={a11yLabelVA(youHaveFileRequestsText)}
-            accessibilityRole="header"
-            accessible={true}>
-            {youHaveFileRequestsText}
-          </TextView>
-          <Box mt={standardMarginBetween}>
-            <Button
-              onPress={fileRequestsPress}
-              testID={t('claimPhase.fileRequests.button.label')}
-              label={t('claimPhase.fileRequests.button.label')}
-              a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
-            />
-          </Box>
-        </Box>
-      )}
-    </AccordionCollapsible>
+      testID={testID}
+    />
   )
 }
 
