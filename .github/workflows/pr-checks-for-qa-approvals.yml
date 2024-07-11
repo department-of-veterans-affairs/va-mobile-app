@@ -1,7 +1,10 @@
+
 #
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
 #
+
 name: '[Utils] QA required approval'
+
 on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
@@ -40,7 +43,8 @@ jobs:
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
-          echo "Approvers: $approvals"
+
+          echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
  
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
@@ -52,14 +56,14 @@ jobs:
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
-                else
+                else 
                   echo 'This PR requires QA approval to merge'
                   exit 1
                 fi
               else
                 echo 'This PR requires Engineer approval before QA review'
                 exit 1
-              fi
+              fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
