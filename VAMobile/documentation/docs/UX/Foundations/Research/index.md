@@ -61,6 +61,8 @@ The research study lead uses the information provided from Perigean, the VA’s 
 ## VA Mobile app research 
 * [VA mobile app UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research)
 Research plans and findings for VA mobile app features and research efforts, 2020 to present.
+* [Conducting remote User Research with a pre-release production app build & user credentials](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-research/research-operations/research-pre-release-prod-app-build-how-to.md) 
+Planning tips and a template for conducting remote research with a pre-release production app build.
 
 ## VA Research resources
 * [VA Platform: Research at VA](https://depo-platform-documentation.scrollhelp.site/research-design/research-at-va)
