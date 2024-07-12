@@ -10,12 +10,10 @@ import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'componen
 import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
@@ -33,7 +31,6 @@ type ClaimStatusProps = {
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
 function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
-  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -75,7 +72,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <Box>
@@ -121,16 +118,14 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       }
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box>
           <TextArea>
-            <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
-            </Box>
-            <Box {...testIdProps(letterAvailable)} accessible={true}>
-              <TextView variant="MobileBody" paragraphSpacing={showButton ? true : false}>
-                {letterAvailable}
-              </TextView>
-            </Box>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
+              {claimDecidedOn}
+            </TextView>
+            <TextView variant="MobileBody" accessible={true} paragraphSpacing={showButton}>
+              {letterAvailable}
+            </TextView>
             {showButton && (
               <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />
             )}
@@ -143,10 +138,9 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   }
 
   return (
-    <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')} testID="claimStatusDetailsID">
+    <Box testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
       {renderClosedClaimStatusDetails()}
-      <NeedHelpData />
     </Box>
   )
 }

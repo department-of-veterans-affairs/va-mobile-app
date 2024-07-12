@@ -27,6 +27,7 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -207,11 +208,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <Box mx={theme.dimensions.gutter}>
-            <TextView
-              variant="BitterBoldHeading"
-              mb={theme.dimensions.condensedMarginBetween}
-              accessibilityRole="header">
+          <Box mx={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'} accessibilityRole="header">
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
@@ -230,6 +228,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
           {claimPhaseExpansionFlag && renderActiveClosedClaimStatusHelpLink()}
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <NeedHelpData />
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>

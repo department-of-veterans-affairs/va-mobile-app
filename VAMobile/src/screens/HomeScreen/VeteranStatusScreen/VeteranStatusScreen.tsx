@@ -87,6 +87,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     const dimensions = {
       width: 34,
       height: 34,
+      preventScaling: true,
     }
 
     switch (branch) {
@@ -127,11 +128,12 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
             mb={theme.dimensions.textIconMargin}
             variant="BitterBoldHeading"
             color="primaryContrast"
-            testID="veteranStatusFullNameTestID">
+            testID="veteranStatusFullNameTestID"
+            accessibilityRole="header">
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
-            <Box display="flex" flexDirection="row">
+            <Box display="flex" flexDirection="row" flexWrap="wrap">
               {getBranchSeal()}
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
@@ -143,7 +145,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
       <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {ratingIsDefined && (
           <Box {...boxProps}>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
+            <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
               {t('disabilityRating.title')}
             </TextView>
             <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
@@ -152,13 +154,13 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           </Box>
         )}
         <Box {...boxProps}>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
+          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.periodOfService')}
           </TextView>
           {getPeriodOfService}
         </Box>
         <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
+          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('personalInformation.dateOfBirth')}
           </TextView>
           <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
@@ -169,7 +171,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
             {t('veteranStatus.uniformedServices')}
           </TextView>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
+          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.fixAnError')}
           </TextView>
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
