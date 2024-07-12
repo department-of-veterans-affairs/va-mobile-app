@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Alert, ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
 import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
@@ -151,16 +152,21 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         onPress: onDecisionLetterPress,
       }
 
+      const alertProps: AlertProps = {
+        variant: 'info',
+        header: isDecisionLetterReady ? t('claims.decisionLetterReady') : t('claims.decisionLetterMailed'),
+        description: isDecisionLetterReady ? t('claims.decisionLetterReady.alertBody') : undefined,
+        primaryButton: isDecisionLetterReady ? buttonProps : undefined,
+        expandable: isDecisionLetterReady,
+      }
+
+      if (isDecisionLetterReady) {
+        alertProps.initializeExpanded = isDecisionLetterReady
+      }
+
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <Alert
-            variant="info"
-            description={isDecisionLetterReady ? t('claims.decisionLetterReady.alertBody') : undefined}
-            header={isDecisionLetterReady ? t('claims.decisionLetterReady') : t('claims.decisionLetterMailed')}
-            expandable={true}
-            initializeExpanded={isDecisionLetterReady}
-            primaryButton={isDecisionLetterReady ? buttonProps : undefined}
-          />
+          <Alert {...alertProps} />
         </Box>
       )
     }
