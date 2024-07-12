@@ -11,13 +11,9 @@ export const VALogo = () => {
     height: 57,
   }
   if (theme.mode === 'dark') {
-    return (
-      <Image style={logoProps} source={require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')} />
-    )
+    return <Image style={logoProps} source={{ uri: 'va_on_dark.png' }} />
   } else {
-    return (
-      <Image style={logoProps} source={require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')} />
-    )
+    return <Image style={logoProps} source={{ uri: 'va_on_light.png' }} />
   }
 }
 
