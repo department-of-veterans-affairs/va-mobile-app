@@ -24,8 +24,8 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import ClaimFiles from '../ClaimFiles/ClaimFiles'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
+import ClaimFiles from './ClaimFiles/ClaimFiles'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
