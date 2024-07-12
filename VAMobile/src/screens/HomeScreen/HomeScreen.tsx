@@ -334,7 +334,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
                 <VAIcon
                   name={'CircleCheckMark'}
-                  fill={Colors.uswdsSystemColorGreenCoolVivid50}
+                  fill={Colors.vadsColorSuccessDark}
                   fill2={theme.colors.icon.transparent}
                 />
                 <TextView
