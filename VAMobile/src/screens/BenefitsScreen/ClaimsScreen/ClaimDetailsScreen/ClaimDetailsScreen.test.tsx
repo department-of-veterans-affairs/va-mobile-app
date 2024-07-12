@@ -1,4 +1,5 @@
 import React from 'react'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -98,6 +99,48 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByText('Files')))
 
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
+    })
+  })
+
+  describe('need help section', () => {
+    it('should always display on claim status tab', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData({
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: '800-827-1000' })))
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
+    })
+
+    it('should display on claim details, to be renamed files tab', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData({
+        ...claimData,
+      })
+      await waitFor(() => fireEvent.press(screen.getByText('Details')))
+      await waitFor(() => fireEvent.press(screen.getByText('Details')))
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
     })
   })
 
