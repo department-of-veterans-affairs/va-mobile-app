@@ -179,7 +179,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
     if (claimType === ClaimTypeConstants.CLOSED) {
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
+        <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagree')}
@@ -213,7 +213,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-            {claimPhaseExpansionFlag && getActiveClosedClaimInformationAlertOrSubmitButton()}
+            {getActiveClosedClaimInformationAlertOrSubmitButton()}
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}
@@ -227,7 +227,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
-          {claimPhaseExpansionFlag && renderActiveClosedClaimStatusHelpLink()}
+          {renderActiveClosedClaimStatusHelpLink()}
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <NeedHelpData />
           </Box>
