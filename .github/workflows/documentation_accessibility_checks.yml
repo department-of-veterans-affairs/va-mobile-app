@@ -51,9 +51,10 @@ jobs:
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
+            echo "Checking accessibility for $url"
             # Prevent script from exiting if axe command fails
             set +e
-            axe_output=$(axe "$url")
+            axe_output=$(axe "$url" --stdout)
             axe_exit_code=$?
             set -e
             
