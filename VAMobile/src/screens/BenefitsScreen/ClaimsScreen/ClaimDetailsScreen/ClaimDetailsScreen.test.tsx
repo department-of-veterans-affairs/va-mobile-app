@@ -6,12 +6,16 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 
+jest.mock('utils/remoteConfig')
+
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (claim?: Partial<ClaimData>): void => {
+  const renderWithData = (featureFlag: boolean = false, claim?: Partial<ClaimData>): void => {
+    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -54,7 +58,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData(false, {
         ...claimData,
       })
       await waitFor(() =>
@@ -70,13 +74,30 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData(false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
 
       await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
+    })
+
+    it('should display the Files component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData(true, {
+        ...claimData,
+      })
+      await waitFor(() => fireEvent.press(screen.getByText('Files')))
+      await waitFor(() => fireEvent.press(screen.getByText('File')))
+
+      await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
 
