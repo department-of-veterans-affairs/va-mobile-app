@@ -1,121 +1,190 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import { ScrollView } from 'react-native'
 
-import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
-import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
-import { HealthStackParamList } from '../HealthStackScreens'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import _ from 'underscore'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFolderMessages, useFolders } from 'api/secureMessaging'
+import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
+import { FolderNameTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { hasErrorCode } from 'utils/errors'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../HealthStackScreens'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
-import StartNewMessageButton from './StartNewMessageButton/StartNewMessageButton'
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
-export const getInboxUnreadCount = (state: RootState): number => {
-  const inbox = state && state.secureMessaging && state.secureMessaging.inbox
-  return inbox?.attributes?.unreadCount || 0
-}
-
-const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
-  const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-
-  const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
+  const navigateTo = useRouteNavigation()
+  const { activeTab } = route.params
+  const [secureMessagingTab, setSecureMessagingTab] = useState(0)
+  const [termsAndConditionError, setTermsAndConditionError] = useState(false)
+  const isFocused = useIsFocused()
+  const {
+    data: userAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+    isFetching: fetchingAuthServices,
+  } = useAuthorizedServices()
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const {
+    data: foldersData,
+    error: foldersError,
+    refetch: refetchFolder,
+    isFetching: refetchingFolders,
+  } = useFolders({
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
+  })
+  const {
+    error: inboxError,
+    isFetched: inboxFetched,
+    refetch: refetchInbox,
+    isFetching: refetchingInbox,
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, {
+    enabled:
+      isFocused &&
+      screenContentAllowed('WG_SecureMessaging') &&
+      userAuthorizedServices?.secureMessaging &&
+      smNotInDowntime,
+  })
+  const folders = foldersData?.data || ([] as SecureMessagingFolderList)
+  const inboxUnreadCount = foldersData?.inboxUnreadCount || 0
+  const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
 
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const [scrollPage, setScrollPage] = useState(1)
+
+  // Resets scroll position to top whenever current page appointment list changes:
+  // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
+  // Position reset is necessary to make the pagination component padding look consistent between pages,
+  const scrollViewRef = useRef<ScrollView | null>(null)
 
   useEffect(() => {
-    if (secureMessaging && smNotInDowntime) {
-      dispatch(resetSaveDraftComplete())
-      dispatch(resetSaveDraftFailed())
-      // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
-      // prefetch inbox message list
-      dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-      // sets the inbox tab on initial load
-      if (!secureMessagingTab) {
-        dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }, [scrollPage])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSecureMessagingTab(activeTab)
+    }, [activeTab]),
+  )
+
+  useEffect(() => {
+    if (inboxFetched && inboxError && isErrorObject(inboxError)) {
+      setTermsAndConditionError(hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, inboxError))
+    }
+  }, [inboxError, inboxFetched])
+
+  const onTabUpdate = (index: number): void => {
+    if (secureMessagingTab !== index) {
+      if (index === SegmentedControlIndexes.FOLDERS) {
+        _.forEach(folders, (folder) => {
+          if (folder.attributes.name === FolderNameTypeConstants.drafts) {
+            logAnalyticsEvent(Events.vama_sm_folders(folder.attributes.count))
+          }
+        })
       }
-      // fetch folders list
-      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    }
-  }, [dispatch, secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
-
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!secureMessaging) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
-        <NotEnrolledSM />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (termsAndConditionError) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
-        <TermsAndConditions />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  const serviceErrorAlert = (): ReactElement => {
-    // TODO error alert from state
-    return <></>
-  }
-
-  const onTabUpdate = (selection: string): void => {
-    const tab = selection as SecureMessagingTabTypes
-    if (secureMessagingTab !== tab) {
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('SecureMessaging tab change'))
+      }
       snackBar?.hideAll()
-      dispatch(updateSecureMessagingTab(tab))
+      setSecureMessagingTab(index)
     }
   }
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+
+  const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
 
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
-      <StartNewMessageButton />
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            values={controlValues}
-            titles={controlLabels}
-            onChange={onTabUpdate}
-            selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
-            accessibilityHints={a11yHints}
-          />
-        </Box>
-        <CernerAlertSM />
-        {serviceErrorAlert()}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
-          {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
-        </Box>
-      </Box>
+    <FeatureLandingTemplate
+      backLabel={t('health.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('messages')}
+      testID="messagesTestID"
+      scrollViewProps={scrollViewProps}>
+      {!smNotInDowntime ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+      ) : getUserAuthorizedServicesError && !fetchingAuthServices && !refetchingFolders && !refetchingInbox ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
+        />
+      ) : !userAuthorizedServices?.secureMessaging ? (
+        <NotEnrolledSM />
+      ) : termsAndConditionError ? (
+        <TermsAndConditions />
+      ) : otherError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
+          error={foldersError || inboxError}
+          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
+        />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('secureMessaging.startNewMessage')}
+              onPress={onPress}
+              testID={'startNewMessageButtonTestID'}
+            />
+          </Box>
+          <Box flex={1} justifyContent="flex-start">
+            <Box
+              mb={theme.dimensions.standardMarginBetween}
+              mt={theme.dimensions.contentMarginTop}
+              mx={theme.dimensions.gutter}>
+              <SegmentedControl
+                labels={controlLabels}
+                onChange={onTabUpdate}
+                selected={secureMessagingTab}
+                a11yHints={a11yHints}
+                a11yLabels={[t('secureMessaging.inbox')]}
+              />
+            </Box>
+            <CernerAlertSM />
+            <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+              {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
+              {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
+            </Box>
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

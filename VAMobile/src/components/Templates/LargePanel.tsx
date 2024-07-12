@@ -1,11 +1,15 @@
-import { useNavigation } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
-
-import { FooterButton, VAScrollView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { useTranslation } from 'react-i18next'
 import { View, ViewStyle } from 'react-native'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+
+import { useNavigation } from '@react-navigation/native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { VAScrollView, WaygateWrapper } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
@@ -26,6 +30,8 @@ export type LargePanelProps = {
   rightButtonText?: string
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
+  /** Optional TestID */
+  rightButtonTestID?: string
   /** text of the footer button(no text it doesn't appear) */
   footerButtonText?: string
   /** function called when footer button is pressed(no function it doesn't appear) */
@@ -34,6 +40,10 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
   /** Optional TestID for scrollView */
   testID?: string
+  /** bypass divider marginbottom */
+  dividerMarginBypass?: boolean
+  /** scrollview insets removal - used for when wanting to extend background color when in landscape mode across the screen, default is false */
+  removeInsets?: boolean
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -44,14 +54,17 @@ export const LargePanel: FC<LargePanelProps> = ({
   titleA11yLabel,
   rightButtonText,
   rightButtonA11yLabel,
+  rightButtonTestID,
   footerButtonText,
   onRightButtonPress,
   onFooterButtonPress,
   testID,
+  dividerMarginBypass,
+  removeInsets,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
 
@@ -86,10 +99,20 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
+    leftButton: leftButtonText
+      ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress }
+      : undefined,
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
+    rightButton: rightButtonText
+      ? {
+          text: rightButtonText,
+          a11yLabel: rightButtonA11yLabel,
+          onPress: rightTitleButtonPress,
+          testID: rightButtonTestID,
+        }
+      : undefined,
     divider: true,
+    dividerMarginBypass: dividerMarginBypass,
   }
 
   const fillStyle: ViewStyle = {
@@ -97,13 +120,26 @@ export const LargePanel: FC<LargePanelProps> = ({
     flex: 1,
   }
 
+  const containerStyle: ViewStyle = {
+    flexGrow: 1,
+    backgroundColor: theme.colors.background.veteranStatus,
+    justifyContent: 'center',
+  }
+
   return (
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView testID={testID}>
-          {children}
-          {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+        <VAScrollView
+          testID={testID}
+          removeInsets={removeInsets}
+          contentContainerStyle={removeInsets ? containerStyle : undefined}>
+          <WaygateWrapper>
+            {children}
+            {footerButtonText && onFooterButtonPress && (
+              <Button label={footerButtonText} onPress={onFooterButtonPress} />
+            )}
+          </WaygateWrapper>
         </VAScrollView>
       </View>
     </>

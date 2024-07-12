@@ -1,17 +1,18 @@
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+
+import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
-import { Countries } from 'constants/countries'
+import { useContactInformation } from 'api/contactInformation/getContactInformation'
+import { AddressData, UserContactInformation, addressTypeFields } from 'api/types'
 import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
+import { Events } from 'constants/analytics'
+import { Countries } from 'constants/countries'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices'
-import { RootState } from 'store'
-import { TFunction } from 'i18next'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
-import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -35,7 +36,9 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
   } else if (address.addressType === addressTypeFields.overseasMilitary) {
     // Military addresses
     const city = address.city ? `${address.city},` : undefined
-    const stateLabel = address.stateCode ? MilitaryStates.find((militaryState) => militaryState.value === address.stateCode)?.label : undefined
+    const stateLabel = address.stateCode
+      ? MilitaryStates.find((militaryState) => militaryState.value === address.stateCode)?.label
+      : undefined
     fieldList = [city, stateLabel, address.zipCode]
     joinBy = ' '
   } else {
@@ -46,13 +49,21 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
   return fieldList.filter(Boolean).join(joinBy).trim()
 }
 
-export const getTextForAddressData = (profile: UserDataProfile | undefined, profileAddressType: profileAddressType, translate: TFunction): Array<TextLine> => {
+export const getTextForAddressData = (
+  contactInformation: UserContactInformation | undefined,
+  profileAddressType: profileAddressType,
+  translate: TFunction,
+): Array<TextLine> => {
   const textLines: Array<TextLine> = []
 
-  if (profile && profile[profileAddressType]) {
-    const address = profile[profileAddressType] as AddressData
+  if (contactInformation && contactInformation[profileAddressType]) {
+    const address = contactInformation[profileAddressType] as AddressData
 
-    const existingAddressLines = getAllFieldsThatExist([address.addressLine1, address.addressLine2 || '', address.addressLine3 || ''])
+    const existingAddressLines = getAllFieldsThatExist([
+      address.addressLine1,
+      address.addressLine2 || '',
+      address.addressLine3 || '',
+    ])
     if (existingAddressLines.length > 0) {
       const addressLine = existingAddressLines.join(', ').trim()
       textLines.push({ text: translate('dynamicField', { field: addressLine }) })
@@ -71,29 +82,54 @@ export const getTextForAddressData = (profile: UserDataProfile | undefined, prof
     // if no address data exists, add please add your ___ message
     if (existingAddressLines.length === 0 && commaSeparatedAddressLine === '') {
       // if its an international address, check additionally if countryCodeIso3 does not exist
-      if ((address.addressType === addressTypeFields.international && !address.countryCodeIso3) || address.addressType !== addressTypeFields.international) {
-        textLines.push({ text: translate('contactInformation.addYour', { field: translate(`contactInformation.${profileAddressType}`).toLowerCase() }) })
+      if (
+        (address.addressType === addressTypeFields.international && !address.countryCodeIso3) ||
+        address.addressType !== addressTypeFields.international
+      ) {
+        textLines.push({
+          text: translate('contactInformation.addYour', {
+            field: translate(`contactInformation.${profileAddressType}`).toLowerCase(),
+          }),
+        })
       }
     }
   } else {
-    textLines.push({ text: translate('contactInformation.addYour', { field: translate(`contactInformation.${profileAddressType}`).toLowerCase() }) })
+    textLines.push({
+      text: translate('contactInformation.addYour', {
+        field: translate(`contactInformation.${profileAddressType}`).toLowerCase(),
+      }),
+    })
   }
 
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<DefaultListItemObj> => {
+const getAddressData = (
+  contactInformation: UserContactInformation | undefined,
+  translate: TFunction,
+  addressData: Array<addressDataField>,
+): Array<DefaultListItemObj> => {
   const resultingData: Array<DefaultListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
-    let textLines: Array<TextLine> = [{ text: translate(`contactInformation.${addressType}`), variant: 'MobileBodyBold' }]
+    let textLines: Array<TextLine> = [
+      { text: translate(`contactInformation.${addressType}`), variant: 'MobileBodyBold' },
+    ]
 
-    textLines = textLines.concat(getTextForAddressData(profile, addressType, translate))
-    const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
+    textLines = textLines.concat(getTextForAddressData(contactInformation, addressType, translate))
+    const a11yHintTextSuffix =
+      addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
     // For integration tests, change the test id and accessibility label to just be the header so we can query for the address summary
-    const testId = IS_TEST ? generateTestID(translate(`contactInformation.${addressType}`), '') : _.map(textLines, 'text').join(' ')
-    resultingData.push({ textLines: textLines, a11yHintText: translate(`contactInformation.${a11yHintTextSuffix}`), onPress, testId })
+    const testId = IS_TEST
+      ? generateTestID(translate(`contactInformation.${addressType}`), '')
+      : _.map(textLines, 'text').join(' ')
+    resultingData.push({
+      textLines: textLines,
+      a11yHintText: translate(`contactInformation.${a11yHintTextSuffix}`),
+      onPress,
+      testId,
+    })
   })
 
   return resultingData
@@ -117,11 +153,23 @@ export type AddressSummaryProps = {
   addressData: Array<addressDataField>
 } & Partial<ListProps>
 
-const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+function AddressSummary({ addressData, title }: AddressSummaryProps) {
+  const contactInformationQuery = useContactInformation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const [retried, setRetried] = useState(false)
 
-  const data = getAddressData(profile, t, addressData)
+  useEffect(() => {
+    if (contactInformationQuery.failureCount > 0) {
+      setRetried(true)
+    }
+
+    if (retried && !contactInformationQuery.isFetching) {
+      const retryStatus = contactInformationQuery.error ? 'fail' : 'success'
+      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
+    }
+  }, [contactInformationQuery.failureCount, contactInformationQuery.error, contactInformationQuery.isFetching, retried])
+
+  const data = getAddressData(contactInformationQuery.data, t, addressData)
 
   return <DefaultList items={data} title={title} />
 }

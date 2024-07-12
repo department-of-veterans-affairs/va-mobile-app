@@ -25,6 +25,17 @@
           }
         },
         {
+          "id": "600236070",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2019-03-22",
+            "updatedAt": "2019-07-18",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
           "id": "600080331",
           "type": "claim",
           "attributes": {
@@ -36,6 +47,28 @@
           }
         },
         {
+          "id": "600461885",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-12-04",
+            "updatedAt": "2021-12-04",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
+          "id": "600461886",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-12-05",
+            "updatedAt": "2021-12-05",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
           "id": "2221530",
           "type": "appeal",
           "attributes": {
@@ -43,7 +76,392 @@
             "completed": false,
             "dateFiled": "2008-06-12",
             "updatedAt": "2011-11-22",
-            "displayTitle": "disability compensation appeal"
+            "displayTitle": "Disability compensation appeal"
+          }
+        },
+        {
+          "id": "2221531",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "appeal",
+            "completed": false,
+            "dateFiled": "2008-06-13",
+            "updatedAt": "2011-11-23",
+            "displayTitle": "Disability compensation appeal"
+          }
+        },
+        {
+          "id": "2221532",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-14",
+            "updatedAt": "2011-11-24",
+            "displayTitle": "Pending hearing appeal"
+          }
+        },
+        {
+          "id": "2221533",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-15",
+            "updatedAt": "2011-11-25",
+            "displayTitle": "Insurance on docket appeal"
+          }
+        },
+        {
+          "id": "2221534",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-16",
+            "updatedAt": "2011-11-26",
+            "displayTitle": "Loan Guaranty pending certification ssoc appeal"
+          }
+        },
+        {
+          "id": "2221535",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-17",
+            "updatedAt": "2011-11-27",
+            "displayTitle": "Education pending certification appeal"
+          }
+        },
+        {
+          "id": "2221536",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-18",
+            "updatedAt": "2011-11-28",
+            "displayTitle": "VRE pending form 9 appeal"
+          }
+        },
+        {
+          "id": "2221537",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-19",
+            "updatedAt": "2011-11-29",
+            "displayTitle": "Medical pending soc appeal"
+          }
+        },
+        {
+          "id": "2221538",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-20",
+            "updatedAt": "2011-11-30",
+            "displayTitle": "Burial stayed appeal"
+          }
+        },
+        {
+          "id": "2221539",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-21",
+            "updatedAt": "2011-11-30",
+            "displayTitle": "At vso appeal"
+          }
+        },
+        {
+          "id": "2221540",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-22",
+            "updatedAt": "2011-12-01",
+            "displayTitle": "BVA development appeal"
+          }
+        },
+        {
+          "id": "2221541",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-23",
+            "updatedAt": "2011-12-02",
+            "displayTitle": "Multiple decision in progress appeals"
+          }
+        },
+        {
+          "id": "2221542",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-24",
+            "updatedAt": "2011-12-03",
+            "displayTitle": "BVA decision appeal"
+          }
+        },
+        {
+          "id": "2221543",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-25",
+            "updatedAt": "2011-12-04",
+            "displayTitle": "Field grant appeal"
+          }
+        },
+        {
+          "id": "2221544",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-26",
+            "updatedAt": "2011-12-05",
+            "displayTitle": "Withdrawn appeal"
+          }
+        },
+        {
+          "id": "2221545",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-27",
+            "updatedAt": "2011-12-06",
+            "displayTitle": "FTR appeal"
+          }
+        },
+        {
+          "id": "2221546",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-28",
+            "updatedAt": "2011-12-07",
+            "displayTitle": "Ramp appeal"
+          }
+        },
+        {
+          "id": "2221547",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-29",
+            "updatedAt": "2011-12-08",
+            "displayTitle": "Death appeal"
+          }
+        },
+        {
+          "id": "2221548",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-06-30",
+            "updatedAt": "2011-12-09",
+            "displayTitle": "Reconsideration appeal"
+          }
+        },
+        {
+          "id": "2221549",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-01",
+            "updatedAt": "2011-12-10",
+            "displayTitle": "Other close appeal"
+          }
+        },
+        {
+          "id": "2221550",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-02",
+            "updatedAt": "2011-12-11",
+            "displayTitle": "Remand ssoc appeal"
+          }
+        },
+        {
+          "id": "2221551",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "appeal",
+            "completed": false,
+            "dateFiled": "2008-07-03",
+            "updatedAt": "2011-12-12",
+            "displayTitle": "Remand appeal"
+          }
+        },
+        {
+          "id": "2221552",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-04",
+            "updatedAt": "2011-12-13",
+            "displayTitle": "Merged appeal"
+          }
+        },
+        {
+          "id": "2221553",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-05",
+            "updatedAt": "2011-12-14",
+            "displayTitle": "AMA remand appeal"
+          }
+        },
+        {
+          "id": "2221554",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-06",
+            "updatedAt": "2011-12-15",
+            "displayTitle": "Statutory opt in appeal"
+          }
+        },
+        {
+          "id": "2221555",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-07",
+            "updatedAt": "2011-12-16",
+            "displayTitle": "Evidentiary period appeal"
+          }
+        },
+        {
+          "id": "2221556",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-08",
+            "updatedAt": "2011-12-17",
+            "displayTitle": "Post bva dta decision appeal"
+          }
+        },
+        {
+          "id": "2221557",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-09",
+            "updatedAt": "2011-12-18",
+            "displayTitle": "BVA decision effectuation appeal"
+          }
+        },
+        {
+          "id": "2221558",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "supplementalClaim",
+            "completed": false,
+            "dateFiled": "2008-07-10",
+            "updatedAt": "2011-12-19",
+            "displayTitle": "Supplemental claim received appeal"
+          }
+        },
+        {
+          "id": "2221559",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "higherLevelReview",
+            "completed": false,
+            "dateFiled": "2008-07-11",
+            "updatedAt": "2011-12-20",
+            "displayTitle": "Higher level review recieved appeal"
+          }
+        },
+        {
+          "id": "2221560",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "higherLevelReview",
+            "completed": false,
+            "dateFiled": "2008-07-12",
+            "updatedAt": "2011-12-21",
+            "displayTitle": "Higher level review decision appeal"
+          }
+        },
+        {
+          "id": "2221561",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "higherLevelReview",
+            "completed": false,
+            "dateFiled": "2008-07-13",
+            "updatedAt": "2011-12-22",
+            "displayTitle": "Higher level review error appeal"
+          }
+        },
+        {
+          "id": "2221562",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "supplementalClaim",
+            "completed": false,
+            "dateFiled": "2008-07-14",
+            "updatedAt": "2011-12-23",
+            "displayTitle": "Supplemental claim decision appeal"
+          }
+        },
+        {
+          "id": "2221563",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "supplementalClaim",
+            "completed": false,
+            "dateFiled": "2008-07-15",
+            "updatedAt": "2011-12-24",
+            "displayTitle": "Supplemental claim closed appeal"
+          }
+        },
+        {
+          "id": "2221564",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "higherLevelReview",
+            "completed": false,
+            "dateFiled": "2008-07-16",
+            "updatedAt": "2011-12-25",
+            "displayTitle": "Higher level review Closed Appeal"
+          }
+        },
+        {
+          "id": "2221565",
+          "type": "appeal",
+          "attributes": {
+            "subtype": "legacyAppeal",
+            "completed": false,
+            "dateFiled": "2008-07-17",
+            "updatedAt": "2011-12-26",
+            "displayTitle": "Remand return appeal"
           }
         }
       ],
@@ -52,9 +470,10 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 1,
-          "totalEntries": 1
-        }
+          "totalPages": 5,
+          "totalEntries": 42
+        },
+        "activeClaimsCount": 5
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
@@ -86,7 +505,8 @@
           "perPage": 10,
           "totalPages": 1,
           "totalEntries": 1
-        }
+        },
+        "activeClaimsCount": 0
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
@@ -116,9 +536,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Low back strain (New)"
-        ],
+        "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -254,7 +672,7 @@
             "type": "received_from_you_list",
             "trackedItemId": 293446,
             "description": "Buddy mentioned - No complete address",
-            "displayName": "Request 5",
+            "displayName": "Complete address needed",
             "overdue": false,
             "status": "NO_LONGER_REQUIRED",
             "uploaded": true,
@@ -280,7 +698,7 @@
             "type": "still_need_from_you_list",
             "trackedItemId": 293448,
             "description": "Combat not verified",
-            "displayName": "Request 4",
+            "displayName": "Combat verification document needed",
             "overdue": false,
             "status": "SUBMITTED_AWAITING_REVIEW",
             "uploaded": true,
@@ -322,7 +740,7 @@
             "type": "still_need_from_you_list",
             "trackedItemId": 293442,
             "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
-            "displayName": "Request 2",
+            "displayName": "Dental disability - More information needed",
             "overdue": false,
             "status": "NEEDED",
             "uploaded": false,
@@ -338,7 +756,7 @@
             "type": "still_need_from_you_list",
             "trackedItemId": 293439,
             "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
-            "displayName": "Request 1",
+            "displayName": "Documents relating to disability needed",
             "overdue": false,
             "status": "NEEDED",
             "uploaded": false,
@@ -354,7 +772,7 @@
             "type": "still_need_from_you_list",
             "trackedItemId": 293447,
             "description": "Accidental injury - 21-4176 needed",
-            "displayName": "Request 3",
+            "displayName": "Accidental injury - 21-4176 needed",
             "overdue": false,
             "status": "NEEDED",
             "uploaded": false,
@@ -456,9 +874,370 @@
           "name": "mobile.claims_and_appeals.claim.type",
           "value": 1,
           "sampleRate": 1,
-          "tags": [
-            "type:Compensation"
-          ],
+          "tags": ["type:Compensation"],
+          "metadata": null
+        }
+      }
+    }
+  },
+  "/v0/claim/600236070": {
+    "data": {
+      "id": "600236070",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": "2021-09-04",
+        "maxEstDate": "2030-11-14",
+        "phaseChangeDate": "2021-05-04",
+        "open": true,
+        "waiverSubmitted": true,
+        "documentsNeeded": true,
+        "developmentLetterSent": true,
+        "decisionLetterSent": false,
+        "phase": 3,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": ["Low back strain (New)"],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293440,
+            "description": "21-4142a",
+            "displayName": "Request 10",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": false,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [],
+            "uploadDate": null,
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293441,
+            "description": "21-4142/21-4142a",
+            "displayName": "Request 9",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              },
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293443,
+            "description": "Employment info needed",
+            "displayName": "Request 8",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293443,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "Screenshot_20210519-120209_VAMobile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293444,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Request 7",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293444,
+                "fileType": "Correspondence",
+                "documentType": "L023",
+                "filename": "fs-V3800_QSG-IB_r2.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293445,
+            "description": "21-4142",
+            "displayName": "Request 6",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293445,
+                "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+                "documentType": "L029",
+                "filename": "Get_Started_With_Smallpdf.pdf",
+                "uploadDate": "2021-05-18"
+              }
+            ],
+            "uploadDate": "2021-05-18",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "received_from_you_list",
+            "trackedItemId": 293446,
+            "description": "Buddy mentioned - No complete address",
+            "displayName": "Complete address needed",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293446,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293448,
+            "description": "Combat not verified",
+            "displayName": "Combat verification document needed",
+            "overdue": false,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "post-deployment-document.pdf",
+                "uploadDate": "2021-05-13"
+              },
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "DD214.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": "ClaimDecisionRequest.pdf",
+            "uploadDate": "2021-06-02",
+            "type": "other_documents_list",
+            "date": "2021-06-02"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293442,
+            "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
+            "displayName": "Dental disability - more information needed",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-07-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": []
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293439,
+            "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
+            "displayName": "Documents relating to disability needed",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-06-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": []
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293447,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Accidental injury - 21-4176 needed",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": null,
+            "documents": []
+          },
+          {
+            "type": "phase2",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "phase1",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": ["type:Compensation"],
           "metadata": null
         }
       }
@@ -483,10 +1262,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "Hearing loss (New)",
-          " ringing in ears (New)"
-        ],
+        "contentionList": ["Hearing loss (New)", " ringing in ears (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
           {
@@ -678,9 +1454,7 @@
           "name": "mobile.claims_and_appeals.claim.type",
           "value": 1,
           "sampleRate": 1,
-          "tags": [
-            "type:Compensation"
-          ],
+          "tags": ["type:Compensation"],
           "metadata": null
         }
       }
@@ -705,11 +1479,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "contentionList": [
-          "hearing loss (Increase)",
-          " kidney removal of (New)"
-        ],
-        "vaRepresentative": "Checking this is pronounced",
+        "contentionList": ["hearing loss (Increase)", " kidney removal of (New)"],
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "trackedItemId": null,
@@ -2937,26 +3708,112 @@
       }
     }
   },
+  "/v0/claim/600461885": {
+    "data": {
+      "id": "600461885",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2023-12-04",
+        "minEstDate": null,
+        "maxEstDate": null,
+        "phaseChangeDate": "2023-12-04",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": false,
+        "phase": 9,
+        "everPhaseBack": null,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": null,
+            "filename": "Jesse_Gray_600461885_526.pdf",
+            "uploadDate": "2023-12-04",
+            "type": "other_documents_list",
+            "date": "2023-12-04"
+          },
+          {
+            "type": "phase1",
+            "date": "2023-12-04"
+          },
+          {
+            "type": "filed",
+            "date": "2023-12-04"
+          }
+        ],
+        "updatedAt": null
+      }
+    }
+  },
+  "/v0/claim/600461886": {
+    "data": {
+      "id": "600461886",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2023-12-05",
+        "minEstDate": null,
+        "maxEstDate": null,
+        "phaseChangeDate": "2023-12-05",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": false,
+        "phase": 1,
+        "everPhaseBack": null,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": null,
+            "filename": "Jesse_Gray_600461886_526.pdf",
+            "uploadDate": "2023-12-04",
+            "type": "other_documents_list",
+            "date": "2023-12-04"
+          },
+          {
+            "type": "phase1",
+            "date": "2023-12-04"
+          },
+          {
+            "type": "filed",
+            "date": "2023-12-04"
+          }
+        ],
+        "updatedAt": null
+      }
+    }
+  },
   "/v0/appeal/2221530": {
     "data": {
       "id": "2221530",
       "type": "appeal",
       "attributes": {
-        "appealIds": [
-          "2221530"
-        ],
+        "appealIds": ["2221530"],
         "active": true,
         "alerts": [
           {
-            "type": "scheduled_hearing",
+            "type": "hearing_no_show",
             "details": {
-              "date": "2021-02-24",
+              "date": "2021-02-25",
               "type": "video",
               "location": "Louisville regional office"
             }
           }
         ],
-        "aod": false,
+        "aod": true,
         "aoj": "vba",
         "description": "Service connection, ureteral stricture, and 2 others",
         "docket": {
@@ -3000,6 +3857,150 @@
           {
             "type": "certified",
             "date": "2011-11-22"
+          },
+          {
+            "type": "hearing_held",
+            "date": "2021-02-24"
+          },
+          {
+            "type": "hearing_no_show",
+            "date": "2021-02-25"
+          },
+          {
+            "type": "transcript",
+            "date": "2021-02-26"
+          },
+          {
+            "type": "cavc_decision",
+            "date": "2021-02-27"
+          },
+          {
+            "type": "vacated",
+            "date": "2021-02-28"
+          },
+          {
+            "type": "record_designation",
+            "date": "2021-03-01"
+          },
+          {
+            "type": "dro_hearing_held",
+            "date": "2021-03-02"
+          },
+          {
+            "type": "dro_hearing_cancelled",
+            "date": "2021-03-03"
+          },
+          {
+            "type": "dro_hearing_no_show",
+            "date": "2021-03-04"
+          },
+          {
+            "type": "ama_nod",
+            "date": "2021-03-05"
+          },
+          {
+            "type": "docket_change",
+            "date": "2021-03-06"
+          },
+          {
+            "type": "distributed_to_vlj",
+            "date": "2021-03-07"
+          },
+          {
+            "type": "bva_decision_effectuation",
+            "date": "2021-03-08"
+          },
+          {
+            "type": "dta_decision",
+            "date": "2021-03-09"
+          }
+        ],
+        "evidence": [
+          {
+            "description": "test",
+            "data": "test,"
+          }
+        ],
+        "incompleteHistory": true,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": false,
+            "lastAction": null,
+            "date": "02-04-11"
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "scheduled_hearing",
+          "details": {
+            "date": "2021-02-24",
+            "type": "in Person",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221531": {
+    "data": {
+      "id": "2221531",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221531"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "scheduled_hearing",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "appeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221532": {
+    "data": {
+      "id": "2221532",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221532"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "claim_decision",
+            "date": "2008-04-11"
           }
         ],
         "evidence": [],
@@ -3011,17 +4012,281 @@
             "active": true,
             "lastAction": null,
             "date": null
-          },
+          }
+        ],
+        "location": "bva",
+        "programArea": "pension",
+        "status": {
+          "type": "pending_hearing_scheduling",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221533": {
+    "data": {
+      "id": "2221533",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221533"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
           {
-            "description": "Service connection, varicose veins",
-            "diagnosticCode": "7120",
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
             "active": true,
             "lastAction": null,
             "date": null
-          },
+          }
+        ],
+        "location": "bva",
+        "programArea": "insurance",
+        "status": {
+          "type": "on_docket",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "appeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221534": {
+    "data": {
+      "id": "2221534",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221534"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
           {
-            "description": "Service connection, generalized anxiety disorder",
-            "diagnosticCode": "9400",
+            "type": "sc_request",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "loan_guaranty",
+        "status": {
+          "type": "pending_certification_ssoc",
+          "details": {
+            "lastSocDate": "2021-02-24"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221535": {
+    "data": {
+      "id": "2221535",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221535"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "education",
+        "status": {
+          "type": "pending_certification",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221536": {
+    "data": {
+      "id": "2221536",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221536"],
+        "active": true,
+        "alerts": [
+          {
+            "type": "form9_needed",
+            "details": {
+              "date": "2021-02-24",
+              "type": "video",
+              "location": "Louisville regional office"
+            }
+          }
+        ],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "vre",
+        "status": {
+          "type": "pending_form9",
+          "details": {
+            "lastSocDate": "2021-02-24"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221537": {
+    "data": {
+      "id": "2221537",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221537"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "medical",
+        "status": {
+          "type": "pending_soc"
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221538": {
+    "data": {
+      "id": "2221538",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221538"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "burial",
+        "status": {
+          "type": "stayed",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221539": {
+    "data": {
+      "id": "2221539",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221539"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
             "active": true,
             "lastAction": null,
             "date": null
@@ -3030,7 +4295,1143 @@
         "location": "bva",
         "programArea": "compensation",
         "status": {
-          "type": "scheduled_hearing",
+          "type": "at_vso",
+          "details": {
+            "vsoName": "John Smith"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221540": {
+    "data": {
+      "id": "2221540",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221540"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "bva",
+        "status": {
+          "type": "bva_development",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221541": {
+    "data": {
+      "id": "2221541",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221541"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "multiple",
+        "status": {
+          "type": "decision_in_progress",
+          "details": {
+            "issues": [
+              {
+                "disposition": "Type1",
+                "description": "Service connection"
+              }
+            ]
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221542": {
+    "data": {
+      "id": "2221542",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221542"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "nca",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "bva_decision",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "bva",
+        "status": {
+          "type": "bva_decision",
+          "bvaDecisionDate": "2021-02-24",
+          "aojDecisionDate": "2021-02-20"
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221543": {
+    "data": {
+      "id": "2221543",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221543"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "field_grant",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "field_grant",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221544": {
+    "data": {
+      "id": "2221544",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221544"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "withdrawn",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "withdrawn",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221545": {
+    "data": {
+      "id": "2221545",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221545"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "ftr",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "ftr",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221546": {
+    "data": {
+      "id": "2221546",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221546"],
+        "active": true,
+        "alerts": [
+          {
+            "type": "ramp_eligible",
+            "details": {
+              "date": "2021-02-25",
+              "type": "video",
+              "location": "Louisville regional office"
+            }
+          },
+          {
+            "type": "ramp_ineligible",
+            "details": {
+              "date": "2021-02-25",
+              "type": "video",
+              "location": "Louisville regional office"
+            }
+          }
+        ],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "ramp",
+            "date": "2008-04-10"
+          },
+          {
+            "type": "ramp_notice",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "ramp",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221547": {
+    "data": {
+      "id": "2221547",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221547"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "death",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "death",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221548": {
+    "data": {
+      "id": "2221548",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221548"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "reconsideration",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "reconsideration",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221549": {
+    "data": {
+      "id": "2221549",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221531"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "other_close",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "other",
+        "status": {
+          "type": "other_close",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221550": {
+    "data": {
+      "id": "2221550",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221550"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "other",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "remand_ssoc",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221551": {
+    "data": {
+      "id": "2221551",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221551"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "other",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": "02-04-12"
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "remand",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office",
+            "issues": [
+              {
+                "disposition": "remand",
+                "description": "service connection"
+              }
+            ]
+          }
+        },
+        "type": "appeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221552": {
+    "data": {
+      "id": "2221552",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221552"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "merged",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "merged",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221553": {
+    "data": {
+      "id": "2221553",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221531"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vha",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "ama_remand",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office",
+            "issues": [
+              {
+                "disposition": "remand",
+                "description": "service connection"
+              }
+            ]
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221554": {
+    "data": {
+      "id": "2221554",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221554"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "statutory_opt_in",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "statutory_opt_in",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221555": {
+    "data": {
+      "id": "2221555",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221555"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "evidentiary_period",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221556": {
+    "data": {
+      "id": "2221556",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221556"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "bva",
+        "status": {
+          "type": "post_bva_dta_decision",
+          "details": {
+            "bvaDecisionDate": "2021-02-24",
+            "issues": [
+              {
+                "disposition": "allowed",
+                "description": "service connection"
+              },
+              {
+                "disposition": "denied",
+                "description": "service connection"
+              }
+            ]
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221557": {
+    "data": {
+      "id": "2221557",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221557"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vha",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "bva",
+        "status": {
+          "type": "bva_decision_effectuation",
+          "details": {
+            "bvaDecisionDate": "2021-02-24",
+            "aojDecisionDate": "2021-02-20"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221558": {
+    "data": {
+      "id": "2221558",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221558"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "sc_request",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "sc_received",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "supplementalClaim",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221559": {
+    "data": {
+      "id": "2221559",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221559"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "hlr_request",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "hlr_received",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office",
+            "informalConference": true
+          }
+        },
+        "type": "higherLevelReview",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221560": {
+    "data": {
+      "id": "2221560",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221560"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "hlr_decision",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "hlr_decision",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "higherLevelReview",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221561": {
+    "data": {
+      "id": "2221561",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221561"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "hlr_dta_error",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "hlr_dta_error",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "higherLevelReview",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221562": {
+    "data": {
+      "id": "2221562",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221562"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "nca",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "sc_decision",
+          "details": {
+            "date": "2021-02-24"
+          }
+        },
+        "type": "supplementalClaim",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221563": {
+    "data": {
+      "id": "2221563",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221563"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vha",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "sc_other_close",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "sc_closed",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "supplementalClaim",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221564": {
+    "data": {
+      "id": "2221564",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221564"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "hlr_other_close",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "hlr_closed",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "higherLevelReview",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221565": {
+    "data": {
+      "id": "2221565",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": ["2221565"],
+        "active": true,
+        "alerts": [],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {},
+        "events": [
+          {
+            "type": "remand_return",
+            "date": "2008-04-11"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "remand_return",
           "details": {
             "date": "2021-02-24",
             "type": "video",

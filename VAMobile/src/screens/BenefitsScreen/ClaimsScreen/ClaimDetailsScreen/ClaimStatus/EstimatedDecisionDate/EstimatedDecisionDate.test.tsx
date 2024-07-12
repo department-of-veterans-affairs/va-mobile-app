@@ -1,22 +1,16 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
 
+import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { context, mockNavProps, mockStore, render } from 'testUtils'
-import { InitialState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
 import EstimatedDecisionDate from './EstimatedDecisionDate'
-import { AlertBox, TextView, VAButton } from 'components'
-import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
@@ -24,103 +18,69 @@ jest.mock('utils/hooks', () => {
 })
 
 context('EstimatedDecisionDate', () => {
-  let store: any
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   const initializeTestCase = (maxEstDate: string, showCovidMessage: boolean): void => {
-    props = mockNavProps({ maxEstDate, showCovidMessage })
-
-    component = render(<EstimatedDecisionDate {...props} />, { preloadedState: { ...InitialState } })
-    testInstance = component.UNSAFE_root
+    const props = mockNavProps({ maxEstDate, showCovidMessage })
+    render(<EstimatedDecisionDate {...props} />)
   }
 
-  beforeEach(() => {
+  it('Renders EstimatedDecisionDate', () => {
     initializeTestCase('2020-12-20', false)
-  })
-
-  it('should initialize', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Estimated decision date:')).toBeTruthy()
+    expect(screen.getByText('December 20, 2020')).toBeTruthy()
+    expect(screen.getByText('We estimated your claim would be completed by now but we need more time.')).toBeTruthy()
   })
 
   describe('when showCovidMessage is true', () => {
-    beforeEach(async () => {
+    it('should show an AlertBox and Button and should launch external link when button is pressed', () => {
       initializeTestCase('2020-12-20', true)
-    })
-
-    it('should show an AlertBox and VAButton', async () => {
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(VAButton).length).toEqual(1)
-    })
-
-    describe('on click of the va button', () => {
-      it('should launch external link', () => {
-        testInstance.findByType(VAButton).props.onPress()
-        expect(mockExternalLinkSpy).toHaveBeenCalled()
-      })
+      expect(
+        screen.getByText(
+          'We can’t provide an estimated date on when your claim will be complete due to the affect that COVID-19 has had on scheduling in-person claim exams. We’re starting to schedule in-person exams again in many locations. To see the status of claim exams in your area, you can review locations where we’re now offering in-person exams.',
+        ),
+      ).toBeTruthy()
+      expect(screen.getByText('Review locations')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: 'Review locations' }))
+      expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
   describe('when showCovidMessage is false', () => {
     describe('when the max estimated date exists', () => {
       describe('when the max estimated date is between today and 2 years from the future', () => {
-        it('it will show the formatted date', async () => {
+        it('it will show the formatted date', () => {
           const dateBetweenNowAndTwoYears = DateTime.local().plus({ years: 1 })
           initializeTestCase(dateBetweenNowAndTwoYears.toISO(), false)
-
-          const textViews = testInstance.findAllByType(TextView)
-          expect(textViews[1].props.children).toEqual(dateBetweenNowAndTwoYears.toFormat('MMMM dd, yyyy'))
-          expect(textViews[2].props.children).toEqual('We base this on claims similar to yours. It isn’t an exact date.')
+          expect(screen.getByText(dateBetweenNowAndTwoYears.toFormat('MMMM dd, yyyy'))).toBeTruthy()
+          expect(screen.getByText('We base this on claims similar to yours. It isn’t an exact date.')).toBeTruthy()
         })
       })
 
       describe('when the max estimated date is more than 2 years ago', () => {
-        let textViews: ReactTestInstance[]
-        beforeEach(async () => {
+        it('should show the message "Claim completion dates aren\'t available right now." instead of the date', () => {
           const dateMoreThanTwoYearsAgo = DateTime.local().plus({ years: 3 })
           initializeTestCase(dateMoreThanTwoYearsAgo.toISO(), false)
-          textViews = testInstance.findAllByType(TextView)
-        })
-
-        it('should show the message "Claim completion dates aren\'t available right now." instead of the date', async () => {
-          expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
-        })
-
-        it('should not show text after the no date message', async () => {
-          expect(textViews.length).toEqual(2)
-          expect(textViews[0].props.children).toEqual('Estimated decision date:')
-          expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
+          expect(screen.getByText('Estimated decision date:')).toBeTruthy()
+          expect(screen.getByText("Claim completion dates aren't available right now.")).toBeTruthy()
         })
       })
 
       describe('when the max estimated date is before today', () => {
-        it('should show the formatted date and the message "We estimated your claim would be completed by now but we need more time."', async () => {
+        it('should show the formatted date and the message "We estimated your claim would be completed by now but we need more time."', () => {
           const dateBeforeToday = DateTime.local().minus({ years: 1 })
           initializeTestCase(dateBeforeToday.toISO(), false)
-
-          const textViews = testInstance.findAllByType(TextView)
-          expect(textViews[1].props.children).toEqual(dateBeforeToday.toFormat('MMMM dd, yyyy'))
-          expect(textViews[2].props.children).toEqual('We estimated your claim would be completed by now but we need more time.')
+          expect(screen.getByText(dateBeforeToday.toFormat('MMMM dd, yyyy'))).toBeTruthy()
+          expect(
+            screen.getByText('We estimated your claim would be completed by now but we need more time.'),
+          ).toBeTruthy()
         })
       })
     })
 
     describe('when the max estimated date does not exist', () => {
-      let textViews: ReactTestInstance[]
-      beforeEach(async () => {
+      it('should show the message "Claim completion dates aren\'t available right now." instead of the date', () => {
         initializeTestCase('', false)
-        textViews = testInstance.findAllByType(TextView)
-      })
-
-      it('should show the message "Claim completion dates aren\'t available right now." instead of the date', async () => {
-        expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
-      })
-
-      it('should not show text after the no date message', async () => {
-        expect(textViews.length).toEqual(2)
-        expect(textViews[0].props.children).toEqual('Estimated decision date:')
-        expect(textViews[1].props.children).toEqual("Claim completion dates aren't available right now.")
+        expect(screen.getByText('Estimated decision date:')).toBeTruthy()
+        expect(screen.getByText("Claim completion dates aren't available right now.")).toBeTruthy()
       })
     })
   })

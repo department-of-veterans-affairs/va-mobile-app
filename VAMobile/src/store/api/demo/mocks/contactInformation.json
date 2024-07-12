@@ -1,0 +1,47 @@
+{
+  "/v0/user/contact-info": {
+    "data": {
+      "id": "abe3f152-90b0-45cb-8776-4958bad0e0ef",
+      "attributes": {
+        "residentialAddress": null,
+        "mailingAddress": {
+          "id": 269569,
+          "addressLine1": "3101 N Fort Valley Rd",
+          "addressLine2": null,
+          "addressLine3": null,
+          "addressPou": "CORRESPONDENCE",
+          "addressType": "DOMESTIC",
+          "city": "Flagstaff",
+          "countryCodeIso3": "USA",
+          "internationalPostalCode": null,
+          "province": null,
+          "stateCode": "AZ",
+          "zipCode": "86001",
+          "zipCodeSuffix": "8348"
+        },
+        "homePhone": {
+          "areaCode": "555",
+          "countryCode": "1",
+          "phoneNumber": "4446666",
+          "phoneType": "HOME"
+        },
+        "mobilePhone": {
+          "areaCode": "555",
+          "countryCode": "1",
+          "phoneNumber": "4446666",
+          "phoneType": "MOBILE"
+        },
+        "workPhoneNumber": {
+          "areaCode": "555",
+          "countryCode": "1",
+          "phoneNumber": "4446666",
+          "phoneType": "WORK"
+        },
+        "contactEmail": {
+          "id": 183571,
+          "emailAddress": "attended1@gmail.com"
+        }
+      }
+    }
+  }
+}

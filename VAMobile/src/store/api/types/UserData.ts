@@ -1,6 +1,3 @@
-import { AddressData } from './AddressData'
-import { PhoneData } from './PhoneData'
-
 export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV' | 'LOGINGOV'
 
 export const SigninServiceTypesConstants: {
@@ -15,48 +12,11 @@ export const SigninServiceTypesConstants: {
   LOGINGOV: 'LOGINGOV',
 }
 
-export type UserDataProfile = {
-  firstName: string
-  preferredName: string
-  middleName: string
-  lastName: string
-  fullName: string
-  contactEmail: EmailData
-  signinEmail: string
-  birthDate: string
-  genderIdentity: string
-  addresses: string
-  residentialAddress?: AddressData
-  mailingAddress?: AddressData
-  homePhoneNumber: PhoneData
-  formattedHomePhone?: string
-  mobilePhoneNumber: PhoneData
-  formattedMobilePhone?: string
-  workPhoneNumber: PhoneData
-  formattedWorkPhone?: string
-  signinService: SigninServiceTypes
-}
-
-export type Facility = {
-  facilityId: string
-  isCerner: boolean
-  facilityName: string
-}
-
-export type CernerData = {
-  isCernerPatient: boolean
-  facilities: Array<Facility>
-}
-
-export type EmailData = {
-  id: string
-  emailAddress: string
-}
-
 export type VAServices =
   | 'appeals'
   | 'appointments'
   | 'claims'
+  | 'decisionLetters'
   | 'directDepositBenefits'
   | 'directDepositBenefitsUpdate'
   | 'lettersAndDocuments'
@@ -70,6 +30,7 @@ export const VAServicesConstants: {
   Appeals: VAServices
   Appointments: VAServices
   Claims: VAServices
+  DecisionLetters: VAServices
   DirectDepositBenefits: VAServices
   DirectDepositBenefitsUpdate: VAServices
   LettersAndDocuments: VAServices
@@ -82,6 +43,7 @@ export const VAServicesConstants: {
   Appeals: 'appeals',
   Appointments: 'appointments',
   Claims: 'claims',
+  DecisionLetters: 'decisionLetters',
   DirectDepositBenefits: 'directDepositBenefits',
   DirectDepositBenefitsUpdate: 'directDepositBenefitsUpdate',
   LettersAndDocuments: 'lettersAndDocuments',
@@ -97,9 +59,6 @@ export type UserData = {
     attributes: {
       id: string
       type: string
-      authorizedServices: Array<VAServices>
-      profile: UserDataProfile
-      health: CernerData
     }
   }
 }
@@ -125,28 +84,4 @@ export type EditResponseData = {
       }
     }
   }
-}
-
-export type GenderIdentityOptions = {
-  [key: string]: string
-}
-
-export type GenderIdentityOptionsData = {
-  data: {
-    id: string
-    type: string
-    attributes: {
-      options: GenderIdentityOptions
-    }
-  }
-}
-
-export const UserGreetingTimeConstants: {
-  MORNING: number
-  AFTERNOON: number
-  EVENING: number
-} = {
-  MORNING: 12,
-  AFTERNOON: 18,
-  EVENING: 4,
 }

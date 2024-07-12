@@ -7,11 +7,11 @@
         "preferences": [
           {
             "preferenceId": "appointment_reminders",
-            "preferenceName": "Appointment Reminders",
+            "preferenceName": "Appointment reminders",
             "value": true
           },
           {
-            "preferenceName": "Secure Message Alerts",
+            "preferenceName": "New secure messages",
             "preferenceId": "secure_message_alerts",
             "value": true
           }

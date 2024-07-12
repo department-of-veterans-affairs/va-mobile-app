@@ -1,16 +1,18 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useSelector } from 'react-redux'
+import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -21,6 +23,14 @@ export const WhatsNew = () => {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
 
   const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
+  //@ts-ignore
+  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
+  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
+
+  //@ts-ignore
+  const body = t(BODY_PREFIX)
+
+  const displayWN = featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -44,6 +54,12 @@ export const WhatsNew = () => {
     }
   }, [demoMode])
 
+  useEffect(() => {
+    if (displayWN) {
+      logAnalyticsEvent(Events.vama_whatsnew_alert())
+    }
+  }, [displayWN])
+
   const expandCollapsible = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_more())
   }
@@ -52,22 +68,11 @@ export const WhatsNew = () => {
     logAnalyticsEvent(Events.vama_whatsnew_close())
   }
 
-  const whatsNewAppeared = (): void => {
-    logAnalyticsEvent(Events.vama_whatsnew_alert())
-  }
-
   const onPress = (): void => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
     setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
     setSkippedVersionHomeScreen(localVersion || '0.0')
   }
-
-  //@ts-ignore
-  const labelValue = t(`${BODY_PREFIX}.a11yLabel`)
-  const bodyA11yLabel = labelValue.startsWith(BODY_PREFIX) ? undefined : labelValue
-
-  //@ts-ignore
-  const body = t(BODY_PREFIX)
 
   const getBullets = () => {
     const bullets: VABulletListText[] = []
@@ -105,7 +110,7 @@ export const WhatsNew = () => {
             </Box>
           ) : undefined}
         </Box>
-        <VAButton onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonTypesConstants.buttonSecondary} />
+        <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
       </>
     ),
     a11yLabel: t('whatsNew.title'),
@@ -113,8 +118,7 @@ export const WhatsNew = () => {
     onCollapse: closeCollapsible,
   }
 
-  if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
-    whatsNewAppeared()
+  if (displayWN) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />

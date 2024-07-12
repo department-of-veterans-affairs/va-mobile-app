@@ -1,10 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppointmentPhone } from 'store/api/types'
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
+import { AppointmentPhone } from 'api/types'
+import { Box, LinkWithAnalytics } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 
 type ClickToCallPhoneNumberProps = {
@@ -16,11 +17,22 @@ type ClickToCallPhoneNumberProps = {
   center?: boolean
   /** accessibility label - otherwise; defaults to the actual phone number */
   a11yLabel?: string
+  /** tty bypass */
+  ttyBypass?: boolean
+  /** color variant */
+  variant?: 'default' | 'base'
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel }) => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({
+  phone,
+  displayedText,
+  center,
+  a11yLabel,
+  ttyBypass,
+  variant,
+}) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   if (!phone) {
     return <></>
@@ -28,24 +40,28 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
 
   const phoneNumber = typeof phone === 'string' ? phone : `${phone.areaCode}-${phone.number}`
 
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: displayedText || phoneNumber,
-    linkType: LinkTypeOptionsConstants.call,
-    numberOrUrlLink: getNumbersFromString(phoneNumber),
+  const clickToCallProps: LinkProps = {
+    type: 'call',
+    phoneNumber: getNumbersFromString(phoneNumber),
+    text: displayedText || phoneNumber,
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
+    variant,
+    testID: 'CallVATestID',
   }
 
-  const ttyProps: LinkButtonProps = {
-    displayedText: t('contactVA.tty.displayText'),
-    linkType: LinkTypeOptionsConstants.callTTY,
-    numberOrUrlLink: t('contactVA.tty.number'),
+  const ttyProps: LinkProps = {
+    type: 'call TTY',
+    TTYnumber: t('contactVA.tty.number'),
+    text: t('contactVA.tty.displayText'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
+    variant,
+    testID: 'CallTTYTestID',
   }
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
+      <LinkWithAnalytics {...clickToCallProps} />
+      {!ttyBypass && <LinkWithAnalytics {...ttyProps} />}
     </Box>
   )
 }

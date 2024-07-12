@@ -1,139 +1,84 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, render, waitFor } from 'testUtils'
-import { PickerItem } from './VAModalPicker'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import VAModalPicker from './VAModalPicker'
-import TextView from 'components/TextView'
-import BaseListItem from 'components/BaseListItem'
-import { InitialState } from 'store/slices'
-import { RenderAPI } from '@testing-library/react-native'
 
 context('VAModalPicker', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let selected: string
-  let pickerOptions: Array<PickerItem>
-  let doneButton: any
-  let cancelButton: any
-  let selectionButtons: any
 
-  const initializeTestInstance = async (
-    selectedValue: string,
-    labelKey?: string,
-    helperTextKey = '',
-    error = '',
-    isRequiredField = false,
-    testID = '',
-    isRunning = false,
-  ): Promise<void> => {
-    selected = selectedValue
-    const setSelected = (updatedSelected: string) => {
-      selected = updatedSelected
-    }
-
+  const initializeTestInstance = (labelKey = '', helperTextKey = '', isRequiredField = false, error = '') => {
     const props = {
-      selectedValue: selectedValue,
-      onSelectionChange: setSelected,
-      pickerOptions,
+      selectedValue: 'js',
+      onSelectionChange: (updatedSelected: string) => {
+        selected = updatedSelected
+      },
+      pickerOptions: [
+        { label: 'Java', value: 'java' },
+        { label: 'JavaScript', value: 'js' },
+        { label: 'JavaScript2', value: 'js2' },
+        { label: 'JavaScript3', value: 'js3' },
+      ],
       labelKey,
       helperTextKey,
       error,
       isRequiredField,
-      testID,
+      testID: '',
     }
 
-    component = render(<VAModalPicker {...props} />, {
-      preloadedState: {
-        accessibility: {
-          ...InitialState.accessibility,
-          isVoiceOverTalkBackRunning: isRunning,
-        },
-      },
-    })
+    render(<VAModalPicker {...props} />)
 
-    testInstance = component.UNSAFE_root
-
-    await waitFor(() => {
-      const showButton = testInstance.findByProps({ accessibilityRole: 'spinbutton' })
-      showButton.props.onPress()
-    })
-
-    doneButton = testInstance.findByProps({ accessibilityLabel: 'Done' })
-    cancelButton = testInstance.findByProps({ accessibilityLabel: 'Cancel' })
-    selectionButtons = testInstance.findAllByType(BaseListItem)
+    fireEvent.press(screen.getByRole('spinbutton'))
   }
 
-  beforeEach(async () => {
-    pickerOptions = [
-      { label: 'Java', value: 'java' },
-      { label: 'JavaScript', value: 'js' },
-      { label: 'JavaScript2', value: 'js2' },
-      { label: 'JavaScript3', value: 'js3' },
-    ]
-
-    await initializeTestInstance('js', 'common:editPhoneNumber.number')
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('when an option is selected', () => {
-    it('should update selected to the value of that option and select done', async () => {
-      await waitFor(() => {
-        selectionButtons[0].props.onPress()
-      })
+    beforeEach(() => {
+      initializeTestInstance()
+    })
 
-      await waitFor(() => {
-        doneButton.props.onPress()
-      })
+    it('should update selected to the value of that option and select done', () => {
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Java' }))
+
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
 
       expect(selected).toEqual('java')
     })
 
     it('should not update selected to the value of that option and select cancel', async () => {
-      await waitFor(() => {
-        selectionButtons[0].props.onPress()
+      fireEvent.press(screen.getByRole('menuitem', { name: 'JavaScript2' }))
 
-        cancelButton.props.onPress()
+      fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
 
-        expect(selected).not.toEqual('java')
-      })
+      expect(selected).not.toEqual('js2')
     })
   })
 
-  describe('when labelKey exists', () => {
-    it('should render a textview for the label', async () => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['Number', ' ', ''])
-      expect(textViews.length).toEqual(9)
+  describe('when labelKey and helper text exist', () => {
+    beforeEach(() => {
+      initializeTestInstance('Back', 'back.a11yHint')
+    })
+
+    it('should render a textview for the label if present', () => {
+      expect(screen.getByRole('spinbutton', { name: 'Back picker Navigates to the previous page' })).toBeTruthy()
+      expect(screen.getAllByText(/Back/).length).toBeGreaterThan(0)
+    })
+
+    it('should display helper text', () => {
+      expect(screen.getByText('Navigates to the previous page')).toBeTruthy()
     })
   })
 
-  describe('when there is helper text', () => {
-    it('should display it', async () => {
-      await initializeTestInstance('js', 'label', 'common:back.a11yHint')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
+  describe('when there is an error, or a field is required', () => {
+    beforeEach(() => {
+      initializeTestInstance('label', 'back.a11yHint', true, 'ERROR')
     })
-  })
 
-  describe('when there is an error', () => {
-    it('should display it', async () => {
-      await initializeTestInstance('email', 'label', '', 'ERROR')
-      const allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews[allTextViews.length - 2].props.children).toEqual('ERROR')
+    it('should display error text', () => {
+      expect(screen.getByText('ERROR')).toBeTruthy()
     })
-  })
 
-  describe('when isRequiredField is true', () => {
-    it('should display (Required)', async () => {
-      await initializeTestInstance('email', 'label', '', '', true)
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
-      expect(textViews.length).toEqual(9)
+    it('should display (Required) on the label if option is required and label is provided', () => {
+      expect(screen.getByText(/(Required)/)).toBeTruthy()
     })
   })
 })

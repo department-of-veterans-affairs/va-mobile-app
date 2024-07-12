@@ -1,37 +1,25 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import AppealIssues from './AppealIssues'
-import { TextView } from 'components'
 
 context('AppealIssues', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
-  beforeEach(async () => {
-    props = mockNavProps()
-
-    const issues = ['Service connection, Post-traumatic stress disorder', 'Eligibility for loan guaranty benefits', 'Service connected']
-
-    component = render(<AppealIssues issues={issues} {...props} />)
-
-    testInstance = component.UNSAFE_root
+  beforeEach(() => {
+    const issues = [
+      'Service connection, Post-traumatic stress disorder',
+      'Eligibility for loan guaranty benefits',
+      'Service connected',
+    ]
+    render(<AppealIssues issues={issues} {...mockNavProps()} />)
   })
 
-  it('should initialize', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should have the right number of items', async () => {
-    const textViews = testInstance.findAllByType(TextView)
-    expect(textViews.length).toEqual(4)
-
-    expect(textViews[1].props.children[1]).toEqual('Service connection, Post-traumatic stress disorder')
-    expect(textViews[2].props.children[1]).toEqual('Eligibility for loan guaranty benefits')
-    expect(textViews[3].props.children[1]).toEqual('Service connected')
+  it('should initialize', () => {
+    expect(screen.getByRole('header', { name: 'Currently on appeal' })).toBeTruthy()
+    expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy()
+    expect(screen.getByText('Eligibility for loan guaranty benefits')).toBeTruthy()
+    expect(screen.getByText('Service connected')).toBeTruthy()
   })
 })

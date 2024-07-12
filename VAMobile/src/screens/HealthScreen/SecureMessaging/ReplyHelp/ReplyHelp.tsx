@@ -1,25 +1,28 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
+import { Box, ClickToCallPhoneNumber, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
 import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
+import { useTheme } from 'utils/hooks'
 
 /**
  * View for Reply Help screen
  *
  * Returns ReplyHelp component
  */
-const ReplyHelp: FC = () => {
+function ReplyHelp() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
-    <LargePanel title={t('secureMessaging.replyHelp.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+    <LargePanel
+      testID="messageHelpTestID"
+      title={t('secureMessaging.replyHelp.title')}
+      rightButtonText={t('close')}
+      rightButtonTestID="messagesHelpCloseTestID">
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.replyHelp.onlyUseMessages')}
         </TextView>
@@ -57,13 +60,11 @@ const ReplyHelp: FC = () => {
             ]}
           />
         </Box>
-
-        <ClickForActionLink
-          displayedText={t('secureMessaging.replyHelp.call911')}
+        <ClickToCallPhoneNumber
+          ttyBypass={true}
+          phone={t('911')}
           a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
-          numberOrUrlLink={t('secureMessaging.replyHelp.911')}
-          linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('secureMessaging.replyHelp.call911.a11yHint'))}
+          displayedText={t('secureMessaging.replyHelp.call911')}
         />
       </Box>
     </LargePanel>

@@ -1,7 +1,9 @@
-import { AppThunk } from 'store'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { activateRemoteConfig } from 'utils/remoteConfig'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
+import { AppThunk } from 'store'
+import { activateRemoteConfig } from 'utils/remoteConfig'
 
 export type SettingsState = {
   haptics: boolean
@@ -70,5 +72,6 @@ const settingsSlice = createSlice({
   },
 })
 
-const { dispatchUpdateHaptics, dispatchUpdateLoadingRemoteConfig, dispatchFinishLoadingRemoteConfig } = settingsSlice.actions
+const { dispatchUpdateHaptics, dispatchUpdateLoadingRemoteConfig, dispatchFinishLoadingRemoteConfig } =
+  settingsSlice.actions
 export default settingsSlice.reducer

@@ -56,7 +56,7 @@ env:
 
 jobs:
   build_ios:
-    runs-on: macos-latest-xl
+    runs-on: macos-14-xlarge
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -70,7 +70,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    steps:
+    steps:	
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -80,36 +80,42 @@ jobs:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         run: |
-          echo Notes: ${{ inputs.notes }}
+          echo "Notes: ${{ inputs.notes }}"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: 15.2
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          # cache: 'yarn'
-          # cache-dependency-path: 'VAMobile/yarn.lock'
+          node-version-file: 'VAMobile/.nvmrc'
       - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Bundle app
-        run: yarn bundle:ios
       - name: Install pods
         run: pod install
+      - name: Bundle app
+        run: yarn bundle:ios
       - name: Install gems
         run: bundle install
       - name: Update fastlane
         run: bundle update fastlane
-      - name: Run fastlane
-        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      - name: Run fastlane with retries
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3

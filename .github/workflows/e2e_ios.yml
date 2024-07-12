@@ -1,0 +1,263 @@
+#
+# Detox e2e tests in CI
+#
+
+name: '[e2e] iOS Detox Test Run'
+
+on:
+  push:
+    branches:
+        - 'dependabot/**'
+  pull_request:
+    types: [opened, ready_for_review, labeled, edited]
+  workflow_dispatch:
+    inputs:
+      run_full_test:
+        description: 'Run full e2e test?'
+        type: boolean
+        required: false
+      tests_to_run:
+        description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
+        type: string
+        required: false
+      testRail_name:
+        description: 'Name testRail run (will default to date if blank)'
+        type: string
+        required: false
+      run_testRail:
+        description: 'Add results to testRail?'
+        type: boolean
+        required: false
+      device_specific:
+        description: 'Is your testRail run iOS only? (only check if adding results to testRail)'
+        type: boolean
+        required: false
+  schedule:
+    - cron: '0 4 * * 1,2,3,4,5'
+  workflow_run:
+    workflows: ['[Release] New Release Issue']
+    types: 
+      - in_progress
+
+concurrency:
+  group: ios-detox-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Slack API token
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  start_slack_thread:
+    if: github.event_name == 'schedule'
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
+
+  find_detox_tests_to_run:
+    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/e2e_detox_mapping.yml
+  
+  output_detox_tests_to_run:
+    runs-on: macos-latest-xl
+    needs: find_detox_tests_to_run
+    outputs: 
+      output1: ${{ steps.matrix_value.outputs.matrix }}
+      output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: 'Get Matrix Value'
+        id: matrix_value
+        run: |
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+              echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+              echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+            else
+              if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "matrix=" >> "$GITHUB_OUTPUT" 
+              fi
+            fi
+          else
+            if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
+              echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+              if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+                  e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+                  echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+                  echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+                else
+                  if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+                    echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "matrix=" >> "$GITHUB_OUTPUT" 
+                  fi
+                fi
+              else
+                resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+                echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+              fi
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  matrix-e2e-ios:
+    if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
+    runs-on: macos-14-xlarge
+    needs: [start_slack_thread, output_detox_tests_to_run]
+    env:
+      # Path to write secret key to. Also used by fastlane
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      # Xcode project file name
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
+      # Xcode scheme to build
+      IOS_SCHEME: 'VAMobileRelease'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
+        run: |
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Install pods
+        working-directory: VAMobile/ios
+        run: pod install
+  
+      - name: Install Ruby gems
+        working-directory: VAMobile/ios
+        run: bundle install
+
+      - name: Bundle iOS app
+        run: yarn e2e:ios-build
+
+      - name: Run e2e tests for iOS
+        id: run_e2e_tests
+        run: |
+          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+            echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
+          else
+            echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          fi
+        continue-on-error: true
+
+      - name: Rerun e2e tests for iOS if failed
+        if: steps.run_e2e_tests.outcome == 'failure' && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        id: rerun_e2e_tests
+        run: |
+            yarn jest:clear;
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+
+      - name: Upload e2e-junit
+        if: failure() || success()
+        uses: actions/upload-artifact@v4
+        with: 
+            name: ${{matrix.testsuite}}-e2e-junit
+            path: VAMobile/e2e/test_reports/e2e-junit.xml
+
+      - name: Inform Slack of Failure
+        id: post_failure
+        if: steps.run_e2e_tests.outcome == 'failure' && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+
+      - name: Inform Slack of success
+        id: post_success
+        if: steps.run_e2e_tests.outcome == 'success' && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts on failure
+        if: failure() && (steps.run_e2e_tests.outcome == 'failure' || steps.rerun_e2e_tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4
+        with:
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          path: VAMobile/artifacts
+
+      - name: Fail workflow if needed(View e2e step for details)
+        if: steps.run_e2e_tests.outcome == 'failure'
+        run: exit 1
+
+  matrix-send_test_results_to_testrail:
+    if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
+    needs: [matrix-e2e-ios, output_detox_tests_to_run]
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
+    name: Update testRail Results
+    uses: ./.github/workflows/update_testrail_results.yml
+    with: 
+      test_names: "${{matrix.testsuite}}"
+      testRail_name: ${{ inputs.testRail_name }}
+      test_specific_OS_needed: ${{ inputs.device_specific}}
+      test_OS_name: "iOS"
+    secrets: inherit

@@ -1,21 +1,16 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
-import { downloadFileAttachment } from 'store/slices'
-import { Pressable } from 'react-native'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
-import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
+import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
+
+import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
+import { context, render } from 'testUtils'
+import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
+
 import CollapsibleMessage from './CollapsibleMessage'
-import Mock = jest.Mock
-import { TextView } from 'components'
-import { waitFor } from '@testing-library/react-native'
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     downloadFileAttachment: jest.fn(() => {
@@ -27,12 +22,10 @@ jest.mock('store/slices', () => {
   }
 })
 
-context('CollapsibleMessage', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+const mockDateISO = DateTime.local().toISO()
 
-  let listOfAttachments: Array<SecureMessagingAttachment> = [
+context('CollapsibleMessage', () => {
+  const listOfAttachments: Array<SecureMessagingAttachment> = [
     {
       id: 1,
       filename: 'testAttachment',
@@ -40,65 +33,108 @@ context('CollapsibleMessage', () => {
       link: 'key',
     },
   ]
-  let messageAttributes: SecureMessagingMessageAttributes = {
-    messageId: 1,
-    category: CategoryTypeFields.education,
-    subject: 'Test Message Subject',
-    body: 'Test Message Body',
-    attachment: true,
-    attachments: listOfAttachments,
-    sentDate: '2013-06-06T04:00:00.000+00:00',
-    senderId: 11,
-    senderName: 'John Smith',
-    recipientId: 2,
-    recipientName: 'Jane Smith',
-  }
-  let mockProps = {
-    message: messageAttributes,
-    isInitialMessage: true,
-  }
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
-    onPressSpy = jest.fn(() => {})
+  const initializeTestInstance = (isInitialMessage = false, body = 'Test Message Body') => {
+    const messageAttributes: SecureMessagingMessageAttributes = {
+      messageId: 1,
+      category: CategoryTypeFields.education,
+      subject: 'Test Message Subject',
+      body: body,
+      hasAttachments: true,
+      attachment: true,
+      attachments: listOfAttachments,
+      sentDate: mockDateISO,
+      senderId: 11,
+      senderName: 'John Smith',
+      recipientId: 2,
+      recipientName: 'Jane Smith',
+    }
+    const mockProps = {
+      message: messageAttributes,
+      isInitialMessage: isInitialMessage,
+    }
 
-    component = render(<CollapsibleMessage {...mockProps} />, {
-      preloadedState: {
-        ...InitialState,
-        errors: errorsState,
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<CollapsibleMessage {...mockProps} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders CollapsibleMessage when it is not the initialMessage', () => {
+    expect(screen.getByText('John Smith')).toBeTruthy()
+    expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO))).toBeTruthy()
+    expect(screen.getByText('Test Message Body')).toBeTruthy()
   })
 
-  it('should render message  contents correctly', async () => {
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts.length).toBe(5)
-    expect(texts[0].props.children).toBe('John Smith')
-    // cannot test date textView - date display is dependent on viewer's current time zone
-    expect(texts[2].props.children).toBe('Test Message Body')
-    expect(texts[3].props.children).toBe('Attachments')
+  it('does not render CollapsibleMessage when it is the initialMessage', () => {
+    initializeTestInstance(true)
+    expect(screen.queryByText('John Smith')).toBeFalsy()
   })
 
-  it('should render AttachmentLink content correctly', async () => {
-    const linkText = testInstance.findAllByType(Pressable)[1].findByType(TextView)
-    expect(linkText.props.children).toBe('testAttachment (1 MB)')
+  it('linkifies email addresses properly', () => {
+    initializeTestInstance(false, 'test@va.gov or mailto:test@va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: 'test@va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'mailto:test@va.gov' })).toBeTruthy()
   })
 
-  describe('when an attachment link is clicked', () => {
-    it('should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
-      })
-    })
+  it('does not linkify improper email addresses', () => {
+    initializeTestInstance(false, 'test @va.gov or mail to:test@va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: 'test@va.gov' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'mailto:test@va.gov' })).toBeFalsy()
+  })
+
+  it('linkifies phone numbers properly', () => {
+    initializeTestInstance(
+      false,
+      '8006982411 or 800-698-2411 or (800)698-2411 or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411',
+    )
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: '8006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '(800)698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '(800)-698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800 698 2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '+8006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '+18006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '1-800-698-2411' })).toBeTruthy()
+  })
+
+  it('does not linkify improper phone numbers', () => {
+    initializeTestInstance(false, '800698241 or 800&698&2411 or 800 698 411')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: '800698241' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: '800&698&2411' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: '800 698 411' })).toBeFalsy()
+  })
+
+  it('linkifies web address and maps properly', () => {
+    initializeTestInstance(
+      false,
+      'https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com or http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or http://maps.google.com/?q=50.894967,4.341626',
+    )
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: 'https://www.va.gov/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://rb.gy/riwea' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'http://www.va.gov/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://www.va.gov/education/about-gi-bill-benefits/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'www.va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'www.google.com' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'google.com' })).toBeTruthy()
+    expect(
+      screen.getByRole('link', { name: 'http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s' }),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'http://maps.google.com/?q=50.894967,4.341626' })).toBeTruthy()
+  })
+
+  it('does not linkify improper web address and maps', () => {
+    initializeTestInstance(false, 'ftp://www.va.gov/ or www. va .gov or htttps://va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: 'ftp://www.va.gov/' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'www. va .gov' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'htttps://va.gov' })).toBeFalsy()
   })
 })

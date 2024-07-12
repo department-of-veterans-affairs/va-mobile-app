@@ -36,10 +36,9 @@ return (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
             <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
                 label={t('secureMessaging.startNewMessage.new')}
                 onPress={onPressCompose}
-                buttonType={'buttonPrimary'}
                 a11yHint={t('secureMessaging.startNewMessage.new.a11yHint')}
             />
             </Box>

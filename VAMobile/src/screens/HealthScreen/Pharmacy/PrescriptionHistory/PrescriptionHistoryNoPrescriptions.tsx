@@ -1,38 +1,72 @@
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
+import {
+  AlertBox,
+  Box,
+  BoxProps,
+  ClickToCallPhoneNumber,
+  TextView,
+  VABulletList,
+  VABulletListText,
+  VAScrollView,
+} from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const PrescriptionHistoryNoPrescriptions: FC = () => {
+function PrescriptionHistoryNoPrescriptions() {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween } = theme.dimensions
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_na())
+  }, [])
 
   const alertWrapperProps: BoxProps = {
-    mt: standardMarginBetween,
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const bullets: string[] = [
-    t('prescriptions.notFound.bullets.one'),
-    t('prescriptions.notFound.bullets.two'),
-    t('prescriptions.notFound.bullets.three'),
-    t('prescriptions.notFound.bullets.four'),
+  const medicationsNotIncludedList: Array<VABulletListText> = [
+    {
+      text: t('prescription.help.item1'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item1')),
+    },
+    {
+      text: t('prescription.help.item2'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item2')),
+    },
+    {
+      text: t('prescription.help.item3'),
+    },
+    {
+      text: t('prescription.help.item4'),
+      a11yLabel: t('prescription.help.item4.a11yLabel'),
+    },
+    {
+      text: t('prescription.help.item5'),
+    },
   ]
 
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox border={'informational'} title={t('prescriptions.notFound.title')} titleA11yLabel={t('prescriptions.notFound.title.a11y')}>
-          <TextView pt={theme.paragraphSpacing.spacing20FontSize} paragraphSpacing={true} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
+        <AlertBox
+          border={'informational'}
+          title={t('prescriptions.notFound.title')}
+          titleA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
+          <TextView
+            pt={theme.paragraphSpacing.spacing20FontSize}
+            mb={theme.dimensions.condensedMarginBetween}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <VABulletList listOfText={bullets} paragraphSpacing={true} />
+          <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
-          <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
+          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
         </AlertBox>
       </Box>
     </VAScrollView>

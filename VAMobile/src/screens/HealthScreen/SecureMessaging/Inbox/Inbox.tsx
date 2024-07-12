@@ -1,65 +1,80 @@
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
+import { useIsFocused } from '@react-navigation/native'
+
+import { useFolderMessages } from 'api/secureMessaging'
+import { SecureMessagingMessageData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
-type InboxProps = Record<string, unknown>
+type InboxProps = {
+  setScrollPage: React.Dispatch<React.SetStateAction<number>>
+}
 
-const Inbox: FC<InboxProps> = () => {
-  const dispatch = useAppDispatch()
+function Inbox({ setScrollPage }: InboxProps) {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
+  const isFocused = useIsFocused()
+  const [page, setPage] = useState(1)
+  const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
+  const { data: inboxMessagesData, isLoading: loadingInbox } = useFolderMessages(
+    SecureMessagingSystemFolderIdConstants.INBOX,
+    { enabled: isFocused },
+  )
+
+  useEffect(() => {
+    const messageList = inboxMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setMessagesToShow(messageList || [])
+  }, [inboxMessagesData?.data, page])
+
+  const paginationMetaData = inboxMessagesData?.meta.pagination
 
   const onInboxMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', {
+    navigateTo('SecureMessaging', { activeTab: 0 }) // ensures that when we back out of the message that the inbox is present
+    navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
-      currentPage: paginationMetaData?.currentPage || 1,
-      messagesLeft: inboxMessages.length,
-    })()
+      currentPage: page,
+    })
   }
 
   if (loadingInbox) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
-  if (!inboxMessages?.length) {
+  if (!inboxMessagesData?.data?.length) {
     return <NoInboxMessages />
   }
 
-  const requestPage = (requestedPage: number) => {
-    dispatch(fetchInboxMessages(requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-  }
-
-  const page = paginationMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1)
+      setPage(page + 1)
+      setScrollPage(page + 1)
     },
     onPrev: () => {
-      requestPage(page - 1)
+      setPage(page - 1)
+      setScrollPage(page - 1)
     },
     totalEntries: paginationMetaData?.totalEntries || 0,
-    pageSize: paginationMetaData?.perPage || 0,
+    pageSize: DEFAULT_PAGE_SIZE,
     page,
+    tab: 'inbox messages',
   }
 
   return (
-    <Box {...testIdProps('', false, 'Inbox-page')}>
-      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
+    <Box>
+      <MessageList
+        items={getMessagesListItems(messagesToShow, t, onInboxMessagePress, FolderNameTypeConstants.inbox)}
+        title={t('secureMessaging.inbox')}
+      />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

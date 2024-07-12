@@ -1,9 +1,17 @@
-import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VAListTagColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
-import _ from 'underscore'
-import styled from 'styled-components'
+import { FlexAlignType, View, ViewProps } from 'react-native'
 
+import styled from 'styled-components'
+import _ from 'underscore'
+
+import {
+  VABackgroundColors,
+  VABorderColors,
+  VAButtonBackgroundColors,
+  VAButtonBorderColors,
+  VAListTagColors,
+  VATheme,
+} from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
@@ -65,12 +73,15 @@ export type BoxProps = ViewProps & {
   flex?: number
   /**describes how any space within a container should be distributed among its children along the main axis*/
   flexGrow?: number
-  /**flexShrink describes how to shrink children along the main axis in the case in which the total size of the children overflows the size of the container on the main axis*/
+  /**flexShrink describes how to shrink children along the main axis in the case in which the total size of the
+   * children overflows the size of the container on the main axis*/
   flexShrink?: number
   /**controls whether children can wrap around after they hit the end of a flex container*/
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   /**controls which directions children of a container go*/
   flexDirection?: 'column' | 'row'
+  /** sets the gaps between rows and columns */
+  gap?: number
   /**controls how children are measured and displayed*/
   overflow?: 'hidden' | 'visible' | 'scroll'
   /**aligns children in the main direction*/
@@ -207,7 +218,9 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant] || theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
+    styles[`border${dir}-color`] =
+      theme.colors.border[color as VABorderColorsVariant] ||
+      theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
   }
   return styles
 }
@@ -248,6 +261,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     'flex-shrink': props.flexShrink,
     'flex-grow': props.flexGrow,
     'flex-wrap': props.flexWrap,
+    gap: typeof props.gap === 'number' ? `${props.gap}px` : props.gap,
     'text-align': props.textAlign,
     overflow: props.overflow,
     ...mStyles,
@@ -260,10 +274,14 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...blStyles,
     ...brStyles,
     'border-radius': typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
-    'border-top-left-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-top-right-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-bottom-left-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
-    'border-bottom-right-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    'border-top-left-radius':
+      typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-top-right-radius':
+      typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-bottom-left-radius':
+      typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    'border-bottom-right-radius':
+      typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
   }
 
   return _.map(styles, (v, k) => {
@@ -280,7 +298,8 @@ const StyledBox = styled(View)`
   ${themeFn<BoxProps>((theme, props) => createBoxStyles(theme, props))};
 `
 /**
- * A common component for layout. It conforms to the convention of [m] [my] [mx] [mt] [mb] [ml] [mr] for specifying margins. It also accepts dimensions for padding in the same form.
+ * A common component for layout. It conforms to the convention of [m] [my] [mx] [mt] [mb] [ml] [mr]
+ * for specifying margins. It also accepts dimensions for padding in the same form.
  *
  * @returns TextView component
  */

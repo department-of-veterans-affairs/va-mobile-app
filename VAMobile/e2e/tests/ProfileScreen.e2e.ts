@@ -1,4 +1,5 @@
-import { expect, device, by, element, waitFor } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
+
 import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
@@ -10,8 +11,6 @@ export const ProfileE2eIdConstants = {
   BANNER_NAME_ID: 'Kimberly Washington',
   BANNER_BRANCH_ID: 'United States Coast Guard',
 }
-
-
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -25,7 +24,7 @@ describe('Profile Screen', () => {
       .withTimeout(6000)
 
     await expect(element(by.text(ProfileE2eIdConstants.PERSONAL_INFO_ROW_TEXT))).toExist()
-    await expect(element(by.text(ProfileE2eIdConstants.MILITARY_INFO_ROW_TEXT))).toExist() 
+    await expect(element(by.text(ProfileE2eIdConstants.MILITARY_INFO_ROW_TEXT))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.CONTACT_INFO_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
   })
@@ -34,7 +33,4 @@ describe('Profile Screen', () => {
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_BRANCH_ID))).toExist()
   })
-  
 })
-
-

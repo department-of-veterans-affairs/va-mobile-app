@@ -1,40 +1,36 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, waitFor, RenderAPI } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import AppealTimeline from './AppealTimeline'
 
 context('AppealTimeline', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
-  beforeEach(async () => {
-    props = mockNavProps({
+  beforeEach(() => {
+    const props = mockNavProps({
       events: [
         {
-          data: '2015-04-24',
+          date: '2015-04-24',
           type: 'claim_decision',
         },
         {
-          data: '',
+          date: '2016-03-23',
           type: 'hlr_request',
         },
         {
-          data: '',
-          type: 'claim_decision',
+          date: '2016-09-02',
+          type: 'reconsideration',
         },
       ],
     })
 
-    component = render(<AppealTimeline {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<AppealTimeline {...props} />)
   })
 
-  it('should initialize', async () => {
-    expect(component).toBeTruthy()
+  it('displays list of events with a11y labels', () => {
+    expect(screen.getByLabelText('V-A  sent you a claim decision On April 24, 2015')).toBeTruthy()
+    expect(screen.getByLabelText('V-A  received your Higher-Level Review request On March 23, 2016')).toBeTruthy()
+    expect(screen.getByLabelText('Your Motion for Reconsideration was denied On September 02, 2016')).toBeTruthy()
   })
 })

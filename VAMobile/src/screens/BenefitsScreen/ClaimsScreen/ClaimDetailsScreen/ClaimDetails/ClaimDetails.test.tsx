@@ -1,22 +1,14 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, render } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import ClaimDetails from './ClaimDetails'
-import { TextView } from 'components'
-import { RenderAPI } from '@testing-library/react-native'
 
 context('ClaimDetails', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
-  let contentionList = ['Hearing Loss (Increase)']
-
-  const initializeTestInstance = (contentionList: Array<string>): void => {
-    props = mockNavProps({
+  beforeEach(() => {
+    const props = mockNavProps({
       claim: {
         id: '600156928',
         type: 'evss_claims',
@@ -36,7 +28,7 @@ context('ClaimDetails', () => {
           requestedDecision: false,
           claimType: 'Compensation',
           updatedAt: '2020-12-07T20:37:12.041Z',
-          contentionList,
+          contentionList: ['Hearing Loss (Increase)'],
           vaRepresentative: 'AMERICAN LEGION',
           eventsTimeline: [
             {
@@ -62,25 +54,17 @@ context('ClaimDetails', () => {
       },
     })
 
-    component = render(<ClaimDetails {...props} />)
-
-    testInstance = component.UNSAFE_root
-  }
-
-  beforeEach(() => {
-    initializeTestInstance(contentionList)
+    render(<ClaimDetails {...props} />)
   })
 
-  it('should initialize', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when the contention list has items', () => {
-    it('will display the header "What you\'ve claimed"', async () => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(8)
-
-      expect(textViews[2].props.children).toEqual("What you've claimed")
-    })
+  it('renders claim details', () => {
+    expect(screen.getByText('Claim type')).toBeTruthy()
+    expect(screen.getByText('Compensation')).toBeTruthy()
+    expect(screen.getByText("What you've claimed")).toBeTruthy()
+    expect(screen.getByText('Hearing Loss (Increase)')).toBeTruthy()
+    expect(screen.getByText('Date received')).toBeTruthy()
+    expect(screen.getByText('June 06, 2019')).toBeTruthy()
+    expect(screen.getByText('Your representative for VA claims')).toBeTruthy()
+    expect(screen.getByText('AMERICAN LEGION')).toBeTruthy()
   })
 })

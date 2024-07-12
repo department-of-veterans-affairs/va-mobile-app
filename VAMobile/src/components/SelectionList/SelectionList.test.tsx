@@ -1,10 +1,11 @@
-import 'react-native'
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { render } from 'testUtils'
-import SelectionList from './SelectionList'
+
 import { TextView } from '../index'
+import SelectionList from './SelectionList'
 
 describe('SelectionList', () => {
   beforeEach(() => {

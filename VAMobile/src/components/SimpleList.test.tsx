@@ -1,16 +1,12 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import SimpleList from './SimpleList'
 
+import Mock = jest.Mock
+
 context('SimpleList', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   beforeEach(() => {
@@ -21,19 +17,16 @@ context('SimpleList', () => {
       { text: 'another line', a11yHintText: 'hint2', onPress: onPressSpy },
     ]
 
-    component = render(<SimpleList items={items} />)
-
-    testInstance = component.UNSAFE_root
+    render(<SimpleList items={items} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText('one line')).toBeTruthy()
+    expect(screen.getByText('another line')).toBeTruthy()
   })
 
-  it('should call onPress when one of the buttons has been clicked', async () => {
-    await waitFor(() => {
-      expect(findByTestID(testInstance, 'another-line').props.onPress())
-      expect(onPressSpy).toBeCalled()
-    })
+  it('should call onPress when one of the buttons has been clicked', () => {
+    fireEvent.press(screen.getByText('another line'))
+    expect(onPressSpy).toBeCalled()
   })
 })

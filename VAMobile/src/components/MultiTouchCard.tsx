@@ -1,8 +1,9 @@
-import { Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
+import { Pressable, PressableProps } from 'react-native'
 
 import { HiddenA11yElement } from 'styles/common'
 import { useTheme } from 'utils/hooks'
+
 import Box, { BoxProps } from './Box'
 
 export type MultiTouchCardProps = {
@@ -22,7 +23,15 @@ export type MultiTouchCardProps = {
   bottomA11yLabel?: string
 }
 
-const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent, bottomContent, bottomOnPress, bottomA11yHint, mainA11yLabel, bottomA11yLabel }) => {
+const MultiTouchCard: FC<MultiTouchCardProps> = ({
+  orderIdentifier,
+  mainContent,
+  bottomContent,
+  bottomOnPress,
+  bottomA11yHint,
+  mainA11yLabel,
+  bottomA11yLabel,
+}) => {
   const theme = useTheme()
 
   const hasBottomContent = !!bottomContent

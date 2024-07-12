@@ -1,11 +1,12 @@
+import React, { FC, ReactNode, useState } from 'react'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import React, { FC, ReactNode, useState } from 'react'
 
-import { TextView, TextViewProps, VAIconProps } from 'components'
-import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import { HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+
+import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use these templates:
 1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
@@ -14,13 +15,6 @@ import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
 
-type headerButton = {
-  label: string
-  labelA11y?: string
-  icon: VAIconProps
-  onPress: () => void
-}
-
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
   backLabel: string
@@ -28,21 +22,37 @@ export type ChildTemplateProps = {
   backLabelA11y?: string
   /** On press navigation for descriptive back button */
   backLabelOnPress: () => void
+  /** Optional TestID for back */
+  backLabelTestID?: string
   /** Title for page that transitions to header */
   title: string
   /** Optional a11y label for title  */
   titleA11y?: string
   /** Optional header button requiring label, icon, and onPress props */
-  headerButton?: headerButton
+  headerButton?: HeaderButton
   /** Optional footer content pinned below the scrollable space */
   footerContent?: ReactNode
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({
+  backLabel,
+  backLabelA11y,
+  backLabelTestID,
+  backLabelOnPress,
+  title,
+  titleA11y,
+  headerButton,
+  children,
+  footerContent,
+  scrollViewProps,
+  testID,
+}) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -59,13 +69,26 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
+    leftButton: {
+      text: backLabel,
+      a11yLabel: backLabelA11y,
+      testID: backLabelTestID,
+      onPress: backLabelOnPress,
+      descriptiveBack: true,
+    },
     title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
-    rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
+    rightButton: headerButton
+      ? {
+          text: headerButton.label,
+          a11yLabel: headerButton.labelA11y,
+          onPress: headerButton.onPress,
+          icon: headerButton.icon,
+        }
+      : undefined,
   }
 
   const subtitleProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     mt: 0,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
@@ -99,21 +122,25 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <HeaderBanner {...headerProps} />
-
-      <>
-        <VAScrollView
-          scrollEventThrottle={1}
-          onScroll={(event) => {
-            transitionHeader(event.nativeEvent.contentOffset.y)
-          }}
-          {...scrollViewProps}>
-          <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
-          {children}
-        </VAScrollView>
-        {footerContent}
-      </>
+      <VAScrollView
+        testID={testID}
+        scrollEventThrottle={1}
+        onScroll={(event) => {
+          transitionHeader(event.nativeEvent.contentOffset.y)
+        }}
+        {...scrollViewProps}>
+        <View onLayout={getTransitionHeaderHeight}>
+          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
+        </View>
+        <WaygateWrapper>{children}</WaygateWrapper>
+      </VAScrollView>
+      <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
   )
 }

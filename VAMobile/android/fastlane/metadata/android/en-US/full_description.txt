@@ -1,13 +1,12 @@
 With the official VA: Health & Benefits app, you can manage your VA health care, benefits, and payments from your mobile phone or tablet. 
 
-
 Features include:
 
-Biometric Sign-in
+Biometric sign-in
 - Use your phone’s built-in security features—like fingerprint and face recognition—to securely access your information.
 
 Health care tools
-- Refill and track your VA prescriptions
+- Refill and track your VA prescriptions.
 - Send and receive secure messages from your VA health care team.
 - Review appointments and add them to your calendar.
 - Get your records for VA vaccines, such as COVID-19.
@@ -28,4 +27,8 @@ Facility locator
 Veterans Crisis Line
 - Get quick access to the VA Crisis Line.
 
+Proof of Veteran status
+- Show proof of your Veteran status.
+
 Need help with this app? Call us at 800-698-2411 (TTY: 711). We’re here 24/7.
+

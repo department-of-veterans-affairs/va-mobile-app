@@ -3,90 +3,73 @@ title: Development Setup Process
 sidebar_position: 5
 ---
 
-# Development Setup Instructions
+# Development setup instructions
 
 ## Prerequisites
 
-#### Download and install the latest versions of the following IDEs and Native Hosts:
+:::tip
+If you are building in the app for prototyping, testing, or demo purposes, you can freely build locally for Android without requesting access or keys.
+
+You can also consider [using our codespaces setup](https://github.com/features/codespaces) to get up and running quickly.
+:::
+
+### Access
+
+- You have been fully onboarding into the [VA Github organiztion](https://github.com/department-of-veterans-affairs).
+- An SSH key setup with github: [Connect With SSH](https://docs.github.com/en/enterprise-server@3.5/authentication/connecting-to-github-with-ssh/about-ssh).
+- You or your team has been approved to build and release a production feature into the VA Mobile App by a [VA Product Owner](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app).
+- **If your feature is approved**, reach out to [Flagship support](https://dsva.slack.com/archives/C018V2JCWRJ) to get access to App Store Connect so you can build the iOS app locally.
+
+### Software
 
 - [XCode](https://apps.apple.com/us/app/xcode/id497799835?mt=12)
-
 - [Android Studio](https://developer.android.com/studio)
-
 - [CocoaPods](https://guides.cocoapods.org/using/getting-started.html)
-
 - [Node.js](https://nodejs.org/en/download/)
-
+- [Homebrew](https://formulae.brew.sh/)
+- [git](https://git-scm.com/download/mac)
+- [NVM](https://formulae.brew.sh/formula/nvm)
+- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
 - [Java JDK](https://www.oracle.com/java/technologies/downloads/#jdk17-mac)
 
+## Environment variables setup
 
-#### Depending on which IDE you are using install the following:
+If you are using zsh on Mac you will need to create the `.zprofile` and `.zshrc` files if they do not exists.
 
-- [VSCode](https://code.visualstudio.com/download)
+In your `bash_profile` or `.zprofile` add the following:
 
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/download/#section=mac)
+```bash
+# JAVA_HOME` variable pointing to the java installed above example
+export JAVA_HOME=$(/usr/libexec/java_home -v 15.0.2)
 
+# `NODE_OPTIONS` this is to manage the node memory space
+export NODE_OPTIONS=--max_old_space_size=8192
 
+# Android specific vars for the ANDROID_HOME, platform-tools and cmdline-tools
+export ANDROID_SDK=/Users/(your user folder)/Library/Android/sdk
+export ANDROID_HOME=$ANDROID_SDK
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-## ENV Variables Setup
+# The build of the app relies on a scripted creation of the .env 
+# file to run correctly. You will need to add the `APP_CLIENT_SECRET` 
+# var to work correctly:
+export APP_CLIENT_SECRET='client secret ask for this client key'
 
-:::info
-    If you are using z on Mac you will need to create the .zprofile and .zshrc files if they do not exists.
-:::
+# The app has a demo mode. To use demo mode the app reads the 
+# `DEMO_PASSWORD` var. You can set this to a blank password or 
+# assign any string to it
 
-#### On your bash_profile or .zprofile add the following:
+export DEMO_PASSWORD=''
+```
 
-- **`JAVA_HOME` variable pointing to the java installed above example:**
+After adding the variables, restart your terminal window and the variables should be activated. Run `which adb` to make sure the android variables are working. If they are not, please reach out to [Flagship support](https://dsva.slack.com/archives/C018V2JCWRJ).
 
- `export JAVA_HOME=$(/usr/libexec/java_home -v 15.0.2)` make sure you use the version you installed.
+## Local project setup
 
-- **`NODE_OPTIONS` this is to manage the node memory space:**
-
- `export NODE_OPTIONS=--max_old_space_size=8192`
- 
-#### On your bashrc or .zshrc add the following:
-
-- **Android specific vars for the `ANDROID_HOME`, `platform-tools` and `cmdline-tools`:**
-
- `export ANDROID_SDK=/Users/(your user folder)/Library/Android/sdk`
- 
- `export ANDROID_HOME=$ANDROID_SDK`
-
- `export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin` 
-
- `export PATH=$PATH:$ANDROID_HOME/platform-tools` 
-
-- **The build of the app relies on a scripted creation of the .env file to run correctly. You will need to add the `APP_CLIENT_SECRET` var to work correctly:**
-
- `export APP_CLIENT_SECRET='client secret ask for this client key'`
-
-- **The app has a demo mode. To use demo mode the app reads the `DEMO_PASSWORD` var. You can set this to a blank password or assign any string to it:**
-
- `export DEMO_PASSWORD=''`
-
- 
-:::info
-    After adding the variables if you have a terminal open run source .zprofile and source .zshrc. If you do not have a terminal open than open a brand new terminal and the variables should be activated. Run which adb to make sure the android vars are working.
-:::
-
-## Github And Cloning Repo
-
-- Verify you have access to the [VAMobile](https://github.com/department-of-veterans-affairs/va-mobile-app) repo.
-
-- Make sure you have the SSH Github setup on your machine if not follow these instruction [Connect With SSH](https://docs.github.com/en/enterprise-server@3.5/authentication/connecting-to-github-with-ssh/about-ssh).
-
-- Create a folder where you wish to clone the repo to. Example (`/Users/(your user folder/Workspace`).
-
-- Using your prefer method or prefer IDE (example cmd line, Github Desktop, VSCode, or IntelliJ) clone the VAMobile repo to the folder created in the previouse step.
-
-- Verify you see a folder structure like `/Users/(your user folder/Workspace/va-mobile-app/VAMobile`.
-
-
-## With VSCode or IntelliJ IDEA Project Setup
-
-- With your prefer IDE Open the `/Users/(your user folder/Workspace/va-mobile-app/VAMobile` folder.
-
-- In the `android/app` directory add a file named `google-services.json`. You can download this `google-services.json` file from the [firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp), under the "your apps" section. You can also download the corresponding `GoogleService-Info.plist` file you will need to later place in your in `VAMobile/ios`.
+1. Verify you have access to the [Firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp). If you don't, please reach out to [Flagship support](https://dsva.slack.com/archives/C018V2JCWRJ).
+2. With your preferred code editor, navigate to the `va-mobile-app/VAMobile` folder inside your cloned version of the repository.
+3. In the `android/app` directory add a file named `google-services.json`. You can download this `google-services.json` file from the [firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp), under the "your apps" section. You can also download the corresponding `GoogleService-Info.plist` file you will need to later place in your in `VAMobile/ios`.
 
 ### Download the files from Firebase
 
@@ -100,181 +83,173 @@ sidebar_position: 5
 
 ### Add file to proper directory
 
-   ![Google services file](/img/devSetupImage/google-service-android-file.png)
+![Google services file](/img/devSetupImage/google-service-android-file.png)
 
-- Open a terminal in the IDE and type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
+1. Open a terminal and type `nvm use` and press enter to set the node version for the project (if the version isn't installed, it will prompt you with the install command).
+2. In a terminal, type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
+3. After dependencies are installed, type `cd ios && pod install && cd ..` and press enter to install pods on iOS (This is done once unless you installed new dependencies that need pods created).
+4. Run `yarn env:staging` and press enter to setup the staging environment and create the `.env` file. Verify the file has the client key and demo password that is in your `.zshrc` file.
+5. Run `yarn bundle:ios` and press enter to create the IOS bundle.
+6. Run `yarn bundle:android` and press enter to create the android bundle.
+7. Run `yarn start` to start the metro development server.
 
-- After dependencies are installed type `cd ios && pod install && cd ..` and press enter to install pods on ios (This is done once unless you installed new dependencies that need pods created).
+## Android Setup
 
-- After pods are installed type `yarn env:staging` and press enter to setup the staging environment and create the `.env` file. Verify the file has the client key and demo password that is in your .zshrc file.
+### Emulator Setup
 
-    ![Env file Location](/img/devSetupImage/env-file-image.png)  
+1. Open Android Studios and select to a open project.
 
-    ![ENV File Content](/img/devSetupImage/env-file-content-image.png) 
+   ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png)
 
+2. On the popup window, browse to `va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
 
-- After the env file is created type `yarn bundle:ios` and press enter to create the IOS bundle.
+    ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png)
 
-- After the ios bundle is done tye `yarn bundle:android` and press enter to create the android bundle.
+3. After opening the android project, you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
 
-- After the android bundle is done type `yarn start` to start the metro development server.
+    ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png)
 
-     ![Metro Started](/img/devSetupImage/metro-started-image.png)  
+4. Go to `Android Studios -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
 
+    ![Preference Android](/img/devSetupImage/android-preferences-path.png)
 
-## Android Setup 
+    ![Gradle Java Path](/img/devSetupImage/android-gradle-java-path.png)
 
-### Emulator Setup: 
+5. Add a test emulator in Android Studios `Tools -> AVD Manager`. Follow the instructions on [Android Emulator Setup](https://developer.android.com/studio/run/managing-avds) to add a new virtual device.
 
-- Open Android Studios and select to a open project.
+6. After adding the new virtual device, select it from the top device menu.
 
-   ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png) 
+   ![Select Device](/img/devSetupImage/select-device-android-studio.png)
 
-- On the popup window browse to `/Users/(your user folder/Workspace/va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
+7. Build the project
 
-    ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png) 
+    ![Build Project](/img/devSetupImage/build-project-android.png)
 
-- After opening the android project you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
+8. Launch Virtual Device from Android studio.
 
-    ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png) 
+     ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png)
 
-- Go to `Android Studios -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
+9. Verify the Virtual Device launches and Android Studio installs and opens the VAMobile app on the device.
 
-    ![Preference Android](/img/devSetupImage/android-preferences-path.png) 
+### Physical Device Setup
 
-    ![Gradle Java Path](/img/devSetupImage/android-gradle-java-path.png) 
+1. Open Android Studio and select to a open project.
 
-- Add a test emulator in Android Studios `Tools -> AVD Manager`. Follow the instructions on [Android Emulator Setup](https://developer.android.com/studio/run/managing-avds) to add a new virtual device.
+   ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png)
 
-- After adding the new virtual device select it from the top device menu.
+2. On the popup window, browse to `va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
 
-   ![Select Device](/img/devSetupImage/select-device-android-studio.png) 
+    ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png)
 
-- Build the project. 
+3. After opening the android project, you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
 
-    ![Build Project](/img/devSetupImage/build-project-android.png) 
-   
-- Launch Virtual Device from Android studio.
+    ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png)
 
-     ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png) 
+4. Go to `Android Studio -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
 
-- Verify the Virtual Device launches and Android Studios installs and opens the VAMobile app on the device.
+    ![Preference Android](/img/devSetupImage/android-preferences-path.png)
 
-### Physical Device Setup: 
+    ![Gradle Java Path](/img/devSetupImage/android-gradle-java-path.png)
 
-- Open Android Studios and select to a open project.
+5. Turn on developer mode for the phone. [See React Native Instructions](https://reactnative.dev/docs/running-on-device)
 
-   ![Open Android Studio](/img/devSetupImage/open-android-studio-image.png) 
+6. Connect phone with a usb to the host machine.
 
-- On the popup window browse to `/Users/(your user folder/Workspace/va-mobile-app/VAMobile/android` and select the android folder from the VAMobile project and press open.
+7. Open a Terminal and type `adb devices`. You should see an ouput like so.
 
-    ![Select Android Folder](/img/devSetupImage/select-android-folder-android-studio.png) 
+    ![ADB Devices](/img/devSetupImage/adb-devices-android.png)
 
-- After opening the android project you will need to sync the project with gradle. Go to `File -> Sync Project With Gradle Files`.
+8. Type `adb -s <device name> reverse tcp:8081 tcp:8081`.
 
-    ![Sync With Gradle](/img/devSetupImage/gradle-project-sync-image.png) 
+    ![ADB TCP Reverse](/img/devSetupImage/reverse-tcp-android.png)
 
-- Go to `Android Studios -> Preferences -> Build, Execution, Deployment -> Build Tools -> Gradle` and verify that the Gradle JDK is pointing to `/Applications/Android Studio.app/Contents/jre/Contents/Home`
+9. Select the physical device from the top device menu.
 
-    ![Preference Android](/img/devSetupImage/android-preferences-path.png) 
+   ![Select Device](/img/devSetupImage/select-device-android-studio.png)
 
-    ![Gradle Java Path](/img/devSetupImage/android-gradle-java-path.png) 
+10. Build the project
 
- - Turn on developer mode for the phone. [See React Native Instructions](https://reactnative.dev/docs/running-on-device)
+    ![Build Project](/img/devSetupImage/build-project-android.png)
 
- - Connect phone with a usb to the host machine.
+11. Launch Virtual Device from Android Studio.
 
- - Open a Terminal and type `adb devices`. You should see an ouput like so.
+     ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png)
 
-    ![ADB Devices](/img/devSetupImage/adb-devices-android.png) 
+12. Verify Android Studio installs and opens the VAMobile app on the device.
 
- - Type `adb -s <device name> reverse tcp:8081 tcp:8081`.
-
-    ![ADB TCP Reverse](/img/devSetupImage/reverse-tcp-android.png) 
-
-- Select the physical device from the top device menu.
-
-   ![Select Device](/img/devSetupImage/select-device-android-studio.png) 
-
-- Build the project. 
-
-    ![Build Project](/img/devSetupImage/build-project-android.png) 
-   
-- Launch Virtual Device from Android studio.
-
-     ![Launch Project](/img/devSetupImage/launch-virtual-app-android.png) 
-
-- Verify Android Studios installs and opens the VAMobile app on the device.
-
-## iPhone Setup 
+## iOS Setup
 
 ### Simulator Setup
 
-- Open Xcode and select to open project or file.
+1. Open Xcode and select to open project or file.
 
-    ![Open Xcode Project](/img/devSetupImage/open-xcode-project.png) 
+    ![Open Xcode Project](/img/devSetupImage/open-xcode-project.png)
 
-- On the popup window browse and select the `ios` folder on the `VAMobile` project.
+2. On the popup window browse and select the `ios` folder on the `VAMobile` project.
 
-    ![Select Project Xcode](/img/devSetupImage/select-ios-folder-xcode.png) 
+    ![Select Project Xcode](/img/devSetupImage/select-ios-folder-xcode.png)
 
-- Go to Xcode -> Preference and under account verify you are signed in with the apple id which has the `US Department of Veterans Affairs (VA) developer account`.
+3. Go to Xcode -> Preference and under account verify you are signed in with the apple id which has the `US Department of Veterans Affairs (VA) developer account`.
 
-    ![Apple Id Account](/img/devSetupImage/xcode-preference-path.png) 
+    ![Apple Id Account](/img/devSetupImage/xcode-preference-path.png)
 
-    ![Apple Id Account](/img/devSetupImage/xcode-apple-id-account.png) 
+    ![Apple Id Account](/img/devSetupImage/xcode-apple-id-account.png)
 
-- Select the project icon on the left hand explorer and verify you have the right signing. `Team should be US Department of Veterans Affairs (VA)`
+4. Select the project icon on the left hand explorer and verify you have the right signing. `Team should be US Department of Veterans Affairs (VA)`
 
-    ![Signing Project Account](/img/devSetupImage/signing-xcode.png) 
- 
-- Select a simulator from the list in Xcode.
+    ![Signing Project Account](/img/devSetupImage/signing-xcode.png)
 
-    ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png) 
+5. Select a simulator from the list in Xcode.
 
-- Build project on Xcode.
+    ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png)
 
-     ![Build Project Xcode](/img/devSetupImage/build-project-xcode.png) 
+6. If you are using XCode 15, a temporary workaround is required to avoid a build failure with RCT-Folly.
 
-- Launch simulator by pressing the play button.
+   a. Select Pods > Build Settings > Apple Clang - Preprocessing section > Preprocessor Macros section
+   b. Add to the "Debug" and "Release" sections: _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
 
-     ![Launch Simulator Xcode](/img/devSetupImage/launch-app-xcode.png) 
+    ![XCode 15 workaround](/img/devSetupImage/xcode-15-temporary-workaround.png)
 
+7. Build project on Xcode.
+
+     ![Build Project Xcode](/img/devSetupImage/build-project-xcode.png)
+
+8. Launch simulator by pressing the play button.
+
+     ![Launch Simulator Xcode](/img/devSetupImage/launch-app-xcode.png)
 
 ### Physical Device
 
-- Open Xcode and select to open project or file.
+1. Open Xcode and select to open project or file.
 
-    ![Open Xcode Project](/img/devSetupImage/open-xcode-project.png) 
+    ![Open Xcode Project](/img/devSetupImage/open-xcode-project.png)
 
-- On the popup window browse and select the `ios` folder on the `VAMobile` project.
+2. On the popup window browse and select the `ios` folder on the `VAMobile` project.
 
-    ![Select Project Xcode](/img/devSetupImage/select-ios-folder-xcode.png) 
+    ![Select Project Xcode](/img/devSetupImage/select-ios-folder-xcode.png)
 
-- Go to Xcode -> Preference and under account verify you are signed in with the apple id which has the `US Department of Veterans Affairs (VA) developer account`.
+3. Go to Xcode -> Preference and under account verify you are signed in with the apple id which has the `US Department of Veterans Affairs (VA) developer account`.
 
-    ![Apple Id Account](/img/devSetupImage/xcode-preference-path.png) 
+    ![Apple Id Account](/img/devSetupImage/xcode-preference-path.png)
 
-    ![Apple Id Account](/img/devSetupImage/xcode-apple-id-account.png) 
+    ![Apple Id Account](/img/devSetupImage/xcode-apple-id-account.png)
 
-- Select the project icon on the left hand explorer and verify you have the right signing. `Team should be US Department of Veterans Affairs (VA)`.
+4. Select the project icon on the left hand explorer and verify you have the right signing. `Team should be US Department of Veterans Affairs (VA)`.
 
-    ![Signing Project Account](/img/devSetupImage/signing-xcode.png) 
+    ![Signing Project Account](/img/devSetupImage/signing-xcode.png)
 
-- Connect the iPhone via USB to the host machine. [See React Native Instructions](https://reactnative.dev/docs/running-on-device)
+5. Connect the iPhone via USB to the host machine. [See React Native Instructions](https://reactnative.dev/docs/running-on-device)
 
-- Accept permissions on your iPhone from Xcode to allow the developers option.
- 
-- Select a device from the list in Xcode.
+6. Accept permissions on your iPhone from Xcode to allow the developers option.
 
-    ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png) 
+7. Select a device from the list in Xcode.
 
-- Build project on Xcode. 
+    ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png)
 
-     ![Build Project Xcode](/img/devSetupImage/build-project-xcode.png) 
+8. Build project on Xcode.
 
-- Launch device by pressing the play button.
+     ![Build Project Xcode](/img/devSetupImage/build-project-xcode.png)
 
-     ![Launch Simulator Xcode](/img/devSetupImage/launch-app-xcode.png) 
+9. Launch device by pressing the play button.
 
-
+     ![Launch Simulator Xcode](/img/devSetupImage/launch-app-xcode.png)

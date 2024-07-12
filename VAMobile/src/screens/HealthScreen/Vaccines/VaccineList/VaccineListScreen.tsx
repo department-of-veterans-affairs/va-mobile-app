@@ -1,19 +1,35 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { map } from 'underscore'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect } from 'react'
+import { ScrollView } from 'react-native'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextLine } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { map } from 'underscore'
+
+import { Vaccine } from 'api/types'
+import { useVaccines } from 'api/vaccines/getVaccines'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TextLine,
+} from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { Vaccine } from 'store/api/types'
-import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getA11yLabelText } from 'utils/common'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -21,14 +37,32 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 /**
  * Screen containing a list of vaccines on record and a link to their details view
  */
-const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
-  const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
+function VaccineListScreen({ navigation }: VaccineListScreenProps) {
+  const [page, setPage] = useState(1)
+  // checks for downtime, immunizations downtime constant is having an issue with unit test
+  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
+  const {
+    data: vaccines,
+    isFetching: loading,
+    error: vaccineError,
+    refetch: refetchVaccines,
+  } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
+  const [vaccinesToShow, setVaccinesToShow] = useState<Array<Vaccine>>([])
+
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+
+  useEffect(() => {
+    const vaccineList = vaccines?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setVaccinesToShow(vaccineList || [])
+  }, [vaccines?.data, page])
+
+  const vaccineButtons: Array<DefaultListItemObj> = map(vaccinesToShow, (vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
       { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
@@ -36,79 +70,69 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
     const vaccineButton: DefaultListItemObj = {
       textLines,
-      onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
-      a11yHintText: t('vaccines.list.a11y'),
-      a11yValue: tc('listPosition', { position: index + 1, total: vaccines.length }),
+      onPress: () => {
+        navigateTo('VaccineDetails', { vaccine: vaccine })
+      },
+      a11yHintText: t('vaccines.list.a11yHint'),
+      a11yValue: t('listPosition', { position: index + 1, total: vaccines?.data.length }),
       testId: getA11yLabelText(textLines),
     }
 
     return vaccineButton
   })
 
-  const requestPage = useCallback(
-    (requestedPage: number) => {
-      // request the next page
-      dispatch(getVaccines(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID, requestedPage))
-    },
-    [dispatch],
-  )
-
   // Render pagination for sent and drafts folderMessages only
-  const renderPagination = (): ReactNode => {
-    const page = vaccinePagination?.currentPage || 1
+  function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
-        requestPage(page + 1)
+        setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
       onPrev: () => {
-        requestPage(page - 1)
+        setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
-      totalEntries: vaccinePagination?.totalEntries || 0,
-      pageSize: vaccinePagination?.perPage || 0,
+      totalEntries: vaccines?.meta?.pagination?.totalEntries || 0,
+      pageSize: DEFAULT_PAGE_SIZE,
       page,
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
   }
 
-  useEffect(() => {
-    requestPage(1)
-  }, [dispatch, requestPage])
-
-  if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-        <LoadingComponent text={t('vaccines.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (vaccines.length === 0) {
-    return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-        <NoVaccineRecords />
-      </FeatureLandingTemplate>
-    )
-  }
-
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={vaccineButtons} />
-      </Box>
-      {renderPagination()}
+    <FeatureLandingTemplate
+      backLabel={t('health.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('vaVaccines')}
+      titleA11y={a11yLabelVA(t('vaVaccines'))}
+      scrollViewProps={scrollViewProps}>
+      {loading ? (
+        <LoadingComponent text={t('vaccines.loading')} />
+      ) : vaccineError || vaccinesInDowntime ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
+          error={vaccineError}
+          onTryAgain={refetchVaccines}
+        />
+      ) : vaccines?.data?.length === 0 ? (
+        <NoVaccineRecords />
+      ) : (
+        <>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <DefaultList items={vaccineButtons} />
+          </Box>
+          {renderPagination()}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

@@ -1,6 +1,7 @@
-import { TouchableWithoutFeedback } from 'react-native'
-import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+
+import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
 

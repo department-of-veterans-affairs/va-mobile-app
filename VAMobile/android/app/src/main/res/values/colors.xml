@@ -5,4 +5,6 @@
     <color name="primaryDarkerDarkMode">#FF0000</color>
     <color name="toolbarBackgroundGray">#F9F9F9</color>
     <color name="toolbarBackgroundDark">#000000</color>
+    <color name="grayLightest">#F1F1F1</color>
+    <color name="darkmodeGrayDark">#121212</color>
 </resources>

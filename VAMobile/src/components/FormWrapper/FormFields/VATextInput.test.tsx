@@ -1,112 +1,61 @@
-import 'react-native'
 import React from 'react'
-import { Pressable, TextInput } from 'react-native'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
-import VATextInput, { VATextInputTypes } from './VATextInput'
-import { Box, TextView } from '../../index'
-import { isIOS } from 'utils/platform'
+import { context, fireEvent, render, screen } from 'testUtils'
 
-let mockIsIOS = jest.fn()
-jest.mock('utils/platform', () => ({
-  isIOS: jest.fn(() => mockIsIOS),
-}))
+import VATextInput from './VATextInput'
 
 context('VATextInput', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onChangeSpy: Mock
-  let isIOSMock = isIOS as jest.Mock
+  const onChangeSpy = jest.fn()
 
-  const initializeTestInstance = (
-    inputType = 'email' as VATextInputTypes,
-    value = '',
-    helperTextKey = '',
-    error = '',
-    isRequiredField = false,
-    testID = '',
-    labelKey = 'profile:contactInformation.emailAddress',
-    isTextArea = false,
-  ) => {
-    onChangeSpy = jest.fn(() => {})
-
-    isIOSMock.mockReturnValue(false)
-
-    component = render(
+  const initializeTestInstance = (isRequiredField = false, error = '') => {
+    render(
       <VATextInput
-        inputType={inputType}
+        inputType={'email'}
         onChange={onChangeSpy}
-        labelKey={labelKey}
-        value={value}
-        helperTextKey={helperTextKey}
+        labelKey={'contactInformation.emailAddress'}
+        value={''}
+        helperTextKey={'back.a11yHint'}
         isRequiredField={isRequiredField}
-        testID={testID}
-        isTextArea={isTextArea}
+        testID={'InputTest'}
+        isTextArea={false}
         error={error}
       />,
     )
-
-    testInstance = component.UNSAFE_root
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should call onChange', async () => {
-    await waitFor(() => {
-      testInstance.findByType(VATextInput).props.onChange()
-      expect(onChangeSpy).toBeCalled()
+  describe('When input type is email', () => {
+    beforeEach(() => {
+      initializeTestInstance()
     })
-  })
-
-  describe('when isTextArea is true', () => {
-    it('should add the text area props to the text input', async () => {
-      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', true)
-      expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
+    it('should call onChange when text is entered', () => {
+      fireEvent.changeText(screen.getByTestId('InputTest'), 'content')
+      expect(onChangeSpy).toHaveBeenCalled()
     })
-  })
 
-  describe('when input type is email', () => {
-    it('should set the textContentType to "emailAddress"', async () => {
-      expect(testInstance.findByType(TextInput).props.textContentType).toEqual('emailAddress')
-      expect(testInstance.findByType(TextInput).props.keyboardType).toEqual('email-address')
+    it('should display a label if provided', () => {
+      expect(screen.getByText('Email address')).toBeTruthy()
     })
-  })
 
-  describe('when input type is phone', () => {
-    it('should set the textContentType to "telephoneNumber"', async () => {
-      initializeTestInstance('phone')
-      expect(testInstance.findByType(TextInput).props.textContentType).toEqual('telephoneNumber')
-    })
-  })
-
-  describe('when there is helper text', () => {
-    it('should display it', async () => {
-      initializeTestInstance('email', '', 'common:back.a11yHint')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Navigates to the previous page')
+    it('should display helper text if provided', () => {
+      expect(screen.getByText('Navigates to the previous page')).toBeTruthy()
     })
   })
 
   describe('when there is an error', () => {
-    it('should display it', async () => {
-      initializeTestInstance('email', '', '', 'ERROR')
-      const allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews[allTextViews.length - 1].props.children).toEqual('ERROR')
+    beforeEach(() => {
+      initializeTestInstance(false, 'ERROR')
     })
+    it('should display Error text', () => {
+      expect(screen.getByText('ERROR')).toBeTruthy()
+    })
+  })
 
-    it('should set the border color to error and make the border thicker', async () => {
-      initializeTestInstance('email', '', '', 'ERROR')
-      expect(testInstance.findAllByType(Box)[4].props.borderColor).toEqual('error')
-      expect(testInstance.findAllByType(Box)[4].props.borderWidth).toEqual(2)
+  describe('when it is a required field', () => {
+    beforeEach(() => {
+      initializeTestInstance(true)
+    })
+    it('should include "(Required)" in the label', () => {
+      expect(screen.getByText(/(Required)/)).toBeTruthy()
     })
   })
 })

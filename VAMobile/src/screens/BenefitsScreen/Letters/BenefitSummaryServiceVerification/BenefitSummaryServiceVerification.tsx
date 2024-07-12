@@ -1,47 +1,69 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { map } from 'underscore'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { map } from 'underscore'
+
+import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
+import { LetterBenefitInformation, LetterTypeConstants, LettersDownloadParams } from 'api/types'
 import {
   BasicError,
   Box,
   ButtonDecoratorType,
-  ButtonTypesConstants,
-  ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
   FeatureLandingTemplate,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
+  LinkWithAnalytics,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
-import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
+import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()
 
-type BenefitSummaryServiceVerificationProps = StackScreenProps<BenefitsStackParamList, 'BenefitSummaryServiceVerificationLetter'>
+type BenefitSummaryServiceVerificationProps = StackScreenProps<
+  BenefitsStackParamList,
+  'BenefitSummaryServiceVerificationLetter'
+>
 
-const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = ({ navigation }) => {
+function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
+  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
+    enabled: screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter'),
+  })
+  const lettersOptions: LettersDownloadParams = {
+    militaryService: false,
+    serviceConnectedDisabilities: false,
+    serviceConnectedEvaluation: false,
+    nonServiceConnectedPension: letterBeneficiaryData?.benefitInformation.hasNonServiceConnectedPension || false,
+    monthlyAward: false,
+    unemployable: letterBeneficiaryData?.benefitInformation.hasIndividualUnemployabilityGranted || false,
+    specialMonthlyCompensation: letterBeneficiaryData?.benefitInformation.hasSpecialMonthlyCompensation || false,
+    adaptedHousing: letterBeneficiaryData?.benefitInformation.hasAdaptedHousing || false,
+    chapter35Eligibility: false,
+    deathResultOfDisability: letterBeneficiaryData?.benefitInformation.hasDeathResultOfDisability || false,
+    survivorsAward:
+      letterBeneficiaryData?.benefitInformation.hasSurvivorsIndemnityCompensationAward ||
+      letterBeneficiaryData?.benefitInformation.hasSurvivorsPensionAward ||
+      false,
+  }
+  const {
+    isFetching: downloading,
+    isError: letterDownloadError,
+    refetch: refetchLetter,
+  } = useDownloadLetter(LetterTypeConstants.benefitSummary, lettersOptions)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -49,12 +71,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(true)
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
-  useEffect(() => {
-    dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
-  }, [dispatch])
-
   const getListOfMilitaryService = (): React.ReactNode => {
-    return map(mostRecentServices, (periodOfService, index) => {
+    return map(letterBeneficiaryData?.mostRecentServices || [], (periodOfService, index) => {
       const militaryServiceInfoList: Array<DefaultListItemObj> = [
         {
           textLines: [
@@ -96,7 +114,13 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       ]
       return (
-        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
+        <Box
+          key={index}
+          mb={
+            (letterBeneficiaryData?.mostRecentServices?.length || 0) - 1 === index
+              ? 0
+              : theme.dimensions.standardMarginBetween
+          }>
           <DefaultList items={militaryServiceInfoList} title={t('letters.benefitService.militaryServiceInformation')} />
         </Box>
       )
@@ -110,7 +134,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
         on: includeMilitaryServiceInfoToggle,
-        a11yHint: t('letters.benefitService.includeMilitaryServiceInfoA11yHint'),
         testID: 'include-military-service-information',
       },
     },
@@ -118,38 +141,32 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
     const toggleListItems: Array<SimpleListItemObj> = []
-    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility, hasServiceConnectedDisabilities } =
-      letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
+    const {
+      monthlyAwardAmount,
+      awardEffectiveDate,
+      serviceConnectedPercentage,
+      hasChapter35Eligibility,
+      hasServiceConnectedDisabilities,
+    } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
-    if (!!monthlyAwardAmount || !!awardEffectiveDate) {
-      let text = ''
-      if (!!monthlyAwardAmount && !!awardEffectiveDate) {
-        text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      } else if (monthlyAwardAmount) {
-        text = t('letters.benefitService.monthlyAward', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-        })
-      } else if (awardEffectiveDate) {
-        text = t('letters.benefitService.effectiveDate', {
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      }
+    const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+      monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
+      date: awardEffectiveDate
+        ? formatDateMMMMDDYYYY(awardEffectiveDate)
+        : t('letters.benefitService.effectiveDateInvalid'),
+    })
 
-      toggleListItems.push({
-        text: text,
-        testId: text.replace(',', ''),
-        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-        decorator: ButtonDecoratorType.Switch,
-        decoratorProps: {
-          on: monthlyAwardToggle,
-          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-          testID: 'monthly-award',
-        },
-      })
-    }
+    toggleListItems.push({
+      text: text,
+      testId: text.replace(',', ''),
+      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: monthlyAwardToggle,
+        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+        testID: 'monthly-award',
+      },
+    })
 
     if (serviceConnectedPercentage) {
       const percentText = t('letters.benefitService.combinedServiceConnectingRating', {
@@ -170,7 +187,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
     const nonDataDrivenData: Array<SimpleListItemObj> = [
       {
-        text: t('letters.benefitService.disabledDueToService', { areOrNot: hasChapter35Eligibility ? 'are' : "aren't" }),
+        text: t('letters.benefitService.disabledDueToService', {
+          areOrNot: hasChapter35Eligibility ? 'are' : "aren't",
+        }),
         onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -180,7 +199,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       },
       {
-        text: t('letters.benefitService.oneOrMoreServiceDisabilities', { haveOrNot: hasServiceConnectedDisabilities ? 'have' : "don't have" }),
+        text: t('letters.benefitService.oneOrMoreServiceDisabilities', {
+          haveOrNot: hasServiceConnectedDisabilities ? 'have' : "don't have",
+        }),
         onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -195,85 +216,87 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   const onViewLetter = (): void => {
-    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-      militaryService: includeMilitaryServiceInfoToggle,
-      monthlyAward: monthlyAwardToggle,
-      serviceConnectedEvaluation: combinedServiceRatingToggle,
-      chapter35Eligibility: disabledDueToServiceToggle,
-      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-    }
-
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    lettersOptions.militaryService = includeMilitaryServiceInfoToggle
+    lettersOptions.monthlyAward = monthlyAwardToggle
+    lettersOptions.serviceConnectedEvaluation = combinedServiceRatingToggle
+    lettersOptions.chapter35Eligibility = disabledDueToServiceToggle
+    lettersOptions.serviceConnectedDisabilities = atLeastOneServiceDisabilityToggle
+    refetchLetter()
   }
 
-  if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
-  }
-
-  if (downloading || !letterBeneficiaryData) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
-        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
 
   return (
     <FeatureLandingTemplate
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
-      {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('letters.benefitService.title')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('letters.benefitService.summary')}
-          </TextView>
-        </TextArea>
-
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header" paragraphSpacing={true}>
-          {t('letters.benefitService.chooseIncludedInformation')}
-        </TextView>
-        {getListOfMilitaryService()}
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          {t('letters.benefitService.ourRecordsShow')}
-        </TextView>
-        <SimpleList items={includeMilitaryServiceInfoList} />
-
-        <SimpleList
-          items={getBenefitAndDisabilityToggleList()}
-          title={t('letters.benefitService.benefitAndDisabilityInfo')}
-          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
+      testID="BenefitSummaryServiceVerificationTestID">
+      {loadingCheck ? (
+        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
+      ) : letterDownloadError ? (
+        <BasicError
+          onTryAgain={onViewLetter}
+          messageText={t('letters.download.error')}
+          buttonA11yHint={t('letters.download.tryAgain.a11y')}
         />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('letters.benefitService.title')}
+            </TextView>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('letters.benefitService.summary')}
+            </TextView>
+          </TextArea>
 
-        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
-          {t('letters.benefitService.sendMessageIfIncorrectInfo')}
-        </TextView>
+          <TextView
+            variant="MobileBodyBold"
+            mt={theme.dimensions.standardMarginBetween}
+            mx={theme.dimensions.gutter}
+            accessibilityRole="header"
+            paragraphSpacing={true}>
+            {t('letters.benefitService.chooseIncludedInformation')}
+          </TextView>
+          {getListOfMilitaryService()}
+          <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            {t('letters.benefitService.ourRecordsShow')}
+          </TextView>
+          <SimpleList items={includeMilitaryServiceInfoList} />
 
-        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink
-            displayedText={t('letters.benefitService.sendMessage')}
-            linkType={LinkTypeOptionsConstants.url}
-            numberOrUrlLink={LINK_URL_ASK_VA_GOV}
-            linkUrlIconType={LinkUrlIconType.Arrow}
-            {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
-            a11yLabel={t('letters.benefitService.sendMessageA11yLabel')}
+          <SimpleList
+            items={getBenefitAndDisabilityToggleList()}
+            title={t('letters.benefitService.benefitAndDisabilityInfo')}
+            titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
           />
-        </Box>
 
-        <Box mx={theme.dimensions.gutter}>
-          <VAButton
-            onPress={onViewLetter}
-            label={t('letters.benefitService.viewLetter')}
-            testID={t('letters.benefitService.viewLetter')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('letters.benefitService.viewLetterA11yHint')}
-          />
+          <TextView
+            accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))}
+            variant="MobileBody"
+            m={theme.dimensions.standardMarginBetween}>
+            {t('letters.benefitService.sendMessageIfIncorrectInfo')}
+          </TextView>
+
+          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_ASK_VA_GOV}
+              text={t('letters.benefitService.sendMessage')}
+              a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
+              a11yHint={t('letters.benefitService.sendMessageA11yHint')}
+            />
+          </Box>
+
+          <Box mx={theme.dimensions.gutter}>
+            <Button
+              onPress={onViewLetter}
+              label={t('letters.benefitService.viewLetter')}
+              testID={t('letters.benefitService.viewLetter')}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

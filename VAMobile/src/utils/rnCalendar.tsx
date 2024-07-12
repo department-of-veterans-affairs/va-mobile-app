@@ -1,6 +1,7 @@
 import { NativeModules, PermissionsAndroid } from 'react-native'
-import { isIOS } from './platform'
+
 import { logNonFatalErrorToFirebase } from './analytics'
+import { isIOS } from './platform'
 
 // Calendar bridge from iOS and Android
 const RNCal = NativeModules.RNCalendar
@@ -11,10 +12,23 @@ const RNCal = NativeModules.RNCalendar
  * @param beginTime - The number of seconds UTC from 1970 when the event will start.
  * @param endTime - The number of seconds UTC from 1970 when the event will end.
  * @param location - The address or name of place where the event will take place.
+ * @param latitude - iOS only: Latitude of place where the event will take place.
+ * @param longitude - iOS only: Longitude of place where the event will take place.
  * @returns Returns an empty Promise
  */
-export const addToCalendar = async (title: string, beginTime: number, endTime: number, location: string): Promise<void> => {
-  await RNCal.addToCalendar(title, beginTime, endTime, location)
+export const addToCalendar = async (
+  title: string,
+  beginTime: number,
+  endTime: number,
+  location: string,
+  latitude: number,
+  longitude: number,
+): Promise<void> => {
+  if (isIOS()) {
+    await RNCal.addToCalendar(title, beginTime, endTime, location, latitude, longitude)
+  } else {
+    await RNCal.addToCalendar(title, beginTime, endTime, location)
+  }
 }
 
 /**

@@ -1,14 +1,18 @@
-import { StackActions, useNavigation } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
-
-import { Box, ButtonTypesConstants, CrisisLineCta, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
-import { MenuViewActionsType } from 'components/Menu'
-import { NAMESPACE } from 'constants/namespaces'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, View, ViewStyle } from 'react-native'
-import { VAIconProps } from 'components/VAIcon'
-import { useDestructiveAlert, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { StackActions, useNavigation } from '@react-navigation/native'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
+import { MenuViewActionsType } from 'components/Menu'
+import { VAIconProps } from 'components/VAIcon'
+import { NAMESPACE } from 'constants/namespaces'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -23,6 +27,8 @@ export type FullScreenSubtaskProps = {
   onLeftButtonPress?: () => void
   /** a11y label for left button text */
   leftButtonA11yLabel?: string
+  /** Optional TestID for left button */
+  leftButtonTestID?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
   /** a11y label for title text */
@@ -35,6 +41,8 @@ export type FullScreenSubtaskProps = {
   rightButtonDisabled?: boolean
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
+  /** Optional TestID for right button */
+  rightButtonTestID?: string
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** ref for the VAScrollView component that contains the content */
@@ -45,6 +53,8 @@ export type FullScreenSubtaskProps = {
   primaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
   onPrimaryContentButtonPress?: () => void
+  /** Optional TestID for primary button */
+  primaryButtonTestID?: string
   /** text of the footer button(no text it doesn't appear) */
   secondaryContentButtonText?: string
   /** function called when secondary content button is pressed(no function it doesn't appear) */
@@ -52,7 +62,9 @@ export type FullScreenSubtaskProps = {
   /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
-  showCrisisLineCta?: boolean
+  showCrisisLineButton?: boolean
+  /** Optional testID */
+  testID?: string
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -60,30 +72,33 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   leftButtonText,
   onLeftButtonPress,
   leftButtonA11yLabel,
+  leftButtonTestID,
   title,
   titleA11yLabel,
   rightButtonText,
   onRightButtonPress,
   rightButtonA11yLabel,
+  rightButtonTestID,
   rightVAIconProps,
   scrollViewRef,
   menuViewActions,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
+  primaryButtonTestID,
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
-  showCrisisLineCta = false,
+  showCrisisLineButton = false,
+  testID,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
-  const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
 
   const titleTextProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     accessibilityLabel: titleA11yLabel,
     accessibilityRole: 'header',
   }
@@ -145,8 +160,23 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: onLeftTitleButtonPress } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
+    leftButton: leftButtonText
+      ? {
+          text: leftButtonText,
+          a11yLabel: leftButtonA11yLabel,
+          testID: leftButtonTestID,
+          onPress: onLeftTitleButtonPress,
+        }
+      : undefined,
+    rightButton: rightButtonText
+      ? {
+          text: rightButtonText,
+          a11yLabel: rightButtonA11yLabel,
+          testID: rightButtonTestID,
+          onPress: onRightTitleButtonPress,
+          icon: rightVAIconProps,
+        }
+      : undefined,
     menuViewActions,
   }
   const fillStyle: ViewStyle = {
@@ -154,32 +184,54 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
-  const titleMarginTop = showCrisisLineCta ? 0 : theme.dimensions.buttonPadding
+  const titleMarginTop = showCrisisLineButton ? 0 : theme.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollViewRef={scrollViewRef}>
-        {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
+      <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
+        {showCrisisLineButton && <CrisisLineButton />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
             <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
-        {children}
+        <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
-      {primaryContentButtonText && onPrimaryContentButtonPress && (
-        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-          {secondaryContentButtonText && onSecondaryContentButtonPress && (
-            <Box ml={theme.dimensions.gutter} flex={1}>
-              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+      <WaygateWrapper bypassAlertBox={true}>
+        {primaryContentButtonText && onPrimaryContentButtonPress && (
+          <Box
+            display="flex"
+            flexDirection="row"
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.contentMarginBottom}
+            alignItems={'center'}>
+            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+              <Box ml={theme.dimensions.gutter} flex={1}>
+                <Button
+                  onPress={onSecondaryContentButtonPress}
+                  label={secondaryContentButtonText}
+                  buttonType={ButtonVariants.Secondary}
+                />
+              </Box>
+            )}
+            <Box
+              ml={
+                secondaryContentButtonText && onSecondaryContentButtonPress
+                  ? theme.dimensions.buttonPadding
+                  : theme.dimensions.gutter
+              }
+              mr={theme.dimensions.gutter}
+              flex={1}>
+              <Button
+                onPress={onPrimaryContentButtonPress}
+                label={primaryContentButtonText}
+                testID={primaryButtonTestID}
+              />
             </Box>
-          )}
-          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
-        </Box>
-      )}
+        )}
+      </WaygateWrapper>
     </View>
   )
 }

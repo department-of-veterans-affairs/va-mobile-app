@@ -1,10 +1,11 @@
-import { Dimensions, View, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
+import React from 'react'
+import { View, ViewStyle } from 'react-native'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
+import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
   header: string
@@ -17,16 +18,23 @@ export type GenericOnboardingProps = {
   centerHeader?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
+function GenericOnboarding({
+  header,
+  text,
+  displayLogo,
+  textA11yLabel,
+  listOfText,
+  centerHeader,
+}: GenericOnboardingProps) {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const isPortrait = useOrientation()
 
   useFocusEffect(setFocus)
 
   const headerProps: TextViewProps = {
     variant: 'MobileBodyBold',
     color: 'primaryContrast',
-    accessibilityRole: 'header',
     mt: displayLogo ? theme.dimensions.standardMarginBetween : 0,
   }
 
@@ -36,28 +44,28 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
     justifyContent: 'center',
   }
 
-  const isPortrait = () => {
-    const dim = Dimensions.get('screen')
-    return dim.height >= dim.width
-  }
-
   return (
     <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false} removeInsets={true}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VAIcon name="Logo" />
+            <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
-          <View ref={focusRef} accessible={true}>
-            <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
-              {header}
-            </TextView>
+          <View ref={focusRef} accessible={true} accessibilityRole={'header'}>
+            <TextView {...headerProps}>{header}</TextView>
           </View>
         </Box>
         {text && (
-          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
+          <TextView
+            {...testIdProps(textA11yLabel || text)}
+            variant="MobileBody"
+            color="primaryContrast"
+            mt={theme.dimensions.standardMarginBetween}>
             {text}
           </TextView>
         )}

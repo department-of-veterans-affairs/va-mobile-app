@@ -1,15 +1,12 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import WebviewScreen from './WebviewScreen'
 
 context('WebviewScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const mockProps = mockNavProps(
     {},
     {
@@ -26,20 +23,15 @@ context('WebviewScreen', () => {
 
   beforeEach(() => {
     const props = mockProps
-
-    component = render(<WebviewScreen {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<WebviewScreen {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should create the webview', async () => {
-    const webview = findByTestID(testInstance, 'Webview-web')
-
-    expect(webview).toBeTruthy()
-    expect(webview.props.source.uri).toBe('http://www.google.com')
+  it('initializes correctly', () => {
+    expect(screen.getByTestId('Webview-page')).toBeTruthy()
+    expect(screen.getByTestId('Webview-web')).toBeTruthy()
+    expect(screen.getByTestId('Back')).toBeTruthy()
+    expect(screen.getByTestId('Forward')).toBeTruthy()
+    expect(screen.getByTestId('Open in browser')).toBeTruthy()
+    expect(screen.getByTestId('Webview-web').props.source.uri).toBe('http://www.google.com')
   })
 })

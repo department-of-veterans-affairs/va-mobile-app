@@ -80,10 +80,13 @@ _Note `AccessibilityState` can be used as normal without a special function_.
 
 
 ## Notable Quirks
+
 ### React Navigation and Wireless Keyboard
-There has been noticeable issues using wireless keyboard with react navigation that has been tracked [here](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/department-of-veterans-affairs/va-mobile-app/2214).
+
+**Note**: There have been noticeable [issues using wireless keyboard with react navigation](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/department-of-veterans-affairs/va-mobile-app/2214).
 
 ### Copy and Paste and how it affects Accessibility
+
 We can make text-only elements(ex. TextView) have the ability to copy and paste by adding [selectable](https://reactnative.dev/docs/text#selectable) to its property.
 
-We limit the areas(ex. Secure Messaging) where we want to do this because any `selectable` element gets read as pressable from voice navigation apps like Voice Access and Voice Control. See related ticket [here](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/department-of-veterans-affairs/va-mobile-app/2233).
+We limit the areas(ex. Secure Messaging) where we want to do this because any `selectable` element gets read as pressable from voice navigation apps like Voice Access and Voice Control. [View related ticket](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/department-of-veterans-affairs/va-mobile-app/2233).

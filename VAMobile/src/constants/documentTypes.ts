@@ -45,7 +45,8 @@ export const DocumentTypes526 = [
   },
   {
     value: 'L117',
-    label: 'VA Form 21-4502 - Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
+    label:
+      'VA Form 21-4502 - Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
   },
   {
     value: 'L159',

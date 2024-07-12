@@ -1,30 +1,45 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import PreferredNameScreen from './PreferredNameScreen'
-import { VATextInput } from 'components'
 
 context('PreferredNameScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
-  beforeEach(async () => {
+  beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
-    component = render(<PreferredNameScreen {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<PreferredNameScreen {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'Preferred name' })).toBeTruthy()
+    expect(screen.getByText("Share the name you'd like us to use when you come in to VA.")).toBeTruthy()
+    expect(screen.getByText('25 characters maximum')).toBeTruthy()
+    expect(screen.getByTestId('preferredNameTestID')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Save' })).toBeTruthy()
   })
 
-  it('text input is setup correctly', async () => {
-    const textInput = testInstance.findAllByType(VATextInput)[0]
-    expect(textInput.props.value).toEqual('')
-    expect(textInput.props.labelKey).toEqual('personalInformation.preferredNameScreen.body')
+  describe('when name has a number in it', () => {
+    it('should show error text', () => {
+      fireEvent.changeText(screen.getByTestId('preferredNameTestID'), 'Bobby3')
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Enter letters only')).toBeTruthy()
+    })
+  })
+
+  describe('when name has to many characters', () => {
+    it('should show error text', () => {
+      fireEvent.changeText(screen.getByTestId('preferredNameTestID'), 'abcdefghijklmnopqrstuvwxyz')
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Enter 25 characters or less for preferred name')).toBeTruthy()
+    })
+  })
+
+  describe('when name ie empty', () => {
+    it('should show error text', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Enter a preferred name')).toBeTruthy()
+    })
   })
 })

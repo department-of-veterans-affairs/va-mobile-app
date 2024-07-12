@@ -1,12 +1,13 @@
-import { Pressable, PressableProps, View } from 'react-native'
 import React, { FC, ReactNode, useState } from 'react'
+import { Pressable, PressableProps, View } from 'react-native'
 
-import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
 import { VABorderColors } from 'styles/theme'
-import { isAndroid } from 'utils/platform'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { isAndroid } from 'utils/platform'
+
 import TextArea from './TextArea'
+import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 
 export type CollapsibleAlertProps = {
   /** color of the border */
@@ -21,9 +22,19 @@ export type CollapsibleAlertProps = {
   onExpand?: () => void
   /** handles anything needed when collapsing the alert*/
   onCollapse?: () => void
+  /** Optional TestID */
+  testID?: string
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({
+  border,
+  headerText,
+  body,
+  a11yLabel,
+  onExpand,
+  onCollapse,
+  testID,
+}) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
@@ -59,7 +70,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
         <Box flex={1}>
           <TextView variant="MobileBodyBold">{headerText}</TextView>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween} ml={10}>
+        <Box justifyContent={'center'} ml={10}>
           <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
         </Box>
       </Box>
@@ -85,7 +96,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   }
 
   return (
-    <Box {...boxProps}>
+    <Box testID={testID} {...boxProps}>
       <TextArea>
         {accordionHeader()}
         {expanded && body}

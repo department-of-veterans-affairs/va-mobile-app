@@ -1,89 +1,61 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { TouchableWithoutFeedback } from 'react-native'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
-import BackButton from './BackButton'
-import VAIcon from './VAIcon'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { BackButtonLabel, BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { context, render } from 'testUtils'
+
+import BackButton from './BackButton'
 
 context('BackButton', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn()
 
-  const initializeTestInstance = (canGoBack: boolean, showCarat?: boolean, a11yHint?: string, label?: BackButtonLabel): void => {
-    onPressSpy = jest.fn(() => {})
-
-    component = render(<BackButton onPress={onPressSpy} label={label || BackButtonLabelConstants.back} canGoBack={canGoBack} showCarat={showCarat} a11yHint={a11yHint} />)
-
-    testInstance = component.UNSAFE_root
+  const renderWithProps = (canGoBack: boolean, showCarat?: boolean, a11yHint?: string, label?: BackButtonLabel) => {
+    render(
+      <BackButton
+        onPress={onPressSpy}
+        label={label || BackButtonLabelConstants.back}
+        canGoBack={canGoBack}
+        showCarat={showCarat}
+        a11yHint={a11yHint}
+      />,
+    )
   }
 
-  beforeEach(() => {
-    initializeTestInstance(true)
+  it('renders button label and hint', () => {
+    renderWithProps(true)
+    expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy()
+    expect(screen.getAllByA11yHint('Navigates to the previous page')).toBeTruthy()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('does not render button when canGoBack is false', () => {
+    renderWithProps(false)
+    expect(screen.queryByRole('button', { name: 'Back' })).toBeFalsy()
   })
 
-  describe('when canGoBack is false', () => {
-    it('should return null', async () => {
-      initializeTestInstance(false)
-
-      testInstance = component.UNSAFE_root
-      expect(component.toJSON()).toBeFalsy()
-    })
+  it('calls onPress when pressed', () => {
+    renderWithProps(true)
+    fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(onPressSpy).toHaveBeenCalled()
   })
 
-  describe('when the onPress is clicked', () => {
-    it('should call the onPress function', async () => {
-      await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(onPressSpy).toBeCalled()
-      })
-    })
+  it('shows carat when showCarat is true', () => {
+    renderWithProps(true, true)
+    expect(screen.getByTestId('BackButtonCarat')).toBeTruthy()
   })
 
-  describe('when showCarat is true', () => {
-    it('should render the VAIcon component', async () => {
-      initializeTestInstance(true, true)
-      expect(testInstance.findAllByType(VAIcon).length).toEqual(1)
-    })
+  it('shows custom a11yHint', () => {
+    renderWithProps(true, false, 'Action on click')
+    expect(screen.getByA11yHint('Action on click')).toBeTruthy()
   })
 
-  describe('when a11yHint exists', () => {
-    it('should set the hint to the one specified', async () => {
-      initializeTestInstance(true, false, 'action on click')
-      expect(testInstance.findByType(TouchableWithoutFeedback).props.accessibilityHint).toEqual('action on click')
-    })
+  it('shows correct a11yHint when label is "Cancel"', () => {
+    renderWithProps(true, undefined, undefined, BackButtonLabelConstants.cancel)
+    expect(screen.getByA11yHint('Cancels changes and navigates to the previous page')).toBeTruthy()
   })
 
-  describe('when a11yHint does not exist', () => {
-    describe('when the label is back', () => {
-      it('should set the hint to "Navigates to the previous page"', async () => {
-        initializeTestInstance(true, undefined, undefined, BackButtonLabelConstants.back)
-        expect(testInstance.findByType(TouchableWithoutFeedback).props.accessibilityHint).toEqual('Navigates to the previous page')
-      })
-    })
-
-    describe('when the label is cancel', () => {
-      it('should set the hint to "Cancels changes and navigates to the previous page"', async () => {
-        initializeTestInstance(true, undefined, undefined, BackButtonLabelConstants.cancel)
-        expect(testInstance.findByType(TouchableWithoutFeedback).props.accessibilityHint).toEqual('Cancels changes and navigates to the previous page')
-      })
-    })
-
-    describe('when the label is done', () => {
-      it('should set the hint to "Exits out of the web view and navigates to the previous page"', async () => {
-        initializeTestInstance(true, undefined, undefined, BackButtonLabelConstants.done)
-        expect(testInstance.findByType(TouchableWithoutFeedback).props.accessibilityHint).toEqual('Exits out of the web view and navigates to the previous page')
-      })
-    })
+  it('shows correct a11yHint when label is "Done"', () => {
+    renderWithProps(true, undefined, undefined, BackButtonLabelConstants.done)
+    expect(screen.getByA11yHint('Exits out of the web view and navigates to the previous page')).toBeTruthy()
   })
 })

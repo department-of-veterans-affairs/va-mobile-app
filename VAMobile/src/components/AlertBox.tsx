@@ -1,10 +1,12 @@
-import { AccessibilityRole, ScrollView, View } from 'react-native'
 import React, { FC, RefObject, useEffect, useState } from 'react'
+import { AccessibilityRole, ScrollView, View } from 'react-native'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
-import { Box, BoxProps, TextView } from './index'
 import { VABorderColors } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
+
+import { Box, BoxProps, TextView } from './index'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -23,12 +25,25 @@ export type AlertBoxProps = {
   titleA11yLabel?: string
   /** optional accessibility role for the title */
   titleRole?: AccessibilityRole
+  /** optional testID */
+  testId?: string
 }
 
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({
+  border,
+  children,
+  focusOnError = true,
+  scrollViewRef,
+  title,
+  text,
+  textA11yLabel,
+  titleA11yLabel,
+  titleRole,
+  testId,
+}) => {
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
   const [shouldFocus, setShouldFocus] = useState(true)
@@ -49,13 +64,14 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
     borderLeftColor: border,
     py: boxPadding,
     px: boxPadding,
+    testID: testId,
   }
 
   const vibrate = (): void => {
     if (border === 'error') {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else if (border === 'warning') {
-      triggerHaptic('notificationWarning')
+      triggerHaptic(HapticFeedbackTypes.notificationWarning)
     }
   }
 
@@ -64,7 +80,11 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
   return (
     <Box {...boxProps}>
       {!!title && (
-        <View ref={viewRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
+        <View
+          ref={viewRef}
+          accessible={true}
+          accessibilityLabel={titleA11yLabel || title}
+          accessibilityRole={titleAccessibilityRole}>
           <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
             {title}
           </TextView>
@@ -72,9 +92,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
       )}
       {!!text && (
         <View ref={!title ? viewRef : undefined} accessible={true} accessibilityLabel={textA11yLabel || text}>
-          <TextView paragraphSpacing={true} variant="MobileBody">
-            {text}
-          </TextView>
+          <TextView variant="MobileBody">{text}</TextView>
         </View>
       )}
       {children}

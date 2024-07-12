@@ -1,11 +1,19 @@
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
+
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 import { Box, BoxProps } from '../../index'
-import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from './formFieldUtils'
-import { isIOS } from 'utils/platform'
-import { useTheme } from 'utils/hooks'
+import {
+  getInputBorderColor,
+  getInputBorderWidth,
+  getInputWrapperProps,
+  removeInputErrorMessage,
+  renderInputError,
+  renderInputLabelSection,
+} from './formFieldUtils'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 
@@ -44,13 +52,30 @@ export type VATextInputProps = {
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, isRequiredField, helperTextKey, setError, error, isTextArea, setInputCursorToBeginning } = props
+  const {
+    inputType,
+    value,
+    labelKey,
+    onChange,
+    maxLength,
+    onEndEditing,
+    testID,
+    inputRef,
+    isRequiredField,
+    helperTextKey,
+    setError,
+    error,
+    isTextArea,
+    setInputCursorToBeginning,
+  } = props
   const { t } = useTranslation()
   const theme = useTheme()
   const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(setInputCursorToBeginning ? startTextPositon : undefined)
+  const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(
+    setInputCursorToBeginning ? startTextPositon : undefined,
+  )
   const ref = useRef<TextInput>(null)
 
   useEffect(() => {
@@ -95,6 +120,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     maxLength,
     disableFullscreenUI: true,
     placeholderTextColor: theme.colors.text.placeholder,
+    textAlignVertical: isTextArea ? 'top' : undefined,
     onChangeText: (newVal) => {
       if ((newVal.length > 0 && keyboardType === 'number-pad') || keyboardType === 'numeric') {
         onChange(newVal.replace(/\D/g, ''))
@@ -114,6 +140,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
     selection,
     multiline: isTextArea ? true : false,
+    testID,
   }
 
   const textAreaWrapperProps: BoxProps = {
@@ -130,7 +157,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const textInputBox = (
       <Box {...wrapperProps}>
         <Box width="100%">
-          <TextInput {...inputProps} ref={inputRef || ref} />
+          <TextInput testID={testID} {...inputProps} ref={inputRef || ref} />
         </Box>
       </Box>
     )

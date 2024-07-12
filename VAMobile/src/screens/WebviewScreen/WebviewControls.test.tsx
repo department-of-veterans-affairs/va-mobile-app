@@ -1,15 +1,14 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
 
 import WebviewControls from './WebviewControls'
+
 import Mock = jest.Mock
 
 context('WebviewControls', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let onBackSpy: Mock
   let onForwardSpy: Mock
   let onOpenSpy: Mock
@@ -27,27 +26,27 @@ context('WebviewControls', () => {
       canGoForward: true,
     }
 
-    component = render(<WebviewControls {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<WebviewControls {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByTestId('Back')).toBeTruthy()
+    expect(screen.getByTestId('Forward')).toBeTruthy()
+    expect(screen.getByTestId('Open in browser')).toBeTruthy()
   })
 
-  it('should call onBackPressed on back', async () => {
-    expect(findByTestID(testInstance, 'Back').props.onPress())
+  it('should call onBackPressed on back', () => {
+    fireEvent.press(screen.getByTestId('Back'))
     expect(onBackSpy).toBeCalled()
   })
 
-  it('should call onForwardPressed on forward', async () => {
-    expect(findByTestID(testInstance, 'Forward').props.onPress())
+  it('should call onForwardPressed on forward', () => {
+    fireEvent.press(screen.getByTestId('Forward'))
     expect(onForwardSpy).toBeCalled()
   })
 
-  it('should call onOpenPressed on open', async () => {
-    expect(findByTestID(testInstance, 'Open in browser').props.onPress())
+  it('should call onOpenPressed on open', () => {
+    fireEvent.press(screen.getByTestId('Open in browser'))
     expect(onOpenSpy).toBeCalled()
   })
 })

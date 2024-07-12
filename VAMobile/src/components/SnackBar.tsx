@@ -1,18 +1,21 @@
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
-import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 
-import { Box, TextViewProps } from 'components'
-import { BoxProps } from './Box'
+import { useFocusEffect } from '@react-navigation/native'
+
+import { Box, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+
+import colors from '../styles/themes/VAColors'
+import { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
-import colors from '../styles/themes/VAColors'
 
 export type SnackbarMessages = {
   successMsg: string
@@ -30,6 +33,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const windowHeight = useWindowDimensions().height
   const fontScale = useWindowDimensions().fontScale
 
   useFocusEffect(setFocus)
@@ -131,32 +135,44 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const vibrate = (): void => {
     if (!isUndo) {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else {
-      triggerHaptic('notificationSuccess')
+      triggerHaptic(HapticFeedbackTypes.notificationSuccess)
     }
   }
 
   return (
     <SafeAreaView edges={['left', 'right']} style={{ ...safeViewStyle }}>
       <Box {...mainContainerProps}>
-        <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
-          <Box {...messageContainerProps}>
-            <Box {...iconWrapperBoxProps}>
-              <VAIcon {...snackBarIconProps} />
-            </Box>
-            <TextView {...messageProp}>{message}</TextView>
-          </Box>
-        </View>
+        <Box height={fontScale >= 3 ? windowHeight * 0.45 : undefined}>
+          <VAScrollView backgroundColor="snackbar">
+            <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
+              <Box {...messageContainerProps}>
+                <Box {...iconWrapperBoxProps}>
+                  <VAIcon {...snackBarIconProps} />
+                </Box>
+                <TextView {...messageProp}>{message}</TextView>
+              </Box>
+            </View>
+          </VAScrollView>
+        </Box>
         <Box {...btnContainerProps}>
           {!isUndo && (
-            <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
+            <TouchableOpacity
+              onPress={onActionPress}
+              style={confirmBtnStlye}
+              accessible={true}
+              accessibilityRole={'button'}>
               <TextView variant={'SnackBarBtnText'} display={'flex'}>
-                {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
+                {actionBtnText || isError ? t('tryAgain') : t('snackbar.undo')}
               </TextView>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+          <TouchableOpacity
+            onPress={onDismissPress}
+            style={dismissBtnStlye}
+            accessible={true}
+            accessibilityRole={'button'}>
             <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
           </TouchableOpacity>
         </Box>

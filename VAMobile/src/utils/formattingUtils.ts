@@ -1,6 +1,8 @@
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-import { DateTime, DateTimeFormatOptions } from 'luxon'
+
 import { TFunction } from 'i18next'
+import { $Dictionary } from 'i18next/typescript/helpers'
+import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 /**
  * Returns the formatted phone number
@@ -68,10 +70,10 @@ export const getFormattedDateTimeYear = (dateTime: string): string => {
  */
 export const getFormattedMessageTime = (dateTime: string): string => {
   const date = DateTime.fromISO(dateTime)
-  if (DateTime.now().minus({ hours: 24 }) < date) {
+  if (DateTime.now().day === date.day && DateTime.now().month === date.month && DateTime.now().year === date.year) {
     return date.toFormat('t')
   } else {
-    return date.toFormat('D')
+    return date.toFormat('DDD')
   }
 }
 
@@ -96,7 +98,10 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
  * @returns Returns datetime as: Month DD, YYYY, HH:MM PM TIMEZONE
  */
 export const getFormattedDateAndTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, { month: 'long', timeZoneName: 'short' })
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATETIME_MED, timeZone, {
+    month: 'long',
+    timeZoneName: 'short',
+  })
 }
 
 /**
@@ -127,7 +132,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  *
  * @returns date string formatted based on formatBy
  */
-export const getFormattedDate = (date: string, formatBy: string): string => {
+export const getFormattedDate = (date: string | null, formatBy: string): string => {
   if (date) {
     return DateTime.fromISO(date).toLocal().toFormat(formatBy)
   }
@@ -238,7 +243,7 @@ export const stringToTitleCase = (str: string): string => {
  * @returns string of number rounded to the hundredths place
  */
 export const roundToHundredthsPlace = (num: number): string => {
-  return (Math.round(num * 100) / 100).toFixed(2)
+  return Intl.NumberFormat('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(num)
 }
 
 /**
@@ -281,6 +286,15 @@ export const getNumbersFromString = (text: string): string => {
  */
 export const getNumberAccessibilityLabelFromString = (text: string): string => {
   return getNumbersFromString(text).split('').join(' ')
+}
+
+/**
+ * Converts 1234567890 to 123-456-7890
+ * @param phoneNumber - string that has the phone number
+ */
+
+export const displayedTextPhoneNumber = (phoneNumber: string): string => {
+  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }
 
 /**
@@ -342,6 +356,6 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
  * @param t - translation function
  * @param options - optional param for variables in interpolated translations
  */
-export const getTranslation = (key: string, t: TFunction, options?: object): string => {
+export const getTranslation = (key: string, t: TFunction, options?: $Dictionary): string => {
   return options ? t(key, options) : t(key)
 }

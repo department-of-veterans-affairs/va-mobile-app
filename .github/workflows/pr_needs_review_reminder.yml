@@ -1,0 +1,25 @@
+name: '[Utils] FE PR Needs Review Reminder'
+
+on:
+  workflow_dispatch
+
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  send_pr_reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get count of PRs needing review
+        id: get_count
+        run: echo "pr_count=$(GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
+      - name: Post message to Slack
+        id: post_message
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"C0212B872MT","text":"(Please disregard) test count ${{ steps.get_count.outputs.pr_count }}"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')

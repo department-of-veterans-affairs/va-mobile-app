@@ -1,27 +1,43 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { AlertBox, Box, WhatsNew } from 'components'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
-import { isIOS } from 'utils/platform'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { requestStorePopup } from 'utils/rnInAppUpdate'
-import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import {
+  FeatureConstants,
+  getLocalVersion,
+  getStoreVersion,
+  getVersionSkipped,
+  setVersionSkipped,
+} from 'utils/homeScreenAlerts'
+import { useOpenAppStore, useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const openAppStore = useOpenAppStore()
+
+  const displayEU =
+    featureEnabled('inAppUpdates') &&
+    storeVersion &&
+    localVersionName &&
+    skippedVersion &&
+    skippedVersion !== storeVersion &&
+    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
 
   useEffect(() => {
     async function checkLocalVersion() {
@@ -52,20 +68,15 @@ export const EncourageUpdateAlert = () => {
     }
   }, [demoMode])
 
-  const callRequestStorePopup = async () => {
-    const result = await requestStorePopup()
-    if (result && isIOS()) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      openAppStore()
-    } else if (result) {
-      logAnalyticsEvent(Events.vama_eu_updated_success())
-      setVersionName(storeVersion ? storeVersion : '0.0')
+  useEffect(() => {
+    if (displayEU) {
+      logAnalyticsEvent(Events.vama_eu_shown())
     }
-  }
+  }, [displayEU])
 
   const onUpdatePressed = (): void => {
     logAnalyticsEvent(Events.vama_eu_updated())
-    callRequestStorePopup()
+    openAppStore()
   }
 
   const onSkipPressed = (): void => {
@@ -74,24 +85,16 @@ export const EncourageUpdateAlert = () => {
     setSkippedVersionHomeScreen(storeVersion ? storeVersion : '0.0')
   }
 
-  if (
-    featureEnabled('inAppUpdates') &&
-    storeVersion &&
-    localVersionName &&
-    skippedVersion &&
-    skippedVersion !== storeVersion &&
-    ((isIOS() && storeVersion > localVersionName) || (!isIOS() && +storeVersion > +localVersionName))
-  ) {
-    logAnalyticsEvent(Events.vama_eu_shown())
+  if (displayEU) {
     return (
       <Box mb={theme.dimensions.buttonPadding}>
-        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
+        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
           <Box>
             <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <Button onPress={onUpdatePressed} label={t('updateNow')} />
             </Box>
             <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-              <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
+              <Button onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonVariants.Secondary} />
             </Box>
           </Box>
         </AlertBox>

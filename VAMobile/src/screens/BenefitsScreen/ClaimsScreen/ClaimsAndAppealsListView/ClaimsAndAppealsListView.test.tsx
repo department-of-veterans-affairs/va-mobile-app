@@ -1,205 +1,181 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
-import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView'
-import { InitialState } from 'store/slices'
-import { TextView } from 'components'
-import { ClaimsAndAppealsList } from 'store/api/types'
-import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-import { getClaimsAndAppeals } from 'store/slices'
-import { waitFor } from '@testing-library/react-native'
-import { when } from 'jest-when'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-let mockNavigationSpy = jest.fn()
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsListPayload } from 'api/types'
+import { ClaimType } from 'constants/claims'
+import { LARGE_PAGE_SIZE } from 'constants/common'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    getClaimsAndAppeals: jest.fn(() => {
-      return {
-        type: '',
-        payload: {},
-      }
-    }),
-  }
-})
+const mockPayload: ClaimsAndAppealsListPayload = {
+  data: [
+    {
+      id: '1',
+      type: 'claim',
+      attributes: {
+        subtype: 'Compensation',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-01',
+        updatedAt: '2020-10-05',
+        displayTitle: 'Compensation',
+      },
+    },
+    {
+      id: '2',
+      type: 'appeal',
+      attributes: {
+        subtype: 'legacyAppeal',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-12-22',
+        updatedAt: '2020-12-28',
+        displayTitle: 'Insurance on docket appeal',
+      },
+    },
+  ],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalEntries: 2,
+    },
+  },
+}
+
+const emptyPayload: ClaimsAndAppealsListPayload = {
+  data: [],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalEntries: 0,
+    },
+  },
+}
 
 context('ClaimsAndAppealsListView', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-  let mockNavigateToClaimDetailsScreenSpy: jest.Mock
-  let mockNavigateToAppealDetailsScreenSpy: jest.Mock
-
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
-    mockNavigateToClaimDetailsScreenSpy = jest.fn()
-    mockNavigateToAppealDetailsScreenSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
-      .mockReturnValue(mockNavigateToClaimDetailsScreenSpy)
-      .calledWith('AppealDetailsScreen', { appealID: '0' })
-      .mockReturnValue(mockNavigateToAppealDetailsScreenSpy)
-    props = mockNavProps({ claimType })
-
-    const activeClaimsAndAppeals: ClaimsAndAppealsList = [
+    const props = mockNavProps({ claimType })
+    const queriesData: QueriesData = [
       {
-        id: '0',
-        type: 'appeal',
-        attributes: {
-          subtype: 'supplementalClaim',
-          completed: false,
-          decisionLetterSent: false,
-          dateFiled: '2020-10-22',
-          updatedAt: '2020-10-28',
-          displayTitle: 'supplemental claim for disability compensation',
-        },
-      },
-      {
-        id: '2',
-        type: 'claim',
-        attributes: {
-          subtype: 'Compensation',
-          completed: false,
-          decisionLetterSent: false,
-          dateFiled: '2020-10-22',
-          updatedAt: '2020-10-30',
-          displayTitle: 'Compensation',
-        },
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
+        data: isEmpty ? emptyPayload : mockPayload,
       },
     ]
-
-    const closedClaimsAndAppeals: ClaimsAndAppealsList = [
-      {
-        id: '1',
-        type: 'claim',
-        attributes: {
-          subtype: 'Compensation',
-          completed: true,
-          decisionLetterSent: true,
-          dateFiled: '2020-10-25',
-          updatedAt: '2020-10-31',
-          displayTitle: 'Compensation',
-        },
-      },
-    ]
-
-    component = render(<ClaimsAndAppealsListView {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claimsAndAppealsByClaimType: {
-            ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
-            CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
-          },
-          claimsAndAppealsMetaPagination: {
-            ACTIVE: {
-              currentPage: 2,
-              perPage: 1,
-              totalEntries: 5,
-            },
-            CLOSED: {
-              currentPage: 2,
-              perPage: 1,
-              totalEntries: 5,
-            },
-          },
-        },
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<ClaimsAndAppealsListView {...props} />, { queriesData })
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     initializeTestInstance('ACTIVE')
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
+  describe('Renders', () => {
+    it('ClaimsAndAppealsListView', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockPayload)
+      initializeTestInstance('ACTIVE')
+      await waitFor(() => expect(screen.getByText('Your active claims, decision reviews, and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your closed claims, decision reviews, and appeals')).toBeFalsy())
 
-  describe('when the claimType is ACTIVE', () => {
-    it('should display the header as "Your active claims and appeals"', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your active claims and appeals')
-    })
-  })
+      await waitFor(() => expect(screen.getByText('Insurance on docket appeal')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
 
-  describe('when the claimType is CLOSED', () => {
-    it('should display the header as "Your closed claims and appeals"', async () => {
-      await initializeTestInstance('CLOSED')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your closed claims and appeals')
-    })
-  })
+      await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
 
-  describe('when an item is type claim', () => {
-    it('should display the first line with the format "Claim for {{subtype}} updated on MMMM, dd yyyy"', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claim for compensation updated on October 30, 2020')
-    })
-
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Submitted October 22, 2020')
-    })
-  })
-
-  describe('when an item is type appeal', () => {
-    it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim for disability compensation updated on October 28, 2020')
-    })
-
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted October 22, 2020')
+      initializeTestInstance('CLOSED')
+      await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your active claims, decision reviews, and appeals')).toBeFalsy())
     })
   })
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigateToClaimDetailsScreenSpy).toHaveBeenCalled()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockPayload)
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('button', {
+            name: 'Compensation Received October 01, 2020',
+          }),
+        ),
+      )
+      await waitFor(() =>
+        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '1', claimType: 'ACTIVE' }),
+      )
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigateToAppealDetailsScreenSpy).toHaveBeenCalled()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(mockPayload)
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('button', {
+            name: 'Insurance on docket appeal Received December 22, 2020',
+          }),
+        ),
+      )
+      await waitFor(() => expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '2' }))
     })
   })
 
   describe('where there are no claims or appeals', () => {
     it('should display the NoClaimsAndAppeals components', async () => {
-      await initializeTestInstance('ACTIVE', true)
-      expect(testInstance.findAllByType(NoClaimsAndAppeals).length).toEqual(1)
-    })
-  })
-
-  describe('pagination', () => {
-    it('should call getClaimsAndAppeals for previous arrow', async () => {
-      findByTestID(testInstance, 'previous-page').props.onPress()
-      // was 2 now 1
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
-    })
-
-    it('should call getClaimsAndAppeals for next arrow', async () => {
-      findByTestID(testInstance, 'next-page').props.onPress()
-      // was 2 now 3
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(emptyPayload)
+      initializeTestInstance('ACTIVE', true)
+      await waitFor(() => expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
+          ),
+        ).toBeTruthy(),
+      )
     })
   })
 })

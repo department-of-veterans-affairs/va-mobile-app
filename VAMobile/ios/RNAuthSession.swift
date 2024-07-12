@@ -7,6 +7,7 @@
 
 import Foundation
 import AuthenticationServices
+import WebKit
 
 /// This module allows the React-Native bridge to set up and use the ASWebAuthenticationSession flow for iOS devices.
 @objc(RNAuthSession)
@@ -29,27 +30,13 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       static let authScheme = "vamobile"
   }
   
-  func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, SISEnabled: Bool)-> URL? {
+  func generateUrl(authUrl: String, codeChallenge: String)-> URL? {
     var items = [
       URLQueryItem(name: "code_challenge_method", value: "S256"),
       URLQueryItem(name: "code_challenge", value: codeChallenge),
+      URLQueryItem(name: "application", value: "vamobile"),
+      URLQueryItem(name: "oauth", value: "true"),
     ]
-
-    if (SISEnabled) {
-      items.append(contentsOf: [
-        URLQueryItem(name: "application", value: "vamobile"),
-        URLQueryItem(name: "oauth", value: "true")
-      ])
-    } else {
-      items.append(contentsOf: [
-        URLQueryItem(name: "client_id", value: clientId),
-        URLQueryItem(name: "redirect_uri", value: redirectUri),
-        URLQueryItem(name: "scope", value: scope),
-        URLQueryItem(name: "response_type", value: "code"),
-        URLQueryItem(name: "response_mode", value: "query"),
-        URLQueryItem(name: "state", value: state)
-      ])
-    }
 
     guard var comps = URLComponents(string: authUrl) else {
       return nil
@@ -70,9 +57,9 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   ///   - resolve: React Native Promise resolver.
   ///   - reject: React Native Promise rejecter.
   /// - Returns: resolves with the callback url or rejects with an error.
-  @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:SISEnabled:resolver:rejecter:)
-  func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, SISEnabled: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
-    let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state, SISEnabled: SISEnabled)
+  @objc(beginAuthSession:codeChallenge:resolver:rejecter:)
+  func beginAuthSession(_ authUrl: String, codeChallenge: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    let authUrl: URL? = generateUrl(authUrl: authUrl, codeChallenge: codeChallenge)
     guard let url = authUrl else {
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
       return
@@ -90,6 +77,21 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
     session?.prefersEphemeralWebBrowserSession = true
     session?.start()
   }
+ 
+ /// Clears the devices cookies
+ /// - Parameters:
+ ///   - useWebKit: bool to use webkit or not
+ ///   - resolve: React Native Promise resolver.
+ /// - Returns: resolves true or false if it was able to clear the users cookies
+ @objc(clearCookies:rejecter:)
+ func clearCookies(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+     let cookieStorage = HTTPCookieStorage.shared
+     for c in cookieStorage.cookies ?? [] {
+         cookieStorage.deleteCookie(c)
+     }
+     UserDefaults.standard.synchronize()
+     resolve(true)
+ }
   
   // defaults the presentation anchor for the ASWebAuthenticationSession
   func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {

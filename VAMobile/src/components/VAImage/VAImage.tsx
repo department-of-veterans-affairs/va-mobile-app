@@ -1,8 +1,8 @@
-import { Image, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
+import { Image, useWindowDimensions } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { testIdProps } from 'utils/accessibility'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
  * Add images to android('res/drawable') and in xcode('Images.xcassets') when new ones are added.
@@ -29,7 +29,9 @@ export type VAImageProps = {
 }
 
 /**
- * A common component to display static images. New images need to be placed in VAImge/image and in Xcode under VAMobile/Images.xcassets. Examples/details can be found in VAImage component.
+ * A common component to display static images.
+ * New images need to be placed in VAImge/image and in Xcode under VAMobile/Images.xcassets.
+ * Examples/details can be found in VAImage component.
  *
  * @returns VAImage component
  */

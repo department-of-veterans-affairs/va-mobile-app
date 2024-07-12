@@ -5,13 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react'
-import clsx from 'clsx'
-import styles from './HomepageFeatures.module.css'
+
 import Link from '@docusaurus/Link'
+import clsx from 'clsx'
+
+import styles from './HomepageFeatures.module.css'
 
 type FeatureItem = {
   title: string
   image: string
+  alt: string
   description: JSX.Element
   useMobileImageCss?: boolean
 }
@@ -22,16 +25,22 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'VA: Health and Benefits App',
     image: `${baseUrl}/img/va-logo.png`,
+    alt: `Department of Veteran Affairs logo`,
     useMobileImageCss: true,
-    description: <>The mobile app allows Veterans to more easily complete key transactions across VA health and benefits services.</>,
+    description: (
+      <>
+        The mobile app allows Veterans to more easily complete key transactions across VA health and benefits services.
+      </>
+    ),
   },
   {
     title: 'React Native',
     image: `${baseUrl}/img/react-native-logo.png`,
+    alt: `React Native logo`,
     description: (
       <>
-        The <code>front end</code> is built using{' '}
-        <Link href="https://reactnative.dev/" target="_blank">
+        The front end is built using{' '}
+        <Link href="https://reactnative.dev/" target="_blank" aria-label="React Native (opens in new window)">
           React Native
         </Link>
         .
@@ -41,10 +50,11 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Ruby on Rails',
     image: `${baseUrl}/img/ruby-logo.png`,
+    alt: `Ruby on Rails logo`,
     description: (
       <>
-        The <code>back end</code> is built using{' '}
-        <Link href="https://rubyonrails.org/" target="_blank">
+        The back end is built using{' '}
+        <Link href="https://rubyonrails.org/" target="_blank" aria-label="Ruby on Rails (opens in new window)">
           Ruby on Rails
         </Link>
         .
@@ -53,14 +63,14 @@ const FeatureList: FeatureItem[] = [
   },
 ]
 
-function Feature({ title, image, description, useMobileImageCss }: FeatureItem) {
+function Feature({ title, alt, image, description, useMobileImageCss }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <img className={useMobileImageCss ? styles.mobilePhoneSvg : styles.featureSvg} alt={title} src={image} />
+        <img className={useMobileImageCss ? styles.mobilePhoneSvg : styles.featureSvg} alt={alt} src={image} />
       </div>
       <div className="text--center padding-horiz--md">
-        <h3>{title}</h3>
+        <h2>{title}</h2>
         <p>{description}</p>
       </div>
     </div>

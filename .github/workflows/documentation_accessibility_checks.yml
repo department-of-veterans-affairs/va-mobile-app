@@ -1,0 +1,84 @@
+name: '[Documentation] Accessibility Check'
+
+# Adapted from https://docusaurus.io/docs/deployment
+
+on:
+  workflow_dispatch:
+  # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
+  schedule:
+    - cron: '0 9 * * 1,2,3,4,5'
+jobs:
+  axe-scan:
+    name: Acessibility Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Clean npm cache
+        run: npm cache clean --force
+      - name: Install Axe CLI globally
+        run: npm install -g @axe-core/cli@latest
+      - name: Update npm
+        run: npm install -g npm@latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: yarn
+          cache-dependency-path: VAMobile/yarn.lock 
+      - name: Test build
+        working-directory: VAMobile
+        run: |
+          yarn install --frozen-lockfile
+          cd documentation
+          yarn install --frozen-lockfile
+          yarn build
+      - name: Start web server
+        working-directory: VAMobile/documentation
+        run: npm start & npx wait-on http://localhost:3000 &          
+      - name: Check accessibility issues
+        id: accessibility_check
+        run: |
+          # Path to the downloaded sitemap file
+          sitemap_path="VAMobile/documentation/build/sitemap.xml"
+    
+          # Counter for the number of accessibility issues detected
+          num_issues=0
+    
+          # Extract URLs from sitemap and iterate
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
+            if axe "$url" --exit; then
+              echo "No accessibility issues found in $url"
+            else
+              echo "Accessibility issues found in $url"
+              echo "$url" >> accessibility_issues.txt
+              num_issues=$((num_issues+1))
+            fi
+          done
+          num_issues_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
+          echo "Accessibility issues detected: $num_issues"
+
+          # Fail the workflow if accessibility issues are detected
+          if [ "$num_issues" -gt 0 ]; then
+            echo "Accessibility issues were detected."    
+            exit 1
+          else
+            echo "No accessibility issues were found."
+          fi
+
+  start_slack_thread:
+    name: Start Slack thread
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    needs: axe-scan
+    steps:
+      - name: Notify Slack
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          channel_name: va-mobile-build-alerts
+          message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+        run: |
+          curl -X POST \
+               -H "Authorization: Bearer $SLACK_API_TOKEN" \
+               -H "Content-Type: application/json" \
+               -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
+               https://slack.com/api/chat.postMessage
+

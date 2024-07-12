@@ -1,97 +1,56 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
-import Pagination, { PaginationArrow, PaginationProps } from './Pagination'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
+import Pagination, { PaginationProps } from './Pagination'
 
 context('Pagination', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
+  const prevSpy = jest.fn()
+  const nextSpy = jest.fn()
 
-  const initializeTestInstance = (paginationProps: PaginationProps): void => {
-    component = render(<Pagination {...paginationProps} />)
-
-    testInstance = component.UNSAFE_root
-  }
-
-  it('initializes correctly', async () => {
-    initializeTestInstance({
-      onPrev: () => {},
-      onNext: () => {},
+  const renderWithProps = (partialProps?: Partial<PaginationProps>) => {
+    const fullProps = {
+      onPrev: prevSpy,
+      onNext: nextSpy,
       totalEntries: 12,
       page: 1,
       pageSize: 10,
-    })
-    expect(component).toBeTruthy()
+      ...partialProps,
+    }
+    render(<Pagination {...fullProps} />)
+  }
+
+  it('renders page count', () => {
+    renderWithProps()
+    expect(screen.getByText('1 to 10 of 12')).toBeTruthy()
   })
 
-  it('should not render pagination when totalEntries is less than the pageSize', async () => {
-    initializeTestInstance({
-      onPrev: () => {},
-      onNext: () => {},
-      totalEntries: 2,
-      page: 1,
-      pageSize: 10,
-    })
-    expect(testInstance.findAllByType(PaginationArrow).length).toEqual(0)
+  it('does not render pagination when totalEntries < pageSize', () => {
+    renderWithProps({ totalEntries: 2 })
+    expect(screen.queryByText('1 to 10')).toBeFalsy()
   })
 
-  describe('Previous Arrow', () => {
-    it('should call onPrev', async () => {
-      const previousSpy = jest.fn()
-      initializeTestInstance({
-        onPrev: previousSpy,
-        onNext: () => {},
-        totalEntries: 20,
-        page: 2,
-        pageSize: 10,
-      })
-      await waitFor(() => {
-        findByTestID(testInstance, 'previous-page').props.onPress()
-        expect(previousSpy).toBeCalled()
-      })
-    })
-
-    it('should be disabled when on first page', () => {
-      initializeTestInstance({
-        onPrev: () => {},
-        onNext: () => {},
-        totalEntries: 12,
-        page: 1,
-        pageSize: 10,
-      })
-      expect(findByTestID(testInstance, 'previous-page').props.disabled).toBeTruthy()
-    })
+  it('calls onPrev when previous arrow is pressed', () => {
+    renderWithProps({ page: 2 })
+    fireEvent.press(screen.getByA11yHint('Previous page'))
+    expect(prevSpy).toHaveBeenCalled()
   })
 
-  describe('Next Arrow', () => {
-    it('should call setPage for pagination next arrow', async () => {
-      const nextSpy = jest.fn()
-      initializeTestInstance({
-        onPrev: () => {},
-        onNext: nextSpy,
-        totalEntries: 22,
-        page: 2,
-        pageSize: 10,
-      })
-      await waitFor(() => {
-        findByTestID(testInstance, 'next-page').props.onPress()
-        expect(nextSpy).toBeCalled()
-      })
-    })
+  it('disables prev arrow on first page', () => {
+    renderWithProps()
+    expect(screen.getByRole('link', { disabled: true })).toBeTruthy()
+  })
 
-    it('should be disabled when on last page', () => {
-      initializeTestInstance({
-        onPrev: () => {},
-        onNext: () => {},
-        totalEntries: 22,
-        page: 3,
-        pageSize: 10,
-      })
-      expect(findByTestID(testInstance, 'next-page').props.disabled).toBeTruthy()
-    })
+  it('calls onNext when next arrow is pressed', () => {
+    renderWithProps()
+    fireEvent.press(screen.getByA11yHint('Next page'))
+    expect(nextSpy).toHaveBeenCalled()
+  })
+
+  it('disables next arrow on last page', () => {
+    renderWithProps({ page: 2 })
+    expect(screen.getByRole('link', { disabled: true })).toBeTruthy()
   })
 })

@@ -1,5 +1,6 @@
-import { LabelTagTypes } from '../LabelTag'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
+
+import { LabelTagTypes } from '../LabelTag'
 
 /**
  * Represents a line of text and associated properties

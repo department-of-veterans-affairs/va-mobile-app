@@ -1,0 +1,2 @@
+cd VAMobile
+yarn run lint-staged

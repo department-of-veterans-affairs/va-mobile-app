@@ -1,62 +1,59 @@
-import 'react-native'
-import { Pressable } from 'react-native'
 import React from 'react'
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import AccordionCollapsible from './AccordionCollapsible'
 import TextView from './TextView'
 
-context('AccordionCollapsible', () => {
-  let component: RenderAPI
-  let testInstance: RenderAPI
+import Mock = jest.Mock
 
-  const initializeTestInstance = (hideArrow = false) => {
-    component = render(
+context('AccordionCollapsible', () => {
+  let onPressSpy: Mock
+  const initializeTestInstance = (hideArrow = false, expandedInitialValue = false) => {
+    onPressSpy = jest.fn(() => {})
+    render(
       <AccordionCollapsible
         hideArrow={hideArrow}
         header={<TextView>HEADER</TextView>}
         expandedContent={<TextView>EXPANDED</TextView>}
         collapsedContent={<TextView>COLLAPSED</TextView>}
-      />,
+        customOnPress={onPressSpy}
+        expandedInitialValue={expandedInitialValue}>
+        <TextView>Child</TextView>{' '}
+      </AccordionCollapsible>,
     )
-
-    testInstance = component
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when hideArrow is false', () => {
-    it('should render a Pressable', async () => {
-      expect(testInstance.UNSAFE_root.findAllByType(Pressable).length).toEqual(1)
+  describe('should render correctly', () => {
+    it('when it is setup as default', () => {
+      expect(screen.getByRole('tab', { name: 'HEADER' })).toBeTruthy()
+      expect(screen.queryByText('EXPANDED')).toBeFalsy()
+      expect(screen.getByText('COLLAPSED')).toBeTruthy()
+      expect(screen.getByText('Child')).toBeTruthy()
     })
-  })
 
-  describe('when hideArrow is true', () => {
-    it('should not render a Pressable', async () => {
+    it('when pressed should display the expanded content and hide the collapsed and calls custom on press', () => {
+      fireEvent.press(screen.getByRole('tab'))
+      expect(screen.getByText('EXPANDED')).toBeTruthy()
+      expect(screen.queryByText('COLLAPSED')).toBeFalsy()
+      expect(onPressSpy).toBeCalled()
+    })
+
+    it('when hideArrow set to true, cannot find tab to press', () => {
       initializeTestInstance(true)
-      expect(testInstance.UNSAFE_root.findAllByType(Pressable).length).toEqual(0)
+      expect(screen.queryByRole('tab')).toBeFalsy()
     })
-  })
 
-  describe('when expanded is true', () => {
-    it('should render the expandedContent', async () => {
-      await waitFor(() => {
-        testInstance.UNSAFE_root.findByType(Pressable).props.onPress()
-
-        expect(testInstance.UNSAFE_root.findAllByType(TextView)[1].props.children).toEqual('EXPANDED')
-      })
-    })
-  })
-
-  describe('when expanded is false', () => {
-    it('should render the collapsedContent', async () => {
-      expect(testInstance.UNSAFE_root.findAllByType(TextView)[1].props.children).toEqual('COLLAPSED')
+    it('when expandedIntiailValue is true it should show Expanded and not Collapsed content on load', () => {
+      initializeTestInstance(false, true)
+      expect(screen.getByRole('tab', { name: 'HEADER' })).toBeTruthy()
+      expect(screen.queryByText('COLLAPSED')).toBeFalsy()
+      expect(screen.getByText('EXPANDED')).toBeTruthy()
+      expect(screen.getByText('Child')).toBeTruthy()
     })
   })
 })

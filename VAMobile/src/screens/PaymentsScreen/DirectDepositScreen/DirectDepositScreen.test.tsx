@@ -1,186 +1,106 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
-import { context, waitFor, render, RenderAPI, mockNavProps } from 'testUtils'
 
-import {
-  DirectDepositState,
-  ErrorsState,
-  initialAuthorizedServicesState,
-  initialAuthState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  initialMilitaryServiceState,
-  initialPersonalInformationState,
-} from 'store/slices'
-import { ServiceData, UserDataProfile } from 'store/api/types'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { directDepositKeys } from 'api/directDeposit'
+import { DirectDepositData } from 'api/types'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
+
 import DirectDepositScreen from './index'
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
-const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
-  militaryService: {
-    ...initialMilitaryServiceState,
-    serviceHistory: [{} as ServiceData],
-  },
-}
+jest.mock('@react-navigation/native', () => {
+  const original = jest.requireActual('@react-navigation/native')
+  return {
+    ...original,
+    useFocusEffect: () => jest.fn(),
+  }
+})
 
-context('DirectDepositScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let mockNavigateToSpy: jest.Mock
-
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
-    const directDeposit: DirectDepositState = {
-      loading,
-      saving: false,
+const mockData: DirectDepositData = {
+  data: {
+    type: 'checking',
+    id: '1',
+    attributes: {
       paymentAccount: {
         accountNumber: '******1234',
         accountType: 'Savings',
         financialInstitutionName: 'BoA',
         financialInstitutionRoutingNumber: '12341234123',
       },
-      bankInfoUpdated: false,
-      invalidRoutingNumberError: false,
-    }
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
+    },
+  },
+}
 
-    component = render(<DirectDepositScreen {...mockNavProps()} />, {
-      preloadedState: {
-        auth: { ...initialAuthState },
-        directDeposit,
-        errors: errorsState,
-        ...authorizedMilitaryState,
+const noData = {
+  data: {
+    type: null,
+    id: null,
+    attributes: {
+      paymentAccount: {
+        accountNumber: null,
+        accountType: null,
+        financialInstitutionName: null,
+        financialInstitutionRoutingNumber: null,
       },
-    })
+    },
+  },
+}
 
-    testInstance = component.UNSAFE_root
+context('DirectDepositScreen', () => {
+  const initializeTestInstance = (data?: DirectDepositData) => {
+    const queriesData: QueriesData = [
+      {
+        queryKey: directDepositKeys.directDeposit,
+        data: data,
+      },
+    ]
+    render(<DirectDepositScreen {...mockNavProps()} />, { queriesData: queriesData })
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(true)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
-    })
-  })
-
   describe('when there is bank data', () => {
-    it('should display the button with the given bank data', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Account')
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('BoA')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('******1234')
-        expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Savings account')
-      })
+    it('should display the button with the given bank data and call navigation anvigate when info is clicked', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockResolvedValue(mockData)
+      initializeTestInstance(mockData)
+      await waitFor(() => expect(screen.getByText('Account')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('BoA')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('******1234')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Savings account')).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account')))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' }),
+      )
     })
   })
 
   describe('when there is no bank data', () => {
     it('should render the button with the text Add your bank account information', async () => {
-      component = render(<DirectDepositScreen {...mockNavProps()} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          personalInformation: {
-            ...initialPersonalInformationState,
-            profile: {} as UserDataProfile,
-            needsDataLoad: false,
-          },
-          ...authorizedMilitaryState,
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
-      })
-
-      component = render(<DirectDepositScreen {...mockNavProps()} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          personalInformation: {
-            ...initialPersonalInformationState,
-            profile: { bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown as UserDataProfile,
-            needsDataLoad: false,
-          },
-          ...authorizedMilitaryState,
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
-      })
-    })
-  })
-
-  describe('when bank info is clicked', () => {
-    it('should call navigation navigate', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
-        expect(mockNavigateToSpy).toHaveBeenCalled()
-      })
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockResolvedValue(noData)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('Add your bank account information')).toBeTruthy())
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-      })
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+    it('should render error component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/payment-information/benefits')
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })

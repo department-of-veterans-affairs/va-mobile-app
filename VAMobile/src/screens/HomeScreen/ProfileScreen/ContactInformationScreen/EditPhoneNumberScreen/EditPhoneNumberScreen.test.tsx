@@ -1,209 +1,105 @@
-import 'react-native'
 import React from 'react'
-import { TextInput, TouchableWithoutFeedback } from 'react-native'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+
+import { PhoneData, PhoneType } from 'api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { mockNavProps, render } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
-import { PhoneData } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
 
-context('EditPhoneNumberScreen', () => {
-  let store: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-  let navHeaderSpy: any
+describe('EditPhoneNumberScreen', () => {
+  let props: StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
+  const phoneType: PhoneType = 'HOME'
+  const phoneData: PhoneData = {
+    id: 0,
+    areaCode: '858',
+    phoneNumber: '1234567',
+    countryCode: '1',
+    phoneType,
+  }
 
-  const initializeTestInstance = (phoneData: PhoneData, errorsState: ErrorsState = initialErrorsState) => {
+  const renderWithData = (data?: PhoneData) => {
     props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
         goBack: jest.fn(),
+        addListener: jest.fn(),
       },
       {
         params: {
           displayTitle: 'Home phone',
-          phoneType: 'HOME',
           phoneData,
+          ...data,
         },
       },
     )
 
-    store = {
-      ...InitialState,
-      errors: errorsState,
-    }
-
-    component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
-
-    testInstance = component.UNSAFE_root
+    render(<EditPhoneNumberScreen {...props} />)
   }
 
   beforeEach(() => {
-    initializeTestInstance({
-      id: 0,
-      areaCode: '858',
-      phoneNumber: '1234567',
-      countryCode: '1',
-      phoneType: 'HOME',
-    })
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    renderWithData()
   })
 
   describe('when the phone number exists', () => {
-    it('should display the remove button', () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '858',
-        phoneNumber: '1234567',
-        countryCode: '1',
-        phoneType: 'HOME',
-      })
-      const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home phone')
+    it('displays the remove button', () => {
+      renderWithData()
+      expect(screen.getByRole('button', { name: 'Remove home phone' })).toBeTruthy()
     })
   })
 
-  describe('when the text input changes', () => {
+  describe('Phone number text input', () => {
     describe('when the length is less than or equal to 10 digits', () => {
-      it('should display just the numbers in the text input', async () => {
-        const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
-        phoneNumTextInput.props.onChangeText('12345')
-        expect(phoneNumTextInput.props.value).toEqual('12345')
+      it('displays just the numbers in the text input', () => {
+        const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
+
+        fireEvent.changeText(phoneNumberInput, '12345')
+        phoneNumberInput.props.onEndEditing()
+        expect(phoneNumberInput.props.value).toBe('12345')
       })
     })
 
     describe('when the new text is greater than 10 digits', () => {
-      it('will not update phoneNumber to the new value', async () => {
-        const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
-        phoneNumTextInput.props.onChangeText('12345')
-        expect(phoneNumTextInput.props.value).toEqual('12345')
+      it('does not update phoneNumber to the new value', () => {
+        const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
-        phoneNumTextInput.props.onChangeText('123456789011')
-        expect(phoneNumTextInput.props.value).toEqual('12345')
+        expect(phoneNumberInput.props.value).toBe('858-123-4567')
+        fireEvent.changeText(phoneNumberInput, '123456789011')
+        phoneNumberInput.props.onEndEditing()
+        expect(phoneNumberInput.props.value).toBe('858-123-4567')
       })
     })
-  })
 
-  describe('when the text input has been edited', () => {
     describe('when there are 10 digits', () => {
-      it('should set the value of the text input to the formatted number', async () => {
-        const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
-        phoneNumTextInput.props.onChangeText('1234567890')
-        phoneNumTextInput.props.onEndEditing()
-        expect(phoneNumTextInput.props.value).toEqual('123-456-7890')
-      })
-    })
+      it('sets the value of the input to the formatted number', () => {
+        const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
-    describe('when there are not 10 digits', () => {
-      it('should set the value of the text input to the number', async () => {
-        const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
-        phoneNumTextInput.props.onChangeText('12345678')
-        phoneNumTextInput.props.onEndEditing()
-        expect(phoneNumTextInput.props.value).toEqual('12345678')
+        fireEvent.changeText(phoneNumberInput, '1234567890')
+        phoneNumberInput.props.onEndEditing()
+        expect(phoneNumberInput.props.value).toBe('123-456-7890')
       })
     })
   })
 
-  describe('when phoneNumberSaved is true', () => {
-    it('should call navigations go back function', async () => {
-      store = {
-        ...InitialState,
-        personalInformation: { ...InitialState.personalInformation, phoneNumberSaved: true },
-      }
-
-      await waitFor(() => {
-        component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
-      })
-
-      testInstance = component.UNSAFE_root
-
-      expect(props.navigation.goBack).toBeCalled()
+  describe('when the phone number is saved', () => {
+    it('navigates back to the previous screen', async () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      await waitFor(() => expect(props.navigation.goBack).toBeCalled())
     })
   })
 
-  describe('when the number input is blank or has less than 10 digits on save', () => {
-    it('should display an error AlertBox and a field error', async () => {
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      const saveButton = testInstance.findAllByType(TouchableWithoutFeedback)[1]
+  describe('when the number input is invalid', () => {
+    it('displays an error AlertBox and a field error', () => {
+      const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
-      await waitFor(() => {
-        const numberInput = testInstance.findAllByType(TextInput)[0]
-        numberInput.props.onChangeText('123')
-        act(() => {
-          saveButton.props.onPress()
-        })
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
-      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
-
-      await waitFor(() => {
-        const numberInput = testInstance.findAllByType(TextInput)[0]
-        numberInput.props.onChangeText('')
-        saveButton.props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
-      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
-    })
-  })
-
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(
-        {
-          id: 0,
-          areaCode: '858',
-          phoneNumber: '123',
-          countryCode: '1',
-          phoneType: 'HOME',
-        },
-        errorState,
-      )
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(
-        {
-          id: 0,
-          areaCode: '858',
-          phoneNumber: '123',
-          countryCode: '1',
-          phoneType: 'HOME',
-        },
-        errorState,
-      )
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      fireEvent.changeText(phoneNumberInput, '')
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Check your phone number')).toBeTruthy()
+      expect(screen.getByText('Enter a valid phone number')).toBeTruthy()
     })
   })
 })

@@ -1,114 +1,104 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { screen, fireEvent } from '@testing-library/react-native'
 
+import { screen } from '@testing-library/react-native'
+
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
+import { SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
-import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
-import SecureMessaging from './SecureMessaging'
-import { updateSecureMessagingTab, initialAuthorizedServicesState, InitialState } from 'store/slices'
-import { TouchableOpacity } from 'react-native'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { ErrorComponent } from 'components/CommonErrorComponents'
-import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateSecureMessagingTab: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+import SecureMessaging from './SecureMessaging'
 
 context('SecureMessaging', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-
-  const initializeTestInstance = (authorizedSM = true) => {
-    props = mockNavProps()
-
-    component = render(<SecureMessaging {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          secureMessaging: authorizedSM,
-        },
+  const initializeTestInstance = (authorized = true) => {
+    render(
+      <SecureMessaging
+        {...mockNavProps(
+          undefined,
+          {
+            navigate: jest.fn(),
+            setOptions: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: { activeTab: 0 } },
+        )}
+      />,
+      {
+        queriesData: [
+          {
+            queryKey: authorizedServicesKeys.authorizedServices,
+            data: {
+              appeals: true,
+              appointments: true,
+              claims: true,
+              decisionLetters: true,
+              directDepositBenefits: true,
+              directDepositBenefitsUpdate: true,
+              disabilityRating: true,
+              genderIdentity: true,
+              lettersAndDocuments: true,
+              militaryServiceHistory: true,
+              paymentHistory: true,
+              preferredName: true,
+              prescriptions: true,
+              scheduleAppointments: true,
+              secureMessaging: authorized,
+              userProfileUpdate: true,
+            },
+          },
+        ],
       },
-    })
-
-    testInstance = component.UNSAFE_root
+    )
   }
-
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
 
   describe('when user is not authorized for secure messaging', () => {
     it('should display NotEnrolledSM component', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false)
-      })
-
-      expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+      initializeTestInstance(false)
+      await waitFor(() =>
+        expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy(),
+      )
     })
   })
 
   describe('when common error occurs', () => {
     it('should render the error component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, expect.anything())
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
+        .calledWith(`/v0/messaging/health/folders`)
         .mockRejectedValue({ networkError: true } as api.APIError)
-
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 
-  describe('when loading messages error occurs', () => {
-    it('should render the loading messages error component', async () => {
+  describe('when terms and conditions error occurs', () => {
+    it('should render the terms and conditions component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, expect.anything())
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-        .calledWith(`/v0/messaging/health/folders`, expect.anything())
-        .mockRejectedValue({ networkError: false, status: 500 } as api.APIError)
-
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
-      expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
-    })
-  })
-
-  describe('on click of a segmented control tab', () => {
-    it('should call updateSecureMessagingTab', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-        fireEvent.press(screen.getByText('Folders'))
-      })
-
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        })
+        .mockRejectedValue({
+          json: {
+            errors: [
+              {
+                title: 'User is not eligible because they have not accepted terms and conditions or opted-in',
+                detail: 'You have not accepted the MHV Terms and Conditions to use secure messaging',
+                code: 'SM135',
+                source: '',
+              },
+            ],
+          },
+        } as api.APIError)
+        .calledWith(`/v0/messaging/health/folders`)
+        .mockRejectedValue({ networkError: true } as api.APIError)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.getByText('You’re required to accept the current terms and conditions')).toBeTruthy(),
+      )
     })
   })
 })

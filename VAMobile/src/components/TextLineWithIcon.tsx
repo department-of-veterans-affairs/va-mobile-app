@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
 
-import { TextLine } from './types'
 import { useTheme } from 'utils/hooks'
+
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
+import { TextLine } from './types'
 
 export type TextLineWithIconProps = {
   /** Props for icon you want to display in this line of text */
@@ -21,8 +22,18 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
 
   return (
     <Box flexDirection={'row'} alignItems={'center'}>
-      <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mr={themes.dimensions.condensedMarginBetween}>
-        {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
+      <Box
+        ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft}
+        mr={themes.dimensions.condensedMarginBetween}>
+        {iconProps && (
+          <VAIcon
+            name={iconProps.name}
+            width={iconProps.width}
+            height={iconProps.height}
+            fill={iconProps.fill}
+            testID={iconProps.testID}
+          />
+        )}
         {!iconProps && <Box mr={16} />}
       </Box>
       {iconNotOwnRow && (

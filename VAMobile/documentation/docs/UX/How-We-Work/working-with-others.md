@@ -11,7 +11,7 @@ In the course of your work, you will interact with a few different practices. He
 - **Engineering** 
     - Front End (FE): Most often you will be interacting with Front End (FE) folks as they will be turning your work into code.
     - Back End (BE): You will work with Back End as well when considering the data you need to design for. 
-- **QA:** QA folks review our work to make sure it works as expected and passes testing procedures, including accessibility. They will let you know when your designs are in a build, any issues that need addressing, and ask that you do a design review to make sure it’s looking and acting as expected.
+- **QA:** QA folks review our work to make sure it works as expected and passes testing procedures, including accessibility. They will let you know when your designs are in a build, any issues that need addressing, and [ask that you do a design review to make sure it’s looking and acting as expected](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/designing-ui#qa).
 - **Component Committee**: A rotating group of cross-discipline folks representing UX, FE, and QA. They are responsible for auditing and vetting new and updated components in the UI system. The goal is to make sure we’re being thoughtful, consistent, and strategic about how components get added to the app and that there is buy-in and common language across practices.
 
 ## How UX and Content collaborate

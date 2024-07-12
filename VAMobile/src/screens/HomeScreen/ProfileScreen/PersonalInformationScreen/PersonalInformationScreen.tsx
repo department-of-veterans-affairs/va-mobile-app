@@ -1,66 +1,87 @@
-import { Pressable } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TFunction } from 'i18next'
-import { useFocusEffect } from '@react-navigation/native'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
-import { GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { TFunction } from 'i18next'
+
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LinkWithAnalytics,
+  LoadingComponent,
+  TextView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getGenderIdentityOptions } from 'store/slices/personalInformationSlice'
-import { RootState } from 'store'
-import { UserDataProfile } from 'store/api/types'
-import { featureEnabled } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { stringToTitleCase } from 'utils/formattingUtils'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
-const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile && profile.birthDate) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
-    return t('dynamicField', { field: formattedBirthDate })
+const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
+  if (demographics?.preferredName) {
+    return stringToTitleCase(demographics.preferredName)
   } else {
-    return t('personalInformation.informationNotAvailable')
+    return t('personalInformation.genericBody', {
+      informationType: t('personalInformation.preferredName.title').toLowerCase(),
+    })
   }
 }
 
-const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile?.preferredName) {
-    return stringToTitleCase(profile.preferredName)
+const getGenderIdentity = (
+  demographics: UserDemographics | undefined,
+  t: TFunction,
+  genderIdentityOptions: GenderIdentityOptions,
+): string => {
+  if (demographics?.genderIdentity) {
+    return genderIdentityOptions[demographics.genderIdentity]
   } else {
-    return t('personalInformation.genericBody', { informationType: t('personalInformation.preferredName.title').toLowerCase() })
-  }
-}
-
-const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
-  if (profile?.genderIdentity) {
-    return genderIdentityOptions[profile.genderIdentity]
-  } else {
-    return t('personalInformation.genericBody', { informationType: t('personalInformation.genderIdentity.title').toLowerCase() })
+    return t('personalInformation.genericBody', {
+      informationType: t('personalInformation.genderIdentity.title').toLowerCase(),
+    })
   }
 }
 
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
+function PersonalInformationScreen({ navigation }: PersonalInformationScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, error, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (profile?.genderIdentity && !Object.keys(genderIdentityOptions).length && !error) {
-        dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
-      }
-    }, [dispatch, error, genderIdentityOptions, profile?.genderIdentity]),
-  )
+  const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
+  const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
+  const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
+  const {
+    data: personalInfo,
+    isFetching: loadingPersonalInfo,
+    isError: personalInfoError,
+    refetch: refetchPersonalInfo,
+  } = usePersonalInformation({
+    enabled: isScreenContentAllowed,
+  })
+  const {
+    data: demographics,
+    isFetching: loadingDemographics,
+    error: getDemographicsError,
+    refetch: refetchDemographics,
+  } = useDemographics({ enabled: isScreenContentAllowed })
+  const {
+    data: genderIdentityOptions,
+    isFetching: loadingGenderIdentityOptions,
+    error: getGenderIdentityOptionsError,
+    refetch: refetchGenderIdentityOptions,
+  } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
@@ -69,91 +90,98 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     setReviewEventRegistered(true)
   }
 
-  const linkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    mx: gutter,
-    mt: condensedMarginBetween,
+  const personalInformationItems = (): Array<DefaultListItemObj> => {
+    const items: Array<DefaultListItemObj> = [
+      {
+        textLines: [
+          { text: t('personalInformation.preferredName.title'), variant: 'MobileBodyBold' },
+          { text: getPreferredName(demographics, t) },
+        ],
+        onPress: () => navigateTo('PreferredName'),
+      },
+    ]
+
+    if (genderIdentityOptions) {
+      items.push({
+        textLines: [
+          { text: t('personalInformation.genderIdentity.title'), variant: 'MobileBodyBold' },
+          { text: getGenderIdentity(demographics, t, genderIdentityOptions) },
+        ],
+        onPress: () => navigateTo('GenderIdentity'),
+      })
+    }
+    return items
   }
 
-  const dobLinkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    mb: formMarginBetween,
+  const birthdateItems = (): Array<DefaultListItemObj> => [
+    {
+      textLines: [
+        {
+          text: t('personalInformation.dateOfBirth'),
+          variant: 'MobileBodyBold',
+        },
+        { text: birthdate },
+      ],
+    },
+  ]
+
+  const onTryAgain = () => {
+    if (getDemographicsError) {
+      refetchDemographics()
+    }
+    if (getGenderIdentityOptionsError) {
+      refetchGenderIdentityOptions()
+    }
+    if (personalInfoError) {
+      refetchPersonalInfo()
+    }
   }
 
-  const boxProps: BoxProps = {
-    minHeight: 81,
-    borderRadius: 6,
-    p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.condensedMarginBetween,
-    backgroundColor: 'textBox',
-    borderWidth: theme.dimensions.buttonBorderWidth,
-    borderColor: 'secondary',
-    borderStyle: 'solid',
-  }
-
-  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading || loadingGenderIdentityOptions) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <LoadingComponent text={t('personalInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  const birthdate = getBirthDate(profile, t)
-
-  //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
+  const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
-        {t('contactInformation.editNote')}
-      </TextView>
-      <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
-      </Pressable>
-      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <Box {...boxProps}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
-              {t('personalInformation.dateOfBirth')}
-            </TextView>
+    <FeatureLandingTemplate
+      backLabel={t('profile.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('personalInformation.title')}
+      testID="PersonalInformationTestID">
+      {loadingCheck ? (
+        <LoadingComponent text={t('personalInformation.loading')} />
+      ) : errorCheck ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
+          onTryAgain={onTryAgain}
+          error={getDemographicsError || getGenderIdentityOptionsError}
+        />
+      ) : (
+        <>
+          <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
+            {t('contactInformation.editNote')}
+          </TextView>
+          <Box mx={gutter} mt={condensedMarginBetween}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('personalInformation.howToFixLegalName')}
+              onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })}
+            />
           </Box>
-          <TextView variant={'MobileBody'}>{birthdate}</TextView>
-        </Box>
-        <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
-          <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
-        </Pressable>
-        {featureEnabled('preferredNameGenderWaygate') && (
-          <>
-            <LargeNavButton
-              title={t('personalInformation.preferredName.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getPreferredName(profile, t)}
-              onPress={navigateTo('PreferredName')}
+          <Box
+            my={theme.dimensions.standardMarginBetween}
+            mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+            <DefaultList items={birthdateItems()} />
+          </Box>
+          <Box mx={theme.dimensions.gutter} mb={formMarginBetween}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('personalInformation.howToFixDateOfBirth')}
+              onPress={() => navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
             />
-            <LargeNavButton
-              title={t('personalInformation.genderIdentity.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getGenderIdentity(profile, t, genderIdentityOptions)}
-              onPress={navigateTo('GenderIdentity')}
-            />
-          </>
-        )}
-      </Box>
+          </Box>
+          {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

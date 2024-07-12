@@ -1,89 +1,140 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
+import { FeatureLandingTemplate } from 'components'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
-  AppointmentAddressAndNumber,
-  AppointmentAlert,
-  AppointmentReason,
-  AppointmentTypeAndDate,
-  ContactInformation,
-  PreferredAppointmentType,
-  PreferredDateAndTime,
-  ProviderName,
-} from '../AppointmentDetailsCommon'
-import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
+  AppointmentDetailsSubTypeConstants,
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  isAPendingAppointment,
+} from '../../../../utils/appointments'
 import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { isAPendingAppointment } from '../../../../utils/appointments'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import {
+  ClaimExamAppointment,
+  CommunityCareAppointment,
+  InPersonVAAppointment,
+  PhoneAppointment,
+  VideoAtlasAppointment,
+  VideoGFEAppointment,
+  VideoHomeAppointment,
+  VideoVAAppointment,
+} from '../AppointmentTypeComponents'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
-const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
-  const { appointmentID } = route.params
+function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
+  const { appointment } = route.params
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
-  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-
-  const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail(pendingAppointment))
-  }, [dispatch, appointmentID, pendingAppointment])
-
-  const appointmentTypeAndDateIsLastItem =
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
-
-  const renderScheduleAnotherAppointment = (): ReactElement => {
-    if (pendingAppointment) {
-      return <></>
+    if (attributes) {
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+      logAnalyticsEvent(
+        Events.vama_appt_view_details(
+          !!pendingAppointment,
+          appointment.id,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
+      )
+      registerReviewEvent()
     }
+  }, [appointment, pendingAppointment, attributes])
 
-    return (
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
-            {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
-          </TextView>
-        </TextArea>
-      </Box>
-    )
-  }
+  const isInPersonVAAppointment =
+    appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'
+  const isPhoneAppointment = phoneOnly
+  const isVideoAtlasAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
+  const isVideoVAAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
+  const isVideoGFEAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
+  const isClaimExamAppointment = serviceCategoryName === 'COMPENSATION & PENSION'
+  const isCommunityCareAppointment = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+  const isVideoHomeAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+
+  const subType =
+    appointmentIsCanceled && pendingAppointment
+      ? AppointmentDetailsSubTypeConstants.CanceledAndPending
+      : appointmentIsCanceled
+        ? AppointmentDetailsSubTypeConstants.Canceled
+        : pendingAppointment
+          ? AppointmentDetailsSubTypeConstants.PastPending
+          : AppointmentDetailsSubTypeConstants.Past
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <AppointmentAlert attributes={attributes} />
-        <TextArea>
-          <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-            <AppointmentTypeAndDate attributes={attributes} />
-          </Box>
-
-          <ProviderName attributes={attributes} />
-
-          <AppointmentAddressAndNumber attributes={attributes} />
-
-          <PreferredDateAndTime attributes={attributes} />
-          <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} />
-          <ContactInformation attributes={attributes} />
-        </TextArea>
-
-        {renderScheduleAnotherAppointment()}
-      </Box>
+    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+      {isPhoneAppointment ? (
+        <PhoneAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isInPersonVAAppointment ? (
+        <InPersonVAAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoVAAppointment ? (
+        <VideoVAAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoGFEAppointment ? (
+        <VideoGFEAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoAtlasAppointment ? (
+        <VideoAtlasAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isClaimExamAppointment ? (
+        <ClaimExamAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isCommunityCareAppointment ? (
+        <CommunityCareAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : isVideoHomeAppointment ? (
+        <VideoHomeAppointment
+          appointmentID={appointment.id}
+          attributes={attributes}
+          subType={subType}
+          goBack={navigation.goBack}
+        />
+      ) : (
+        <></>
+      )}
     </FeatureLandingTemplate>
   )
 }

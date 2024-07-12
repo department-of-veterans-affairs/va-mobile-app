@@ -1,10 +1,13 @@
-import { Pressable, PressableProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps } from 'react-native'
 
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -20,6 +23,8 @@ export type PaginationProps = {
   onPrev: () => void
   /** function to be called when next is selected */
   onNext: () => void
+  /** optional tab if screen has tabs for analytics */
+  tab?: string
 }
 
 type PaginationArrowProps = {
@@ -62,7 +67,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   )
 }
 /**A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item. */
-const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext }) => {
+const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext, tab }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -74,8 +79,18 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     minHeight: theme.dimensions.touchableMinHeight,
   }
 
+  const onPrevPress = () => {
+    logAnalyticsEvent(Events.vama_pagination(page, page - 1, tab))
+    onPrev()
+  }
+
+  const onNextPress = () => {
+    logAnalyticsEvent(Events.vama_pagination(page, page + 1, tab))
+    onNext()
+  }
+
   const previousProps: PaginationArrowProps = {
-    onPress: onPrev,
+    onPress: onPrevPress,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
     iconProps: { name: 'ChevronLeft', fill: theme.colors.icon.pagination },
@@ -83,7 +98,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   }
 
   const nextProps: PaginationArrowProps = {
-    onPress: onNext,
+    onPress: onNextPress,
     testID: 'next-page',
     a11yHint: t('pagination.next'),
     iconProps: { name: 'ChevronRight', fill: theme.colors.icon.pagination },

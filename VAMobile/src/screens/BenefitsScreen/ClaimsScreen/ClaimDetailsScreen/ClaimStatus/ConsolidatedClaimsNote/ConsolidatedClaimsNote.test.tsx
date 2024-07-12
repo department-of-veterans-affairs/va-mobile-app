@@ -1,21 +1,23 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, render, mockNavProps } from 'testUtils'
-import { act } from 'react-test-renderer'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import ConsolidatedClaimsNote from './ConsolidatedClaimsNote'
 
 context('ConsolidatedClaimsNote', () => {
-  let component: any
-
   beforeEach(() => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() })
-
-    component = render(<ConsolidatedClaimsNote {...props} />)
+    render(<ConsolidatedClaimsNote {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('Renders ConsolidatedClaimsNote', () => {
+    expect(screen.getByText('A note about consolidated claims')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'If you turn in a new claim while we’re reviewing another one from you, we’ll add any new information to the original claim and close the new claim, with no action required from you.',
+      ),
+    ).toBeTruthy()
   })
 })

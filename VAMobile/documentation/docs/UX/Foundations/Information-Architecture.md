@@ -1,6 +1,6 @@
 ---
 title: Information Architecture
-sidebar_position: 5
+sidebar_position: 2
 ---
 
 ## Defining information architecture
@@ -51,7 +51,7 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 * **Home:** The app’s default screen—displays a combined, personalized view of the information (and tasks) most relevant to the individual Veteran from across the VA, plus persistent access to general VA info (ex: contact and location finder) and lesser used features like Profile and Settings.
   * **Profile (Subcategory):** Infrequently updated items like personal information (such as contact information, military information, DOB) that isn’t specific to a single category and app settings.
 * **Health:** All health-related features and statuses.
-  * Features: Appointments, Pharmacy, Medical records, Messaging, COVID-19 updates.
+  * Features: Appointments, Pharmacy, Medical records, Messaging.
 * **Benefits:** All benefit-related features and statuses that are not health-related.
   * Features: Disability rating, Claims, Education, VA Letters
 * **[Payments]:** A unified section for managing financial information from across the VA.

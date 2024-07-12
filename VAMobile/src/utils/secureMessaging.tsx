@@ -1,12 +1,24 @@
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import React, { ReactNode } from 'react'
+import DocumentPicker from 'react-native-document-picker'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
+import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
-import DocumentPicker from 'react-native-document-picker'
 import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
+import {
+  Box,
+  InlineTextWithIconsProps,
+  LinkWithAnalytics,
+  MessageListItemObj,
+  PickerItem,
+  TextView,
+  VAIconProps,
+} from 'components'
+import { Events } from 'constants/analytics'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -15,71 +27,102 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
-import { UseDestructiveAlertProps, imageDocumentResponseType } from './hooks'
-import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
-import { logNonFatalErrorToFirebase } from './analytics'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import theme from 'styles/themes/standardTheme'
+import {
+  getFormattedMessageTime,
+  getNumberAccessibilityLabelFromString,
+  getNumbersFromString,
+  stringToTitleCase,
+} from 'utils/formattingUtils'
+
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 
 const MAX_SUBJECT_LENGTH = 50
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number, isDraft?: boolean) => void,
+  onMessagePress: (messageID: number, isDraft?: boolean, unreadMessage?: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } =
+      attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
-    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps =
+      readReceipt !== READ && !isOutbound
+        ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps)
+        : undefined
+    const paperClipProps =
+      hasAttachments || attachment
+        ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps)
+        : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
         leftTextProps: {
-          text: t('common:text.raw', {
+          text: t('text.raw', {
             text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? stringToTitleCase(recipientName) : stringToTitleCase(senderName)}`,
           }),
           variant: 'MobileBodyBold',
           textAlign: 'left',
         },
         leftIconProps: unreadIconProps,
-        rightTextProps: {
-          text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
+      },
+      {
+        leftTextProps: {
+          text: t('text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
-          textAlign: 'right',
+          textAlign: 'left',
         },
       },
       {
         leftTextProps: {
-          text: t('common:text.raw', { text: formatSubject(category, subject, t) }),
+          text: t('text.raw', { text: formatSubject(category, subject, t) }),
           variant: 'MobileBody',
           textAlign: 'left',
         },
         leftIconProps: paperClipProps,
-        rightIconProps: {
-          name: 'ChevronRight',
-          width: theme.dimensions.chevronListItemWidth,
-          height: theme.dimensions.chevronListItemHeight,
-          fill: theme.colors.icon.chevronListItem,
-        } as VAIconProps,
       },
     ]
+
+    const folder = (): string => {
+      switch (folderName) {
+        case FolderNameTypeConstants.sent:
+          return 'sent'
+        case FolderNameTypeConstants.inbox:
+          return 'inbox'
+        case FolderNameTypeConstants.deleted:
+          return 'deleted'
+        case FolderNameTypeConstants.drafts:
+          return 'drafts'
+        default:
+          return 'custom'
+      }
+    }
 
     return {
       inlineTextWithIcons: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id, isDraftsFolder),
-      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
+      onPress: () => {
+        logAnalyticsEvent(
+          Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'),
+        )
+        onMessagePress(message.id, isDraftsFolder, readReceipt !== READ)
+      },
+      a11yHintText: isDraftsFolder
+        ? t('secureMessaging.viewMessage.draft.a11yHint')
+        : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
-      a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
+      a11yValue: t('listPosition', { position: index + 1, total: messages.length }),
     }
   })
 }
@@ -312,6 +355,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param fileUris - list of already attached files uri values
  * @param imageBase64s - list of already attached images base64 values
+ * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility.
+ * Useful for preventing back navigation when action sheet is opened
  */
 export const onAddFileAttachments = (
   t: TFunction,
@@ -322,29 +367,61 @@ export const onAddFileAttachments = (
   totalBytesUsed: number,
   fileUris: Array<string>,
   imageBase64s: Array<string>,
+  setIsActionSheetVisible: (isVisible: boolean) => void,
 ): void => {
-  const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
+  const options = [t('camera'), t('photoGallery'), t('fileFolder'), t('cancel')]
 
+  setIsActionSheetVisible(true)
   showActionSheetWithOptions(
     {
       options,
       cancelButtonIndex: 3,
     },
     (buttonIndex) => {
+      setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
           launchCamera(
-            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            {
+              mediaType: 'photo',
+              quality: 1,
+              maxWidth: MAX_IMAGE_DIMENSION,
+              maxHeight: MAX_IMAGE_DIMENSION,
+              presentationStyle: 'fullScreen',
+              includeBase64: true,
+            },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(
+                response,
+                setError,
+                setErrorA11y,
+                callbackIfUri,
+                totalBytesUsed,
+                imageBase64s,
+                t,
+              )
             },
           )
           break
         case 1:
           launchImageLibrary(
-            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            {
+              mediaType: 'photo',
+              quality: 1,
+              maxWidth: MAX_IMAGE_DIMENSION,
+              maxHeight: MAX_IMAGE_DIMENSION,
+              includeBase64: true,
+            },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
+              postCameraOrImageLaunchOnFileAttachments(
+                response,
+                setError,
+                setErrorA11y,
+                callbackIfUri,
+                totalBytesUsed,
+                imageBase64s,
+                t,
+              )
             },
           )
           break
@@ -367,13 +444,13 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
 /**
  * Checks if the message has attachments before saving a draft and displays a message to the
  * user letting them know that the attachments wouldn't be saved with the draft
- * @param alert - Alert from useDestructiveAlert() hook
+ * @param alert - Alert from useDestructiveActionSheet() hook
  * @param attachmentsList - List of attachments
  * @param t - Traslation function
  * @param dispatchSaveDraft - Dispatch save draft callback
  */
 export const saveDraftWithAttachmentAlert = (
-  alert: (props: UseDestructiveAlertProps) => void,
+  alert: (props: useDestructiveActionSheetProps) => void,
   attachmentsList: Array<imageDocumentResponseType>,
   t: TFunction,
   dispatchSaveDraft: () => void,
@@ -384,7 +461,7 @@ export const saveDraftWithAttachmentAlert = (
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.keepEditing'),
+          text: t('keepEditing'),
         },
         {
           text: t('secureMessaging.saveDraft'),
@@ -395,4 +472,137 @@ export const saveDraftWithAttachmentAlert = (
   } else {
     dispatchSaveDraft()
   }
+}
+
+export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
+  const textReconstructedBody: Array<ReactNode> = []
+  const bodySplit = body.split(/\s/).filter((value) => value !== '')
+  const whiteSpace = body
+    .trim()
+    .split(/\S/)
+    .reverse()
+    .filter((value) => value !== '')
+  let dontAddNextString = false
+  _.forEach(bodySplit, (text, index) => {
+    if (dontAddNextString) {
+      //if previous entry was a phone number with xxx xxx xxxx format need to not add xxxx again
+      dontAddNextString = false
+      return
+    }
+
+    if (index !== 0 && index !== bodySplit.length - 1) {
+      //phone number with spaces xxx xxx xxxx format
+      const previousText = bodySplit[index - 1]
+      const nextText = bodySplit[index + 1]
+      const testString = previousText + ' ' + text + ' ' + nextText
+      const phoneMatch = PHONE_REGEX_EXP.exec(testString)
+      if (phoneMatch) {
+        textReconstructedBody.pop()
+        textReconstructedBody.pop()
+        textReconstructedBody.push(
+          <LinkWithAnalytics
+            type="call"
+            phoneNumber={previousText + text + nextText}
+            text={previousText + ' ' + text + ' ' + nextText}
+            icon="no icon"
+            disablePadding={true}
+            a11yLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
+            a11yHint={t('openInPhoneMessaging.a11yHint')}
+          />,
+        )
+        textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+        dontAddNextString = true
+        return
+      }
+    }
+
+    const emailMatch = EMAIL_REGEX_EXP.exec(text)
+    const mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
+    const phoneMatch = PHONE_REGEX_EXP.exec(text)
+    const urlMatch = URL_REGEX_EXP.exec(text)
+    const url2Match = URL2_REGEX_EXP.exec(text)
+    if (emailMatch) {
+      //matches <email address> only
+      textReconstructedBody.push(
+        <LinkWithAnalytics
+          type="url"
+          url={'mailto:' + text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInEmailMessaging.a11yHint')}
+        />,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+    } else if (mailToMatch) {
+      // matches mailto:<email address>
+      textReconstructedBody.push(
+        <LinkWithAnalytics
+          type="url"
+          url={text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInEmailMessaging.a11yHint')}
+        />,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+    } else if (phoneMatch) {
+      // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
+      textReconstructedBody.push(
+        <LinkWithAnalytics
+          type="call"
+          phoneNumber={getNumbersFromString(text)}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
+          a11yHint={t('openInPhoneMessaging.a11yHint')}
+        />,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+    } else if (urlMatch) {
+      // matches any https, http url
+      textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
+      textReconstructedBody.push(
+        <LinkWithAnalytics
+          type="url"
+          url={text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInBrowser.a11yHint')}
+        />,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+    } else if (url2Match) {
+      // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
+      // into a link - may need to update this if we need to include other domains greater than 3 digits)
+      textReconstructedBody.push(
+        <LinkWithAnalytics
+          type="url"
+          url={'https://' + text}
+          text={text}
+          icon="no icon"
+          disablePadding={true}
+          a11yLabel={text}
+          a11yHint={t('openInBrowser.a11yHint')}
+        />,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+    } else {
+      const spacing = whiteSpace.pop() || ''
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + spacing}</TextView>)
+    }
+  })
+  return (
+    <Box>
+      <TextView selectable={true} paragraphSpacing={true}>
+        {textReconstructedBody}
+      </TextView>
+    </Box>
+  )
 }

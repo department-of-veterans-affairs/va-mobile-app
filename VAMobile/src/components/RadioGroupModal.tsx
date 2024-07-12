@@ -1,11 +1,12 @@
+import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { isAndroid } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
@@ -22,12 +23,10 @@ export type RadioPickerGroup = {
 export type RadioGroupModalProps = {
   /** Array of groups to display in the modal */
   groups: Array<RadioPickerGroup>
-  /** Callback for when the input is confirmed */
-  onConfirm: () => void
-  /** Callback when the upper right button is pressed */
-  onUpperRightAction: () => void
-  /** Callback for cancelling the interaction */
-  onCancel: () => void
+  /** Callback when the apply button is pressed */
+  onApply: () => void
+  /** Optional callback for cancelling the interaction */
+  onCancel?: () => void
   /** Header text within the modal */
   headerText: string
   /** Text to appear on the button that launches the modal */
@@ -36,51 +35,44 @@ export type RadioGroupModalProps = {
   buttonA11yLabel?: string
   /** Accessibility hint for the button that launches the modal */
   buttonA11yHint?: string
-  /** Text for the button in the upper right of the modal */
-  topRightButtonText: string
-  /** Accessibility hint for the button in the upper right */
-  topRightButtonA11yHint?: string
+  /** Optional TestID for the button  */
+  buttonTestID?: string
   /** Function called when the modal is opened to support analytics */
   onShowAnalyticsFn?: () => void
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 const RadioGroupModal: FC<RadioGroupModalProps> = ({
   groups,
-  buttonText,
-  headerText,
-  onConfirm,
-  onUpperRightAction,
+  onApply,
   onCancel,
+  headerText,
+  buttonText,
   buttonA11yLabel,
   buttonA11yHint,
-  topRightButtonText,
-  topRightButtonA11yHint,
+  buttonTestID,
   onShowAnalyticsFn,
+  testID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
-  const showModal = (): void => {
+  const showModal = () => {
     setModalVisible(true)
-    if (onShowAnalyticsFn) {
-      onShowAnalyticsFn()
-    }
+    onShowAnalyticsFn && onShowAnalyticsFn()
   }
 
-  const onCancelPressed = (): void => {
+  const onCancelPressed = () => {
     setModalVisible(false)
-    onCancel()
+    onCancel && onCancel()
   }
 
-  const onApply = (): void => {
+  const onApplyPressed = () => {
     setModalVisible(false)
-    onConfirm()
-  }
-
-  const onUpperRightActionPressed = (): void => {
-    onUpperRightAction()
+    onApply()
   }
 
   const getGroups = () =>
@@ -94,7 +86,13 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 
       return (
         <Box key={idx} mt={mt}>
-          <RadioGroup options={group.items} onChange={group.onSetOption} isRadioList={true} radioListTitle={group.title} value={group.selectedValue} />
+          <RadioGroup
+            options={group.items}
+            onChange={group.onSetOption}
+            isRadioList={true}
+            radioListTitle={group.title}
+            value={group.selectedValue}
+          />
         </Box>
       )
     })
@@ -113,40 +111,21 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   }
 
   const commonButtonProps: TextViewProps = {
-    variant: 'HelperText',
+    variant: 'MobileBody',
     color: 'showAll',
     allowFontScaling: false,
-    py: 3,
   }
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: tc('cancel.picker.a11yHint'),
+    accessibilityHint: t('cancel.picker.a11yHint'),
   }
 
-  const resetButtonProps: PressableProps = {
+  const applyButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: topRightButtonA11yHint,
-  }
-
-  const pressableProps: PressableProps = {
-    onPress: showModal,
-    accessibilityRole: 'button',
-    accessible: true,
-    accessibilityLabel: buttonA11yLabel,
-    accessibilityHint: buttonA11yHint,
-  }
-
-  const buttonDisplayProps: BoxProps = {
-    backgroundColor: 'modalButton',
-    borderWidth: 1,
-    borderColor: 'modalButton',
-    borderRadius: 20,
-    py: 10,
-    px: 15,
-    alignSelf: 'flex-start',
+    accessibilityHint: t('done.picker.a11yHint'),
   }
 
   return (
@@ -154,40 +133,46 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       <Modal
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
         visible={modalVisible}
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box backgroundColor={isAndroid() ? 'modalOverlay' : undefined} pt={insets.top} />
+          <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
-                <TextView {...commonButtonProps}>{tc('cancel')}</TextView>
+                <TextView {...commonButtonProps}>{t('cancel')}</TextView>
               </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" accessibilityRole={'header'} textAlign={'center'} allowFontScaling={false}>
+                <TextView
+                  variant="MobileBodyBold"
+                  accessibilityRole={'header'}
+                  textAlign={'center'}
+                  allowFontScaling={false}>
                   {headerText}
                 </TextView>
               </Box>
-              <Pressable onPress={onUpperRightActionPressed} {...resetButtonProps}>
-                <TextView {...commonButtonProps}>{topRightButtonText}</TextView>
+              <Pressable onPress={onApplyPressed} {...applyButtonProps}>
+                <TextView {...commonButtonProps}>{t('apply')}</TextView>
               </Pressable>
             </Box>
-            <VAScrollView bounces={false}>{getGroups()}</VAScrollView>
-            <FooterButton text={tc('apply')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onApply} />
+            <VAScrollView testID={testID} bounces={false}>
+              {getGroups()}
+            </VAScrollView>
           </Box>
         </Box>
       </Modal>
-      <Pressable {...pressableProps}>
-        <Box {...buttonDisplayProps}>
-          <TextView maxFontSizeMultiplier={1.5} variant={'HelperText'}>
-            {buttonText}
-          </TextView>
-        </Box>
-      </Pressable>
+
+      <Button
+        onPress={showModal}
+        label={buttonText}
+        buttonType={ButtonVariants.Secondary}
+        a11yLabel={buttonA11yLabel}
+        a11yHint={buttonA11yHint}
+        testID={buttonTestID}
+      />
     </View>
   )
 }

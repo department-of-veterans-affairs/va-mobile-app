@@ -1,23 +1,19 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { render, context } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
 
 import LoginScreen from './LoginScreen'
-import { initialAuthState } from 'store/slices'
 
 context('LoginScreen', () => {
-  let component: any
-
   beforeEach(() => {
-    component = render(<LoginScreen />, {
-      preloadedState: {
-        auth: { ...initialAuthState },
-      },
-    })
+    render(<LoginScreen />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('button', { name: 'Sign in' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Find a VA location' })).toBeTruthy()
+    expect(screen.getByTestId('AppVersionTestID')).toBeTruthy()
   })
 })

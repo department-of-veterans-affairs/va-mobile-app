@@ -1,241 +1,158 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
+
+import { screen, waitFor } from '@testing-library/react-native'
+
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
+import { DemographicsPayload, GenderIdentityOptionsPayload, UserDemographics } from 'api/types'
+import { get } from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import PersonalInformationScreen from './index'
-import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import {
-  ErrorsState,
-  initialAuthorizedServicesState,
-  initialAuthState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  initialMilitaryServiceState,
-  initialPersonalInformationState,
-} from 'store/slices'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { when } from 'jest-when'
 
-let mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => mockNavigationSpy,
-  }
-})
+jest.mock('utils/remoteConfig')
+when(featureEnabled as jest.Mock)
+  .calledWith('preferredNameGenderWaygate')
+  .mockReturnValue(true)
 
-const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
-  militaryService: {
-    ...initialMilitaryServiceState,
-    mostRecentBranch: BranchesOfServiceConstants.AirForce,
-    serviceHistory: [{} as ServiceData],
-  },
-}
-
-const personalInformationState = {
-  ...initialPersonalInformationState,
-  needsDataLoad: false,
-}
+when(get as jest.Mock)
+  .calledWith('/v0/user/gender_identity/edit')
+  .mockResolvedValue({
+    data: {
+      id: '23fe358d-6e82-4541-804c-ce7562ba28f4',
+      type: 'GenderIdentityOptions',
+      attributes: {
+        options: {
+          m: 'Man',
+          b: 'Non-Binary',
+          tm: 'Transgender Man',
+          tf: 'Transgender Woman',
+          f: 'Woman',
+          n: 'Prefer not to answer',
+          o: 'A gender not listed here',
+        },
+      },
+    },
+  } as GenderIdentityOptionsPayload)
 
 context('PersonalInformationScreen', () => {
-  let store: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let profile: UserDataProfile
-  let props: any
-  let navigateToResidentialAddressSpy: jest.Mock
-  let navigateToMailingAddressSpy: jest.Mock
+  const renderWithData = (queriesData?: QueriesData, demographics?: UserDemographics) => {
+    when(get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockResolvedValue({
+        data: {
+          id: 'ae19ab8a-7165-57d1-a8e2-200f5031f66c',
+          type: 'demographics',
+          attributes: {
+            genderIdentity: demographics?.genderIdentity || '',
+            preferredName: demographics?.preferredName || '',
+          },
+        },
+      } as DemographicsPayload)
 
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
-    navigateToMailingAddressSpy = jest.fn()
-    navigateToResidentialAddressSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: 'mailingAddress' })
-      .mockReturnValue(navigateToMailingAddressSpy)
-      .calledWith('EditAddress', { displayTitle: 'Home address', addressType: 'residentialAddress' })
-      .mockReturnValue(navigateToResidentialAddressSpy)
-
-    props = mockNavProps(
+    const props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
         goBack: jest.fn(),
       },
-      {
-        params: {},
-      },
     )
 
-    profile = {
-      preferredName: 'Benny',
-      firstName: 'Ben',
-      middleName: 'J',
-      lastName: 'Morgan',
-      fullName: 'Ben J Morgan',
-      genderIdentity: 'M',
-      contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
-      signinEmail: 'ben@gmail.com',
-      birthDate: '1990-05-08',
-      addresses: '',
-      residentialAddress: {
-        id: 1,
-        addressLine1: '10 Laurel Way',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Novato',
-        countryCodeIso3: '1',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      },
-      mailingAddress: {
-        id: 2,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: '1',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      },
-      homePhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901289',
-        phoneType: 'HOME',
-      },
-      formattedHomePhone: '(858)-690-1289',
-      mobilePhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901288',
-        phoneType: 'HOME',
-      },
-      formattedMobilePhone: '(858)-690-1288',
-      workPhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901287',
-        phoneType: 'HOME',
-      },
-      formattedWorkPhone: '(858)-690-1287',
-      signinService: 'IDME',
-    }
-
-    store = {
-      auth: { ...initialAuthState },
-      personalInformation: {
-        ...personalInformationState,
-        profile,
-        loading,
-      },
-      errors: errorsState,
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        militaryServiceHistory: true,
-      },
-      militaryService: {
-        ...initialMilitaryServiceState,
-        serviceHistory: [{} as ServiceData],
-      },
-    }
-
-    component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-
-    testInstance = component.UNSAFE_root
+    render(<PersonalInformationScreen {...props} />, { queriesData })
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
+  it('renders correctly', async () => {
+    renderWithData()
+    expect(screen.getByText('Loading your personal information...')).toBeTruthy()
+    await waitFor(() => expect(screen.getByLabelText('Personal information')).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByText('Any updates you make here will also update in your VA.gov profile.')).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'How to update or fix an error in your legal name' })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText('Date of birth')).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'How to fix an error in your date of birth' })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText('Preferred name')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+  describe('when there is no birth date', () => {
+    it('should display the message This information is not available right now', async () => {
+      renderWithData([
+        {
+          queryKey: personalInformationKeys.personalInformation,
+          data: {
+            firstName: 'Gary',
+            middleName: null,
+            lastName: 'Washington',
+            signinEmail: 'Gary.Washington@idme.com',
+            signinService: 'IDME',
+            fullName: 'Gary Washington',
+            birthDate: null,
+          },
+        },
+      ])
+      await waitFor(() => expect(screen.getByText('This information is not available right now')).toBeTruthy())
     })
   })
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('May 08, 1990')
-    })
-  })
-
-  describe('when there is no birth date', () => {
-    it('should display the message This information is not available right now', async () => {
-      profile.birthDate = ''
-
-      store = {
-        auth: { ...initialAuthState },
-        personalInformation: {
-          ...personalInformationState,
-          profile,
+      renderWithData([
+        {
+          queryKey: personalInformationKeys.personalInformation,
+          data: {
+            firstName: 'Gary',
+            middleName: null,
+            lastName: 'Washington',
+            signinEmail: 'Gary.Washington@idme.com',
+            signinService: 'IDME',
+            fullName: 'Gary Washington',
+            birthDate: 'May 08, 1990',
+          },
         },
-        ...authorizedMilitaryState,
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-      })
-
-      testInstance = component.UNSAFE_root
-
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('This information is not available right now')
+      ])
+      await waitFor(() => expect(screen.getByText('May 08, 1990')).toBeTruthy())
     })
   })
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+  describe("when demographics information isn't set", () => {
+    it('displays message on sharing gender identity and preferred name', async () => {
+      renderWithData()
+      await waitFor(() => expect(screen.getByText('Sharing your gender identity is optional.')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Sharing your preferred name is optional.')).toBeTruthy())
     })
+  })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+  describe('when the gender identity is set', () => {
+    it("displays the user's gender identity", async () => {
+      const demographics = { genderIdentity: 'M', preferredName: '' }
 
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+      renderWithData(undefined, demographics)
+      await waitFor(() => expect(screen.getByText('Man')).toBeTruthy())
+    })
+  })
 
-      initializeTestInstance(false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+  describe('when the preferred name is set', () => {
+    it("displays the user's preferred name", async () => {
+      const demographics = { genderIdentity: '', preferredName: 'Gar' }
+
+      renderWithData(undefined, demographics)
+      await waitFor(() => expect(screen.getByText('Gar')).toBeTruthy())
+    })
+  })
+
+  describe('when fetching gender identity options fails', () => {
+    it('displays error component', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/user/gender_identity/edit')
+        .mockRejectedValue({ networkError: 500 })
+
+      renderWithData()
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })

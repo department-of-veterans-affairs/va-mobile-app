@@ -129,6 +129,7 @@
             "category": "MEDICATIONS",
             "subject": "Naproxen side effects",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-26T22:22:06.000Z",
             "senderId": 1835650,
@@ -149,6 +150,7 @@
             "category": "COVID",
             "subject": "Prepping for your visit",
             "body": null,
+            "hasAttachments": true,
             "attachment": true,
             "sentDate": "2021-10-26T22:21:11.000Z",
             "senderId": 1835650,
@@ -166,9 +168,10 @@
           "type": "messages",
           "attributes": {
             "messageId": 2092789,
-            "category": "MEDICATIONS",
+            "category": "GENERAL",
             "subject": "Your requested info",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-26T22:17:38.000Z",
             "senderId": 1835650,
@@ -189,6 +192,7 @@
             "category": "APPOINTMENTS",
             "subject": "Please read and prepare appropriately",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-26T22:14:45.000Z",
             "senderId": 1835650,
@@ -206,9 +210,10 @@
           "type": "messages",
           "attributes": {
             "messageId": 2088259,
-            "category": "APPOINTMENTS",
+            "category": "OTHER",
             "subject": "Summary of visit",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-21T15:59:15.000Z",
             "senderId": 1835650,
@@ -226,9 +231,10 @@
           "type": "messages",
           "attributes": {
             "messageId": 2088250,
-            "category": "APPOINTMENTS",
+            "category": "TEST_RESULTS",
             "subject": "Preparing for your visit",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-21T15:58:36.000Z",
             "senderId": 1835650,
@@ -249,6 +255,7 @@
             "category": "EDUCATION",
             "subject": "Good morning to you ",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:17:02.000Z",
             "senderId": 1835650,
@@ -269,6 +276,7 @@
             "category": "MEDICATIONS",
             "subject": "Medication Inquiry",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:16:44.000Z",
             "senderId": 1835650,
@@ -289,6 +297,7 @@
             "category": "COVID",
             "subject": "COVID Inquiry",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:13:58.000Z",
             "senderId": 1835650,
@@ -309,6 +318,7 @@
             "category": "COVID",
             "subject": "Test ",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:13:30.000Z",
             "senderId": 1835650,
@@ -320,29 +330,7 @@
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
           }
-        }
-      ],
-      "links": {
-        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?",
-        "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "prev": null,
-        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2&per_page=10",
-        "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
-      },
-      "meta": {
-        "sort": {
-          "sentDate": "DESC"
         },
-        "pagination": {
-          "currentPage": 1,
-          "perPage": 10,
-          "totalPages": 2,
-          "totalEntries": 12
-        }
-      }
-    },
-    "2": {
-      "data": [
         {
           "id": "2060013",
           "type": "messages",
@@ -351,6 +339,7 @@
             "category": "OTHER",
             "subject": "General Inquiry 2 Attachment",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:12:45.000Z",
             "senderId": 1835650,
@@ -371,6 +360,7 @@
             "category": "APPOINTMENTS",
             "subject": "Appointment Inquiry 1",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-09-17T23:11:23.000Z",
             "senderId": 1835650,
@@ -385,10 +375,10 @@
         }
       ],
       "links": {
-        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2",
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?",
         "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "prev": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=1&per_page=10",
-        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10",
+        "prev": null,
+        "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=2&per_page=10",
         "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/0/messages?page=3&per_page=10"
       },
       "meta": {
@@ -396,9 +386,9 @@
           "sentDate": "DESC"
         },
         "pagination": {
-          "currentPage": 2,
+          "currentPage": 1,
           "perPage": 10,
-          "totalPages": 2,
+          "totalPages": 1,
           "totalEntries": 12
         }
       }
@@ -412,14 +402,15 @@
         "messageId": 2092809,
         "category": "MEDICATIONS",
         "subject": "Naproxen side effects",
-        "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.",
+        "body": "Upset stomach is a common side effect of this medication.\nMild stomach pain is normal, but if            you are having severe stomach pains, please let us know or seek in-person care.\tIf you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-26T22:22:06.000Z",
         "senderId": 1835650,
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {
@@ -431,8 +422,75 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092809/thread": {
+  "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {
     "data": []
+  },
+  "/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=false": {
+    "data": []
+  },
+  "/v1/messaging/health/messages/2112896/thread?excludeProvidedMessage=false": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/signature": {
+    "data": {
+      "id": 1,
+      "type": "hah",
+      "attributes": {
+        "signatureName": "signatureName",
+        "includeSignature": false,
+        "signatureTitle": "Title"
+      }
+    }
+  },
+  "/v1/messaging/health/messages/2113141/thread?excludeProvidedMessage=false": {
+    "data": [
+      {
+        "id": "2113141",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2113141,
+          "category": "TEST_RESULTS",
+          "subject": "Test Inquiry",
+          "body": null,
+          "hasAttachments": false,
+          "attachment": false,
+          "sentDate": "2021-11-17T01:00:53.000Z",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": null
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
+        }
+      }
+    ]
+  },
+  "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=false": {
+    "data": [
+      {
+        "id": "2092809",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2092809,
+          "category": "MEDICATIONS",
+          "subject": "Naproxen side effects",
+          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+          "hasAttachments": false,
+          "attachment": false,
+          "sentDate": "2021-10-26T22:22:06.000Z",
+          "senderId": 1835650,
+          "senderName": "RATANA, NARIN ",
+          "recipientId": 523757,
+          "recipientName": "FREEMAN, MELVIN  V",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
+        }
+      }
+    ]
   },
   "/v0/messaging/health/messages/2092803": {
     "data": {
@@ -442,14 +500,15 @@
         "messageId": 2092803,
         "category": "COVID",
         "subject": "Your requested info",
-        "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
+        "body": "Special character testing\nAmpersand: &amp;\nDouble Quotes: &ldquo;\nSingle Quote: &rsquo;",
+        "hasAttachments": true,
         "attachment": true,
         "sentDate": "2021-10-26T22:21:11.000Z",
         "senderId": 1835650,
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {
@@ -480,7 +539,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2092803/thread": {
+  "/v1/messaging/health/messages/2092803/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2092789": {
@@ -489,16 +548,17 @@
       "type": "messages",
       "attributes": {
         "messageId": 2092789,
-        "category": "COVID",
+        "category": "GENERAL",
         "subject": "Vaccine Booster",
         "body": "As discussed in your last visit, we recommend getting a vaccine booster to improve your immunity to COVID-19. Please let us know if you have any other questions.",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-26T22:17:38.000Z",
         "senderId": 1835650,
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "UNREAD"
       },
       "relationships": {
         "attachments": {
@@ -510,7 +570,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092789/thread": {
+  "/v1/messaging/health/messages/2092789/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2092775": {
@@ -522,6 +582,7 @@
         "category": "APPOINTMENTS",
         "subject": "Preparing for your visit",
         "body": "See you at your appointment.  Please do not forget to fast for at least 12 hours before your blood test.",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-26T22:14:45.000Z",
         "senderId": 1835650,
@@ -540,7 +601,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092775/thread": {
+  "/v1/messaging/health/messages/2092775/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2088259": {
@@ -549,9 +610,10 @@
       "type": "messages",
       "attributes": {
         "messageId": 2088259,
-        "category": "COVID",
+        "category": "OTHER",
         "subject": "COVID vaccine booster?",
         "body": "Boosters are recommended and to improve your prevention.",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-21T15:59:15.000Z",
         "senderId": 1835650,
@@ -570,7 +632,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2088259/thread": {
+  "/v1/messaging/health/messages/2088259/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2088250": {
@@ -579,9 +641,10 @@
       "type": "messages",
       "attributes": {
         "messageId": 2088250,
-        "category": "APPOINTMENTS",
+        "category": "TEST_RESULTS",
         "subject": "Preparing for your visit",
         "body": "See you at your appointment.  Please do not forget to fast.",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-21T15:58:36.000Z",
         "senderId": 1835650,
@@ -600,7 +663,54 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2088250/thread": {
+  "/v0/messaging/health/messages/2069243": {
+    "data": {
+      "id": "2069243",
+      "type": "messages",
+      "attributes": {
+        "messageId": 2069243,
+        "category": "APPOINTMENTS",
+        "subject": "Preparing for your visit",
+        "body": "Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+        "hasAttachments": true,
+        "attachment": true,
+        "sentDate": "2021-10-21T15:58:36.000Z",
+        "senderId": 1835650,
+        "senderName": "RATANA, NARIN ",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ"
+      },
+      "relationships": {
+        "attachments": {
+          "data": [
+            {
+              "id": "2098927",
+              "type": "attachments"
+            }
+          ]
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
+      }
+    },
+    "included": [
+      {
+        "id": "2069243",
+        "type": "attachments",
+        "attributes": {
+          "name": "COVID-19-mRNA-infographic_G_508.pdf",
+          "messageId": 2069243,
+          "attachmentSize": 180141
+        },
+        "links": {
+          "download": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243/attachments/2069243"
+        }
+      }
+    ]
+  },
+  "/v1/messaging/health/messages/2088250/thread?excludeProvidedMessage=true": {
     "data": [
       {
         "id": "2084703",
@@ -610,6 +720,7 @@
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
           "body": "Testing ",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-15T22:55:06.000Z",
           "senderId": 523757,
@@ -629,8 +740,9 @@
           "messageId": 2069243,
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
-          "body": "Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.",
-          "attachment": false,
+          "body": "Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+          "hasAttachments": true,
+          "attachment": true,
           "sentDate": "2021-10-01T22:23:13.000Z",
           "senderId": 1835650,
           "senderName": "RATANA, NARIN ",
@@ -653,6 +765,7 @@
         "category": "EDUCATION",
         "subject": "Good morning to you ",
         "body": "test",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:17:02.000Z",
         "senderId": 1835650,
@@ -671,7 +784,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060125/thread": {
+  "/v1/messaging/health/messages/2060125/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2060114": {
@@ -683,6 +796,7 @@
         "category": "MEDICATIONS",
         "subject": "Medication Inquiry",
         "body": "test reply",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:16:44.000Z",
         "senderId": 1835650,
@@ -701,7 +815,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060114/thread": {
+  "/v1/messaging/health/messages/2060114/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2060047": {
@@ -713,6 +827,7 @@
         "category": "COVID",
         "subject": "COVID Inquiry",
         "body": "test reply",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:13:58.000Z",
         "senderId": 1835650,
@@ -731,7 +846,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060047/thread": {
+  "/v1/messaging/health/messages/2060047/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2060025": {
@@ -743,6 +858,7 @@
         "category": "COVID",
         "subject": "Test ",
         "body": "test",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:13:30.000Z",
         "senderId": 1835650,
@@ -761,7 +877,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060025/thread": {
+  "/v1/messaging/health/messages/2060025/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2060013": {
@@ -773,6 +889,7 @@
         "category": "OTHER",
         "subject": "General Inquiry 2 Attachment",
         "body": "test",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:12:45.000Z",
         "senderId": 1835650,
@@ -791,7 +908,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060013/thread": {
+  "/v1/messaging/health/messages/2060013/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2060006": {
@@ -803,6 +920,7 @@
         "category": "APPOINTMENTS",
         "subject": "Appointment Inquiry 1",
         "body": "test",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-09-17T23:11:23.000Z",
         "senderId": 1835650,
@@ -821,7 +939,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060006/thread": {
+  "/v1/messaging/health/messages/2060006/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/folders/-1": {
@@ -851,6 +969,7 @@
             "category": "APPOINTMENTS",
             "subject": "Preparing for your visit",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-11-16T21:29:11.000Z",
             "senderId": 523757,
@@ -871,6 +990,7 @@
             "category": "MEDICATIONS",
             "subject": "Naproxen side effects",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-11-03T16:14:24.000Z",
             "senderId": 523757,
@@ -891,6 +1011,7 @@
             "category": "EDUCATION",
             "subject": "Education Inquiry",
             "body": null,
+            "hasAttachments": true,
             "attachment": true,
             "sentDate": "2021-11-03T16:13:34.000Z",
             "senderId": 523757,
@@ -911,6 +1032,7 @@
             "category": "TEST_RESULTS",
             "subject": "Test Inquiry",
             "body": null,
+            "hasAttachments": true,
             "attachment": true,
             "sentDate": "2021-11-03T16:05:23.000Z",
             "senderId": 523757,
@@ -931,6 +1053,7 @@
             "category": "TEST_RESULTS",
             "subject": "Test Inquiry",
             "body": null,
+            "hasAttachments": false,
             "attachment": false,
             "sentDate": "2021-10-28T18:47:43.000Z",
             "senderId": 523757,
@@ -973,6 +1096,7 @@
         "category": "APPOINTMENTS",
         "subject": "Preparing for your visit",
         "body": "Thanks for the reminder, Dr. Ratana! Is drinking flavored water OK or should I just stick to regular water?\n\nThanks,\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-11-16T21:29:11.000Z",
         "senderId": 523757,
@@ -991,7 +1115,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113100/thread": {
+  "/v1/messaging/health/messages/2113100/thread?excludeProvidedMessage=true": {
     "data": [
       {
         "id": "2109451",
@@ -1001,6 +1125,7 @@
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
           "body": "Melvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-13T00:07:21.000Z",
           "senderId": 523757,
@@ -1021,6 +1146,7 @@
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
           "body": "See you at your appointment.  Please do not forget to fast.",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-21T15:58:36.000Z",
           "senderId": 1835650,
@@ -1041,6 +1167,7 @@
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
           "body": "Testing ",
+          "hasAttachments": true,
           "attachment": true,
           "sentDate": "2021-10-15T22:55:06.000Z",
           "senderId": 523757,
@@ -1061,6 +1188,7 @@
           "category": "APPOINTMENTS",
           "subject": "Preparing for your visit",
           "body": "Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-01T22:23:13.000Z",
           "senderId": 1835650,
@@ -1084,6 +1212,7 @@
         "category": "MEDICATIONS",
         "subject": "Naproxen side effects",
         "body": "Simple reply\n\n\n\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-11-03T16:14:24.000Z",
         "senderId": 523757,
@@ -1102,7 +1231,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2098942/thread": {
+  "/v1/messaging/health/messages/2098942/thread?excludeProvidedMessage=true": {
     "data": [
       {
         "id": "2098903",
@@ -1112,6 +1241,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": "Reply \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-03T16:06:13.000Z",
           "senderId": 523757,
@@ -1132,6 +1262,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": "A reply. \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-29T18:00:41.000Z",
           "senderId": 523757,
@@ -1151,7 +1282,8 @@
           "messageId": 2092809,
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
-          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.",
+          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-26T22:22:06.000Z",
           "senderId": 1835650,
@@ -1175,6 +1307,7 @@
         "category": "EDUCATION",
         "subject": "Education Inquiry",
         "body": "Android smoke\n\n\n\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": true,
         "attachment": true,
         "sentDate": "2021-11-03T16:13:34.000Z",
         "senderId": 523757,
@@ -1212,7 +1345,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2098929/thread": {
+  "/v1/messaging/health/messages/2098929/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2098888": {
@@ -1224,6 +1357,7 @@
         "category": "TEST_RESULTS",
         "subject": "Test Inquiry",
         "body": "Smoke\n\n\n\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": true,
         "attachment": true,
         "sentDate": "2021-11-03T16:05:23.000Z",
         "senderId": 523757,
@@ -1261,7 +1395,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2098888/thread": {
+  "/v1/messaging/health/messages/2098888/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2095016": {
@@ -1273,6 +1407,7 @@
         "category": "TEST_RESULTS",
         "subject": "Test Inquiry",
         "body": "Review 1\n\n\n\nMelvin Freeman\nUSMC Veteran\n",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": "2021-10-28T18:47:43.000Z",
         "senderId": 523757,
@@ -1291,7 +1426,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2095016/thread": {
+  "/v1/messaging/health/messages/2095016/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/folders/-2": {
@@ -1313,6 +1448,27 @@
   "/v0/messaging/health/folders/-2/messages": {
     "data": [
       {
+        "id": "2112896",
+        "type": "messages",
+        "attributes": {
+          "messageId": 2112896,
+          "category": "COVID",
+          "subject": "Your requested info",
+          "body": null,
+          "hasAttachments": false,
+          "attachment": false,
+          "sentDate": "{{now - 5 days}}",
+          "senderId": 523757,
+          "senderName": "FREEMAN, MELVIN  V",
+          "recipientId": 1918816,
+          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
+          "readReceipt": "READ"
+        },
+        "links": {
+          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
+        }
+      },
+      {
         "id": "2113141",
         "type": "messages",
         "attributes": {
@@ -1320,6 +1476,7 @@
           "category": "TEST_RESULTS",
           "subject": "Test Inquiry",
           "body": null,
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-17T01:00:53.000Z",
           "senderId": 523757,
@@ -1340,6 +1497,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": null,
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-16T17:19:04.000Z",
           "senderId": 523757,
@@ -1350,26 +1508,6 @@
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
-        }
-      },
-      {
-        "id": "2112896",
-        "type": "messages",
-        "attributes": {
-          "messageId": 2112896,
-          "category": "COVID",
-          "subject": "Your requested info",
-          "body": null,
-          "attachment": false,
-          "sentDate": "2021-11-16T16:46:36.000Z",
-          "senderId": 523757,
-          "senderName": "FREEMAN, MELVIN  V",
-          "recipientId": 1918816,
-          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
-        },
-        "links": {
-          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
         }
       }
     ],
@@ -1392,6 +1530,117 @@
       }
     }
   },
+  "/v0/messaging/health/folders/-3": {
+    "data": {
+      "id": "-3",
+      "type": "folders",
+      "attributes": {
+        "folderId": -3,
+        "name": "Trash",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/-3/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-3/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
+  "/v0/messaging/health/folders/690824": {
+    "data": {
+      "id": "690824",
+      "type": "folders",
+      "attributes": {
+        "folderId": 690824,
+        "name": "Test",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/690824/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/690824/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
+  "/v0/messaging/health/folders/1937904": {
+    "data": {
+      "id": "1937904",
+      "type": "folders",
+      "attributes": {
+        "folderId": 1937904,
+        "name": "Trash",
+        "count": 0,
+        "unreadCount": 0,
+        "systemFolder": false
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904"
+      }
+    }
+  },
+  "/v0/messaging/health/folders/1937904/messages": {
+    "data": [],
+    "links": {
+      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=1",
+      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=1&per_page=10",
+      "prev": null,
+      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=2&per_page=10",
+      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/1937904/messages?page=5&per_page=10"
+    },
+    "meta": {
+      "sort": {
+        "sentDate": "DESC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10,
+        "totalPages": 1,
+        "totalEntries": 0
+      }
+    }
+  },
   "/v0/messaging/health/messages/2113141": {
     "data": {
       "id": "2113141",
@@ -1401,6 +1650,7 @@
         "category": "TEST_RESULTS",
         "subject": "Test Inquiry",
         "body": "Melvin Freeman\nUSMC Veteran",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": null,
         "senderId": 523757,
@@ -1419,7 +1669,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113141/thread": {
+  "/v1/messaging/health/messages/2113141/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v0/messaging/health/messages/2112896": {
@@ -1431,6 +1681,7 @@
         "category": "COVID",
         "subject": "Your requested info",
         "body": "Test test \n\n\n\n\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": null,
         "senderId": 523757,
@@ -1449,7 +1700,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2112896/thread": {
+  "/v1/messaging/health/messages/2112896/thread?excludeProvidedMessage=true": {
     "data": [
       {
         "id": "2092803",
@@ -1459,8 +1710,9 @@
           "category": "COVID",
           "subject": "Your requested info",
           "body": "Here is the information about COVID vaccines that you requested.  Let us know if you have any questions.\r\n\r\nDr. Duma\r\n",
+          "hasAttachments": true,
           "attachment": true,
-          "sentDate": "2021-10-26T22:21:11.000Z",
+          "sentDate": "{{now - 15 days}}",
           "senderId": 1835650,
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
@@ -1482,6 +1734,7 @@
         "category": "MEDICATIONS",
         "subject": "Naproxen side effects",
         "body": "Yes test test \n\nTest test \n\n\nMelvin Freeman\nUSMC Veteran",
+        "hasAttachments": false,
         "attachment": false,
         "sentDate": null,
         "senderId": 523757,
@@ -1500,7 +1753,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113020/thread": {
+  "/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=true": {
     "data": [
       {
         "id": "2098942",
@@ -1510,6 +1763,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": "Simple reply\n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-03T16:14:24.000Z",
           "senderId": 523757,
@@ -1530,6 +1784,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": "Reply \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-11-03T16:06:13.000Z",
           "senderId": 523757,
@@ -1550,6 +1805,7 @@
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
           "body": "A reply. \n\n\n\nMelvin Freeman\nUSMC Veteran",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-29T18:00:41.000Z",
           "senderId": 523757,
@@ -1569,7 +1825,8 @@
           "messageId": 2092809,
           "category": "MEDICATIONS",
           "subject": "Naproxen side effects",
-          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.",
+          "body": "Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care. If you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com  you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
+          "hasAttachments": false,
           "attachment": false,
           "sentDate": "2021-10-26T22:22:06.000Z",
           "senderId": 1835650,

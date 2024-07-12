@@ -1,24 +1,24 @@
-import { ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { AlertBox, Box, VAScrollView } from 'components'
-import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
+import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindow, ErrorsState } from 'store/slices'
+import { a11yLabelID } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { featureInDowntime, useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
-  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
-  overrideFeatureName?: string
 }
 
 /**Common component to show an alert when the service is down*/
-const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -31,9 +31,21 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }
     mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const feature = DowntimeScreenIDToFeature[screenID]
-  const featureName = overrideFeatureName ? overrideFeatureName : downtimeWindowsByFeature[feature]?.featureName
-  const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
+  const features = ScreenIDToDowntimeFeatures[screenID]
+  // if there are multiple active downtime windows for the screen, use the latest endTime
+  let latestDowntimeWindow: DowntimeWindow | null = null
+  features.forEach((feature) => {
+    if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
+      const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+      if (downtimeWindow && (latestDowntimeWindow === null || latestDowntimeWindow.endTime < downtimeWindow.endTime)) {
+        latestDowntimeWindow = downtimeWindow
+      }
+    }
+  })
+
+  const endTime = latestDowntimeWindow
+    ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat("DDD 'at' t ZZZZ")
+    : ''
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
@@ -41,10 +53,18 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }
         <AlertBox
           title={t('downtime.title')}
           titleA11yLabel={t('downtime.title')}
-          text={t('downtime.message', { featureName, endTime })}
-          textA11yLabel={t('downtime.message', { featureName, endTime })}
-          border="warning"
-        />
+          text={t('downtime.message.1', { endTime })}
+          textA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}
+          border="warning">
+          <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
+            {t('downtime.message.2')}
+          </TextView>
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8006982411'))}
+            phone={t('8006982411')}
+            a11yLabel={a11yLabelID(t('8006982411'))}
+          />
+        </AlertBox>
       </Box>
     </VAScrollView>
   )

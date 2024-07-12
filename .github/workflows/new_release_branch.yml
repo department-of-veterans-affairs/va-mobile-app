@@ -38,6 +38,7 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-
       - name: Cut release branch
+        env:
+          GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
         run: ./release_branch.sh

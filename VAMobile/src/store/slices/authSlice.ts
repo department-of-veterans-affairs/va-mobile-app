@@ -1,13 +1,17 @@
 import * as Keychain from 'react-native-keychain'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { utils } from '@react-native-firebase/app'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
+import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
-import qs from 'querystringify'
 
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
+import queryClient from 'api/queryClient'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { EnvironmentTypesConstants } from 'constants/common'
+import { AppDispatch, AppThunk } from 'store'
 import * as api from 'store/api'
 import {
   AUTH_STORAGE_TYPE,
@@ -20,38 +24,18 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
 } from 'store/api/types'
-import { AppDispatch, AppThunk } from 'store'
-import { EnvironmentTypesConstants } from 'constants/common'
-import { Events, UserAnalytics } from 'constants/analytics'
-import { dispatchClearAuthorizedServices } from './authorizedServicesSlice'
-import { dispatchClearCerner } from './patientSlice'
-import { dispatchClearLoadedAppointments } from './appointmentsSlice'
-import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
-import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
-import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
-import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
-import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
-import { dispatchProfileLogout } from './personalInformationSlice'
-import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { dispatchVaccineLogout } from './vaccineSlice'
-import { featureEnabled } from 'utils/remoteConfig'
-import { isAndroid } from 'utils/platform'
-import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { pkceAuthorizeParams } from 'utils/oauth'
-import { updateDemoMode } from './demoSlice'
+import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
+import { pkceAuthorizeParams } from 'utils/oauth'
+import { isAndroid } from 'utils/platform'
+import { clearCookies } from 'utils/rnAuthSesson'
+
+import { dispatchSetAnalyticsLogin } from './analyticsSlice'
+import { updateDemoMode } from './demoSlice'
+import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 
 const {
-  AUTH_IAM_CLIENT_ID,
-  AUTH_IAM_CLIENT_SECRET,
-  AUTH_IAM_ENDPOINT,
-  AUTH_IAM_REDIRECT_URL,
-  AUTH_IAM_REVOKE_URL,
-  AUTH_IAM_SCOPES,
-  AUTH_IAM_TOKEN_EXCHANGE_URL,
   AUTH_SIS_ENDPOINT,
   AUTH_SIS_REVOKE_URL,
   AUTH_SIS_TOKEN_EXCHANGE_URL,
@@ -61,6 +45,9 @@ const {
 } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
+
+export const NEW_SESSION = '@store_new_session'
+export const FIRST_TIME_LOGIN = '@store_first_time_login'
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
@@ -107,6 +94,24 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
+}
+
+/*
+Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
+*/
+
+const postLoggedIn = async () => {
+  try {
+    await logAnalyticsEvent(Events.vama_login_success(true))
+    await api.post('/v0/user/logged-in')
+  } catch (error) {
+    if (isErrorObject(error)) {
+      logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_user_call(error.status))
+      }
+    }
+  }
 }
 
 /**
@@ -208,11 +213,16 @@ export const setPKCEParams = (): AppThunk => async (dispatch) => {
 export const loginStart =
   (syncing: boolean): AppThunk =>
   async (dispatch) => {
-    dispatch(sendLoginStartAnalytics())
+    dispatch(sendLoginStartAnalytics(false))
     dispatch(dispatchStartAuthLogin(syncing))
   }
 
-const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
+const finishInitialize = async (
+  dispatch: AppDispatch,
+  loginPromptType: LOGIN_PROMPT_TYPE,
+  loggedIn: boolean,
+  authCredentials?: AuthCredentialData,
+): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
   // if undefined we assume save with biometrics (first time through)
@@ -299,22 +309,24 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
-const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
-  if (featureEnabled('SIS')) {
-    const splitToken = refreshToken.split('.')
-    await Promise.all([
-      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-      AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
-      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-    ])
-  } else {
-    await Promise.all([
-      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options),
-      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.IAM),
-    ])
-  }
+const storeRefreshToken = async (
+  refreshToken: string,
+  options: Keychain.Options,
+  storageType: AUTH_STORAGE_TYPE,
+): Promise<void> => {
+  const splitToken = refreshToken.split('.')
+  await Promise.all([
+    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
+    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
+    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
+  ])
+    .then(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(true))
+    })
+    .catch(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(false))
+    })
 }
 
 /**
@@ -322,14 +334,19 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
-  if (featureEnabled('SIS')) {
-    const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-    const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
-    return reconstructedToken
+  const result = await Promise.all([
+    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+  ])
+  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+
+  if (reconstructedToken) {
+    await logAnalyticsEvent(Events.vama_login_token_get(true))
   } else {
-    const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
-    return result ? result.password : undefined
+    await logAnalyticsEvent(Events.vama_login_token_get(false))
   }
+
+  return reconstructedToken
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -364,7 +381,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       console.debug('processAuthResponse:', await response.text())
       throw Error(`${response.status}`)
     }
-    const authResponse = featureEnabled('SIS') ? ((await response.json())?.data as AuthCredentialData) : ((await response.json()) as AuthCredentialData)
+    const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
     // state is not uniformly supported on the token exchange request so may not be necessary
@@ -390,17 +407,13 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
  */
 export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
   const tokenType = await AsyncStorage.getItem(REFRESH_TOKEN_TYPE)
-  const SISEnabled = featureEnabled('SIS')
-  const tokenMatchesService = (SISEnabled && tokenType === LoginServiceTypeConstants.SIS) || (!SISEnabled && tokenType === LoginServiceTypeConstants.IAM)
-  console.debug('refreshTokenMatchesLoginService: ', tokenMatchesService)
-  return tokenMatchesService
+  return tokenType === LoginServiceTypeConstants.SIS
 }
 
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
-  const SISEnabled = featureEnabled('SIS')
   try {
-    await CookieManager.clearAll()
+    await clearCookies()
 
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
@@ -409,22 +422,14 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
       return false
     }
 
-    const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: qs.stringify({
+      body: new URLSearchParams({
         refresh_token: refreshToken,
-        ...(!SISEnabled
-          ? {
-              grant_type: 'refresh_token',
-              client_id: AUTH_IAM_CLIENT_ID,
-              client_secret: AUTH_IAM_CLIENT_SECRET,
-              redirect_uri: AUTH_IAM_REDIRECT_URL,
-            }
-          : {}),
-      }),
+      }).toString(),
     })
 
     console.debug('refreshAccessToken: completed refresh request')
@@ -460,39 +465,39 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
   }
 }
 
-export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
+export const attemptIntializeAuthWithRefreshToken = async (
+  dispatch: AppDispatch,
+  refreshToken: string,
+): Promise<void> => {
   try {
-    await CookieManager.clearAll()
-    const SISEnabled = featureEnabled('SIS')
+    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
       throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
     }
 
-    const response = await fetch(SISEnabled ? AUTH_SIS_TOKEN_REFRESH_URL : AUTH_IAM_TOKEN_EXCHANGE_URL, {
+    const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: qs.stringify({
+      body: new URLSearchParams({
         refresh_token: refreshToken,
-        ...(!SISEnabled
-          ? {
-              grant_type: 'refresh_token',
-              client_id: AUTH_IAM_CLIENT_ID,
-              client_secret: AUTH_IAM_CLIENT_SECRET,
-              redirect_uri: AUTH_IAM_REDIRECT_URL,
-            }
-          : {}),
-      }),
+      }).toString(),
     })
     const authCredentials = await processAuthResponse(response)
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
-  } catch (err) {
-    console.error(err)
-    logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+    postLoggedIn()
+  } catch (error) {
+    if (isErrorObject(error)) {
+      console.error(error)
+      logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+      }
+    }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -518,7 +523,6 @@ export const setBiometricsPreference =
   }
 
 export const logout = (): AppThunk => async (dispatch, getState) => {
-  const SISEnabled = featureEnabled('SIS')
   console.debug('logout: logging out')
   dispatch(dispatchStartLogout())
 
@@ -535,28 +539,19 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
       refreshToken = await retrieveRefreshToken()
     }
 
-    await CookieManager.clearAll()
+    await clearCookies()
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
-      const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
+      const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
+
+      const response = await fetch(AUTH_SIS_REVOKE_URL, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: qs.stringify({
-          ...(!SISEnabled
-            ? {
-                token,
-                client_id: AUTH_IAM_CLIENT_ID,
-                client_secret: AUTH_IAM_CLIENT_SECRET,
-                redirect_uri: AUTH_IAM_REDIRECT_URL,
-              }
-            : {
-                refresh_token: refreshToken,
-              }),
-        }),
+        body: queryString,
       })
       console.debug('logout:', response.status)
       console.debug('logout:', await response.text())
@@ -572,18 +567,8 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
-    dispatch(dispatchClearLoadedAppointments())
-    dispatch(dispatchClearLoadedMessages())
-    dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchClearAuthorizedServices())
-    dispatch(dispatchClearCerner())
-    dispatch(dispatchProfileLogout())
-    dispatch(dispatchMilitaryHistoryLogout())
-    dispatch(dispatchDisabilityRatingLogout())
-    dispatch(dispatchClearPaymentsOnLogout())
-    dispatch(dispatchClearPrescriptionLogout())
+    queryClient.removeQueries()
     dispatch(dispatchFinishLogout())
-    dispatch(dispatchVaccineLogout())
   }
 }
 
@@ -596,6 +581,8 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
   console.debug('startBiometricsLogin: starting')
+  await AsyncStorage.setItem(NEW_SESSION, 'true')
+  dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
     refreshToken = await retrieveRefreshToken()
@@ -671,84 +658,69 @@ export const handleTokenCallbackUrl =
   async (dispatch, getState) => {
     try {
       await logAnalyticsEvent(Events.vama_auth_completed())
-      const SISEnabled = featureEnabled('SIS')
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-      const exchangeUrl = SISEnabled ? AUTH_SIS_TOKEN_EXCHANGE_URL : AUTH_IAM_TOKEN_EXCHANGE_URL
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
-      console.debug('handleTokenCallbackUrl: POST to', exchangeUrl, AUTH_IAM_CLIENT_ID, AUTH_IAM_CLIENT_SECRET)
-      await CookieManager.clearAll()
-      const response = await fetch(exchangeUrl, {
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
+      await clearCookies()
+      const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: qs.stringify({
+        body: new URLSearchParams({
           grant_type: 'authorization_code',
-          code_verifier: getState().auth.codeVerifier,
+          code_verifier: getState().auth.codeVerifier ?? '',
           code,
-          ...(!SISEnabled
-            ? {
-                client_id: AUTH_IAM_CLIENT_ID,
-                client_secret: AUTH_IAM_CLIENT_SECRET,
-                redirect_uri: AUTH_IAM_REDIRECT_URL,
-              }
-            : {}),
-        }),
+        }).toString(),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
+      postLoggedIn()
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
+        if (error.status) {
+          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
+        }
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
   }
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
-  await logAnalyticsEvent(Events.vama_login_closed(featureEnabled('SIS')))
+  await logAnalyticsEvent(Events.vama_login_closed(true))
   dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
   (error: Error): AppThunk =>
   async () => {
-    await logAnalyticsEvent(Events.vama_login_fail(error, featureEnabled('SIS')))
+    await logAnalyticsEvent(Events.vama_login_fail(error, true))
   }
 
-export const sendLoginStartAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_login_start(featureEnabled('SIS')))
-}
+export const sendLoginStartAnalytics =
+  (biometric: boolean): AppThunk =>
+  async () => {
+    await logAnalyticsEvent(Events.vama_login_start(true, biometric))
+  }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
-  await CookieManager.clearAll()
-  const SISEnabled = featureEnabled('SIS')
+  await clearCookies()
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
-  const params = qs.stringify({
+  const params = new URLSearchParams({
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     application: 'vamobile',
     oauth: 'true',
-    ...(!SISEnabled
-      ? {
-          client_id: AUTH_IAM_CLIENT_ID,
-          redirect_uri: AUTH_IAM_REDIRECT_URL,
-          scope: AUTH_IAM_SCOPES,
-          response_type: 'code',
-          response_mode: 'query',
-          state: '12345',
-        }
-      : {}),
-  })
+  }).toString()
 
-  const url = `${SISEnabled ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
+  const url = `${AUTH_SIS_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
 }
 
@@ -808,10 +780,10 @@ const authSlice = createSlice({
       const successfulLogin = !action.payload.error
 
       return {
-        ...state,
+        ...(action.payload.error ? initialAuthState : state),
         ...action.payload,
         webLoginUrl: undefined,
-        loading: false,
+        ...(action.payload.error ? { initializing: false } : { loading: false }),
         successfulLogin: successfulLogin,
         loggedIn: successfulLogin,
       }

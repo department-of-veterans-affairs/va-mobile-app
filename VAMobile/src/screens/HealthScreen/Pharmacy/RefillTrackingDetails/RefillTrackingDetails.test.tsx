@@ -1,84 +1,55 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { render, context, RenderAPI, waitFor, mockNavProps } from 'testUtils'
 
+import { screen } from '@testing-library/react-native'
+import { when } from 'jest-when'
+
+import { PrescriptionData } from 'api/types'
 import * as api from 'store/api'
-import RefillTrackingDetails from './RefillTrackingDetails'
-import { ReactTestInstance } from 'react-test-renderer'
-import { ErrorsState, initialErrorsState } from 'store/slices'
-import { RootState } from 'store'
-import { ErrorComponent, TextView } from 'components'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import {
-  defaultPrescriptionsList as mockData,
   emptyStatePrescriptionList as emptyMockData,
   emptyStateTrackingInfoList as emptyTrackingMockData,
+  defaultPrescriptionsList as mockData,
   multipleTrackingInfoList as multipleTrackingInfoData,
 } from 'utils/tests/prescription'
-import { DateTime } from 'luxon'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { when } from 'jest-when'
-import { PrescriptionData } from 'store/api'
+
+import RefillTrackingDetails from './RefillTrackingDetails'
 
 context('RefillTrackingDetails', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
-  const initializeTestInstance = (errorState?: Partial<ErrorsState>, paramPrescription?: PrescriptionData) => {
+  const initializeTestInstance = (paramPrescription?: PrescriptionData) => {
     const props = mockNavProps(
       {},
       {
         setOptions: jest.fn(),
         navigate: jest.fn(),
+        addListener: jest.fn(),
       },
       { params: { prescription: paramPrescription ? paramPrescription : mockData[0] } },
     )
-    const store: Partial<RootState> = {
-      errors: {
-        ...initialErrorsState,
-        ...errorState,
-      },
-    }
-
-    component = render(<RefillTrackingDetails {...props} />, { preloadedState: store })
-    testInstance = component.UNSAFE_root
+    render(<RefillTrackingDetails {...props} />)
   }
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-    })
-    expect(component).toBeTruthy()
-  })
 
   describe('when there is no data provided', () => {
     it('should show None Noted for applicable properties', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockResolvedValue({ data: emptyTrackingMockData })
-
-      await waitFor(() => {
-        initializeTestInstance(undefined, emptyMockData[0] as PrescriptionData)
-      })
-
-      const texts = testInstance.findAllByType(TextView)
-
-      // Header
-      expect(texts[2].props.children).toEqual('ALLOPURINOL 100MG TAB')
-      expect(texts[3].props.children).toEqual('Rx #: None noted')
-
-      // Disclaimer
-      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
-
-      // Tracking Information
-      expect(texts[6].props.children).toEqual('Tracking number')
-      expect(texts[7].props.children).toEqual('None noted')
-      expect(texts[8].props.children).toEqual('Delivery service: None noted')
-      expect(texts[9].props.children).toEqual('Date shipped: None noted')
-
-      // Other prescriptions
-      expect(texts[10].props.children).toEqual('Other prescriptions in this package:')
-      expect(texts[11].props.children).toEqual('There are no other prescriptions in this package.')
+      initializeTestInstance(emptyMockData[0] as PrescriptionData)
+      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We share tracking information here for up to 15 days, even if you've received your prescription.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Tracking number')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('None noted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Delivery service: None noted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Date shipped: None noted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Other prescriptions in this package:')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('There are no other prescriptions in this package.')).toBeTruthy())
     })
   })
 
@@ -87,31 +58,25 @@ context('RefillTrackingDetails', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockResolvedValue({ data: [multipleTrackingInfoData[0]] })
-
-      await waitFor(() => {
-        initializeTestInstance(undefined, mockData[0] as PrescriptionData)
-      })
-
-      const texts = testInstance.findAllByType(TextView)
-
-      // Header
-      expect(texts[2].props.children).toEqual('ALLOPURINOL 100MG TAB')
-      expect(texts[3].props.children).toEqual('Rx #: 3636691')
-
-      // Disclaimer
-      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
-
-      // Tracking Information
-      expect(texts[6].props.children).toEqual('Tracking number')
-      expect(texts[7].props.children).toEqual('7534533636856')
-      expect(texts[8].props.children).toEqual('Delivery service: DHL')
-      expect(texts[9].props.children).toEqual('Date shipped: 06/14/2022')
-      // Other Prescriptions
-      expect(texts[10].props.children).toEqual('Other prescriptions in this package:')
-      expect(texts[11].props.children).toEqual('LAMIVUDINE 10MG TAB')
-      expect(texts[12].props.children).toEqual('Rx #: 2336800')
-      expect(texts[13].props.children).toEqual('ZIDOVUDINE 1MG CAP')
-      expect(texts[14].props.children).toEqual('Rx #: None noted')
+      initializeTestInstance(mockData[0] as PrescriptionData)
+      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 3636691')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We share tracking information here for up to 15 days, even if you've received your prescription.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Tracking number')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('7534533636856')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Delivery service: DHL')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Date shipped: 06/14/2022')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Other prescriptions in this package:')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('LAMIVUDINE 10MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 2336800')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('ZIDOVUDINE 1MG CAP')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
     })
   })
 
@@ -120,65 +85,34 @@ context('RefillTrackingDetails', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockResolvedValue({ data: multipleTrackingInfoData })
+      initializeTestInstance(mockData[0] as PrescriptionData)
 
-      await waitFor(() => {
-        initializeTestInstance(undefined, mockData[0] as PrescriptionData)
-      })
-
-      const texts = testInstance.findAllByType(TextView)
-
-      // Header
-      expect(texts[2].props.children).toEqual('ALLOPURINOL 100MG TAB')
-      expect(texts[3].props.children).toEqual('Rx #: 3636691')
-
-      // Disclaimer
-      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
-
-      // Tracking Information #1
-      expect(texts[6].props.children).toEqual('Package 1 of 2')
-      expect(texts[7].props.children).toEqual('Tracking number')
-      expect(texts[8].props.children).toEqual('7534533636856')
-      expect(texts[9].props.children).toEqual('Delivery service: DHL')
-      expect(texts[10].props.children).toEqual('Date shipped: 06/14/2022')
-      // Other Prescriptions
-      expect(texts[11].props.children).toEqual('Other prescriptions in this package:')
-      expect(texts[12].props.children).toEqual('LAMIVUDINE 10MG TAB')
-      expect(texts[13].props.children).toEqual('Rx #: 2336800')
-      expect(texts[14].props.children).toEqual('ZIDOVUDINE 1MG CAP')
-      expect(texts[15].props.children).toEqual('Rx #: None noted')
-
-      // Tracking Information #2
-      expect(texts[16].props.children).toEqual('Package 2 of 2')
-      expect(texts[17].props.children).toEqual('Tracking number')
-      expect(texts[18].props.children).toEqual('5634533636812')
-      expect(texts[19].props.children).toEqual('Delivery service: USPS')
-      expect(texts[20].props.children).toEqual('Date shipped: 06/28/2022')
-      // Other Prescriptions
-      expect(texts[21].props.children).toEqual('Other prescriptions in this package:')
-      expect(texts[22].props.children).toEqual('AMLODIPINE BESYLATE 10MG TAB')
-      expect(texts[23].props.children).toEqual('Rx #: 3636711A')
-      expect(texts[24].props.children).toEqual('ZIDOVUDINE 1MG CAP')
-      expect(texts[25].props.children).toEqual('Rx #: 4636722C')
-    })
-  })
-
-  describe('when there is a downtime message for rx refill', () => {
-    it('should show PRESCRIPTION_SCREEN downtime message', async () => {
-      await waitFor(() => {
-        initializeTestInstance({
-          downtimeWindowsByFeature: {
-            rx_refill: {
-              featureName: 'VA Prescriptions',
-              startTime: DateTime.now().plus({ days: -1 }),
-              endTime: DateTime.now().plus({ days: 1 }),
-            },
-          },
-        })
-      })
-
-      const error = testInstance.findByType(ErrorComponent)
-      expect(error).toBeTruthy()
-      expect(error.props.screenID).toEqual(ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID)
+      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 3636691')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We share tracking information here for up to 15 days, even if you've received your prescription.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Package 1 of 2')).toBeTruthy())
+      await waitFor(() => expect(screen.getAllByText('Tracking number')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('7534533636856')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Delivery service: DHL')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Date shipped: 06/14/2022')).toBeTruthy())
+      await waitFor(() => expect(screen.getAllByText('Other prescriptions in this package:')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('LAMIVUDINE 10MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 2336800')).toBeTruthy())
+      await waitFor(() => expect(screen.getAllByText('ZIDOVUDINE 1MG CAP')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Package 2 of 2')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('5634533636812')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Delivery service: USPS')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Date shipped: 06/28/2022')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 3636711A')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rx #: 4636722C')).toBeTruthy())
     })
   })
 
@@ -187,13 +121,9 @@ context('RefillTrackingDetails', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockRejectedValue({ networkError: 500 })
-      await waitFor(() => {
-        initializeTestInstance()
-      })
 
-      const error = testInstance.findByType(ErrorComponent)
-      expect(error).toBeTruthy()
-      expect(error.props.screenID).toEqual(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
     })
   })
 })

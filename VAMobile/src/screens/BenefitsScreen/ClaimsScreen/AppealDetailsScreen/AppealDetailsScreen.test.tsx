@@ -1,227 +1,337 @@
-import 'react-native'
 import React from 'react'
-import * as api from 'store/api'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, when } from 'testUtils'
 
-import AppealDetailsScreen from './AppealDetailsScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
+
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { AppealData } from 'api/types'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
+
 import { appeal as appealData } from '../appealData'
-import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
-import AppealStatus from './AppealStatus/AppealStatus'
-import AppealIssues from './AppealIssues/AppealIssues'
-import { AppealEventData, AppealTypes } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { RenderAPI, waitFor } from '@testing-library/react-native'
-import { StackNavigationOptions } from '@react-navigation/stack'
+import AppealDetailsScreen from './AppealDetailsScreen'
 
 context('AppealDetailsScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let navHeaderSpy: any
-  let testInstance: ReactTestInstance
-  let goBack: jest.Mock
-  let abortLoadSpy: jest.Mock
-  let store: any
-
-  const mockApiCall = (type?: AppealTypes, events?: Array<AppealEventData>) => {
-    when(api.get as jest.Mock)
-      .calledWith(`/v0/appeal/0`, {}, expect.anything())
-      .mockResolvedValue({
-        data: {
-          ...appealData,
-          type: type ? type : 'appeal',
-          attributes: {
-            ...appealData.attributes,
-            events: events || appealData.attributes.events,
+  const renderWithData = (appeal?: Partial<AppealData>): void => {
+    let queriesData: QueriesData | undefined
+    if (appeal) {
+      queriesData = [
+        {
+          queryKey: [claimsAndAppealsKeys.appeal, '0'],
+          data: {
+            ...appeal,
           },
         },
-      })
+      ]
+    }
 
-    initializeTestInstance()
-  }
-
-  const initializeTestInstance = (loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
-    goBack = jest.fn()
-    abortLoadSpy = jest.fn()
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         navigate: jest.fn(),
         addListener: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
-        goBack,
+        goBack: jest.fn(),
       },
       { params: { appealID: '0' } },
     )
-
-    component = render(<AppealDetailsScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          loadingAppeal,
-          cancelLoadingDetailScreen: {
-            abort: abortLoadSpy,
-          },
-        },
-        errors: errorsState,
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<AppealDetailsScreen {...props} />, { queriesData })
   }
-
-  it('should initialize', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
-    })
-  })
 
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(true)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      renderWithData()
+      expect(screen.getByText('Loading your appeal details...')).toBeTruthy()
     })
   })
 
   describe('when the selected tab is status', () => {
     it('should display the AppealStatus component', async () => {
-      await waitFor(async () => {
-        mockApiCall()
-        initializeTestInstance()
+      const date = DateTime.fromISO('2018-01-19T10:20:42-05:00')
+      const dateTime = date.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'appeal',
       })
-
-      await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange('Status')
-        expect(component.UNSAFE_root.findAllByType(AppealStatus).length).toEqual(1)
-      })
+      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Status' })))
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Up to date as of ' + dateTime)).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Review past events')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'A reviewer is examining your new evidence' })).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'If you have more evidence to submit, you should do so as soon as possible. You can send new evidence to the Veterans Benefits Administration at:',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Department of Veterans Affairs')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Evidence Intake Center')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('PO Box 4444')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Janesville, WI 53547-4444')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Fax 844-531-7818')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Appeals ahead of you' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy())
     })
   })
 
   describe('when the selected tab is issues', () => {
     it('should display the AppealStatus component', async () => {
-      await waitFor(async () => {
-        mockApiCall()
-        initializeTestInstance()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'appeal',
       })
-
-      await waitFor(async () => {
-        component.UNSAFE_root.findByType(SegmentedControl).props.onChange('Issues')
-      })
-      expect(component.UNSAFE_root.findAllByType(AppealIssues).length).toEqual(1)
+      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Issues' })))
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Currently on appeal' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Eligibility for loan guaranty benefits')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Service connected')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Other')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Validity of debt owed')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Effective date, pension benefits')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Rule 608 motion to withdraw')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Eligibility for pension, unemployability')).toBeTruthy())
     })
   })
 
   describe('when the type is higherLevelReview', () => {
     it('should display "Higher level review appeal for {{ programArea }}" as the title', async () => {
-      mockApiCall('higherLevelReview')
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Higher level review appeal for compensation')
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'higherLevelReview',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'higherLevelReview',
       })
+      await waitFor(() => expect(screen.getByText('Higher level review appeal for compensation')).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "hlr_request"', async () => {
-      await waitFor(async () => {
-        mockApiCall('higherLevelReview', [
-          { date: '2020-01-20', type: 'hlr_request' },
-          { date: '2020-01-20', type: 'claim_decision' },
-        ])
-        initializeTestInstance()
+    it('should display the Received date as the event date where the type is "hlr_request"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'higherLevelReview',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'hlr_request' },
+                { date: '2020-01-20', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'higherLevelReview',
+        attributes: {
+          ...appealData.attributes,
+          events: [
+            { date: '2020-01-20', type: 'hlr_request' },
+            { date: '2020-01-20', type: 'claim_decision' },
+          ],
+        },
       })
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
   describe('when the type is legacyAppeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
-      await waitFor(async () => {
-        mockApiCall('legacyAppeal')
-        initializeTestInstance()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'legacyAppeal',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'legacyAppeal',
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
-      })
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "nod"', async () => {
-      await waitFor(async () => {
-        mockApiCall('legacyAppeal', [
-          { date: '2020-01-20', type: 'nod' },
-          { date: '2020-10-31', type: 'claim_decision' },
-        ])
-        initializeTestInstance()
+    it('should display the Received date as the event date where the type is "nod"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'legacyAppeal',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'nod' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'legacyAppeal',
+        attributes: {
+          ...appealData.attributes,
+          events: [
+            { date: '2020-01-20', type: 'nod' },
+            { date: '2020-10-31', type: 'claim_decision' },
+          ],
+        },
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
   describe('when the type is appeal', () => {
     it('should display "Appeal for {{ programArea }}" as the title', async () => {
-      await waitFor(async () => {
-        mockApiCall('appeal')
-        initializeTestInstance()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'appeal',
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
-      })
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
     })
 
-    it('should display the submitted date as the event date where the type is "nod"', async () => {
-      await waitFor(async () => {
-        mockApiCall('appeal', [
-          { date: '2020-01-20', type: 'nod' },
-          { date: '2020-10-31', type: 'claim_decision' },
-        ])
-        initializeTestInstance()
+    it('should display the Received date as the event date where the type is "nod"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'appeal',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'nod' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'appeal',
+        attributes: {
+          ...appealData.attributes,
+          events: [
+            { date: '2020-01-20', type: 'nod' },
+            { date: '2020-10-31', type: 'claim_decision' },
+          ],
+        },
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
   describe('when the type is supplementalClaim', () => {
     it('should display "Supplemental claim appeal for {{ programArea }}" as the title', async () => {
-      await waitFor(async () => {
-        mockApiCall('supplementalClaim')
-        initializeTestInstance()
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'supplementalClaim',
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'supplementalClaim',
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Supplemental claim appeal for compensation')
-      })
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'Supplemental claim appeal for compensation' })).toBeTruthy(),
+      )
     })
 
-    it('should display the submitted date as the event date where the type is "sc_request"', async () => {
-      await waitFor(async () => {
-        mockApiCall('supplementalClaim', [
-          { date: '2020-01-20', type: 'sc_request' },
-          { date: '2020-10-31', type: 'claim_decision' },
-        ])
-        initializeTestInstance()
+    it('should display the Received date as the event date where the type is "sc_request"', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appeal/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...appealData,
+            type: 'supplementalClaim',
+            attributes: {
+              ...appealData.attributes,
+              events: [
+                { date: '2020-01-20', type: 'sc_request' },
+                { date: '2020-10-31', type: 'claim_decision' },
+              ],
+            },
+          },
+        })
+      renderWithData({
+        ...appealData,
+        type: 'supplementalClaim',
+        attributes: {
+          ...appealData.attributes,
+          events: [
+            { date: '2020-01-20', type: 'sc_request' },
+            { date: '2020-10-31', type: 'claim_decision' },
+          ],
+        },
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      await waitFor(() => expect(screen.getByText('Received January 20, 2020')).toBeTruthy())
     })
   })
 
@@ -230,27 +340,8 @@ context('AppealDetailsScreen', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/appeal/0`, {}, expect.anything())
         .mockRejectedValue({ networkError: true } as api.APIError)
-
-      await waitFor(() => {
-        initializeTestInstance(false)
-      })
-
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      renderWithData()
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
     })
   })
 })

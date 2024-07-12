@@ -1,297 +1,254 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
-import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
+import { screen } from '@testing-library/react-native'
+
+import {
+  CategoryTypeFields,
+  SecureMessagingFoldersGetData,
+  SecureMessagingMessageGetData,
+  SecureMessagingThreadGetData,
+} from 'api/types'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
 import ViewMessageScreen from './ViewMessageScreen'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
-import Mock = jest.Mock
-import { Pressable } from 'react-native'
-import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { when } from 'jest-when'
-import { DateTime, DiffOptions, Duration, DurationUnits } from 'luxon'
-import { LocaleOptions } from 'luxon/src/datetime'
-
-let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
-  }
-})
-
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: jest.fn(),
-      goBack: jest.fn(),
-    }),
-  }
-})
-
-// Contains message Ids grouped together by thread
-const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
-
-// Create a date that's always more than 45 days from now
-const nowInMill = 1643402338567
-const mockDateISO = DateTime.fromMillis(nowInMill).toISO()
-const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45 }).toISO()
-
-// Contains message attributes mapped to their ids
-const mockMessagesById: SecureMessagingMessageMap = {
-  1: {
-    messageId: 1,
-    category: CategoryTypeFields.other,
-    subject: 'mock subject 1: The initial message sets the overall thread subject header',
-    body: 'message 1 body text',
-    attachment: false,
-    sentDate: '1',
-    senderId: 2,
-    senderName: 'mock sender 1',
-    recipientId: 3,
-    recipientName: 'mock recipient name 1',
-    readReceipt: 'mock read receipt 1',
-  },
-  2: {
-    messageId: 2,
-    category: CategoryTypeFields.other,
-    subject: '',
-    body: 'test 2',
-    attachment: false,
-    sentDate: '2',
-    senderId: 2,
-    senderName: 'mock sender 2',
-    recipientId: 3,
-    recipientName: 'mock recipient name 2',
-    readReceipt: 'mock read receipt 2',
-  },
-  3: {
-    messageId: 3,
-    category: CategoryTypeFields.other,
-    subject: '',
-    body: 'First accordion collapsible should be open, so the body text of this message should display',
-    attachment: false,
-    sentDate: mockDateISO,
-    senderId: 2,
-    senderName: 'mock sender 3',
-    recipientId: 3,
-    recipientName: 'mock recipient name 3',
-    readReceipt: 'mock read receipt',
-  },
-  45: {
-    messageId: 45,
-    category: CategoryTypeFields.other,
-    subject: 'This message should not display because it has different thread ID',
-    body: 'test',
-    attachment: false,
-    sentDate: fortySixDaysAgoISO, // message always older than 45 days
-    senderId: 2,
-    senderName: 'mock sender 45',
-    recipientId: 3,
-    recipientName: 'mock recipient name',
-    readReceipt: 'mock read receipt',
-  },
-}
 
 context('ViewMessageScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
-  let navHeaderSpy: any
-  let navigateToSpy: jest.Mock
-  onPressSpy = jest.fn(() => {})
-
-  const initializeTestInstance = (
-    mockMessagesById: SecureMessagingMessageMap,
-    threadList: SecureMessagingThreads,
-    loading: boolean = false,
-    loadingFile: boolean = false,
-    messageID: number = 3,
-    messageIDsOfError?: Array<number>,
-  ) => {
-    /** messageID is 3 because inbox/folder previews the last message from a thread, aka the message we clicked on to access the rest of thread
-     * While the renderMessages function can identify the correct thread array from any one of the messageIDs in that particular thread, it also
-     * uses messageID to determine which AccordionCollapsible component should be expanded by default.
-     * So it's important when testing to set this messageID to the last message in the thread to match design specs for ViewMessage.tsx
-     * */
-    props = mockNavProps(
-      undefined,
+  const thread: SecureMessagingThreadGetData = {
+    data: [
       {
-        navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
         },
-        goBack: jest.fn(),
       },
-      { params: { messageID: messageID } },
-    )
-
-    const fromISOSpy = jest.spyOn(DateTime, 'fromISO')
-    when(fromISOSpy)
-      .calledWith(mockDateISO)
-      .mockReturnValue({
-        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-          return {
-            days: -14,
-          } as Duration
+      {
+        id: 2,
+        type: '1',
+        attributes: {
+          messageId: 2,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'test 2',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '2',
+          senderId: 2,
+          senderName: 'mock sender 2',
+          recipientId: 3,
+          recipientName: 'mock recipient name 2',
+          readReceipt: 'mock read receipt 2',
         },
-        toFormat: (fmt: string, opts?: LocaleOptions) => {
-          return ''
-        },
-      } as DateTime)
-      .calledWith(fortySixDaysAgoISO)
-      .mockReturnValue({
-        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-          return {
-            days: -46,
-          } as Duration
-        },
-        toFormat: (fmt: string, opts?: LocaleOptions) => {
-          return ''
-        },
-      } as DateTime)
-
-    navigateToSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-      .mockReturnValue(navigateToSpy)
-    onPressSpy = jest.fn(() => {})
-
-    component = render(<ViewMessageScreen {...props} />, {
-      preloadedState: {
-        auth: { ...initialAuthState },
-        secureMessaging: {
-          ...initialSecureMessagingState,
-          loading: loading,
-          messagesById: mockMessagesById,
-          threads: threadList,
-          messageIDsOfError: messageIDsOfError,
-        },
-        errors: initialErrorsState,
       },
-    })
-
-    testInstance = component.UNSAFE_root
+      {
+        id: 3,
+        type: '3',
+        attributes: {
+          messageId: 3,
+          category: CategoryTypeFields.other,
+          subject: '',
+          body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '3',
+          senderId: 2,
+          senderName: 'mock sender 3',
+          recipientId: 3,
+          recipientName: 'mock recipient name 3',
+          readReceipt: 'mock read receipt',
+        },
+      },
+    ],
+  }
+  const oldThread: SecureMessagingThreadGetData = {
+    data: [],
+  }
+  const oldMessage: SecureMessagingMessageGetData = {
+    data: {
+      id: 45,
+      type: '3',
+      attributes: {
+        messageId: 45,
+        category: CategoryTypeFields.other,
+        subject: 'This message should not display because it has different thread ID',
+        body: 'test',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '2013-06-06T04:00:00.000+00:00',
+        senderId: 2,
+        senderName: 'mock sender 45',
+        recipientId: 3,
+        recipientName: 'mock recipient name',
+        readReceipt: 'mock read receipt',
+      },
+    },
+    included: [],
   }
 
-  beforeEach(() => {
-    initializeTestInstance(mockMessagesById, mockThreads)
-  })
+  const message: SecureMessagingMessageGetData = {
+    data: {
+      id: 3,
+      type: '3',
+      attributes: {
+        messageId: 3,
+        category: CategoryTypeFields.other,
+        subject: '',
+        body: 'Last accordion collapsible should be open, so the body text of this message should display 1-800-698-2411.Thank',
+        hasAttachments: false,
+        attachment: false,
+        sentDate: '3',
+        senderId: 2,
+        senderName: 'mock sender 3',
+        recipientId: 3,
+        recipientName: 'mock recipient name 3',
+        readReceipt: 'mock read receipt',
+      },
+    },
+    included: [],
+  }
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
+  const listOfFolders: SecureMessagingFoldersGetData = {
+    data: [
+      {
+        type: 'folders',
+        id: '-2',
+        attributes: {
+          folderId: -2,
+          name: 'Drafts',
+          count: 2,
+          unreadCount: 2,
+          systemFolder: true,
+        },
+      },
+      {
+        type: 'folders',
+        id: '-1',
+        attributes: {
+          folderId: -1,
+          name: 'Sent',
+          count: 32,
+          unreadCount: 0,
+          systemFolder: true,
+        },
+      },
+      {
+        type: 'folders',
+        id: '-3',
+        attributes: {
+          folderId: -3,
+          name: 'Deleted',
+          count: 24,
+          unreadCount: 0,
+          systemFolder: true,
+        },
+      },
+      {
+        type: 'folders',
+        id: '100',
+        attributes: {
+          folderId: 100,
+          name: 'test 1',
+          count: 3,
+          unreadCount: 0,
+          systemFolder: true,
+        },
+      },
+      {
+        type: 'folders',
+        id: '101',
+        attributes: {
+          folderId: 101,
+          name: 'test 2',
+          count: 12,
+          unreadCount: 0,
+          systemFolder: true,
+        },
+      },
+    ],
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+    meta: {
+      pagination: {
+        currentPage: 1,
+        perPage: 10,
+        totalPages: 1,
+        totalEntries: 5,
+      },
+    },
+    inboxUnreadCount: 0,
+  }
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
+  const initializeTestInstance = (messageID: number = 3) => {
+    render(
+      <ViewMessageScreen
+        {...mockNavProps(
+          undefined,
+          {
+            navigate: jest.fn(),
+            setOptions: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: { messageID: messageID } },
+        )}
+      />,
+    )
+  }
 
-  it('should render the correct text content of thread, and all accordions except the first should be closed', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
-      // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
-      expect(testInstance.findAllByType(TextView)[9].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should close first accordion and expand last accordion', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        testInstance.findAllByType(Pressable)[3].props.onPress()
-        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('mock sender 2')
-        // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
-        expect(testInstance.findAllByType(TextView)[10].props.children).toBe('mock sender 1')
-        expect(testInstance.findAllByType(TextView)[11].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView)[12].props.children).toBe('message 1 body text')
-        // Reply button displays properly if latest message in thread is not over 45 days old
-        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Reply')
-      })
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
-
-      await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
-    })
-  })
-
-  describe('when loadingFile is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance({}, [], false, true)
-
-      await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
-    })
-  })
-
-  describe('when individual messages fail to load', () => {
-    describe('when an individual message returns an error and that message is clicked', () => {
-      it('should show AlertBox with "Message could not be found" title', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, false, 1, [1])
-
-        await waitFor(() => {
-          testInstance.findAllByType(Pressable)[1].props.onPress()
-          expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
-          expect(testInstance.findByProps({ title: 'Message could not be found' })).toBeTruthy()
+  describe('when latest message is older than 45 days', () => {
+    it('should have the Start new message button', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${45}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
         })
-      })
-    })
-    describe('when multiple messages are expanded and fail to load', () => {
-      it('should show multiple error components', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1, 3])
-
-        await waitFor(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
-          testInstance.findAllByType(Pressable)[2].props.onPress()
-          expect(testInstance.findAllByType(IndividualMessageErrorComponent)).toBeTruthy()
-          expect(testInstance.findAllByProps({ title: 'Message could not be found' })).toBeTruthy()
-        })
-      })
+        .mockResolvedValue(oldThread)
+        .calledWith(`/v0/messaging/health/messages/${45}`)
+        .mockResolvedValue(oldMessage)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+      initializeTestInstance(45)
+      await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('This conversation is too old for new replies')).toBeTruthy())
     })
   })
 
-  describe('when message is older than 45 days', () => {
-    // changing to a different message thread by changing to different messageID
-    beforeEach(() => {
-      initializeTestInstance(mockMessagesById, mockThreads, false, false, 45)
-    })
-
-    it('should show AlertBox with Compose button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByType(StartNewMessageButton)).toBeTruthy()
-      })
+  describe('Should load the screen correctly', () => {
+    it('renders correct amount of CollapsibleMessages', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=${true}`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(listOfFolders)
+      initializeTestInstance()
+      expect(screen.getByText('Loading your message...')).toBeTruthy()
+      await waitFor(() => expect(screen.queryByRole('link', { name: '1-800-698-2411.Thank' })).toBeFalsy())
+      await waitFor(() => expect(screen.getAllByRole('tab').length).toBe(2))
+      await waitFor(() => expect(screen.getByText('mock sender 1')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('mock sender 2')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('mock sender 3')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('mock sender 45')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Reply')).toBeTruthy())
     })
   })
 })

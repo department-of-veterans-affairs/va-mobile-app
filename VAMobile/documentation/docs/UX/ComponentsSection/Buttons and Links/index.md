@@ -1,4 +1,0 @@
----
-title: Buttons and links
----
-

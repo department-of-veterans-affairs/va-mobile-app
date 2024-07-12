@@ -506,14 +506,13 @@
         }
       },
       {
-        "attributes":
-        {
+        "attributes": {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
           "expirationDate": null,
           "facilityName": "",
           "instructions": "",
           "isRefillable": false,
-          "isTrackable": true,
+          "isTrackable": false,
           "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 100MG TAB",
           "prescriptionNumber": "",
@@ -528,21 +527,20 @@
         "type": "Prescription"
       },
       {
-        "attributes":
-        {
+        "attributes": {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
           "expirationDate": null,
           "facilityName": "",
           "instructions": "",
           "isRefillable": false,
-          "isTrackable": true,
+          "isTrackable": false,
           "orderedDate": null,
           "prescriptionName": "LAMIVUDINE 1MG TAB",
           "prescriptionNumber": "",
           "quantity": null,
           "refillDate": null,
           "refillRemaining": null,
-          "refillStatus": "suspended",
+          "refillStatus": "active",
           "refillSubmitDate": "2022-08-04T13:59:40.000Z",
           "stationNumber": "999"
         },
@@ -637,7 +635,7 @@
         "id": "40142594",
         "type": "Prescription",
         "attributes": {
-          "refillStatus": "nonVerified",
+          "refillStatus": "expired",
           "refillSubmitDate": null,
           "refillDate": "2022-06-26T04:00:00.000Z",
           "refillRemaining": 1,
@@ -668,6 +666,19 @@
         "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
         "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
         "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      },
+      "prescriptionStatusCount": {
+        "active": 24,
+        "isRefillable": 10,
+        "discontinued": 1,
+        "expired": 4,
+        "historical": 3,
+        "pending": 8,
+        "transferred": 1,
+        "submitted": 0,
+        "hold": 1,
+        "unknown": 1,
+        "total": 31
       }
     }
   },
@@ -698,11 +709,37 @@
       }
     ]
   },
+  "/v0/health/rx/prescriptions/21142625/tracking": {
+    "data": [
+      {
+        "attributes": {
+          "deliveryService": "FEDEX",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": "3636850"
+            },
+            {
+              "prescriptionName": "LAMIVUDINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            }
+          ],
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "prescriptionNumber": "3636856",
+          "shippedDate": "2022-06-14T00:00:00.000Z",
+          "trackingNumber": "7534533636856",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142625
+        },
+        "id": "21142625",
+        "type": "PrescriptionTracking"
+      }
+    ]
+  },
   "/v0/health/rx/prescriptions/21142623/tracking": {
     "data": [
       {
-        "attributes":
-        {
+        "attributes": {
           "prescriptionName": "HALCINONIDE 0.1% OINT",
           "prescriptionNumber": "2720334",
           "ndcNumber": "00013264681",
@@ -714,7 +751,7 @@
         }
       },
       {
-        "attributes":  {
+        "attributes": {
           "deliveryService": "USPS",
           "otherPrescriptions": [
             {

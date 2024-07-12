@@ -1,51 +1,125 @@
-import { DateTime } from 'luxon'
-import { TFunction } from 'i18next'
 import React, { ReactNode } from 'react'
+
+import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import {
   AppointmentAttributes,
   AppointmentData,
+  AppointmentLocation,
+  AppointmentStatus,
+  AppointmentStatusConstants,
+  AppointmentTimeZone,
   AppointmentType,
   AppointmentTypeConstants,
+  AppointmentsDateRange,
   AppointmentsGroupedByYear,
   AppointmentsList,
   AppointmentsMetaPagination,
-} from 'store/api'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+} from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { VATheme, VATypographyThemeVariants } from 'styles/theme'
+
 import { LabelTagTypeConstants } from '../components/LabelTag'
-import { VATheme } from 'styles/theme'
-import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
+import {
+  getFormattedDate,
+  getFormattedDateWithWeekdayForTimeZone,
+  getFormattedTimeForTimeZone,
+} from './formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
+
+const atFacilityAddress = (location: AppointmentLocation | undefined, t: TFunction) => {
+  let fullAddress = ''
+  if (location?.address) {
+    const address = location.address
+    if (address.street && address.city && address.state && address.zipCode) {
+      fullAddress = `${address.street}, ${address.city}, ${address.state} ${address.zipCode}`
+    }
+  }
+
+  return fullAddress ? t('appointments.atFacility', { facility: fullAddress }) : t('appointments.atAtlasFacility')
+}
+
+const atFacilityName = (location: AppointmentLocation | undefined, t: TFunction) => {
+  const facility = location?.name
+  return facility ? t('appointments.atFacility', { facility }) : t('appointments.atVAFacility')
+}
 
 /**
  * Returns returns the appointment type icon text
  *
  * @param appointmentType - type AppointmentType, to describe the type of appointment
- * @param translate - function the translate function
+ * @param t - function the translate function
  * @param phoneOnly - boolean tells if the appointment is a phone call
  *
  * @returns string of the appointment type icon
  */
-export const getAppointmentTypeIconText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
-  switch (appointmentType) {
+export const getAppointmentTypeIconText = (
+  type: AppointmentType,
+  location: AppointmentLocation,
+  phoneOnly: boolean,
+  t: TFunction,
+): string => {
+  switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-      return translate('appointmentList.connectAtAtlas')
+      return atFacilityAddress(location, t)
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-      return translate('appointmentList.connectAtHome')
+      return t('video')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return translate('appointmentList.connectOnsite')
+      return atFacilityName(location, t)
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return translate('appointmentList.connectGFE')
+      return t('video')
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
+      return phoneOnly ? t('appointmentList.phoneOnly') : atFacilityName(location, t)
     case AppointmentTypeConstants.COMMUNITY_CARE:
+      return t('upcomingAppointments.communityCare')
     default:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : ''
+      return phoneOnly ? t('appointmentList.phoneOnly') : ''
   }
+}
+
+/**
+ * Returns returns the appointment analytics status
+ *
+ * @param attributes - appointment attributes
+ *
+ * @returns string appointment analytics status
+ */
+export const getAppointmentAnalyticsStatus = (attributes: AppointmentAttributes): string => {
+  let apiStatus = ''
+
+  const isPendingAppointment =
+    attributes.isPending &&
+    (attributes.status === AppointmentStatusConstants.SUBMITTED ||
+      attributes.status === AppointmentStatusConstants.CANCELLED)
+
+  if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+    apiStatus = 'Canceled'
+  } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
+    apiStatus = 'Confirmed'
+  } else if (isPendingAppointment) {
+    apiStatus = 'Pending'
+  }
+
+  return apiStatus
+}
+
+/**
+ * Returns returns the appointment analytics days
+ *
+ * @param attributes - appointment attributes
+ *
+ * @returns string appointment analytics days
+ */
+export const getAppointmentAnalyticsDays = (attributes: AppointmentAttributes): number => {
+  const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
+  const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
+  const days = apptDate - nowDate
+
+  return days
 }
 
 /**
@@ -57,20 +131,18 @@ export const getAppointmentTypeIconText = (appointmentType: AppointmentType, tra
  *
  * @returns string of the appointment type icon
  */
-export const getPendingAppointmentRequestTypeText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
-  switch (appointmentType) {
+export const pendingType = (type: AppointmentType, t: TFunction, phoneOnly: boolean): string => {
+  switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-      return translate('appointmentList.connectAtAtlas')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
-      return translate('appointmentList.connectAtHome')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return translate('appointmentList.connectOnsite')
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return translate('appointmentList.connectGFE')
-    case AppointmentTypeConstants.VA:
+      return t('video')
     case AppointmentTypeConstants.COMMUNITY_CARE:
+      return t('upcomingAppointments.communityCare')
+    case AppointmentTypeConstants.VA:
     default:
-      return phoneOnly ? translate('appointmentList.phoneOnly') : translate('appointmentList.inPerson')
+      return phoneOnly ? t('appointmentList.phoneOnly') : t('appointmentList.inPerson')
   }
 }
 
@@ -83,27 +155,37 @@ export const getPendingAppointmentRequestTypeText = (appointmentType: Appointmen
  *
  * @returns VAIconProps or undefined
  */
-export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
-  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.HelperText.fontSize, width: theme.fontSizes.HelperText.fontSize } as VAIconProps
+export const getAppointmentTypeIcon = (
+  type: AppointmentType,
+  phoneOnly: boolean,
+  theme: VATheme,
+): VAIconProps | undefined => {
+  const iconProps = {
+    fill: theme.colors.icon.defaultMenuItem,
+    height: theme.fontSizes.HelperText.fontSize,
+    width: theme.fontSizes.HelperText.fontSize,
+  } as VAIconProps
 
-  switch (appointmentType) {
+  switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
-    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+      return { ...iconProps, name: 'Building' }
+    case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return { ...iconProp, name: 'VideoCamera' }
+      return { ...iconProps, name: 'VideoCamera' }
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? { ...iconProp, name: 'Phone' } : { ...iconProp, name: 'Building' }
+      return phoneOnly ? { ...iconProps, name: 'Phone' } : { ...iconProps, name: 'Building' }
     case AppointmentTypeConstants.COMMUNITY_CARE:
+      return undefined
     default:
-      return phoneOnly ? { ...iconProp, name: 'Phone' } : undefined
+      return phoneOnly ? { ...iconProps, name: 'Phone' } : undefined
   }
 }
 
 /**
  * Returns list of appointments
  *
- * @param appointmentsByYear - type AppointmentsGroupedByYear, set appointment by year
+ * @param appointments - list of appointments unsorted
  * @param theme - type VATheme, the theme object to set some properties
  * @param translate - function, the translate function
  * @param onAppointmentPress - function, the function that will be triggered on appointment press
@@ -113,17 +195,17 @@ export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOn
  * @returns list of appointments
  */
 export const getGroupedAppointments = (
-  appointmentsByYear: AppointmentsGroupedByYear,
+  appointments: AppointmentsList,
   theme: VATheme,
-  translations: { t: TFunction; tc: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  translations: { t: TFunction },
+  onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
-  if (!appointmentsByYear) {
+  if (!appointments) {
     return <></>
   }
-
+  const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointments)
   const sortedYears = _.keys(appointmentsByYear).sort()
   if (isReverseSort) {
     sortedYears.reverse()
@@ -136,7 +218,14 @@ export const getGroupedAppointments = (
   return _.map(sortedYears, (year) => {
     return _.map(yearsToSortedMonths[year], (month) => {
       const listOfAppointments = appointmentsByYear[year][month]
-      const listItems = getListItemsForAppointments(listOfAppointments, translations, onAppointmentPress, upcomingPageMetaData, groupIdx, theme)
+      const listItems = getListItemsForAppointments(
+        listOfAppointments,
+        translations,
+        onAppointmentPress,
+        upcomingPageMetaData,
+        groupIdx,
+        theme,
+      )
       groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
@@ -147,6 +236,24 @@ export const getGroupedAppointments = (
       )
     })
   })
+}
+
+export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
+  const appointmentsByYear: AppointmentsGroupedByYear = {}
+
+  // Group appointments by year, resulting object is { year: [ list of appointments for year ] }
+  const initialAppointmentsByYear = _.groupBy(appointmentsList || [], (appointment) => {
+    return getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
+  })
+
+  // Group appointments by year by month next, resulting object is { year: { month1: [ list for month1 ], month2: [ list for month2 ] } }
+  _.each(initialAppointmentsByYear, (listOfAppointmentsInYear, year) => {
+    appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): number => {
+      return new Date(appointment.attributes.startDateUtc).getUTCMonth()
+    })
+  })
+
+  return appointmentsByYear
 }
 
 /**
@@ -163,32 +270,96 @@ export const getGroupedAppointments = (
  */
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
-  translations: { t: TFunction; tc: TFunction },
-  onAppointmentPress: (appointmentID: string) => void,
+  translations: { t: TFunction },
+  onAppointmentPress: (appointment: AppointmentData) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
-  const { t, tc } = translations
+  const { t } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
-    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+    const a11yValue = t('listPosition', { position, total: totalEntries })
     const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
     listItems.push({
       textLines,
       a11yValue,
-      onPress: () => onAppointmentPress(appointment.id),
+      onPress: () => onAppointmentPress(appointment),
       a11yHintText: isPendingAppointment ? t('appointments.viewDetails.request') : t('appointments.viewDetails'),
       testId: getTestIDFromTextLines(textLines),
     })
   })
 
   return listItems
+}
+
+const getStatus = (
+  isPending: boolean,
+  status: AppointmentStatus,
+  t: TFunction,
+  mb: number,
+): TextLineWithIconProps | undefined => {
+  if (status === AppointmentStatusConstants.CANCELLED) {
+    return {
+      text: t('appointments.canceled'),
+      textTag: { labelType: LabelTagTypeConstants.tagInactive },
+      mb,
+    }
+  } else if (status === AppointmentStatusConstants.BOOKED) {
+    return {
+      text: t('appointments.confirmed'),
+      textTag: { labelType: LabelTagTypeConstants.tagGreen },
+      mb,
+    }
+  } else if (isPending) {
+    return {
+      text: t('appointments.pending'),
+      textTag: { labelType: LabelTagTypeConstants.tagYellow },
+      mb,
+    }
+  } else {
+    return undefined
+  }
+}
+
+const getDate = (startDateUtc: string, timeZone: AppointmentTimeZone): TextLineWithIconProps => ({
+  text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone),
+  variant: 'MobileBodyBold',
+})
+
+const getTime = (startDateUtc: string, timeZone: AppointmentTimeZone, mb: number): TextLineWithIconProps => ({
+  text: getFormattedTimeForTimeZone(startDateUtc, timeZone),
+  variant: 'MobileBodyBold',
+  mb,
+})
+
+const getCareText = (typeOfCare = '', serviceCategoryName: string | null = '', t: TFunction) => {
+  return serviceCategoryName === 'COMPENSATION & PENSION' ? t('appointments.claimExam') : typeOfCare
+}
+
+const getModality = (
+  type: AppointmentType,
+  phoneOnly: boolean,
+  location: AppointmentLocation,
+  theme: VATheme,
+  t: TFunction,
+): TextLineWithIconProps => ({
+  text: getAppointmentTypeIconText(type, location, phoneOnly, t),
+  iconProps: getAppointmentTypeIcon(type, phoneOnly, theme),
+  variant: 'HelperText',
+})
+
+const getTextLine = (
+  text: string | null,
+  mb: number,
+  variant: keyof VATypographyThemeVariants = 'HelperText',
+): TextLineWithIconProps | undefined => {
+  return text ? { text, variant, mb } : undefined
 }
 
 /**
@@ -198,85 +369,50 @@ const getListItemsForAppointments = (
  * @param t - function, the translate function
  * @param theme - type VATheme, the theme object to set some properties
  */
-export const getTextLinesForAppointmentListItem = (appointment: AppointmentData, t: TFunction, theme: VATheme): Array<TextLineWithIconProps> => {
+export const getTextLinesForAppointmentListItem = (
+  appointment: AppointmentData,
+  t: TFunction,
+  theme: VATheme,
+): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
-  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider } = attributes
-  const textLines: Array<TextLineWithIconProps> = []
-  const { condensedMarginBetween } = theme.dimensions
-  const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
+  const {
+    startDateUtc,
+    timeZone,
+    appointmentType,
+    location,
+    phoneOnly,
+    typeOfCare,
+    healthcareProvider,
+    serviceCategoryName,
+  } = attributes
+  const { condensedMarginBetween, tinyMarginBetween } = theme.dimensions
+  const isPending =
+    attributes.isPending &&
+    (attributes.status === AppointmentStatusConstants.SUBMITTED ||
+      attributes.status === AppointmentStatusConstants.CANCELLED)
+  const careText = getCareText(typeOfCare, serviceCategoryName, t)
+  let result: Array<TextLineWithIconProps | undefined> = []
 
-  if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: condensedMarginBetween })
-  } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: condensedMarginBetween })
-  } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: condensedMarginBetween })
-  }
-
-  // pending appointments
-  if (isPendingAppointment) {
-    textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
-    switch (appointmentType) {
-      case AppointmentTypeConstants.COMMUNITY_CARE:
-        if (healthcareProvider) {
-          textLines.push({ text: t('common:text.raw', { text: healthcareProvider }), variant: 'HelperText' })
-        } else {
-          textLines.push({ text: t('upcomingAppointments.communityCare'), variant: 'HelperText' })
-        }
-        break
-      case AppointmentTypeConstants.VA:
-      default:
-        textLines.push({
-          text: t('common:text.raw', { text: location.name }),
-          variant: 'HelperText',
-          mb: condensedMarginBetween,
-        })
-    }
-    const youRequestedText = getPendingAppointmentRequestTypeText(appointmentType, t, phoneOnly)
-    textLines.push({
-      text: t('appointmentList.youRequested', { typeOfVisit: youRequestedText }),
-      variant: 'HelperText',
-    })
+  if (isPending) {
+    const type = pendingType(appointmentType, t, phoneOnly)
+    result = [
+      getTextLine(careText, tinyMarginBetween, 'MobileBodyBold'),
+      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      getTextLine(healthcareProvider, tinyMarginBetween),
+      getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
+    ]
   } else {
-    // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
-    if (isCovidVaccine) {
-      textLines.push(
-        { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
-      )
-    } else if (typeOfCare) {
-      textLines.push(
-        { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
-      )
-    } else {
-      textLines.push(
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
-      )
-    }
-
-    const isVideoOrVAAppointment = appointmentType !== AppointmentTypeConstants.COMMUNITY_CARE
-    const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
-    const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
-    textLines.push({
-      text: t('common:text.raw', { text: healthcareProvider || location.name }),
-      variant: 'HelperText',
-      mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
-    })
-
-    if (showAppointmentTypeIcon) {
-      textLines.push({
-        text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
-        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-        variant: 'HelperText',
-      })
-    }
+    result = [
+      getDate(startDateUtc, timeZone),
+      getTime(startDateUtc, timeZone, tinyMarginBetween),
+      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      getTextLine(careText, tinyMarginBetween),
+      getTextLine(healthcareProvider, tinyMarginBetween),
+      getModality(appointmentType, phoneOnly, location, theme, t),
+    ]
   }
 
-  return textLines
+  return result.filter(Boolean) as Array<TextLineWithIconProps>
 }
 
 /**
@@ -287,7 +423,10 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
  *
  * @returns type YearsToSortedMonths sorted appointments
  */
-export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedByYear, isReverseSort: boolean): YearsToSortedMonths => {
+export const getYearsToSortedMonths = (
+  appointmentsByYear: AppointmentsGroupedByYear,
+  isReverseSort: boolean,
+): YearsToSortedMonths => {
   const yearToSortedMonths: YearsToSortedMonths = {}
 
   _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
@@ -320,7 +459,95 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
  */
 export const isAPendingAppointment = (attributes: AppointmentAttributes): boolean => {
   const { status, isPending } = attributes || ({} as AppointmentAttributes)
-  const validPendingStatus = status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
+  const validPendingStatus =
+    status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
 
   return !!(isPending && validPendingStatus)
+}
+
+/**
+ * Returns the date rage for upcoming appointments
+ *
+ * @returns AppointmentsDateRange
+ */
+export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const futureDate = todaysDate.plus({ days: 390 })
+
+  return {
+    startDate: todaysDate.startOf('day').toISO(),
+    endDate: futureDate.endOf('day').toISO(),
+  }
+}
+
+/**
+ * Returns the date rage for appointments in the past 3 months
+ *
+ * @returns AppointmentsDateRange
+ */
+export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+
+  return {
+    startDate: threeMonthsEarlier.startOf('day').toISO(),
+    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+  }
+}
+
+export type AppointmentDetailsScreenType =
+  | 'ClaimExam'
+  | 'CommunityCare'
+  | 'CompensationPension'
+  | 'InPersonVA'
+  | 'Phone'
+  | 'VideoVA'
+  | 'VideoAtlas'
+  | 'VideoHome'
+  | 'VideoGFE'
+
+export const AppointmentDetailsTypeConstants: {
+  ClaimExam: AppointmentDetailsScreenType
+  CommunityCare: AppointmentDetailsScreenType
+  CompensationPension: AppointmentDetailsScreenType
+  InPersonVA: AppointmentDetailsScreenType
+  Phone: AppointmentDetailsScreenType
+  VideoVA: AppointmentDetailsScreenType
+  VideoAtlas: AppointmentDetailsScreenType
+  VideoHome: AppointmentDetailsScreenType
+  VideoGFE: AppointmentDetailsScreenType
+} = {
+  ClaimExam: 'ClaimExam',
+  CommunityCare: 'CommunityCare',
+  CompensationPension: 'CompensationPension',
+  InPersonVA: 'InPersonVA',
+  Phone: 'Phone',
+  VideoVA: 'VideoVA',
+  VideoAtlas: 'VideoAtlas',
+  VideoHome: 'VideoHome',
+  VideoGFE: 'VideoGFE',
+}
+
+export type AppointmentDetailsSubType =
+  | 'Pending'
+  | 'Past'
+  | 'Upcoming'
+  | 'Canceled'
+  | 'CanceledAndPending'
+  | 'PastPending'
+
+export const AppointmentDetailsSubTypeConstants: {
+  Pending: AppointmentDetailsSubType
+  Past: AppointmentDetailsSubType
+  Upcoming: AppointmentDetailsSubType
+  Canceled: AppointmentDetailsSubType
+  CanceledAndPending: AppointmentDetailsSubType
+  PastPending: AppointmentDetailsSubType
+} = {
+  Pending: 'Pending',
+  Past: 'Past',
+  Upcoming: 'Upcoming',
+  Canceled: 'Canceled',
+  CanceledAndPending: 'CanceledAndPending',
+  PastPending: 'PastPending',
 }

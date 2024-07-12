@@ -1,7 +1,15 @@
 {
-  "testRunner": "jest",
-  "runnerConfig": "detoxconfig.js",
-  
+  "testRunner": {
+    "$0": "jest",
+    "args": {
+      "config": "detoxconfig.js"
+    },
+    "jest": {
+      "setupTimeout": 300000,
+      "reportSpecs": false,
+      "reportWorkerAssign": false
+    }
+  },
   "skipLegacyWorkersInjection": true,
   "apps": {
     "ios": {
@@ -19,13 +27,14 @@
     "simulator": {
       "type": "ios.simulator",
       "device": {
-        "type": "iPhone 13"
+        "type": "iPhone 15 Pro Max",
+        "os": "iOS 17.4"
       }
     },
     "emulator": {
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_4_XL_API_31"
+        "avdName": "Pixel_4_XL_API_28"
       }
     }
   },

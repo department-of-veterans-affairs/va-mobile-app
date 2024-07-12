@@ -1,7 +1,8 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { NAMESPACE } from 'constants/namespaces'
+
 import BasicError from './BasicError'
 
 export type NetworkConnectionErrorProps = {
@@ -19,7 +20,6 @@ const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain })
       messageText={t('errors.networkConnection.body')}
       buttonA11yHint={t('errors.networkConnection.a11yHint')}
       headerText={t('errors.networkConnection.header')}
-      headerA11yLabel={t('errors.networkConnection.headerA11yLabel')}
       label={t('refresh')}
     />
   )

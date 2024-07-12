@@ -1,37 +1,40 @@
-import { ScrollView, TextInput } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import { ScrollView, TextInput } from 'react-native'
 
-import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { RootNavStackParamList } from 'App'
+
+import { useContactInformation } from 'api/contactInformation'
+import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
+import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import {
   AlertBox,
   Box,
-  ButtonTypesConstants,
-  ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
   LoadingComponent,
   PickerItem,
-  VAButton,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Countries } from 'constants/countries'
-import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/slices'
-import { RootNavStackParamList } from 'App'
-import { RootState } from 'store'
-import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
+import { GenerateAddressMessages } from 'translations/en/functions'
+import { showSnackBar } from 'utils/common'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
+import { getAddressDataPayload } from 'utils/personalInformation'
+
 import { profileAddressOptions } from '../AddressSummary'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -76,18 +79,19 @@ export type AddressDataEditedFields =
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
-const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, savingAddress, showValidation, validateAddressAbortController } = useSelector<RootState, PersonalInformationState>(
-    (state) => state.personalInformation,
-  )
+function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
-  const destructiveAlert = useDestructiveAlert()
+  const { data: contactInformation } = useContactInformation()
+  const { mutate: deleteAddress, isPending: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
+  const { mutate: saveAddress, isPending: savingAddress, isSuccess: addressSaved } = useSaveAddress()
+  const { mutate: validateAddress, isPending: validatingAddress, data: validationData } = useValidateAddress()
+  const [addressValidated, setAddressValidated] = useState(false)
+  const deleteAddressAlert = useAlert()
+  const destructiveActionSheet = useDestructiveActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
-
-  const [deleting, setDeleting] = useState(false)
 
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
@@ -102,7 +106,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
-    const item = profile?.[addressType]?.[itemToGet]
+    const item = contactInformation?.[addressType]?.[itemToGet]
     return item ? item : ''
   }
 
@@ -118,49 +122,78 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onCancel = (): void => {
-    dispatch(finishValidateAddress())
     navigation.goBack()
   }
 
-  const onConfirmCancel = (): void => {
-    destructiveAlert({
-      title: t('editAddress.validation.cancelConfirm.title'),
+  const initialCheckbox = getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType)
+  const initialCountry = getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries)
+  const initialAddressLine1 = getInitialState(AddressDataEditedFieldValues.addressLine1)
+  const initialAddressLine2 = getInitialState(AddressDataEditedFieldValues.addressLine2)
+  const initialAddressLine3 = getInitialState(AddressDataEditedFieldValues.addressLine3)
+  const initialMilitaryPostOffice = getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices)
+  const initialCity = getInitialState(AddressDataEditedFieldValues.city)
+  const initialState =
+    contactInformation?.[addressType]?.countryCodeIso3 === USA_VALUE
+      ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
+      : getInitialState(AddressDataEditedFieldValues.stateCode) ||
+        getInitialState(AddressDataEditedFieldValues.province)
+  const initialZipCode =
+    getInitialState(AddressDataEditedFieldValues.zipCode) ||
+    getInitialState(AddressDataEditedFieldValues.internationalPostalCode)
+
+  const [checkboxSelected, setCheckboxSelected] = useState(initialCheckbox)
+  const [country, setCountry] = useState(initialCountry)
+  const [addressLine1, setAddressLine1] = useState(initialAddressLine1)
+  const [addressLine2, setAddressLine2] = useState(initialAddressLine2)
+  const [addressLine3, setAddressLine3] = useState(initialAddressLine3)
+  const [militaryPostOffice, setMilitaryPostOffice] = useState(initialMilitaryPostOffice)
+  const [city, setCity] = useState(initialCity)
+  const [state, setState] = useState(initialState)
+  const [zipCode, setZipCode] = useState(initialZipCode)
+  const [formContainsError, setFormContainsError] = useState(false)
+  const [resetErrors, setResetErrors] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [showAddressValidation, setShowAddressValidation] = useState(false)
+
+  const abortController = new AbortController()
+  const abortSignal = abortController.signal
+
+  useBeforeNavBackListener(navigation, (e) => {
+    // If address is being validated when exiting screen, abort API call
+    if (validatingAddress) {
+      abortController.abort()
+    }
+
+    if (!formChanged() && !showAddressValidation) {
+      return
+    }
+
+    if (addressDeleted || addressSaved || addressValidated) {
+      return
+    }
+
+    e.preventDefault()
+    const title =
+      addressType === profileAddressOptions.RESIDENTIAL_ADDRESS
+        ? t('editAddress.validation.cancelConfirm.home.title')
+        : t('editAddress.validation.cancelConfirm.mailing.title')
+
+    destructiveActionSheet({
+      title,
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keepEditing'),
         },
         {
-          text: t('editAddress.validation.cancelConfirm.confirm'),
-          onPress: onCancel,
+          text: t('deleteChanges'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
         },
       ],
     })
-  }
-
-  const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
-  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries))
-  const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
-  const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
-  const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
-  const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
-  const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
-  const [state, setState] = useState(
-    profile?.[addressType]?.countryCodeIso3 === USA_VALUE
-      ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
-      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province),
-  )
-  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
-  const [formContainsError, setFormContainsError] = useState(false)
-  const [resetErrors, setResetErrors] = useState(false)
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
-
-  useBeforeNavBackListener(navigation, () => {
-    // if saving still when canceling then abort
-    if (savingAddress) {
-      validateAddressAbortController?.abort()
-    }
   })
 
   const isDomestic = (countryVal: string): boolean => {
@@ -180,21 +213,31 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onDelete = (): void => {
-    const currentAddressData = profile?.[addressType]
+    const currentAddressData = contactInformation?.[addressType]
 
     if (!currentAddressData) {
       // Cannot delete without existing data
       return
     }
 
-    setDeleting(true)
-    dispatch(deleteAddress(currentAddressData, removalSnackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    const mutateOptions = {
+      onSuccess: () => showSnackBar(removalSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+      onError: () =>
+        showSnackBar(
+          removalSnackbarMessages.errorMsg,
+          dispatch,
+          () => deleteAddress(currentAddressData, mutateOptions),
+          false,
+          true,
+        ),
+    }
+    deleteAddress(currentAddressData, mutateOptions)
   }
 
   const getAddressValues = (): AddressData => {
     const addressLocationType = getAddressLocationType()
 
-    const addressId = profile?.[addressType]?.id || 0
+    const addressId = contactInformation?.[addressType]?.id || 0
     const countryNameObj = Countries.find((countryDef) => countryDef.value === country)
     const countryName = countryNameObj ? countryNameObj.label : ''
 
@@ -228,7 +271,28 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onSave = (): void => {
-    dispatch(validateAddress(getAddressValues(), snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+    const addressValues = getAddressValues()
+    const addressData = getAddressDataPayload(addressValues, contactInformation)
+
+    const save = () => {
+      validateAddress(
+        { addressData, abortSignal },
+        {
+          onSuccess: (data) => {
+            if (data?.confirmedSuggestedAddresses) {
+              setShowAddressValidation(true)
+            } else {
+              registerReviewEvent()
+              setAddressValidated(true)
+              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            }
+          },
+          onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
+        },
+      )
+    }
+
+    save()
   }
 
   useEffect(() => {
@@ -239,45 +303,21 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }, [checkboxSelected, country])
 
   useEffect(() => {
-    if (addressSaved) {
-      dispatch(finishEditAddress())
-      setDeleting(false)
+    if (addressDeleted || addressSaved || addressValidated) {
       navigation.goBack()
     }
-  }, [addressSaved, navigation, dispatch])
+  }, [addressDeleted, addressSaved, addressValidated, navigation])
 
-  const cancelFn = showValidation ? onConfirmCancel : onCancel
-
-  if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (savingAddress || addressSaved) {
-    const loadingText = deleting ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
-
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
-        <LoadingComponent text={loadingText} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (showValidation) {
-    const addressValidationProps = {
-      addressEntered: getAddressValues(),
-      addressId: profile?.[addressType]?.id || 0,
-      snackbarMessages: snackbarMessages,
-    }
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
-        <AddressValidation {...addressValidationProps} />
-      </FullScreenSubtask>
-    )
-  }
+  const formChanged = (): boolean =>
+    checkboxSelected !== initialCheckbox ||
+    country !== initialCountry ||
+    addressLine1 !== initialAddressLine1 ||
+    addressLine2 !== initialAddressLine2 ||
+    addressLine3 !== initialAddressLine3 ||
+    militaryPostOffice !== initialMilitaryPostOffice ||
+    city !== initialCity ||
+    state !== initialState ||
+    zipCode !== initialZipCode
 
   const clearFieldsAndErrors = (): void => {
     setAddressLine1('')
@@ -322,6 +362,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           labelKey: 'editAddress.militaryPostOffices',
           isRequiredField: true,
+          testID: 'militaryPostOfficeTestID',
         },
         fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
@@ -336,6 +377,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setCity,
         inputRef: cityRef,
         isRequiredField: true,
+        testID: 'cityTestID',
       },
       fieldErrorMessage: t('editAddress.cityFieldError'),
     }
@@ -354,6 +396,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'stateTestID',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -366,6 +409,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.state',
         value: state,
         onChange: setState,
+        testID: 'stateTestID',
       },
     }
   }
@@ -403,7 +447,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
-  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
+  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } =
+    getZipCodeOrInternationalCodeFields()
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -412,7 +457,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.liveOnMilitaryBase',
         selected: checkboxSelected,
         onSelectionChange: onCheckboxChange,
-        a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
+        testID: 'USMilitaryBaseCheckboxTestID',
       },
     },
     {
@@ -425,6 +470,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
+        testID: 'countryPickerTestID',
       },
       fieldErrorMessage: t('editAddress.countryFieldError'),
       hideField: checkboxSelected,
@@ -440,6 +486,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         inputRef: addressLine1Ref,
         isRequiredField: true,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine1TestID',
       },
       fieldErrorMessage: t('editAddress.streetAddressLine1FieldError'),
     },
@@ -452,6 +499,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setAddressLine2,
         maxLength: MAX_ADDRESS_LENGTH,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine2TestID',
       },
     },
     {
@@ -464,6 +512,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine3Ref,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine3TestID',
       },
     },
     getCityOrMilitaryBaseFormFieldType(),
@@ -477,25 +526,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setZipCode,
         inputRef: zipCodeRef,
         isRequiredField: true,
+        testID: 'zipCodeTestID',
       },
       fieldErrorMessage: zipCodeFieldError,
       validationList: zipCodeValidationList,
     },
   ]
 
-  const noAddressData = !profile?.[addressType]
+  const noAddressData = !contactInformation?.[addressType]
 
   const lowerCaseTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    destructiveAlert({
-      title: t('contactInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
-      message: t('contactInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
+    deleteAddressAlert({
+      title: t('contactInformation.removeInformation.title', { info: lowerCaseTitle }),
+      message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
         },
         {
           text: t('remove'),
@@ -505,40 +553,65 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     })
   }
 
+  const loadingCheck = deletingAddress || savingAddress || validatingAddress
+  const addressValidation = showAddressValidation && validationData
+  const addressValues = getAddressValues()
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={displayTitle}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={cancelFn}
-      rightButtonText={t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
-            />
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <FormWrapper
-          fieldsList={formFieldsList}
-          onSave={onSave}
-          setFormContainsError={setFormContainsError}
-          resetErrors={resetErrors}
-          setResetErrors={setResetErrors}
-          onSaveClicked={onSaveClicked}
-          setOnSaveClicked={setOnSaveClicked}
+      onLeftButtonPress={onCancel}
+      rightButtonText={!loadingCheck ? t('save') : undefined}
+      onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
+      testID="EditAddressTestID">
+      {loadingCheck ? (
+        <LoadingComponent
+          text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')}
         />
-      </Box>
+      ) : addressValidation ? (
+        <AddressValidation
+          addressEntered={getAddressDataPayload(addressValues, contactInformation)}
+          addressId={contactInformation?.[addressType]?.id || 0}
+          snackbarMessages={snackbarMessages}
+          validationData={validationData}
+          saveAddress={saveAddress}
+          setShowAddressValidation={setShowAddressValidation}
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
+                buttonType={ButtonVariants.Destructive}
+                testID="EditAddressSaveTestID"
+              />
+            </Box>
+          )}
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox
+                title={t('editAddress.alertError')}
+                border="error"
+                scrollViewRef={scrollViewRef}
+                focusOnError={onSaveClicked}
+              />
+            </Box>
+          )}
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

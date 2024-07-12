@@ -1,11 +1,11 @@
+import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
+
+import { refreshAccessToken } from 'store/slices/authSlice'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
-import { featureEnabled } from 'utils/remoteConfig'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { refreshAccessToken } from 'store/slices/authSlice'
-import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
-
-const DocumentDirectoryPath = `${RNFetchBlob.fs.dirs.DocumentDir}/`
+const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
 
 // TODO: verify this time on the service side and match
 const FETCH_TIMEOUT_MS = 60000
@@ -21,12 +21,17 @@ const fileSystemFatalErrorString = 'File System Error'
  * @param retries - number of times to attempt the request again until it fails
  * @returns Returns a Promise with a string that represents the filePath or undefined for a failed download
  */
-export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}, retries = 0): Promise<string | undefined> => {
-  const SISEnabled = featureEnabled('SIS')
+export const downloadFile = async (
+  method: 'GET' | 'POST',
+  endpoint: string,
+  fileName: string,
+  params: Params = {},
+  retries = 0,
+): Promise<string | undefined> => {
   const filePath = DocumentDirectoryPath + fileName
 
   try {
-    const options: RNFetchBlobConfig = {
+    const options: ReactNativeBlobUtilConfig = {
       fileCache: true,
       path: filePath,
       timeout: FETCH_TIMEOUT_MS,
@@ -35,23 +40,21 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const headers = {
       authorization: `Bearer ${getAccessToken()}`,
       'X-Key-Inflection': 'camel',
-      ...(SISEnabled ? { 'Authentication-Method': 'SIS' } : {}),
+      'Authentication-Method': 'SIS',
     }
 
-    // https://github.com/joltup/rn-fetch-blob/wiki/Fetch-API#bodystring--arrayobject-optional
+    // https://github.com/RonRadtke/react-native-blob-util/wiki/api#bodystring--arrayobject-optional
     const body = JSON.stringify(params)
-    const results: FetchBlobResponse = await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
+    const results = await ReactNativeBlobUtil.config(options).fetch(method, endpoint, headers, body)
     const statusCode = results.respInfo.status
     let accessTokenExpired = false
 
-    // For SIS, a 403 alone doesn't indicated an expired access token. We need to check for the error message as well.
-    if (SISEnabled && statusCode === 403) {
+    // a 403 alone doesn't indicated an expired access token. We need to check for the error message as well.
+    if (statusCode === 403) {
       const responseBody = await results.json()
       if (responseBody?.errors === 'Access token has expired') {
         accessTokenExpired = true
       }
-    } else if (!SISEnabled && statusCode === 401) {
-      accessTokenExpired = true
     }
 
     // Unauthorized, access-token likely expired
@@ -91,10 +94,14 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
  * @param params - body for the call
  * @returns Returns the filePath
  */
-export const downloadDemoFile = async (endpoint: string, fileName: string, params: Params = {}): Promise<string | undefined> => {
+export const downloadDemoFile = async (
+  endpoint: string,
+  fileName: string,
+  params: Params = {},
+): Promise<string | undefined> => {
   const filePath = DocumentDirectoryPath + fileName
 
-  const options: RNFetchBlobConfig = {
+  const options: ReactNativeBlobUtilConfig = {
     fileCache: true,
     path: filePath,
     timeout: FETCH_TIMEOUT_MS,
@@ -103,14 +110,14 @@ export const downloadDemoFile = async (endpoint: string, fileName: string, param
   const headers = {}
 
   const body = JSON.stringify(params)
-  await RNFetchBlob.config(options).fetch('GET', endpoint, headers, body)
+  await ReactNativeBlobUtil.config(options).fetch('GET', endpoint, headers, body)
 
   return filePath
 }
 
 // Unlinking is the same as deleting in this case
 export const unlinkFile = async (filePath: string): Promise<void> => {
-  await RNFetchBlob.fs.unlink(filePath)
+  await ReactNativeBlobUtil.fs.unlink(filePath)
 }
 
 /**
@@ -118,7 +125,8 @@ export const unlinkFile = async (filePath: string): Promise<void> => {
  */
 export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
   // TODO: this is not currently used but will be used for the multi upload flow
-  // Documents from the document picker sometimes are prepended with file:// which RNFetchBlob is not expecting
+  // Documents from the document picker sometimes are prepended with file:// which
+  // ReactNativeBlobUtil is not expecting
   const filePrefix = 'file://'
   if (uri.startsWith(filePrefix)) {
     uri = uri.substring(filePrefix.length)
@@ -129,5 +137,5 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
     }
   }
 
-  return await RNFetchBlob.fs.readFile(uri, 'base64')
+  return await ReactNativeBlobUtil.fs.readFile(uri, 'base64')
 }

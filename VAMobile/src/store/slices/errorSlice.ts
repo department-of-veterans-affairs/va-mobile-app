@@ -1,19 +1,18 @@
-import { DateTime } from 'luxon'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { DateTime } from 'luxon'
 import { reduce } from 'underscore'
 
-import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
+import { AppThunk } from 'store'
+import { get } from 'store/api'
 import {
-  DowntimeFeatureNameConstants,
-  DowntimeFeatureToScreenID,
   DowntimeFeatureType,
   DowntimeFeatureTypeConstants,
   MaintenanceWindowsGetData,
   ScreenIDTypes,
 } from 'store/api/types'
+
 import { ScreenIDTypesConstants } from '../api/types/Screens'
-import { get } from 'store/api'
 
 export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes
@@ -24,7 +23,6 @@ export type DowntimeWindowsByFeatureType = {
 }
 
 export type DowntimeWindow = {
-  featureName: string
   startTime: DateTime
   endTime: DateTime
 }
@@ -32,6 +30,7 @@ export type DowntimeWindow = {
 export type ErrorsState = {
   errorsByScreenID: ErrorsByScreenIDType
   downtimeWindowsByFeature: DowntimeWindowsByFeatureType
+  downtimeWindowsFetched: boolean
   tryAgain: () => Promise<void>
 }
 
@@ -61,6 +60,7 @@ export const initialErrorsState: ErrorsState = {
   tryAgain: () => Promise.resolve(),
   errorsByScreenID: initializeErrorsByScreenID(),
   downtimeWindowsByFeature: initializeDowntimeWindowsByFeature(),
+  downtimeWindowsFetched: false,
 }
 
 /**
@@ -70,16 +70,18 @@ export const initialErrorsState: ErrorsState = {
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
   if (!response) {
+    dispatch(dispatchSetDowntime(undefined))
     return
   }
 
   // filtering out any maintenance windows we haven't mapped to a screen in the app
-  const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
+  const maintWindows = response.data.filter((w) =>
+    Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service),
+  )
   let downtimeWindows = {} as DowntimeWindowsByFeatureType
   for (const m of maintWindows) {
     const maintWindow = m.attributes
     const metadata: DowntimeWindow = {
-      featureName: DowntimeFeatureNameConstants[maintWindow.service],
       startTime: DateTime.fromISO(maintWindow.startTime),
       endTime: DateTime.fromISO(maintWindow.endTime),
     }
@@ -126,11 +128,15 @@ const errorSlice = createSlice({
       state.tryAgain = action.payload
     },
 
-    dispatchSetDowntime: (state, action: PayloadAction<DowntimeWindowsByFeatureType>) => {
-      state.downtimeWindowsByFeature = action.payload
+    dispatchSetDowntime: (state, action: PayloadAction<DowntimeWindowsByFeatureType | undefined>) => {
+      if (action.payload) {
+        state.downtimeWindowsByFeature = action.payload
+      }
+      state.downtimeWindowsFetched = true
     },
   },
 })
 
-export const { dispatchSetError, dispatchClearErrors, dispatchSetTryAgainFunction, dispatchSetDowntime } = errorSlice.actions
+export const { dispatchSetError, dispatchClearErrors, dispatchSetTryAgainFunction, dispatchSetDowntime } =
+  errorSlice.actions
 export default errorSlice.reducer

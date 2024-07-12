@@ -1,7 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { DateTime } from 'luxon'
+
 import { getVersionName } from './deviceData'
 import { requestReview } from './rnReviews'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const STORAGE_REVIEW_EVENT_KEY = '@review_event'
 export const STORAGE_LAST_REVIEW_PROMPT_DATE_MILLIS = '@last_review_date'

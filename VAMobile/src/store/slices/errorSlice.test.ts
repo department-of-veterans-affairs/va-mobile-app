@@ -1,12 +1,19 @@
-import { find } from 'underscore'
 import { when } from 'jest-when'
 import { DateTime, Settings } from 'luxon'
+import { find } from 'underscore'
 
-import { context, realStore } from 'testUtils'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants, MaintenanceWindowsGetData, DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypesConstants } from 'store/api/types'
+import { context, realStore } from 'testUtils'
+
 import * as api from '../api'
-import { checkForDowntimeErrors, dispatchClearErrors, dispatchSetError, initialErrorsState, initializeErrorsByScreenID } from './errorSlice'
+import {
+  checkForDowntimeErrors,
+  dispatchClearErrors,
+  dispatchSetError,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+} from './errorSlice'
 
 export const ActionTypes: {
   ERRORS_SET_ERROR: string
@@ -23,9 +30,15 @@ context('errors', () => {
     it('should set networkConnectionError for screenID to true', async () => {
       const store = realStore()
       const expectedErrorsByScreenID = initializeErrorsByScreenID()
-      expectedErrorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      expectedErrorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-      store.dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR, screenID: ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID }))
+      store.dispatch(
+        dispatchSetError({
+          errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+          screenID: ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID,
+        }),
+      )
       expect(store.getState().errors.errorsByScreenID).toEqual(expectedErrorsByScreenID)
     })
   })
@@ -34,9 +47,15 @@ context('errors', () => {
     it('should set state to initial state', async () => {
       const store = realStore()
       const expectedErrorsByScreenID = initializeErrorsByScreenID()
-      expectedErrorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      expectedErrorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-      store.dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR, screenID: ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID }))
+      store.dispatch(
+        dispatchSetError({
+          errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+          screenID: ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID,
+        }),
+      )
       let actions = store.getActions()
       let action = find(actions, { type: ActionTypes.ERRORS_SET_ERROR })
       expect(action?.state.errors.errorsByScreenID).toEqual(expectedErrorsByScreenID)
@@ -83,13 +102,13 @@ context('errors', () => {
             type: 'maintenance_window',
           },
           {
-            attributes: {
-              service: 'auth_idme',
-              startTime: '2021-06-01T12:00:00.000Z',
-              endTime: '2021-06-01T18:00:00.000Z',
-            },
-            id: '4',
+            id: '23fe358d-6e82-4541-804c-ce7562ba28f4',
             type: 'maintenance_window',
+            attributes: {
+              service: 'disability_rating',
+              startTime: '2019-04-20T14:15:00.000-04:00',
+              endTime: '2024-04-20T18:15:00.000Z',
+            },
           },
         ],
       }
@@ -114,8 +133,15 @@ context('errors', () => {
     it('should mark downtime for active maintenance windows', async () => {
       const store = await initializeMaintenanceWindows()
 
-      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.directDepositBenefits)
-      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.militaryServiceHistory)
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(
+        DowntimeFeatureTypeConstants.directDepositBenefits,
+      )
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(
+        DowntimeFeatureTypeConstants.militaryServiceHistory,
+      )
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(
+        DowntimeFeatureTypeConstants.disabilityRating,
+      )
     })
 
     it('should not mark downtime for future maintenance windows', async () => {

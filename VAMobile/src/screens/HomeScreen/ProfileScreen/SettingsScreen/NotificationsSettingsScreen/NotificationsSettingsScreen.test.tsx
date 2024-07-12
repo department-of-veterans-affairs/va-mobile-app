@@ -1,17 +1,14 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { Switch as RNSwitch } from 'react-native'
 
-import { ErrorComponent } from 'components'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
-import { PushPreference } from 'store/api'
-import NotificationsSettingsScreen from './NotificationsSettingsScreen'
-import { waitFor } from '@testing-library/react-native'
-import { ScreenIDTypesConstants } from 'store/api/types'
+import { screen } from '@testing-library/react-native'
+
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { PushPreference } from 'store/api'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { ErrorsState, InitialState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 
 let mockPushEnabled = false
 jest.mock('utils/notifications', () => {
@@ -23,8 +20,8 @@ jest.mock('utils/notifications', () => {
 })
 
 jest.mock('store/slices/', () => {
-  let actual = jest.requireActual('store/slices')
-  let notification = jest.requireActual('store/slices').initialNotificationsState
+  const actual = jest.requireActual('store/slices')
+  const notification = jest.requireActual('store/slices').initialNotificationsState
   return {
     ...actual,
     loadPushPreferences: jest.fn(() => {
@@ -39,26 +36,28 @@ jest.mock('store/slices/', () => {
 })
 
 context('NotificationsSettingsScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const apptPrefOn: PushPreference = {
     preferenceId: 'appointment_reminders',
-    preferenceName: 'Appointment Reminders',
+    preferenceName: 'Upcoming appointments',
     value: true,
   }
 
   const apptPrefOff: PushPreference = {
     preferenceId: 'appointment_reminders',
-    preferenceName: 'Appointment Reminders',
+    preferenceName: 'Upcoming appointments',
     value: false,
   }
 
-  const initializeTestInstance = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[], errorsState: ErrorsState = initialErrorsState) => {
+  const renderWithProps = (
+    notificationsEnabled: boolean,
+    systemNotificationsOn: boolean,
+    preferences: PushPreference[],
+    errorsState: ErrorsState = initialErrorsState,
+  ) => {
     const props = mockNavProps()
     mockPushEnabled = notificationsEnabled
 
-    component = render(<NotificationsSettingsScreen {...props} />, {
+    render(<NotificationsSettingsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         notifications: {
@@ -69,57 +68,63 @@ context('NotificationsSettingsScreen', () => {
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
-  beforeEach(async () => {
-    initializeTestInstance(false, true, [apptPrefOn])
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
 
   describe('appointment reminders switch', () => {
-    it('value should be true when pref is set to true', async () => {
-      await waitFor(() => {
-        const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
-        expect(rnSwitch.props.value).toEqual(true)
-      })
+    it('value should be true when pref is set to true', () => {
+      renderWithProps(false, true, [apptPrefOn])
+      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+        true,
+      )
     })
 
-    it('value should be false when pref is set to true', async () => {
-      initializeTestInstance(false, true, [apptPrefOff])
-      const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
-      expect(rnSwitch.props.value).toEqual(false)
+    it('value should be false when pref is set to true', () => {
+      renderWithProps(false, true, [apptPrefOff])
+      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+        false,
+      )
+    })
+  })
+
+  describe('when system notifications are disabled', () => {
+    it('hides the notification switches', () => {
+      renderWithProps(false, false, [apptPrefOff])
+      expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy()
+      expect(
+        screen.getByText(
+          "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
+        ),
+      ).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
+    it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, true, [apptPrefOn], errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      renderWithProps(false, true, [apptPrefOn], errorState)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
+    it('should not render error component when the stores screenID does not match the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, true, [apptPrefOn], errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      renderWithProps(false, true, [apptPrefOn], errorState)
+      expect(screen.queryByText("The app can't be loaded.")).toBeFalsy()
     })
   })
 })

@@ -2,6 +2,8 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
+import { useTheme } from 'utils/hooks'
+
 import {
   Box,
   FormAttachments,
@@ -15,7 +17,6 @@ import {
   VATextInput,
   VATextInputProps,
 } from '../index'
-import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
 export enum FieldType {
@@ -35,7 +36,9 @@ export type ValidationFunctionItems = {
 }
 
 /** form field type that includes the index of the field in the list so that it can be used to find a specific field */
-type FormFieldTypeWithUId<T> = Pick<FormFieldType<T>, 'fieldType' | 'fieldProps' | 'fieldErrorMessage'> & { index: number }
+type FormFieldTypeWithUId<T> = Pick<FormFieldType<T>, 'fieldType' | 'fieldProps' | 'fieldErrorMessage'> & {
+  index: number
+}
 
 export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
@@ -136,7 +139,10 @@ const FormWrapper = <T,>({
     }
 
     // Iterates over all required form fields that are not filled and updates the error messages for these fields
-    const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId<T>>, errorsFromValidationFunctions: { [key: number]: string }): void => {
+    const setErrorsOnFormSaveFailure = (
+      requiredFieldsNotFilled: Array<FormFieldTypeWithUId<T>>,
+      errorsFromValidationFunctions: { [key: number]: string },
+    ): void => {
       const updatedErrors: { [key: number]: string } = {}
       _.forEach(requiredFieldsNotFilled, (field) => {
         updatedErrors[field.index] = field.fieldErrorMessage || ''
@@ -195,7 +201,11 @@ const FormWrapper = <T,>({
 
   // sets the field error in the errors object based on its index, if its a string it sets it to the given errorMessage
   // otherwise, it sets it to the fieldErrorMessage if it exists
-  const setFormError = (errorMessage: string | undefined, index: number, fieldErrorMessage: string | undefined): void => {
+  const setFormError = (
+    errorMessage: string | undefined,
+    index: number,
+    fieldErrorMessage: string | undefined,
+  ): void => {
     if (typeof errorMessage === 'string') {
       const updatedErrors = { ...errors, [index]: errorMessage }
       setErrors(updatedErrors)
@@ -222,14 +232,28 @@ const FormWrapper = <T,>({
     switch (fieldType) {
       case FieldType.Picker:
         return (
-          <VAModalPicker {...(fieldProps as VAModalPickerProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
+          <VAModalPicker
+            {...(fieldProps as VAModalPickerProps)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
         )
       case FieldType.TextInput:
         return (
-          <VATextInput {...(fieldProps as VATextInputProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
+          <VATextInput
+            {...(fieldProps as VATextInputProps)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
         )
       case FieldType.Selector:
-        return <VASelector {...(fieldProps as VASelectorProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
+        return (
+          <VASelector
+            {...(fieldProps as VASelectorProps)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
+        )
       case FieldType.Radios:
         return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
       case FieldType.FormAttachmentsList:
@@ -240,7 +264,10 @@ const FormWrapper = <T,>({
   const generateForm = (): ReactElement[] => {
     return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
+        <Box
+          mt={index === 0 ? 0 : theme.dimensions.formMarginBetween}
+          key={index}
+          display={field.hideField ? 'none' : undefined}>
           {getFormComponent(field, index)}
         </Box>
       )

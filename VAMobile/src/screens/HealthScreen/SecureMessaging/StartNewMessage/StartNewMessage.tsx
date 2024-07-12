@@ -1,78 +1,81 @@
-import { InteractionManager, Pressable, ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { ScrollView } from 'react-native'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import {
+  secureMessagingKeys,
+  useMessageRecipients,
+  useMessageSignature,
+  useSaveDraft,
+  useSendMessage,
+} from 'api/secureMessaging'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  SaveDraftParameters,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SendMessageParameters,
+} from 'api/types'
+import {
   AlertBox,
-  BackButton,
   Box,
-  ButtonTypesConstants,
-  CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   PickerItem,
-  SaveButton,
   TextArea,
-  VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypesConstants,
-} from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import {
-  SecureMessagingState,
-  getMessageRecipients,
-  getMessageSignature,
-  resetHasLoadedRecipients,
-  resetSendMessageComplete,
-  resetSendMessageFailed,
-  saveDraft,
-  sendMessage,
-  updateSecureMessagingTab,
-} from 'store/slices'
-import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { isErrorObject, showSnackBar } from 'utils/common'
+import { hasErrorCode } from 'utils/errors'
 import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveAlert,
-  useError,
+  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import {
+  SubjectLengthValidationFn,
+  getStartNewMessageCategoryPickerOptions,
+  saveDraftWithAttachmentAlert,
+} from 'utils/secureMessaging'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
-const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+function StartNewMessage({ navigation, route }: StartNewMessageProps) {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
+  const queryClient = useQueryClient()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -84,45 +87,100 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
-  const { sendingMessage, sendMessageComplete, savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
+  const {
+    mutate: sendMessage,
+    isPending: sendingMessage,
+    isError: sendMessageError,
+    error: sendMessageErrorDetails,
+  } = useSendMessage()
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
-
+  const {
+    data: recipients,
+    isFetched: hasLoadedRecipients,
+    error: recipientsError,
+    refetch: refetchRecipients,
+    isFetching: refetchingRecipients,
+  } = useMessageRecipients({
+    enabled: screenContentAllowed('WG_StartNewMessage'),
+  })
+  const {
+    data: signature,
+    isFetched: signatureFetched,
+    error: signatureError,
+    refetch: refetchSignature,
+    isFetching: refetchingSignature,
+  } = useMessageSignature({
+    enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
+  })
   const [to, setTo] = useState('')
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
+  const [replyTriageError, setReplyTriageError] = useState(false)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
-  const [message, setMessage] = useMessageWithSignature()
+  const [message, setMessage] = useMessageWithSignature(signature, signatureFetched)
   const validateMessage = useValidateMessageWithSignature()
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-
-    if (PREPOPULATE_SIGNATURE && !signature) {
-      dispatch(getMessageSignature())
+    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+        setReplyTriageError(true)
+      } else {
+        const messageData = {
+          recipient_id: parseInt(to, 10),
+          category: category as CategoryTypes,
+          body: message,
+          subject,
+        } as SecureMessagingFormData
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+            navigateTo('SecureMessaging', { activeTab: 0 })
+          },
+        }
+        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
+      }
     }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
-  }, [dispatch, signature])
+  }, [
+    dispatch,
+    sendMessageError,
+    sendMessageErrorDetails,
+    snackbarSentMessages.successMsg,
+    snackbarSentMessages.errorMsg,
+    attachmentsList,
+    category,
+    message,
+    to,
+    subject,
+    navigateTo,
+    sendMessage,
+  ])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
-    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body: message, subject } as SecureMessagingFormData
-    composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
+    const messageData = {
+      recipient_id: parseInt(to, 10),
+      category: category as CategoryTypes,
+      body: message,
+      subject,
+    } as SecureMessagingFormData
+    composeCancelConfirmation({
+      origin: FormHeaderTypeConstants.compose,
+      draftMessageID: undefined,
+      messageData,
+      isFormValid,
+    })
   }
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
@@ -136,7 +194,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
    */
   useBeforeNavBackListener(navigation, (e) => {
-    if (isDiscarded || saveDraftComplete || sendMessageComplete) {
+    if (isDiscarded) {
       return
     } else if (!noProviderError && !isFormBlank) {
       e.preventDefault()
@@ -144,23 +202,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     } else {
       navigation.goBack
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () =>
-        !noRecipientsReceived && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
-    })
   })
 
   useEffect(() => {
@@ -174,58 +215,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  useEffect(() => {
-    if (saveDraftComplete) {
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: true,
-      })
-    }
-  }, [saveDraftComplete, navigation, dispatch])
-
-  useEffect(() => {
-    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
-    if (sendMessageComplete) {
-      dispatch(resetSendMessageComplete())
-      dispatch(resetHasLoadedRecipients())
-      navigation.navigate('SecureMessaging')
-    }
-  }, [sendMessageComplete, dispatch, navigation])
-
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={tc('cancel')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && category && validateMessage(message) && (category !== CategoryTypeFields.other || subject))
-
-  if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
-    const text = savingDraft
-      ? t('secureMessaging.formMessage.saveDraft.loading')
-      : isDiscarded
-      ? t('secureMessaging.deleteDraft.loading')
-      : t('secureMessaging.formMessage.startNewMessage.loading')
-    return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={text} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (sendingMessage) {
-    return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
-      </FullScreenSubtask>
-    )
-  }
+  const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message, signature))
+  const isFormValid = !!(
+    to &&
+    category &&
+    validateMessage(message, signature) &&
+    (category !== CategoryTypeFields.other || subject)
+  )
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
@@ -250,30 +246,34 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
-
+  const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+  }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.to',
+        labelKey: 'secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
         pickerOptions: getToPickerOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'to field',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.startNewMessage.category',
+        labelKey: 'secureMessaging.startNewMessage.category',
         selectedValue: category,
         onSelectionChange: onCategoryChange,
         pickerOptions: getStartNewMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'picker',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
@@ -281,11 +281,12 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'health:secureMessaging.startNewMessage.subject',
+        labelKey: 'secureMessaging.startNewMessage.subject',
         value: subject,
         onChange: setSubject,
-        helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
+        helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
+        testID: 'startNewMessageSubjectTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
       validationList: [
@@ -299,14 +300,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps:
+        buttonLabel:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-            ? {
-                label: t('secureMessaging.formMessage.addFiles'),
-                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
-                onPress: onAddFiles,
-              }
+            ? t('secureMessaging.formMessage.addFiles')
             : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
@@ -316,23 +314,21 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: message,
         onChange: setMessage,
-        labelKey: 'health:secureMessaging.formMessage.message',
+        labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
+        testID: 'message field',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
 
   const onGoToInbox = (): void => {
-    dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigation.navigate('SecureMessaging')
+    navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
   const onMessageSendOrSave = (): void => {
-    dispatch(resetSendMessageFailed())
     const messageData = {
       recipient_id: parseInt(to, 10),
       category: category as CategoryTypes,
@@ -340,27 +336,58 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       subject,
     } as SecureMessagingFormData
 
-    if (savedDraftID) {
-      messageData.draft_id = savedDraftID
-    }
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
+        const params: SaveDraftParameters = { messageData: messageData }
+        const mutateOptions = {
+          onSuccess: () => {
+            showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
+            queryClient.invalidateQueries({
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
+            })
+            navigateTo('SecureMessaging', { activeTab: 1 })
+            navigateTo('FolderMessages', {
+              folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+              folderName: FolderNameTypeConstants.drafts,
+              draftSaved: true,
+            })
+          },
+          onError: () => {
+            showSnackBar(snackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+          },
+        }
+        saveDraft(params, mutateOptions)
+      })
     } else {
-      dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
+      const mutateOptions = {
+        onSuccess: () => {
+          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+          logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
+          navigateTo('SecureMessaging', { activeTab: 0 })
+        },
+      }
+      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      sendMessage(params, mutateOptions)
     }
   }
 
-  const renderContent = (): ReactNode => {
+  function renderContent() {
     if (noProviderError) {
       return (
         <AlertBox
           title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
-          <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
+    }
+
+    const navigateToReplyHelp = () => {
+      logAnalyticsEvent(Events.vama_sm_nonurgent())
+      navigateTo('ReplyHelp')
     }
 
     return (
@@ -371,6 +398,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           scrollViewRef={scrollViewRef}
           focusOnError={onSendClicked}
           errorList={errorList}
+          replyTriageError={replyTriageError}
         />
         <TextArea>
           <FormWrapper
@@ -384,25 +412,20 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             setErrorList={setErrorList}
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
-              onPress={navigateTo('ReplyHelp')}
-              accessibilityRole={'button'}
-              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
+              onPress={navigateToReplyHelp}
+              testID="startNewMessageOnlyUseMessagesTestID"
+            />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>
@@ -410,25 +433,56 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const rightButtonProps = noProviderError
-    ? undefined
-    : {
-        rightButtonText: tc('save'),
-        onRightButtonPress: () => {
-          setOnSaveDraftClicked(true)
-          setOnSendClicked(true)
-        },
-      }
+  const hasError = recipientsError || signatureError
+  const isLoading =
+    !hasLoadedRecipients ||
+    savingDraft ||
+    !signatureFetched ||
+    isDiscarded ||
+    sendingMessage ||
+    refetchingRecipients ||
+    refetchingSignature
+  const loadingText = savingDraft
+    ? t('secureMessaging.formMessage.saveDraft.loading')
+    : isDiscarded
+      ? t('secureMessaging.deleteDraft.loading')
+      : sendingMessage
+        ? t('secureMessaging.formMessage.send.loading')
+        : t('secureMessaging.formMessage.startNewMessage.loading')
+
+  const rightButtonProps =
+    noProviderError || isLoading || hasError
+      ? undefined
+      : {
+          rightButtonText: t('save'),
+          onRightButtonPress: () => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          },
+          rightButtonTestID: 'startNewMessageSaveTestID',
+        }
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('secureMessaging.startNewMessage')}
-      leftButtonText={tc('cancel')}
+      title={isLoading || hasError ? '' : t('secureMessaging.startNewMessage')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}>
-      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      showCrisisLineButton={!(isLoading || hasError)}
+      testID="startNewMessageTestID"
+      leftButtonTestID="startNewMessageCancelTestID">
+      {isLoading ? (
+        <LoadingComponent text={loadingText} />
+      ) : hasError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
+          error={recipientsError || signatureError}
+          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+        />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      )}
     </FullScreenSubtask>
   )
 }

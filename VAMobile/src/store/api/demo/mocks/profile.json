@@ -1,107 +1,4 @@
 {
-  "/v1/user": {
-    "data": {
-      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
-      "type": "user",
-      "attributes": {
-        "profile": {
-          "firstName": "KIMBERLY",
-          "middleName": "",
-          "lastName": "WASHINGTON",
-          "fullName": "KIMBERLY WASHINGTON",
-          "genderIdentity": "F",
-          "contactEmail": {
-            "id": 183571,
-            "emailAddress": "attended1@gmail.com"
-          },
-          "signinEmail": "vets.gov.user+228@gmail.com",
-          "birthDate": "1950-01-01",
-          "residentialAddress": null,
-          "mailingAddress": {
-            "id": 269569,
-            "addressLine1": "3101 N Fort Valley Rd",
-            "addressLine2": null,
-            "addressLine3": null,
-            "addressPou": "CORRESPONDENCE",
-            "addressType": "DOMESTIC",
-            "city": "Flagstaff",
-            "countryCodeIso3": "USA",
-            "internationalPostalCode": null,
-            "province": null,
-            "stateCode": "AZ",
-            "zipCode": "86001",
-            "zipCodeSuffix": "8348"
-          },
-          "homePhoneNumber": {
-            "areaCode": "555",
-            "countryCode": "1",
-            "phoneNumber": "4446666",
-            "phoneType": "HOME"
-          },
-          "mobilePhoneNumber": {
-            "areaCode": "555",
-            "countryCode": "1",
-            "phoneNumber": "4446666",
-            "phoneType": "HOME"
-          },
-          "workPhoneNumber": {
-            "areaCode": "555",
-            "countryCode": "1",
-            "phoneNumber": "4446666",
-            "phoneType": "HOME"
-          }
-        },
-        "authorizedServices": [
-          "appeals",
-          "appointments",
-          "claims",
-          "directDepositBenefits",
-          "lettersAndDocuments",
-          "militaryServiceHistory",
-          "userProfileUpdate",
-          "secureMessaging",
-          "prescriptions"
-        ],
-        "health": {
-          "facilities": [
-            {
-              "facilityId": "983",
-              "isCerner": false
-            },
-            {
-              "facilityId": "556",
-              "isCerner": false
-            },
-            {
-              "facilityId": "668",
-              "isCerner": true
-            },
-            {
-              "facilityId": "984",
-              "isCerner": false
-            },
-            {
-              "facilityId": "987",
-              "isCerner": false
-            }
-          ],
-          "isCernerPatient": false
-        }
-      }
-    },
-    "meta": {
-      "availableServices": [
-        "appeals",
-        "appointments",
-        "claims",
-        "directDepositBenefits",
-        "lettersAndDocuments",
-        "militaryServiceHistory",
-        "userProfileUpdate",
-        "secureMessaging"
-      ]
-    }
-  },
   "/v0/military-service-history": {
     "data": {
       "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
@@ -109,11 +6,22 @@
       "attributes": {
         "serviceHistory": [
           {
-            "branchOfService": "United States Coast Guard",
+            "branchOfService": "United States Army",
             "beginDate": "1970-07-13",
             "endDate": "1998-08-31",
             "formattedBeginDate": "July 13, 1970",
-            "formattedEndDate": "August 31, 1998"
+            "formattedEndDate": "August 31, 1998",
+            "characterOfDischarge": "Dishonorable",
+            "honorableServiceIndicator": "N"
+          },
+          {
+            "branchOfService": "United States Coast Guard",
+            "beginDate": "1998-09-01",
+            "endDate": "2000-01-01",
+            "formattedBeginDate": "September 01, 1998",
+            "formattedEndDate": "January 01, 2000",
+            "characterOfDischarge": "Honorable",
+            "honorableServiceIndicator": "Y"
           }
         ]
       }
@@ -175,23 +83,6 @@
           "financialInstitutionName": null,
           "accountNumber": null,
           "financialInstitutionRoutingNumber": null
-        }
-      }
-    }
-  },
-  "/v0/user/gender_identity/edit": {
-    "data": {
-      "id": "23fe358d-6e82-4541-804c-ce7562ba28f4",
-      "type": "GenderIdentityOptions",
-      "attributes": {
-        "options": {
-          "m": "Man",
-          "b": "Non-Binary",
-          "tm": "Transgender Man",
-          "tf": "Transgender Woman",
-          "f": "Woman",
-          "n": "Prefer not to answer",
-          "o": "A gender not listed here"
         }
       }
     }

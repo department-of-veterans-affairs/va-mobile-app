@@ -1,11 +1,13 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
 
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
@@ -13,40 +15,31 @@ type NeedHelpDataProps = {
   isAppeal?: boolean
 }
 
-const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
+function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const AppealData = (): ReactElement => {
+  function renderAppealData() {
     if (!isAppeal) {
       return <></>
     }
 
-    const clickToRedirectProps: LinkButtonProps = {
-      displayedText: t('appealDetails.visitVAGov'),
-      numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
-      linkType: LinkTypeOptionsConstants.url,
-      linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: t('appealDetails.visitVAGovA11yLabel'),
-    }
-
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" {...testIdProps(t('appealDetails.viewMoreDetailsA11yLabel'))}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('appealDetails.viewMoreDetails'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_CLAIM_APPEAL_STATUS}
+            text={t('goToVAGov')}
+            a11yLabel={a11yLabelVA(t('goToVAGov'))}
+            a11yHint={t('appealDetails.goToVAGovA11yHint')}
+          />
         </Box>
       </Box>
     )
-  }
-
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: t('8008271000.displayText'),
-    a11yLabel: t('8008271000.displayText.a11yLabel'),
-    numberOrUrlLink: t('8008271000'),
-    linkType: LinkTypeOptionsConstants.call,
   }
 
   return (
@@ -61,10 +54,8 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
           {t('claimDetails.callVA')}
         </TextView>
       </Box>
-      <Box>
-        <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
-      </Box>
-      <AppealData />
+      <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
+      {renderAppealData()}
     </TextArea>
   )
 }

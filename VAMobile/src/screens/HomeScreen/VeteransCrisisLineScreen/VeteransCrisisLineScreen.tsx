@@ -1,14 +1,14 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, LargePanel, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { Box, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { NAMESPACE } from 'constants/namespaces'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useExternalLink, useTheme } from 'utils/hooks'
-import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
+
+import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
 const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
@@ -17,26 +17,18 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
  *
  * Returns VeteransCrisisLineScreen component
  */
-const VeteransCrisisLineScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HOME)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+function VeteransCrisisLineScreen() {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
-  const fireAnalyticFn = (): void => {
-    setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
-  }
-
-  const redirectToVeteransCrisisLineLink = (): void => {
-    fireAnalyticFn()
-    launchExternalLink(LINK_URL_VETERANS_CRISIS_LINE)
-  }
-
   return (
-    <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>
@@ -44,25 +36,22 @@ const VeteransCrisisLineScreen: FC = () => {
             {t('veteransCrisisLine.connectWithResponders')}
           </TextView>
         </Box>
-
         <VeteransCrisisLineNumbers />
-
         <Box mt={standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
         <Box mt={standardMarginBetween}>
-          <TextView
-            variant="MobileBody"
-            color="link"
-            onPress={redirectToVeteransCrisisLineLink}
-            accessibilityRole="link"
-            {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
-            {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}
-            testID="veteransCrisisLineGetMoreResourcesTestID">
-            {t('veteransCrisisLine.urlDisplayed')}
-          </TextView>
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_VETERANS_CRISIS_LINE}
+            text={t('veteransCrisisLine.urlDisplayed')}
+            a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
+            a11yHint={t('veteransCrisisLine.urlA11yHint')}
+            analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
+            testID="veteransCrisisLineGetMoreResourcesTestID"
+          />
         </Box>
       </Box>
     </LargePanel>

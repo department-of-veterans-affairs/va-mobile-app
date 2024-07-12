@@ -1,9 +1,16 @@
-import { ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
@@ -22,7 +29,14 @@ export type CallHelpCenterProps = {
 }
 
 /**A common component to show the help center contact info for when an error happens*/
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11yHint, errorText, errorA11y, callPhone }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({
+  onTryAgain,
+  titleText,
+  titleA11yHint,
+  errorText,
+  errorA11y,
+  callPhone,
+}) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -34,34 +48,43 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_fail())
+  }, [])
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween
+
+  const tryAgain = () => {
+    logAnalyticsEvent(Events.vama_fail_refresh())
+    if (onTryAgain) {
+      onTryAgain()
+    }
+  }
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
           title={titleText ? titleText : t('errors.callHelpCenter.vaAppNotWorking')}
-          titleA11yLabel={titleA11yHint ? titleA11yHint : t('errors.callHelpCenter.vaAppNotWorking')}
+          titleA11yLabel={titleA11yHint ? titleA11yHint : a11yLabelVA(t('errors.callHelpCenter.vaAppNotWorking'))}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+            <TextView
+              variant="MobileBody"
+              paragraphSpacing={true}
+              mt={theme.paragraphSpacing.spacing20FontSize}
+              accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
             <ClickToCallPhoneNumber
-              displayedText={callPhone ? undefined : t('errors.callHelpCenter.informationLine.numberDisplayed')}
-              phone={callPhone ? callPhone : t('errors.callHelpCenter.informationLine.number')}
+              a11yLabel={a11yLabelID(callPhone || t('8006982411'))}
+              displayedText={callPhone ? undefined : displayedTextPhoneNumber(t('8006982411'))}
+              phone={callPhone ? callPhone : t('8006982411')}
             />
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
-                <VAButton
-                  onPress={onTryAgain}
-                  label={t('refresh')}
-                  buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID={t('refresh')}
-                  a11yHint={t('errors.callHelpCenter.button.a11yHint')}
-                />
+                <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
               </Box>
             )}
           </Box>

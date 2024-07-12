@@ -1,25 +1,26 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import Mock = jest.Mock
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import NetworkConnectionError from './NetworkConnectionError'
 
 context('NetworkConnectionError', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onTryAgainPressSpy: Mock
+  const onTryAgainPressSpy = jest.fn()
 
   beforeEach(() => {
-    component = render(<NetworkConnectionError onTryAgain={onTryAgainPressSpy} />)
-
-    testInstance = component.UNSAFE_root
+    render(<NetworkConnectionError onTryAgain={onTryAgainPressSpy} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    expect(
+      screen.getByText("You aren't connected to the internet. Check your internet connection and try again."),
+    ).toBeTruthy()
+    expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
+  })
+
+  it('should call onTryAgain', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Refresh screen' }))
+    expect(onTryAgainPressSpy).toHaveBeenCalled()
   })
 })

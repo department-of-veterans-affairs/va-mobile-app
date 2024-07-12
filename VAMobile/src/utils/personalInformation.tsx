@@ -1,19 +1,20 @@
+import { filter, omit, sortBy } from 'underscore'
+
 import {
   AddressData,
+  AddressPouToProfileAddressFieldType,
   AddressValidationData,
   AddressValidationScenarioTypes,
   AddressValidationScenarioTypesConstants,
   DeliveryPointValidationTypesConstants,
-  PhoneData,
-  PhoneType,
-  PhoneTypeConstants,
   SuggestedAddress,
-  UserDataProfile,
+  UserContactInformation,
   addressTypeFields,
-} from 'store/api/types'
-import { filter, sortBy } from 'underscore'
+} from 'api/types'
 
-export const getAddressValidationScenarioFromAddressValidationData = (suggestedAddresses: Array<SuggestedAddress>): AddressValidationScenarioTypes | undefined => {
+export const getAddressValidationScenarioFromAddressValidationData = (
+  suggestedAddresses: Array<SuggestedAddress>,
+): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
     return
   }
@@ -27,7 +28,9 @@ export const getValidationKey = (suggestedAddresses?: Array<SuggestedAddress>): 
   return suggestedAddresses[0]?.meta?.validationKey
 }
 
-export const getSuggestedAddresses = (addressValidationData?: AddressValidationData): Array<SuggestedAddress> | undefined => {
+export const getSuggestedAddresses = (
+  addressValidationData?: AddressValidationData,
+): Array<SuggestedAddress> | undefined => {
   if (!addressValidationData) {
     return
   }
@@ -50,13 +53,17 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
  function will return `false` unless the user made an error entering their
  address or their address is not know to the validation API
  */
-export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
+export const showValidationScreen = (
+  addressData: AddressData,
+  suggestedAddresses?: Array<SuggestedAddress>,
+): boolean => {
   if (!suggestedAddresses) {
     return false
   }
   const [firstSuggestedAddress] = suggestedAddresses
   const metadata = firstSuggestedAddress.meta.address
-  // suggestedStateCode and addressDataStateCode can be null and undefined respectively so we check them for a falsy value as well as check for equality
+  // suggestedStateCode and addressDataStateCode can be null and undefined respectively so we check them
+  // for a falsy value as well as check for equality
   const suggestedStateCode = firstSuggestedAddress?.attributes?.stateCode
   const addressDataStateCode = addressData?.stateCode
 
@@ -73,7 +80,9 @@ export const showValidationScreen = (addressData: AddressData, suggestedAddresse
   return true
 }
 
-export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddress>): Array<SuggestedAddress> | undefined => {
+export const getConfirmedSuggestions = (
+  suggestedAddresses?: Array<SuggestedAddress>,
+): Array<SuggestedAddress> | undefined => {
   if (!suggestedAddresses) {
     return
   }
@@ -90,7 +99,10 @@ export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddr
 }
 
 // formats a suggested address into an AddressData object
-export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAddress, addressId?: number): AddressData => {
+export const getAddressDataFromSuggestedAddress = (
+  suggestedAddress: SuggestedAddress,
+  addressId?: number,
+): AddressData => {
   return {
     ...suggestedAddress.attributes,
     id: addressId,
@@ -98,13 +110,15 @@ export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAd
   }
 }
 
-export const getPhoneDataForPhoneType = (phoneType: PhoneType, profile: UserDataProfile): PhoneData | undefined => {
-  switch (phoneType) {
-    case PhoneTypeConstants.HOME:
-      return profile.homePhoneNumber
-    case PhoneTypeConstants.MOBILE:
-      return profile.mobilePhoneNumber
-    case PhoneTypeConstants.WORK:
-      return profile.workPhoneNumber
-  }
+/**
+ * Returns address data with the `id` field present or omitted based on whether the user already has the address field saved
+ */
+export const getAddressDataPayload = (
+  addressData: AddressData,
+  contactInformation?: UserContactInformation,
+): AddressData => {
+  const addressPou = addressData.addressPou
+  const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
+  const newAddress = !(contactInformation || {})[addressFieldType as keyof UserContactInformation]
+  return newAddress ? omit(addressData, 'id') : addressData
 }

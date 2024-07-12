@@ -1,64 +1,79 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
+import { context, mockNavProps, render } from 'testUtils'
 
 import AppealDecision from './AppealDecision'
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
-import { TextView } from 'components'
 
 context('AppealDecision', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
-  const initializeTestInstance = (issues: Array<AppealStatusDetailsIssue>, aoj: AppealAOJTypes, ama: boolean, boardDecision: boolean): void => {
-    props = mockNavProps({
+  const initializeTestInstance = (
+    issues: Array<AppealStatusDetailsIssue>,
+    aoj: AppealAOJTypes,
+    ama: boolean,
+    boardDecision: boolean,
+  ): void => {
+    const props = mockNavProps({
       issues,
       aoj,
       ama,
       boardDecision,
     })
 
-    component = render(<AppealDecision {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<AppealDecision {...props} />)
   }
 
   beforeEach(() => {
     initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
   })
 
-  it('should initialize', async () => {
-    expect(component).toBeTruthy()
+  it('should initialize', () => {
+    expect(screen.getByText('Granted')).toBeTruthy()
+    expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+      ),
+    ).toBeTruthy()
+    expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
   })
 
   describe('when there are remandIssues', () => {
     describe('when ama is true', () => {
-      it('should display the text "After the {{aojDesc}} has completed the judge’s instructions to correct the error, they will make a new decision."', async () => {
+      it('should display the text "After the {{aojDesc}} has completed the judge’s instructions to correct the error, they will make a new decision."', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual(
-          'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
-        )
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
   })
 
   describe('when there are allowedIssues', () => {
     describe('when boardDecision is true', () => {
-      it('should display the text "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months."', async () => {
+      it('should display the text "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months."', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual(
-          'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
-        )
+        expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
   })
 
   describe('when there is more than one allowed issue', () => {
     describe('when boardDecision is true', () => {
-      it('should display "The judge granted the following issues:"', async () => {
+      it('should display "The judge granted the following issues:"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'allowed' },
@@ -68,12 +83,17 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge granted the following issues:')
+        expect(screen.getByText('The judge granted the following issues:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
-      it('should display "The reviewer granted the following issues:"', async () => {
+      it('should display "The reviewer granted the following issues:"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'allowed' },
@@ -83,30 +103,35 @@ context('AppealDecision', () => {
           true,
           false,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The reviewer granted the following issues:')
+        expect(screen.getByText('The reviewer granted the following issues:')).toBeTruthy()
       })
     })
   })
 
   describe('when there is only one allowed issue', () => {
     describe('when boardDecision is true', () => {
-      it('should display "The judge granted the following issue:"', async () => {
+      it('should display "The judge granted the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge granted the following issue:')
+        expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
-      it('should display "The reviewer granted the following issue:"', async () => {
+      it('should display "The reviewer granted the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, false)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The reviewer granted the following issue:')
+        expect(screen.getByText('The reviewer granted the following issue:')).toBeTruthy()
       })
     })
   })
 
   describe('when there is more than one denied issue', () => {
     describe('when boardDecision is true', () => {
-      it('should display "The judge denied the following issues:"', async () => {
+      it('should display "The judge denied the following issues:"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'denied' },
@@ -116,12 +141,12 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge denied the following issues:')
+        expect(screen.getByText('The judge denied the following issues:')).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
-      it('should display "The reviewer denied the following issues:"', async () => {
+      it('should display "The reviewer denied the following issues:"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'denied' },
@@ -131,30 +156,30 @@ context('AppealDecision', () => {
           true,
           false,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The reviewer denied the following issues:')
+        expect(screen.getByText('The reviewer denied the following issues:')).toBeTruthy()
       })
     })
   })
 
   describe('when there is only one denied issue', () => {
     describe('when boardDecision is true', () => {
-      it('should display "The judge denied the following issue:"', async () => {
+      it('should display "The judge denied the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'denied' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge denied the following issue:')
+        expect(screen.getByText('The judge denied the following issue:')).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
-      it('should display "The reviewer denied the following issue:"', async () => {
+      it('should display "The reviewer denied the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'denied' }], 'vba', true, false)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The reviewer denied the following issue:')
+        expect(screen.getByText('The reviewer denied the following issue:')).toBeTruthy()
       })
     })
   })
 
   describe('when there is more than one remand issue', () => {
     describe('when ama is true', () => {
-      it('should display "The judge is sending these issues back to the {{aojDesc}} to correct an error"', async () => {
+      it('should display "The judge is sending these issues back to the {{aojDesc}} to correct an error"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'remand' },
@@ -164,12 +189,21 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge is sending these issues back to the Veterans Benefits Administration to correct an error')
+        expect(
+          screen.getByText(
+            'The judge is sending these issues back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when ama is false', () => {
-      it('should display "The judge is sending these issues back to the {{aojDesc}} to gather more evidence or to fix a mistake before deciding whether to grant or deny"', async () => {
+      it('should display "The judge is sending these issues back to the {{aojDesc}} to gather more evidence or to fix a mistake before deciding whether to grant or deny"', () => {
         initializeTestInstance(
           [
             { description: 'desc', disposition: 'remand' },
@@ -179,27 +213,40 @@ context('AppealDecision', () => {
           false,
           false,
         )
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-          'The judge is sending these issues back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
-        )
+        expect(
+          screen.getByText(
+            'The judge is sending these issues back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+          ),
+        ).toBeTruthy()
       })
     })
   })
 
   describe('when there is only one remand issue', () => {
     describe('when ama is true', () => {
-      it('should display "The judge is sending this issue back to the {{aojDesc}} to correct an error"', async () => {
+      it('should display "The judge is sending this issue back to the {{aojDesc}} to correct an error"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge is sending this issue back to the Veterans Benefits Administration to correct an error')
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when ama is false', () => {
-      it('should display "The judge is sending this issue back to the {{aojDesc}} to gather more evidence or to fix a mistake before deciding whether to grant or deny"', async () => {
+      it('should display "The judge is sending this issue back to the {{aojDesc}} to gather more evidence or to fix a mistake before deciding whether to grant or deny"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', false, false)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-          'The judge is sending this issue back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
-        )
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+          ),
+        ).toBeTruthy()
       })
     })
   })

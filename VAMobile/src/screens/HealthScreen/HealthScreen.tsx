@@ -1,155 +1,200 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import { Pressable } from 'react-native'
 
-import { AuthorizedServicesState, PrescriptionState, loadAllPrescriptions } from 'store/slices'
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { useAppointments } from 'api/appointments'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
+import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import getEnv from 'utils/env'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getInbox } from 'store/slices/secureMessagingSlice'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useDowntime, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
-import { useSelector } from 'react-redux'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import Appointments from './Appointments'
-import CernerAlert from './CernerAlert'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
+import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
-import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
-  const dispatch = useAppDispatch()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
-  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const hasCernerFacilities = useHasCernerFacilities()
-  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+  const cernerExist = cernerFacilities.length >= 1
+  const allCerner = facilitiesInfo?.length === cernerFacilities.length
+  const mixedCerner = cernerExist && !allCerner
 
-  const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
-  const onPharmacy = () => {
-    // If rx list is already loaded, reload it to ensure freshness
-    if (!prescriptionsNeedLoad) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-    pharmacyNavHandler()
-  }
-  const onCoronaVirusFAQ = () => {
-    dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
-  }
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const {
+    data: prescriptionData,
+    isFetching: fetchingPrescriptions,
+    isError: prescriptionsError,
+  } = usePrescriptions({
+    enabled: isFocused,
+  })
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  const {
+    data: apptsData,
+    isFetching: loadingAppointments,
+    isError: appointmentsError,
+  } = useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    {
+      enabled: isFocused,
+    },
+  )
+  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
+  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+  const {
+    data: foldersData,
+    isFetching: loadingInbox,
+    isError: inboxError,
+  } = useFolders({
+    enabled: isFocused,
+  })
+  const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
   useEffect(() => {
-    if (smNotInDowntime) {
-      // fetch inbox metadata to display unread messages count tag
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-  }, [dispatch, smNotInDowntime])
+    async function healthHelpScreenCheck() {
+      const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
+      const newSession = await AsyncStorage.getItem(NEW_SESSION)
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
+      if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
+        navigateTo('HealthHelp')
+        await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
+        await AsyncStorage.setItem(NEW_SESSION, '')
+      }
+    }
+
+    healthHelpScreenCheck()
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+
+  const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
+  const activityError = appointmentsError || inboxError || prescriptionsError
+  const showAlert = featureInDowntime || activityError
+  const alertMessage = featureInDowntime ? t('health.activity.downtime') : t('health.activity.error')
+
+  const enrolledInVAHealthCare =
+    userAuthorizedServices?.appointments ||
+    userAuthorizedServices?.secureMessaging ||
+    userAuthorizedServices?.prescriptions ||
+    userAuthorizedServices?.scheduleAppointments
 
   return (
-    <CategoryLanding title={tc('health')}>
-      <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+    <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
+      <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
         <LargeNavButton
-          title={t('appointments.title')}
-          a11yHint={t('appointments.a11yHint')}
-          onPress={onAppointments}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
+          title={t('appointments')}
+          onPress={() => navigateTo('Appointments')}
+          showLoading={loadingAppointments}
+          subText={
+            upcomingAppointmentsCount && upcomingDaysLimit
+              ? t('appointments.activityButton.subText', {
+                  count: upcomingAppointmentsCount,
+                  dayCount: upcomingDaysLimit,
+                })
+              : undefined
+          }
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          a11yHint={t('secureMessaging.a11yHint')}
-          onPress={onSecureMessaging}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          tagCount={secureMessaging && smNotInDowntime ? unreadCount : undefined}
-          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
+          onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
+          showLoading={loadingInbox}
+          subText={
+            unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
+          }
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
-            a11yHint={t('prescription.A11yHint')}
-            onPress={onPharmacy}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
+            onPress={() => navigateTo('PrescriptionHistory')}
+            showLoading={fetchingPrescriptions}
+            subText={
+              prescriptionData?.meta.prescriptionStatusCount.isRefillable
+                ? t('prescriptions.activityButton.subText', {
+                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                  })
+                : undefined
+            }
           />
         )}
-        <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          a11yHint={t('vaVaccines.a11yHint')}
-          onPress={onVaVaccines}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('covid19Updates.title')}
-          a11yHint={t('covid19Updates.a11yHint')}
-          onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('vaVaccines.buttonTitle')} onPress={() => navigateTo('VaccineList')} />
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
-        <CernerAlert />
-      </Box>
+      {cernerExist && (
+        <Box mx={theme.dimensions.buttonPadding}>
+          <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
+          <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileFooterLink" paragraphSpacing={true}>
+              {t('healthHelp.checkFacility')}
+            </TextView>
+          </Pressable>
+        </Box>
+      )}
+      {!enrolledInVAHealthCare && (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <AnnouncementBanner
+            title={t('applyForHealthCare')}
+            link={LINK_URL_APPLY_FOR_HEALTH_CARE}
+            a11yLabel={a11yLabelVA(t('applyForHealthCare'))}
+          />
+        </Box>
+      )}
     </CategoryLanding>
   )
 }
 
 type HealthStackScreenProps = Record<string, unknown>
 
-const HealthScreenStack = createStackNavigator()
+const HealthScreenStack = createStackNavigator<HealthStackParamList>()
 
 /**
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HealthStackScreen: FC<HealthStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
+function HealthStackScreen({}: HealthStackScreenProps) {
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <HealthScreenStack.Navigator
-      screenOptions={headerStyles}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
@@ -161,16 +206,48 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
         },
       }}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen
+        name="Appointments"
+        component={Appointments}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen
+        name="PastAppointmentDetails"
+        component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionDetails"
+        component={PrescriptionDetails}
+        options={{ headerShown: false }}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionHistory"
+        component={PrescriptionHistory}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="SecureMessaging"
+        component={SecureMessaging}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="UpcomingAppointmentDetails"
+        component={UpcomingAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineDetails"
+        component={VaccineDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineList"
+        component={VaccineListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
     </HealthScreenStack.Navigator>
   )
 }

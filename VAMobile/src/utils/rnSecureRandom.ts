@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native'
+
 import { logNonFatalErrorToFirebase } from './analytics'
 
 const RnSecureRandom = NativeModules.RNSecureRandom

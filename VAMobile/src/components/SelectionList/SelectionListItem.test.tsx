@@ -1,38 +1,31 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import Mock = jest.Mock
-import { Pressable } from 'react-native'
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import SelectionListItem from './SelectionListItem'
 
 context('SelectionListItem', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onSelectSpy: Mock
+  const onSelectSpy = jest.fn()
 
-  const initializeTestInstance = (useImage = false) => {
-    onSelectSpy = jest.fn(() => {})
-
-    component = render(<SelectionListItem isSelected={false} setSelectedFn={onSelectSpy} />)
-    testInstance = component.UNSAFE_root
+  const renderWithProps = (isSelected = false) => {
+    render(<SelectionListItem isSelected={isSelected} setSelectedFn={onSelectSpy} />)
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
+  it('shows item', () => {
+    renderWithProps()
+    expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('calls onPress when pressed', () => {
+    renderWithProps()
+    fireEvent.press(screen.getByRole('checkbox', { checked: false }))
+    expect(onSelectSpy).toHaveBeenCalled()
   })
 
-  it('should call the alert when the button is pressed', async () => {
-    await waitFor(() => {
-      testInstance.findByType(Pressable).props.onPress()
-      expect(onSelectSpy).toBeCalled()
-    })
+  it('sets accessibilityState correctly when selected', () => {
+    renderWithProps(true)
+    expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
   })
 })

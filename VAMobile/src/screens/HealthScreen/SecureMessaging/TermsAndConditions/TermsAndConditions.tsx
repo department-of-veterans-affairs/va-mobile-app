@@ -1,41 +1,47 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_MY_HEALTHEVET } = getEnv()
-const TermsAndConditions: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+function TermsAndConditions() {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <Box {...testIdProps(t('termsAndConditions.title'))} accessibilityRole="header" accessible={true} mx={gutter} mb={standardMarginBetween}>
+      <Box mb={contentMarginBottom}>
+        <Box
+          {...testIdProps(t('termsAndConditions.title'))}
+          accessibilityRole="header"
+          accessible={true}
+          mx={gutter}
+          mb={standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
-          <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+          <TextView
+            variant="MobileBody"
+            paragraphSpacing={true}
+            {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
           <Box mb={theme.paragraphSpacing.spacing20FontSize}>
-            <ClickForActionLink
-              displayedText={t('termsAndConditions.goTo')}
-              linkType={LinkTypeOptionsConstants.url}
-              numberOrUrlLink={LINK_URL_GO_TO_MY_HEALTHEVET}
-              linkUrlIconType={LinkUrlIconType.Arrow}
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_GO_TO_MY_HEALTHEVET}
+              text={t('termsAndConditions.goTo')}
               a11yLabel={t('termsAndConditions.goTo.a11yLabel')}
-              {...a11yHintProp(t('termsAndConditions.goTo.a11yHint'))}
+              a11yHint={t('termsAndConditions.goTo.a11yHint')}
             />
           </Box>
           <TextView>
-            <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
+            <TextView variant="MobileBodyBold">{t('note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
           </TextView>
         </TextArea>

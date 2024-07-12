@@ -1,11 +1,12 @@
-import { Pressable, PressableProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps } from 'react-native'
 
-import { Box, BoxProps, VAIcon } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+
 import TextView, { TextViewProps } from './TextView'
+import { Box, BoxProps, VAIcon } from './index'
 
 type PhotoAddProps = {
   /** width of the component */
@@ -42,12 +43,20 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
     color: 'footerButton',
     textAlign: 'center',
     width: width,
+    maxFontSizeMultiplier: 2.5,
   }
 
   return (
     <Pressable {...pressableProps}>
       <Box {...boxProps}>
-        <VAIcon name={'Add'} width={32} height={32} fill={themeColor.icon.photoAdd} fill2={themeColor.icon.transparent} />
+        <VAIcon
+          name={'Add'}
+          width={32}
+          height={32}
+          fill={themeColor.icon.photoAdd}
+          fill2={themeColor.icon.transparent}
+          maxWidth={70}
+        />
       </Box>
       <Box width={width} flexDirection="row">
         <TextView {...textProps}>{t('fileUpload.addPhoto')}</TextView>

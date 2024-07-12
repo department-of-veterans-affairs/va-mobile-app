@@ -1,11 +1,14 @@
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   AccessibilityInfo,
-  ActionSheetIOS,
   Alert,
   AlertButton,
   AppState,
   Dimensions,
   EmitterSubscription,
+  Keyboard,
   Linking,
   PixelRatio,
   ScrollView,
@@ -13,31 +16,37 @@ import {
   View,
   findNodeHandle,
 } from 'react-native'
-import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
 
-import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
-import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
-import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
-import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
-import { VATheme } from 'styles/theme'
-import { WebProtocolTypesConstants } from 'constants/common'
-import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
-import { isAndroid, isIOS } from 'utils/platform'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { SecureMessagingSignatureDataAttributes } from 'api/types'
+import { Events } from 'constants/analytics'
+import { WebProtocolTypesConstants } from 'constants/common'
+import { NAMESPACE } from 'constants/namespaces'
+import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { AppDispatch, RootState } from 'store'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
+import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { VATheme } from 'styles/theme'
+import { getTheme } from 'styles/themes/standardTheme'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
+import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { isAndroid, isIOS, isIpad } from 'utils/platform'
+import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
+
+const textAlign = isIOS() ? 'center' : 'left'
 /**
  * Hook to determine if an error should be shown for a given screen id
  * @param currentScreenID - the id of the screen being check for errors
@@ -45,16 +54,38 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
+  const downtime = useDowntimeByScreenID(currentScreenID)
+  if (downtime) {
+    return true
+  }
+
+  return !!errorsByScreenID[currentScreenID]
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const mw = downtimeWindowsByFeature[feature]
-  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-    return true
-  }
-  return false
+  return featureInDowntime(feature, downtimeWindowsByFeature)
+}
+
+export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean => {
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const features = ScreenIDToDowntimeFeatures[currentScreenID]
+  return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+}
+
+export const featureInDowntime = (
+  feature: DowntimeFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): boolean => {
+  const mw = downtimeWindows[feature]
+  return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
+}
+
+export const oneOfFeaturesInDowntime = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): boolean => {
+  return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
 /**
@@ -80,7 +111,7 @@ export const useFontScale = (): ((val: number) => number) => {
 export const useTheme = styledComponentsUseTheme as () => VATheme
 
 export type OnPressHandler = () => void
-export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
+export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => void
 
 /**
  * Navigation hook to use in onPress events.
@@ -92,8 +123,13 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   const navigation = useNavigation()
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
-    return (): void => {
-      navigation.navigate(routeName as never, args as never)
+    if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: `${String(routeName)}`,
+          params: args,
+        }),
+      )
     }
   }
 }
@@ -103,8 +139,8 @@ type RouteNavParams<T extends ParamListBase> = {
 
 /**
  * On iOS, voiceover will focus on the element closest to what the user last interacted with on the
- * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
- * focus on the element we know will be in the correct place.
+ * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056)
+ * This hook allows you to manually set the accessibility focus on the element we know will be in the correct place.
  *
  * @returns Array with a ref and the function to set the ref for the accessibility focus
  */
@@ -165,11 +201,14 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
     let screenReaderChangedSubscription: EmitterSubscription
 
     if (withListener) {
-      screenReaderChangedSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', (isScreenReaderEnabled) => {
-        if (isMounted) {
-          setScreenReaderEnabled(isScreenReaderEnabled)
-        }
-      })
+      screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
+        'screenReaderChanged',
+        (isScreenReaderEnabled) => {
+          if (isMounted) {
+            setScreenReaderEnabled(isScreenReaderEnabled)
+          }
+        },
+      )
     }
     AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
       if (isMounted) {
@@ -193,17 +232,24 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
  *
  * @returns an alert showing user they are leaving the app
  */
-export function useExternalLink(): (url: string) => void {
+export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (url: string) => {
+  return (url: string, eventParams?: EventParams) => {
+    logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
+
+    const onOKPress = () => {
+      logAnalyticsEvent(Events.vama_link_confirm({ url, ...eventParams }))
+      return Linking.openURL(url)
+    }
+
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
-          text: t('cancel'),
+          text: t('leavingApp.cancel'),
           style: 'cancel',
         },
-        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },
       ])
     } else {
       Linking.openURL(url)
@@ -211,24 +257,14 @@ export function useExternalLink(): (url: string) => void {
   }
 }
 
-/**
- * Returns whether user has cerner facilities or not
- *
- * @returns boolean showing if the user has cerner facilities
- */
-export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
-  return cernerFacilities.length > 0
-}
-
-export type UseDestructiveAlertButtonProps = {
+export type useDestructiveActionSheetButtonProps = {
   /** text of button */
   text: string
   /** handler for onClick */
   onPress?: () => void
 }
 
-export type UseDestructiveAlertProps = {
+export type useDestructiveActionSheetProps = {
   /** title of alert */
   title: string
   /** message of alert */
@@ -238,51 +274,87 @@ export type UseDestructiveAlertProps = {
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
-  buttons: Array<UseDestructiveAlertButtonProps>
+  buttons: Array<useDestructiveActionSheetButtonProps>
 }
 /**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- * TODO: consolidate this and useShowActionSheet into a single hook
+ * Hook to create appropriate actionSheet for a destructive event
+ * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
+ * @param title - optional title of the ActionSheet
+ * @param message - optional message for the ActionSheet
+ * @param destructiveButtonIndex - optional destructive index
+ * @param cancelButtonIndex - ios cancel index
+ * @param buttons - options to show in the ActionSheet
+ * @returns an action sheet
+ */
+export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
+  return (props: useDestructiveActionSheetProps) => {
+    const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
+
+    // Ensure cancel button is always last for UX consisency
+    const newButtons = [...buttons]
+    if (cancelButtonIndex < buttons.length - 1) {
+      newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
+    }
+
+    let newDestructiveButtonIndex = destructiveButtonIndex
+    if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+      newDestructiveButtonIndex = destructiveButtonIndex - 1
+    }
+
+    Keyboard.dismiss()
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+    showActionSheetWithOptions(
+      {
+        title: props.title,
+        titleTextStyle: {
+          fontWeight: 'bold',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
+        message: props.message,
+        messageTextStyle: {
+          fontWeight: 'normal',
+          textAlign: textAlign,
+          color: currentTheme.colors.text.primary,
+        },
+        textStyle: { color: currentTheme.colors.text.primary },
+        destructiveButtonIndex: newDestructiveButtonIndex,
+        destructiveColor: currentTheme.colors.text.error,
+        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
+        containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+        cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
+      },
+      (buttonIndex) => {
+        if (buttonIndex || buttonIndex === 0) {
+          newButtons[buttonIndex]?.onPress?.()
+        }
+      },
+    )
+  }
+}
+
+export type UseAlertProps = {
+  /** title of alert */
+  title: string
+  /** message of alert */
+  message?: string
+  /** options to show in alert */
+  buttons: Array<AlertButton>
+}
+/**
+ * Hook to create standard alert for a destructive event
  * @param title - title of the alert
  * @param message - optional message for the alert
- * @param destructiveButtonIndex - ios destructive index
- * @param cancelButtonIndex - ios cancel index
  * @param buttons - options to show in the alert
- * @returns an action sheet for ios and an alert for android
+ * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually
+ * displaying V-A since the alert used does not have a separate accessibility Label
+ * @returns returns an alert for ios and android
  */
-export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
-  return (props: UseDestructiveAlertProps) => {
-    if (isIOS()) {
-      const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
-
-      // Ensure cancel button is always last for UX consisency
-      const newButtons = [...buttons]
-      if (cancelButtonIndex < buttons.length - 1) {
-        newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-      }
-
-      let newDestructiveButtonIndex = destructiveButtonIndex
-      if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
-        newDestructiveButtonIndex = destructiveButtonIndex - 1
-      }
-
-      // Don't pass cancelButtonIndex because doing so would hide the button on iPad
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          ...remainingProps,
-          destructiveButtonIndex: newDestructiveButtonIndex,
-          options: newButtons.map((button) => stringToTitleCase(button.text)),
-        },
-        (buttonIndex) => {
-          const onPress = newButtons[buttonIndex]?.onPress
-          if (onPress) {
-            onPress()
-          }
-        },
-      )
-    } else {
-      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
-    }
+export function useAlert(): (props: UseAlertProps) => void {
+  return (props: UseAlertProps) => {
+    Alert.alert(props.title, props.message, props.buttons)
   }
 }
 
@@ -291,7 +363,12 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
  *
  * @returns ref to the scrollView and the element to scroll to and the function to call the manual scroll
  */
-export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, (offset?: number) => void, React.Dispatch<React.SetStateAction<boolean>>] {
+export function useAutoScrollToElement(): [
+  MutableRefObject<ScrollView>,
+  MutableRefObject<View>,
+  (offset?: number) => void,
+  React.Dispatch<React.SetStateAction<boolean>>,
+] {
   const scrollRef = useRef() as MutableRefObject<ScrollView>
   const [viewRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
@@ -335,14 +412,16 @@ export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, Mutable
  *
  * @returns message state and the setMessage function
  */
-export function useMessageWithSignature(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const { signature, loadingSignature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+export function useMessageWithSignature(
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+  signatureFetched: boolean,
+): [string, React.Dispatch<React.SetStateAction<string>>] {
   const [message, setMessage] = useState('')
   useEffect(() => {
     if (PREPOPULATE_SIGNATURE && signature && signature.includeSignature) {
       setMessage(`\n\n\n\n${signature.signatureName}\n${signature.signatureTitle}`)
     }
-  }, [loadingSignature, signature])
+  }, [signatureFetched, signature])
   return [message, setMessage]
 }
 
@@ -352,10 +431,11 @@ export function useMessageWithSignature(): [string, React.Dispatch<React.SetStat
  * @param message - the message to be validated
  * @returns boolean if the message is valid
  */
-export function useValidateMessageWithSignature(): (message: string) => boolean {
-  const { signature } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
-  return (message: string): boolean => {
+export function useValidateMessageWithSignature(): (
+  message: string,
+  signature: SecureMessagingSignatureDataAttributes | undefined,
+) => boolean {
+  return (message: string, signature: SecureMessagingSignatureDataAttributes | undefined): boolean => {
     let isMessageBlank = !!message
     if (signature && signature.includeSignature) {
       isMessageBlank = message.trim() !== `${signature?.signatureName}\n${signature?.signatureTitle}`
@@ -380,8 +460,8 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert = useDestructiveAlert()
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
+  const destructiveAlert = useDestructiveActionSheet()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
     setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -393,15 +473,15 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('health:secureMessaging.attachments.removeAttachment'),
+      title: t('secureMessaging.attachments.removeAttachment'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('health:secureMessaging.attachments.keep'),
+          text: t('secureMessaging.attachments.keep'),
         },
         {
-          text: t('common:remove'),
+          text: t('remove'),
           onPress: () => {
             onRemove(attachmentFileToRemove)
           },
@@ -417,10 +497,14 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
 
 /**
  * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
- * TODO: consolidate this and useDestructiveAlert into a single hook
+ * TODO: consolidate this and useDestructiveActionSheet into a single hook
  */
-export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
+export function useShowActionSheet(): (
+  options: ActionSheetOptions,
+  callback: (i?: number) => void | Promise<void>,
+) => void {
   const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
 
   return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
     // Use title case for iOS, sentence case for Android
@@ -428,17 +512,28 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       if (isIOS()) {
         return stringToTitleCase(optionText)
       } else {
-        return capitalizeFirstLetter(optionText)
+        // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+        return capitalizeFirstLetter(optionText + ' ')
       }
     })
 
     const casedOptions: ActionSheetOptions = {
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: textAlign,
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
+      textStyle: { color: currentTheme.colors.text.primary },
+      destructiveColor: currentTheme.colors.text.error,
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       ...options,
       options: casedOptionText,
     }
 
-    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
-    delete casedOptions.cancelButtonIndex
+    if (isIpad()) {
+      delete casedOptions.cancelButtonIndex
+    }
 
     showActionSheetWithOptions(casedOptions, callback)
   }
@@ -475,7 +570,18 @@ export function useOrientation(): boolean {
 export function useBeforeNavBackListener(
   navigation: StackNavigationProp<ParamListBase, keyof ParamListBase>,
   callback: (
-    e: EventArg<'beforeRemove', true, { action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined }> }>,
+    e: EventArg<
+      'beforeRemove',
+      true,
+      {
+        action: Readonly<{
+          type: string
+          payload?: object | undefined
+          source?: string | undefined
+          target?: string | undefined
+        }>
+      }
+    >,
   ) => void,
 ): void {
   useEffect(() => {
@@ -521,4 +627,16 @@ export function usePrevious<T>(value: T): T {
     ref.current = value
   }, [value])
   return ref.current as T
+}
+/**
+ * Opens the app listing in the device's respective app store.
+ *
+ * @returns An alert asking the user whether they'd like to leave the app to the app store.
+ */
+export function useOpenAppStore(): () => void {
+  const launchExternalLink = useExternalLink()
+  const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
+  const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+
+  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
 }

@@ -1,34 +1,28 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
-import { TextLine } from './types'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import MultiTouchCard, { MultiTouchCardProps } from './MultiTouchCard'
 import { TextLines } from './TextLines'
+import { TextLine } from './types'
 
 context('MultiTouchCard', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn(() => {})
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
-
     const middleTextLines: Array<TextLine> = [
       {
-        text: 'line 1',
+        text: 'main line 1',
         variant: 'MobileBodyBold',
       },
       {
-        text: 'line 1',
+        text: 'main line 2',
         variant: 'MobileBodyBold',
       },
       {
-        text: 'line 1',
+        text: 'main line 3',
         variant: 'MobileBodyBold',
       },
     ]
@@ -40,14 +34,34 @@ context('MultiTouchCard', () => {
       orderIdentifier: 'Prescription 1 of 1',
       mainContent: <TextLines listOfText={middleTextLines} />,
       bottomContent: <TextLines listOfText={bottomText} />,
+      bottomA11yHint: 'Hint for bottom content',
+      bottomOnPress: onPressSpy,
     }
 
-    component = render(<MultiTouchCard {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<MultiTouchCard {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('shows orderIdentifier', () => {
+    expect(screen.getByText('Prescription 1 of 1')).toBeTruthy()
+  })
+
+  it('shows mainContent', () => {
+    expect(screen.getByText('main line 1')).toBeTruthy()
+    expect(screen.getByText('main line 2')).toBeTruthy()
+    expect(screen.getByText('main line 3')).toBeTruthy()
+  })
+
+  it('shows bottomContent', () => {
+    expect(screen.getByText('bottom line 1')).toBeTruthy()
+    expect(screen.getByText('bottom line 2')).toBeTruthy()
+  })
+
+  it('renders a11yHint for bottomContent', () => {
+    expect(screen.getByA11yHint('Hint for bottom content')).toBeTruthy()
+  })
+
+  it('calls onPress function on bottomContent click', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'bottom line 1' }))
+    expect(onPressSpy).toBeCalled()
   })
 })

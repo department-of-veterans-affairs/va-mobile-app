@@ -22,312 +22,53 @@ All of our Figma files are set so “**anyone with the link can view**.” If yo
 
 
 #### Team permissions by role
-<table>
-  <tr>
-   <td><strong>Team member</strong>
-   </td>
-   <td><strong><a href="https://help.figma.com/hc/en-us/articles/13839486673559-Organization-plan-permissions#teams">Roles</a></strong>
-   </td>
-   <td><strong>Paid account</strong>
-   </td>
-   <td><strong>Figma</strong>
-   </td>
-   <td><strong>FigJam</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Org/IT
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#team-admin">Admin</a>
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-  </tr>
-  <tr>
-   <td>UX Lead
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#owner">Owner</a>
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-  </tr>
-  <tr>
-   <td>Design Librarian
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#Can_edit">Editor</a>
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-  </tr>
-  <tr>
-   <td>UX Designer
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#Can_edit">Editor</a>
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-  </tr>
-  <tr>
-   <td>UX  Content
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#Can_edit">Editor</a>
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-   <td>✅
-   </td>
-  </tr>
-  <tr>
-   <td>UX Researcher
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#view">Viewer</a>
-   </td>
-   <td>🚫
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Product
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#view">Viewer</a>
-   </td>
-   <td>🚫
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Engineering
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039970673#view">Viewer</a>
-   </td>
-   <td>🚫
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Guests
-   </td>
-   <td><a href="https://help.figma.com/hc/en-us/articles/360039960434#viewer-restricted">Viewer-restricted</a>
-   </td>
-   <td>🚫
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-</table>
+|Team member|[Roles](https://help.figma.com/hc/en-us/articles/13839486673559-Organization-plan-permissions#teams)|Paid account|Figma|FigJam|
+|--- |--- |--- |--- |--- |
+|Org/IT|[Admin](https://help.figma.com/hc/en-us/articles/360039970673#team-admin)|✅|✅|✅|
+|UX Lead|[Owner](https://help.figma.com/hc/en-us/articles/360039970673#owner)|✅|✅|✅|
+|Design Librarian|[Editor](https://help.figma.com/hc/en-us/articles/360039970673#Can_edit)|✅|✅|✅|
+|UX Designer|[Editor](https://help.figma.com/hc/en-us/articles/360039970673#Can_edit)|✅|✅|✅|
+|UX  Content|[Editor](https://help.figma.com/hc/en-us/articles/360039970673#Can_edit)|✅|✅|✅|
+|UX Researcher|[Viewer](https://help.figma.com/hc/en-us/articles/360039970673#view)|🚫|View only|View only|
+|Product|[Viewer](https://help.figma.com/hc/en-us/articles/360039970673#view)|🚫|View only|View only|
+|Engineering|[Viewer](https://help.figma.com/hc/en-us/articles/360039970673#view)|🚫|View only|View only|
+|Guests|[Viewer-restricted](https://help.figma.com/hc/en-us/articles/360039960434#viewer-restricted)|🚫|View only|View only|
 
 
 
 ### Setting permissions for projects and files
 * For **projects**, set the Owner as the UX Lead. Then, set the share settings so “Members of VA Mobile App can edit.”
 * For **shipped files**, set the Owner as the UX Lead. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
-* For **working files**, set the Owner as the UX Librarian. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
+* For **working files**, set the Owner as the Design Librarian. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
 
 
 #### Project and file permissions by role
-<table>
-  <tr>
-   <td><strong>Team member</strong>
-   </td>
-   <td><strong><a href="https://help.figma.com/hc/en-us/articles/13839486673559-Organization-plan-permissions#projects">Projects</a></strong>
-   </td>
-   <td><strong><a href="https://help.figma.com/hc/en-us/articles/13839486673559-Organization-plan-permissions#files">Shipped files</a></strong>
-   </td>
-   <td><strong><a href="https://help.figma.com/hc/en-us/articles/13839486673559-Organization-plan-permissions#files">Working files</a></strong>
-   </td>
-  </tr>
-  <tr>
-   <td>UX Lead
-   </td>
-   <td>🔑 Owner
-   </td>
-   <td>🔑 Owner
-   </td>
-   <td>✅ Can edit
-   </td>
-  </tr>
-  <tr>
-   <td>Design Librarian
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>🔑 Owner
-   </td>
-  </tr>
-  <tr>
-   <td>UX Designer
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-  </tr>
-  <tr>
-   <td>UX  Content
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-  </tr>
-  <tr>
-   <td>UX Researcher
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Product
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Engineering
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-  <tr>
-   <td>Guests
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-   <td>View only
-   </td>
-  </tr>
-</table>
+|Team member|Projects|Shipped files|Working files|
+|--- |--- |--- |--- |
+|UX Lead|🔑 Owner|🔑 Owner|✅ Can edit|
+|Design Librarian|✅ Can edit|✅ Can edit|🔑 Owner|
+|UX Designer|✅ Can edit|✅ Can edit|✅ Can edit|
+|UX  Content|✅ Can edit|✅ Can edit|✅ Can edit|
+|UX Researcher|View only|View only|View only|
+|Product|View only|View only|View only|
+|Engineering|View only|View only|View only|
+|Guests|View only|View only|View only|
 
 
 
 ### Setting permissions for libraries
-* For **01 Design Libraries project**, set the Owner as the UX Lead and add the UX Librarian as an editor. Then, set the share settings so “Members of VA Mobile App can view.”
-    * To change the Design Librarian, follow the onboarding/offboarding steps in the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/#onboarding--offboarding) documentation.
+* For **01 Design Libraries project**, set the Owner as the UX Lead and add the Design Librarian as an editor. Then, set the share settings so “Members of VA Mobile App can view.”
 * For **library files**, set the Owner as the UX Lead. Then, set the share settings so “Anyone at Ad Hoc with the link can view.”
 
 
 #### Library permissions by role
-<table>
-  <tr>
-   <td><strong>Team member</strong>
-   </td>
-   <td><strong>Library project</strong>
-   </td>
-   <td><strong>Library files</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>UX Lead
-   </td>
-   <td>🔑 Owner
-   </td>
-   <td>🔑 Owner
-   </td>
-  </tr>
-  <tr>
-   <td>Design Librarian
-   </td>
-   <td>✅ Can edit
-   </td>
-   <td>✅ Can edit
-   </td>
-  </tr>
-  <tr>
-   <td>UX Designer
-   </td>
-   <td>View only - Required to create a branch to edit
-
-   </td>
-   <td>View only - Required to create a branch to edit
-   </td>
-  </tr>
-  <tr>
-   <td>UX  Content
-   </td>
-   <td>View only - Required to create a branch to edit
-   </td>
-   <td>View only - Required to create a branch to edit
-   </td>
-  </tr>
-  <tr>
-   <td>UX Researcher
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-  </tr>
-  <tr>
-   <td>Product
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-  </tr>
-  <tr>
-   <td>Engineering
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-  </tr>
-  <tr>
-   <td>Guests
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-   <td>View only - Able to use library in drafts
-   </td>
-  </tr>
-</table>
+|Team member|Library project|Library files|
+|--- |--- |--- |
+|UX Lead|🔑 Owner|🔑 Owner|
+|Design Librarian|✅ Can edit|✅ Can edit|
+|UX Designer|View only - Required to create a branch to edit|View only - Required to create a branch to edit|
+|UX  Content|View only - Required to create a branch to edit|View only - Required to create a branch to edit|
+|UX Researcher|View only - Able to use library in drafts|View only - Able to use library in drafts|
+|Product|View only - Able to use library in drafts|View only - Able to use library in drafts|
+|Engineering|View only - Able to use library in drafts|View only - Able to use library in drafts|
+|Guests|View only - Able to use library in drafts|View only - Able to use library in drafts|

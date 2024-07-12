@@ -1,0 +1,71 @@
+# Workflow that labels a pr with the correct label
+name: "[Github Management] Pull Request Labeler on Review"
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  changes_requested:
+    if: github.event.review.state == 'changes_requested'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Remove old labels and add FE-Changes Requested
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Changes Requested"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  review_dismissed:
+    if: github.event.review.state == 'dismissed'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Remove old labels and add FE-Needs Review
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Changes Requested" --add-label "FE-Needs Review"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  approved:
+    if: github.event.review.state == 'approved'
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Check approvals and add correct labels
+        shell: bash
+        run: |
+          approvals=$(curl --request GET \
+          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
+          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' |
+          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          echo "Approvers: $approvals"
+
+          if [[ $(jq '. | length' <<< "$approvals") -ge 1 ]]
+            then
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+                then
+                echo 'This PR has QA approval and one other'
+                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Ready to Merge"
+              else 
+                echo 'This PR requires QA approval'
+                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review" --add-label "FE-With QA"
+              fi
+          else
+            echo 'This PR requires 2 approvals, including one QA approval'
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

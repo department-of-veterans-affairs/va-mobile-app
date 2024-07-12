@@ -1,14 +1,16 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { ButtonDecoratorType } from 'components'
-import { InlineTextWithIcons } from './InlineTextWithIcons'
-import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
+import { ButtonDecoratorType, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
+import { useTheme } from 'utils/hooks'
+
+import { READ } from '../constants/secureMessaging'
 import Box from './Box'
+import { InlineTextWithIcons } from './InlineTextWithIcons'
 import LabelTag, { LabelTagTypeConstants } from './LabelTag'
+import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -18,7 +20,8 @@ export type MessageListItemObj = {
   inlineTextWithIcons: Array<InlineTextWithIconsProps>
   /** Tells if one is displaying sent folder messages list - needed for READ tag display conditional */
   isSentFolder: boolean
-  /** Attribute for whether recipient has read user's sent message (Sent folder) OR whether user has read received message (Inbox || Folders other than 'Sent')
+  /** Attribute for whether recipient has read user's sent message (Sent folder)
+   * OR whether user has read received message (Inbox || Folders other than 'Sent')
    * Usage depends on which folder you're in */
   readReceipt?: string
 } & Partial<ListItemObj>
@@ -35,7 +38,8 @@ export type MessageListProps = {
  * Display a list of buttons with text and optional actions
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item
@@ -47,17 +51,24 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
 
     const content = (
       // Package individual textLineWithIcon components together into one message
-      <Box flex={1}>
-        <Box flexDirection="column" mb={7}>
+      <Box flex={1} flexDirection="row" alignItems="center">
+        <Box flex={1} flexDirection="column" mb={7}>
           {inlineTextWithIcons?.map((textObj: InlineTextWithIconsProps, index: number) => {
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
           {isSentReadTag && (
-            <Box ml={23} mt={7}>
+            <Box mt={7}>
               <LabelTag text={t('secureMessaging.folders.read.tag')} labelType={LabelTagTypeConstants.tagInactive} />
             </Box>
           )}
         </Box>
+        <VAIcon
+          name="ChevronRight"
+          width={theme.dimensions.chevronListItemWidth}
+          height={theme.dimensions.chevronListItemHeight}
+          fill={theme.colors.icon.chevronListItem}
+          testID="ChevronRight"
+        />
       </Box>
     )
 

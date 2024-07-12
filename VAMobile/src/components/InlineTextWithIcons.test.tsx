@@ -1,66 +1,66 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, render, RenderAPI } from 'testUtils'
-import VAIcon, { VAIconProps } from './VAIcon'
-import InlineTextWithIcons from './InlineTextWithIcons'
+import { screen } from '@testing-library/react-native'
+
 import { Box, InlineTextWithIconsProps } from 'components'
-import TextView from './TextView'
+import { context, render } from 'testUtils'
+
+import InlineTextWithIcons from './InlineTextWithIcons'
+import { VAIconProps } from './VAIcon'
 
 context('InlineTextWithIcons', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
-
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
     const testLine1 = {
       leftTextProps: {
         text: 'Test Email',
         variant: 'MobileBodyBold',
         textAlign: 'left',
       },
-      leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true } as VAIconProps,
-      rightTextProps: {
-        text: '9/10/2022',
+      leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true, testID: 'Unread' } as VAIconProps,
+    } as InlineTextWithIconsProps
+    const testLine2 = {
+      leftTextProps: {
+        text: 'September 10, 2022',
         variant: 'MobileBody',
         textAlign: 'right',
         color: 'primary',
       },
     } as InlineTextWithIconsProps
-    const testLine2 = {
+    const testLine3 = {
       leftTextProps: {
         text: 'Test Subject',
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
       },
-      leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps,
-      rightIconProps: { name: 'ChevronRight', width: 16, height: 16, fill: 'spinner' } as VAIconProps,
+      leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
+      rightIconProps: {
+        name: 'ChevronRight',
+        width: 16,
+        height: 16,
+        fill: 'spinner',
+        testID: 'ChevronRight',
+      } as VAIconProps,
     } as InlineTextWithIconsProps
 
-    component = render(
+    render(
       <Box>
         <InlineTextWithIcons {...testLine1} />
         <InlineTextWithIcons {...testLine2} />
+        <InlineTextWithIcons {...testLine3} />
       </Box>,
     )
-
-    testInstance = component.UNSAFE_root
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders text', () => {
+    expect(screen.getByText('Test Email')).toBeTruthy()
+    expect(screen.getByText('September 10, 2022')).toBeTruthy()
+    expect(screen.getByText('Test Subject')).toBeTruthy()
   })
 
-  it('should render correct VAIcons and not show icon for component with undefined iconProps', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Unread')
-    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
-    expect(testInstance.findAllByType(VAIcon)[2].props.name).toEqual('ChevronRight')
-    expect(testInstance.findAllByType(VAIcon).length).toEqual(3)
+  it('renders icons', () => {
+    expect(screen.getByTestId('Unread')).toBeTruthy()
+    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+    expect(screen.getByTestId('ChevronRight')).toBeTruthy()
   })
 })

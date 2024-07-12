@@ -1,102 +1,111 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
-import { ErrorComponent, RadioGroup, TextView, VAButton } from 'components'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { GenderIdentityOptions } from 'store/api'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ErrorsState, getGenderIdentityOptions, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
 import GenderIdentityScreen from './GenderIdentityScreen'
 
-const genderIdentityOptions: GenderIdentityOptions = {
-  M: 'Man',
-  B: 'Non-binary',
-  TM: 'Transgender man',
-  TF: 'Transgender woman',
-  F: 'Woman',
-  N: 'Prefer not to answer',
-  O: 'A gender not listed here',
-}
-
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    getGenderIdentityOptions: jest.fn(() => {
-      return {
-        type: '',
-        payload: genderIdentityOptions,
-      }
-    }),
-  }
-})
-
 context('GenderIdentityScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
+  const genderIdentityOptionsPayload = {
+    data: {
+      id: '1',
+      type: 'string',
+      attributes: {
+        options: {
+          M: 'Man',
+          B: 'Non-binary',
+          TM: 'Transgender man',
+          TF: 'Transgender woman',
+          F: 'Woman',
+          N: 'Prefer not to answer',
+          O: 'A gender not listed here',
+        },
+      },
+    },
+  }
+
+  const demographicsPayload = {
+    data: {
+      id: '1',
+      type: 'string',
+      attributes: {
+        genderIdentity: 'M',
+        preferredName: 'Jim',
+      },
+    },
+  }
 
   afterEach(() => {
     jest.clearAllMocks()
   })
-  
-  const initializeTestInstance = (preloadGenderIdentityOptions?: boolean, errorsState: ErrorsState = initialErrorsState) => {
-    const props = mockNavProps()
-    const store = {
-      ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        genderIdentityOptions: preloadGenderIdentityOptions ? genderIdentityOptions : {},
-      },
-      errors: errorsState,
-    }
 
-    component = render(<GenderIdentityScreen {...props} />, { preloadedState: store })
-    testInstance = component.UNSAFE_root
+  const initializeTestInstance = () => {
+    const props = mockNavProps(
+      {},
+      {
+        navigate: jest.fn(),
+        goBack: jest.fn(),
+        addListener: jest.fn(),
+      },
+      {},
+    )
+
+    render(<GenderIdentityScreen {...props} />)
   }
 
   it('initializes correctly', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockResolvedValue(demographicsPayload)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
-    expect(component).toBeTruthy()
-  })
-
-  it('fetches gender identity options from the API if they were not previously fetched', async () => {
-    initializeTestInstance()
-    expect(getGenderIdentityOptions).toBeCalled()
-  })
-
-  it('does not fetch gender identity options from the API if they were previously fetched', async () => {
-    initializeTestInstance(true)
-    expect(getGenderIdentityOptions).not.toHaveBeenCalled()
-  })
-
-  it('sets up radio group correctly', async () => {
-    initializeTestInstance()
-
-    const radioGroup = testInstance.findAllByType(RadioGroup)[0]
-    expect(radioGroup.props.value).toEqual(undefined)
+    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.',
+        ),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' }),
+      ).toBeTruthy(),
+    )
   })
 
   it('shows an error message on save when a gender identity type has not been selected', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockResolvedValue(demographicsPayload)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
 
-    testInstance.findAllByType(VAButton)[0].props.onPress()
-    const textViews = testInstance.findAllByType(TextView)
-    expect(textViews[5].props.children).toEqual('Select an option')
+    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Save' })))
+    await waitFor(() => expect(screen.queryByText('Select an option')).toBeTruthy())
   })
 
   it('renders the ErrorComponent when an error occurs', async () => {
-    const errorsByScreenID = initializeErrorsByScreenID()
-    errorsByScreenID[ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/demographics')
+      .mockRejectedValue({ networkError: true } as api.APIError)
+      .calledWith('/v0/user/gender_identity/edit')
+      .mockRejectedValue({ networkError: true } as api.APIError)
 
-    const errorsState: ErrorsState = {
-      ...initialErrorsState,
-      errorsByScreenID,
-    }
-
-    initializeTestInstance(false, errorsState)
-    expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    initializeTestInstance()
+    await waitFor(() => {
+      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
+    })
   })
 })

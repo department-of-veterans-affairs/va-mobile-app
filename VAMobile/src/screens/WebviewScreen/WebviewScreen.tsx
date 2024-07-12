@@ -1,16 +1,19 @@
-import { Linking, StatusBar, ViewStyle } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { WebView } from 'react-native-webview'
+import React, { MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { Linking, StatusBar, ViewStyle } from 'react-native'
+import { WebView } from 'react-native-webview'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { isIOS } from 'utils/platform'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
+
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
@@ -19,7 +22,7 @@ type ReloadButtonProps = {
   reloadPressed: () => void
 }
 
-const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
+function ReloadButton({ reloadPressed }: ReloadButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { dimensions, colors } = theme
@@ -34,7 +37,13 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 
   return (
     <Box {...reloadBoxProps}>
-      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'Redo'} fill={colors.icon.webviewReload} testID={t('refresh')} a11yHint={t('refresh.a11yHint')} />
+      <WebviewControlButton
+        onPress={reloadPressed}
+        disabled={false}
+        icon={'Redo'}
+        fill={colors.icon.webviewReload}
+        testID={t('refresh')}
+      />
     </Box>
   )
 }
@@ -43,7 +52,7 @@ type WebviewLoadingProps = {
   loadingMessage?: string
 }
 
-const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
+function WebviewLoading({ loadingMessage }: WebviewLoadingProps) {
   const spinnerStyle: ViewStyle = {
     position: 'absolute',
     left: 0,
@@ -52,9 +61,11 @@ const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
     bottom: 0,
   }
 
+  const loadingMessageA11y = loadingMessage ? a11yLabelVA(loadingMessage) : undefined
+
   return (
     <Box style={spinnerStyle}>
-      <LoadingComponent text={loadingMessage} />
+      <LoadingComponent text={loadingMessage} a11yLabel={loadingMessageA11y} />
     </Box>
   )
 }
@@ -75,7 +86,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
-const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
+function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
@@ -91,7 +102,15 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton webview={true} onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          webview={true}
+          onPress={props.onPress}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.done}
+          showCarat={false}
+        />
+      ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
@@ -139,7 +158,11 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   return (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}

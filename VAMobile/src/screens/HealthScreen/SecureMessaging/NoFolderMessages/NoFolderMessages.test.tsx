@@ -1,32 +1,15 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
-import { TextView, VAButton } from 'components'
-import NoFolderMessages from './NoFolderMessages'
-import { updateSecureMessagingTab } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateSecureMessagingTab: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+import { context, render } from 'testUtils'
+
+import NoFolderMessages from './NoFolderMessages'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useRouteNavigation: () => {
@@ -36,75 +19,20 @@ jest.mock('utils/hooks', () => {
 })
 
 context('NoFolderMessages', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  const mockNavigateToSpy = jest.fn()
-
   const initializeTestInstance = () => {
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
       .calledWith('SecureMessaging')
-      .mockReturnValue(mockNavigateToSpy)
-    mockNavigationSpy.mockReturnValueOnce(() => {}).mockReturnValueOnce(mockNavigateToSpy)
-    component = render(<NoFolderMessages />)
-
-    testInstance = component.UNSAFE_root
+      .mockReturnValue(jest.fn())
+    render(<NoFolderMessages />)
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should render text fields correctly', async () => {
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
-  })
-
-  describe('on click of the go to inbox button', () => {
-    it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
-      testInstance.findAllByType(VAButton)[1].props.onPress()
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
-      expect(mockNavigateToSpy).toHaveBeenCalled()
-    })
-  })
-})
-
-context('NoDrafts', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  const mockNavigateToSpy = jest.fn()
-
-  const initializeTestInstance = () => {
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('SecureMessaging')
-      .mockReturnValue(mockNavigateToSpy)
-    component = render(<NoFolderMessages />)
-    testInstance = component.UNSAFE_root
-  }
-
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should render text fields correctly', async () => {
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
-  })
-
-  describe('on click of the go to inbox button', () => {
-    it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
-      testInstance.findAllByType(VAButton)[1].props.onPress()
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
-      expect(mockNavigateToSpy).toHaveBeenCalled()
+  describe('should render correctly', () => {
+    it('on click of the go to inbox button should call updateSecureMessagingTab and useRouteNavigation', () => {
+      initializeTestInstance()
+      expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

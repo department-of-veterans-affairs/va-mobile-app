@@ -15,6 +15,8 @@ For now, we’ll be testing branching in our design library for:
 * Adding a new component to our library
 * Updating an existing component in our library
 * Experimental changes we don’t want to commit to yet
+* Updating the shipped files
+* Updating the App Store images file
 
 In the future, we may consider branching for:
 

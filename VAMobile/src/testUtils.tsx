@@ -1,85 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react'
 import { I18nextProvider } from 'react-i18next'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider } from 'react-redux'
-import { render as rtlRender } from '@testing-library/react-native'
-import { ThemeProvider } from 'styled-components'
-import React, { ElementType } from 'react'
-import i18nReal from 'utils/i18n'
-import { RootState } from 'store'
-import path from 'path'
-import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
-import { NavigationContainer } from '@react-navigation/native'
-import { ReactTestInstance } from 'react-test-renderer'
 
+import { NavigationContainer } from '@react-navigation/native'
+
+import { AnyAction, Store, configureStore } from '@reduxjs/toolkit'
+import { QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
+import { render as rtlRender } from '@testing-library/react-native'
+import path from 'path'
+import { ThemeProvider } from 'styled-components'
+
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
+import { RootState } from 'store'
+import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
-import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
-import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
-import directDepositReducer from 'store/slices/directDepositSlice'
-import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
-import decisionLettersReducer from 'store/slices/decisionLettersSlice'
-import lettersReducer from 'store/slices/lettersSlice'
-import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
-import personalInformationReducer from 'store/slices/personalInformationSlice'
-import secureMessagingReducer from 'store/slices/secureMessagingSlice'
-import snackbarReducer from 'store/slices/snackBarSlice'
-import vaccineReducer from 'store/slices/vaccineSlice'
-import paymentsReducer from 'store/slices/paymentsSlice'
-import requestAppoitnmentReducer from 'store/slices/requestAppointmentSlice'
-import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import settingsReducer from 'store/slices/settingsSlice'
-import { InitialState } from 'store/slices'
+import snackbarReducer from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-
-export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.name === name || el.props.label === name || el.props.children === name)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithSubstring = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title?.includes(text) || el.props.children?.includes(text))
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
-  return testInstance.findByProps({ testID })
-}
-
-export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title === text || el.props.children === text)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByOnPressFunction = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && el.props.onPress.name === text
-    })
-  } catch {
-    return null
-  }
-}
+import i18nReal from 'utils/i18n'
 
 type fn = () => any
 type ActionState = AnyAction & {
@@ -90,7 +35,7 @@ type ActionState = AnyAction & {
 export class TrackedStore {
   constructor(state?: RootState) {
     this.actions = []
-    this.realStore = getConfiguredStore(state)
+    this.realStore = getConfiguredStore(state) as any
     this.subscribe = this.realStore.subscribe
   }
 
@@ -108,7 +53,7 @@ export class TrackedStore {
     } else {
       //@ts-ignore
       return action(
-        (action: any) => this.dispatch(action),
+        (providedAction: AnyAction | fn | any) => this.dispatch(providedAction),
         () => this.realStore.getState(),
       )
     }
@@ -123,7 +68,7 @@ export class TrackedStore {
   }
 
   getStateField = <T extends keyof RootState, P extends keyof RootState[T]>(stateType: T, field: P) => {
-    let state = this.realStore.getState()[stateType]
+    const state = this.realStore.getState()[stateType]
     return state[field]
   }
 }
@@ -131,29 +76,14 @@ export class TrackedStore {
 const getConfiguredStore = (state?: Partial<RootState>) => {
   return configureStore({
     reducer: {
-      auth: authReducer,
-      accessibility: accessabilityReducer,
-      demo: demoReducer,
-      personalInformation: personalInformationReducer,
-      authorizedServices: authorizedServicesReducer,
-      errors: errorReducer,
-      analytics: analyticsReducer,
-      appointments: appointmentsReducer,
-      claimsAndAppeals: claimsAndAppealsReducer,
-      directDeposit: directDepositReducer,
-      disabilityRating: disabilityRatingReducer,
-      decisionLetters: decisionLettersReducer,
-      letters: lettersReducer,
-      militaryService: militaryServiceReducer,
-      notifications: notificationReducer,
-      patient: patientReducer,
-      secureMessaging: secureMessagingReducer,
-      snackBar: snackbarReducer,
-      vaccine: vaccineReducer,
-      payments: paymentsReducer,
-      requestAppointment: requestAppoitnmentReducer,
-      prescriptions: prescriptionsReducer,
-      settings: settingsReducer,
+      auth: authReducer as any,
+      accessibility: accessabilityReducer as any,
+      demo: demoReducer as any,
+      errors: errorReducer as any,
+      analytics: analyticsReducer as any,
+      notifications: notificationReducer as any,
+      snackBar: snackbarReducer as any,
+      settings: settingsReducer as any,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
     preloadedState: { ...state },
@@ -179,6 +109,7 @@ export const generateRandomString = (): string => {
   // drop the leading "0."
   // these are generally 11 chars long
   const gen = (): string => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const crypto = require('crypto')
     const buf = crypto.randomBytes(36)
     return buf.toString('hex')
@@ -209,12 +140,12 @@ const buildRecurse = (vals: Array<string>, fn: () => void, only?: boolean, skip?
   }
 }
 
-//@ts-ignore
-const ctxFn: any = (name: string, fn: () => void) => {
+// @ts-ignore
+const ctxFn = (name: string, fn: () => void) => {
   return ctxReq(name, fn)
 }
 
-const ctxReq: any = (name: string, fn: () => void, only?: boolean, skip?: boolean) => {
+const ctxReq = (name: string, fn: () => void, only?: boolean, skip?: boolean) => {
   const dir = path.dirname(module?.parent?.filename || '')
   const cwd = process.cwd()
   const relPath = dir.substr((cwd + '/src/').length)
@@ -234,32 +165,77 @@ ctxFn.skip = (name: string, fn: () => void) => {
 
 export const context = ctxFn
 
+export type QueriesData = Array<{
+  queryKey: QueryKey
+  data: any
+}>
+
+export type RenderParams = {
+  preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
+  navigationProvided?: boolean
+  queriesData?: QueriesData
+}
+
 //@ts-ignore
-function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {
+function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
   //@ts-ignore
   function Wrapper({ children }) {
-    let store = mockStore(preloadedState)
+    const store = mockStore(preloadedState)
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    })
+    queryClient.setQueryData(authorizedServicesKeys.authorizedServices, {
+      appeals: true,
+      appointments: true,
+      claims: true,
+      decisionLetters: true,
+      directDepositBenefits: true,
+      directDepositBenefitsUpdate: true,
+      disabilityRating: true,
+      genderIdentity: true,
+      lettersAndDocuments: true,
+      militaryServiceHistory: true,
+      paymentHistory: true,
+      preferredName: true,
+      prescriptions: true,
+      scheduleAppointments: true,
+      secureMessaging: true,
+      userProfileUpdate: true,
+    })
+    if (queriesData?.length) {
+      queriesData.forEach(({ queryKey, data }) => {
+        queryClient.setQueryData(queryKey, data)
+      })
+    }
     if (navigationProvided) {
       return (
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nReal}>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </I18nextProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nReal}>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </I18nextProvider>
+          </Provider>
+        </QueryClientProvider>
       )
     }
     return (
-      <Provider store={store}>
-        <I18nextProvider i18n={i18nReal}>
-          <NavigationContainer>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </NavigationContainer>
-        </I18nextProvider>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nReal}>
+            <NavigationContainer initialState={{ routes: [] }}>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </QueryClientProvider>
     )
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })

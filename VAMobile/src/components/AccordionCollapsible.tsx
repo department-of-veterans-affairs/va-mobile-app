@@ -1,11 +1,14 @@
-import { Pressable, PressableProps, View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps, View } from 'react-native'
 
-import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+
+import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -51,6 +54,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {
+    logAnalyticsEvent(Events.vama_accordion_click(testID || '', !expanded))
     if (customOnPress) {
       customOnPress(!expanded)
     }
@@ -107,7 +111,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   return (
-    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} importantForAccessibility={'no'}>
+    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} testID={testID} importantForAccessibility={'no'}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}

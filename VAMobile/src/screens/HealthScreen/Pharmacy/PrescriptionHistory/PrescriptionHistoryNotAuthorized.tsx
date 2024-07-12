@@ -1,63 +1,80 @@
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
+import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
+
+import {
+  AlertBox,
+  Box,
+  BoxProps,
+  ClickToCallPhoneNumber,
+  LinkWithAnalytics,
+  TextArea,
+  TextView,
+  VABulletList,
+  VAScrollView,
+} from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
-const PrescriptionHistoryNotAuthorized: FC = () => {
+function PrescriptionHistoryNotAuthorized() {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
-  const launchExternalLink = useExternalLink()
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_noauth())
+  }, [])
 
   const alertWrapperProps: BoxProps = {
-    my: standardMarginBetween,
+    mb: standardMarginBetween,
   }
 
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
-    boldedText: ' ' + tc('and'),
-    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + tc('and'),
+    boldedText: ' ' + t('and'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.enrolled')) + ' ' + t('and'),
   }
 
   const bulletTwo = {
     text: t('prescriptions.notAuthorized.registered'),
-    a11yLabel: t('prescriptions.notAuthorized.registered.a11y'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.registered')),
   }
 
-  const redirectLink = (): void => {
-    launchExternalLink(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
-  }
-
-  const linkProps: TextViewProps = {
-    variant: 'MobileBodyLink',
-    onPress: redirectLink,
-    accessibilityRole: 'link',
-    accessibilityLabel: t('notEnrolledSM.learnHowTo.a11yLabel'),
-    accessibilityHint: t('notEnrolledSM.learnHowTo.a11yHint'),
-    paragraphSpacing: true,
+  const linkProps: LinkProps = {
+    type: 'url',
+    url: LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT,
+    text: t('notEnrolledSM.learnHowTo'),
+    a11yLabel: t('notEnrolledSM.learnHowTo'),
+    a11yHint: t('notEnrolledSM.learnHowTo.a11yHint'),
   }
 
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox border={'warning'} title={t('prescriptions.notAuthorized.warning')} titleA11yLabel={t('prescriptions.notAuthorized.warning.a11y')} />
+        <AlertBox
+          border={'warning'}
+          title={t('prescriptions.notAuthorized.warning')}
+          titleA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
+        />
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toAccess')}</TextView>
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
           <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
-          <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
+          <LinkWithAnalytics {...linkProps} />
           <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
-          <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
+          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
         </TextArea>
       </Box>
     </VAScrollView>

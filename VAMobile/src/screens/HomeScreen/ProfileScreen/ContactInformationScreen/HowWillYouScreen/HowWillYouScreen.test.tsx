@@ -1,24 +1,28 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import HowWillYouScreen from './HowWillYouScreen'
 
 context('HowWillYouScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
-  beforeEach(async () => {
+  beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
-
-    component = render(<HowWillYouScreen {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<HowWillYouScreen {...props} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText('How we use your contact information')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'We’ll use this information to contact you about certain benefits and services, like disability compensation, pension benefits, and claims and appeals.',
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByText(
+        'If you’re enrolled in VA health care, we’ll send your prescriptions to your mailing address. Your health care team may also use this information to contact you.',
+      ),
+    ).toBeTruthy()
   })
 })

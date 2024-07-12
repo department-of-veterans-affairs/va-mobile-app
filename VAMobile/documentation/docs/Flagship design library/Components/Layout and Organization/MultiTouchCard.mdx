@@ -1,0 +1,41 @@
+---
+title: Multi-touch card
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import AlertBoxString from '!!raw-loader!@componentsDocs/MultiTouchCard'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+
+The multi-touch card provides multiple touch targets on a list item.
+
+## Examples
+
+### Default
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9097-30010&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
+
+### Variations
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9118-30720&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
+
+## Usage
+
+### When to use Multi-touch card
+- The component should be used when a list item includes a lot of data and requires 2-3 touch targets. 
+
+### How this component works
+- Component should use established color patterns.
+
+### Instances of this component in production
+- Prescriptions
+
+## Accessibility considerations
+- The card's type and place in the list (ex. prescription 1 of 1) should be called out first by the screen reader. The screen reader should call out each individual touch target by its respective type (button, link; etc) along with its respective a11y hint. 
+- Keyboards and Voice Access/Voice Control should navigate through each line item separately 
+- Keyboards and Voice Access/Voice Control should navigate each touch area separately 
+- Touch target UI should have clear and distinguishable areas/borders
+
+## Code usage
+import MultiTouchCardString from '!!raw-loader!@componentsDocs/MultiTouchCard'
+export const exampleString = `<CrisisLineCta onPress={onCrisisLine} />`
+
+<ComponentTopInfo componentName="MultiTouchCard" example={exampleString} codeString={MultiTouchCardString} />

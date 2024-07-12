@@ -1,12 +1,16 @@
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { TFunction } from 'i18next'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import React, { ReactElement } from 'react'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import { TFunction } from 'i18next'
+
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
+
+import { logAnalyticsEvent } from './analytics'
 
 /** function that determines if a request file has been uploaded or received for a claim's event*/
 export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
@@ -30,11 +34,15 @@ export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
 /** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
 export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
   const notUploadedRequests = events.filter(
-    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && event.uploadsAllowed,
+    (event: ClaimEventData) =>
+      event.status === FILE_REQUEST_STATUS.NEEDED &&
+      event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU &&
+      event.uploadsAllowed,
   )
   const uploadedRequests = events.filter(
     (event: ClaimEventData) =>
-      (event.status === FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU) ||
+      (event.status === FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW &&
+        event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU) ||
       event.type === FILE_REQUEST_TYPE.RECEIVED_FROM_YOU,
   )
 
@@ -44,7 +52,11 @@ export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
   return events.filter(
-    (event: ClaimEventData) => event.status === FILE_REQUEST_STATUS.NEEDED && event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU && !event.uploaded && event.uploadsAllowed,
+    (event: ClaimEventData) =>
+      event.status === FILE_REQUEST_STATUS.NEEDED &&
+      event.type === FILE_REQUEST_TYPE.STILL_NEED_FROM_YOU &&
+      !event.uploaded &&
+      event.uploadsAllowed,
   )
 }
 
@@ -55,7 +67,12 @@ export const numberOfItemsNeedingAttentionFromVet = (events: ClaimEventData[]): 
 
 /** function that returns a boolean for a claim indicating if there are files that can be uploaded */
 export const needItemsFromVet = (attributes: ClaimAttributesData): boolean => {
-  return !attributes.decisionLetterSent && attributes.open && attributes.documentsNeeded && numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
+  return (
+    !attributes.decisionLetterSent &&
+    attributes.open &&
+    attributes.documentsNeeded &&
+    numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
+  )
 }
 
 /** function to get the claim phase in base 5 rather than base 10 */
@@ -204,7 +221,8 @@ export const postCameraLaunchCallback = (
  * @param setError - sets error message
  * @param callbackIfUri - callback when an image is selected from the camera roll or taken with the camera successfully
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
- *
+ * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility. Useful for
+ * preventing back navigation when action sheet is opened
  **/
 export const onAddPhotos = (
   t: TFunction,
@@ -212,25 +230,40 @@ export const onAddPhotos = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
+  claimID: string,
+  request: ClaimEventData,
+  setIsActionSheetVisible?: (isVisible: boolean) => void,
 ): void => {
-  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
+  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
 
+  setIsActionSheetVisible && setIsActionSheetVisible(true)
   showActionSheetWithOptions(
     {
       options,
       cancelButtonIndex: 2,
     },
     (buttonIndex) => {
+      setIsActionSheetVisible && setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
+          launchCamera(
+            { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
+            (response: ImagePickerResponse): void => {
+              postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            },
+          )
           break
         case 1:
-          launchImageLibrary({ selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          logAnalyticsEvent(
+            Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'gallery'),
+          )
+          launchImageLibrary(
+            { selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            },
+          )
           break
       }
     },
@@ -242,7 +275,11 @@ export const onAddPhotos = (
  *
  * @param image - ImagePickerResponse image selection for deletion
  */
-export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, deleteIndex: number, images: Asset[]): void => {
+export const deletePhoto = (
+  deleteCallbackIfUri: (response: Asset[]) => void,
+  deleteIndex: number,
+  images: Asset[],
+): void => {
   images.splice(deleteIndex, 1)
   deleteCallbackIfUri(images)
 }
@@ -253,11 +290,11 @@ export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, de
  * @param fs - fontscale function
  */
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
-  const indicatorDiameter = 30
+  const indicatorDiameter = fs(30)
   return {
-    height: fs(indicatorDiameter),
-    width: fs(indicatorDiameter),
-    borderRadius: fs(indicatorDiameter),
+    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -275,12 +312,12 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
   if (useCheckMark) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" />
+        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" textAlign={'center'}>
+      <TextView variant="ClaimPhase" textAlign={'center'} mt={-2.5} allowFontScaling={false}>
         {number}
       </TextView>
     )

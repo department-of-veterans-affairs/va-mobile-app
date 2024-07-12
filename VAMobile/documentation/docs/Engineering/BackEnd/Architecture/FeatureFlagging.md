@@ -1,10 +1,13 @@
-# Feature Flagging
+---
+title: Feature Flagging
+---
 
 ## Flipper
 
-We use Flipper to manage feature flags. Instructions for use and best practices can be found [here](https://depo-platform-documentation.scrollhelp.site/developer-docs/Feature-toggles.1859780873.html)
+We use Flipper to manage feature flags. [View instructions for use and best practices](https://depo-platform-documentation.scrollhelp.site/developer-docs/Feature-toggles.1859780873.html).
 
 ## Access
+
 ### Staging
 
 In order to turn features on and off in staging and in review instances, you will first need to create an id.me account. You can do this by going to [staging](https://staging.va.gov), clicking "sign in", choosing to sign in with id.me, then choosing to sign in using the google integration. Enter your Ad Hoc email address. It will then take you through an identity verification process. This is done on the id.me sandbox environment. DO NOT PROVIDE YOUR REAL SSN OR OTHER SENSITIVE DATA. IT WILL ACCEPT ANY PERSONAL IDENTIFYING INFORMATION.
@@ -20,7 +23,8 @@ You will then need to add your production id.me email address to `config/setting
 ## Toggling Feature Flags
 
 Flipper URLS (note the 'api' in the url)
-* staging: https://staging-api.va.gov/flipper/features
-* production: https://api.va.gov/flipper/features
+
+* staging: staging-api.va.gov/flipper/features
+* production: api.va.gov/flipper/features
 
 From there, you can select individual features and turn them on and off for all users, individual users, or even a percentage of random users.

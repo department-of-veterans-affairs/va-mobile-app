@@ -3,7 +3,7 @@ title: Creating components in Figma
 sidebar_position: 6
 ---
 
-### How to set up components
+## How to set up components
 
 * **Component configuration**
 	* All components should have “simplify all instances” checked.
@@ -44,17 +44,17 @@ sidebar_position: 6
 	    * Body copy fields should always be named “content”.
 	    * Fields such as labels, tags, and buttons should be named descriptively – i.e. button text.
 
-### How to set up icons
+## How to set up icons
 
-#### Adding icons to the library
+### Adding icons to the library
 1. Log in to [Font Awesome (version 5.15.4)](https://fontawesome.com/v5/search) and look for the specific icon. 
 2. Click SVG and then right click and copy the SVG code snippet.
 3. In the Figma [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?node-id=719%3A1428&t=mZejOtPIYdGFPfth-1), paste the SVG code snipped onto the  “Design Elements” page.
 4. In the right panel, select “constrain proportions” and set the longest side of the SVG to 24px. This will scale it appropriately.
 5. Then, add any color variants for the icon.
 
-#### Preparing icons for handoff
-##### Duotone icons
+### Preparing icons for handoff
+#### Duotone icons
 1. Open [Icons 2.0](https://www.figma.com/file/cLGkWCYparhoT1kDSw0xX4/%F0%9F%93%90-Icons-2.0---VAMobile?node-id=0%3A1&t=cuVnHqvFVGMX3KrI-1) file in Figma
 2. Log in to [Font Awesome (version 5.15.4)](https://fontawesome.com/v5/search) and look for the duotone icon. 
 	* If it exists, copy the SVG code snippet and paste it into the Figma file.
@@ -69,7 +69,7 @@ sidebar_position: 6
 6. In your downloads, right click and select "Open with" > "Text edit."
 7. Copy the code from the text edit and send to FE. Ask FE to review and make sure it is working as expected.
 
-##### Single layer icons
+#### Single layer icons
 1. Open [Icons 2.0](https://www.figma.com/file/cLGkWCYparhoT1kDSw0xX4/%F0%9F%93%90-Icons-2.0---VAMobile?node-id=0%3A1&t=cuVnHqvFVGMX3KrI-1) file in Figma
 2. Log in to [Font Awesome (version 5.15.4)](https://fontawesome.com/v5/search) and look for the icon. Copy the SVG code snippet and paste it into the Figma file.
 3. Remove the frame and resize the icon to fit inside of the 24px circle.

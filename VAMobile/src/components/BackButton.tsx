@@ -1,12 +1,14 @@
-import { TouchableWithoutFeedback } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TouchableWithoutFeedback } from 'react-native'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -27,6 +29,8 @@ export type BackButtonProps = {
   a11yHint?: string
   /** boolean to specify if we want accesibility to focus on the back button */
   focusOnButton?: boolean
+  /** option testID */
+  backButtonTestID?: string
 
   webview?: boolean
 }
@@ -34,7 +38,16 @@ export type BackButtonProps = {
 /**
  * Button used by the stack navigation to go back to the previous screen
  */
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true, webview }) => {
+export const BackButton: FC<BackButtonProps> = ({
+  onPress,
+  canGoBack,
+  label,
+  showCarat,
+  a11yHint,
+  backButtonTestID,
+  focusOnButton = true,
+  webview,
+}) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -46,15 +59,32 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
     return null
   }
 
-  const chevron = showCarat ? <VAIcon mt={1} name={'ChevronLeft'} fill="backButton" /> : <></>
+  const chevron = showCarat ? <VAIcon mt={1} name={'ChevronLeft'} fill="backButton" testID="BackButtonCarat" /> : <></>
 
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
   return (
-    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
+    <TouchableWithoutFeedback
+      ref={focusRef}
+      onPress={onPress}
+      {...testIdProps(label)}
+      {...a11yHintProp(a11yHintPropParam)}
+      accessibilityRole="button"
+      accessible={true}
+      testID={backButtonTestID}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        ml={theme.dimensions.headerButtonSpacing}
+        height={theme.dimensions.headerHeight}
+        alignItems={'center'}>
         {chevron}
-        <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView
+          variant="ActionBar"
+          color={webview ? 'footerButton' : undefined}
+          ml={theme.dimensions.textIconMargin}
+          allowFontScaling={false}
+          accessible={false}>
           {t(label)}
         </TextView>
       </Box>

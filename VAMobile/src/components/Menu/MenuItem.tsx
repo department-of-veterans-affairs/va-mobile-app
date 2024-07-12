@@ -1,6 +1,7 @@
-// This component code is from the original code in https://github.com/breeffy/react-native-popup-menu with some modification made to make it work for us.
-import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps, ViewStyle } from 'react-native'
+// This component code is from the original code in https://github.com/breeffy/react-native-popup-menu
+// with some modification made to make it work for us.
 import React, { PropsWithChildren } from 'react'
+import { StyleProp, TouchableHighlight, TouchableHighlightProps, View, ViewProps, ViewStyle } from 'react-native'
 
 import theme from 'styles/themes/standardTheme'
 

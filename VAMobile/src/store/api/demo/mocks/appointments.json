@@ -3,94 +3,13 @@
     "past": {
       "data": [
         {
-          "type": "appointment",
-          "id": "4",
-          "attributes": {
-            "appointmentType": "VA",
-            "status": "BOOKED",
-            "phoneOnly": false,
-            "statusDetail": null,
-            "isCovidVaccine": true,
-            "startDateLocal": "2021-09-06T19:53:14.000+00:00",
-            "startDateUtc": "2021-09-06T19:53:14.000+00:00",
-            "minutesDuration": 60,
-            "comment": "Please arrive 20 minutes before the start of your appointment",
-            "timeZone": "America/Los_Angeles",
-            "healthcareService": "Blind Rehabilitation Center",
-            "healthcareProvider": null,
-            "reason": null,
-            "location": {
-              "name": "VA Long Beach Healthcare System",
-              "address": {
-                "street": "5901 East 7th Street",
-                "city": "Long Beach",
-                "state": "CA",
-                "zipCode": "90822"
-              },
-              "phone": {
-                "number": "456-7890",
-                "extension": "",
-                "areaCode": "123"
-              },
-              "url": "",
-              "code": ""
-            },
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
-          }
-        },
-        {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
-            "comment": "Routine Check up. Reminder to bring your ID card",
-            "healthcareProvider": null,
-            "healthcareService": "Community Clinic Association",
-            "location": {
-              "id": null,
-              "name": "Community Clinic Association",
-              "address": {
-                "street": "1412 East Cesar Ave",
-                "city": "East Lost Angeles",
-                "state": "CA",
-                "zipCode": "93344"
-              },
-              "lat": null,
-              "long": null,
-              "phone": {
-                "areaCode": "323",
-                "number": "458-9423",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 60,
-            "phoneOnly": false,
-            "startDateLocal": "2021-06-02T20:00:00.000-04:00",
-            "startDateUtc": "2021-06-03T00:00:00.000Z",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
-          }
-        },
-        {
-          "id": "8a48dc927956f6030179632426bc001a",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Test",
-            "healthcareProvider": null,
+            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "healthcareProvider": "Vilanisi Reddy",
             "healthcareService": "Outpatient Clinic",
             "location": {
               "id": null,
@@ -113,25 +32,133 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2021-05-13T02:48:00.000-04:00",
-            "startDateUtc": "2021-05-13T06:48:00.000Z",
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/New_York",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "typeOfCare": "Podiatry"
           }
         },
         {
-          "id": "202104211230984000285500000000000000",
+          "id": "40977d8c1f4f0ed3f692403bed8d69cd4c8e47d44087c2cec9fbff842b82185d",
           "type": "appointment",
           "attributes": {
-            "appointmentType": "VA",
-            "cancelId": null,
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": "123",
             "comment": null,
-            "healthcareService": "MID SLEEP CLIN A",
+            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareService": null,
             "location": {
+              "id": null,
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": "442;3240628.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "724-316-5274",
+            "patientEmail": "christopher.ray3@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening"],
+            "friendlyLocationName": "Denver VA Medical Center",
+            "serviceCategoryName": null
+          }
+        },
+        {
+          "id": "7b21f45ff6f899127bf1e28fc557ed402a53a28c3e78fb084913aa1959a4cc5c",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": null,
+            "comment": "Smoke test 5/21 - 1",
+            "healthcareProvider": "Jim Smith",
+            "healthcareService": null,
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
+                "state": "CA",
+                "zipCode": "90022"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "323",
+                "number": "723-9322",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 45 minutes}}",
+            "startDateUtc": "{{now - 45 minutes utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": "552;3240527.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Evening"],
+            "friendlyLocationName": null,
+            "serviceCategoryName": null
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00az",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - Onsite - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
               "name": "Middletown VA Clinic",
               "address": {
                 "street": "4337 North Union Road",
@@ -139,8 +166,8 @@
                 "state": "OH",
                 "zipCode": "45005-5211"
               },
-              "lat": 39.50603012,
-              "long": -84.3164749,
+              "lat": 39.50603,
+              "long": -84.316475,
               "phone": {
                 "areaCode": "513",
                 "number": "423-8387",
@@ -149,232 +176,622 @@
               "url": null,
               "code": null
             },
-            "minutesDuration": 90,
-            "startDateLocal": "2021-04-21T08:30:00.000-04:00",
-            "startDateUtc": "2021-04-21T12:30:00.000+00:00",
-            "status": "HIDDEN",
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
             "timeZone": "America/New_York",
-            "vetextId": "2855;20210421.080030"
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
           }
         },
         {
-          "id": "202104081200984000118400000000000000",
+          "id": "55",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - Onsite - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "56",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 5 days}}",
+            "startDateUtc": "{{now - 5 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+
+        {
+          "id": "57",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": "Other details test",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": "12345"
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Reason test",
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "58",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": "Other details test",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Reason test",
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "59",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 6 days}}",
+            "startDateUtc": "{{now - 6 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+        {
+          "id": "60",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 7 days}}",
+            "startDateUtc": "{{now - 7 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "61",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 7 days}}",
+            "startDateUtc": "{{now - 7 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "62",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+
+        {
+          "id": "63",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": null
+          }
+        },
+        {
+          "id": "64",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "65",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 8 days}}",
+            "startDateUtc": "{{now - 8 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00aa",
           "type": "appointment",
           "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
-            "healthcareService": "C&P OPTOMETRY",
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
             "location": {
-              "name": "Dayton VA Medical Center",
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Canceled",
               "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
               },
-              "lat": 39.74935073,
-              "long": -84.25320014,
+              "lat": 40.553875,
+              "long": -105.08795,
               "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
+                "areaCode": "970",
+                "number": "224-1550",
                 "extension": null
               },
               "url": null,
               "code": null
             },
-            "minutesDuration": null,
-            "startDateLocal": "2021-04-08T08:00:00.000-04:00",
-            "startDateUtc": "2021-04-08T12:00:00.000+00:00",
-            "status": "CANCELLED",
-            "timeZone": "America/New_York",
-            "vetextId": "1184;20210408.080000"
-          }
-        },
-        {
-          "id": "202103290000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "2021-03-29T17:30:00.000-04:00",
-            "startDateUtc": "2021-03-29T21:30:00.000+00:00",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210329.170030"
-          }
-        },
-        {
-          "id": "202102070000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "2021-02-07T17:30:00.000-04:00",
-            "startDateUtc": "2021-02-07T21:30:00.000+00:00",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210207.170030"
-          }
-        },
-        {
-          "id": "202102060000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
-            "cancelId": null,
-            "comment": "Medication Review",
-            "healthcareService": "DAYTON",
-            "location": {
-              "name": "Dayton VA Medical Center",
-              "address": {
-                "street": "4100 West Third Street",
-                "city": "Dayton",
-                "state": "OH",
-                "zipCode": "45428-9000"
-              },
-              "lat": 39.74935073,
-              "long": -84.25320014,
-              "phone": {
-                "areaCode": "937",
-                "number": "268-6511",
-                "extension": null
-              },
-              "url": null,
-              "code": "VJJLWB"
-            },
-            "minutesDuration": 30,
-            "startDateLocal": "2021-02-06T17:30:00.000-04:00",
-            "startDateUtc": "2021-02-06T21:30:00.000+00:00",
-            "status": "BOOKED",
-            "timeZone": "America/New_York",
-            "vetextId": ";20210206.170030"
-          }
-        },
-        {
-          "id": "8a48912a6d02b0fc016d20b4ccb9001b",
-          "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
-              "id": null,
-              "name": "Test clinic 2",
-              "address":
-              {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone":
-              {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
+            "physicalLocation": "FORT COLLINS AUDIO",
+            "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now - 12 days}}",
+            "startDateUtc": "{{now - 12 days utc}}",
             "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY PATIENT",
+            "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[
-              {
-                "date": "10/01/2021",
-                "time": "PM"
-              },
-              {
-                "date": "10/02/2021",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
         {
-          "id": "8a48e8db6d70a38a016d72b354240004",
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
           "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
+          "attributes": {
+            "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Confirmed",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": "FORT COLLINS AUDIO",
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 13 days}}",
+            "startDateUtc": "{{now - 13 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
+          "id": "9a48e8db6d70a38a016d72b354240002",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Smith",
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "name": "San Francisco VA Health Care System",
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -382,8 +799,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -393,90 +809,26 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2021-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2021-11-02T08:00:00.000Z",
-            "status": "SUBMITTED",
+            "startDateLocal": "{{now - 26 days}}",
+            "startDateUtc": "{{now - 26 days utc}}",
+            "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[
+            "isPending": false,
+            "proposedTimes": [
               {
-                "date": "10/01/2021",
+                "date": "{{now + 26 days short}}",
                 "time": "PM"
               },
               {
-                "date": "11/02/2021",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               },
               {
-                "date": "11/03/2021",
-                "time": "AM"
-              }
-            ],
-            "typeOfCare": "Primary Care",
-            "patientPhoneNumber": "(666) 666-6666",
-            "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning","Afternoon","Evening"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
-          }
-        },
-        {
-          "id": "8a48e8db6d70a38a016d72b354240003",
-          "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "VA",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location":
-            {
-              "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address":
-              {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
-              },
-              "lat": 41.148027,
-              "long": -104.7862575,
-              "phone":
-              {
-                "areaCode": "307",
-                "number": "778-7550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "2021-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2021-11-02T08:00:00.000Z",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "New Issue",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[
-              {
-                "date": "10/01/2021",
-                "time": "PM"
-              },
-              {
-                "date": "11/02/2021",
-                "time": "AM"
-              },
-              {
-                "date": "11/03/2021",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               }
             ],
@@ -484,25 +836,753 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
         {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001d",
+          "id": "70",
           "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "LA VA Medical Center",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 27 days}}",
+            "startDateUtc": "{{now - 27 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 27 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 27 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "67",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Central California VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 28 days}}",
+            "startDateUtc": "{{now - 28 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "71",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "VA Palo Alto Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 29 days}}",
+            "startDateUtc": "{{now - 29 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "72",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Albany VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 30 days}}",
+            "startDateUtc": "{{now - 30 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "73",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Bath VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 31 days}}",
+            "startDateUtc": "{{now - 31 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "74",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Northport VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 32 days}}",
+            "startDateUtc": "{{now - 32 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "75",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Syracuse VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 33 days}}",
+            "startDateUtc": "{{now - 33 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "77",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 34 days}}",
+            "startDateUtc": "{{now - 34 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "78",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John James",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 35 days}}",
+            "startDateUtc": "{{now - 35 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "79",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Valente Nihad",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Houston VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 36 days}}",
+            "startDateUtc": "{{now - 36 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "80",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Dallas VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 37 days}}",
+            "startDateUtc": "{{now - 37 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "81",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Sakari Rina",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Salem VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 38 days}}",
+            "startDateUtc": "{{now - 38 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "82",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Hampton VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 39 days}}",
+            "startDateUtc": "{{now - 39 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "83",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 40 days}}",
+            "startDateUtc": "{{now - 40 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "84",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jim Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 41 days}}",
+            "startDateUtc": "{{now - 41 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -510,8 +1590,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -520,27 +1599,117 @@
               "code": null
             },
             "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "phoneOnly": true,
+            "startDateLocal": "{{now - 45 days}}",
+            "startDateUtc": "{{now - 45 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Confirmed",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a3",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now - 46 days}}",
+            "startDateUtc": "{{now - 46 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Canceled",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a55",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now - 47 days}}",
+            "startDateUtc": "{{now - 47 days utc}}",
             "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
-                "date": "10/01/2021",
-                "time": "PM"
-              },
-              {
-                "date": "10/02/2021",
+                "date": "05/16/2024",
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Optometry (routine eye exam)",
+            "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
@@ -553,8 +1722,8 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 2,
-          "totalEntries": 12
+          "totalPages": 4,
+          "totalEntries": 36
         }
       },
       "links": {
@@ -574,7 +1743,7 @@
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
-            "healthcareProvider": null,
+            "healthcareProvider": "Vilanisi Reddy",
             "healthcareService": "Outpatient Clinic",
             "location": {
               "id": null,
@@ -597,180 +1766,766 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2022-06-02T20:00:00.000-04:00",
-            "startDateUtc": "2022-06-03T00:00:00.000Z",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/New_York",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "typeOfCare": "Podiatry"
           }
         },
         {
-          "id": "8a4872aa7883bc4b01788d9788d9003c",
+          "id": "40977d8c1f4f0ed3f692403bed8d69cd4c8e47d44087c2cec9fbff842b82185d",
           "type": "appointment",
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": "Routine Check up. Reminder to bring your ID card",
-            "healthcareProvider": null,
-            "healthcareService": "Community Clinic Association",
+            "appointmentIen": null,
+            "cancelId": "123",
+            "comment": null,
+            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareService": null,
             "location": {
               "id": null,
-              "name": "Community Clinic Association",
+              "name": null,
               "address": {
-                "street": "1412 East Cesar Ave",
-                "city": "East Lost Angeles",
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": null,
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": "442;3240628.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "724-316-5274",
+            "patientEmail": "christopher.ray3@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening"],
+            "friendlyLocationName": "Denver VA Medical Center",
+            "serviceCategoryName": null
+          }
+        },
+        {
+          "id": "7b21f45ff6f899127bf1e28fc557ed402a53a28c3e78fb084913aa1959a4cc5c",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "appointmentIen": null,
+            "cancelId": null,
+            "comment": "Smoke test 5/21 - 1",
+            "healthcareProvider": "Jim Smith",
+            "healthcareService": null,
+            "location": {
+              "id": null,
+              "name": "Outpatient Clinic",
+              "address": {
+                "street": "2341 North Ave",
+                "city": "Commerce",
                 "state": "CA",
-                "zipCode": "93344"
+                "zipCode": "90022"
               },
               "lat": null,
               "long": null,
               "phone": {
                 "areaCode": "323",
-                "number": "458-9423",
+                "number": "723-9322",
                 "extension": null
               },
               "url": null,
               "code": null
             },
+            "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2022-06-16T16:26:00.000-04:00",
-            "startDateUtc": "2022-06-16T20:26:00.000Z",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": "552;3240527.12",
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": "Podiatry",
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Evening"],
+            "friendlyLocationName": null,
+            "serviceCategoryName": null
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00az",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - Onsite - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 5 days}}",
+            "startDateUtc": "{{now + 5 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
             "reason": null,
-            "isCovidVaccine": false
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
           }
         },
         {
+          "id": "55",
           "type": "appointment",
-          "id": "1",
           "attributes": {
-            "appointmentType": "VA",
-            "status": "CANCELLED",
-            "phoneOnly": false,
-            "statusDetail": null,
-            "isCovidVaccine": true,
-            "startDateLocal": "2022-09-06T19:53:14.000+00:00",
-            "startDateUtc": "2022-09-06T19:53:14.000+00:00",
-            "minutesDuration": 60,
-            "comment": "Please arrive 20 minutes before the start of your appointment",
-            "timeZone": "America/Los_Angeles",
-            "healthcareService": "Blind Rehabilitation Center",
-            "healthcareProvider": null,
-            "reason": null,
-            "location": {
-              "name": "VA Long Beach Healthcare System",
-              "address": {
-                "street": "5901 East 7th Street",
-                "city": "Long Beach",
-                "state": "CA",
-                "zipCode": "90822"
-              },
-              "phone": {
-                "number": "456-7890",
-                "extension": "",
-                "areaCode": "123"
-              },
-              "url": "",
-              "code": ""
-            },
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
-          }
-        },
-        {
-          "id": "9a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Vilasini Reddy",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
-              "id": null,
-              "name": "Test clinic 2",
-              "address":
-              {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
+            "healthcareProvider": "Sami Alsahhar - Onsite - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
               },
-              "lat": null,
-              "long": null,
-              "phone":
-              {
-                "areaCode": "703",
-                "number": "652-0000",
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
                 "extension": null
               },
               "url": null,
               "code": null
             },
-            "minutesDuration": null,
+            "minutesDuration": 30,
             "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
-            "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
+            "startDateLocal": "{{now + 5 days}}",
+            "startDateUtc": "{{now + 5 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
+            "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-
-            "proposedTimes":[
-              {
-                "date": "10/01/2022",
-                "time": "PM"
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "56",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - Onsite - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
               },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 5 days}}",
+            "startDateUtc": "{{now + 5 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "proposedTimes": [
               {
-                "date": "10/02/2022",
+                "date": "05/16/2024",
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
-            "practitioner": {
-              "prefix": "Dr.",
-              "firstName": "Larry",
-              "middleName": "",
-              "lastName": "TestDoctor"
-            }
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+
+        {
+          "id": "57",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": "Other details test",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": "12345"
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 6 days}}",
+            "startDateUtc": "{{now + 6 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Reason test",
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "58",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": "Other details test",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 6 days}}",
+            "startDateUtc": "{{now + 6 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Reason test",
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "59",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 6 days}}",
+            "startDateUtc": "{{now + 6 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": "Test",
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+        {
+          "id": "60",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 7 days}}",
+            "startDateUtc": "{{now + 7 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "61",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 7 days}}",
+            "startDateUtc": "{{now + 7 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "62",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 7 days}}",
+            "startDateUtc": "{{now + 7 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+
+        {
+          "id": "63",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 8 days}}",
+            "startDateUtc": "{{now + 8 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": null
+          }
+        },
+        {
+          "id": "64",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Canceled",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 8 days}}",
+            "startDateUtc": "{{now + 8 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY PATIENT & AUTO_REBOOK",
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "65",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_GFE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 8 days}}",
+            "startDateUtc": "{{now + 8 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "isPending": true,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "proposedTimes": [
+              {
+                "date": "05/16/2024",
+                "time": "PM"
+              }
+            ],
+            "patientPhoneNumber": "413-757-5329",
+            "patientEmail": "Judy.morrison@id.me",
+            "bestTimeToCall": ["Afternoon"]
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00aa",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Canceled",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": "FORT COLLINS AUDIO",
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 12 days}}",
+            "startDateUtc": "{{now + 12 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic - Claim - Confirmed",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": "FORT COLLINS AUDIO",
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 13 days}}",
+            "startDateUtc": "{{now + 13 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "friendlyLocationName": "Fort Collins VA Clinic",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
           }
         },
         {
           "id": "9a48e8db6d70a38a016d72b354240002",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
-            "cancelId": null,
+            "cancelId": "12",
             "comment": null,
-            "healthcareProvider": null,
+            "healthcareProvider": "Jane Smith",
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
-              "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "name": "San Francisco VA Health Care System",
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -778,8 +2533,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -789,26 +2543,26 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2022-11-02T08:00:00.000Z",
-            "status": "SUBMITTED",
+            "startDateLocal": "{{now + 26 days}}",
+            "startDateUtc": "{{now + 26 days utc}}",
+            "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[
+            "isPending": false,
+            "proposedTimes": [
               {
-                "date": "10/01/2022",
+                "date": "{{now + 26 days short}}",
                 "time": "PM"
               },
               {
-                "date": "11/02/2022",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               },
               {
-                "date": "11/03/2022",
+                "date": "{{now + 26 days short}}",
                 "time": "AM"
               }
             ],
@@ -816,25 +2570,753 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
         {
-          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "id": "70",
           "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "LA VA Medical Center",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 27 days}}",
+            "startDateUtc": "{{now + 27 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 27 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 27 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "67",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Central California VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 28 days}}",
+            "startDateUtc": "{{now + 28 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 28 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "71",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "VA Palo Alto Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 29 days}}",
+            "startDateUtc": "{{now + 29 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "72",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Albany VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 30 days}}",
+            "startDateUtc": "{{now + 30 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "73",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Bath VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 31 days}}",
+            "startDateUtc": "{{now + 31 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "74",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Northport VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 32 days}}",
+            "startDateUtc": "{{now + 32 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "75",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Syracuse VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 33 days}}",
+            "startDateUtc": "{{now + 33 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "77",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 34 days}}",
+            "startDateUtc": "{{now + 34 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "78",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John James",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 35 days}}",
+            "startDateUtc": "{{now + 35 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "79",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Valente Nihad",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Houston VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 36 days}}",
+            "startDateUtc": "{{now + 36 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "80",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Dallas VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 37 days}}",
+            "startDateUtc": "{{now + 37 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "81",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Sakari Rina",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Salem VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 38 days}}",
+            "startDateUtc": "{{now + 38 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "82",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "Hampton VA Medical Center",
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 39 days}}",
+            "startDateUtc": "{{now + 39 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "83",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 40 days}}",
+            "startDateUtc": "{{now + 40 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "84",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jim Jones",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": null,
+              "address": {
+                "street": null,
+                "city": null,
+                "state": null,
+                "zipCode": null
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": null,
+                "number": null,
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 41 days}}",
+            "startDateUtc": "{{now + 41 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": [],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -842,8 +3324,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -852,142 +3333,121 @@
               "code": null
             },
             "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 45 days}}",
+            "startDateUtc": "{{now + 45 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Confirmed",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a3",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 46 days}}",
+            "startDateUtc": "{{now + 46 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Canceled",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a55",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 47 days}}",
+            "startDateUtc": "{{now + 47 days utc}}",
             "status": "SUBMITTED",
-            "statusDetail": "CANCELLED BY CLINIC",
+            "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
-                "date": "10/01/2022",
-                "time": "PM"
-              },
-              {
-                "date": "10/02/2022",
+                "date": "05/16/2024",
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Optometry (routine eye exam)",
+            "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001a",
-          "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
-              "id": null,
-              "name": "Test clinic 2",
-              "address":
-              {
-                "street": "123 Sesame St.",
-                "city": "Cheyenne",
-                "state": "VA",
-                "zipCode": "20171"
-              },
-              "lat": null,
-              "long": null,
-              "phone":
-              {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[
-              {
-                "date": "10/01/2022",
-                "time": "PM"
-              },
-              {
-                "date": "10/02/2022",
-                "time": "PM"
-              }
-            ],
-            "typeOfCare": "Optometry (routine eye exam)",
-            "patientPhoneNumber": "(703) 652-0000",
-            "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
-          }
-        },
-        {
-          "id": "6a48912a6d02b0fc016d20b4ccb9001z",
-          "type": "appointment",
-          "attributes":
-          {
-            "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": "",
-            "healthcareService": "Test clinic 2",
-            "location":
-            {
-              "id": null,
-              "name": "",
-              "address":
-              {
-                "street": "",
-                "city": "",
-                "state": "",
-                "zipCode": ""
-              },
-              "lat": null,
-              "long": null,
-              "phone":
-              {
-                "areaCode": "703",
-                "number": "652-0000",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": null,
-            "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
-            "status": "CANCELLED",
-            "statusDetail": "CANCELLED BY CLINIC",
-            "timeZone": "America/Denver",
-            "vetextId": null,
-            "reason": "routine-follow-up",
-            "isCovidVaccine": null,
-            "isPending": true,
-            "proposedTimes":[],
-            "typeOfCare": "",
-            "patientPhoneNumber": "",
-            "patientEmail": "",
-            "bestTimeToCall": [],
-            "friendlyLocationName": ""
           }
         }
       ],
@@ -996,9 +3456,11 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 1,
-          "totalEntries": 8
-        }
+          "totalPages": 4,
+          "totalEntries": 36
+        },
+        "upcomingAppointmentsCount": 3,
+        "upcomingDaysLimit": 7
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",

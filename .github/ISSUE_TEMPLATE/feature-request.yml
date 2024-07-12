@@ -1,13 +1,13 @@
-name: Feature Request
-description: Use this template to formally request a feature for the VA Mobile App team to evaluate.
-title: "Feature Request: [name of feature]"
-labels: [ feature-request ]
+name: VAHB Mobile App Change Request Form
+description: Use this template to formally request a new feature, enhancement to a feature, discovery, research, analytics request or other ask/change for the VA Mobile App team to evaluate.
+title: "Change Request: [name of change]"
+labels: [ change-request ]
 assignees: [ timwright12, Hallm13 ]
 body:
 - type: input
   id: fullname
   attributes:
-    label: Full Name
+    label: 1.) Requestor's Name
     description: Add your full name here
     placeholder: Example Name
   validations:
@@ -15,23 +15,85 @@ body:
 - type: input
   id: email
   attributes:
-    label: Email
+    label: 2.) Requestor's Email
     description: Your email address so we can contact you with any follow-up questions.
     placeholder: 'example@va.gov'
   validations:
     required: true
 - type: input
-  id: featurelabel
+  id: VA_Team
   attributes:
-    label: What would you like to add as a new feature?
+    label: 3.) VA Team
+    description: The VA Team you are with (Health Products, Benefit Tools Crew, Identity, Contact Center, CAIA, etc) 
+    placeholder: 
+  validations:
+    required: true    
+- type: input
+  id: change_request_label
+  attributes:
+    label: 4.) What is the name of the project or change? 
     description: Give us a short name or description for this feature, so we know what to call it.
+  validations:
+    required: true
+- type: textarea
+  id: problem
+  attributes:
+    label: 5.) Please explain what problem you are trying to solve.  
+    description: Describe the problem and its impact on Veteran experience so we can assess mobile implementation. 
   validations:
     required: true
 - type: textarea
   id: description
   attributes:
-    label: Please explain how it would work.
-    description: Giving us an explanation of how you feel this feature should work will help us better in planning and scoping the request.
+    label: 6.) Please explain how this change would work.
+    description: Please explain how this change or feature would solve the problem. 
   validations:
     required: true
+- type: input
+  id: Feature
+  attributes:
+    label: 7.) Features Impacted
+    description: What features will this change involve (Appointments, Prescriptions, Secure Messaging, Direct Deposit, Payments, Vaccines, Contact Information, etc.)
+    placeholder: If this is a new feature request put NA. 
+  validations:
+    required: true  
+- type: textarea
+  id: existing_documentation
+  attributes:
+    label: 8.) Please include all relevant documentation links for this change request.  
+    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to research and review existing materials.  
+  validations:
+    required: true
+- type: input
+  id: mobile_readiness
+  attributes:
+    label: 9.) Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
+    description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile will be blocked until future work is completed in order to better asses planning, scoping, and prioritization. 
+    placeholder: Yes / No
+  validations:
+    required: true
+- type: input
+  id: discussion_VAHB_PO
+  attributes:
+    label: 10.) Has this change been discussed with VAHB POs (Rachel, Ryan, or Don)? 
+    description: 
+    placeholder: VAHB PO Name  - Yes / No
+  validations:
+    required: true
+- type: input
+  id: va_stakedholer_alignment
+  attributes:
+    label: 11.) Has this change been agreed upon by all impacted VA Stakeholders? 
+    description: 
+    placeholder: Yes / No
+  validations:
+    required: true
+- type: input
+  id: duedate
+  attributes:
+    label: 12.) What is your ideal due date for this change request? 
+    description: 
+    placeholder: MM/DD/YYYY or Quarter 
+  validations:
+    required: true    
 

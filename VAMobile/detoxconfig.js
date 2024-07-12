@@ -5,11 +5,23 @@ module.exports = {
   ...tsjPreset,
   preset: 'react-native',
   maxWorkers: 1,
-  testEnvironment: "./e2e/environment",
-  setupFilesAfterEnv: ["./e2e/setup.ts"],
-  testRunner: "jest-circus/runner",
-  testTimeout: 120000,
-  testRegex: "\\.e2e\\.ts$",
+  testEnvironment: './e2e/environment',
+  setupFilesAfterEnv: ['./e2e/setup.ts'],
+  verbose: true,
+  reporters: [
+    'detox/runners/jest/reporter',
+    [
+      'jest-junit',
+      {
+        outputDirectory: '<rootDir>/e2e/test_reports',
+        outputName: 'e2e-junit.xml',
+      },
+    ],
+  ],
+  globalSetup: 'detox/runners/jest/globalSetup',
+  globalTeardown: 'detox/runners/jest/globalTeardown',
+  testTimeout: 400000,
+  testRegex: '\\.e2e\\.ts$',
   transform: {
     ...tsjPreset.transform,
     '^.+\\.tsx?$': [
@@ -20,11 +32,8 @@ module.exports = {
       },
     ],
   },
-  reporters: ["detox/runners/jest/streamlineReporter"],
-  verbose: true,
   transformIgnorePatterns: ['jest-runner', '/node_modules/(?!native-base)/'],
   moduleNameMapper: {
-    '@env': '<rootDir>/env/test.env.ts'
+    '@env': '<rootDir>/env/test.env.ts',
   },
-};
-
+}

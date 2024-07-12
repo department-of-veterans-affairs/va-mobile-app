@@ -1,19 +1,17 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import Mock = jest.Mock
-
-import { context, render, RenderAPI } from 'testUtils'
-import PhotoPreview from 'components/PhotoPreview'
 import { Asset } from 'react-native-image-picker/src/types'
 
+import { t } from 'i18next'
+
+import PhotoPreview from 'components/PhotoPreview'
+import { context, render, screen } from 'testUtils'
+import { bytesToFinalSizeDisplay } from 'utils/common'
+
+import Mock = jest.Mock
+
 context('PhotoPreview', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let onPressSpy: Mock
-  let image: Asset = {
+  const image: Asset = {
     uri: 'testing',
     fileSize: 1234,
   }
@@ -21,12 +19,11 @@ context('PhotoPreview', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    component = render(<PhotoPreview width={110} height={110} image={image} onDeleteCallback={onPressSpy} />)
-
-    testInstance = component.UNSAFE_root
+    render(<PhotoPreview width={110} height={110} image={image} onDeleteCallback={onPressSpy} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders correctly', () => {
+    expect(screen.getByAccessibilityHint('Remove this photo')).toBeTruthy()
+    expect(screen.getByText(bytesToFinalSizeDisplay(1234, t, false))).toBeTruthy()
   })
 })

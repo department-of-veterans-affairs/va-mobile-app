@@ -2,24 +2,55 @@
 name: Epic Ticket
 about: Template for new Epics
 title: [Epic Name]
-labels: 
+labels: Epic
 assignees:
 ---
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
-# Epic
-<!-- Goal of these tickets: Define whole features we're adding to the app as an epic. -->  
 
-## User Story?
-<!-- As a user of the VA mobile app, I want to use [...] feature in the app so that I can [...] -->  
-## Discovery Task (feature discovery)
-### Discovery task (i.e. conversation with another team, review of past research, collaboration with engineering, etc)
-<!-- (i.e. conversation with another team, review of past research, collaboration with engineering, etc) --> 
+# Project Status Overview
+### Project Objective:
+- High level description of the project and what we are trying to solve
+### Product Brief:
+- [link to GitHub Product Brief]
 
-### Key Takeaways
-<!--What is the work? What did you find in discovery? What information do you now have that should drive Acceptability Criteria  --> 
 
-### Staging test accounts used to do discovery research
-<!-- indicate the accounts you used to get the data we need for design, engineering and QA -->
+### Monthly Update for Stakeholders
 
-### Blockers 
-<!--Is there anything that keeps us from finishing this feature? Lack of staging accounts? Are there ACs we can't define? Why? -->
+ 
+|Date|  Progress & Key Accomplishments| Issues/Risks/Blockers|
+|-------| --------|---------|
+|MM/DD/YY| 
+|MM/DD/YY|
+|MM/DD/YY|
+|MM/DD/YY|
+
+### Current Dependencies / Blockers
+<details>
+<summary>Blockers</summary>
+ 
+|Blocker | Team / Owner | Est to Resolution |
+|-------|---------|-------| 
+| Internal dependency ? |   |
+| External dependency ?  |   |
+</details>
+
+### Team Members
+<details>
+<summary>Contact List</summary>
+ 
+**VA:**
+- **Mobile OCTO Product Leads:** Rachel Han or  Ryan Thurlwell
+- **VA OCTO Product Leads:** 
+- **External Team 1 & Role:**
+- **External Team 1 & Role:**
+- 
+**Ad Hoc:** 
+- **Mobile Team**: Global, Health and Benefits, Design System, QA, API 
+- **Mobile Team Lead:** 
+- **FE Engineering:**
+- **BE Engineering:** 
+- **Design:**
+- **Content**
+- **QA:**
+- **Mobile Teams that are involved:** Global, Health and Benefits, Design System, QA, API 
+</details>

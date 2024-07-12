@@ -1,170 +1,119 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+
+import { contactInformationKeys } from 'api/contactInformation/queryKeys'
+import { put } from 'store/api'
+import { QueriesData, mockNavProps, render, when } from 'testUtils'
+
 import EditEmailScreen from './EditEmailScreen'
-import { TextInput, TouchableWithoutFeedback } from 'react-native'
-import Mock = jest.Mock
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { deleteEmail, updateEmail } from 'store/slices'
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateEmail: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    deleteEmail: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+describe('EditEmailScreen', () => {
+  let onBackSpy: jest.Mock
 
-context('EditEmailScreen', () => {
-  let store: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onBackSpy: Mock
-  let props: any
-  let navHeaderSpy: any
-
-  const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
-
-  const prepTestInstanceWithStore = (storeProps?: any, errorsState: ErrorsState = initialErrorsState) => {
-    if (!storeProps) {
-      storeProps = { emailSaved: false, loading: false }
-    }
-
+  const renderWithOptions = (queriesData?: QueriesData) => {
     onBackSpy = jest.fn(() => {})
 
-    store = {
-      ...InitialState,
-      personalInformation: { ...InitialState.personalInformation, ...storeProps },
-      errors: errorsState,
-    }
-
-    props = mockNavProps(
+    const props = mockNavProps(
       {},
       {
+        addListener: jest.fn(),
         navigate: jest.fn(),
         goBack: onBackSpy,
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
       },
     )
 
-    component = render(<EditEmailScreen {...props} />, { preloadedState: store })
-
-    testInstance = component.UNSAFE_root
+    render(<EditEmailScreen {...props} />, { queriesData })
   }
 
   beforeEach(() => {
-    prepTestInstanceWithStore()
+    renderWithOptions()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  describe('when an email exists', () => {
+    it('initializes the text input with the current email', () => {
+      renderWithOptions([
+        {
+          queryKey: contactInformationKeys.contactInformation,
+          data: {
+            contactEmail: {
+              id: '0',
+              emailAddress: 'my@email.com',
+            },
+          },
+        },
+      ])
+
+      expect(screen.getByDisplayValue('my@email.com')).toBeTruthy()
+    })
   })
 
-  it('should initialize the text input with the current email', async () => {
-    prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
-
-    const input = testInstance.findByType(TextInput)
-    expect(input.props.value).toEqual('my@email.com')
-  })
-
-  it('should go back when the email is saved', async () => {
-    prepTestInstanceWithStore({ emailSaved: true, loading: false })
-    expect(onBackSpy).toHaveBeenCalled()
+  describe('when the email is saved', () => {
+    it('navigates back to the previous screen', async () => {
+      fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), 'my@email.com')
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      await waitFor(() => expect(onBackSpy).toHaveBeenCalled())
+    })
   })
 
   describe('when the email does not have an @ followed by text on save', () => {
-    it('should display an alertbox and field error', async () => {
-      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my', id: '0' } } })
-
-      await waitFor(() => {
-        getSaveButton().props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(findByTypeWithText(testInstance, TextView, 'Enter your email address again using this format: X@X.com')).toBeTruthy()
+    it('displays an AlertBox and field error', () => {
+      fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), 'myemail')
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Check your email address')).toBeTruthy()
+      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 
   describe('when the email input is empty on save', () => {
-    it('should display an alertbox and field error', async () => {
-      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: '', id: '0' } } })
-
-      await waitFor(() => {
-        getSaveButton().props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(findByTypeWithText(testInstance, TextView, 'Enter your email address again using this format: X@X.com')).toBeTruthy()
+    it('displays an AlertBox and field error', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      expect(screen.getByText('Check your email address')).toBeTruthy()
+      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 
-  describe('on click of save for a valid email', () => {
-    it('should call updateEmail', async () => {
-      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
+  describe('when the save button is pressed for a valid email', () => {
+    it('submits a PUT request', async () => {
+      renderWithOptions([
+        {
+          queryKey: contactInformationKeys.contactInformation,
+          data: {
+            contactEmail: {
+              id: '0',
+              emailAddress: 'my@email.com',
+            },
+          },
+        },
+      ])
 
-      await waitFor(() => {
-        getSaveButton().props.onPress()
-      })
+      const updatedEmail = 'my@newemail.com'
+      const payload = { id: '0', emailAddress: updatedEmail }
+      when(put as jest.Mock)
+        .calledWith('/v0/user/emails', payload)
+        .mockResolvedValue({})
 
-      expect(updateEmail).toHaveBeenCalledWith({ errorMsg: 'Email address could not be saved', successMsg: 'Email address saved' }, 'my@email.com', '0', 'EDIT_EMAIL_SCREEN')
+      fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), updatedEmail)
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      await waitFor(() => expect(put as jest.Mock).toBeCalledWith('/v0/user/emails', payload))
     })
   })
 
   describe('when there is an existing email', () => {
-    it('should display the remove button', () => {
-      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' } } })
-      const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
-    })
-  })
+    it('displays the remove button', () => {
+      renderWithOptions([
+        {
+          queryKey: contactInformationKeys.contactInformation,
+          data: {
+            contactEmail: {
+              id: '0',
+              emailAddress: 'my@email.com',
+            },
+          },
+        },
+      ])
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      prepTestInstanceWithStore(undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      prepTestInstanceWithStore(undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      expect(screen.getByRole('button', { name: 'Remove email address' })).toBeTruthy()
     })
   })
 })

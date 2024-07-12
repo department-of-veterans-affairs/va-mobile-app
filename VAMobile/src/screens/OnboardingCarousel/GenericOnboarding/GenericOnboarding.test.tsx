@@ -1,34 +1,29 @@
-import 'react-native'
 import React from 'react'
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import GenericOnboarding from './GenericOnboarding'
-import { VAIcon } from 'components'
 
 context('GenericOnboarding', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (displayLogo: boolean = false) => {
-    component = render(<GenericOnboarding header={'header'} text={'text'} displayLogo={displayLogo} />)
-
-    testInstance = component.UNSAFE_root
+    render(<GenericOnboarding header={'header'} text={'text'} displayLogo={displayLogo} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'header' })).toBeTruthy()
+    expect(screen.getByText('text')).toBeTruthy()
   })
 
   describe('when displayLogo is true', () => {
-    it('should display a VAIcon', async () => {
+    it('should display a VAIcon', () => {
       initializeTestInstance(true)
-      expect(testInstance.findAllByType(VAIcon).length).toEqual(1)
+      expect(screen.getByTestId('VAIconOnboardingLogo')).toBeTruthy()
     })
   })
 })

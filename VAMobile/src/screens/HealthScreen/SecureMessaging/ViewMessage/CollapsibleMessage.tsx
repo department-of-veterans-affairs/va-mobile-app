@@ -1,68 +1,136 @@
-import { View } from 'react-native'
+import React, { Ref, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref } from 'react'
+import { View, ViewStyle } from 'react-native'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
+import { useIsFocused } from '@react-navigation/native'
+
+import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
+import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
+import {
+  AccordionCollapsible,
+  AccordionCollapsibleProps,
+  AttachmentLink,
+  Box,
+  LabelTag,
+  LabelTagTypeConstants,
+  LoadingComponent,
+  TextView,
+  VAIcon,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { fixSpecialCharacters } from 'utils/jsonFormatting'
+import { getLinkifiedText } from 'utils/secureMessaging'
+
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
   /* message object */
   message: SecureMessagingMessageAttributes
   /* if it is the message selected */
-  isInitialMessage: boolean
+  isInitialMessage?: boolean
   /* ref for the message */
   collapsibleMessageRef?: Ref<View>
 }
 
-const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
+function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tCom } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
-  const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const fileToGet = {} as SecureMessagingAttachment
+  const [attachments, setAttachments] = useState<SecureMessagingAttachment[]>([])
+  const {
+    data: messageWithAttachmentData,
+    isFetching: loadingAttachments,
+    isError: messageWithAttachmentError,
+    isFetched: fetchedMessage,
+    refetch: fetchMessage,
+  } = useMessage(message.messageId, {
+    enabled: false && isFocused,
+  })
+  const { refetch: refetchFile, isFetching: attachmentFetchPending } = useDownloadFileAttachment(fileToGet, {
+    enabled: false,
+  })
 
+  const messageToUse = messageWithAttachmentData?.data.attributes || message
+  const { attachment, hasAttachments, senderName, sentDate, body } = messageToUse
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const attachLabel = (attachment && 'has attachment') || ''
+  const attachmentBoolean = hasAttachments || attachment
+  const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
+
+  useEffect(() => {
+    if (fetchedMessage) {
+      const includedAttachments = messageWithAttachmentData?.included?.filter(
+        (included) => included.type === 'attachments',
+      )
+      if (includedAttachments?.length) {
+        const attachmentsToSet: Array<SecureMessagingAttachment> = includedAttachments.map((attachmentToMap) => ({
+          id: attachmentToMap.id,
+          filename: attachmentToMap.attributes.name,
+          link: attachmentToMap.links.download,
+          size: attachmentToMap.attributes.attachmentSize,
+        }))
+        setAttachments(attachmentsToSet)
+      }
+    }
+  }, [messageWithAttachmentData, fetchedMessage])
+
+  if (isInitialMessage) {
+    return <></>
+  }
 
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
-    if (expandedValue && attachment && !attachments?.length) {
-      dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true))
+    if (expandedValue && attachmentBoolean) {
+      fetchMessage()
     }
   }
 
-  const onPressAttachment = async (file: SecureMessagingAttachment, key: string): Promise<void> => {
-    dispatch(downloadFileAttachment(file, key))
+  const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
+    fileToGet.filename = file.filename
+    fileToGet.id = file.id
+    fileToGet.link = file.link
+    fileToGet.size = file.size
+    refetchFile()
   }
 
-  const getExpandedContent = (): ReactNode => {
+  function getBody() {
+    /** this does preserve newline characters just not spaces
+     * TODO: change the mobile body link text views to be clickable and launch the right things */
+    if (body) {
+      return getLinkifiedText(fixSpecialCharacters(body), t)
+    }
+    return <></>
+  }
+
+  function getExpandedContent() {
+    const loadingScrollViewStyle: ViewStyle = {
+      backgroundColor: theme.colors.background.contentBox,
+    }
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
-          <TextView variant="MobileBody" selectable={true}>
-            {body}
-          </TextView>
-          {loadingAttachments && !attachments?.length && attachment && (
-            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-              <LoadingComponent justTheSpinnerIcon={true} />
+          {getBody()}
+          {(loadingAttachments || attachmentFetchPending) && !attachments?.length && attachmentBoolean ? (
+            <Box
+              mx={theme.dimensions.gutter}
+              mt={theme.dimensions.contentMarginTop}
+              mb={theme.dimensions.contentMarginBottom}>
+              <LoadingComponent
+                text={t('secureMessaging.viewMessage.loadingAttachment')}
+                scrollViewStyle={loadingScrollViewStyle}
+              />
             </Box>
-          )}
+          ) : undefined}
         </Box>
         <Box>
-          {attachments?.length && (
+          {attachments?.length ? (
             <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
@@ -74,46 +142,66 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
                     formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
-                    a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
-                    onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                    a11yValue={t('listPosition', { position: index + 1, total: attachments.length })}
+                    onPress={() => onPressAttachment(a)}
                   />
                 </Box>
               ))}
             </Box>
-          )}
+          ) : undefined}
         </Box>
       </Box>
     )
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessible={false}>
           {senderName}
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
-          {attachment && (
+          {attachmentBoolean && (
             <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}
-          <TextView accessible={false} variant="MobileBody">
-            {dateTime}
-          </TextView>
+          {sentDate && sentDate.length > 1 ? (
+            <TextView accessible={false} variant="MobileBody">
+              {dateTime}
+            </TextView>
+          ) : (
+            <Box mt={condensedMarginBetween}>
+              <LabelTag text={t('draft')} labelType={LabelTagTypeConstants.tagInactive} />
+            </Box>
+          )}
         </Box>
       </Box>
     )
   }
 
-  const loadMessageError = messageIDsOfError?.includes(message.messageId)
+  function getCollapsedContent() {
+    return (
+      <Box>
+        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
+          {body?.trimStart()}
+        </TextView>
+      </Box>
+    )
+  }
+
+  const errorContent = (
+    <Box mt={theme.dimensions.gutter}>
+      <IndividualMessageErrorComponent />
+    </Box>
+  )
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
+    expandedContent: messageWithAttachmentError ? errorContent : getExpandedContent(),
+    collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
-    expandedInitialValue: isInitialMessage,
     noBorder: true,
     headerRef: collapsibleMessageRef,
   }

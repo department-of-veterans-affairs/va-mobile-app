@@ -1,4 +1,7 @@
 import { StackNavigationOptions, TransitionPresets } from '@react-navigation/stack'
+
+import store from 'store'
+import theme from 'styles/themes/standardTheme'
 import { fullPanelCardStyleInterpolator } from 'utils/common'
 import { isIOS } from 'utils/platform'
 
@@ -7,13 +10,20 @@ export const FULLSCREEN_SUBTASK_OPTIONS: StackNavigationOptions = {
   headerShown: false,
 }
 
+export const FEATURE_LANDING_TEMPLATE_OPTIONS: StackNavigationOptions = {
+  headerShown: false,
+}
+
 export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   headerShown: false,
   presentation: 'transparentModal',
-  cardStyleInterpolator: fullPanelCardStyleInterpolator,
   cardOverlayEnabled: true,
   headerStatusBarHeight: 0,
-  cardStyle: {
-    borderRadius: 0,
-  },
+  // Hardcode card style for VoiceOver to prevent a race condition that causes announcements to fail when using interpolator
+  ...(isIOS() && store.getState().accessibility.isVoiceOverTalkBackRunning
+    ? {
+        ...TransitionPresets.ModalSlideFromBottomIOS,
+        cardStyle: { borderRadius: 0, paddingTop: '30%', backgroundColor: theme.colors.background.overlayOpacity },
+      }
+    : { cardStyle: { borderRadius: 0 }, cardStyleInterpolator: fullPanelCardStyleInterpolator }),
 }

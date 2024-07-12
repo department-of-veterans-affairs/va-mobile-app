@@ -1,11 +1,27 @@
-import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
+import { DateTime } from 'luxon'
+
+import {
+  AddressData,
+  GenderIdentityUpdatePayload,
+  PaymentAccountData,
+  PreferredNameUpdatePayload,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
+import { featureEnabled } from 'utils/remoteConfig'
+
+import { Params } from '../api'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
+import {
+  DemographicsDemoApiReturnTypes,
+  DemographicsDemoStore,
+  updateGenderIdentity,
+  updatePreferredName,
+} from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
-import { Params } from '../api'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
 import {
@@ -36,7 +52,8 @@ export type DemoStore = AppointmentsDemoStore &
   LettersDemoStore &
   PaymenDemoStore &
   PrescriptionsDemoStore &
-  NotificationDemoStore
+  NotificationDemoStore &
+  DemographicsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -53,6 +70,7 @@ type DemoApiReturns =
   | PaymentsDemoReturnTypes
   | PrescriptionsDemoReturnTypes
   | NotificationDemoApiReturnTypes
+  | DemographicsDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -62,6 +80,51 @@ let store: DemoStore | undefined
  */
 const setDemoStore = (data: DemoStore) => {
   store = data
+}
+
+/**
+ * Replace double curly brace date expression in mock file with ISO date.
+ * For example, \{\{now + 5 days\}\} is replaced with 2023-08-08T10:58:58.003-06:00
+ * (Ignore the backslashes, they're just for JSDoc.)
+ * Units can be days, weeks, months, or years, and you can add or subtract.
+ * You can add an optional format at the end. Options:
+ *   short: month-day-year (05-30-2023)
+ *   shortReversed: year-month-day (2023-07-11)
+ *   year: year only (2023)
+ *   utc: timestamp in UTC time (2023-08-10T22:04:16.695Z)
+ *   (default): timestamp in local timezone (2023-11-08T16:04:16.693-07:00)
+ */
+const generateDate = (match: string, signSymbol: string, offset: string, units: string, format: string) => {
+  const sign = signSymbol === '+' ? 'plus' : 'minus'
+  let result = ''
+
+  try {
+    const localNow = DateTime.now()[sign]({ [units]: offset })
+    if (format === 'short') {
+      result = localNow.toFormat('MM-dd-yyyy')
+    } else if (format === 'shortReversed') {
+      result = localNow.toFormat('yyyy-MM-dd')
+    } else if (format === 'year') {
+      result = localNow.toFormat('yyyy')
+    } else if (format === 'utc') {
+      result = DateTime.utc()
+        [sign]({ [units]: offset })
+        .toISO()
+    } else {
+      result = localNow.toString()
+    }
+  } catch (error) {
+    console.log(`Error in mock file date expression ${match}: ${error}`)
+  }
+
+  return result
+}
+
+/**
+ * Replace all the date expressions in a mock file with the corresponding dates
+ */
+const transformDates = (fileObject: Record<string, unknown>) => {
+  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, generateDate))
 }
 
 /**
@@ -80,8 +143,16 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
+    import('./mocks/contactInformation.json'),
+    import('./mocks/getAuthorizedServices.json'),
+    featureEnabled('cernerTrueForDemo')
+      ? import('./mocks/getFacilitiesInfoCerner.json')
+      : import('./mocks/getFacilitiesInfo.json'),
+    import('./mocks/demographics.json'),
+    import('./mocks/personalInformation.json'),
   ])
-  setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
+  const transformedData = data.map((file) => transformDates(file))
+  setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
 /**
@@ -92,7 +163,11 @@ export const initDemoStore = async (): Promise<void> => {
  * @param endpoint- api endpoint being mocked
  * @param params- API params for the call
  */
-export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params): DemoApiReturns => {
+export const transform = (
+  callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
+  endpoint: string,
+  params: Params,
+): DemoApiReturns => {
   switch (callType) {
     case 'GET': {
       return transformGetCall(endpoint, params)
@@ -216,8 +291,16 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
       return updateAddress(store, params as unknown as AddressData)
     }
     case '/v0/payment-information/benefits': {
-      store['/v0/payment-information/benefits'].data.attributes.paymentAccount = params as unknown as PaymentAccountData
-      return directDepositTransform(params as unknown as PaymentAccountData)
+      return directDepositTransform(store, params as unknown as PaymentAccountData)
+    }
+    /**
+     * Demographics
+     */
+    case '/v0/user/gender_identity': {
+      return updateGenderIdentity(store, params as GenderIdentityUpdatePayload)
+    }
+    case '/v0/user/preferred_name': {
+      return updatePreferredName(store, params as PreferredNameUpdatePayload)
     }
     default: {
       return undefined

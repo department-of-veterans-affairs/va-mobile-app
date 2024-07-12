@@ -1,20 +1,33 @@
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
+import { useAppointments } from 'api/appointments'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDisabilityRating } from 'api/disabilityRating'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useLetterBeneficiaryData } from 'api/letters'
+import { useServiceHistory } from 'api/militaryService'
+import { usePrescriptions } from 'api/prescriptions'
+import { useFolders } from 'api/secureMessaging'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
+import { UserAnalytics } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
+import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
+import { testIdProps } from 'utils/accessibility'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import getEnv from 'utils/env'
+import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
-const SyncScreen: FC<SyncScreenProps> = () => {
+function SyncScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const splashStyles: ViewStyle = {
     flexGrow: 1,
@@ -23,15 +36,34 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isPortrait = useOrientation()
+
+  const { ENVIRONMENT } = getEnv()
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: personalInformationLoaded } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
-  const { preloadComplete: militaryHistoryLoaded } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
-    (state) => state.authorizedServices,
+  const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { isFetched: authorizedServicesFetched } = useAuthorizedServices()
+
+  // Prefetch data for `Activity` section
+  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
+  useAppointments(
+    upcomingAppointmentDateRange.startDate,
+    upcomingAppointmentDateRange.endDate,
+    TimeFrameTypeConstants.UPCOMING,
+    {
+      enabled: loggedIn && downtimeWindowsFetched,
+    },
   )
+  useClaimsAndAppeals('ACTIVE', { enabled: loggedIn && downtimeWindowsFetched })
+  useFolders({ enabled: loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: loggedIn && downtimeWindowsFetched })
+  useFacilitiesInfo({ enabled: loggedIn })
+
+  // Prefetch data for `About you` section
+  useServiceHistory({ enabled: loggedIn && downtimeWindowsFetched })
+  useDisabilityRating({ enabled: loggedIn && downtimeWindowsFetched })
+  useLetterBeneficiaryData({ enabled: loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -46,18 +78,6 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
-    if (loggedIn) {
-      if (!personalInformationLoaded) {
-        dispatch(getProfileInfo())
-      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded) {
-        dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded) {
-        dispatch(getDisabilityRating())
-      }
-    }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
-
-  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -68,15 +88,20 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage('')
     }
 
-    const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
+      setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
+  }, [dispatch, loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, ENVIRONMENT])
 
   return (
-    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <Box
+        justifyContent="center"
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <VAIcon name={'Logo'} />
 
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>

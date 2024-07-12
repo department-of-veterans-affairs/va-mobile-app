@@ -1,0 +1,35 @@
+---
+title: Pagination
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import PaginationString from '!!raw-loader!@componentsDocs/Pagination'
+
+Pagination is navigation for paginated content.
+
+## Examples
+
+### Master component
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-1995&mode=design&t=kmODZY3bkhNgpYY1-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+
+### Examples
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-1996&mode=design&t=kmODZY3bkhNgpYY1-4" allowfullscreen></iframe>
+
+## Usage
+* Refer to the [VA Design System for usage guidance](https://design.va.gov/components/pagination#usage)
+
+## Accessibility considerations
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/pagination#accessibility-considerations)
+* All interactive tappable elements should be coded as links and not as buttons.
+* When additional context might be needed, we should apply a11yLabels to the links.
+
+## Related
+* [Pagination - VA Design System](https://design.va.gov/components/pagination)
+* [Pagination - USWDS](https://designsystem.digital.gov/components/pagination/)
+
+## Code usage
+
+import ComponentTopInfo from '../../../../../src/components/ComponentInfo'
+export const exampleString = `<Pagination page={1} onNext={() => {}} onPrev={() => {}} totalEntries={12} pageSize={10} />`
+
+<ComponentTopInfo componentName="Pagination" example={exampleString} codeString={PaginationString} />

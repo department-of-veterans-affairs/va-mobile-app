@@ -1,9 +1,10 @@
-import { TFunction } from 'i18next'
+import React, { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
 
+import { TFunction } from 'i18next'
 import _ from 'underscore'
 
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   AppealAOJTypes,
   AppealAOJTypesConstants,
@@ -12,32 +13,30 @@ import {
   AppealStatusTypesConstants,
   AppealTypes,
   AppealTypesConstants,
-} from 'store/api/types'
+} from 'api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices'
-import { RootState } from 'store'
+import getEnv from 'utils/env'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+
 import AppealDecision from '../AppealDecision/AppealDecision'
-import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS, LINK_URL_YOUR_CLAIMS } = getEnv()
 
-export const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string => {
+export const getAojDescription = (aoj: AppealAOJTypes, t: TFunction): string => {
   if (aoj === AppealAOJTypesConstants.other) {
-    return translation('appealDetails.agencyJurisdiction')
+    return t('appealDetails.agencyJurisdiction')
   }
 
-  return translation(`appealDetails.${aoj}`)
+  return t(`appealDetails.${aoj}`)
 }
 
-const getHearingType = (type: string, translation: TFunction): string => {
+const getHearingType = (type: string, t: TFunction): string => {
   const typeMaps: { [key: string]: string } = {
-    video: translation('appealDetails.videoConference'),
-    travel_board: translation('appealDetails.travelBoard'),
-    central_office: translation('appealDetails.centralOffice'),
+    video: t('appealDetails.videoConference'),
+    travel_board: t('appealDetails.travelBoard'),
+    central_office: t('appealDetails.centralOffice'),
   }
 
   return typeMaps[type] || type
@@ -53,239 +52,249 @@ const getStatusHeadingAndTitle = (
   aoj: AppealAOJTypes,
   appealType: AppealTypes,
   name: string,
-  translation: TFunction,
+  t: TFunction,
   docketName: string,
 ): AppealStatusDisplayedData => {
   const appealStatusDisplayedData: AppealStatusDisplayedData = { title: '', details: [] }
 
   const { type, details } = status
 
-  const aojDesc = getAojDescription(aoj, translation)
+  const aojDesc = getAojDescription(aoj, t)
 
   switch (type) {
     case AppealStatusTypesConstants.scheduled_hearing:
-      appealStatusDisplayedData.title = translation('appealDetails.scheduledHearingTitle')
+      appealStatusDisplayedData.title = t('appealDetails.scheduledHearingTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.scheduledHearingDescription1', {
-          hearingType: getHearingType(details.type || '', translation),
+        t('appealDetails.scheduledHearingDescription1', {
+          hearingType: getHearingType(details.type || '', t),
           date: details.date ? formatDateMMMMDDYYYY(details.date) : '',
           location: details.location,
         }),
       ]
 
       if (appealType === AppealTypesConstants.appeal) {
-        appealStatusDisplayedData.details.push(translation('appealDetails.note'))
-        appealStatusDisplayedData.details.push(translation('appealDetails.scheduledHearingDescription2'))
+        appealStatusDisplayedData.details.push(t('appealDetails.note'))
+        appealStatusDisplayedData.details.push(t('appealDetails.scheduledHearingDescription2'))
       }
       break
     case AppealStatusTypesConstants.pending_hearing_scheduling:
-      appealStatusDisplayedData.title = translation('appealDetails.pendingHearingSchedulingTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '', translation) })]
+      appealStatusDisplayedData.title = t('appealDetails.pendingHearingSchedulingTitle')
+      appealStatusDisplayedData.details = [
+        t('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '', t) }),
+      ]
 
       if (appealType === AppealTypesConstants.appeal) {
-        appealStatusDisplayedData.details.push(translation('appealDetails.note'))
-        appealStatusDisplayedData.details.push(translation('appealDetails.pendingHearingSchedulingDescription2'))
+        appealStatusDisplayedData.details.push(t('appealDetails.note'))
+        appealStatusDisplayedData.details.push(t('appealDetails.pendingHearingSchedulingDescription2'))
       }
       break
     case AppealStatusTypesConstants.on_docket:
-      appealStatusDisplayedData.title = translation('appealDetails.onDocketTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.onDocketDescription1')]
+      appealStatusDisplayedData.title = t('appealDetails.onDocketTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.onDocketDescription1')]
 
       if (appealType === AppealTypesConstants.appeal) {
-        appealStatusDisplayedData.details.push(translation('appealDetails.note'))
-        appealStatusDisplayedData.details.push(translation('appealDetails.onDocketDescription2'))
+        appealStatusDisplayedData.details.push(t('appealDetails.note'))
+        appealStatusDisplayedData.details.push(t('appealDetails.onDocketDescription2'))
       }
 
       break
     case AppealStatusTypesConstants.pending_certification_ssoc:
-      appealStatusDisplayedData.title = translation('appealDetails.pendingCertSsocTitle')
+      appealStatusDisplayedData.title = t('appealDetails.pendingCertSsocTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.pendingCertSsocDescription1', {
+        t('appealDetails.pendingCertSsocDescription1', {
           aojDesc,
           date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '',
         }),
-        translation('appealDetails.pendingCertSsocDescription2'),
-        translation('appealDetails.pendingCertSsocDescription3'),
+        t('appealDetails.pendingCertSsocDescription2'),
+        t('appealDetails.pendingCertSsocDescription3'),
       ]
       break
     case AppealStatusTypesConstants.pending_certification:
-      appealStatusDisplayedData.title = translation('appealDetails.pendingCertTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.pendingCertDescription', { aojDesc })]
+      appealStatusDisplayedData.title = t('appealDetails.pendingCertTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.pendingCertDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.pending_form9:
-      appealStatusDisplayedData.title = translation('appealDetails.pendingForm9Title')
+      appealStatusDisplayedData.title = t('appealDetails.pendingForm9Title')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.pendingForm9Description1', { aojDesc, date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '' }),
-        translation('appealDetails.pendingForm9Description2'),
-        translation('appealDetails.pendingForm9Description3'),
-        translation('appealDetails.or'),
-        translation('appealDetails.pendingForm9Description4'),
+        t('appealDetails.pendingForm9Description1', {
+          aojDesc,
+          date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '',
+        }),
+        t('appealDetails.pendingForm9Description2'),
+        t('appealDetails.pendingForm9Description3'),
+        t('appealDetails.or'),
+        t('appealDetails.pendingForm9Description4'),
       ]
       break
     case AppealStatusTypesConstants.pending_soc:
-      appealStatusDisplayedData.title = translation('appealDetails.pendingSocTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.pendingSocDescription', { aojDesc })]
+      appealStatusDisplayedData.title = t('appealDetails.pendingSocTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.pendingSocDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.stayed:
-      appealStatusDisplayedData.title = translation('appealDetails.stayedTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.stayedDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.stayedTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.stayedDescription')]
       break
     case AppealStatusTypesConstants.at_vso:
-      appealStatusDisplayedData.title = translation('appealDetails.atVsoTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.atVsoDescription', { vsoName: details.vsoName })]
+      appealStatusDisplayedData.title = t('appealDetails.atVsoTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.atVsoDescription', { vsoName: details.vsoName })]
       break
     case AppealStatusTypesConstants.bva_development:
-      appealStatusDisplayedData.title = translation('appealDetails.bvaDevTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.bvaDevDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.bvaDevTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.bvaDevDescription')]
       break
     case AppealStatusTypesConstants.decision_in_progress:
-      appealStatusDisplayedData.title = translation('appealDetails.decisionInProgressTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.decisionInProgressDescription1')]
+      appealStatusDisplayedData.title = t('appealDetails.decisionInProgressTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.decisionInProgressDescription1')]
 
       if (appealType === AppealTypesConstants.legacyAppeal) {
-        appealStatusDisplayedData.details.push(translation('appealDetails.decisionInProgressDescription2'))
+        appealStatusDisplayedData.details.push(t('appealDetails.decisionInProgressDescription2'))
       }
       break
     case AppealStatusTypesConstants.remand:
     case AppealStatusTypesConstants.ama_remand:
     case AppealStatusTypesConstants.bva_decision:
-      appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionAndRemandTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.bvaDecisionAndRemandDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.bvaDecisionAndRemandTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.bvaDecisionAndRemandDescription')]
       break
     case AppealStatusTypesConstants.field_grant:
-      appealStatusDisplayedData.title = translation('appealDetails.fieldGrantStatusTitle', { aojDesc })
-      appealStatusDisplayedData.details = [translation('appealDetails.fieldGrantStatusDescription', { aojDesc })]
+      appealStatusDisplayedData.title = t('appealDetails.fieldGrantStatusTitle', { aojDesc })
+      appealStatusDisplayedData.details = [t('appealDetails.fieldGrantStatusDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.withdrawn:
-      appealStatusDisplayedData.title = translation('appealDetails.withdrawn')
-      appealStatusDisplayedData.details = [translation('appealDetails.withdrawnDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.withdrawn')
+      appealStatusDisplayedData.details = [t('appealDetails.withdrawnDescription')]
       break
     case AppealStatusTypesConstants.ftr:
-      appealStatusDisplayedData.title = translation('appealDetails.ftrTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.ftrDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.ftrTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.ftrDescription')]
       break
     case AppealStatusTypesConstants.ramp:
-      appealStatusDisplayedData.title = translation('appealDetails.rampStatusTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.rampStatusDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.rampStatusTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.rampStatusDescription')]
       break
     case AppealStatusTypesConstants.death:
-      appealStatusDisplayedData.title = translation('appealDetails.death')
-      appealStatusDisplayedData.details = [translation('appealDetails.deathDescription', { name })]
+      appealStatusDisplayedData.title = t('appealDetails.death')
+      appealStatusDisplayedData.details = [t('appealDetails.deathDescription', { name })]
       break
     case AppealStatusTypesConstants.reconsideration:
-      appealStatusDisplayedData.title = translation('appealDetails.reconsideration')
-      appealStatusDisplayedData.details = [translation('appealDetails.reconsiderationDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.reconsideration')
+      appealStatusDisplayedData.details = [t('appealDetails.reconsiderationDescription')]
       break
     case AppealStatusTypesConstants.other_close:
-      appealStatusDisplayedData.title = translation('appealDetails.otherClose')
-      appealStatusDisplayedData.details = [translation('appealDetails.otherCloseDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.otherClose')
+      appealStatusDisplayedData.details = [t('appealDetails.otherCloseDescription')]
       break
     case AppealStatusTypesConstants.remand_ssoc:
-      appealStatusDisplayedData.title = translation('appealDetails.remandSsocTitle')
+      appealStatusDisplayedData.title = t('appealDetails.remandSsocTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.remandSsocDescription', { aojDesc, date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '' }),
+        t('appealDetails.remandSsocDescription', {
+          aojDesc,
+          date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '',
+        }),
       ]
       break
     case AppealStatusTypesConstants.merged:
-      appealStatusDisplayedData.title = translation('appealDetails.mergedTitle')
+      appealStatusDisplayedData.title = t('appealDetails.mergedTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.mergedDescription1'),
-        translation('appealDetails.mergedDescription2'),
-        translation('appealDetails.mergedDescription3'),
-        translation('appealDetails.mergedDescription4'),
+        t('appealDetails.mergedDescription1'),
+        t('appealDetails.mergedDescription2'),
+        t('appealDetails.mergedDescription3'),
+        t('appealDetails.mergedDescription4'),
       ]
       break
     case AppealStatusTypesConstants.statutory_opt_in:
-      appealStatusDisplayedData.title = translation('appealDetails.statutoryOptIn')
+      appealStatusDisplayedData.title = t('appealDetails.statutoryOptIn')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.statutoryOptInDescription1'),
-        translation('appealDetails.statutoryOptInDescription2'),
-        translation('appealDetails.statutoryOptInDescription3'),
-        translation('appealDetails.statutoryOptInDescription4'),
-        translation('appealDetails.statutoryOptInDescription5'),
+        t('appealDetails.statutoryOptInDescription1'),
+        t('appealDetails.statutoryOptInDescription2'),
+        t('appealDetails.statutoryOptInDescription3'),
+        t('appealDetails.statutoryOptInDescription4'),
+        t('appealDetails.statutoryOptInDescription5'),
       ]
       break
     case AppealStatusTypesConstants.evidentiary_period:
-      appealStatusDisplayedData.title = translation('appealDetails.evidentiaryPeriodTitle')
+      appealStatusDisplayedData.title = t('appealDetails.evidentiaryPeriodTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.evidentiaryPeriodDescription1', { docketName: capitalizeFirstLetter(camelToIndividualWords(docketName)) }),
-        translation('appealDetails.evidentiaryPeriodDescription2'),
-        translation('appealDetails.evidentiaryPeriodDescription3'),
-        translation('appealDetails.evidentiaryPeriodDescription4'),
-        translation('appealDetails.evidentiaryPeriodDescription5'),
+        t('appealDetails.evidentiaryPeriodDescription1', {
+          docketName: capitalizeFirstLetter(camelToIndividualWords(docketName)),
+        }),
+        t('appealDetails.evidentiaryPeriodDescription2'),
+        t('appealDetails.evidentiaryPeriodDescription3'),
+        t('appealDetails.evidentiaryPeriodDescription4'),
+        t('appealDetails.evidentiaryPeriodDescription5'),
       ]
       break
     case AppealStatusTypesConstants.post_bva_dta_decision:
-      appealStatusDisplayedData.title = translation('appealDetails.postBvaDtaDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.title = t('appealDetails.postBvaDtaDecisionTitle', { aojDesc })
       appealStatusDisplayedData.details = [
-        translation('appealDetails.postBvaDtaDecisionDescription1', {
+        t('appealDetails.postBvaDtaDecisionDescription1', {
           formattedBvaDecisionDate: formatDateMMMMDDYYYY(details.bvaDecisionDate || ''),
           aojDesc,
           formattedAojDecisionDate: formatDateMMMMDDYYYY(details.aojDecisionDate || ''),
         }),
-        translation('appealDetails.postBvaDtaDecisionDescription2', { aojDesc }),
+        t('appealDetails.postBvaDtaDecisionDescription2', { aojDesc }),
       ]
       break
     case AppealStatusTypesConstants.bva_decision_effectuation:
-      appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionEffectuationTitle', { aojDesc })
+      appealStatusDisplayedData.title = t('appealDetails.bvaDecisionEffectuationTitle', { aojDesc })
       appealStatusDisplayedData.details = [
-        translation('appealDetails.bvaDecisionEffectuationDescription1', {
+        t('appealDetails.bvaDecisionEffectuationDescription1', {
           formattedBvaDecisionDate: formatDateMMMMDDYYYY(details.bvaDecisionDate || ''),
           formattedAojDecisionDate: formatDateMMMMDDYYYY(details.aojDecisionDate || ''),
           aojDesc,
         }),
-        translation('appealDetails.bvaDecisionEffectuationDescription2', { aojDesc }),
+        t('appealDetails.bvaDecisionEffectuationDescription2', { aojDesc }),
       ]
       break
     case AppealStatusTypesConstants.sc_received:
-      appealStatusDisplayedData.title = translation('appealDetails.scReceivedTitle')
+      appealStatusDisplayedData.title = t('appealDetails.scReceivedTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.scReceivedDescription1', { aojDesc }),
-        translation('appealDetails.scReceivedNonCompDescrition'),
-        translation('appealDetails.scReceivedCompDescrition1', { aojDesc }),
-        translation('appealDetails.scReceivedCompDescrition2'),
-        translation('appealDetails.scReceivedCompDescrition3'),
-        translation('appealDetails.scReceivedCompDescrition4'),
-        translation('appealDetails.scReceivedCompDescrition5'),
-        translation('appealDetails.scReceivedCompDescrition6'),
-        translation('appealDetails.scReceivedDescription2'),
+        t('appealDetails.scReceivedDescription1', { aojDesc }),
+        t('appealDetails.scReceivedNonCompDescrition'),
+        t('appealDetails.scReceivedCompDescrition1', { aojDesc }),
+        t('appealDetails.scReceivedCompDescrition2'),
+        t('appealDetails.scReceivedCompDescrition3'),
+        t('appealDetails.scReceivedCompDescrition4'),
+        t('appealDetails.scReceivedCompDescrition5'),
+        t('appealDetails.scReceivedCompDescrition6'),
+        t('appealDetails.scReceivedDescription2'),
       ]
       break
     case AppealStatusTypesConstants.sc_decision:
-      appealStatusDisplayedData.title = translation('appealDetails.scDecisionTitle', { aojDesc })
-      appealStatusDisplayedData.details = [translation('appealDetails.scDecisionDescription', { aojDesc })]
+      appealStatusDisplayedData.title = t('appealDetails.scDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.details = [t('appealDetails.scDecisionDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.sc_closed:
-      appealStatusDisplayedData.title = translation('appealDetails.scClosedTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.scClosedDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.scClosedTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.scClosedDescription')]
       break
     case AppealStatusTypesConstants.hlr_received:
-      appealStatusDisplayedData.title = translation('appealDetails.hlrReceivedTitle')
+      appealStatusDisplayedData.title = t('appealDetails.hlrReceivedTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.hlrReceivedDescription1', { aojDesc }),
-        translation('appealDetails.hlrReceivedDescription2'),
-        translation('appealDetails.hlrReceivedDescription3'),
+        t('appealDetails.hlrReceivedDescription1', { aojDesc }),
+        t('appealDetails.hlrReceivedDescription2'),
+        t('appealDetails.hlrReceivedDescription3'),
       ]
       if (details.informalConference) {
         /* CHECK IF details.informalConference */
-        appealStatusDisplayedData.details.push(translation('appealDetails.hlrReceivedInformalConfDescription'))
+        appealStatusDisplayedData.details.push(t('appealDetails.hlrReceivedInformalConfDescription'))
       }
       break
     case AppealStatusTypesConstants.hlr_decision:
-      appealStatusDisplayedData.title = translation('appealDetails.hlrDecisionTitle', { aojDesc })
-      appealStatusDisplayedData.details = [translation('appealDetails.hlrDecisionDescription', { aojDesc })]
+      appealStatusDisplayedData.title = t('appealDetails.hlrDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.details = [t('appealDetails.hlrDecisionDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.hlr_dta_error:
-      appealStatusDisplayedData.title = translation('appealDetails.hlrDtaErrorTitle', { aojDesc })
-      appealStatusDisplayedData.details = [translation('appealDetails.hlrDtaErrorDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.hlrDtaErrorTitle', { aojDesc })
+      appealStatusDisplayedData.details = [t('appealDetails.hlrDtaErrorDescription')]
       break
     case AppealStatusTypesConstants.hlr_closed:
-      appealStatusDisplayedData.title = translation('appealDetails.hlrClosedTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.hlrClosedDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.hlrClosedTitle')
+      appealStatusDisplayedData.details = [t('appealDetails.hlrClosedDescription')]
       break
     case AppealStatusTypesConstants.remand_return:
-      appealStatusDisplayedData.title = translation('appealDetails.remandReturn')
-      appealStatusDisplayedData.details = [translation('appealDetails.remandReturnDescription')]
+      appealStatusDisplayedData.title = t('appealDetails.remandReturn')
+      appealStatusDisplayedData.details = [t('appealDetails.remandDescription')]
       break
   }
 
@@ -300,14 +309,21 @@ type AppealCurrentStatusProps = {
   programArea: string
 }
 
-const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
+function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea }: AppealCurrentStatusProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-
+  const { data: personalInfo } = usePersonalInformation()
+  const fullName = personalInfo?.fullName || ''
   const marginTop = theme.dimensions.condensedMarginBetween
-  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
+  const statusHeadingAndTitle = getStatusHeadingAndTitle(
+    status,
+    aoj,
+    appealType,
+    fullName,
+    t,
+    docketName || 'UNDF DOCKET',
+  )
 
   const renderStatusDetails = (): ReactElement => {
     const { details } = statusHeadingAndTitle
@@ -404,7 +420,12 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={true}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.evidentiary_period:
@@ -427,7 +448,12 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={true}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
             <TextView variant="MobileBody" mt={marginTop}>
               {details[1]}
             </TextView>
@@ -487,7 +513,12 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={false}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.sc_closed:
@@ -532,7 +563,12 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={false}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.hlr_dta_error:

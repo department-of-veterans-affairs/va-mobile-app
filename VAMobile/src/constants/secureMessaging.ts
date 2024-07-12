@@ -1,3 +1,11 @@
+export const SegmentedControlIndexes: {
+  INBOX: number
+  FOLDERS: number
+} = {
+  INBOX: 0,
+  FOLDERS: 1,
+}
+
 export const HIDDEN_FOLDERS = new Set(['Inbox'])
 
 export const MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES = 6291456

@@ -1,15 +1,23 @@
-import { expect, device, by, element, waitFor } from 'detox'
-import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openProfile, openSettings, openDismissLeavingAppPopup, CommonE2eIdConstants } from './utils'
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
+
+import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, openProfile, openSettings } from './utils'
 
 export const SettingsE2eIdConstants = {
-  SETTINGS_PAGE_TEXT: 'Settings',
-  MANAGE_ACCT_ROW_TEXT: 'Manage account',
-//biometrics toggle has dynamic text/ID, can't be covered by detox in current state
+  SETTINGS_SCREEN_TEXT: 'Settings',
+  MANAGE_ACCT_ROW_TEXT: 'Account security',
+  MANAGE_ACCT_SCREEN_TEXT:
+    'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
+  NOTIFICATIONS_SCREEN_TEXT: "Select which notifications you'd like to receive.",
+  NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment reminders',
+  NOTIFICATIONS_MESSAGING_TEXT: 'New secure messages',
   SHARE_APP_ROW_TEXT: 'Share the app',
+  SHARE_APP_SCREEN_TEXT:
+    'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
   PRIVACY_ROW_TEXT: 'Privacy policy',
-  MANAGE_ACCT_PAGE_TEXT: 'Manage your account page'
+  SIGN_OUT_BTN_ID: 'Sign out',
+  SIGN_OUT_CONFIRM_TEXT: device.getPlatform() === 'ios' ? 'Sign Out' : 'Sign Out ',
 }
 
 beforeAll(async () => {
@@ -18,9 +26,9 @@ beforeAll(async () => {
   await openSettings()
 })
 
-describe('Settings Screen', () => { 
+describe('Settings Screen', () => {
   it('should show settings list content', async () => {
-    await waitFor(element(by.text(SettingsE2eIdConstants.SETTINGS_PAGE_TEXT)))
+    await waitFor(element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)))
       .toExist()
       .withTimeout(2000)
 
@@ -30,8 +38,76 @@ describe('Settings Screen', () => {
     await expect(element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT))).toExist()
   })
 
-  it('should show sign out button', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.SIGN_OUT_BTN_ID))).toExist()
+  it('should show "Manage account" screen', async () => {
+    await element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_ROW_TEXT)).tap()
+    await expect(element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_ROW_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_SCREEN_TEXT))).toExist()
+    await element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)).tap()
+  })
+
+  it('should show "Notifications" screen', async () => {
+    await element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_ROW_TEXT)).atIndex(0).tap()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_ROW_TEXT)).atIndex(0)).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_SCREEN_TEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_APPOINTMENT_TEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_MESSAGING_TEXT))).toExist()
+    await element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)).tap()
+  })
+
+  it('should show "Share the app" screen', async () => {
+    if (device.getPlatform() === 'ios') {
+      await element(by.text(SettingsE2eIdConstants.SHARE_APP_ROW_TEXT)).tap()
+      await device.takeScreenshot('ShareTheAppScreenshot')
+      await device.launchApp({ newInstance: true })
+      await loginToDemoMode()
+      await openProfile()
+      await openSettings()
+    }
+  })
+
+  it('should show Give feedback screen', async () => {
+    try {
+      await expect(element(by.text('Give feedback'))).toExist()
+    } catch (ex) {
+      await element(by.text('Developer Screen')).tap()
+      await element(by.text('Remote Config')).tap()
+      await waitFor(element(by.text('Override Toggles')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(400, 'down')
+      await waitFor(element(by.text('inAppRecruitment')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(100, 'down')
+      await element(by.text('inAppRecruitment')).tap()
+      await waitFor(element(by.text('Apply Overrides')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(100, 'down')
+      await element(by.text('Apply Overrides')).tap()
+      await loginToDemoMode()
+      await openProfile()
+      await openSettings()
+    }
+    await element(by.text('Give feedback')).tap()
+    await expect(element(by.text('Make this app better for all Veterans'))).toExist()
+    await expect(element(by.text('Go to questionnaire'))).toExist()
+    await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
+  })
+
+  it('should tap on "go to questionnaire" in in app recruitment', async () => {
+    await element(by.text('Go to questionnaire')).tap()
+    await device.takeScreenshot('inAppRecruitmentQuestionnaire')
+    await element(by.text('Done')).tap()
+    await element(by.text('Close')).tap()
+  })
+
+  it('should show Privacy Policy page', async () => {
+    await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('SettingsPrivacyPolicy')
+    await device.launchApp({ newInstance: false })
   })
 
   it('should show and dismiss leaving app popup for privacy', async () => {
@@ -39,20 +115,14 @@ describe('Settings Screen', () => {
   })
 
   it('should show and dismiss signout popup', async () => {
-    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await expect(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
+    await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
   })
 
-  /** Sidelined while we have back buttons that have no unique identifiers, no ancestors, no descendants
-   * 
-   * 
-  it('should open, show, and close manage accounts page', async () => {
-    await element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_ROW_TEXT)).tap()
-    await expect(element(by.text(SettingsE2eIdConstants.MANAGE_ACCT_PAGE_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.BACK_BTN_LABEL).withAncestor(by.text(SettingsE2eIdConstants.MANAGE_ACCT_PAGE_TEXT))).tap()
-    await expect(element(by.id(SettingsE2eIdConstants.SETTINGS_PAGE_ID))).toExist()
+  it('should sign out', async () => {
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
   })
-  */
-
 })

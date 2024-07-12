@@ -1,79 +1,81 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
-import { Pressable } from 'react-native'
-import { LettersOverviewScreen } from './index'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import NoLettersScreen from './NoLettersScreen'
-import { InitialState, initialPersonalInformationState } from 'store/slices'
-import { LoadingComponent } from 'components'
-import { when } from 'jest-when'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import { LettersOverviewScreen } from './index'
 
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const actual = jest.requireActual('utils/hooks')
   return {
-    ...original,
+    ...actual,
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('LettersOverviewScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let mockNavigateToSpy: jest.Mock
-
-  const initializeTestInstance = (personalInformationLoading = false, personalInformationError = false) => {
-    mockNavigateToSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
-      .mockReturnValue(mockNavigateToSpy)
-
-    const props = mockNavProps()
-
-    component = render(<LettersOverviewScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...initialPersonalInformationState,
-          loading: personalInformationLoading,
-          error: personalInformationError ? { networkError: true } : undefined,
+  const initializeTestInstance = (isAuthorized = true) => {
+    render(<LettersOverviewScreen {...mockNavProps()} />, {
+      queriesData: [
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            appeals: true,
+            appointments: true,
+            claims: true,
+            decisionLetters: true,
+            directDepositBenefits: true,
+            directDepositBenefitsUpdate: true,
+            disabilityRating: true,
+            genderIdentity: true,
+            lettersAndDocuments: isAuthorized,
+            militaryServiceHistory: true,
+            paymentHistory: true,
+            preferredName: true,
+            prescriptions: true,
+            scheduleAppointments: true,
+            secureMessaging: true,
+            userProfileUpdate: true,
+          },
         },
-      },
+      ],
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText('Downloaded documents will list your address as:')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Mailing address Add your mailing address' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        'If this address is incorrect you may want to update it, but your letter will still be valid even with the incorrect address.',
+      ),
+    ).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Review letters' })).toBeTruthy()
   })
 
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+  it('should go to edit address when the address is pressed', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Mailing address Add your mailing address' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', {
+      displayTitle: 'Mailing address',
+      addressType: profileAddressOptions.MAILING_ADDRESS,
     })
   })
 
-  describe('when an error occurs loading profile info', () => {
-    it('should show No Letters screen', async () => {
-      initializeTestInstance(false, true)
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
-    })
+  it('should go to letters list screen when Review letters is pressed', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('LettersList')
   })
 
-  it('should go to edit address when the address is pressed', async () => {
-    testInstance.findAllByType(Pressable)[0].props.onPress()
-    expect(mockNavigateToSpy).toHaveBeenCalled()
+  it('should show No Letters screen when service is not authorized', () => {
+    initializeTestInstance(false)
+    expect(screen.getByRole('header', { name: "We couldn't find information about your VA letters" })).toBeTruthy()
   })
 })

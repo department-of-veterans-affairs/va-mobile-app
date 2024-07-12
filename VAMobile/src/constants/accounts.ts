@@ -1,4 +1,4 @@
-import { AccountTypes } from 'store/api/types'
+import { AccountTypes } from 'api/types'
 
 export const ACCOUNT_TYPES: {
   checking: AccountTypes
@@ -15,11 +15,11 @@ export type AccountOption = {
 
 export const AccountOptions: Array<AccountOption> = [
   {
-    label: 'common:accountType.checking',
+    label: 'accountType.checking',
     value: ACCOUNT_TYPES.checking,
   },
   {
-    label: 'common:accountType.savings',
+    label: 'accountType.savings',
     value: ACCOUNT_TYPES.savings,
   },
 ]

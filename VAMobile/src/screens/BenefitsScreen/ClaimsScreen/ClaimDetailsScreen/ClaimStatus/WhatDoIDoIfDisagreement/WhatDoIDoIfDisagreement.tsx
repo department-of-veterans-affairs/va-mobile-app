@@ -1,41 +1,46 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, LargePanel, TextView } from 'components'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Box, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_DECISION_REVIEWS } = getEnv()
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'WhatDoIDoIfDisagreement'>
 
-const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
+function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const launchExternalLink = useExternalLink()
-
-  const onDecisionReview = async (): Promise<void> => {
-    launchExternalLink(LINK_URL_DECISION_REVIEWS)
-  }
+  const { claimID, claimType, claimStep } = route.params
 
   const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')
 
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={a11yLabelVA(t('claimsDetails.whatDoIDoIfDisagreement.header'))}>
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.content')}
         </TextView>
-        <TextView variant="MobileBodyLink" accessibilityRole="link" {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)} onPress={onDecisionReview}>
-          {text}
-        </TextView>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_DECISION_REVIEWS}
+          text={text}
+          a11yHint={`${text} ${t('mobileBodyLink.a11yHint')}`}
+          analyticsProps={{ claim_id: claimID, claim_type: claimType, claim_step: claimStep }}
+          testID="ClaimsDecisionReviewOptionsTestID"
+        />
       </Box>
     </LargePanel>
   )

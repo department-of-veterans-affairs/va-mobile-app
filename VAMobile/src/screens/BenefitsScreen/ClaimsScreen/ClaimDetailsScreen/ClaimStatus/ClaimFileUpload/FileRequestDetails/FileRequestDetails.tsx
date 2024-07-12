@@ -1,26 +1,34 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { map } from 'underscore'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { map } from 'underscore'
+
+import { Box, BoxProps, ChildTemplate, TextArea, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
-const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
+function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { request } = route.params
+  const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, description, uploadDate, documents } = request
+  const { displayName, type, status, description, uploadDate, documents } = request
 
   const hasUploaded = hasUploadedOrReceived(request)
+  const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
+  const isReviewed = type.startsWith('received_from') && status !== 'SUBMITTED_AWAITING_REVIEW'
+  const isPending = !isClosed && !isReviewed
   const noneNoted = t('noneNoted')
 
   const boxProps: BoxProps = {
@@ -51,18 +59,41 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
     return documents && documents.length > 0 ? documents[0].fileType : noneNoted
   }
 
+  const onFilePress = () => {
+    logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
+    navigateTo('SelectFile', { claimID, request })
+  }
+
+  const onPhotoPress = () => {
+    logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
+    navigateTo('TakePhotos', { claimID, request })
+  }
+
   return (
-    <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
+    <ChildTemplate
+      backLabel={t('request.backLabel')}
+      backLabelOnPress={navigation.goBack}
+      title={displayName || ''}
+      testID="fileRequestDetailsID">
+      <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
             <TextArea>
-              <TextView variant="MobileBodyBold" accessibilityRole="header">
-                {t('fileRequestDetails.submittedTitle')}
-              </TextView>
-              <TextView paragraphSpacing={true} variant="MobileBody">
-                {getUploadedDate()}
-              </TextView>
+              {isClosed ? (
+                <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+                  {t('noLongerNeeded')}
+                </TextView>
+              ) : (
+                <>
+                  <TextView variant="MobileBodyBold" accessibilityRole="header">
+                    {t('fileRequestDetails.submittedTitle')}
+                  </TextView>
+                  <TextView paragraphSpacing={true} variant="MobileBody">
+                    {getUploadedDate()}
+                    {isPending && ` (${t('pending')})`}
+                  </TextView>
+                </>
+              )}
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.fileTitle')}
               </TextView>
@@ -84,20 +115,18 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
       {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
-            <VAButton
-              onPress={navigateTo('SelectFile', { request })}
+            <Button
+              onPress={onFilePress}
               label={t('fileUpload.selectAFile')}
               testID={t('fileUpload.selectAFile')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
-              a11yHint={t('fileUpload.selectAFileA11yHint')}
+              buttonType={ButtonVariants.Secondary}
             />
             <Box mt={theme.dimensions.condensedMarginBetween}>
-              <VAButton
-                onPress={navigateTo('TakePhotos', { request })}
+              <Button
+                onPress={onPhotoPress}
                 label={t('fileUpload.takePhotos')}
                 testID={t('fileUpload.takePhotos')}
-                buttonType={ButtonTypesConstants.buttonSecondary}
-                a11yHint={t('fileUpload.takePhotosA11yHint')}
+                buttonType={ButtonVariants.Secondary}
               />
             </Box>
           </Box>

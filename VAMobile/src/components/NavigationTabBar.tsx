@@ -1,18 +1,21 @@
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+
 import Box from './Box'
+import { VA_ICON_MAP } from './VAIcon'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
 type TabBarRoute = {
@@ -41,6 +44,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -50,7 +54,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     })
 
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(route.name)
+      navigateTo(route.name)
     }
   }
 
@@ -74,8 +78,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           const isFocused = state.index === index
           const routeName = route.name.replace('Tab', '')
           const lowerCaseRoute = routeName.toLowerCase()
-          // TODO: remove this conditional once all tab names have been moved to common.json
-          const translatedName = ['payments', 'benefits'].includes(lowerCaseRoute) ? translation(`common:${lowerCaseRoute}.title`) : translation(`${routeName.toLowerCase()}:title`)
+          const translatedName = translation(`${lowerCaseRoute}.title`)
 
           type TouchableProps = {
             key: string

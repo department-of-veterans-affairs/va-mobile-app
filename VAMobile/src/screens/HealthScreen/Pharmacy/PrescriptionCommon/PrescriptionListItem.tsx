@@ -1,11 +1,13 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
+import { PrescriptionAttributeData } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionAttributeData } from 'store/api/types'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
+
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import RefillTag from './RefillTag'
 
 export type PrescriptionListItemProps = {
@@ -18,13 +20,12 @@ export type PrescriptionListItemProps = {
 }
 
 /** common component to show the prescription info on a list  */
-const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
+function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag }: PrescriptionListItemProps) {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
-  const noneNoted = tc('noneNoted')
+  const noneNoted = t('noneNoted')
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate)
@@ -60,13 +61,22 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
         </Box>
       )}
       {renderInstructions()}
-      <TextView accessibilityLabel={`${refillDateText}.`} variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
+      <TextView
+        accessibilityLabel={`${refillDateText}.`}
+        variant={'HelperText'}
+        mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {refillDateText}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
-        {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
+      <TextView
+        variant={'HelperText'}
+        mt={condensedMarginBetween}
+        accessibilityLabel={`${t('fillDate')} ${dateA11yLabel}.`}>
+        {`${t('fillDate')}: ${dateMMddyyyy}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
+      <TextView
+        variant={'HelperText'}
+        mt={condensedMarginBetween}
+        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
     </Box>

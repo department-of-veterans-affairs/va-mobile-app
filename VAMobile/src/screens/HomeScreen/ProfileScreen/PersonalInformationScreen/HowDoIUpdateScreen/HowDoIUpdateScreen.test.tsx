@@ -1,75 +1,80 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+import { Alert } from 'react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
-import { initialAuthState } from 'store/slices'
-import { TextView } from 'components'
-
-let mockNavigationSpy = jest.fn()
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../../utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => mockNavigationSpy,
-  }
-})
-
-jest.mock('@react-navigation/native', () => {
-  const original = jest.requireActual('@react-navigation/native')
-  return {
-    ...original,
-    useFocusEffect: () => jest.fn(),
-  }
-})
 
 context('HowDoIUpdateScreen', () => {
-  let store: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let mockNavigationToSpy: jest.Mock
-
-  beforeEach(async () => {
+  const initializeTestInstance = (screenType = 'DOB'): void => {
     const props = mockNavProps(
       {},
       { setOptions: jest.fn(), navigate: jest.fn() },
       {
         params: {
-          screenType: 'DOB',
+          screenType: screenType,
         },
       },
     )
-    mockNavigationToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigationToSpy)
 
-    store = mockStore({
-      auth: { ...initialAuthState },
-    })
+    render(<HowDoIUpdateScreen {...props} />)
+  }
 
-    await waitFor(() => {
-      component = render(<HowDoIUpdateScreen {...props} />, {
-        preloadedState: {
-          auth: {
-            ...initialAuthState,
-          },
-        },
-      })
-    })
-
-    testInstance = component.UNSAFE_root
+  it('initializes correctly for DOB', () => {
+    initializeTestInstance('DOB')
+    expect(screen.getByRole('header', { name: 'How to fix an error in your date of birth' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If our records have an error in your date of birth, you can request a correction. Here's how to request a correction:",
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByText("If you're enrolled in the VA health care program, contact your nearest VA medical center."),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Find nearest VA medical center' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If you receive VA benefits but aren’t enrolled in VA health care, call us. We're here Monday through Friday, 8:00 AM to 9:00 PM ET.",
+      ),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly for name', () => {
+    initializeTestInstance('name')
+    expect(screen.getByRole('header', { name: 'How to update or fix an error in your legal name' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If you've changed your legal name, you'll need to tell us so we can change your name in our records.",
+      ),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Learn how to change your legal name on file with the VA' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If our records have a misspelling or other error in your name, you can request a correction. Here's how to request a correction:",
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByText("If you're enrolled in the VA health care program, contact your nearest VA medical center."),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Find nearest VA medical center' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If you receive VA benefits but aren’t enrolled in VA health care, call us. We're here Monday through Friday, 8:00 AM to 9:00 PM ET.",
+      ),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
   })
 
   describe('when the find VA location link is clicked', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(TextView)[5].props.onPress()
-      expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
-      expect(mockNavigationToSpy).toBeCalled()
+    it('should show alert', () => {
+      initializeTestInstance('DOB')
+      fireEvent.press(screen.getByRole('link', { name: 'Find nearest VA medical center' }))
+      expect(Alert.alert).toBeCalled()
     })
   })
 })

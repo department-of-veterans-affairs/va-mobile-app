@@ -1,14 +1,14 @@
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { ButtonDecoratorType } from 'components/BaseListItem'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { TextLine } from 'components/types'
-import { getA11yLabelText, getFileDisplay } from 'utils/common'
-import { useDestructiveAlert } from 'utils/hooks'
 import DefaultList, { DefaultListItemObj } from 'components/DefaultList'
+import { TextLine } from 'components/types'
+import { NAMESPACE } from 'constants/namespaces'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { getA11yLabelText, getFileDisplay } from 'utils/common'
+import { useDestructiveActionSheet } from 'utils/hooks'
 
 export type FileListProps = {
   /** List of files to display */
@@ -19,7 +19,7 @@ export type FileListProps = {
 
 const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const deleteFileAlert = useDestructiveAlert()
+  const deleteFileAlert = useDestructiveActionSheet()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
     const { fileName, fileSize: formattedFileSize, fileSizeA11y: fileSizeA11y } = getFileDisplay(file, t, false)
@@ -34,15 +34,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({
-          title: t('file.removeConfirm'),
+          title: t('file.removeFile'),
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: t('cancel'),
+              text: t('keep'),
             },
             {
-              text: t('delete'),
+              text: t('remove'),
               onPress: () => {
                 onDelete(file)
               },

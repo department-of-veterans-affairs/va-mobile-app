@@ -1,8 +1,9 @@
-import { AppointmentsGetData } from '../types'
-import { DemoStore } from './store'
-import { Params } from '../api'
-
 import { DateTime } from 'luxon'
+
+import { AppointmentsGetData } from 'api/types'
+
+import { Params } from '../api'
+import { DemoStore } from './store'
 
 /**
  * Type denoting the demo data store
@@ -25,6 +26,8 @@ export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData
  */
 export const getAppointments = (store: DemoStore, params: Params): AppointmentsGetData | undefined => {
   const endDate = params.endDate
+  //ToDo fix pagination and past appointments to be broken up to the ranges that past appointments can be selected, do this when migrating to msw
+
   if (endDate && typeof endDate === 'string') {
     if (DateTime.fromISO(endDate) < DateTime.now()) {
       return store['/v0/appointments'].past

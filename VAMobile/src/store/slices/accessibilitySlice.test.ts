@@ -1,6 +1,8 @@
-import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from './accessibilitySlice'
-import { context, realStore } from 'testUtils'
 import _ from 'underscore'
+
+import { context, realStore } from 'testUtils'
+
+import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from './accessibilitySlice'
 
 context('accessibilitySlice', () => {
   describe('updateCurrentFontScale', () => {

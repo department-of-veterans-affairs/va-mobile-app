@@ -1,23 +1,16 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import Mock = jest.Mock
 
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { InlineTextWithIconsProps, MessageListItemObj, TextLine } from 'components'
+import { context, render } from 'testUtils'
+
 import MessageList from './MessageList'
-import VAIcon, { VAIconProps } from './VAIcon'
-import LabelTag from './LabelTag'
-import { MessageListItemObj, InlineTextWithIconsProps, TextLine } from 'components'
 
 context('MessageList', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn(() => {})
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
     const items = [
       {
         inlineTextWithIcons: [
@@ -34,17 +27,16 @@ context('MessageList', () => {
         onPress: onPressSpy,
       },
       {
-        inlineTextWithIcons:
-          [
-            {
-              leftTextProps: { text: 'test2-sender' },
-              leftIconProps: { name: 'Unread', width: 16, height: 16 }
-            },
-            {
-              leftTextProps: { text: 'test2-subject-line' },
-              leftIconProps: { name: 'PaperClip', width: 16, height: 16 }
-            }
-          ],
+        inlineTextWithIcons: [
+          {
+            leftTextProps: { text: 'test2-sender' },
+            leftIconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread' },
+          },
+          {
+            leftTextProps: { text: 'test2-subject-line' },
+            leftIconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' },
+          },
+        ],
         isSentFolder: false,
         a11yHintText: 'hint2',
         onPress: onPressSpy,
@@ -65,31 +57,31 @@ context('MessageList', () => {
       },
     ] as Array<MessageListItemObj>
 
-    component = render(<MessageList items={items} />)
-
-    testInstance = component.UNSAFE_root
+    render(<MessageList items={items} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should call onPress when one of the buttons has been clicked', async () => {
-    findByTestID(testInstance, 'inbox-item-no-attachment-read').props.onPress()
+  it('should call onPress when one of the buttons has been clicked', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'another line' }))
     expect(onPressSpy).toBeCalled()
   })
 
-  it('should generate correct testId with icon accessibility labels if no testId provided in props', async () => {
-    findByTestID(testInstance, 'Unread: test2-sender Has attachment test2-subject-line').props.onPress()
-    findByTestID(testInstance, 'test3-recipient test3-sent-item-with-read-tag Recipient has read your message').props.onPress()
+  it('should generate correct testId with icon accessibility labels if no testId provided in props', () => {
+    expect(screen.getByTestId('Unread: test2-sender Has attachment test2-subject-line')).toBeTruthy()
+    expect(
+      screen.getByTestId('test3-recipient test3-sent-item-with-read-tag Recipient has read your message'),
+    ).toBeTruthy()
   })
 
-  it('should render Read tag for read sent message', async () => {
-    expect(testInstance.findByType(LabelTag).props.text).toEqual('Read')
+  it('should render Read tag for read sent message', () => {
+    expect(screen.findByText('Read')).toBeTruthy()
   })
 
-  it('should render the VAIcon components for unread item with attachment', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Unread')
-    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
+  it('should render the VAIcon components for unread item with attachment', () => {
+    expect(screen.getByTestId('Unread')).toBeTruthy()
+    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+  })
+
+  it('should render chevron icons', () => {
+    expect(screen.getAllByTestId('ChevronRight')).toHaveLength(3)
   })
 })

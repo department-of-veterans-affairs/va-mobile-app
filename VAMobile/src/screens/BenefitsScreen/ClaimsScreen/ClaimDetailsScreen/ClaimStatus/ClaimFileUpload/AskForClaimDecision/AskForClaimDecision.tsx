@@ -1,12 +1,13 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { useClaim, useSubmitClaimDecision } from 'api/claimsAndAppeals'
 import {
   Box,
-  ButtonTypesConstants,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -16,72 +17,99 @@ import {
   TextArea,
   TextView,
   VABulletList,
-  VAButton,
 } from 'components'
-import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
+import { Events } from 'constants/analytics'
+import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
-const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
+function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
+  const {
+    mutate: submitClaimDecision,
+    error: error,
+    isPending: loadingSubmitClaimDecision,
+  } = useSubmitClaimDecision(claimID)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+  const [submittedDecision, setSubmittedDecision] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const requestEvalAlert = useDestructiveAlert()
+  const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
+  const requestEvalAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
+  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigation.navigate('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
     }
-  }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 
-  if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
+  const onCancelPress = () => {
+    if (claim) {
+      logAnalyticsEvent(
+        Events.vama_claim_eval_cancel(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests),
+      )
+    }
+    navigation.goBack()
   }
 
-  if (loadingSubmitClaimDecision) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
-        <LoadingComponent text={t('askForClaimDecision.loading')} />
-      </FullScreenSubtask>
-    )
+  const onSelectionChange = (value: boolean) => {
+    if (claim && value) {
+      logAnalyticsEvent(Events.vama_claim_eval_check(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
+    setHaveSubmittedEvidence(value)
   }
 
   const bulletedListOfText = [
-    { text: t('askForClaimDecision.whetherYouGetVABenefits'), a11yLabel: t('askForClaimDecision.whetherYouGetVABenefitsA11yLabel') },
+    {
+      text: t('askForClaimDecision.whetherYouGetVABenefits'),
+      a11yLabel: a11yLabelVA(t('askForClaimDecision.whetherYouGetVABenefits')),
+    },
     { text: t('askForClaimDecision.paymentAmount') },
     { text: t('askForClaimDecision.whetherYouGetOurHelp') },
     { text: t('askForClaimDecision.dateBenefits') },
   ]
 
   const onSubmit = (): void => {
-    dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
+    const mutateOptions = {
+      onSuccess: () => {
+        setSubmittedDecision(true)
+        showSnackBar('Request sent', dispatch, undefined, true, false, true)
+      },
+      onError: () => showSnackBar('Request could not be sent', dispatch, () => onSubmit, false, true),
+    }
+    submitClaimDecision(claimID, mutateOptions)
   }
 
   const onRequestEvaluation = (): void => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
     requestEvalAlert({
       title: t('askForClaimDecision.alertTitle'),
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('cancelRequest'),
         },
         {
           text: t('askForClaimDecision.alertBtnTitle'),
@@ -96,10 +124,9 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       fieldType: FieldType.Selector,
       fieldProps: {
         selected: haveSubmittedEvidence,
-        onSelectionChange: setHaveSubmittedEvidence,
-        labelKey: 'common:askForClaimDecision.haveSubmittedAllEvidence',
-        a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
-        a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
+        onSelectionChange,
+        labelKey: 'askForClaimDecision.haveSubmittedAllEvidence',
+        a11yLabel: a11yLabelVA(t('askForClaimDecision.haveSubmittedAllEvidence')),
         isRequiredField: true,
       },
       fieldErrorMessage: t('askForClaimDecision.checkToConfirmInformation'),
@@ -107,33 +134,52 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
-            {t('askForClaimDecision.title')}
-          </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
-            {t('askForClaimDecision.weSentYouALetter')}
-          </TextView>
-          <TextView variant="MobileBody" mb={standardMarginBetween}>
-            {t('askForClaimDecision.takingFull30Days')}
-          </TextView>
-          <VABulletList listOfText={bulletedListOfText} />
-        </TextArea>
-        <Box mx={gutter}>
-          <Box my={standardMarginBetween}>
-            <FormWrapper fieldsList={formFieldsList} onSave={onRequestEvaluation} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={onCancelPress}
+      title={t('askForClaimDecision.pageTitle')}
+      testID="askForClaimDecisionPageTestID">
+      {loadingSubmitClaimDecision || loadingClaim ? (
+        <LoadingComponent
+          text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
+        />
+      ) : loadingClaimError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+          error={loadingClaimError}
+          onTryAgain={refetchClaim}
+        />
+      ) : (
+        <Box mb={contentMarginBottom}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
+              {t('askForClaimDecision.title')}
+            </TextView>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('askForClaimDecision.weSentYouALetter')}
+            </TextView>
+            <TextView variant="MobileBody" mb={standardMarginBetween}>
+              {t('askForClaimDecision.takingFull30Days')}
+            </TextView>
+            <VABulletList listOfText={bulletedListOfText} />
+          </TextArea>
+          <Box mx={gutter}>
+            <Box my={standardMarginBetween}>
+              <FormWrapper
+                fieldsList={formFieldsList}
+                onSave={onRequestEvaluation}
+                setOnSaveClicked={setOnSaveClicked}
+                onSaveClicked={onSaveClicked}
+              />
+            </Box>
+            <Button
+              onPress={(): void => setOnSaveClicked(true)}
+              label={t('askForClaimDecision.submit')}
+              testID={t('askForClaimDecision.submit')}
+            />
           </Box>
-          <VAButton
-            onPress={(): void => setOnSaveClicked(true)}
-            label={t('askForClaimDecision.submit')}
-            testID={t('askForClaimDecision.submit')}
-            a11yHint={t('askForClaimDecision.submitA11yHint')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
         </Box>
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }

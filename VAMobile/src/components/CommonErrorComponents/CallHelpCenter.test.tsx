@@ -1,24 +1,31 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
 
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { context, fireEvent, render, screen } from 'testUtils'
 
-import { context, render, RenderAPI } from 'testUtils'
 import CallHelpCenter from './CallHelpCenter'
 
+const onTryAgainSpy = jest.fn(() => {})
+
 context('ErrorComponent', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
+  const initializeTestInstance = (errorText?: string, onTryAgain?: jest.Mock) => {
+    render(<CallHelpCenter errorText={errorText} errorA11y={errorText} onTryAgain={onTryAgain} />)
+  }
 
-  beforeEach(() => {
-    component = render(<CallHelpCenter />)
-
-    testInstance = component.UNSAFE_root
+  it('initializes correctly with default error message', () => {
+    initializeTestInstance()
+    expect(screen.getByText(/call our MyVA411 main information line/)).toBeTruthy()
+    expect(screen.getByLabelText(/call our My V-A 4 1 1 main information line/)).toBeTruthy()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly with custom error message', () => {
+    initializeTestInstance('Call for help')
+    expect(screen.getByText(/Call for help/)).toBeTruthy()
+    expect(screen.getByLabelText(/Call for help/)).toBeTruthy()
+  })
+
+  it('should call onTryAgain if passed in', () => {
+    initializeTestInstance(undefined, onTryAgainSpy)
+    fireEvent.press(screen.getByRole('button', { name: 'Refresh screen' }))
+    expect(onTryAgainSpy).toHaveBeenCalled()
   })
 })

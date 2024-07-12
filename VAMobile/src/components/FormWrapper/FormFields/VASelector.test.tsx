@@ -1,24 +1,23 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { TouchableWithoutFeedback } from 'react-native'
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import VASelector, { SelectorType } from './VASelector'
-import { TextView } from '../../index'
+
 import Mock = jest.Mock
 
 context('VASelector', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let selected: boolean
   let setSelected: Mock
   let errorMessage: string
   let setErrorMessage: Mock
 
-  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, selectorType = SelectorType.Checkbox): void => {
+  const initializeTestInstance = (
+    selectedValue: boolean,
+    disabled?: boolean,
+    error?: string,
+    selectorType = SelectorType.Checkbox,
+  ): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
 
@@ -31,9 +30,9 @@ context('VASelector', () => {
       }
     })
 
-    component = render(
+    render(
       <VASelector
-        labelKey={'profile:editAddress.address'}
+        labelKey={'editAddress.address'}
         selected={selected}
         disabled={disabled}
         onSelectionChange={setSelected}
@@ -42,76 +41,68 @@ context('VASelector', () => {
         selectorType={selectorType}
       />,
     )
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(false)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('when the checkbox area is clicked', () => {
-    it('should call setSelected', async () => {
-      await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(setSelected).toBeCalled()
-        expect(selected).toEqual(true)
-      })
+    it('should call setSelected', () => {
+      fireEvent.press(screen.getByRole('checkbox'))
+      expect(setSelected).toBeCalled()
+      expect(selected).toEqual(true)
     })
   })
 
   describe('when selected is true', () => {
-    it('should display the filled checkbox icon', async () => {
+    it('should display the filled checkbox and update accessibility state', () => {
       initializeTestInstance(true)
-      const filledCheckBox = findByTestID(testInstance, 'CheckBoxFilled')
-
-      expect(filledCheckBox).toBeTruthy()
-      expect(filledCheckBox.props.fill).toEqual('checkboxEnabledPrimary')
+      expect(screen.getByTestId('CheckBoxFilled')).toBeTruthy()
+      expect(screen.getByLabelText('CheckBoxFilled')).toBeTruthy()
+      expect(
+        screen.getByAccessibilityState({
+          checked: true,
+        }),
+      ).toBeTruthy()
     })
   })
 
   describe('when selected is false', () => {
-    it('should display the empty checkbox icon', async () => {
-      const emptyCheckBox = findByTestID(testInstance, 'CheckBoxEmpty')
-
-      expect(emptyCheckBox).toBeTruthy()
-      expect(emptyCheckBox.props.fill).toEqual('checkboxDisabledContrast')
-      expect(emptyCheckBox.props.stroke).toEqual('checkboxDisabled')
+    it('should display the empty checkbox', () => {
+      expect(screen.getByTestId('CheckBoxEmpty')).toBeTruthy()
+      expect(screen.getByLabelText('CheckBoxEmpty')).toBeTruthy()
+      expect(
+        screen.getByAccessibilityState({
+          checked: false,
+        }),
+      ).toBeTruthy()
     })
   })
 
   describe('when disabled is true and checkbox area is clicked', () => {
-    it('should not call setSelected', async () => {
+    it('should not call setSelected', () => {
       initializeTestInstance(false, true)
-      await waitFor(() => {
-        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-        expect(setSelected).not.toBeCalled()
-        expect(selected).toEqual(false)
-      })
+      fireEvent.press(screen.getByRole('checkbox'))
+      expect(setSelected).not.toBeCalled()
+      expect(selected).toEqual(false)
     })
   })
 
   describe('when disabled is true and the selector type is radio', () => {
-    it('should display the RadioEmpty icon', async () => {
+    it('should display the RadioEmpty', () => {
       initializeTestInstance(false, true, '', SelectorType.Radio)
-      const radioDisabled = findByTestID(testInstance, 'RadioEmpty')
-      expect(radioDisabled).toBeTruthy()
+      expect(screen.getByTestId('RadioEmpty')).toBeTruthy()
+      expect(screen.getByLabelText('RadioEmpty')).toBeTruthy()
     })
   })
 
   describe('when there is an error and the selector type is checkbox', () => {
-    it('should display the CheckBoxError and the error message', async () => {
+    it('should display the CheckBoxError and the error message', () => {
       initializeTestInstance(false, false, 'ERROR MESSAGE')
-
-      const checkBoxError = findByTestID(testInstance, 'CheckBoxError')
-      expect(checkBoxError).toBeTruthy()
-
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).toEqual('ERROR MESSAGE')
+      expect(screen.getByTestId('CheckBoxError')).toBeTruthy()
+      expect(screen.getByLabelText('CheckBoxError')).toBeTruthy()
+      expect(screen.getByText('ERROR MESSAGE')).toBeTruthy()
     })
   })
 })

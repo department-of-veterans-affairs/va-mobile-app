@@ -1,4 +1,4 @@
-import { LetterBeneficiaryDataPayload, LettersData } from '../types'
+import { LetterBeneficiaryDataPayload, LettersData } from 'api/types'
 
 /**
  * Type denoting the demo data store
@@ -16,5 +16,6 @@ export type LettersDemoApiReturnTypes = LettersData | LetterBeneficiaryDataPaylo
 /**
  * Consts to use for demo letter pdf
  */
-export const DEMO_MODE_LETTER_ENDPOINT = 'https://department-of-veterans-affairs.github.io/va-mobile-app/demo_mode_benefit_summary.pdf'
+export const DEMO_MODE_LETTER_ENDPOINT =
+  'https://department-of-veterans-affairs.github.io/va-mobile-app/demo_mode_benefit_summary.pdf'
 export const DEMO_MODE_LETTER_NAME = 'demo_mode_benefit_summary.pdf'

@@ -1,6 +1,7 @@
-import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
-import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { flatten, includes, map, some } from 'lodash'
+
+import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
+import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   if (!error) {
@@ -22,7 +23,10 @@ export const hasErrorCode = (errorCode: string, error?: APIError): boolean => {
 const appLevelErrorStatusCodes: number[] = [404, 500, 502]
 const appLevelErrorWithRefreshStatusCodes: number[] = [408, 503, 504]
 const appLevelErrorLoadingMessagesCodes: string[] = ['SM900', 'SM901', 'SM903', 'SM99']
-const healthErrorPageList = [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID]
+const healthErrorPageList = [
+  ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
+  ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID,
+]
 
 export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDTypes): CommonErrorTypes | undefined => {
   if (error.networkError) {
@@ -38,9 +42,13 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE
   } else if (screenID === ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID && error.status && error.status >= 500) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING
+  } else if (screenID === ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID && error.status && error.status >= 500) {
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS
   } else if (includes(appLevelErrorStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR
   } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH
+  } else {
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR
   }
 }

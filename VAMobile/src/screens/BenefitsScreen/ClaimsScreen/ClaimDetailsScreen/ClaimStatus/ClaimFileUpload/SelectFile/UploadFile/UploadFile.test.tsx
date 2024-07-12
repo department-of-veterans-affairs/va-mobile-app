@@ -1,96 +1,93 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, findByTypeWithText, mockNavProps, mockStore, render } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { ImagePickerResponse } from 'react-native-image-picker'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 import UploadFile from './UploadFile'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { InitialState } from 'store/slices'
-import { TextView, VAButton, VAModalPicker, VASelector } from 'components'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ImagePickerResponse } from 'react-native-image-picker'
-import { RenderAPI } from '@testing-library/react-native'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
-    useDestructiveAlert: () => mockAlertSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 
 context('UploadFile', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
   let navigateToSpy: jest.Mock
-
-  let request = {
+  const request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
     uploaded: false,
     uploadsAllowed: true,
   }
-
-  const initializeTestInstance = (imageUploaded?: ImagePickerResponse) => {
+  const renderWithData = (imageUploaded?: ImagePickerResponse): void => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
+
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '0'],
+        data: {
+          ...Claim,
+        },
+      },
+    ]
 
     const file = {
       name: 'File 1',
       size: 100,
     } as DocumentPickerResponse
 
-    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
+    const props = mockNavProps(
+      undefined,
+      { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
+      { params: { claimID: '0', request, fileUploaded: file, imageUploaded } },
+    )
 
-    component = render(<UploadFile {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claim: Claim,
-        },
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<UploadFile {...props} />, { queriesData })
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    renderWithData()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'Upload files' })).toBeTruthy()
+    expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
+    expect(screen.getByLabelText('Document type picker required')).toBeTruthy()
+    expect(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) ')).toBeTruthy()
+    expect(screen.getByText('Submit file')).toBeTruthy()
   })
 
   describe('on click of the upload button', () => {
-    it('should display an error if the checkbox is not checked', async () => {
-      act(() => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, 'Check the box to confirm the information is correct')).toBeTruthy()
+    it('should display an error if the checkbox is not checked', () => {
+      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Civilian Police Reports' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
+      expect(screen.getByRole('checkbox', { name: 'Check the box to confirm the information is correct' })).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
-    it('should bring up confirmation requirements are met', async () => {
-      act(() => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
-        testInstance.findByType(VASelector).props.onSelectionChange(true)
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-
+    it('should bring up confirmation requirements are met', () => {
+      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Civilian Police Reports' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
+      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })

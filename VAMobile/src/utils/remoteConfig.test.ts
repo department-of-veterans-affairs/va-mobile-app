@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { overrideRemote, devConfig, featureEnabled, activateRemoteConfig, setDebugConfig, getFeatureToggles } from 'utils/remoteConfig'
+
+import { activateRemoteConfig, devConfig, featureEnabled, overrideRemote, setDebugConfig } from 'utils/remoteConfig'
 
 const mockGetItem = AsyncStorage.getItem as jest.Mock
 const mockSetItem = AsyncStorage.setItem as jest.Mock
@@ -21,11 +22,17 @@ const mockOverrides = {
   prescriptions: true,
   SIS: true,
   testFeature: false,
+  inAppRecruitment: false,
   inAppUpdates: false,
   preferredNameGenderWaygate: false,
   haptics: false,
+  homeScreenPrefetch: false,
   whatsNewUI: false,
   decisionLettersWaygate: false,
+  patientCheckIn: false,
+  patientCheckInWaygate: true,
+  cernerTrueForDemo: false,
+  claimPhaseExpansion: true,
 }
 
 describe('activate', () => {

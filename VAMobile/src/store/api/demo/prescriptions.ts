@@ -1,5 +1,7 @@
+import { PrescriptionTrackingInfoGetData, PrescriptionsGetData } from 'api/types'
+
+import { Params } from '..'
 import { DemoStore } from './store'
-import { Params, PrescriptionTrackingInfoGetData, PrescriptionsGetData } from '..'
 
 /**
  * Types for prescription tracking information

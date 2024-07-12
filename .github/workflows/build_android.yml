@@ -87,6 +87,11 @@ jobs:
           echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
           cd ../app
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'microsoft'
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
@@ -96,19 +101,29 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: 'VAMobile/.nvmrc'
           cache: 'yarn'
           cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
       - name: Bundle app
         run: yarn bundle:android
       - name: Update fastlane
-        run: bundle update fastlane
+        run: |
+          bundle update fastlane
+          bundle exec fastlane update_plugins
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Run fastlane
-        run: bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV 
+      - name: Run fastlane with retries
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"

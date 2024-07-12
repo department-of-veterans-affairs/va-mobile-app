@@ -12,10 +12,10 @@ export const exampleString = `useBeforeNavBackListener(navigation, (e) => {
     destructiveButtonIndex: 1,
     buttons: [
       {
-        text: t('common:cancel'),
+        text: t('fileUpload.continueUpload'),
       },
       {
-        text: t('fileUpload.discard.photos'),
+        text: t('fileUpload.cancelUpload'),
         onPress: () => {
           navigation.dispatch(e.data.action)
         },

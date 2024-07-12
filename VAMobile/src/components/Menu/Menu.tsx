@@ -1,8 +1,22 @@
-import { Animated, Dimensions, Easing, LayoutChangeEvent, Modal, NativeMethods, Platform, Pressable, StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import React from 'react'
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  LayoutChangeEvent,
+  Modal,
+  NativeMethods,
+  Platform,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native'
+
+import theme from 'styles/themes/standardTheme'
 
 import colors from '../../styles/themes/VAColors'
-import theme from 'styles/themes/standardTheme'
 
 export enum Position {
   TOP_LEFT,
@@ -354,7 +368,11 @@ export class Menu extends React.Component<Props, State> {
 
     const { menuState } = this.state
     const animationStarted = menuState === STATES.ANIMATING
-    const modalVisible = menuState === STATES.MEASURING || menuState === STATES.CALCULATING || menuState === STATES.SHOWN || animationStarted
+    const modalVisible =
+      menuState === STATES.MEASURING ||
+      menuState === STATES.CALCULATING ||
+      menuState === STATES.SHOWN ||
+      animationStarted
 
     const { testID, style, children } = this.props
 
@@ -367,8 +385,16 @@ export class Menu extends React.Component<Props, State> {
           transparent
           onDismiss={this._onDismiss}>
           <View style={StyleSheet.absoluteFill}>
-            <Pressable accessible={true} style={[StyleSheet.absoluteFill]} onPress={this.hide} accessibilityLabel={'close menu'} accessibilityRole={'button'} />
-            <Animated.View {...(!animationStarted ? { onLayout: this._onMenuLayout } : {})} style={[styles.shadowMenuContainer, shadowMenuContainerStyle, style]}>
+            <Pressable
+              accessible={true}
+              style={[StyleSheet.absoluteFill]}
+              onPress={this.hide}
+              accessibilityLabel={'close menu'}
+              accessibilityRole={'button'}
+            />
+            <Animated.View
+              {...(!animationStarted ? { onLayout: this._onMenuLayout } : {})}
+              style={[styles.shadowMenuContainer, shadowMenuContainerStyle, style]}>
               <Animated.View style={[styles.menuContainer, animationStarted && menuSize]}>{children}</Animated.View>
             </Animated.View>
           </View>

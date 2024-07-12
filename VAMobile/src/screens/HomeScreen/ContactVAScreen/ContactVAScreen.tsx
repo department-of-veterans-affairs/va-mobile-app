@@ -1,12 +1,15 @@
-import { StackScreenProps } from '@react-navigation/stack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { CrisisLineCta } from 'components'
-import { HomeStackParamList } from '../HomeStackScreens'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Box, ClickToCallPhoneNumber, CrisisLineButton, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
+
+import { HomeStackParamList } from '../HomeStackScreens'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -15,28 +18,39 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  *
  * Returns ContactVAScreen component
  */
-const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
+function ContactVAScreen({ navigation }: ContactVAScreenProps) {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HOME)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
-
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
+    <FeatureLandingTemplate
+      backLabel={t('home.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('contactVA.title')}
+      titleA11y={a11yLabelVA(t('contactVA.title'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-        <CrisisLineCta onPress={onCrisisLine} />
+        <CrisisLineButton />
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+          <TextView
+            variant="MobileBodyBold"
+            accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))}
+            accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView
+            variant="MobileBody"
+            mt={standardMarginBetween}
+            paragraphSpacing={true}
+            accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
             {t('contactVA.va411.body')}
           </TextView>
-          <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8006982411'))}
+            phone={t('8006982411')}
+            a11yLabel={a11yLabelID(t('8006982411'))}
+          />
         </TextArea>
       </Box>
     </FeatureLandingTemplate>

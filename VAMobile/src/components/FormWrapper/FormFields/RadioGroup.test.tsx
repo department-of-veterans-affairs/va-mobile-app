@@ -1,11 +1,9 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import RadioGroup from './RadioGroup'
+
 import Mock = jest.Mock
 
 const mockOptions = [
@@ -24,25 +22,27 @@ const mockOptions = [
 ]
 
 context('RadioGroup', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let selected: number
   let setSelected: Mock
 
-  const initializeTestInstance = (selectedValue: number): void => {
+  const initializeTestInstance = (selectedValue: number = 0): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
-
-    component = render(<RadioGroup<number> onChange={setSelected} value={selected} options={mockOptions} />)
-
-    testInstance = component.UNSAFE_root
+    render(<RadioGroup<number> onChange={setSelected} value={selected} options={mockOptions} />)
   }
 
   beforeEach(() => {
-    initializeTestInstance(mockOptions[1].value)
+    initializeTestInstance(1)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getAllByRole('radio').length).toEqual(mockOptions.length)
+    expect(screen.getAllByLabelText('RadioEmpty').length).toEqual(mockOptions.length - 1)
+    expect(screen.getAllByLabelText('RadioFilled').length).toEqual(1)
+  })
+
+  it('calls setSelected on press', () => {
+    fireEvent.press(screen.getByRole('radio', { name: '2 ' }))
+    expect(setSelected).toHaveBeenCalled()
   })
 })

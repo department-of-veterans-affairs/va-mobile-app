@@ -1,25 +1,28 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertBox, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const NoVaccineRecords: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
+function NoVaccineRecords() {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween}>
-        <AlertBox title={t('health:noVaccineRecords.alert.title')} border="informational" text={t('health:noVaccineRecords.alert.text.1')}>
-          <TextView paragraphSpacing={true} variant="MobileBody">
-            {t('health:noVaccineRecords.alert.text.2')}
-          </TextView>
-          <ClickToCallPhoneNumber phone={t('common:8006982411')} displayedText={t('common:8006982411.displayText')} />
-        </AlertBox>
-      </Box>
+      <AlertBox
+        title={t('noVaccineRecords.alert.title')}
+        border="informational"
+        text={t('noVaccineRecords.alert.text.1')}
+        titleA11yLabel={a11yLabelVA(t('noVaccineRecords.alert.title'))}>
+        <TextView paragraphSpacing={true} mt={theme.paragraphSpacing.spacing20FontSize} variant="MobileBody">
+          {t('noVaccineRecords.alert.text.2')}
+        </TextView>
+        <ClickToCallPhoneNumber phone={t('8006982411')} displayedText={displayedTextPhoneNumber(t('8006982411'))} />
+      </AlertBox>
     </VAScrollView>
   )
 }

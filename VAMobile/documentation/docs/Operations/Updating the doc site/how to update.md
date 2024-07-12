@@ -148,9 +148,17 @@ If all is well, click Click the green “Create pull request” button.
 
 ##### Your PR has been created!  
 
-Wait for it to be reviewed and merged into the doc site by a team member.  
+Wait for it to be reviewed by two team members.  
 
 
+### 7. Deploying your branch to the doc site 
+After your pull request receives two approvals, click the green “merge pull request” button at the bottom of the pull request page in Github, followed by the “confirm merge” button in the next step.
+
+Your branch will then begin deploying to the doc site and will be live once the merge is complete.
+
+* To track the status of the build, click “Actions” in Github.
+    - Next, find and select "[Documentation] Deploy Site" in the left-hand panel.
+    - The build will have a yellow icon while the branch is deploying to the doc site and a green check icon once it is complete.
 
 ### Further reading
 

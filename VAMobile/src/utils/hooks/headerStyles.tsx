@@ -1,15 +1,14 @@
-import { BackButton, ClosePanelButton, TextView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { NAMESPACE } from 'constants/namespaces'
 import { ReactNode } from 'react'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { getHeaderStyles } from 'styles/common'
-import { isIOS } from 'utils/platform'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
-import HeaderTitle from 'components/HeaderTitle'
 import React from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { StackNavigationOptions } from '@react-navigation/stack'
+
+import { BackButton } from 'components'
+import HeaderTitle from 'components/HeaderTitle'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { getHeaderStyles } from 'styles/common'
+import { useTheme } from 'utils/hooks'
 
 /**
  * Hook to get the current header styles in a component
@@ -21,7 +20,14 @@ export const useHeaderStyles = (): StackNavigationOptions => {
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
+    headerLeft: (props): ReactNode => (
+      <BackButton
+        onPress={props.onPress}
+        canGoBack={props.canGoBack}
+        label={BackButtonLabelConstants.back}
+        showCarat={true}
+      />
+    ),
     headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
   return headerStyles
@@ -51,36 +57,4 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
       height: insets.top,
     },
   }
-}
-
-/** Header style for the panels*/
-export const usePanelHeaderStyles = (): StackNavigationOptions => {
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const headerStyles: StackNavigationOptions = {
-    headerStyle: {
-      height: 60,
-      shadowColor: 'transparent', // removes bottom border
-      backgroundColor: theme.colors.background.panelHeader,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border.menuDivider,
-    },
-    headerTitleAlign: 'center',
-    headerLeft: (props) => (
-      <ClosePanelButton
-        buttonText={t('cancel')}
-        onPress={props.onPress}
-        buttonTextColor={'closePanel'}
-        a11yHint={t('cancel.panelA11yHint')}
-        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on the panel
-      />
-    ),
-    headerTitle: (header) => (
-      <TextView variant="MobileBodyBold" allowFontScaling={false}>
-        {header.children}
-      </TextView>
-    ),
-  }
-  return headerStyles
 }

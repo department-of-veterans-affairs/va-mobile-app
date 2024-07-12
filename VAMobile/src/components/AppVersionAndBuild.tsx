@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -36,7 +36,7 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
-      <TextView variant={textWeight} flexDirection="row" color={textColor}>
+      <TextView testID="AppVersionTestID" variant={textWeight} flexDirection="row" color={textColor}>
         {t('versionAndBuild', { versionName, buildNumber })}
       </TextView>
     </Box>

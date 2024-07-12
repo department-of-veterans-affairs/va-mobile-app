@@ -1,25 +1,20 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { TouchableWithoutFeedback } from 'react-native'
-import Mock = jest.Mock
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
-import FooterButton from 'components/FooterButton'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import LargePanel from './LargePanel'
-import TextView from 'components/TextView'
 
 context('LargePanel', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn(() => {})
 
-  const initializeTestInstance = (titleText?: string, leftButtonText?: string, rightButtonText?: string, footerButtonText?: string, onFooterButtonPress?: () => void): void => {
-    onPressSpy = jest.fn(() => {})
-
-    component = render(
+  const initializeTestInstance = (
+    titleText?: string,
+    leftButtonText?: string,
+    rightButtonText?: string,
+    footerButtonText?: string,
+    onFooterButtonPress?: () => void,
+  ): void => {
+    render(
       <LargePanel
         title={titleText}
         leftButtonText={leftButtonText}
@@ -28,82 +23,63 @@ context('LargePanel', () => {
         onFooterButtonPress={onFooterButtonPress}
       />,
     )
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('title', () => {
-    it('should not be there', async () => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(0)
+    it('should not be there', () => {
+      expect(screen.queryByRole('header')).toBeFalsy()
     })
-    it('should be there when title added', async () => {
+    it('should be there when title added', () => {
       initializeTestInstance('test')
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(1)
-      expect(textViews[0].props.children).toEqual('test')
+      expect(screen.getByRole('header', { name: 'test' })).toBeTruthy()
     })
   })
 
   describe('left banner button', () => {
-    it('should not be there', async () => {
-      const button = testInstance.findAllByType(TouchableWithoutFeedback)
-      expect(button.length).toEqual(0)
+    it('should not be there', () => {
+      expect(screen.queryByRole('button')).toBeFalsy()
     })
-    it('should be there when text is added', async () => {
+    it('should be there when text is added', () => {
       initializeTestInstance(undefined, 'cancel')
-      const button = testInstance.findAllByType(TouchableWithoutFeedback)
-      expect(button.length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(1)
-      expect(textViews[0].props.children).toEqual('cancel')
+      expect(screen.getByText('cancel')).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'cancel' })).toBeTruthy()
     })
   })
 
   describe('right banner button', () => {
-    it('should not be there', async () => {
-      const button = testInstance.findAllByType(TouchableWithoutFeedback)
-      expect(button.length).toEqual(0)
+    it('should not be there', () => {
+      expect(screen.queryByRole('button')).toBeFalsy()
     })
-    it('should be there when text is added', async () => {
+    it('should be there when text is added', () => {
       initializeTestInstance(undefined, undefined, 'done')
-      const button = testInstance.findAllByType(TouchableWithoutFeedback)
-      expect(button.length).toEqual(1)
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(1)
-      expect(textViews[0].props.children).toEqual('done')
+      expect(screen.getByText('done')).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'done' })).toBeTruthy()
     })
   })
 
   describe('footer button', () => {
-    it('should not be there', async () => {
-      const footerButton = testInstance.findAllByType(FooterButton)
-      expect(footerButton.length).toEqual(0)
+    it('should not be there', () => {
+      expect(screen.queryByRole('button')).toBeFalsy()
     })
-    it('should not be there when text is added', async () => {
+    it('should not be there when only text is added', async () => {
       initializeTestInstance(undefined, undefined, undefined, 'footer')
-      const footerButton = testInstance.findAllByType(FooterButton)
-      expect(footerButton.length).toEqual(0)
+      expect(screen.queryByRole('button', { name: 'footer' })).toBeFalsy()
     })
 
-    it('should not be there when onPress is added', async () => {
+    it('should not be there when only onPress is added', async () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, onPressSpy)
-      const footerButton = testInstance.findAllByType(FooterButton)
-      expect(footerButton.length).toEqual(0)
+      expect(screen.queryByRole('button')).toBeFalsy()
     })
 
     it('should be there when onPress and text is added', async () => {
       initializeTestInstance(undefined, undefined, undefined, 'footer', onPressSpy)
-      const footerButton = testInstance.findAllByType(FooterButton)
-      expect(footerButton.length).toEqual(1)
+      expect(screen.getByRole('button', { name: 'footer' })).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: 'footer' }))
+      expect(onPressSpy).toHaveBeenCalled()
     })
   })
 })

@@ -1,11 +1,11 @@
-import * as Types from './types'
-import { contentTypes, get, post, setRefreshToken } from './api'
-
 import { context, fetch } from 'testUtils'
+
+import { contentTypes, get, post } from './api'
+import * as Types from './types'
 
 jest.mock('store/slices', () => {
   return {
-    refreshAccessToken: (token: string): Promise<boolean> => {
+    refreshAccessToken: (): Promise<boolean> => {
       return Promise.resolve(true)
     },
   }
@@ -23,7 +23,10 @@ context('api', () => {
     const result = await get('/foo', { p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
     expect(result).toEqual(expect.objectContaining({ foo: 'test' }))
     // query params should be properly escaped
-    expect(fetch).toHaveBeenCalledWith('https://test-api/foo?p1=test&p2=t%26%3D%24%3Fest&ary=123&ary=asdfasdf%2Cd%2Casfd&ary=%25%25%25', expect.anything())
+    expect(fetch).toHaveBeenCalledWith(
+      'https://test-api/foo?p1=test&p2=t%26%3D%24%3Fest&ary=123&ary=asdfasdf%2Cd%2Casfd&ary=%25%25%25',
+      expect.anything(),
+    )
   })
 
   it('should handle 204 correctly', async () => {
@@ -36,7 +39,7 @@ context('api', () => {
 
   it('should handle >399 errors correctly', async () => {
     fetch.mockResolvedValue({ status: 400, text: () => Promise.resolve('status test'), clone: () => Promise.resolve() })
-    expect(async () => get('/foo')).rejects.toThrow()
+    await expect(async () => get('/foo')).rejects.toThrow()
   })
 
   it('should handle POST correctly if contentType not specified', async () => {
@@ -48,7 +51,10 @@ context('api', () => {
 
     const body = JSON.stringify({ p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
 
-    expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
+    expect(fetch).toHaveBeenCalledWith(
+      'https://test-api/foo',
+      expect.objectContaining({ method: 'POST', body, headers }),
+    )
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
   })
 
@@ -62,16 +68,10 @@ context('api', () => {
 
     const body = { formData: formData }
 
-    expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
+    expect(fetch).toHaveBeenCalledWith(
+      'https://test-api/foo',
+      expect.objectContaining({ method: 'POST', body, headers }),
+    )
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
-  })
-
-  it('should handle 401 and make the call again', async () => {
-    fetch.mockResolvedValueOnce({ status: 401, text: () => Promise.resolve('unauthorized') }).mockResolvedValueOnce({ status: 200, json: () => Promise.resolve({ foo: 'test' }) })
-
-    setRefreshToken('refresh')
-
-    const result = await get<Types.UserData>('/foo')
-    expect(result).toEqual(expect.objectContaining({ foo: 'test' }))
   })
 })

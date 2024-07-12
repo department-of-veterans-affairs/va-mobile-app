@@ -50,7 +50,7 @@ Health-related products in the app.
 ### Blue team
 Benefits-related products, global app features like navigation and single sign on (SIS), and incremental improvements and maintenance (aka TLC).
 
-See [Who we are](/docs/About%20our%20team/who-we-are) for the team roster.
+See [teaming information](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for the team roster.
 
 ## How we work
 
@@ -151,7 +151,7 @@ Outline work to be done next quarter in order to accomplish the team's goals.
 - Team assigned (_mobile-blue-team_, etc)
 - Discipline(s) (_ux_, _content_, _front-end_, _back-end_, _qa_)
 - Feature area(s) if applicable (_direct-deposit_, _payments_, etc.)
-- For bugs, add the _bug_ tag and [applicable severity tag](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-severity)
+- For bugs, add the _bug_ tag and [applicable severity tag](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA#issue-severity)
 
 
 #### Epics should include:

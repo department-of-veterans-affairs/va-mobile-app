@@ -1,17 +1,20 @@
-import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
-import { Shadow, ShadowProps } from 'react-native-shadow-2'
-import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
+import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Shadow, ShadowProps } from 'react-native-shadow-2'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
-import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
+import colors from 'styles/themes/VAColors'
+import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
   a11yLabel?: string
   onPress: () => void
   descriptiveBack?: boolean
+  testID?: string
 }
 
 /** Static header title */
@@ -42,6 +45,7 @@ export type HeaderRightButtonProps = {
   a11yLabel?: string
   onPress: () => void
   icon?: VAIconProps
+  testID?: string
 }
 
 export type HeaderBannerProps = {
@@ -55,9 +59,21 @@ export type HeaderBannerProps = {
   divider?: boolean
   /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
   menuViewActions?: MenuViewActionsType
+  /** bypass divider marginbottom */
+  dividerMarginBypass?: boolean
+  /** adds shadow to bottom of banner, default no shadow */
+  shadow?: boolean
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
+const HeaderBanner: FC<HeaderBannerProps> = ({
+  leftButton,
+  title,
+  rightButton,
+  divider: bannerDivider,
+  menuViewActions,
+  dividerMarginBypass,
+  shadow: bannerShadow,
+}) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
@@ -98,7 +114,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       updateVaOpacity()
       updateTitleShowing()
     }
-  })
+  }, [transition, title, titleShowing])
 
   /**
    * Handles animation effect on the title
@@ -121,7 +137,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
         useNativeDriver: true,
         easing: Easing.sin,
       }).start()
-  })
+  }) // Removed dependency array to fix screen reader issue #8310
 
   const zIndex = {
     zIndex: 1,
@@ -148,6 +164,21 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
+    mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
+    style: bannerShadow
+      ? {
+          shadowColor: colors.black,
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.1,
+            },
+            android: {
+              elevation: 8,
+            },
+          }),
+        }
+      : undefined,
   }
 
   const commonBoxProps: BoxProps = {
@@ -172,6 +203,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
+      testID: leftButton.testID,
     }
   }
 
@@ -187,7 +219,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   if (title) {
     titleTextViewProps = {
       variant: transition ? 'MobileBodyTight' : title.type === 'VA' ? 'VAHeader' : 'MobileBodyBold',
-      textAlign: 'center',
+      textAlign: title.type !== 'VA' ? 'center' : undefined,
       allowFontScaling: false,
     }
   }
@@ -198,6 +230,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
+      testID: rightButton.testID,
     }
   }
 
@@ -240,10 +273,17 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
           <Box {...titleBannerBoxProps}>
             <Box flex={4} alignItems="flex-start">
               {leftButton?.descriptiveBack ? (
-                <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
+                <DescriptiveBackButton
+                  label={leftButton.text}
+                  onPress={leftButton.onPress}
+                  focusOnButton={focus === 'Left'}
+                />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-                  <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
+                  <TouchableWithoutFeedback
+                    ref={focus === 'Left' ? focusRef : () => {}}
+                    onPress={leftButton.onPress}
+                    accessibilityRole="button">
                     <Box {...commonBoxProps}>
                       <Box display="flex" flexDirection="row" alignItems="center">
                         <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
@@ -262,12 +302,24 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               </Box>
             )}
 
-            <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
+            <Box
+              mr={theme.dimensions.buttonPadding}
+              mt={theme.dimensions.buttonPadding}
+              flex={4}
+              alignItems={'flex-end'}>
               {rightButton && (
-                <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
+                <TouchableWithoutFeedback
+                  ref={focus === 'Right' ? focusRef : () => {}}
+                  onPress={rightButton.onPress}
+                  accessibilityRole="button">
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
-                      <VAIconWithText label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
+                      <VAIconWithText
+                        testID={rightButton.testID}
+                        label={rightButton.text}
+                        labelA11y={rightButton.a11yLabel}
+                        {...rightButton.icon}
+                      />
                     ) : (
                       <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
                     )}

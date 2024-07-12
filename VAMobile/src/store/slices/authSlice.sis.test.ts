@@ -1,10 +1,14 @@
 import * as Keychain from 'react-native-keychain'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import _ from 'underscore'
 
+import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
-import { isAndroid } from '../../utils/platform'
+
 import getEnv from '../../utils/env'
+import { isAndroid } from '../../utils/platform'
 import * as api from '../api'
 import {
   cancelWebLogin,
@@ -20,8 +24,6 @@ import {
   startBiometricsLogin,
   startWebLogin,
 } from './authSlice'
-import { AUTH_STORAGE_TYPE, LoginServiceTypeConstants, LOGIN_PROMPT_TYPE } from 'store/api/types'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export const ActionTypes: {
   AUTH_START_LOGIN: string
@@ -40,6 +42,11 @@ jest.mock('utils/remoteConfig')
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
   isIOS: jest.fn(),
+}))
+
+jest.mock('../../utils/rnAuthSesson', () => ({
+  startAuthSession: jest.fn(),
+  clearCookies: jest.fn(),
 }))
 
 jest.mock('../../utils/env', () =>
@@ -72,9 +79,7 @@ const defaultEnvParams = {
   AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
-const sampleIdToken = 'TEST_TOKEN';
-
-let mockFeatureEnabled = featureEnabled as jest.Mock
+const sampleIdToken = 'TEST_TOKEN'
 const getItemMock = AsyncStorage.getItem as jest.Mock
 
 let mockedAuthResponse: { data: { access_token: string; refresh_token: string; id_token: string } }
@@ -101,7 +106,6 @@ context('authAction SIS', () => {
     }
     const envMock = getEnv as jest.Mock
     envMock.mockReturnValue(defaultEnvParams)
-    when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
     when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
     when(getItemMock).calledWith('@store_refresh_token_encrypted_component').mockResolvedValue(encryptedComponent)
 
@@ -149,29 +153,20 @@ context('authAction SIS', () => {
 
       const store = realStore()
       await store.dispatch(handleTokenCallbackUrl('asdfasdfasdf'))
-      store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK }))
+      store.dispatch(
+        dispatchInitializeAction({
+          loggedIn: true,
+          canStoreWithBiometric: false,
+          shouldStoreWithBiometric: false,
+          loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK,
+        }),
+      )
       expect(store.getState().auth.loggedIn).toBeTruthy()
 
       await store.dispatch(logout())
       const revokeUrl = 'https://test.gov/v0/sign_in/revoke'
       expect(fetch).toHaveBeenCalledWith(revokeUrl, expect.anything())
 
-      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
-      expect(store.getState().auth.loggedIn).toBeFalsy()
-      expect(store.getState().auth.loading).toBeFalsy()
-    })
-
-    it('should skip logout fetch if refresh token type does not match login type from SIS', async () => {
-      // default is IAM, so setting refreshTokenType to SIS should invoke a mismatch
-      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
-
-      const store = realStore()
-      await store.dispatch(handleTokenCallbackUrl('asdfasdfasdf'))
-      store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK }))
-      expect(store.getState().auth.loggedIn).toBeTruthy()
-
-      await store.dispatch(logout())
-      expect(fetch).not.toHaveBeenCalled()
       expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
       expect(store.getState().auth.loggedIn).toBeFalsy()
       expect(store.getState().auth.loading).toBeFalsy()
@@ -183,7 +178,14 @@ context('authAction SIS', () => {
     const DEV: boolean = global.__DEV__
     beforeEach(() => {
       store = realStore()
-      store.dispatch(dispatchInitializeAction({ loggedIn: true, canStoreWithBiometric: false, shouldStoreWithBiometric: false, loginPromptType: LOGIN_PROMPT_TYPE.LOGIN }))
+      store.dispatch(
+        dispatchInitializeAction({
+          loggedIn: true,
+          canStoreWithBiometric: false,
+          shouldStoreWithBiometric: false,
+          loginPromptType: LOGIN_PROMPT_TYPE.LOGIN,
+        }),
+      )
 
       // Temporarily set __DEV__ false to not hit our dev-only convenience refresh token
       global.__DEV__ = false
@@ -224,7 +226,13 @@ context('authAction SIS', () => {
       const prefMock = AsyncStorage.getItem as jest.Mock
       prefMock.mockResolvedValue(null)
       fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-      store.dispatch(dispatchStoreAuthorizeParams({ codeVerifier: 'mylongcodeverifier', codeChallenge: 'mycodechallenge', authorizeStateParam: '2355adfs' }))
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'mylongcodeverifier',
+          codeChallenge: 'mycodechallenge',
+          authorizeStateParam: '2355adfs',
+        }),
+      )
       await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })
@@ -482,27 +490,6 @@ context('authAction SIS', () => {
       expect(state.authCredentials).toEqual(expect.objectContaining(mockedAuthResponse.data))
     })
 
-    it('should skip token refresh and log the user out if there is a mismatch between refresh token type and sign in service', async () => {
-      const store = realStore()
-      const kcMock = Keychain.getInternetCredentials as jest.Mock
-
-      // refreshTokenType is SIS but SIS is disabled by feature toggle
-      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
-
-      when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
-      const hic = Keychain.hasInternetCredentials as jest.Mock
-      hic.mockResolvedValue(true)
-      const gsbt = Keychain.getSupportedBiometryType as jest.Mock
-      gsbt.mockResolvedValue(Keychain.BIOMETRY_TYPE.TOUCH_ID)
-      kcMock.mockResolvedValue(Promise.resolve({ password: nonce }))
-
-      await store.dispatch(initializeAuth())
-
-      expect(fetch).not.toHaveBeenCalled()
-      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
-      expect(store.getState().auth.loggedIn).toBeFalsy()
-    })
-
     describe('android', () => {
       beforeEach(() => {
         const isAndroidMock = isAndroid as jest.Mock
@@ -595,7 +582,6 @@ context('authAction SIS', () => {
       expect(storeState.loggedIn).toBeTruthy()
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
       // expect(storeState.shouldStoreWithBiometric).toBeTruthy()
-      when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
       await store.dispatch(setBiometricsPreference(true))
       storeState = store.getState().auth
       // expect(storeState.canStoreWithBiometric).toBeTruthy()

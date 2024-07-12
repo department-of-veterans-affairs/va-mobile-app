@@ -1,42 +1,37 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, useLayoutEffect } from 'react'
-
-import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
-import { isIOS } from 'utils/platform'
-import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
-import { useTheme } from 'utils/hooks'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { DateTime } from 'luxon'
+
+import { Box, LargePanel, TextView } from 'components'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
 
 type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
 
-const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
+function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
   const { display, value } = route.params
-  const headerStyle = usePanelHeaderStyles()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, tc)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t)
+  const timeOpened = DateTime.now().toMillis()
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      ...headerStyle,
-      headerLeft: (props) => (
-        <ClosePanelButton
-          buttonText={tc('close')}
-          onPress={props.onPress}
-          buttonTextColor={'showAll'}
-          focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-        />
-      ),
-    })
-  }, [navigation, headerStyle, tc])
+  useBeforeNavBackListener(navigation, () => {
+    const timeClosed = DateTime.now().toMillis()
+    logAnalyticsEvent(Events.vama_rx_status(display, timeClosed - timeOpened))
+  })
 
   return (
-    <LargePanel title={tc('statusDefinition')} rightButtonText={tc('close')}>
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <LargePanel title={t('statusDefinition')} rightButtonText={t('close')}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}

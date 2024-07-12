@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/VAMobile'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '08:00'
+      timezone: America/New_York
+    groups:
+      babel:
+        patterns:
+          - '@babel*'
+          - 'babel-plugin-module-resolver'
+          - 'metro-react-native-babel-preset'
+      eslint:
+        patterns:
+          - 'eslint*'
+          - '@react-native-community/eslint-config'
+          - '@typescript-eslint/eslint-plugin'
+          - '@typescript-eslint/parser'
+      firebase:
+        patterns:
+          - '@react-native-firebase*'
+      react-navigation:
+        patterns:
+          - '*react-navigation*'
+      redux:
+        patterns:
+          - '*redux*'
+      unit-tests:
+        patterns:
+          - '*jest*'
+          - '@testing-library*'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-native'
+        update-types: ['version-update:semver-minor']
+      - dependency-name: '@department-of-veterans-affairs/mobile-component-library'
+        update-types: ['version-update:semver-minor']

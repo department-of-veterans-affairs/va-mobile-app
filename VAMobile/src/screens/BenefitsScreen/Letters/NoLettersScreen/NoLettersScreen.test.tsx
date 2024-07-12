@@ -1,21 +1,19 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, render, RenderAPI } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import NoLettersScreen from './NoLettersScreen'
 
 context('NoLettersScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
-  beforeEach(() => {
-    component = render(<NoLettersScreen />)
-
-    testInstance = component.UNSAFE_root
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    render(<NoLettersScreen />)
+    expect(screen.getByRole('header', { name: "We couldn't find information about your VA letters" })).toBeTruthy()
+    expect(
+      screen.getByText('If you think you should have access to this information, please call our VA benefits hotline.'),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
   })
 })

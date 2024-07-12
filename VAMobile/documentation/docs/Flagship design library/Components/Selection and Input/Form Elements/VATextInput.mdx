@@ -1,0 +1,39 @@
+---
+title: Text input
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import VATextInputString from '!!raw-loader!@componentsDocs/FormWrapper/FormFields/VATextInput'
+import ComponentTopInfo from '../../../../../src/components/ComponentInfo'
+
+Text input allows people to enter any type of text unless otherwise restricted.
+
+## Examples
+
+### Default
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/g15WfeOSaVFl8Eapoc6UtP/%5BNEW%5D-Text-input?node-id=4394-547&t=13B9cqqaRF3A0suB-4" allowfullscreen></iframe>
+
+### Examples
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/g15WfeOSaVFl8Eapoc6UtP/%5BNEW%5D-Text-input?node-id=4394-548&t=13B9cqqaRF3A0suB-4" allowfullscreen></iframe>
+
+## Usage
+
+[Refer to the VA Design System for usage guidance](https://design.va.gov/components/form/text-input)
+
+## Content considerations
+* Refer to the [VA Design System for content considerations](https://design.va.gov/components/form/text-input)
+
+## Accessibility considerations
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/form/text-input#accessibility-considerations)
+
+## Code usage
+Link to Storybook coming soon
+
+export const exampleString = `<VATextInput 
+inputType={'email'} 
+value={selected} 
+onChange={(textValue) => { setSelected(textValue) }} 
+isTextArea={false}/>`
+
+
+<ComponentTopInfo componentName="VATextInput" example={exampleString} codeString={VATextInputString} />

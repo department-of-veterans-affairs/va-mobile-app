@@ -1,38 +1,40 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import Mock = jest.Mock
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import DefaultList from './DefaultList'
 
 context('DefaultList', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn()
+  const items = [
+    {
+      textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }],
+      testId: 'testid',
+      a11yHintText: 'hinttext',
+    },
+    { textLines: [{ text: 'another line' }], a11yHintText: 'hint2', onPress: onPressSpy },
+  ]
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
-
-    const items = [
-      { textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }], testId: 'testid', a11yHintText: 'hinttext' },
-      { textLines: [{ text: 'another line' }], a11yHintText: 'hint2', onPress: onPressSpy },
-    ]
-
-    component = render(<DefaultList items={items} />)
-
-    testInstance = component.UNSAFE_root
+    render(<DefaultList items={items} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders a11yHint', () => {
+    expect(screen.getByA11yHint('hinttext')).toBeTruthy()
   })
 
-  it('should call onPress when one of the buttons has been clicked', async () => {
-    await waitFor(() => {
-      expect(findByTestID(testInstance, 'another-line').props.onPress())
-      expect(onPressSpy).toBeCalled()
-    })
+  it('renders a11yLabel', () => {
+    expect(screen.getByLabelText('another-line')).toBeTruthy()
+  })
+
+  it('renders multiple lines', () => {
+    expect(screen.getByText(/line 1 on the first button/)).toBeTruthy()
+    expect(screen.getByText(/line 2 on the first button/)).toBeTruthy()
+  })
+
+  it('calls onPress when item is clicked', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'another line' }))
   })
 })

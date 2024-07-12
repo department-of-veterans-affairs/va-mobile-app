@@ -1,41 +1,50 @@
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const PrescriptionsDetailsBanner: FC = () => {
+function PrescriptionsDetailsBanner() {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const { contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_cerner_alert())
+  }, [])
 
   const getContent = () => {
     const bullets = [
       {
         text: t('prescription.details.banner.bullet1'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet1.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet1')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet2'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet2.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet2')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet3'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + t('or'),
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween} mt={standardMarginBetween}>
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
+          mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -45,17 +54,24 @@ const PrescriptionsDetailsBanner: FC = () => {
           <VABulletList listOfText={bullets} />
         </Box>
         <ClickToCallPhoneNumber
-          phone={tc('5418307563')}
-          displayedText={`${tc('automatedPhoneSystem')} ${tc('5418307563.displayText')}`}
-          a11yLabel={`${tc('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(tc('5418307563'))}`}
+          phone={t('5418307563')}
+          displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
+          a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
         />
       </>
     )
   }
+
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop}>
-        <CollapsibleAlert border="warning" headerText={t('prescription.details.banner.title')} body={getContent()} a11yLabel={t('prescription.details.banner.title')} />
+      <Box mb={contentMarginBottom}>
+        <CollapsibleAlert
+          border="warning"
+          headerText={t('prescription.details.banner.title')}
+          body={getContent()}
+          a11yLabel={t('prescription.details.banner.title')}
+          onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
+        />
       </Box>
     </VAScrollView>
   )

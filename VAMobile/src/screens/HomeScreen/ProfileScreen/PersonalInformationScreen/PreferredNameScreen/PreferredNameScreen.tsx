@@ -1,44 +1,38 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
 
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, finishUpdatePreferredName, updatePreferredName } from 'store/slices'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { showSnackBar } from 'utils/common'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
 const MAX_NAME_LENGTH = 25
 
-const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
-  const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
+  const { data: demographics } = useDemographics()
+  const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
   const dispatch = useAppDispatch()
-  const confirmAlert = useDestructiveAlert()
+  const theme = useTheme()
+  const confirmAlert = useDestructiveActionSheet()
 
   const getInitialState = (): string => {
-    const item = profile?.preferredName
+    const item = demographics?.preferredName
     return item ? stringToTitleCase(item) : ''
   }
 
   const [preferredName, setName] = useState(getInitialState())
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-
-  useEffect(() => {
-    if (preferredNameSaved) {
-      dispatch(finishUpdatePreferredName())
-      navigation.goBack()
-    }
-  }, [preferredNameSaved, navigation, dispatch])
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('personalInformation.preferredName.saved'),
@@ -54,11 +48,11 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         destructiveButtonIndex: 1,
         buttons: [
           {
-            text: t('personalInformation.preferredName.keepEditing'),
+            text: t('keepEditing'),
             onPress: () => {},
           },
           {
-            text: t('personalInformation.preferredName.deleteChanges'),
+            text: t('deleteChanges'),
             onPress: () => {
               navigation.goBack()
             },
@@ -71,9 +65,20 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     }
   }
 
+  const updatePreferredName = () => {
+    const mutateOptions = {
+      onSuccess: () => {
+        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+        navigation.goBack()
+      },
+      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updatePreferredName, false, true, true),
+    }
+    preferredNameMutation.mutate(preferredName, mutateOptions)
+  }
+
   const onSave = (): void => {
     if (preferredName !== '') {
-      dispatch(updatePreferredName(preferredName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
+      updatePreferredName()
     }
   }
 
@@ -106,6 +111,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         onChange: onSetName,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
+        testID: 'preferredNameTestID',
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [
@@ -125,31 +131,27 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     },
   ]
 
-  if (loading || preferredNameSaved) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
-      </FullScreenSubtask>
-    )
-  }
-
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
-      primaryContentButtonText={t('save')}
+      primaryContentButtonText={preferredNameMutation.isPending ? undefined : t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      <Box mx={theme.dimensions.gutter}>
-        <FormWrapper
-          fieldsList={formFieldsList}
-          onSave={onSave}
-          resetErrors={resetErrors}
-          setResetErrors={setResetErrors}
-          onSaveClicked={onSaveClicked}
-          setOnSaveClicked={setOnSaveClicked}
-        />
-      </Box>
+      {preferredNameMutation.isPending ? (
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+      ) : (
+        <Box mx={theme.dimensions.gutter}>
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

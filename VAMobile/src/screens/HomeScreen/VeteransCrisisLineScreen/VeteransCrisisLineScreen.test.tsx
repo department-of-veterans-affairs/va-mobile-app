@@ -1,44 +1,36 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { Alert } from 'react-native'
 
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
+
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
 
-const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
-
 context('VeteransCrisisLineScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   beforeEach(() => {
-    component = render(<VeteransCrisisLineScreen />)
-
-    testInstance = component.UNSAFE_root
+    render(<VeteransCrisisLineScreen />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'We’re here anytime, day or night – 24/7' })).toBeTruthy()
+    expect(
+      screen.getByText(
+        "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
+      ),
+    ).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Call 988 and select 1' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Text 838255' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Start a confidential chat' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'TTY: 800-799-4889' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Get more resources' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'VeteransCrisisLine.net' })).toBeTruthy()
   })
-  
+
   describe('when the veteransCrisisLine.net link is clicked', () => {
-    it('should launch external link with the parameter https://www.veteranscrisisline.net/', async () => {
-      act(() => {
-        testInstance.findByProps({ accessibilityLabel: 'Veterans Crisis Line .net' }).props.onPress()
-      })
-      expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/')
+    it('should show alert', () => {
+      fireEvent.press(screen.getByRole('link', { name: 'VeteransCrisisLine.net' }))
+      expect(Alert.alert).toBeCalled()
     })
   })
 })
