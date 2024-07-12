@@ -5,7 +5,7 @@ import { screen } from '@testing-library/react-native'
 import { ClaimData } from 'api/types'
 import { context, render } from 'testUtils'
 
-import { claim } from '../../claimData'
+import { claim as claimData } from '../../claimData'
 import ClaimFiles from './ClaimFiles'
 
 jest.mock('utils/remoteConfig')
@@ -17,7 +17,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('When there are files to display', () => {
     it('it should render correctly', async () => {
-      renderWithData(claim)
+      renderWithData(claimData)
       expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
       expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
       expect(screen.getAllByText('Received: 2020-07-16')).toBeTruthy()
