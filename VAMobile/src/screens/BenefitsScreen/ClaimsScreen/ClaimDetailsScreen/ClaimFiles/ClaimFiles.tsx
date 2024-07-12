@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import _ from 'underscore'
 
 import { ClaimData } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 
 type ClaimFilesProps = {
@@ -20,14 +20,17 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
 
     _.forEach(documents, (document) => {
       if (document.filename) {
-        items.push({
-          textLines: [
-            { text: document.filename, variant: 'MobileBodyBold' },
-            { text: t('appointmentList.requestType', { type: document.type }) },
-            { text: t('appointmentList.documentType', { type: document.documentType }) },
-            { text: t('appointmentList.received', { date: document.uploadDate }) },
-          ],
-        })
+        const textLines: TextLine[] = [{ text: document.filename, variant: 'MobileBodyBold' }]
+        if (document.type) {
+          textLines.push({ text: t('appointmentList.requestType', { type: document.type }) })
+        }
+        if (document.documentType) {
+          textLines.push({ text: t('appointmentList.documentType', { type: document.documentType }) })
+        }
+        if (document.uploadDate) {
+          textLines.push({ text: t('appointmentList.received', { date: document.uploadDate }) })
+        }
+        items.push({ textLines: textLines })
       }
     })
     return items
