@@ -76,7 +76,7 @@
     "react-native-screens": "^3.32.0",
     "react-native-shadow-2": "^7.1.0",
     "react-native-svg": "^14.1.0",
-    "react-native-svg-transformer": "^1.4.0",
+    "react-native-svg-transformer": "^1.5.0",
     "react-native-toast-notifications": "^3.4.0",
     "react-native-webp-format": "^1.2.0",
     "react-native-webview": "^13.10.4",
