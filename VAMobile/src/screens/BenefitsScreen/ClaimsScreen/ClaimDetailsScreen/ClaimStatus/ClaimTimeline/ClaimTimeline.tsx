@@ -9,7 +9,12 @@ import { AlertBox, Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import {
+  getUserPhase,
+  isDisabilityCompensationClaim,
+  needItemsFromVet,
+  numberOfItemsNeedingAttentionFromVet,
+} from 'utils/claims'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimPhase from './ClaimPhase'
@@ -31,6 +36,9 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
+
+  const is8Steps = featureEnabled('claimPhaseExpansion') && isDisabilityCompensationClaim(attributes.claimTypeCode)
+  const claimStepList = is8Steps ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5]
 
   useFocusEffect(
     useCallback(() => {
@@ -54,7 +62,7 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
         borderTopWidth={theme.dimensions.borderWidth}
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
-        {[1, 2, 3, 4, 5].map((phase) =>
+        {claimStepList.map((phase) =>
           featureEnabled('claimPhaseExpansion') ? (
             <ClaimPhase
               phase={phase}
