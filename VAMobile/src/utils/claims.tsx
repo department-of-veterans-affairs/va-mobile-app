@@ -8,7 +8,7 @@ import { TFunction } from 'i18next'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
-import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
 
 import { logAnalyticsEvent } from './analytics'
 
@@ -322,4 +322,13 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
       </TextView>
     )
   }
+}
+
+/**
+ * Returns true if the provided claim type code is for a disability compensation claim
+ *
+ * @param claimTypeCode - claimTypeCode attribute for a claim
+ */
+export function isDisabilityCompensationClaim(claimTypeCode: string) {
+  return DISABILITY_COMPENSATION_CLAIM_TYPE_CODES.includes(claimTypeCode)
 }

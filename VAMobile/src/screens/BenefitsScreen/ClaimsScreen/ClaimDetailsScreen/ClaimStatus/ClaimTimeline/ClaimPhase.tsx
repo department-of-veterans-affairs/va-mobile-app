@@ -8,6 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { isDisabilityCompensationClaim } from 'utils/claims'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 /**
@@ -38,8 +39,8 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
   const isIncompletePhase = phase > current
-  /*************** NOTE: Need to determine if type is disability. How?  *********************/
-  const isDisabilityClaim = true
+
+  const isDisabilityClaim = isDisabilityCompensationClaim(attributes.claimTypeCode)
   const translationStepString = isDisabilityClaim ? '8step' : '5step'
   const heading = t(`claimPhase.${translationStepString}.heading.phase${phase}`)
 
