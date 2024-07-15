@@ -1398,23 +1398,21 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.12.0.tgz#8656683640d2f11d79adb202535f4ce324c92d2d"
   integrity sha512-85h4yb4Nq0A3PMh5wG5NKya2RnSYsZ/H7Xk9arMhyZpF3IuMi8I9rmGs0Qo+PiI4oi99kj+12VVtIElzyvGJAw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.19.1":
-  version "0.19.1"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.19.1.tgz#fa543b98bb4f904cc9bbdf1387c775a47dce92b7"
-  integrity sha512-zWZoMRj5XG5HQYqrP5pNhSi/esaVqGB1+zpy3xKiXSfK6zt89GGKmwa6Q5cva55hoxOWhHuVt2j8wJz+2JCa0A==
+"@department-of-veterans-affairs/mobile-component-library@0.20.3":
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.20.3.tgz#13136bed350b270c6bfec8841bcd027d5e204788"
+  integrity sha512-UCg+0TwojjlHtm7dUhT8OFnXu8KD0T7cyJRSlayYnR+l4ys1x6OatcH4Pmz9N72rzlGVUcG0pMQxhmWceEwL3g==
   dependencies:
-    "@department-of-veterans-affairs/mobile-assets" "0.12.0"
-    "@department-of-veterans-affairs/mobile-tokens" "0.12.0"
     "@os-team/i18next-react-native-language-detector" "^1.0.31"
     i18next "^23.11.5"
     react-i18next "^14.1.2"
     react-native-svg "15.2.0"
     styled-components "^6.1.8"
 
-"@department-of-veterans-affairs/mobile-tokens@0.12.0":
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.12.0.tgz#df255401790dbb8ac0ecac02f956d6512a1645b2"
-  integrity sha512-cACiKuaU1154l42U+cnnSOa1bRedFiQPG9lX/s+Sb8eJZjCsEmQW4SkqEbRzy5lViYj/59ACnY5JCD7+wslvRw==
+"@department-of-veterans-affairs/mobile-tokens@0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.13.0.tgz#5dbc25e256b8364293c8ac5468d815ae0ca9d24f"
+  integrity sha512-XnR6xlZGt0nzQG/Gs3RWV6dggk/7uK+vwnLAb+OHZO9xuoieOuq8NBYcJuBHL2wEvmxgHLPq8+kquECjwYt4LQ==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
