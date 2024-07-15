@@ -5,7 +5,7 @@
 name: '[Utils] Assign QA to issue'
 
 on:
-  pull_request:
+  issues:
     types:
       - labeled
 env:
@@ -15,31 +15,37 @@ jobs:
   assign_qa:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
+      issues: write
     steps:
       - name: 'Checkout repo'
         uses: actions/checkout@v3
 
       - name: Assign Health team QA
-        if: contains(github.event.pull_request.labels.*.name, fromJson('["Health", "FE-With QA"]'))
+        if: |
+          contains(github.event.issue.labels.*.name, 'Health') && 
+          contains(github.event.issue.labels.*.name, 'FE-With QA')
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "rbontrager"
+          gh pr edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
       - name: Assign Global team QA
         if: |
-          contains(github.event.pull_request.labels.*.name, 'global') && 
-          contains(github.event.pull_request.labels.*.name, 'FE-With QA')
+          contains(github.event.issue.labels.*.name, 'global') && 
+          contains(github.event.issue.labels.*.name, 'FE-With QA')
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "TKDickson"
+          gh pr edit ${{ github.event.issue.number }} --add-assignee "TKDickson"
 
       - name: Assign Design-System team QA
         if: |
-          contains(github.event.pull_request.labels.*.name, 'design-system') && 
-          contains(github.event.pull_request.labels.*.name, 'FE-With QA')  
+          contains(github.event.issue.labels.*.name, 'design-system') && 
+          contains(github.event.issue.labels.*.name, 'FE-With QA')  
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "DJUltraTom"
+          gh pr edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
       
       - name: Assign all other issues to adam
-        if: github.event.label.name == 'FE-With QA' && (github.event.label.name != 'Health' || github.event.label.name != 'global' || github.event.label.name != 'design-system')
+        if: |
+          !contains(github.event.issue.labels.*.name, 'Health') &&
+          !contains(github.event.issue.labels.*.name, 'global') &&
+          !contains(github.event.issue.labels.*.name, 'design-system') &&
+          contains(github.event.issue.labels.*.name, 'FE-With QA') 
         run: |
-          gh issue edit ${{ github.event.pull_request.number }} --add-assignee "bischoffa"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "bischoffa"
       
