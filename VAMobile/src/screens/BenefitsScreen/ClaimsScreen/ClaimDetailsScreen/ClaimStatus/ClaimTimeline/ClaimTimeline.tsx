@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import React, { RefObject, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 
@@ -19,9 +20,11 @@ export type ClaimTimelineProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** ref to parent scrollView, used for auto scroll */
+  scrollViewRef: RefObject<ScrollView>
 }
 
-function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
+function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [count, setCount] = useState(0)
@@ -58,6 +61,7 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
               current={getUserPhase(attributes.phase)}
               attributes={attributes}
               claimID={claimID}
+              scrollViewRef={scrollViewRef}
               key={phase}
             />
           ) : (

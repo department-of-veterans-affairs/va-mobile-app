@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView, View } from 'react-native'
 
 import { ClaimAttributesData } from 'api/types'
 import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
@@ -7,7 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useTheme } from 'utils/hooks'
+import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 /**
  * props for ClaimPhase components
@@ -21,31 +22,43 @@ export type ClaimPhaseProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** ref to parent scrollView, used for auto scroll */
+  scrollViewRef: RefObject<ScrollView>
 }
 
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
+function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
-  const isCompleted = phase < current
-  const isCurrent = phase === current
+  const isCompletedPhase = phase < current
+  const isCurrentPhase = phase === current
   /*************** NOTE: Need to determine if type is disability. How?  *********************/
   const isDisabilityClaim = true
   const translationStepString = isDisabilityClaim ? '8step' : '5step'
   const heading = t(`claimPhase.${translationStepString}.heading.phase${phase}`)
 
+  useEffect(() => {
+    if (phase > 1 && isCurrentPhase && scrollViewRef?.current) {
+      scrollRef.current = scrollViewRef.current
+      scrollToCurrentPhase()
+    }
+  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef])
+
   const phaseHeader = (
     <Box flexDirection="column">
       <Box flexDirection="row" alignItems="center" mb={condensedMarginBetween}>
-        {isCompleted && <VAIcon name="CircleCheckMark" fill={theme.colors.icon.success} width={24} height={24} />}
-        <TextView variant="MobileBodyBold" ml={isCompleted ? condensedMarginBetween : 0}>{`Step ${phase}`}</TextView>
+        {isCompletedPhase && <VAIcon name="CircleCheckMark" fill={theme.colors.icon.success} width={24} height={24} />}
+        <TextView
+          variant="MobileBodyBold"
+          ml={isCompletedPhase ? condensedMarginBetween : 0}>{`Step ${phase}`}</TextView>
       </Box>
       <TextView>{heading}</TextView>
-      {isCurrent && (
+      {isCurrentPhase && (
         <Box mt={7}>
           <LabelTag text={t('currentStep')} labelType={LabelTagTypeConstants.tagGreen} />
         </Box>
@@ -62,9 +75,9 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   let status = ''
 
-  if (isCurrent) {
+  if (isCurrentPhase) {
     status = t('claimPhase.heading.a11y.current')
-  } else if (isCompleted) {
+  } else if (isCompletedPhase) {
     status = t('claimPhase.heading.a11y.completed')
   }
 
@@ -84,14 +97,16 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   }
 
   return (
-    <AccordionCollapsible
-      noBorder={true}
-      header={phaseHeader}
-      expandedContent={phaseExpandedContent}
-      expandedInitialValue={isCurrent}
-      customOnPress={accordionPress}
-      testID={testID}
-    />
+    <View ref={viewRef}>
+      <AccordionCollapsible
+        noBorder={true}
+        header={phaseHeader}
+        expandedContent={phaseExpandedContent}
+        expandedInitialValue={isCurrentPhase}
+        customOnPress={accordionPress}
+        testID={testID}
+      />
+    </View>
   )
 }
 

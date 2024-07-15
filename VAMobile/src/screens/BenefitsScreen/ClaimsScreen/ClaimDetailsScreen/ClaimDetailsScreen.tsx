@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -37,6 +38,7 @@ type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDe
 function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(0)
@@ -130,6 +132,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
+      scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen">
       {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
@@ -156,7 +159,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             </Box>
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+            {claim && selectedTab === 0 && (
+              <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} scrollViewRef={scrollViewRef} />
+            )}
             {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
