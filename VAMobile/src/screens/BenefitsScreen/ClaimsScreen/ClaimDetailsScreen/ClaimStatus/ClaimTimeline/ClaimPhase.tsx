@@ -37,6 +37,7 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
 
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
+  const isIncompletePhase = phase > current
   /*************** NOTE: Need to determine if type is disability. How?  *********************/
   const isDisabilityClaim = true
   const translationStepString = isDisabilityClaim ? '8step' : '5step'
@@ -73,15 +74,22 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
     </TextView>
   )
 
-  let status = ''
-
-  if (isCurrentPhase) {
-    status = t('claimPhase.heading.a11y.current')
+  let currentStatus = ''
+  if (isIncompletePhase) {
+    currentStatus = t('incomplete')
+  } else if (isCurrentPhase) {
+    currentStatus = t('currentStep')
   } else if (isCompletedPhase) {
-    status = t('claimPhase.heading.a11y.completed')
+    currentStatus = t('complete')
   }
 
-  const testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
+  let completedSteps = ''
+  if (phase === 2 && isCurrentPhase) {
+    completedSteps = t('claimPhase.heading.a11y.step1Complete')
+  } else if (phase > 2 && isCurrentPhase) {
+    completedSteps = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
+  }
+  const testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatus}. ${completedSteps}.`
 
   const accordionPress = (isExpanded: boolean | undefined) => {
     logAnalyticsEvent(

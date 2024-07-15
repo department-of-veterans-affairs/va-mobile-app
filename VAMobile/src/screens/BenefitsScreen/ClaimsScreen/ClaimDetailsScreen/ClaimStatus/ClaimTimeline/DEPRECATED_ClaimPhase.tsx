@@ -99,7 +99,7 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
     status = t('claimPhase.heading.a11y.completed')
   }
 
-  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`
+  let testID = `${t('claimPhase.heading.a11y.stepOf5', { step: phase })} ${status} ${heading}`
 
   if (phaseLessThanEqualToCurrent) {
     testID = `${testID} ${updatedLastDate}`
