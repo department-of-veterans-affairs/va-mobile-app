@@ -16,7 +16,7 @@ jobs:
     name: Acessibility Check
     runs-on: ubuntu-latest
     outputs:
-      total_issues: ${{ steps.accessibility_check.outputs.total_issues }}
+      num_issues: ${{ steps.accessibility_check.outputs.num_issues }}
     steps:
       - uses: actions/checkout@v3
       - name: Clean npm cache
@@ -47,41 +47,26 @@ jobs:
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
     
           # Counter for the number of accessibility issues detected
-          total_issues=0
+          num_issues=0
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            echo "Checking accessibility for $url"
-            # Prevent script from exiting if axe command fails
-            set +e
-            axe_output=$(axe "$url" --stdout)
-            axe_exit_code=$?
-            set -e
-            
-            echo "$axe_output"
-            
-            # Check if axe found issues
-            if [ $axe_exit_code -ne 0 ]; then
+            if axe "$url" --exit; then
+              echo "No accessibility issues found in $url"
+            else
               echo "Accessibility issues found in $url"
               echo "$url" >> accessibility_issues.txt
-
-              # Extract number of issues from axe output
-              issues=$(echo "$axe_output" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
-              if [ -n "$issues" ]; then
-                total_issues=$((total_issues + issues))
-              fi
-            else
-              echo "No accessibility issues found in $url"
+              num_issues=$((num_issues+1))
             fi
           done
-
-          echo "Accessibility issues detected: $total_issues"
+      
+          echo "Accessibility issues detected: $num_issues"
 
           # Set output for number of issues
-          echo "total_issues=$total_issues" >> $GITHUB_OUTPUT
+          echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
 
           # Fail the workflow if accessibility issues are detected
-          if [ "$total_issues" -gt 0 ]; then
+          if [ "$num_issues" -gt 0 ]; then
             echo "Accessibility issues were detected."    
             exit 1
           else
@@ -96,4 +81,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_issues }}'
+      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of accessibility issues detected: ${{ needs.axe-scan.outputs.num_issues }}'
