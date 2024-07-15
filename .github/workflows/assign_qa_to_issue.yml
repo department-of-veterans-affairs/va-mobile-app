@@ -21,16 +21,22 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Assign Health team QA
-        if: github.event.label.name == 'Health'
+        if: github.event.label.name == 'Health' && github.event.label.name == 'FE-With QA'
         run: |
           gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
 
       - name: Assign Global team QA
-        if: github.event.label.name == 'global'
+        if: github.event.label.name == 'global' && github.event.label.name == 'FE-With QA'
         run: |
           gh issue edit ${{ github.event.issue.number }} --add-assignee "TKDickson"
 
       - name: Assign Design-System team QA
-        if: github.event.label.name == 'design-system'
+        if: github.event.label.name == 'design-system' && github.event.label.name == 'FE-With QA'
         run: |
           gh issue edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
+      
+      - name: Assign all other issues to adam
+        if: github.event.label.name == 'FE-With QA' && (github.event.label.name != 'Health' || github.event.label.name != 'global' || github.event.label.name != 'design-system')
+        run: |
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "bischoffa"
+      
