@@ -25,20 +25,20 @@ jobs:
           contains(github.event.issue.labels.*.name, 'Health') && 
           contains(github.event.issue.labels.*.name, 'FE-With QA')
         run: |
-          gh pr edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
       - name: Assign Global team QA
         if: |
           contains(github.event.issue.labels.*.name, 'global') && 
           contains(github.event.issue.labels.*.name, 'FE-With QA')
         run: |
-          gh pr edit ${{ github.event.issue.number }} --add-assignee "TKDickson"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "TKDickson"
 
       - name: Assign Design-System team QA
         if: |
           contains(github.event.issue.labels.*.name, 'design-system') && 
           contains(github.event.issue.labels.*.name, 'FE-With QA')  
         run: |
-          gh pr edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
       
       - name: Assign all other issues to adam
         if: |
