@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, View } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { ClaimAttributesData } from 'api/types'
 import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
@@ -45,9 +45,9 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current) {
       scrollRef.current = scrollViewRef.current
-      scrollToCurrentPhase()
+      scrollToCurrentPhase(-standardMarginBetween)
     }
-  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef])
+  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef, standardMarginBetween])
 
   const phaseHeader = (
     <Box flexDirection="column">
@@ -97,16 +97,15 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
   }
 
   return (
-    <View ref={viewRef}>
-      <AccordionCollapsible
-        noBorder={true}
-        header={phaseHeader}
-        expandedContent={phaseExpandedContent}
-        expandedInitialValue={isCurrentPhase}
-        customOnPress={accordionPress}
-        testID={testID}
-      />
-    </View>
+    <AccordionCollapsible
+      noBorder={true}
+      header={phaseHeader}
+      expandedContent={phaseExpandedContent}
+      expandedInitialValue={isCurrentPhase}
+      customOnPress={accordionPress}
+      headerRef={viewRef}
+      testID={testID}
+    />
   )
 }
 
