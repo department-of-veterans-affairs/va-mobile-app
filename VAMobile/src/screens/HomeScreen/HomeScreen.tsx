@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
@@ -334,7 +334,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
                 <VAIcon
                   name={'CircleCheckMark'}
-                  fill={Colors.vadsColorSuccessDark}
+                  fill={DSColors.vadsColorSuccessDark}
                   fill2={theme.colors.icon.transparent}
                 />
                 <TextView
