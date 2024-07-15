@@ -1,7 +1,6 @@
 import { enableAF, verifyAF } from './utils'
 
-var AFValue = process.argv[7]
-
+fc
 const AFNavigationNoIndividual = [
   ['ChildTemplate', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
   ['FeatureLandingTemplate', 'WG_PersonalInformation', 'Profile', 'Personal information'],
@@ -53,7 +52,7 @@ const AFNavigationForIndividual = [
   ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact us'],
   ['HomeScreen.e2e', 'WG_SecureMessaging', 'Messages'],
   ['HomeScreen.e2e', 'WG_PrescriptionHistory', 'Prescriptions'],
-  ['HomeScreen.e2e', 'WG_ClaimsHistoryScreen', 'Claims history'],
+  ['HomeScreen.e2e', 'WG_ClaimsHistoryScreen', 'Claims'],
   ['HomeScreen.e2e', 'WG_Appointments', 'Appointments'],
   ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'Talk to the Veterans Crisis Line now'],
   ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
