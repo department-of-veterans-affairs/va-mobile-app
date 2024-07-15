@@ -21,9 +21,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Assign Health team QA
-        if: |
-          contains(github.event.issue.labels.*.name, 'Health') && 
-          contains(github.event.issue.labels.*.name, 'FE-With QA')
+        if: contains(github.event.issue.labels.*.name, fromJson('["Health", "FE-With QA"]'))
         run: |
           gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
 
