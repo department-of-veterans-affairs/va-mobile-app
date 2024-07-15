@@ -1,5 +1,7 @@
 import { enableAF, verifyAF } from './utils'
 
+var AFValue = process.argv[7]
+
 const AFNavigationNoIndividual = [
   ['ChildTemplate', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
   ['FeatureLandingTemplate', 'WG_PersonalInformation', 'Profile', 'Personal information'],
