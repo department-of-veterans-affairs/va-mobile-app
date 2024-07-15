@@ -1,6 +1,5 @@
 import { enableAF, verifyAF } from './utils'
 
-fc
 const AFNavigationNoIndividual = [
   ['ChildTemplate', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
   ['FeatureLandingTemplate', 'WG_PersonalInformation', 'Profile', 'Personal information'],
