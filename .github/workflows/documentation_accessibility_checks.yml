@@ -63,7 +63,6 @@ jobs:
           done
       
           echo "Total Accessibility issues detected: $total_issues"
-
           # Set output for number of issues
           echo "num_issues=$total_issues" >> $GITHUB_OUTPUT
 
