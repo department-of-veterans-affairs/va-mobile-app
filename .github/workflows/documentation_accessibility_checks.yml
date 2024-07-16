@@ -41,7 +41,7 @@ jobs:
         working-directory: VAMobile/documentation
         run: |
           npm start &
-          npx wait-on http://localhost:3000 --timeout 120000 
+          npx wait-on http://localhost:3000 --timeout 300000 
           
       - name: Check accessibility issues
         id: accessibility_check
