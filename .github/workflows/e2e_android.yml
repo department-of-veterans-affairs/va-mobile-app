@@ -252,9 +252,9 @@ jobs:
           name: ${{matrix.testsuite}}-e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Inform Slack of Failure
+      - name: Inform Slack of Failurerun_e2e_tests
         id: post_failure
-        if: steps.run_e2e_tests.outcome == 'failure' && github.event_name == 'schedule'
+        if: steps..outcome == 'failure' && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -275,7 +275,7 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure() || steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
