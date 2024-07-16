@@ -184,7 +184,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     return (
       <Box>
         <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
-          {body?.trimStart()}
+          {fixSpecialCharacters(body || '').trimStart()}
         </TextView>
       </Box>
     )

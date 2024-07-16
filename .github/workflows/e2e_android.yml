@@ -275,7 +275,7 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure() && steps.run_e2e_tests.outcome == 'failure'
+        if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
