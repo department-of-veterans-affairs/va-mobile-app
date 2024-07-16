@@ -16,9 +16,9 @@ export const VALogo: FC<VALogoProps> = ({ testID }) => {
     height: 57,
   }
   if (theme.mode === 'dark') {
-    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_dark.png' }} />
+    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_dark' }} />
   } else {
-    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_light.png' }} />
+    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_light' }} />
   }
 }
 
