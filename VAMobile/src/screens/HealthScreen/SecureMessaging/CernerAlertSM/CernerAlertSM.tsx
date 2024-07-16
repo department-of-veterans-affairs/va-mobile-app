@@ -67,7 +67,7 @@ function CernerAlertSM() {
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {intro}
         </TextView>
-        {hasMultipleFacilities && <VABulletList listOfText={bullets} />}
+        {hasMultipleFacilities && <VABulletList listOfText={bullets} paragraphSpacing={true} />}
         <TextView variant="MobileBody" accessibilityLabel={outroA11y} paragraphSpacing={true}>
           {outro}
         </TextView>

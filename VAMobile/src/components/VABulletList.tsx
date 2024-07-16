@@ -51,7 +51,7 @@ export type VABulletListProps = {
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) => {
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
 

@@ -45,7 +45,7 @@ function PrescriptionHelp({}: PrescriptionHelpProps) {
         <TextView mt={condensedMarginBetween} variant="MobileBody" paragraphSpacing={true}>
           {t('prescription.help.listHeader')}
         </TextView>
-        <VABulletList listOfText={medicationNoIncludedList} />
+        <VABulletList listOfText={medicationNoIncludedList} paragraphSpacing={true} />
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.help.footer'))}>
           {t('prescription.help.footer')}
         </TextView>
