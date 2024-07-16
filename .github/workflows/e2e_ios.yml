@@ -212,13 +212,6 @@ jobs:
             name: ${{matrix.testsuite}}-e2e-junit
             path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Upload e2e-junit
-        if: success()
-        uses: actions/upload-artifact@v4
-        with: 
-            name: detox-image_snapshot-${{matrix.testsuite}}
-            path: VAMobile/e2e/tests/__image_snapshots__
-
       - name: Inform Slack of Failure
         id: post_failure
         if: steps.run_e2e_tests.outcome == 'failure' && github.event_name == 'schedule'
