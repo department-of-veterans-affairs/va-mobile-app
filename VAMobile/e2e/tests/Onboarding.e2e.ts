@@ -31,7 +31,7 @@ describe('Onboarding Screen', () => {
   it('should tap next and show the manage your health care content', async () => {
     await element(by.text('Next')).tap()
     await expect(element(by.text('Manage your health care')))
-    await expect(element(by.text('Use our health care tools to manage tasks like these:'))).toExist()
+    await expect(element(by.text('Use our health care tool to manage tasks like these:'))).toExist()
     await expect(element(by.text('Refill your prescriptions'))).toExist()
     await expect(element(by.text('Communicate with your health care team'))).toExist()
     await expect(element(by.text('Review your appointments'))).toExist()
