@@ -44,7 +44,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   }
   const dispatch = useAppDispatch()
 
-  useOnResumeForeground(() => {
+  const fetchPreferences = () => {
     if (deviceToken) {
       dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
     } else {
@@ -56,7 +56,9 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       })
       Notifications.registerRemoteNotifications()
     }
-  })
+  }
+
+  useOnResumeForeground(fetchPreferences)
 
   useEffect(() => {
     if (screenContentAllowed('WG_NotificationsSettings')) {
@@ -96,7 +98,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
       ) : hasError || !preferences.length ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} onTryAgain={fetchPreferences} />
       ) : (
         <Box mb={contentMarginBottom}>
           {systemNotificationsOn ? (

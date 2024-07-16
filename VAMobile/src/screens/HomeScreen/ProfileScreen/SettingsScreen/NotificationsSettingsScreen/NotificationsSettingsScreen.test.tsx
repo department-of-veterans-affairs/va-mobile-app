@@ -98,6 +98,13 @@ context('NotificationsSettingsScreen', () => {
     })
   })
 
+  it("renders error component when preferences can't be loaded", () => {
+    renderWithProps(false, false, [])
+    expect(
+      screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later."),
+    ).toBeTruthy()
+  })
+
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
