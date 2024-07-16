@@ -93,10 +93,10 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('notifications.title')}>
-      {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
-      ) : loadingCheck ? (
+      {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
+      ) : hasError || !preferences.length ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
       ) : (
         <Box mb={contentMarginBottom}>
           {systemNotificationsOn ? (
