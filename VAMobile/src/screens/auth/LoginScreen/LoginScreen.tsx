@@ -120,7 +120,7 @@ function LoginScreen() {
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
           testID="va-icon">
-          <VALogo />
+          <VALogo testID="VALogo" />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <Button onPress={onLoginInit} label={t('signin')} />

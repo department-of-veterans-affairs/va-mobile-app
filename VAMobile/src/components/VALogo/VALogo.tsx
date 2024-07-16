@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Image, ImageProps } from 'react-native'
 
 import { useTheme } from 'utils/hooks'
 
-export const VALogo = () => {
+export type VALogoProps = {
+  /** Optional TestID */
+  testID?: string
+}
+
+export const VALogo: FC<VALogoProps> = ({ testID }) => {
   const theme = useTheme()
 
   const logoProps: ImageProps = {
@@ -11,9 +16,9 @@ export const VALogo = () => {
     height: 57,
   }
   if (theme.mode === 'dark') {
-    return <Image style={logoProps} source={{ uri: 'va_on_dark.png' }} />
+    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_dark.png' }} />
   } else {
-    return <Image style={logoProps} source={{ uri: 'va_on_light.png' }} />
+    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_light.png' }} />
   }
 }
 
