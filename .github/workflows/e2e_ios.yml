@@ -216,7 +216,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with: 
-            name: detox-image_snapshot-${{ runner.os }}-${{ github.run_id }}
+            name: detox-image_snapshot-${{matrix.testsuite}}
             path: VAMobile/e2e/tests/__image_snapshots__
 
       - name: Inform Slack of Failure
