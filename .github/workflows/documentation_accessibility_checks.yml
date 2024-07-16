@@ -39,7 +39,9 @@ jobs:
           yarn build
       - name: Start web server
         working-directory: VAMobile/documentation
-        run: npm start & npx wait-on http://localhost:3000 & 
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 120000 
           
       - name: Check accessibility issues
         id: accessibility_check
