@@ -56,11 +56,16 @@ jobs:
             else
               echo "Accessibility issues found in $url"
               echo "$url" >> accessibility_issues.txt
-              num_issues=$((num_issues+1))
+             
+              # Extract number of issues from axe output
+              issues=$(axe "$url" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+              if [ -n "$issues" ]; then
+                num_issues=$((num_issues + issues))
+              fi  
             fi
           done
       
-          echo "Accessibility issues detected: $num_issues"
+          echo "Total Accessibility issues detected: $num_issues"
 
           # Set output for number of issues
           echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
