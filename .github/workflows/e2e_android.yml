@@ -254,7 +254,7 @@ jobs:
 
       - name: Inform Slack of Failurerun_e2e_tests
         id: post_failure
-        if: steps..outcome == 'failure' && github.event_name == 'schedule'
+        if: steps.outcome == 'failure' && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
