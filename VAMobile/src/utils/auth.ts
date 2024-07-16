@@ -26,6 +26,9 @@ import getEnv from 'utils/env'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
 import { isAndroid } from './platform'
 
+export const NEW_SESSION = '@store_new_session'
+export const FIRST_TIME_LOGIN = '@store_first_time_login'
+
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
@@ -352,6 +355,7 @@ const startBiometricsLogin = async (queryClient: QueryClient, refreshAccessToken
     return
   }
   await logAnalyticsEvent(Events.vama_login_start(true, true))
+  AsyncStorage.setItem(NEW_SESSION, 'true')
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
