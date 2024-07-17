@@ -1,34 +1,38 @@
-const { AxeBuilder } = require('@axe-core/webdriverjs')
-const { Builder } = require('selenium-webdriver')
-const chrome = require('selenium-webdriver/chrome')
-require('chromedriver')
+const AxeBuilder = require('@axe-core/webdriverjs');
+const { Builder } = require('selenium-webdriver');
+require('chromedriver');
 
-;(async function runAxe() {
-  const options = new chrome.Options()
-
-  // Add your desired Chrome options here
-  options.addArguments('--no-sandbox')
-  options.addArguments('--disable-setuid-sandbox')
-  options.addArguments('--disable-dev-shm-usage')
-  options.addArguments('--disable-gpu')
-  options.addArguments('--window-size=1920,1080')
-
-  const driver = new Builder().forBrowser('chrome').setChromeOptions(options).build()
+async function runAxe(url) {
+  let driver = await new Builder()
+    .forBrowser('chrome')
+    .setChromeOptions(new (require('selenium-webdriver/chrome').Options)()
+      .headless()
+      .addArguments('--no-sandbox')
+      .addArguments('--disable-dev-shm-usage')
+      .addArguments('--disable-gpu')
+      .addArguments('--disable-setuid-sandbox')
+      .addArguments('--window-size=1920,1080')
+      .addArguments('--ignore-certificate-errors')
+      .addArguments('--ignore-ssl-errors')
+      .addArguments('--disable-software-rasterizer')
+      .addArguments('--log-level=3'))
+    .build();
 
   try {
-    const url = process.argv[2]
-    await driver.get(url)
+    await driver.get(url);
 
-    const results = await new AxeBuilder(driver).analyze()
-    console.log(JSON.stringify(results, null, 2))
+    let results = await new AxeBuilder(driver).analyze();
+    let issueCount = results.violations.length;
+    console.log(`${issueCount} Accessibility issues detected`);
 
-    // Output the number of accessibility issues
-    const numIssues = results.violations.reduce((sum, violation) => sum + violation.nodes.length, 0)
-    console.log(`Number of accessibility issues found in ${url}: ${numIssues}`)
-
-    // Return the number of issues found
-    process.exit(numIssues)
+    return issueCount;
+  } catch (err) {
+    console.error('Error running Axe:', err);
+    return -1;
   } finally {
-    await driver.quit()
+    await driver.quit();
   }
-})()
+}
+
+const url = process.argv[2];
+runAxe(url).then(issueCount => process.exit(issueCount > 0 ? 1 : 0));
