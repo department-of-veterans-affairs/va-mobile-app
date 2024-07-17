@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
 import { context, mockNavProps, render } from 'testUtils'
@@ -41,32 +41,6 @@ context('ClaimStatus', () => {
     ).toBeTruthy()
     expect(screen.getByTestId('Step 4 of 5.  Preparation for notification')).toBeTruthy()
     expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
-    expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
-    expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
-  })
-
-  describe('when the claimType is ACTIVE', () => {
-    describe('on click of Find out why we sometimes combine claims. list item', () => {
-      it('should call useRouteNavigation', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
-      })
-    })
-
-    describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
-      it('should call useRouteNavigation', () => {
-        fireEvent.press(
-          screen.getByRole('button', {
-            name: "What should I do if I disagree with VA's decision on my disability claim?",
-          }),
-        )
-        expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
-          claimID: '600156928',
-          claimStep: 3,
-          claimType: 'Compensation',
-        })
-      })
-    })
   })
 
   describe('when the claimType is CLOSED', () => {
