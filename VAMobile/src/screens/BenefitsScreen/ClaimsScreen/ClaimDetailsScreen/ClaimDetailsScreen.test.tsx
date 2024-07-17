@@ -150,7 +150,7 @@ context('ClaimDetailsScreen', () => {
           ...claimData,
         })
         await waitFor(() =>
-          fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' })),
+          fireEvent.press(screen.getByRole('button', { name: 'Find out why we sometimes combine claims' })),
         )
         await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote'))
       })
