@@ -116,7 +116,7 @@ function SyncScreen({}: SyncScreenProps) {
           <TextView
             variant={'MobileBody'}
             justifyContent={'center'}
-            color={'primaryContrast'}
+            color={'primary'}
             alignItems={'center'}
             textAlign={'center'}
             mt={theme.dimensions.standardMarginBetween}>
