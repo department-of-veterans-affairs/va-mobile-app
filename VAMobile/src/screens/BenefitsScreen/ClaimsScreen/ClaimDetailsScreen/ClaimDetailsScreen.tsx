@@ -60,8 +60,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
-
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
     if (loadingClaim) {
