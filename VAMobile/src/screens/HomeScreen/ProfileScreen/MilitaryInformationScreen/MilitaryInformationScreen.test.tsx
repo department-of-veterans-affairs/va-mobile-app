@@ -122,8 +122,9 @@ context('MilitaryInformationScreen', () => {
     await waitFor(() => expect(screen.getByText('United States Marine Corps')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy(),
+      expect(
+        screen.getByRole('link', { name: "What if my military service information doesn't look right?" }),
+      ).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link')).toBeTruthy())
   })
 })
