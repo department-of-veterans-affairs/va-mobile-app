@@ -76,7 +76,6 @@ jobs:
 
   start_slack_thread:
     name: Start Slack thread
-    if: ${{ failure() }}
     needs: axe-scan
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
