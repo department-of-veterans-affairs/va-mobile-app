@@ -74,6 +74,7 @@ jobs:
           else
             echo "No accessibility issues were found."
           fi
+          
   start_slack_thread:
     name: Start Slack thread
     needs: axe-scan

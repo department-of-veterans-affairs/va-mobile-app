@@ -1,21 +1,24 @@
 const AxeBuilder = require('@axe-core/webdriverjs');
 const { Builder } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 require('chromedriver');
 
 async function runAxe(url) {
+  let options = new chrome.Options();
+  options.addArguments('--headless');
+  options.addArguments('--no-sandbox');
+  options.addArguments('--disable-dev-shm-usage');
+  options.addArguments('--disable-gpu');
+  options.addArguments('--disable-setuid-sandbox');
+  options.addArguments('--window-size=1920,1080');
+  options.addArguments('--ignore-certificate-errors');
+  options.addArguments('--ignore-ssl-errors');
+  options.addArguments('--disable-software-rasterizer');
+  options.addArguments('--log-level=3');
+
   let driver = await new Builder()
     .forBrowser('chrome')
-    .setChromeOptions(new (require('selenium-webdriver/chrome').Options)()
-      .headless()
-      .addArguments('--no-sandbox')
-      .addArguments('--disable-dev-shm-usage')
-      .addArguments('--disable-gpu')
-      .addArguments('--disable-setuid-sandbox')
-      .addArguments('--window-size=1920,1080')
-      .addArguments('--ignore-certificate-errors')
-      .addArguments('--ignore-ssl-errors')
-      .addArguments('--disable-software-rasterizer')
-      .addArguments('--log-level=3'))
+    .setChromeOptions(options)
     .build();
 
   try {
