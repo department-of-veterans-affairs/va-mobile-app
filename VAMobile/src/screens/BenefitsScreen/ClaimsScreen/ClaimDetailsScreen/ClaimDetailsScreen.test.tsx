@@ -138,7 +138,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('when the claimType is ACTIVE or closed', () => {
     describe('Active on click of Find out why we sometimes combine claims.', () => {
-      it('should call useRouteNavigation', () => {
+      it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
           .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({
@@ -149,13 +149,15 @@ context('ClaimDetailsScreen', () => {
         renderWithData('Active', {
           ...claimData,
         })
-        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
+        await waitFor(() =>
+          fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' })),
+        )
+        await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote'))
       })
     })
 
     describe('Closed on click of WhatDoIDoIfDisagreement', () => {
-      it('should call useRouteNavigation', () => {
+      it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
           .calledWith(`/v0/claim/0`, {}, expect.anything())
           .mockResolvedValue({
@@ -166,16 +168,20 @@ context('ClaimDetailsScreen', () => {
         renderWithData('Closed', {
           ...claimData,
         })
-        fireEvent.press(
-          screen.getByRole('button', {
-            name: "What should I do if I disagree with VA's decision on my disability claim?",
+        await waitFor(() =>
+          fireEvent.press(
+            screen.getByRole('button', {
+              name: "What should I do if I disagree with VA's decision on my disability claim?",
+            }),
+          ),
+        )
+        await waitFor(() =>
+          expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
+            claimID: '600156928',
+            claimStep: 3,
+            claimType: 'Compensation',
           }),
         )
-        expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
-          claimID: '600156928',
-          claimStep: 3,
-          claimType: 'Compensation',
-        })
       })
     })
   })
