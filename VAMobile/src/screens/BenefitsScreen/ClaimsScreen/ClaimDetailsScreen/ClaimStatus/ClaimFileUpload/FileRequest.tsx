@@ -109,10 +109,10 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"
-            accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
+            accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequestVA', { count }))}
             mb={condensedMarginBetween}
             mx={gutter}>
-            {t('claimPhase.youHaveFileRequest', { count })}
+            {t('claimPhase.youHaveFileRequestVA', { count })}
           </TextView>
           <Box>
             <SimpleList items={getRequests()} />

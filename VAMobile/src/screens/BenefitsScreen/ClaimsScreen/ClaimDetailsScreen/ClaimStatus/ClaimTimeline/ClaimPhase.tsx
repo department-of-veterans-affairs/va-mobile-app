@@ -109,7 +109,7 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   const detailsText = t(`claimPhase.details.phase${phase}`)
   const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phase1')) : detailsText
-  const youHaveFileRequestsText = t('claimPhase.youHaveFileRequest', { count })
+  const youHaveFileRequestsText = t('claimPhase.youHaveFileRequestVA', { count })
 
   const accordionPress = (isExpanded: boolean | undefined) => {
     logAnalyticsEvent(

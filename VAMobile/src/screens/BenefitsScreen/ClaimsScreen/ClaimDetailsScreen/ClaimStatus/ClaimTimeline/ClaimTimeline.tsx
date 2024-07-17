@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimPhase from './ClaimPhase'
 
@@ -35,12 +36,12 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
 
   return (
     <Box>
-      {itemsNeededFromVet && !attributes.waiverSubmitted && (
+      {itemsNeededFromVet && !attributes.waiverSubmitted && !featureEnabled('claimPhaseExpansion') && (
         <Box my={theme.dimensions.standardMarginBetween}>
           <AlertBox
             border={'warning'}
-            titleA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
-            title={t('claimPhase.youHaveFileRequest', { count })}
+            titleA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequestVA', { count }))}
+            title={t('claimPhase.youHaveFileRequestVA', { count })}
           />
         </Box>
       )}

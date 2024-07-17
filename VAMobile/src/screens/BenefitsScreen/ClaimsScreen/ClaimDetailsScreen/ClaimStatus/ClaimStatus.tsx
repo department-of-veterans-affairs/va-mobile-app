@@ -6,11 +6,10 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimData } from 'api/types'
-import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation } from 'utils/hooks'
@@ -41,43 +40,23 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
-    const whyWeCombineOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_why_combine(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      navigateTo('ConsolidatedClaimsNote')
-    }
-
-    const whatShouldOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      navigateTo('WhatDoIDoIfDisagreement', {
-        claimID: claim.id,
-        claimType: claim.attributes.claimType,
-        claimStep: claim.attributes.phase,
-      })
-    }
-
     if (isActiveClaim) {
-      const detailsFAQListItems: Array<SimpleListItemObj> = [
-        {
-          text: t('claimDetails.whyWeCombine'),
-          onPress: whyWeCombineOnPress,
-          testId: a11yLabelVA(t('claimDetails.whyWeCombine')),
-        },
-        {
-          text: t('claimDetails.whatShouldIDoIfDisagree'),
-          onPress: whatShouldOnPress,
-          testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')),
-        },
-      ]
-
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
         <Box>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
-          <Box>
-            <SimpleList items={detailsFAQListItems} />
-          </Box>
+          <TextArea>
+            <TextView variant="MobileBodyBold">{t('claimDetails.whatYouHaveClaimed')}</TextView>
+            {claim.attributes.contentionList && claim.attributes.contentionList.length > 0 ? (
+              <VABulletList listOfText={claim.attributes.contentionList} />
+            ) : (
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('noneNoted')}
+              </TextView>
+            )}
+          </TextArea>
         </Box>
       )
     }
