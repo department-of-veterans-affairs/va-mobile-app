@@ -5,6 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
+import { ClaimTypeConstants } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -25,7 +26,7 @@ jest.mock('utils/remoteConfig')
 when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (claimType = 'Active', claim?: Partial<ClaimData>): void => {
+  const renderWithData = (claimType = ClaimTypeConstants.ACTIVE, claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -68,7 +69,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData('Active', {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() =>
@@ -84,7 +85,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData('Active', {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -103,7 +104,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData('Active', {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
@@ -127,7 +128,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData('Active', {
+      renderWithData(ClaimTypeConstants.ACTIVE, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -146,7 +147,7 @@ context('ClaimDetailsScreen', () => {
               ...claimData,
             },
           })
-        renderWithData('Active', {
+        renderWithData(ClaimTypeConstants.ACTIVE, {
           ...claimData,
         })
         await waitFor(() =>
@@ -165,7 +166,7 @@ context('ClaimDetailsScreen', () => {
               ...claimData,
             },
           })
-        renderWithData('Closed', {
+        renderWithData(ClaimTypeConstants.CLOSED, {
           ...claimData,
         })
         await waitFor(() =>
