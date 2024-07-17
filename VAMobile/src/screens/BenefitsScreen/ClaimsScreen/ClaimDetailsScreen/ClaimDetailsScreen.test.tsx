@@ -11,8 +11,17 @@ import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testU
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (claim?: Partial<ClaimData>): void => {
+  const renderWithData = (claimType = 'Active', claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -33,7 +42,7 @@ context('ClaimDetailsScreen', () => {
         setOptions: jest.fn(),
         goBack: jest.fn(),
       },
-      { params: { claimID: '0', claimType: 'ACTIVE' } },
+      { params: { claimID: '0', claimType: claimType } },
     )
 
     render(<ClaimDetailsScreen {...props} />, { queriesData })
@@ -55,7 +64,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData('Active', {
         ...claimData,
       })
       await waitFor(() =>
@@ -71,7 +80,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData('Active', {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -90,7 +99,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData('Active', {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
@@ -114,12 +123,56 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData('Active', {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+    })
+  })
+
+  describe('when the claimType is ACTIVE', () => {
+    describe('on click of Find out why we sometimes combine claims. list item', () => {
+      it('should call useRouteNavigation', () => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
+          .mockResolvedValue({
+            data: {
+              ...claimData,
+            },
+          })
+        renderWithData('Active', {
+          ...claimData,
+        })
+        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
+      })
+    })
+
+    describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
+      it('should call useRouteNavigation', () => {
+        when(api.get as jest.Mock)
+          .calledWith(`/v0/claim/0`, {}, expect.anything())
+          .mockResolvedValue({
+            data: {
+              ...claimData,
+            },
+          })
+        renderWithData('Closed', {
+          ...claimData,
+        })
+        fireEvent.press(
+          screen.getByRole('button', {
+            name: "What should I do if I disagree with VA's decision on my disability claim?",
+          }),
+        )
+        expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
+          claimID: '600156928',
+          claimStep: 3,
+          claimType: 'Compensation',
+        })
+      })
     })
   })
 
