@@ -31,7 +31,7 @@ context('ClaimDetailsScreen', () => {
     if (claim) {
       queriesData = [
         {
-          queryKey: [claimsAndAppealsKeys.claim, '0'],
+          queryKey: [claimsAndAppealsKeys.claim, '600156928'],
           data: {
             ...claim,
           },
@@ -47,7 +47,7 @@ context('ClaimDetailsScreen', () => {
         setOptions: jest.fn(),
         goBack: jest.fn(),
       },
-      { params: { claimID: '0', claimType: claimType } },
+      { params: { claimID: '600156928', claimType: claimType } },
     )
 
     render(<ClaimDetailsScreen {...props} />, { queriesData })
@@ -63,7 +63,7 @@ context('ClaimDetailsScreen', () => {
   describe('when the selected tab is status', () => {
     it('should display the ClaimStatus component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockResolvedValue({
           data: {
             ...claimData,
@@ -79,7 +79,7 @@ context('ClaimDetailsScreen', () => {
 
     it('should display the ClaimDetails component', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockResolvedValue({
           data: {
             ...claimData,
@@ -98,7 +98,7 @@ context('ClaimDetailsScreen', () => {
   describe('need help section', () => {
     it('should always display on claim status tab', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockResolvedValue({
           data: {
             ...claimData,
@@ -122,7 +122,7 @@ context('ClaimDetailsScreen', () => {
 
     it('should display on claim details, to be renamed files tab', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockResolvedValue({
           data: {
             ...claimData,
@@ -141,7 +141,7 @@ context('ClaimDetailsScreen', () => {
     describe('Active on click of Find out why we sometimes combine claims.', () => {
       it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`, {}, expect.anything())
+          .calledWith(`/v0/claim/600156928`, {}, expect.anything())
           .mockResolvedValue({
             data: {
               ...claimData,
@@ -160,7 +160,7 @@ context('ClaimDetailsScreen', () => {
     describe('Closed on click of WhatDoIDoIfDisagreement', () => {
       it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/0`, {}, expect.anything())
+          .calledWith(`/v0/claim/600156928`, {}, expect.anything())
           .mockResolvedValue({
             data: {
               ...claimData,
@@ -190,7 +190,7 @@ context('ClaimDetailsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData()
