@@ -4,6 +4,7 @@ import { Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -24,7 +25,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
+import { DEVICE_ENDPOINT_SID, NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -44,8 +45,9 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   }
   const dispatch = useAppDispatch()
 
-  const fetchPreferences = () => {
-    if (deviceToken) {
+  const fetchPreferences = async () => {
+    const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+    if (endpoint_sid && deviceToken) {
       dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
     } else {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -97,7 +99,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       title={t('notifications.title')}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
-      ) : hasError || !preferences.length ? (
+      ) : hasError || (systemNotificationsOn && !preferences.length) ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} onTryAgain={fetchPreferences} />
       ) : (
         <Box mb={contentMarginBottom}>
