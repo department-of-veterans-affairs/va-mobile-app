@@ -138,6 +138,20 @@ context('ClaimDetailsScreen', () => {
   })
 
   describe('when the claimType is ACTIVE or closed', () => {
+    it('Active should have file request alert and what you claimed sections', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData(ClaimTypeConstants.ACTIVE, {
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
+    })
+
     describe('Active on click of Find out why we sometimes combine claims.', () => {
       it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
@@ -157,6 +171,20 @@ context('ClaimDetailsScreen', () => {
       })
     })
 
+    it('Closed should have decision letter alert', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData(ClaimTypeConstants.CLOSED, {
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'Decision letter mailed' })).toBeTruthy())
+    })
+
     describe('Closed on click of WhatDoIDoIfDisagreement', () => {
       it('should call useRouteNavigation', async () => {
         when(api.get as jest.Mock)
@@ -170,11 +198,7 @@ context('ClaimDetailsScreen', () => {
           ...claimData,
         })
         await waitFor(() =>
-          fireEvent.press(
-            screen.getByRole('link', {
-              name: "What should I do if I disagree with VA's decision on my disability claim?",
-            }),
-          ),
+          fireEvent.press(screen.getByRole('link', { name: 'Learn what to do if you disagree with our decision' })),
         )
         await waitFor(() =>
           expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
