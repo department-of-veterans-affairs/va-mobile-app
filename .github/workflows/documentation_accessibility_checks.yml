@@ -44,6 +44,7 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
+          npm install @axe-core/webdriverjs
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
     
