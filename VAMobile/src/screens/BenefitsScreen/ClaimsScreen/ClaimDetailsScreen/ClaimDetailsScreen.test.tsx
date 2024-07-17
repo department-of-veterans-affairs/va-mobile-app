@@ -132,8 +132,8 @@ context('ClaimDetailsScreen', () => {
     })
   })
 
-  describe('when the claimType is ACTIVE', () => {
-    describe('on click of Find out why we sometimes combine claims. list item', () => {
+  describe('when the claimType is ACTIVE or closed', () => {
+    describe('Active on click of Find out why we sometimes combine claims.', () => {
       it('should call useRouteNavigation', () => {
         when(api.get as jest.Mock)
           .calledWith(`/v0/claim/0`, {}, expect.anything())
@@ -150,7 +150,7 @@ context('ClaimDetailsScreen', () => {
       })
     })
 
-    describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
+    describe('Closed on click of WhatDoIDoIfDisagreement', () => {
       it('should call useRouteNavigation', () => {
         when(api.get as jest.Mock)
           .calledWith(`/v0/claim/0`, {}, expect.anything())
