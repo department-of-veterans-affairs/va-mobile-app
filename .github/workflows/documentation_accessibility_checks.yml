@@ -22,7 +22,7 @@ jobs:
       - name: Clean npm cache
         run: npm cache clean --force
       - name: Install Axe CLI globally
-        run: npm install -g @axe-core/cli@latest @axe-core/webdriverjs selenium-webdriver chromedriver
+        run: npm install -g @axe-core/cli@latest
       - name: Update npm
         run: npm install -g npm@latest
       - uses: actions/setup-node@v3
@@ -44,7 +44,7 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
-          npm install @axe-core/webdriverjs
+          npm install @axe-core/webdriverjs selenium-webdriver chromedriver
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
     
