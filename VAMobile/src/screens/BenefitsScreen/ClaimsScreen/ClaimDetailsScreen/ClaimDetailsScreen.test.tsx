@@ -7,6 +7,7 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
@@ -19,6 +20,9 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimDetailsScreen', () => {
   const renderWithData = (claimType = 'Active', claim?: Partial<ClaimData>): void => {
