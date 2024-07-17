@@ -48,7 +48,9 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('claimDetails.whatYouHaveClaimed')}</TextView>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('claimDetails.whatYouHaveClaimed')}
+            </TextView>
             {claim.attributes.contentionList && claim.attributes.contentionList.length > 0 ? (
               <VABulletList listOfText={claim.attributes.contentionList} />
             ) : (

@@ -150,6 +150,7 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: "What you've claimed" })).toBeTruthy())
     })
 
     describe('Active on click of Find out why we sometimes combine claims.', () => {
