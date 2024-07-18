@@ -332,7 +332,11 @@ export function HomeScreen({}: HomeScreenProps) {
                 alignItems="center"
                 accessible={true}
                 accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                <VAIcon name={'CircleCheckMark'} fill={Colors.green} fill2={theme.colors.icon.transparent} />
+                <VAIcon
+                  name={'CircleCheckMark'}
+                  fill={Colors.vadsColorSuccessDark}
+                  fill2={theme.colors.icon.transparent}
+                />
                 <TextView
                   importantForAccessibility={'no'}
                   ml={theme.dimensions.condensedMarginBetween}

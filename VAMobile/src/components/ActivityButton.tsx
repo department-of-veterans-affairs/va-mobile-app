@@ -3,6 +3,7 @@ import { Linking, Platform, Pressable, ViewStyle } from 'react-native'
 
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
+import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
 import colors from '../styles/themes/VAColors'
 
@@ -45,11 +46,27 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     flexDirection: 'row',
   }
 
+  const onActivityPress = () => {
+    let useCaseOneString = ''
+    if (deepLink === 'appointments') {
+      useCaseOneString = 'Appointments'
+    } else if (deepLink === 'claims') {
+      useCaseOneString = 'ClaimsHistoryScreen'
+    } else if (deepLink === 'messages') {
+      useCaseOneString = 'SecureMessaging'
+    } else if (deepLink === 'prescriptions') {
+      useCaseOneString = 'PrescriptionHistory'
+    }
+    if (waygateNativeAlert(('WG_' + useCaseOneString) as WaygateToggleType)) {
+      Linking.openURL(`vamobile://${deepLink}`)
+    }
+  }
+
   return (
     <Box {...boxProps}>
       <Pressable
         style={pressableStyles}
-        onPress={() => Linking.openURL(`vamobile://${deepLink}`)}
+        onPress={onActivityPress}
         accessible={true}
         accessibilityRole={'link'}
         accessibilityLabel={title}

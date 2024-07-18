@@ -57,14 +57,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
           <Box flex={1}>
             <TextView variant="AnnouncementBannerTitle">{title}</TextView>
           </Box>
-          <Icon
-            width={24}
-            height={24}
-            preventScaling={true}
-            name={'ExternalLink'}
-            fill={theme.colors.icon.announcementBanner}
-            fill2={theme.colors.icon.transparent}
-          />
+          <Icon preventScaling={true} name={'Launch'} fill={theme.colors.icon.announcementBanner} />
         </Box>
       </Pressable>
     </Box>
