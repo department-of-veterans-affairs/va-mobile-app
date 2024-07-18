@@ -97,7 +97,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     return (
       <StyledPressable
         onPress={onPressCallback}
-        accessibilityRole="button"
+        accessibilityRole="link"
         {...testIdProps(translation(buttonText))}
         {...a11yHintProp(allyHint || '')}>
         <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto" selectable={false}>
@@ -122,7 +122,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     return (
       <StyledPressable
         onPress={onContinue}
-        accessibilityRole="button"
+        accessibilityRole="link"
         {...testIdProps(translation(buttonText))}
         {...a11yHintProp(allyHint || '')}>
         <TextView

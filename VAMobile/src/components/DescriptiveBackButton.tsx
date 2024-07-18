@@ -37,7 +37,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
     <TouchableWithoutFeedback
       ref={focusRef}
       onPress={onPress}
-      accessibilityRole="button"
+      accessibilityRole="link"
       accessibilityLabel={labelA11y ? labelA11y : label}>
       <Box
         display="flex"

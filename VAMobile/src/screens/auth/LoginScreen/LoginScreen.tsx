@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
@@ -89,6 +89,11 @@ function LoginScreen() {
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
