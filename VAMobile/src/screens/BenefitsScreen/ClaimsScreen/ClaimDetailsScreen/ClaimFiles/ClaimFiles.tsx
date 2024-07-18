@@ -46,8 +46,10 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
     )
   }
   return (
-    <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
-      <TextView>{t('claimDetails.noFiles')}</TextView>
+    <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
+        {t('claimDetails.noFiles')}
+      </TextView>
     </Box>
   )
 }
