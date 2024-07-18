@@ -142,9 +142,9 @@ jobs:
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
             select(contains(["CrisisLineButton"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteransCrisisLine"] |
-            select(contains(["ActivityButton.tsx"])) += ["HomeScreen", "Prescriptions", "Appointments", "AppointmentsExpanded", "Claims", "Appeals", "AppealsExpanded", "DecisionLetters"] |
-            select(contains(["LinkRow.tsx"])) += ["MilitaryInformation", "VeteranStatusCard"] |
-            select(contains(["Screens.ts"]) or contains(["BasicError"]) or contains(["LoadingComponent"]) or contains(["Box"]) or contains(["HeaderTitle"]) or contains(["LargeNaveButton"]) 
+            select(contains(["ActivityButton.tsx"])) += ["HomeScreen", "Prescriptions", "Appointments", "Claims", "Appeals", "DecisionLetters"] |
+            select(contains(["LinkRow.tsx"])) += ["HomeScreen"] |
+            select(contains(["Screens.ts"]) or contains(["BasicError"]) or contains(["LoadingComponent"]) or contains(["Box"]) or contains(["HeaderTitle"]) or contains(["LargeNavButton"]) 
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique ')
