@@ -111,7 +111,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData(false, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
@@ -135,7 +135,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData({
+      renderWithData(false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
