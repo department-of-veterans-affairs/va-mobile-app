@@ -99,7 +99,7 @@ context('NotificationsSettingsScreen', () => {
   })
 
   it("renders error component when preferences can't be loaded", () => {
-    renderWithProps(false, false, [])
+    renderWithProps(false, true, [])
     expect(
       screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later."),
     ).toBeTruthy()
