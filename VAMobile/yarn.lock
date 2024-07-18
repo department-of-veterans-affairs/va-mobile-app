@@ -9269,10 +9269,10 @@ react-native-shadow-2@^7.1.0:
   dependencies:
     colord "2.9.2"
 
-react-native-svg-transformer@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg-transformer/-/react-native-svg-transformer-1.4.0.tgz#d17502d3659cfe58780ca28cb13b353cb68bbd76"
-  integrity sha512-ZJ9dpSl8EONXbFQcVoGVr0cAl/7Vm/sKtOH1V6Mf9lcdyeT1/rfww43xgSfQWjmneTNTTXjslM5EoyZTHPfawQ==
+react-native-svg-transformer@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg-transformer/-/react-native-svg-transformer-1.5.0.tgz#75ae4dbdc4b1a1508e75282d54d66900ee5fe3c2"
+  integrity sha512-RG5fSWJT7mjCQYocgYFUo1KYPLOoypPVG5LQab+pZZO7m4ciGaQIe0mhok3W4R5jLQsEXKo0u+aQGkZV/bZG7w==
   dependencies:
     "@svgr/core" "^8.1.0"
     "@svgr/plugin-jsx" "^8.1.0"
