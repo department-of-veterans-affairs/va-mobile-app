@@ -39,42 +39,49 @@ jobs:
           yarn build
       - name: Start web server
         working-directory: VAMobile/documentation
-        run: npm start & npx wait-on http://localhost:3000 &
+        run: |
+          yarn build
+          yarn serve &
+          npx wait-on http://localhost:3000 &
 
       - name: Check accessibility issues
         id: accessibility_check
         run: |
-          npm install @axe-core/webdriverjs selenium-webdriver chromedriver
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
     
           # Counter for the number of accessibility issues detected
-          total_issues=0
+          num_issues=0
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            issue_count=$(node axe-scan.js "$url")
-            if [ $? -ne 0 ]; then
-              echo "Accessibility issues found in $url: $issue_count"
-              echo "$url" >> accessibility_issues.txt
-              total_issues=$((total_issues + issue_count))
-            else
+            if axe --chrome-options="no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage" "$url" --exit; then
               echo "No accessibility issues found in $url"
+            else
+              echo "Accessibility issues found in $url"
+              echo "$url" >> accessibility_issues.txt
+
+              # Extract number of issues from axe output
+              issues=$(axe --chrome-options="no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage" "$url" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+              if [ -n "$issues" ]; then
+                num_issues=$((num_issues + issues))
+              fi
             fi
           done
+
       
-          echo "Total Accessibility issues detected: $total_issues"
+          echo "Total Accessibility issues detected: $num_issues"
           # Set output for number of issues
-          echo "num_issues=$total_issues" >> $GITHUB_OUTPUT
+          echo "num_issues=$num_issues" >> $GITHUB_OUTPUT
 
           # Fail the workflow if accessibility issues are detected
-          if [ "$total_issues" -gt 0 ]; then
+          if [ "$num_issues" -gt 0 ]; then
             echo "Accessibility issues were detected."    
             exit 1
           else
             echo "No accessibility issues were found."
           fi
-          
+
   start_slack_thread:
     name: Start Slack thread
     needs: axe-scan
