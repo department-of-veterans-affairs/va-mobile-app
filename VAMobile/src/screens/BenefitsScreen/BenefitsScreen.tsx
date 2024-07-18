@@ -92,6 +92,7 @@ export function BenefitsScreen({}: BenefitsScreenProps) {
   )
 }
 
+console.log('Test')
 const BenefitsScreenStack = createStackNavigator<BenefitsStackParamList>()
 
 /**
