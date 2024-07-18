@@ -536,6 +536,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "claimTypeCode": "010LCOMP",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -3771,7 +3772,6 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
-        "claimTypeCode": "010LCOMP",
         "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
