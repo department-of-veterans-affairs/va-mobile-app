@@ -1,19 +1,22 @@
-const { defaults: tsjPreset } = require('ts-jest/presets')
-
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  ...tsjPreset,
   preset: 'react-native',
   roots: ['<rootDir>/src'],
-  reporters: ['default', ["jest-junit", {
-    suiteName: "vamobile",
-    outputName: "junit-vamobile.xml",
-    suiteNameTemplate: "vamobile.\"{title}\"",
-    classNameTemplate: "vamobile.\"{classname}\"",
-    outputDirectory: "./coverage/junit",
-    addFileAttribute: "true"
-  }]],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        suiteName: 'vamobile',
+        outputName: 'junit-vamobile.xml',
+        suiteNameTemplate: 'vamobile."{title}"',
+        classNameTemplate: 'vamobile."{classname}"',
+        outputDirectory: './coverage/junit',
+        addFileAttribute: 'true',
+      },
+    ],
+  ],
   transform: {
-    ...tsjPreset.transform,
     '^.+\\.tsx?$': [
       'ts-jest',
       {

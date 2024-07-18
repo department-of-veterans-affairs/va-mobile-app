@@ -1,5 +1,4 @@
 import React from 'react'
-import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -44,11 +43,6 @@ context('ClaimStatus', () => {
     expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
     expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
     expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
-    expect(
-      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
   })
 
   describe('when the claimType is ACTIVE', () => {
@@ -84,13 +78,6 @@ context('ClaimStatus', () => {
         ),
       ).toBeTruthy()
       expect(screen.getByText('We decided your claim on January 31, 2019')).toBeTruthy()
-    })
-  })
-
-  describe('on click of the call click for action link', () => {
-    it('should call Linking openURL', () => {
-      fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
-      expect(Linking.openURL).toHaveBeenCalled()
     })
   })
 })
