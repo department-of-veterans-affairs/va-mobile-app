@@ -1,8 +1,8 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
-import { authKeys } from 'api/auth/queryKeys'
-import { AuthorizedServicesPayload, UserAuthSettings, UserAuthorizedServicesData } from 'api/types'
+import { useAuthSettings } from 'api/auth/getAuthSettings'
+import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types'
 import { get } from 'store/api'
 
 import { authorizedServicesKeys } from './queryKeys'
@@ -19,13 +19,12 @@ export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesDat
  * Returns a query for user demographics
  */
 export const useAuthorizedServices = (options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient()
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
+  const authSettingsQuery = useAuthSettings()
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,
-    enabled: !!(userSettings.loggedIn && queryEnabled),
+    enabled: !!(authSettingsQuery.data?.loggedIn && queryEnabled),
     queryKey: authorizedServicesKeys.authorizedServices,
     queryFn: () => getAuthorizedServices(),
     meta: {
