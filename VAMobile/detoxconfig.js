@@ -1,8 +1,5 @@
-const { defaults: tsjPreset } = require('ts-jest/presets')
-
 /** @type {import('jest').Config} */
 module.exports = {
-  ...tsjPreset,
   preset: 'react-native',
   maxWorkers: 1,
   testEnvironment: './e2e/environment',
@@ -23,7 +20,6 @@ module.exports = {
   testTimeout: 400000,
   testRegex: '\\.e2e\\.ts$',
   transform: {
-    ...tsjPreset.transform,
     '^.+\\.tsx?$': [
       'ts-jest',
       {
