@@ -408,6 +408,7 @@
   "claimDetails.getClaimLetters": "Get claim letters",
   "claimDetails.needHelp": "Need help?",
   "claimDetails.noEstimatedDecisionDate": "Claim completion dates aren't available right now.",
+  "claimDetails.noFiles": "This claim doesn't have any files yet.",
   "claimDetails.receivedOn": "Received {{date}}",
   "claimDetails.reviewLocations": "Review locations",
   "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",

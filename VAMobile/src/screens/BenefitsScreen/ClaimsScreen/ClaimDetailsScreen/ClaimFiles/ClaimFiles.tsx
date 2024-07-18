@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import _ from 'underscore'
 
 import { ClaimData } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, TextLine } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { useTheme } from 'utils/hooks'
 
 type ClaimFilesProps = {
   claim: ClaimData
@@ -13,6 +14,7 @@ type ClaimFilesProps = {
 
 function ClaimFiles({ claim }: ClaimFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const { attributes } = claim
   const documents = attributes.eventsTimeline.filter((event) => event.filename && event.filename.length > 0)
   const files = (): Array<DefaultListItemObj> => {
@@ -35,9 +37,17 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
     })
     return items
   }
+  const filesList = files()
+  if (filesList.length > 0) {
+    return (
+      <Box>
+        <DefaultList items={files()} />
+      </Box>
+    )
+  }
   return (
-    <Box>
-      <DefaultList items={files()} />
+    <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
+      <TextView>{t('claimDetails.noFiles')}</TextView>
     </Box>
   )
 }
