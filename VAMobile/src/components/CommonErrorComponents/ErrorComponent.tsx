@@ -42,8 +42,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     }
 
     if (error && isErrorObject(error)) {
+      let custom
       const reactQueryErrorType = getCommonErrorFromAPIError(error, screenID)
-      const custom = error.json?.errors[0]
       switch (reactQueryErrorType) {
         case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
           return <NetworkConnectionError onTryAgain={tryAgain} />
@@ -78,10 +78,12 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             />
           )
         case CommonErrorTypesConstants.CUSTOM_ERROR:
+          custom = error.json?.errors[0]
           return (
             <CustomError titleText={custom?.title || ''} errorText={custom?.body || ''} callPhone={custom?.telephone} />
           )
         case CommonErrorTypesConstants.CUSTOM_ERROR_WITH_REFRESH:
+          custom = error.json?.errors[0]
           return (
             <CustomError
               onTryAgain={tryAgain}
