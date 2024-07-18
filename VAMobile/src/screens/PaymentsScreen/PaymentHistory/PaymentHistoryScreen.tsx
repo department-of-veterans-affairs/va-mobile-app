@@ -45,7 +45,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     isFetching: loading,
     error: hasError,
     refetch: refetchPayments,
-  } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
+  } = usePayments(yearPickerOption?.label, page)
   const noPayments = payments?.meta.availableYears?.length === 0
 
   type yearsDatePickerOption = {
