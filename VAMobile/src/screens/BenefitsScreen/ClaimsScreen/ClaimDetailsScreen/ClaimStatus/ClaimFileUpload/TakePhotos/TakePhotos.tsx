@@ -7,8 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
-import CollapsibleAlert from 'components/CollapsibleAlert'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
@@ -81,16 +80,13 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
       testID="takePhotosTestID">
       {!!error && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
+          <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
         </Box>
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert
-          border="informational"
-          headerText={t('fileUpload.accessibilityAlert.title')}
-          body={collapsibleContent}
-          a11yLabel={t('fileUpload.accessibilityAlert.title')}
-        />
+        <AlertWithHaptics variant="info" expandable={true} header={t('fileUpload.accessibilityAlert.title')}>
+          {collapsibleContent}
+        </AlertWithHaptics>
       </Box>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">

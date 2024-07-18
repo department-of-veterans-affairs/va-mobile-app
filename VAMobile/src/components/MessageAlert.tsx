@@ -2,7 +2,7 @@ import React, { FC, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { AlertBox, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -53,27 +53,23 @@ const MessageAlert: FC<MessageAlertProps> = ({
 
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox
-        border={'error'}
-        title={t('secureMessaging.formMessage.weNeedMoreInfo')}
-        text={text}
-        titleRole={'header'}
+      <AlertWithHaptics
+        variant="error"
+        header={t('secureMessaging.formMessage.weNeedMoreInfo')}
+        description={text}
         scrollViewRef={scrollViewRef}
         focusOnError={focusOnError}>
         <VABulletList listOfText={bulletedListOfText} />
-      </AlertBox>
+      </AlertWithHaptics>
     </Box>
   ) : replyTriageError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox
-        border={'error'}
-        title={t('secureMessaging.sendError.title')}
-        titleRole={'header'}
+      <AlertWithHaptics
+        variant="error"
+        header={t('secureMessaging.sendError.title')}
+        description={t('secureMessaging.reply.error.youCantSend')}
         scrollViewRef={scrollViewRef}
         focusOnError={focusOnError}>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.reply.error.youCantSend')}
-        </TextView>
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}
@@ -81,7 +77,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
         <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-      </AlertBox>
+      </AlertWithHaptics>
     </Box>
   ) : (
     <></>

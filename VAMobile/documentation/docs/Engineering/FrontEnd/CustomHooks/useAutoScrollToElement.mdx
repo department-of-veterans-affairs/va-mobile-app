@@ -34,7 +34,7 @@ return (
     </Box>
     {replyExpired && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
+        <AlertWithHaptics variant={'warning'} header={t('secureMessaging.reply.youCanNoLonger')} description={t('secureMessaging.reply.olderThan45Days')}>
             <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
                 label={t('secureMessaging.startNewMessage.new')}
@@ -42,7 +42,7 @@ return (
                 a11yHint={t('secureMessaging.startNewMessage.new.a11yHint')}
             />
             </Box>
-        </AlertBox>
+        </AlertWithHaptics>
         </Box>
     )}
     </VAScrollView>
@@ -50,4 +50,4 @@ return (
 </>
 )`
 
-<HooksInfo componentName="useAutoScrollToElement" example={exampleString}/>
+<HooksInfo componentName="useAutoScrollToElement" example={exampleString} />

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   BoxProps,
   ClickToCallPhoneNumber,
@@ -59,10 +59,10 @@ function PrescriptionHistoryNotAuthorized() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox
-          border={'warning'}
-          title={t('prescriptions.notAuthorized.warning')}
-          titleA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
+        <AlertWithHaptics
+          variant="warning"
+          header={t('prescriptions.notAuthorized.warning')}
+          headerA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
         />
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>

@@ -9,7 +9,7 @@ import { RootNavStackParamList } from 'App'
 import { checkIfRoutingNumberIsInvalid, useUpdateBankInfo } from 'api/directDeposit'
 import { AccountTypes, PaymentAccountData } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   CollapsibleView,
   FieldType,
@@ -248,22 +248,22 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
           <Box mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox
-                  scrollViewRef={scrollViewRef}
-                  title={t('editDirectDeposit.pleaseCheckDDInfo')}
-                  border="error"
+                <AlertWithHaptics
+                  variant="error"
+                  header={t('editDirectDeposit.pleaseCheckDDInfo')}
                   focusOnError={onSaveClicked}
+                  scrollViewRef={scrollViewRef}
                 />
               </Box>
             )}
             {invalidRoutingNumberError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox
-                  scrollViewRef={scrollViewRef}
-                  title={t('editDirectDeposit.error')}
-                  text={t('editDirectDeposit.errorInvalidRoutingNumber')}
-                  border="error"
+                <AlertWithHaptics
+                  variant="error"
+                  header={t('editDirectDeposit.error')}
+                  description={t('editDirectDeposit.errorInvalidRoutingNumber')}
                   focusOnError={onSaveClicked}
+                  scrollViewRef={scrollViewRef}
                 />
               </Box>
             )}

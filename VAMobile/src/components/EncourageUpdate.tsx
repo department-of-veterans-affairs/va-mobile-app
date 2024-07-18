@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertBox, Box, WhatsNew } from 'components'
+import { AlertWithHaptics, Box, WhatsNew } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -88,16 +86,13 @@ export const EncourageUpdateAlert = () => {
   if (displayEU) {
     return (
       <Box mb={theme.dimensions.buttonPadding}>
-        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
-          <Box>
-            <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-              <Button onPress={onUpdatePressed} label={t('updateNow')} />
-            </Box>
-            <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-              <Button onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonVariants.Secondary} />
-            </Box>
-          </Box>
-        </AlertBox>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('encourageUpdate.title')}
+          description={t('encourageUpdate.body')}
+          primaryButton={{ label: t('updateNow'), onPress: onUpdatePressed }}
+          secondaryButton={{ label: t('encourageUpdate.skip'), onPress: onSkipPressed }}
+        />
       </Box>
     )
   } else if (localVersionName && storeVersion && localVersionName >= storeVersion) {

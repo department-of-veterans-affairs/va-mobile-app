@@ -1,4 +1,4 @@
-import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import colors from './VAColors'
 
