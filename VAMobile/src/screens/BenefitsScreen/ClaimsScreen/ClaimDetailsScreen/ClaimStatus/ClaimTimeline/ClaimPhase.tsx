@@ -75,22 +75,26 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
     </TextView>
   )
 
-  let currentStatus = ''
+  let currentStatusA11y = ''
   if (isIncompletePhase) {
-    currentStatus = t('incomplete')
+    currentStatusA11y = t('incomplete')
   } else if (isCurrentPhase) {
-    currentStatus = t('currentStep')
+    currentStatusA11y = t('currentStep')
   } else if (isCompletedPhase) {
-    currentStatus = t('complete')
+    currentStatusA11y = t('complete')
   }
 
-  let completedSteps = ''
+  let completedStepsA11y = ''
   if (phase === 2 && isCurrentPhase) {
-    completedSteps = t('claimPhase.heading.a11y.step1Complete')
+    completedStepsA11y = t('claimPhase.heading.a11y.step1Complete')
   } else if (phase > 2 && isCurrentPhase) {
-    completedSteps = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
+    completedStepsA11y = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
   }
-  const testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatus}. ${completedSteps}.`
+
+  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatusA11y}.`
+  if (completedStepsA11y) {
+    testID += ` ${completedStepsA11y}.`
+  }
 
   const accordionPress = (isExpanded: boolean | undefined) => {
     logAnalyticsEvent(
