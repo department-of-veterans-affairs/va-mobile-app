@@ -126,7 +126,12 @@ function LoginScreen() {
           <Button onPress={onLoginInit} label={t('signin')} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={70}>
-          <Button onPress={onFacilityLocator} label={t('findLocation.title')} buttonType={ButtonVariants.Secondary} />
+          <Button
+            onPress={onFacilityLocator}
+            label={t('findLocation.title')}
+            a11yLabel={a11yLabelVA(t('findLocation.title'))}
+            buttonType={ButtonVariants.Secondary}
+          />
         </Box>
         <AppVersionAndBuild textColor={'appVersionAndBuild'} />
       </Box>
