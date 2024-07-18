@@ -75,7 +75,7 @@ jobs:
             select(contains(["ClaimsLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"]) or contains(["letters"])) += ["VALetters"] |
-            select(contains(["Appointments"])) += ["Appointments", "AppointmentsExpanded"] |
+            select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
             select(contains(["Cerner"]) or contains(["Facilities"])) += ["Cerner"] |
             select(contains(["Pharmacy"]) or contains(["prescriptions"])) += ["Prescriptions"] |
             select(contains(["SecureMessaging"]) or contains(["secureMessaging"])) += ["Messages"] |
@@ -141,7 +141,9 @@ jobs:
             select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
             select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
             select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
-            select(contains(["CrisisLineCta"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteransCrisisLine"] |
+            select(contains(["CrisisLineButton"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteransCrisisLine"] |
+            select(contains(["ActivityButton.tsx"])) += ["HomeScreen", "Prescriptions", "Appointments", "AppointmentsExpanded", "Claims", "Appeals", "AppealsExpanded", "DecisionLetters"] |
+            select(contains(["LinkRow.tsx"])) += ["MilitaryInformation", "VeteranStatusCard"] |
             select(contains(["Screens.ts"]) or contains(["BasicError"]) or contains(["LoadingComponent"]) or contains(["Box"]) or contains(["HeaderTitle"]) or contains(["LargeNaveButton"]) 
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
