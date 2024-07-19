@@ -21,7 +21,6 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -188,7 +187,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagree')}
-            testID={a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree'))}
+            testID={t('claimDetails.learnWhatToDoIfDisagree')}
             onPress={whatShouldOnPress}
           />
         </Box>
