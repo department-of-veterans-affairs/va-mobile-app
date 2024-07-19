@@ -61,6 +61,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
       ? {
           text: headerButton.label,
           a11yLabel: headerButton.labelA11y,
+          accessibilityRole: headerButton.accessibilityRole,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
         }
