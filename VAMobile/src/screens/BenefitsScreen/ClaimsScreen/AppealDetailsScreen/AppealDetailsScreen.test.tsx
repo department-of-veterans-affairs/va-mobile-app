@@ -138,6 +138,19 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => expect(screen.getByText('Effective date, pension benefits')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Rule 608 motion to withdraw')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Eligibility for pension, unemployability')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy())
     })
   })
 
