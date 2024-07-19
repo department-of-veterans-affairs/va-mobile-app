@@ -236,7 +236,7 @@ dependencies {
     implementation("com.google.firebase:firebase-config")
 
     // playstore core
-    // So, make sure you also include that repository in your project's build.gradle file.
+    // These dependencies are downloaded from the Google’s Maven repository.
     implementation 'com.google.android.play:asset-delivery:2.2.2'
     implementation 'com.google.android.play:feature-delivery:2.1.0'
     implementation 'com.google.android.play:review:2.0.1'
