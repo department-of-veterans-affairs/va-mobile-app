@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useReducer, useState } from 'react'
-import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { AccessibilityRole, Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -43,6 +43,7 @@ export type HeaderVATitleProps = {
 export type HeaderRightButtonProps = {
   text: string
   a11yLabel?: string
+  accessibilityRole?: AccessibilityRole
   onPress: () => void
   icon?: VAIconProps
   testID?: string
@@ -311,7 +312,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 <TouchableWithoutFeedback
                   ref={focus === 'Right' ? focusRef : () => {}}
                   onPress={rightButton.onPress}
-                  accessibilityRole="button">
+                  accessibilityRole={rightButton.accessibilityRole || 'button'}>
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
                       <VAIconWithText
