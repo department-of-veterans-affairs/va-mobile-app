@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StatusBar, StyleProp, ViewStyle } from 'react-native'
+import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthSettings } from 'api/auth'
-import { AlertBox, Box, BoxProps, CrisisLineButton, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { loginStart } from 'utils/auth'
@@ -40,7 +39,7 @@ function LoginScreen() {
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flexGrow: 1,
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme.colors.background.loginScreen,
   }
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -52,17 +51,6 @@ function LoginScreen() {
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
     })
-  }
-
-  const findLocationProps: BoxProps = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.buttonPadding,
-    testID: 'findVALocationTestID',
   }
 
   const handleUpdateDemoMode = () => {
@@ -110,28 +98,15 @@ function LoginScreen() {
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
           testID="va-icon">
-          <VAIcon testID="VAIcon" name={'Logo'} />
+          <VALogo testID="VALogo" />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={80}>
-          <Button onPress={onLoginInit} label={t('signin')} buttonType={ButtonVariants.White} />
-          <Pressable
-            onPress={onFacilityLocator}
-            {...testIdProps(a11yLabelVA(t('findLocation.title')))}
-            accessibilityRole="button">
-            <Box {...findLocationProps}>
-              <TextView
-                variant={'MobileBodyBold'}
-                display="flex"
-                flexDirection="row"
-                color="primaryContrast"
-                mr={theme.dimensions.textIconMargin}>
-                {t('findLocation.title')}
-              </TextView>
-              <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />
-            </Box>
-          </Pressable>
+        <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+          <Button onPress={onLoginInit} label={t('signin')} />
         </Box>
-        <AppVersionAndBuild textColor={'primaryContrast'} />
+        <Box mx={theme.dimensions.gutter} mb={70}>
+          <Button onPress={onFacilityLocator} label={t('findLocation.title')} buttonType={ButtonVariants.Secondary} />
+        </Box>
+        <AppVersionAndBuild textColor={'appVersionAndBuild'} />
       </Box>
     </VAScrollView>
   )
