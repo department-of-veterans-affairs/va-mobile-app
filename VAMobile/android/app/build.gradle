@@ -235,8 +235,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf'
     implementation("com.google.firebase:firebase-config")
 
-    // playstore core for in-app reviews
-    // These dependencies are downloaded from the Google’s Maven repository.
+    // playstore core
     // So, make sure you also include that repository in your project's build.gradle file.
     implementation 'com.google.android.play:asset-delivery:2.2.2'
     implementation 'com.google.android.play:feature-delivery:2.1.0'
