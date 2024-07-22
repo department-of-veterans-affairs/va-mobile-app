@@ -42,18 +42,41 @@ jobs:
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
 
+      - name: List images before optimization
+        run: |
+          echo "iOS images before optimization:"
+          ls -lh Mob/ios/fastlane/screenshots/
+          echo "Android images before optimization:"
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/  
+
       - name: Optimize iOS images
-        run:  imagemin  -d VAMobile/ios/fastlane/screenshots
+        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/    
 
       - name: Optimize Android images
-        run:  imagemin  -d VAMobile/android/fastlane/metadata/android/en-US/images
+        run: |
+          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
+          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/
 
+      - name: List images before optimization
+        run: |
+          echo "iOS images before optimization:"
+          ls -lh Mob/ios/fastlane/screenshots/
+          echo "Android images before optimization:"
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/  
+     
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
           git add VAMobile/ios/fastlane/screenshots
           git add VAMobile/android/fastlane/metadata/android/en-US/images
+          git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
+          git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot
           git commit -m "Optimize images before release build"
           git push
         env:
