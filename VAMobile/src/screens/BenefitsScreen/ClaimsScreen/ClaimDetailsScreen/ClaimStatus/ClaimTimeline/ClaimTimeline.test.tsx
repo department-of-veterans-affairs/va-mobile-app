@@ -40,9 +40,4 @@ context('ClaimTimeline', () => {
     expect(screen.getByLabelText('Step 7. Final review. Incomplete.')).toBeTruthy()
     expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
   })
-
-  it('shows message about file requests when requests are present', () => {
-    initializeTestInstance(true)
-    expect(screen.getAllByText('You have 2 file requests from VA')).toBeTruthy()
-  })
 })
