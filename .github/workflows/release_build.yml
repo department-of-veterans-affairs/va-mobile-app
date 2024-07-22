@@ -36,7 +36,7 @@ jobs:
       - name: List images before optimization
         run: |
           echo "iOS images before optimization:"
-          ls -lh Mob/ios/fastlane/screenshots/
+          ls -lh VAMobile/ios/fastlane/screenshots/
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
@@ -54,7 +54,7 @@ jobs:
       - name: List images before optimization
         run: |
           echo "iOS images before optimization:"
-          ls -lh Mob/ios/fastlane/screenshots/
+          ls -lh VAMobile/ios/fastlane/screenshots/
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
