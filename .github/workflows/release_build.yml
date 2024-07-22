@@ -40,7 +40,7 @@ jobs:
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/  
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
 
       - name: Optimize iOS images
         run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/    
@@ -49,7 +49,7 @@ jobs:
         run: |
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/
+          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
 
       - name: List images before optimization
         run: |
@@ -58,7 +58,7 @@ jobs:
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot/  
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
      
       - name: Commit optimized images
         run: |
@@ -67,7 +67,7 @@ jobs:
           git add VAMobile/ios/fastlane/screenshots
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
-          git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshot
+          git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
           git commit -m "Optimize images before release build"
           git push
         env:
