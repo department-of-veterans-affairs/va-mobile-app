@@ -30,20 +30,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install ImageOptim-CLI
-        run: brew install imageoptim-cli
+      - name: Download ImageOptim-CLI
+        run: |
+          curl -L https://github.com/JamieMason/ImageOptim-CLI/releases/download/v2.0.0/imageoptim-cli.tar.gz -o imageoptim-cli.tar.gz
+          tar -xzf imageoptim-cli.tar.gz
+          sudo mv imageoptim /usr/local/bin/
 
       - name: Optimize iOS images
-        run: imageoptim -d VAMobile/ios/fastlane/screenshots
+        run: /usr/local/bin/imageoptim -d VAMobile/ios/fastlane/screenshots
 
       - name: Optimize Android images
-        run: imageoptim -d VAMobile/android/fastlane/metadata/android/en-US/images
+        run: /usr/local/bin/imageoptim -d VAMobile/android/fastlane/metadata/android/en-US/images
 
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git add ./path/to/images
+          git add VAMobile/ios/fastlane/screenshots
+          git add VAMobile/android/fastlane/metadata/android/en-US/images
           git commit -m "Optimize images before release build"
           git push
         env:
