@@ -348,7 +348,7 @@ describe('Claims Screen', () => {
     await element(by.id('claimsHistoryID')).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID)).tap()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await expect(element(by.id('Step 5. Complete. Complete.'))).toExist()
+    await element(by.id('Step 5. Complete. Complete.')).tap()
     await expect(element(by.text('Complete')).atIndex(1)).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
