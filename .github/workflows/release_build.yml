@@ -21,9 +21,36 @@ jobs:
     with:
       channel_name: 'va-mobile-app'
       message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
+
+  optimize_images:
+    name: Optimize Images
+    needs: start_slack_thread
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install ImageOptim-CLI
+        run: brew install imageoptim-cli
+
+      - name: Optimize iOS images
+        run: imageoptim -d VAMobile/ios/fastlane/screenshots
+
+      - name: Optimize Android images
+        run: imageoptim -d VAMobile/android/fastlane/metadata/android/en-US/images
+
+      - name: Commit optimized images
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add ./path/to/images
+          git commit -m "Optimize images before release build"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
   ios:
     name: iOS Release Build
-    needs: start_slack_thread
+    needs: [start_slack_thread, optimize_images]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -48,7 +75,7 @@ jobs:
                https://slack.com/api/chat.postMessage  
   android:
     name: Android Release Build
-    needs: start_slack_thread
+    needs: [start_slack_thread, optimize_images]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:

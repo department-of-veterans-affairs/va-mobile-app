@@ -31,9 +31,35 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+  optimize_images:
+    name: Optimize Images
+    needs: start_slack_thread
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install ImageOptim-CLI
+        run: brew install imageoptim-cli
+
+      - name: Optimize iOS images
+        run: imageoptim -d VAMobile/ios/fastlane/screenshots
+
+      - name: Optimize Android images
+        run: imageoptim -d VAMobile/android/fastlane/metadata/android/en-US/images
+
+      - name: Commit optimized images
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add ./path/to/images
+          git commit -m "Optimize images before release build"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}         
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build, start_slack_thread, optimize_images]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -42,9 +68,24 @@ jobs:
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+  notify_ios_failure:
+    name: Notify ios Failure
+    needs: [start_slack_thread, ios]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack on iOS failure
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               https://slack.com/api/chat.postMessage    
   android:
     name: Android On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build, start_slack_thread, optimize_images]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
@@ -53,3 +94,19 @@ jobs:
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+  notify_android_failure:
+    name: Notify Android Failure
+    needs: [start_slack_thread, android]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Notify Slack on Android failure
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
+               https://slack.com/api/chat.postMessage         
