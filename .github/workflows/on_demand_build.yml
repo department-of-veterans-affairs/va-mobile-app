@@ -39,17 +39,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download ImageOptim-CLI
-        run: |
-          curl -L https://github.com/JamieMason/ImageOptim-CLI/releases/download/v2.0.0/imageoptim-cli.tar.gz -o imageoptim-cli.tar.gz
-          tar -xzf imageoptim-cli.tar.gz
-          sudo mv imageoptim /usr/local/bin/
+      - name: Install imagemin-cli
+        run: npm install -g imagemin-cli
 
       - name: Optimize iOS images
-        run: /usr/local/bin/imageoptim -d VAMobile/ios/fastlane/screenshots
+        run:  imagemin  -d VAMobile/ios/fastlane/screenshots
 
       - name: Optimize Android images
-        run: /usr/local/bin/imageoptim -d VAMobile/android/fastlane/metadata/android/en-US/images
+        run:  imagemin  -d VAMobile/android/fastlane/metadata/android/en-US/images
 
       - name: Commit optimized images
         run: |
