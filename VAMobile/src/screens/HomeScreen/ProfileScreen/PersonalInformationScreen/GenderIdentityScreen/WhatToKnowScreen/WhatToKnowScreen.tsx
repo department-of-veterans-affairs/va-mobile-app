@@ -62,7 +62,6 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
                   t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
               },
             ]}
-            paragraphSpacing={true}
           />
         </Box>
         <LinkWithAnalytics
