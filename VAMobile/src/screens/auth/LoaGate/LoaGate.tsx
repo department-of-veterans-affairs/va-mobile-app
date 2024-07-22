@@ -49,7 +49,7 @@ function LoaGate({}: LoaGateProps) {
           {t('loaGate.p2')}
         </TextView>
         <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false}>
-          <TextView paragraphSpacing={true} {...bodyTextProps}>
+          <TextView mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} {...bodyTextProps}>
             {t('loaGate.readMore.p1')}
           </TextView>
           <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
