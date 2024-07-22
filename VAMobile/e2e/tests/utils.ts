@@ -513,7 +513,7 @@ const navigateToFeature = async (featureNavigationArray) => {
         .whileElement(by.id('homeScreenID'))
         .scroll(200, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
-    } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] === 'Prescriptions') {
+    } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] !== 'Appointments') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
