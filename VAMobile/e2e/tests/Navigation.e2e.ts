@@ -48,7 +48,7 @@ const navigationDic = {
       ],
       'Dental disability - More information needed',
     ],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'Request type'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'Claim type'],
     [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
       ['Appeals.e2e', 'AppealsExpanded.e2e'],

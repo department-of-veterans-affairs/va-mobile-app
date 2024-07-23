@@ -16,23 +16,41 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { attributes } = claim
-  const documents = attributes.eventsTimeline.filter((event) => event.filename && event.filename.length > 0)
+  const events = attributes.eventsTimeline.filter(
+    (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
+  )
   const files = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = []
 
-    _.forEach(documents, (document) => {
-      if (document.filename) {
-        const textLines: TextLine[] = [{ text: document.filename, variant: 'MobileBodyBold' }]
-        if (document.type) {
-          textLines.push({ text: t('appointmentList.requestType', { type: document.type }) })
+    _.forEach(events, (event) => {
+      if (event.filename) {
+        const textLines: TextLine[] = [{ text: event.filename, variant: 'MobileBodyBold' }]
+        if (event.type) {
+          textLines.push({ text: t('appointmentList.requestType', { type: event.type }) })
         }
-        if (document.documentType) {
-          textLines.push({ text: t('appointmentList.documentType', { type: document.documentType }) })
+        if (event.documentType) {
+          textLines.push({ text: t('appointmentList.documentType', { type: event.documentType }) })
         }
-        if (document.uploadDate) {
-          textLines.push({ text: t('appointmentList.received', { date: document.uploadDate }) })
+        if (event.uploadDate) {
+          textLines.push({ text: t('appointmentList.received', { date: event.uploadDate }) })
         }
         items.push({ textLines: textLines })
+      } else {
+        _.forEach(event.documents || [], (document) => {
+          if (document.filename) {
+            const textLines: TextLine[] = [{ text: document.filename, variant: 'MobileBodyBold' }]
+            if (document.fileType) {
+              textLines.push({ text: t('appointmentList.requestType', { type: document.fileType }) })
+            }
+            if (document.documentType) {
+              textLines.push({ text: t('appointmentList.documentType', { type: document.documentType }) })
+            }
+            if (document.uploadDate) {
+              textLines.push({ text: t('appointmentList.received', { date: document.uploadDate }) })
+            }
+            items.push({ textLines: textLines })
+          }
+        })
       }
     })
     return items
