@@ -80,7 +80,7 @@ describe('Claims Screen', () => {
   it('Verify VA sometimes combine claims information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Find out why we sometimes combine claims')).tap()
-    await expect(element(by.text('A note about consolidated claims'))).toExist()
+    await expect(element(by.text('Find out why we sometimes combine claims'))).toExist()
     await element(by.text('Close')).tap()
   })
 
