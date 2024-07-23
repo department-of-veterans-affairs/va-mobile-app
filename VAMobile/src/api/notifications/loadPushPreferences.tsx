@@ -16,6 +16,7 @@ import { DEVICE_ENDPOINT_SID } from './registerDevice'
 const loadPushPreferences = async (): Promise<LoadPushPreferencesData | undefined> => {
   const systemNotificationsOn = await notificationsEnabled()
   const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+  if (!endpoint_sid) return
   const response = await get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
   const previousData = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
   return {

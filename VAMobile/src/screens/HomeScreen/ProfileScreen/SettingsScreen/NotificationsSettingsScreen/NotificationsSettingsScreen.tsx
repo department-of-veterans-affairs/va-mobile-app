@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions } from '@tanstack/react-query'
 
-import { useLoadPushPreferences, useRegisterDevice, useSetPushPref } from 'api/notifications'
+import { DEVICE_ENDPOINT_SID, useLoadPushPreferences, useRegisterDevice, useSetPushPref } from 'api/notifications'
 import { PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import {
   AlertBox,
@@ -48,8 +49,10 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     Linking.openSettings()
   }
 
-  useOnResumeForeground(() => {
-    if (notificationData?.deviceToken) {
+  const fetchPreferences = async () => {
+    const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+
+    if (endpoint_sid && notificationData?.deviceToken) {
       refetchPushPreferences()
     } else {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -78,7 +81,9 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       })
       Notifications.registerRemoteNotifications()
     }
-  })
+  }
+
+  useOnResumeForeground(fetchPreferences)
 
   const preferenceList = (): ReactNode => {
     if (notificationData) {
@@ -114,11 +119,11 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       title={t('notifications.title')}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
-      ) : hasError ? (
+      ) : hasError || (notificationData?.systemNotificationsOn && !notificationData.preferences.length) ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
           error={hasError}
-          onTryAgain={refetchPushPreferences}
+          onTryAgain={fetchPreferences}
         />
       ) : (
         <Box mb={contentMarginBottom}>

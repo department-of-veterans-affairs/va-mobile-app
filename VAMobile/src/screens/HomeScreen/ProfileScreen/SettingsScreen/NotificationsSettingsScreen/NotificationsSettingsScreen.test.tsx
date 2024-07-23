@@ -135,4 +135,27 @@ context('NotificationsSettingsScreen', () => {
       )
     })
   })
+
+  it("renders error component when preferences can't be loaded", async () => {
+    const responseData: GetPushPrefsResponse = {
+      data: {
+        type: 'string',
+        id: 'string',
+        attributes: {
+          preferences: [],
+        },
+      },
+    }
+    when(api.get as jest.Mock)
+      .calledWith('/v0/push/prefs/1')
+      .mockResolvedValue(responseData)
+    renderWithProps(true, true, [])
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
+        ),
+      ).toBeTruthy(),
+    )
+  })
 })
