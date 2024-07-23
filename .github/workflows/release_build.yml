@@ -51,11 +51,11 @@ jobs:
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
 
-      - name: List images before optimization
+      - name: List images after optimization
         run: |
-          echo "iOS images before optimization:"
+          echo "iOS images after optimization:"
           ls -lh VAMobile/ios/fastlane/screenshots/
-          echo "Android images before optimization:"
+          echo "Android images after optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
