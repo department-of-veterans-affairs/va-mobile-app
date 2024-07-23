@@ -225,16 +225,16 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   function renderActiveClosedClaimStatusHelpLink() {
     const whatShouldOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_disag(claimID, attributes.claimType, attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_disag(claimID, claimType, attributes.phase))
       navigateTo('WhatDoIDoIfDisagreement', {
         claimID: claimID,
-        claimType: attributes.claimType,
+        claimType: claimType,
         claimStep: attributes.phase,
       })
     }
-
+    
     const whyWeCombineOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_why_combine(claimID, attributes.claimType, attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_why_combine(claimID, claimType, attributes.phase))
       navigateTo('ConsolidatedClaimsNote')
     }
 
@@ -244,7 +244,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagree')}
-            testID={a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree'))}
+            testID={t('claimDetails.learnWhatToDoIfDisagree')}
             onPress={whatShouldOnPress}
           />
         </Box>
