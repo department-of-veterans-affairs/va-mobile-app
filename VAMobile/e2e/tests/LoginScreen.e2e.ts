@@ -4,7 +4,7 @@ import { CommonE2eIdConstants, checkImages } from './utils'
 
 export const LoginE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
-  LOGIN_FIND_VA_BUTTON_ID: 'findVALocationTestID',
+  LOGIN_FIND_VA_BUTTON_ID: 'Find a VA location',
   LOGIN_APP_VERSION_ID: 'AppVersionTestID',
 }
 
@@ -17,8 +17,8 @@ describe('Login Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
     await expect(element(by.id(LoginE2eIdConstants.LOGIN_FIND_VA_BUTTON_ID))).toExist()
-    const VAIconScreenshot = await element(by.id('VAIcon')).takeScreenshot('VAIconLoginScreen')
-    checkImages(VAIconScreenshot)
+    const VALogoScreenshot = await element(by.id('VALogo')).takeScreenshot('VALogoLoginScreen')
+    checkImages(VALogoScreenshot)
     await expect(element(by.id(LoginE2eIdConstants.LOGIN_APP_VERSION_ID)))
   })
 })

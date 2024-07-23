@@ -55,9 +55,8 @@ context('LargePanel', () => {
       expect(screen.queryByRole('button')).toBeFalsy()
     })
     it('should be there when text is added', () => {
-      initializeTestInstance(undefined, undefined, 'done')
-      expect(screen.getByText('done')).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'done' })).toBeTruthy()
+      initializeTestInstance(undefined, undefined, 'close')
+      expect(screen.getByRole('link', { name: 'close' })).toBeTruthy()
     })
   })
 
