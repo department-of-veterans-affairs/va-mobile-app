@@ -32,6 +32,7 @@ import {
   CategoryLanding,
   CategoryLandingAlert,
   EncourageUpdateAlert,
+  HeaderButton,
   LinkRow,
   LoadingComponent,
   Nametag,
@@ -253,8 +254,9 @@ export function HomeScreen({}: HomeScreenProps) {
     navigateTo('Profile')
   }
 
-  const headerButton = {
+  const headerButton: HeaderButton = {
     label: t('profile.title'),
+    accessibilityRole: 'link',
     icon: profileIconProps,
     onPress: onProfile,
   }

@@ -23,15 +23,15 @@ The following must be done for all new feature detox work no matter whether you 
 - Ensure the new/updating script provides artifacts (where necessary) for success and failure
 - Ensure that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](/docs/QA/Automation/AddingNewFeatures)
 - Ensure that the test is named for the screen/feature its automating ('Prescriptions', 'HomeScreen', etc.) and that the test has been placed in the e2e folder.
+- Ensure that e2e_detox_mapping.yml has been updated to account for any added/deleted files
 
 ### Updating Detox tests for non feature work
 
 Detox is currently running on a per PR basis and is running any tests that might be affected with the code change.  The following must be done if any of the detox tests fail:
 
-- If the failing detox test is relevant to the code changes: Update any parts of the detox that were affected by the code change and repush the PR.  This will cause the test to rerun. 
+- Update any parts of the detox that were affected by the code change and repush the PR.  This will cause the test to rerun. 
 	- If you want to check to see if the detox test works before pushing the PR you can either run the test locally or run the test in github actions using the workflow_dispatch trigger
-- If the failing detox test is not relevant to the code changes: Create a ticket and specify what files were changed and what detox test was run in the description.  This will allow whoever picks it up to 
-easily fix the detox mapping.
+- Ensure that e2e_detox_mapping.yml has been updated to account for any added/deleted files in the PR
 
 ### General Best Practices
 - Tests usually follow the same initial format where you import the necessary variables, have a dictionary of any constants, and run a beforeAll statement that navigates to the specific feature in the app
