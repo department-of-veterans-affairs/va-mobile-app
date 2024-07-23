@@ -14,13 +14,13 @@ Radio buttons allow users to select exactly one choice from a group.
 
 ## Usage
 
-[Refer to the VA Design System for usage guidance](https://design.va.gov/components/form/checkbox)
+[Refer to the VA Design System for usage guidance](https://design.va.gov/components/form/radio-button)
 
 ## Content considerations
-* Refer to the [VA Design System for content considerations](https://design.va.gov/components/form/checkbox/#content-considerations)
+* Refer to the [VA Design System for content considerations](https://design.va.gov/components/form/radio-button/#content-considerations)
 
 ## Accessibility considerations
-* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/form/checkbox/#accessibility-considerations)
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/form/radio-button/#accessibility-considerations)
 * Screenreaders should announce the name, role, and state of each checkbox.
 
 ## Code usage

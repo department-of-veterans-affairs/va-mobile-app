@@ -17,46 +17,52 @@ export let overrideRemote = false
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
   | 'appointmentRequests'
-  | 'prescriptions'
-  | 'testFeature'
-  | 'inAppRecruitment'
-  | 'inAppUpdates'
-  | 'preferredNameGenderWaygate'
+  | 'cernerTrueForDemo'
+  | 'claimPhaseExpansion'
+  | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
-  | 'whatsNewUI'
-  | 'decisionLettersWaygate'
+  | 'inAppRecruitment'
+  | 'inAppUpdates'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
+  | 'preferredNameGenderWaygate'
+  | 'prescriptions'
+  | 'testFeature'
+  | 'whatsNewUI'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
-  prescriptions: boolean
-  testFeature: boolean
-  inAppRecruitment: boolean
-  inAppUpdates: boolean
-  preferredNameGenderWaygate: boolean
+  cernerTrueForDemo: boolean
+  claimPhaseExpansion: boolean
+  decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
-  whatsNewUI: boolean
-  decisionLettersWaygate: boolean
+  inAppRecruitment: boolean
+  inAppUpdates: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
+  preferredNameGenderWaygate: boolean
+  prescriptions: boolean
+  testFeature: boolean
+  whatsNewUI: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
-  prescriptions: true,
-  testFeature: false,
-  inAppRecruitment: false,
-  inAppUpdates: true,
-  preferredNameGenderWaygate: true,
+  cernerTrueForDemo: false,
+  claimPhaseExpansion: false,
+  decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
-  whatsNewUI: true,
-  decisionLettersWaygate: true,
+  inAppRecruitment: false,
+  inAppUpdates: true,
   patientCheckIn: false,
   patientCheckInWaygate: true,
+  preferredNameGenderWaygate: true,
+  prescriptions: true,
+  testFeature: false,
+  whatsNewUI: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults

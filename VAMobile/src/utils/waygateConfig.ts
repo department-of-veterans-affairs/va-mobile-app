@@ -104,6 +104,7 @@ export type WaygateToggleType =
   | 'WG_GenericLetter'
   | 'WG_Webview'
   | 'WG_InAppRecruitment'
+  | 'WG_HealthHelp'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -184,6 +185,7 @@ type WaygateToggleValues = {
   WG_GenericLetter: Waygate
   WG_Webview: Waygate
   WG_InAppRecruitment: Waygate
+  WG_HealthHelp: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -273,6 +275,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_GenericLetter: { ...waygateDefault },
   WG_Webview: { ...waygateDefault },
   WG_InAppRecruitment: { ...waygateDefault },
+  WG_HealthHelp: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {

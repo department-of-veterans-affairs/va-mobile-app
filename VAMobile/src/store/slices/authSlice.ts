@@ -8,6 +8,7 @@ import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import queryClient from 'api/queryClient'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { AppDispatch, AppThunk } from 'store'
@@ -44,6 +45,9 @@ const {
 } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
+
+export const NEW_SESSION = '@store_new_session'
+export const FIRST_TIME_LOGIN = '@store_first_time_login'
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
@@ -563,6 +567,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
+    queryClient.removeQueries()
     dispatch(dispatchFinishLogout())
   }
 }
@@ -576,6 +581,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
   console.debug('startBiometricsLogin: starting')
+  await AsyncStorage.setItem(NEW_SESSION, 'true')
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {

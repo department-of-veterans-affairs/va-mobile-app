@@ -4,6 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { CategoryTypeFields, CategoryTypes } from 'api/types'
 import { SecureMessagingFolderMessagesGetData, SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, render, waitFor, when } from 'testUtils'
 
@@ -66,7 +67,8 @@ context('Inbox', () => {
     when(api.get as jest.Mock)
       .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
         page: '1',
-        per_page: '10',
+        per_page: LARGE_PAGE_SIZE.toString(),
+        useCache: 'false',
       } as api.Params)
       .mockResolvedValue(messages)
     render(<Inbox setScrollPage={jest.fn()} />)
@@ -81,7 +83,8 @@ context('Inbox', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
           page: '1',
-          per_page: '10',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
         } as api.Params)
         .mockResolvedValue({
           data: [],
@@ -120,7 +123,6 @@ context('Inbox', () => {
           currentPage: 1,
           folderID: 0,
           messageID: 1,
-          messagesLeft: 1,
         }),
       )
     })

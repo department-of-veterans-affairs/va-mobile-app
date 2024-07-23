@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDecisionLetters } from 'api/decisionLetters'
-import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
+import { ClaimOrAppealConstants, ClaimsAndAppealsList } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -26,20 +27,31 @@ import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
+  scrollViewRef: RefObject<ScrollView>
 }
 
-function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
+function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppealsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [page, setPage] = useState(1)
   const [previousClaimType, setClaimType] = useState(claimType)
-  const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType, page)
+  const { data: claimsAndAppealsListPayload, isLoading: loadingClaimsAndAppeals } = useClaimsAndAppeals(claimType)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: decisionLetterData } = useDecisionLetters()
+  const [claimsToShow, setClaimsToShow] = useState<Array<ClaimsAndAppealsList>>([])
+
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
-  const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
+  const { perPage, totalEntries } = {
+    perPage: 10,
+    totalEntries: pageMetaData?.totalEntries || 0,
+  }
+
+  useEffect(() => {
+    const claimsList = claimsAndAppeals?.slice((page - 1) * perPage, page * perPage)
+    setClaimsToShow(claimsList || [])
+  }, [claimsAndAppeals, page, perPage])
 
   useEffect(() => {
     if (previousClaimType !== claimType) {
@@ -47,19 +59,6 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       setPage(1)
     }
   }, [claimType, previousClaimType])
-
-  const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
-    const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
-
-    switch (type) {
-      case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { displayTitle: displayTitle?.toLowerCase(), date: formattedUpdatedAtDate })
-      case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
-    }
-
-    return ''
-  }
 
   const onClaimDetails = (id: string) => {
     navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
@@ -71,14 +70,10 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    claimsAndAppeals?.forEach((claimAndAppeal, index) => {
+    claimsToShow?.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
-      const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
-      const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
-        { text: t('claimDetails.receivedOn', { date: formattedDateFiled }) },
-      ]
+      const textLines: Array<TextLine> = [{ text: capitalizeWord(attributes.displayTitle), variant: 'MobileBodyBold' }]
 
       if (
         featureEnabled('decisionLettersWaygate') &&
@@ -95,7 +90,9 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
         })
       }
 
-      const position = (currentPage - 1) * perPage + index + 1
+      textLines.push({ text: t('claimDetails.receivedOn', { date: formatDateMMMMDDYYYY(attributes.dateFiled) }) })
+
+      const position = (page - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
       listItems.push({
         textLines,
@@ -116,18 +113,20 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
     return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
-  const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
+  const yourClaimsAndAppealsHeader = t('claims.yourClaims', { claimType: claimType.toLowerCase() })
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(currentPage + 1)
+      setPage(page + 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
-      setPage(currentPage - 1)
+      setPage(page - 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries: totalEntries,
     pageSize: perPage,
-    page: currentPage,
+    page,
     tab: claimType.toLowerCase(),
   }
 

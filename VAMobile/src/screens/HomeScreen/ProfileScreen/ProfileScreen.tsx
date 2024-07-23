@@ -5,7 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -28,6 +29,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { data: personalInfo } = usePersonalInformation()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -35,13 +37,26 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
    */
   const getInfoTryAgain = (): void => {
     refetchUserAuthorizedServices()
-    if (serviceHistoryError) {
+    if (userAuthorizedServices?.militaryServiceHistory && serviceHistoryError) {
       refetchServiceHistory()
     }
   }
 
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || serviceHistoryError
+
+  const displayName = !!personalInfo?.fullName && (
+    <Box>
+      <TextView
+        mx={theme.dimensions.condensedMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
+        textTransform="capitalize"
+        accessibilityRole="header"
+        variant="ProfileScreenHeader">
+        {personalInfo.fullName}
+      </TextView>
+    </Box>
+  )
 
   return (
     <ChildTemplate
@@ -51,6 +66,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       testID="profileID">
       {loadingCheck ? (
         <Box>
+          {displayName}
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
         </Box>
@@ -62,59 +78,28 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
             error={serviceHistoryError}
           />
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            <LargeNavButton
-              title={t('settings.title')}
-              onPress={() => navigateTo('Settings')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
+            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
           </Box>
         </Box>
       ) : (
         <>
+          {displayName}
           <NameTag />
-          <Box
-            mt={theme.dimensions.contentMarginTop}
-            mb={theme.dimensions.standardMarginBetween}
-            mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             {userAuthorizedServices?.userProfileUpdate && (
               <>
                 <LargeNavButton
                   title={t('personalInformation.title')}
                   onPress={() => navigateTo('PersonalInformation')}
-                  borderWidth={theme.dimensions.buttonBorderWidth}
-                  borderColor={'secondary'}
-                  borderColorActive={'primaryDarkest'}
-                  borderStyle={'solid'}
                 />
                 <LargeNavButton
                   title={t('contactInformation.title')}
                   onPress={() => navigateTo('ContactInformation')}
-                  borderWidth={theme.dimensions.buttonBorderWidth}
-                  borderColor={'secondary'}
-                  borderColorActive={'primaryDarkest'}
-                  borderStyle={'solid'}
                 />
               </>
             )}
-            <LargeNavButton
-              title={t('militaryInformation.title')}
-              onPress={() => navigateTo('MilitaryInformation')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
-            <LargeNavButton
-              title={t('settings.title')}
-              onPress={() => navigateTo('Settings')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-            />
+            <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
+            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
           </Box>
         </>
       )}

@@ -18,7 +18,7 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   const theme = useTheme()
   const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
   const [appealsServiceErrors, setAppealsServiceErrors] = useState(false)
-  const { data: claimsAndAppealsListPayload } = useClaimsAndAppeals(claimType, 1)
+  const { data: claimsAndAppealsListPayload } = useClaimsAndAppeals(claimType)
 
   useEffect(() => {
     const nonFatalErros = claimsAndAppealsListPayload?.meta.errors

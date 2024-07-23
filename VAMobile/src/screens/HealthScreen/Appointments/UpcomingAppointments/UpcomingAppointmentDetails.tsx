@@ -15,6 +15,7 @@ import {
   AppointmentDetailsSubTypeConstants,
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
+  getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -30,13 +31,11 @@ import {
   VideoHomeAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
-import { getUpcomingAppointmentDateRange } from '../Appointments'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
 function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   const { appointment, vetextID } = route.params
-  const { page } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dateRange = getUpcomingAppointmentDateRange()
   const {
@@ -44,11 +43,11 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, 1, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
 
-  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment(page || 1)
+  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment()
 
   const trueAppointment =
     appointment ||

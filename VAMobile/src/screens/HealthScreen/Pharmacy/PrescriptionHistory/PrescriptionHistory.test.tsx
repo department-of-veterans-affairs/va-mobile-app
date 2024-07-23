@@ -3,6 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { PrescriptionsGetData } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
@@ -255,7 +256,7 @@ context('PrescriptionHistory', () => {
     it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
       const params = {
         'page[number]': '1',
-        'page[size]': '5000',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
         sort: 'refill_status', // Parameters are snake case for the back end
       }
       when(api.get as jest.Mock)

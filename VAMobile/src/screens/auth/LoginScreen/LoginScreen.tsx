@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, BoxProps, CrisisLineButton, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
@@ -60,10 +62,6 @@ function LoginScreen() {
     })
   }
 
-  const onCrisisLine = () => {
-    navigateTo('VeteransCrisisLine')
-  }
-
   const findLocationProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -87,20 +85,39 @@ function LoginScreen() {
     }
   }
 
+  async function setFirstTimeLogin() {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN, 'true')
+  }
+  async function setNewSession() {
+    await AsyncStorage.setItem(NEW_SESSION, 'true')
+  }
+
   const onLoginInit = demoMode
     ? () => {
+        setNewSession()
         dispatch(loginStart(true))
       }
     : firstTimeLogin
       ? () => {
+          setFirstTimeLogin()
+          setNewSession()
+
           navigateTo('LoaGate')
         }
-      : startAuth
+      : () => {
+          setNewSession()
+          startAuth()
+        }
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
-      <CrisisLineCta onPress={onCrisisLine} />
+      <CrisisLineButton />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box

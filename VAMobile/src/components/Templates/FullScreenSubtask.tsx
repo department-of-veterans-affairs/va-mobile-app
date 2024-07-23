@@ -7,11 +7,11 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, CrisisLineCta, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
+import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { VAIconProps } from 'components/VAIcon'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -62,7 +62,7 @@ export type FullScreenSubtaskProps = {
   /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
-  showCrisisLineCta?: boolean
+  showCrisisLineButton?: boolean
   /** Optional testID */
   testID?: string
 }
@@ -88,18 +88,17 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
-  showCrisisLineCta = false,
+  showCrisisLineButton = false,
   testID,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
-  const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
 
   const titleTextProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     accessibilityLabel: titleA11yLabel,
     accessibilityRole: 'header',
   }
@@ -185,13 +184,13 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
-  const titleMarginTop = showCrisisLineCta ? 0 : theme.dimensions.buttonPadding
+  const titleMarginTop = showCrisisLineButton ? 0 : theme.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-        {showCrisisLineCta && <CrisisLineCta onPress={() => navigateTo('VeteransCrisisLine')} />}
+        {showCrisisLineButton && <CrisisLineButton />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
             <TextView {...titleTextProps}>{title}</TextView>

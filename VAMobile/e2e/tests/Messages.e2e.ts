@@ -2,6 +2,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
+import { HomeE2eIdConstants } from './HomeScreen.e2e'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
 
 export async function getDateWithTimeZone(dateString: string) {
@@ -23,7 +24,6 @@ export const MessagesE2eIdConstants = {
   MESSAGE_6_ID: 'Ratana, Narin  October 21, 2021 Test: Preparing for your visit',
   MESSAGE_7_ID: 'Ratana, Narin  September 17, 2021 Education: Good morning to you',
   MESSAGE_10_ID: 'Ratana, Narin  September 17, 2021 COVID: Test',
-  START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   FOLDERS_TEXT: 'Folders',
   MESSAGES_ID: 'messagesTestID',
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
@@ -85,7 +85,7 @@ beforeAll(async () => {
 
 describe('Messages Screen', () => {
   it('should match the messages page design', async () => {
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
@@ -115,7 +115,7 @@ describe('Messages Screen', () => {
     ).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
   })
 
   it('verify the message just opened is displayed as read', async () => {
@@ -252,7 +252,7 @@ describe('Messages Screen', () => {
   })
 
   it('reply: verify talk to the veterans crisis line now is displayed', async () => {
-    await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
   })
@@ -333,17 +333,17 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
-    await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
   })
@@ -444,7 +444,7 @@ describe('Messages Screen', () => {
   it('verify the user is returned to messages inbox on delete', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
     await expect(
       element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
@@ -571,7 +571,7 @@ describe('Messages Screen', () => {
   it('verify that the sent folder opens and is displayed', async () => {
     await element(by.text('Messages')).tap()
     await element(by.text('Sent')).tap()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(
       element(
         by.id(

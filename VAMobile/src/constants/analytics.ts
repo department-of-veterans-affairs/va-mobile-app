@@ -626,6 +626,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_appts_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_appts_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
   vama_hs_claims_count: (claimsCount: number): Event => {
     return {
       name: 'vama_hs_claims_count',
@@ -634,9 +642,9 @@ export const Events = {
       },
     }
   },
-  vama_hs_load_time: (loadTime: number): Event => {
+  vama_hs_claims_load_time: (loadTime: number): Event => {
     return {
-      name: 'vama_hs_load_time',
+      name: 'vama_hs_claims_load_time',
       params: {
         loadTime,
       },
@@ -650,11 +658,36 @@ export const Events = {
       },
     }
   },
+  vama_hs_rx_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_rx_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
   vama_hs_sm_count: (smCount: number): Event => {
     return {
       name: 'vama_hs_sm_count',
       params: {
         smCount,
+      },
+    }
+  },
+  vama_hs_sm_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_sm_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
+
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
       },
     }
   },

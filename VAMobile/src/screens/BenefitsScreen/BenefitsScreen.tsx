@@ -1,11 +1,12 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useDisabilityRating } from 'api/disabilityRating'
-import { Box, CategoryLanding, LargeNavButton } from 'components'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -19,7 +20,8 @@ import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScr
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -28,18 +30,34 @@ import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersSc
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
-function BenefitsScreen({}: BenefitsScreenProps) {
+export function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { data: ratingData } = useDisabilityRating({ enabled: screenContentAllowed('WG_Benefits') })
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
+  const isFocused = useIsFocused()
 
-  const ratingPercent = ratingData?.combinedDisabilityRating
-  const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
-  const combinedPercentText = ratingIsDefined
-    ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
-    : undefined
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
+  const featureInDowntime = claimsInDowntime || appealsInDowntime
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
+  const {
+    data: claimsAndAppeals,
+    isFetching: loadingClaimsAndAppeals,
+    isError: claimsAndAppealsError,
+  } = useClaimsAndAppeals('ACTIVE', {
+    enabled: isFocused,
+  })
+
+  const nonFatalErrors = claimsAndAppeals?.meta.errors?.length
+  const activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount
+  const showClaimsCount = !claimsAndAppealsError && !nonFatalErrors && !featureInDowntime && activeClaimsCount
+
+  const showAlert = claimsAndAppealsError || !!nonFatalErrors || featureInDowntime
+  const alertMessage = featureInDowntime
+    ? t('benefits.activity.warning.downtime')
+    : nonFatalErrors
+      ? t('benefits.activity.nonFatalError')
+      : t('benefits.activity.error')
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -59,32 +77,16 @@ function BenefitsScreen({}: BenefitsScreenProps) {
 
   return (
     <CategoryLanding title={t('benefits.title')} testID="benefitsTestID">
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <LargeNavButton
-          title={t('disabilityRating.title')}
-          onPress={onDisabilityRatings}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-          subText={combinedPercentText}
-        />
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('claims.title')}
+          subText={showClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
+          showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
         />
-        <LargeNavButton
-          title={t('lettersAndDocs.title')}
-          onPress={onLetters}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
+        <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
+        {showAlert && <CategoryLandingAlert text={alertMessage} isError={claimsAndAppealsError || !!nonFatalErrors} />}
       </Box>
     </CategoryLanding>
   )

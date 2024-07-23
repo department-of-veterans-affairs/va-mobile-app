@@ -10,9 +10,9 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { CrisisLineCta, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { CrisisLineButton, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
-import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -43,7 +43,6 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
@@ -66,11 +65,12 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
           icon: headerButton.icon,
         }
       : undefined,
+    shadow: theme.mode === 'light',
   }
 
   const subtitleProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
-    mt: 0,
+    variant: 'BitterHeading',
+    mt: theme.dimensions.condensedMarginBetween,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,
     mr: theme.dimensions.condensedMarginBetween,
@@ -120,7 +120,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
       <HeaderBanner {...headerProps} />
       <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
-          <CrisisLineCta onPress={() => navigateTo('VeteransCrisisLine')} />
+          <CrisisLineButton />
           {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         <WaygateWrapper>{children}</WaygateWrapper>

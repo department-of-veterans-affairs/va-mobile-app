@@ -18,7 +18,7 @@ export const CommonE2eIdConstants = {
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
-  VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
+  VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -47,7 +47,15 @@ export const CommonE2eIdConstants = {
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
+  REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
+  REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
+  APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
+  START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
+  PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  HOME_ACTIVITY_HEADER_TEXT: 'Activity',
+  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
 }
 
 /** Log the automation into demo mode
@@ -121,6 +129,19 @@ export async function checkIfElementIsPresent(
   } catch (e) {
     return false
   }
+}
+
+/* Scroll down inside container until specified text is found, then tap the text
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToThenTap(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+  await element(by.text(text)).tap()
 }
 
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
@@ -235,7 +256,7 @@ export async function resetInAppReview() {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
 }
 
 export async function openProfile() {
@@ -332,49 +353,64 @@ export async function backButton() {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  if (AFUseCase !== 'AllowFunction') {
-    if (
-      (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
-        AFFeature === 'WG_HowDoIUpdate' ||
-        AFFeature === 'WG_PreferredName' ||
-        AFFeature === 'WG_HowWillYou' ||
-        AFFeature === 'WG_GenderIdentity' ||
-        AFFeature === 'WG_WhatToKnow' ||
-        AFFeature === 'WG_EditAddress' ||
-        AFFeature === 'WG_EditPhoneNumber' ||
-        AFFeature === 'WG_EditEmail') &&
-      AFUseCase === 'DenyAccess'
-    ) {
-      await resetInAppReview()
-    } else {
-      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-      await loginToDemoMode()
-    }
-    await openProfile()
-    await openSettings()
-    await openDeveloperScreen()
-    await waitFor(element(by.text('Remote Config')))
-      .toBeVisible()
-      .whileElement(by.id('developerScreenTestID'))
-      .scroll(200, 'down')
-    await element(by.text('Remote Config')).tap()
+  if (
+    (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
+      AFFeature === 'WG_HowDoIUpdate' ||
+      AFFeature === 'WG_PreferredName' ||
+      AFFeature === 'WG_HowWillYou' ||
+      AFFeature === 'WG_GenderIdentity' ||
+      AFFeature === 'WG_WhatToKnow' ||
+      AFFeature === 'WG_EditAddress' ||
+      AFFeature === 'WG_EditPhoneNumber' ||
+      AFFeature === 'WG_EditEmail') &&
+    AFUseCase === 'DenyAccess'
+  ) {
+    await resetInAppReview()
+  } else {
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
   }
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await waitFor(element(by.text('Remote Config')))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(200, 'down')
+  await element(by.text('Remote Config')).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
-    .scroll(500, 'down')
+    .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
+
   if (AFAppUpdate) {
-    await element(by.text('appUpdateButton')).tap()
+    try {
+      await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
+    } catch (ex) {
+      await element(by.text('appUpdateButton')).tap()
+    }
   } else if (AFFeature === 'WG_Health') {
-    await element(by.text('Enabled')).tap()
+    try {
+      await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+    } catch (ex) {
+      await element(by.text('Enabled')).tap()
+    }
   }
 
   if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
-      await element(by.text('Enabled')).tap()
+      try {
+        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      } catch (ex) {
+        await element(by.text('Enabled')).tap()
+      }
     } else if (AFUseCase === 'DenyAccess') {
-      await element(by.text('Enabled')).tap()
+      try {
+        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      } catch (ex) {
+        await element(by.text('Enabled')).tap()
+      }
     }
   }
   await element(by.id('AFTypeTestID')).replaceText(AFUseCase)
@@ -385,11 +421,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  if (AFUseCase !== 'AllowFunction') {
-    await device.launchApp({ newInstance: true })
-    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-      await loginToDemoMode()
-    }
+  await device.launchApp({ newInstance: true })
+  if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+    await loginToDemoMode()
   }
 }
 
@@ -410,7 +444,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Remote Config')).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
-    .whileElement(by.id('remoteConfigTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
     .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
@@ -426,8 +460,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
-    if (featureNavigationArray[j] === 'talk-to-the-veterans-crisis-line-now') {
-      await element(by.id(featureNavigationArray[j])).tap()
+    if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
+      await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -473,11 +507,17 @@ const navigateToFeature = async (featureNavigationArray) => {
       } else {
         await element(by.text('Request Refill ')).tap()
       }
-    } else if (featureNavigationArray[j] === 'Contact VA') {
+    } else if (featureNavigationArray[j] === 'Contact us') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
-        .scroll(50, 'down')
+        .scroll(200, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] === 'Prescriptions') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('homeScreenID'))
+        .scroll(200, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else {
       try {
@@ -523,4 +563,18 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
     }
   }
+}
+
+/* Toggle the specified remote config feature flag
+ *
+ * @param flagName - name of flag to toggle
+ */
+export async function toggleRemoteConfigFlag(flagName: string) {
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
+  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }

@@ -273,7 +273,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             onSuccess: () => {
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
               queryClient.invalidateQueries({
-                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
               })
               navigateTo('FolderMessages', {
                 folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
@@ -482,7 +482,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               queryKey: [secureMessagingKeys.message, messageID],
             })
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             goToDraftFolder(true)
           },
@@ -498,7 +498,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           queryClient.invalidateQueries({
-            queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+            queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
           })
           goToDraftFolder(false)
         },
@@ -645,6 +645,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     isDiscarded ||
     refetchingRecipients ||
     refetchingThread
+
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : sendingMessage
@@ -663,7 +664,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={isLoading ? undefined : leftButtonAction}
       menuViewActions={isLoading ? undefined : menuViewActions}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       {isLoading ? (

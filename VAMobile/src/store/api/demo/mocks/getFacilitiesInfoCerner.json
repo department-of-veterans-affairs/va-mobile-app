@@ -1,0 +1,28 @@
+{
+  "/v0/facilities-info": {
+    "data": {
+      "type": "facilitiesInfo",
+      "id": "abe3f152-90b0-45cb-8776-4958bad0e0ef",
+      "attributes": {
+        "facilities": [
+          {
+            "id": "357",
+            "name": "Cary VA Medical Center",
+            "city": "Cary",
+            "state": "WY",
+            "cerner": true,
+            "miles": "3.63"
+          },
+          {
+            "id": "358",
+            "name": "Cheyenne VA Medical Center",
+            "city": "Cheyenne",
+            "state": "WY",
+            "cerner": true,
+            "miles": "3.17"
+          }
+        ]
+      }
+    }
+  }
+}

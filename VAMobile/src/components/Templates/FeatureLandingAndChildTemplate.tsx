@@ -88,7 +88,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   }
 
   const subtitleProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     mt: 0,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,

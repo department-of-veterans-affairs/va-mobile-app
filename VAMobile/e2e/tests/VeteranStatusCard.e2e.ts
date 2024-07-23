@@ -96,23 +96,29 @@ export async function verifyMilitaryInfo(militaryBranch) {
       militaryBranch,
     )
     await element(by.text('Home')).tap()
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
     await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
     await element(by.text('Close')).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
     await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
     await element(by.text('Close')).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
   })
 }
 describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await validateVeteranStatusDesign()
   })
@@ -165,6 +171,7 @@ describe('Veteran Status Card', () => {
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
   verifyMilitaryInfo('United States Marine Corps')
+  verifyMilitaryInfo('United States Space Force')
 
   it('should reset mock data', async () => {
     await changeMockData(

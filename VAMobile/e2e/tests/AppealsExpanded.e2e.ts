@@ -7,51 +7,47 @@ import {
   openClaims,
   openClaimsHistory,
   resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 let i = 0
 
 export const AppealsExpandedIdConstants = {
-  REMAND_RETURN_APPEAL_ID: 'Remand return appeal updated on December 26, 2011 Received July 17, 2008',
-  HLR_REVIEW_CLOSED_APPEAL_ID: 'Higher level review closed appeal updated on December 25, 2011 Received July 16, 2008',
-  SC_CLOSED_APPEAL_ID: 'Supplemental claim closed appeal updated on December 24, 2011 Received July 15, 2008',
-  SC_DECISION_APPEAL_ID: 'Supplemental claim decision appeal updated on December 23, 2011 Received July 14, 2008',
-  HLR_ERROR_APPEAL_ID: 'Higher level review error appeal updated on December 22, 2011 Received July 13, 2008',
-  HLR_DECISION_APPEAL_ID: 'Higher level review decision appeal updated on December 21, 2011 Received July 12, 2008',
-  HLR_RECIEVED_APPEAL_ID: 'Higher level review recieved appeal updated on December 20, 2011 Received July 11, 2008',
-  SC_RECIEVED_APPEAL_ID: 'Supplemental claim received appeal updated on December 19, 2011 Received July 10, 2008',
-  BVA_DECISION_EFFECTUATION_APPEAL_ID:
-    'Bva decision effectuation appeal updated on December 18, 2011 Received July 09, 2008',
-  POST_BVA_DECISION_APPEAL_ID: 'Post bva dta decision appeal updated on December 17, 2011 Received July 08, 2008',
-  EVIDENTIARY_PERIOD_APPEAL_ID: 'Evidentiary period appeal updated on December 16, 2011 Received July 07, 2008',
-  STATUTORY_OPT_IN_APPEAL_ID: 'Statutory opt in appeal updated on December 15, 2011 Received July 06, 2008',
-  AMA_REMAND_APPEAL_ID: 'Ama remand appeal updated on December 14, 2011 Received July 05, 2008',
-  MERGED_APPEAL_ID: 'Merged appeal updated on December 13, 2011 Received July 04, 2008',
-  REMAND_APPEAL_ID: 'Remand appeal updated on December 12, 2011 Received July 03, 2008',
-  REMAND_SSOC_APPEAL_ID: 'Remand ssoc appeal updated on December 11, 2011 Received July 02, 2008',
-  OTHER_CLOSED_APPEAL_ID: 'Other close appeal updated on December 10, 2011 Received July 01, 2008',
-  RECONSIDERATION_APPEAL_ID: 'Reconsideration appeal updated on December 09, 2011 Received June 30, 2008',
-  DEATH_APPEAL_ID: 'Death appeal updated on December 08, 2011 Received June 29, 2008',
-  RAMP_APPEAL_ID: 'Ramp appeal updated on December 07, 2011 Received June 28, 2008',
-  FTR_APPEAL_ID: 'Ftr appeal updated on December 06, 2011 Received June 27, 2008',
-  WITHDRAWN_APPEAL_ID: 'Withdrawn appeal updated on December 05, 2011 Received June 26, 2008',
-  FIELD_GRANT_APPEAL_ID: 'Field grant appeal updated on December 04, 2011 Received June 25, 2008',
-  BVA_DECISION_APPEAL_ID: 'Bva decision appeal updated on December 03, 2011 Received June 24, 2008',
-  MULTIPLE_DECISION_APPEAL_ID:
-    'Multiple decision in progress appeals updated on December 02, 2011 Received June 23, 2008',
-  BVA_DEVELOPMENT_APPEAL_ID: 'Bva development appeal updated on December 01, 2011 Received June 22, 2008',
-  BURIAL_STAYED_APPEAL_ID: 'Burial stayed appeal updated on November 30, 2011 Received June 20, 2008',
-  AT_VSO_APPEAL_ID: 'At vso appeal updated on November 30, 2011 Received June 21, 2008',
-  MEDICAL_PENDING_SOC_APPEAL_ID: 'Medical pending soc appeal updated on November 29, 2011 Received June 19, 2008',
-  VRE_PENDING_APPEAL_ID: 'Vre pending form 9 appeal updated on November 28, 2011 Received June 18, 2008',
-  EDUCATION_PENDING_APPEAL_ID:
-    'Education pending certification appeal updated on November 27, 2011 Received June 17, 2008',
-  LOAN_GUARANTY_SSOC_APPEAL_ID:
-    'Loan guaranty pending certification ssoc appeal updated on November 26, 2011 Received June 16, 2008',
-  INSURANCE_DOCKET_APPEAL_ID: 'Insurance on docket appeal updated on November 25, 2011 Received June 15, 2008',
-  PENDING_HEARING_APPEAL_ID: 'Pending hearing appeal updated on November 24, 2011 Received June 14, 2008',
-  DISABILITY_COMPENSATION_APPEAL_1_ID:
-    'Disability compensation appeal updated on November 23, 2011 Received June 13, 2008',
+  REMAND_RETURN_APPEAL_ID: 'Remand return appeal Received July 17, 2008',
+  HLR_REVIEW_CLOSED_APPEAL_ID: 'Higher level review closed appeal Received July 16, 2008',
+  SC_CLOSED_APPEAL_ID: 'Supplemental claim closed appeal Received July 15, 2008',
+  SC_DECISION_APPEAL_ID: 'Supplemental claim decision appeal Received July 14, 2008',
+  HLR_ERROR_APPEAL_ID: 'Higher level review error appeal Received July 13, 2008',
+  HLR_DECISION_APPEAL_ID: 'Higher level review decision appeal Received July 12, 2008',
+  HLR_RECIEVED_APPEAL_ID: 'Higher level review recieved appeal Received July 11, 2008',
+  SC_RECIEVED_APPEAL_ID: 'Supplemental claim received appeal Received July 10, 2008',
+  BVA_DECISION_EFFECTUATION_APPEAL_ID: 'Bva decision effectuation appeal Received July 09, 2008',
+  POST_BVA_DECISION_APPEAL_ID: 'Post bva dta decision appeal Received July 08, 2008',
+  EVIDENTIARY_PERIOD_APPEAL_ID: 'Evidentiary period appeal Received July 07, 2008',
+  STATUTORY_OPT_IN_APPEAL_ID: 'Statutory opt in appeal Received July 06, 2008',
+  AMA_REMAND_APPEAL_ID: 'Ama remand appeal Received July 05, 2008',
+  MERGED_APPEAL_ID: 'Merged appeal Received July 04, 2008',
+  REMAND_APPEAL_ID: 'Remand appeal Received July 03, 2008',
+  REMAND_SSOC_APPEAL_ID: 'Remand ssoc appeal Received July 02, 2008',
+  OTHER_CLOSED_APPEAL_ID: 'Other close appeal Received July 01, 2008',
+  RECONSIDERATION_APPEAL_ID: 'Reconsideration appeal Received June 30, 2008',
+  DEATH_APPEAL_ID: 'Death appeal Received June 29, 2008',
+  RAMP_APPEAL_ID: 'Ramp appeal Received June 28, 2008',
+  FTR_APPEAL_ID: 'Ftr appeal Received June 27, 2008',
+  WITHDRAWN_APPEAL_ID: 'Withdrawn appeal Received June 26, 2008',
+  FIELD_GRANT_APPEAL_ID: 'Field grant appeal Received June 25, 2008',
+  BVA_DECISION_APPEAL_ID: 'Bva decision appeal Received June 24, 2008',
+  MULTIPLE_DECISION_APPEAL_ID: 'Multiple decision in progress appeals Received June 23, 2008',
+  BVA_DEVELOPMENT_APPEAL_ID: 'Bva development appeal Received June 22, 2008',
+  BURIAL_STAYED_APPEAL_ID: 'Burial stayed appeal Received June 20, 2008',
+  AT_VSO_APPEAL_ID: 'At vso appeal Received June 21, 2008',
+  MEDICAL_PENDING_SOC_APPEAL_ID: 'Medical pending soc appeal Received June 19, 2008',
+  VRE_PENDING_APPEAL_ID: 'Vre pending form 9 appeal Received June 18, 2008',
+  EDUCATION_PENDING_APPEAL_ID: 'Education pending certification appeal Received June 17, 2008',
+  LOAN_GUARANTY_SSOC_APPEAL_ID: 'Loan guaranty pending certification ssoc appeal Received June 16, 2008',
+  INSURANCE_DOCKET_APPEAL_ID: 'Insurance on docket appeal Received June 15, 2008',
+  PENDING_HEARING_APPEAL_ID: 'Pending hearing appeal Received June 14, 2008',
+  DISABILITY_COMPENSATION_APPEAL_1_ID: 'Disability compensation appeal Received June 13, 2008',
 }
 
 const expectedInformation = [
@@ -118,6 +114,8 @@ const expectedInformation = [
 ]
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
+
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -128,8 +126,7 @@ describe('AppealsExpanded', () => {
   for (const [key, value] of Object.entries(AppealsExpandedIdConstants)) {
     it('verify ' + key + ' opens and the correct information is displayed', async () => {
       //Note: Most of the wording in the appeals current status is tested using unit tests so it isn't being tested here.
-      //Uncomment when 8101 is completed
-      /*if (
+      if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
         value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
@@ -137,7 +134,7 @@ describe('AppealsExpanded', () => {
         await element(by.id('claimsHistoryID')).scrollTo('bottom')
         await element(by.id('next-page')).tap()
         await element(by.id('claimsHistoryID')).scrollTo('top')
-      }*/
+      }
 
       await waitFor(element(by.id(value)))
         .toBeVisible()
@@ -182,30 +179,31 @@ describe('AppealsExpanded', () => {
         await openBenefits()
         await openClaims()
         await openClaimsHistory()
-        //Uncomment when 8101 is completed
-        /*if (i >= 4 && i <= 13) {
+        if (i >= 4 && i <= 13) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 14 && i <= 23) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 24 && i <= 33) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
         } else if (i >= 34) {
           await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
           await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('top')
-        }*/
+        }
       }
     })
   }

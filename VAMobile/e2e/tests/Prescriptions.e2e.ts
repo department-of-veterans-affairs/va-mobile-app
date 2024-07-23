@@ -11,7 +11,6 @@ import {
 } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
-  PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_TEXT: 'Apply',
@@ -125,7 +124,7 @@ describe('Prescriptions Screen', () => {
   it('should match the prescription page design', async () => {
     tempPath = await element(by.id('filterSortWrapperBoxTestID')).takeScreenshot('filterSortWrapperBox')
     checkImages(tempPath)
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT))).toExist()
     await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_TEXT))).toExist()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
@@ -360,7 +359,7 @@ describe('Prescriptions Screen', () => {
 
   it('verify refill request screen information', async () => {
     await element(by.id('PrescriptionHistory')).scrollTo('top')
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT)).atIndex(0).tap()
+    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Refill request'))).toExist()
     await expect(element(by.text('Request refills at least 15 days before you need more medication.'))).toExist()
     await expect(

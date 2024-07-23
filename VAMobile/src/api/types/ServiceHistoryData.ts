@@ -4,12 +4,14 @@ export const BranchesOfServiceConstants: {
   CoastGuard: branchesOfService
   MarineCorps: branchesOfService
   Navy: branchesOfService
+  SpaceForce: branchesOfService
 } = {
   AirForce: 'United States Air Force',
   Army: 'United States Army',
   CoastGuard: 'United States Coast Guard',
   MarineCorps: 'United States Marine Corps',
   Navy: 'United States Navy',
+  SpaceForce: 'United States Space Force',
 }
 
 type branchesOfService =
@@ -21,6 +23,7 @@ type branchesOfService =
   | 'United States DoD'
   | 'United States Public Health Service'
   | 'United States NOAA'
+  | 'United States Space Force'
 
 export type ServiceData = {
   branchOfService: branchesOfService

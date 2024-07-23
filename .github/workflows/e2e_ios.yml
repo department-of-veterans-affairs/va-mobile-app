@@ -199,7 +199,7 @@ jobs:
         continue-on-error: true
 
       - name: Rerun e2e tests for iOS if failed
-        if: (failure() || success()) && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        if: steps.run_e2e_tests.outcome == 'failure' && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
         id: rerun_e2e_tests
         run: |
             yarn jest:clear;
@@ -235,7 +235,7 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure() && (steps.run_e2e_tests.outcome == 'failure' || steps.rerun_e2e_tests.outcome == 'failure')
+        if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -27,7 +28,25 @@ context('ProfileScreen', () => {
       addListener: jest.fn(),
     })
 
-    render(<ProfileScreen {...props} />)
+    const queriesData = [
+      {
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: null,
+          hasFacilityTransitioningToCerner: false,
+        },
+      },
+    ]
+
+    render(<ProfileScreen {...props} />, {
+      queriesData,
+    })
   }
 
   describe('when userProfileUpdate is false, true would not work since mockReturnValueOnce would not work like the other screens so confirm true with demo mode', () => {
@@ -56,7 +75,6 @@ context('ProfileScreen', () => {
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(militaryServiceHistoryData)
       initializeTestInstance()
-      expect(screen.getByText('Loading your profile...')).toBeTruthy()
       await waitFor(() => expect(screen.queryByText('Personal information')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Contact information')).toBeFalsy())
       await waitFor(() => expect(screen.getByText('Military information')).toBeTruthy())

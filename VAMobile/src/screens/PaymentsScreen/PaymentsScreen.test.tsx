@@ -48,7 +48,7 @@ context('PaymentsScreen', () => {
   describe('when user does not have directDepositBenefits', () => {
     it('should navigate to HowToUpdateDirectDeposit', () => {
       initializeTestInstance(false)
-      fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Direct deposit information' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('HowToUpdateDirectDeposit')
     })
   })
@@ -56,7 +56,7 @@ context('PaymentsScreen', () => {
   describe('when user does have directDepositBenefits', () => {
     it('should navigate to DirectDeposit', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Direct deposit information' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('DirectDeposit')
     })
   })
@@ -64,7 +64,7 @@ context('PaymentsScreen', () => {
   describe('when user click on VA payment history', () => {
     it('should navigate to PaymentHistory', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('menuitem', { name: 'VA payment history' }))
+      fireEvent.press(screen.getByRole('link', { name: 'VA payment history' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('DirectDeposit')
     })
   })

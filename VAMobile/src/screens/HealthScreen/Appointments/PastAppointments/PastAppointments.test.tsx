@@ -48,7 +48,15 @@ context('PastAppointments', () => {
   const initializeTestInstance = (appointmentsData?: AppointmentsGetData, loading = false) => {
     const props = mockNavProps()
 
-    render(<PastAppointments {...props} appointmentsData={appointmentsData} setPage={jest.fn()} loading={loading} />)
+    render(
+      <PastAppointments
+        {...props}
+        appointmentsData={appointmentsData}
+        page={1}
+        setPage={jest.fn()}
+        loading={loading}
+      />,
+    )
   }
 
   it('initializes correctly', () => {

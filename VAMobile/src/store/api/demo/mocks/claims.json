@@ -30,8 +30,8 @@
           "attributes": {
             "subtype": "Compensation",
             "completed": false,
-            "dateFiled": "2021-01-01",
-            "updatedAt": "2021-05-04",
+            "dateFiled": "2019-03-22",
+            "updatedAt": "2019-07-18",
             "displayTitle": "Compensation"
           }
         },
@@ -473,7 +473,7 @@
           "totalPages": 5,
           "totalEntries": 42
         },
-        "activeClaimsCount": 3
+        "activeClaimsCount": 5
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",

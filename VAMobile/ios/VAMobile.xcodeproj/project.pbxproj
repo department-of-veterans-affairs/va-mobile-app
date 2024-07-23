@@ -35,7 +35,9 @@
 		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
 		EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */; };
+		EFE00507643646128D33A4FB /* launch_icon.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2579582387BD4A9C937E3141 /* launch_icon.jpeg */; };
 		F0A7D505A86F15F0584E031D /* libPods-VAMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-VAMobile.a */; };
+		F16E6BEE32054C639EAAF608 /* Bitter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */; };
 		FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +59,7 @@
 		063E6E51934F27E13811FC7D /* Pods-VAMobile.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.rc.xcconfig"; sourceTree = "<group>"; };
 		1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppUpdate.m; sourceTree = "<group>"; };
 		1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNInAppUpdate.swift; sourceTree = "<group>"; };
+		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* VAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VAMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = VAMobile/AppDelegate.mm; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-VAMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
+		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = launch_icon.jpeg; path = ../assets/fonts/launch_icon.jpeg; sourceTree = "<group>"; };
 		3553357295992E19D8D2C691 /* Pods-VAMobile-VAMobileTests.qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.qa.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.qa.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-VAMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
@@ -174,6 +178,8 @@
 				8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */,
 				DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */,
 				2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */,
+				11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */,
+				2579582387BD4A9C937E3141 /* launch_icon.jpeg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -347,6 +353,8 @@
 				EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */,
 				381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */,
 				46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */,
+				F16E6BEE32054C639EAAF608 /* Bitter-Regular.ttf in Resources */,
+				EFE00507643646128D33A4FB /* launch_icon.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

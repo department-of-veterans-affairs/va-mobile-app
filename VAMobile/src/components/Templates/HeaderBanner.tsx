@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useReducer, useState } from 'react'
-import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
+import colors from 'styles/themes/VAColors'
 import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
@@ -60,6 +61,8 @@ export type HeaderBannerProps = {
   menuViewActions?: MenuViewActionsType
   /** bypass divider marginbottom */
   dividerMarginBypass?: boolean
+  /** adds shadow to bottom of banner, default no shadow */
+  shadow?: boolean
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({
@@ -69,6 +72,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   divider: bannerDivider,
   menuViewActions,
   dividerMarginBypass,
+  shadow: bannerShadow,
 }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -161,6 +165,20 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
+    style: bannerShadow
+      ? {
+          shadowColor: colors.black,
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.1,
+            },
+            android: {
+              elevation: 8,
+            },
+          }),
+        }
+      : undefined,
   }
 
   const commonBoxProps: BoxProps = {

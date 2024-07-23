@@ -47,6 +47,7 @@ describe('Military Info Screen', () => {
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
   verifyMilitaryInfo('United States Marine Corps')
+  verifyMilitaryInfo('United States Space Force')
 
   it('should open new screen if military service information is incorrect', async () => {
     await openProfile()

@@ -1,21 +1,28 @@
-import React, { FC, useState } from 'react'
-import { Pressable, ViewStyle } from 'react-native'
+import React, { FC } from 'react'
+import ContentLoader, { Rect } from 'react-content-loader/native'
+import { useTranslation } from 'react-i18next'
+import { Platform, Pressable, ViewStyle } from 'react-native'
 
-import {
-  BackgroundVariant,
-  BorderColorVariant,
-  BorderStyles,
-  BorderWidths,
-  Box,
-  BoxProps,
-  TextView,
-  VAIcon,
-} from 'components'
-import { VAIconColors, VATextColors } from 'styles/theme'
+import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-import MessagesCountTag from './MessagesCountTag'
+import colors from '../styles/themes/VAColors'
+
+const SkeletonLoader = () => {
+  const theme = useTheme()
+  return (
+    <ContentLoader
+      backgroundColor={theme.colors.background.skeletonLoader}
+      foregroundColor={theme.colors.background.skeletonLoaderSecondary}
+      speed={0.6}
+      width="150"
+      height="10">
+      <Rect width="100%" height="25" />
+    </ContentLoader>
+  )
+}
 
 interface HomeNavButtonProps {
   /**string for header and used to create testID for accessibility*/
@@ -28,26 +35,10 @@ interface HomeNavButtonProps {
   a11yHint?: string
   /**function to be called when press occurs */
   onPress: () => void
-  /**BackgroundVariant color for background */
-  backgroundColor?: BackgroundVariant
-  /**BackgroundVariant color for active state */
-  backgroundColorActive?: BackgroundVariant
-  /**VATextColors color for text */
-  textColor?: keyof VATextColors
-  /** VAIconColors icon color*/
-  iconColor?: keyof VAIconColors
-  /**BorderWidths possible widths for HomeNavButton*/
-  borderWidth?: BorderWidths
-  /**BorderColorVariant color for the borders*/
-  borderColor?: BorderColorVariant
-  /**BorderColorVariant color for active state for the borders*/
-  borderColorActive?: BorderColorVariant
-  /**BorderStyles denotes the styling of the borders*/
-  borderStyle?: BorderStyles
-  /**number for the tag */
-  tagCount?: number
-  /**a11y for the tag */
-  tagCountA11y?: string
+  /** Show loading animation in place of subtext */
+  showLoading?: boolean
+  /** Optional test ID for button */
+  testID?: string
 }
 
 /**
@@ -57,107 +48,74 @@ interface HomeNavButtonProps {
 const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,
-  subTextA11yLabel,
   a11yHint,
   onPress,
-  backgroundColor,
-  backgroundColorActive,
-  textColor,
-  iconColor,
-  borderWidth,
-  borderColor,
-  borderColorActive,
-  borderStyle,
-  tagCount,
-  tagCountA11y,
+  showLoading,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
-  const [isPressed, setIsPressed] = useState(false)
-
-  const _onPressIn = (): void => {
-    setIsPressed(true)
-  }
-
-  const _onPressOut = (): void => {
-    setIsPressed(false)
-  }
-
-  const _onPress = (): void => {
-    onPress()
-  }
-
-  const getBorderColor = (): BorderColorVariant | undefined => {
-    // animate borderColor
-    if (isPressed && borderColorActive) {
-      return borderColorActive
-    }
-    return borderColor
-  }
-
-  const getBackgroundColor = (): BackgroundVariant => {
-    // animate backgroundColor
-    if (isPressed && backgroundColorActive) {
-      return backgroundColorActive
-    }
-
-    return backgroundColor ? backgroundColor : 'textBox'
-  }
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {
-    minHeight: 81,
-    borderRadius: 6,
-    p: theme.dimensions.cardPadding,
+    py: theme.dimensions.cardPadding,
+    px: theme.dimensions.buttonPadding,
     mb: theme.dimensions.condensedMarginBetween,
-    backgroundColor: getBackgroundColor(),
-    borderWidth,
-    borderColor: getBorderColor(),
-    borderStyle,
+    backgroundColor: 'textBox',
+    style: {
+      shadowColor: colors.black,
+      ...Platform.select({
+        ios: {
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+        },
+        android: {
+          elevation: 2,
+        },
+      }),
+    },
   }
 
   const pressableStyles: ViewStyle = {
     width: '100%',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
   }
-  const accessibilityLabel =
-    tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
+  const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subText || ''}`.trim()
 
   return (
     <Box {...boxProps}>
       <Pressable
         style={pressableStyles}
-        onPress={_onPress}
-        onPressIn={_onPressIn}
-        onPressOut={_onPressOut}
+        onPress={onPress}
         accessible={true}
-        accessibilityRole={'menuitem'}
+        accessibilityRole={'link'}
         testID={title}
         accessibilityLabel={accessibilityLabel}
         {...a11yHintProp(a11yHint || '')}>
-        <Box flex={1}>
-          <Box
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
-              {title}
-            </TextView>
-            {!!tagCount && <MessagesCountTag unread={tagCount} />}
+        <Box flexDirection="row">
+          <Box flex={1}>
+            <TextView variant="LargeNavButton">{title}</TextView>
+            {showLoading ? (
+              <TextView mt={30} flexDirection={'row'}>
+                <SkeletonLoader />
+              </TextView>
+            ) : subText ? (
+              <TextView mt={20} variant={'LargeNavSubtext'}>
+                {subText}
+              </TextView>
+            ) : (
+              <></>
+            )}
           </Box>
-          {subText && (
-            <TextView variant={'MobileBody'} color={textColor}>
-              {subText}
-            </TextView>
-          )}
+          <VAIcon
+            flexDirection="row"
+            alignItems="flex-end"
+            width={24}
+            height={24}
+            name="RightArrowInCircle"
+            fill={theme.colors.icon.largeNavButton}
+            fill2={theme.colors.icon.transparent}
+            ml={theme.dimensions.listItemDecoratorMarginLeft}
+            preventScaling={true}
+          />
         </Box>
-        <VAIcon
-          name="ChevronRight"
-          fill={`${iconColor ? iconColor : 'largeNav'}`}
-          width={10}
-          height={15}
-          ml={theme.dimensions.listItemDecoratorMarginLeft}
-        />
       </Pressable>
     </Box>
   )
