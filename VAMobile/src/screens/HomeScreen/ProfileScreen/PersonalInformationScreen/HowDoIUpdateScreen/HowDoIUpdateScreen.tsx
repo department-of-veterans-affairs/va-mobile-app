@@ -79,7 +79,10 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
           text={t('howDoIUpdate.learnToChangeLegalName')}
           a11yLabel={a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName'))}
         />
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView
+          variant="MobileBody"
+          mt={theme.dimensions.standardMarginBetween}
+          mb={theme.dimensions.condensedMarginBetween}>
           {t('howDoIUpdate.name.incorrectRecords')}
         </TextView>
         {renderVAMedicalCenterSection()}
