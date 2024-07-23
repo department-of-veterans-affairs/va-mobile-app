@@ -32,6 +32,7 @@ import {
   CategoryLanding,
   CategoryLandingAlert,
   EncourageUpdateAlert,
+  HeaderButton,
   LinkRow,
   LoadingComponent,
   Nametag,
@@ -252,13 +253,14 @@ export function HomeScreen({}: HomeScreenProps) {
     })
   }
 
-  const headerButton = {
+  const headerButton: HeaderButton = {
     label: t('profile.title'),
     icon: {
       name: 'ProfileSelected',
     } as VAIconProps,
     onPress: () => navigateTo('Profile'),
   }
+
   const boxProps: BoxProps = {
     style: {
       shadowColor: colors.black,
