@@ -227,7 +227,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     }
   }
 
-  // Default role for list item is button
+  // Default role for list item is menuitem
   const accessibilityRole = a11yRole || (isSwitchRow ? 'switch' : 'menuitem')
 
   const pressableProps: PressableProps = {
