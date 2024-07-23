@@ -34,7 +34,7 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
-  const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { condensedMarginBetween, standardMarginBetween, tinyMarginBetween } = theme.dimensions
 
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
@@ -53,7 +53,7 @@ function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: Clai
 
   const phaseHeader = (
     <Box flexDirection="column">
-      <Box flexDirection="row" alignItems="center" mb={condensedMarginBetween}>
+      <Box flexDirection="row" alignItems="center" mb={isCompletedPhase ? tinyMarginBetween : 0}>
         {isCompletedPhase && <VAIcon name="CircleCheckMark" fill={theme.colors.icon.success} width={24} height={24} />}
         <TextView
           variant="MobileBodyBold"
