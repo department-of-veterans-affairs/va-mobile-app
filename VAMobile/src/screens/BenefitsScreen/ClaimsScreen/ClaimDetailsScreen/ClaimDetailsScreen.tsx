@@ -24,7 +24,6 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -223,21 +222,21 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     return <></>
   }
 
-  function renderActiveClosedClaimStatusHelpLink() {
-    const whatShouldOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_disag(claimID, claimType, attributes.phase))
-      navigateTo('WhatDoIDoIfDisagreement', {
-        claimID: claimID,
-        claimType: claimType,
-        claimStep: attributes.phase,
-      })
-    }
-    
-    const whyWeCombineOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_why_combine(claimID, claimType, attributes.phase))
-      navigateTo('ConsolidatedClaimsNote')
-    }
+  const whatShouldOnPress = () => {
+    logAnalyticsEvent(Events.vama_claim_disag(claimID, claimType, attributes.phase))
+    navigateTo('WhatDoIDoIfDisagreement', {
+      claimID: claimID,
+      claimType: claimType,
+      claimStep: attributes.phase,
+    })
+  }
 
+  const whyWeCombineOnPress = () => {
+    logAnalyticsEvent(Events.vama_claim_why_combine(claimID, claimType, attributes.phase))
+    navigateTo('ConsolidatedClaimsNote')
+  }
+
+  function renderActiveClosedClaimStatusHelpLink() {
     if (claimType === ClaimTypeConstants.CLOSED) {
       return (
         <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
@@ -256,7 +255,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <LinkWithAnalytics
           type="custom"
           text={t('claimDetails.whyWeCombineNew')}
-          testID={a11yLabelVA(t('claimDetails.whyWeCombine'))}
+          testID={t('claimDetails.whyWeCombineNew')}
           onPress={whyWeCombineOnPress}
         />
       </Box>
