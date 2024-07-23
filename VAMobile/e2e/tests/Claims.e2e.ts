@@ -79,7 +79,7 @@ describe('Claims Screen', () => {
 
   it('Verify VA sometimes combine claims information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id('Why does  V-A  sometimes combine claims?')).tap()
+    await element(by.id('Find out why we sometimes combine claims')).tap()
     await expect(element(by.text('A note about consolidated claims'))).toExist()
     await element(by.text('Close')).tap()
   })
@@ -110,7 +110,7 @@ describe('Claims Screen', () => {
   })
 
   it('should verify that the review file request button is visible in step 3', async () => {
-    await waitFor(element(by.text('Review file requests')))
+    await waitFor(element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID)))
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
