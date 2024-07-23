@@ -310,8 +310,8 @@ describe('Claims Screen', () => {
 
   it('Verify what should I do if disagreement information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id(`Learn what to do if you disagree with our decision`)).tap()
-    await expect(element(by.text('Learn what to do if you disagree with our decision'))).toExist()
+    await element(by.id('Learn what to do if you disagree with our decision')).atIndex(0).tap()
+    await expect(element(by.text('Learn what to do if you disagree with our decision')).atIndex(0)).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
@@ -338,6 +338,7 @@ describe('Claims Screen', () => {
   })
 
   it('verify details tab infomation', async () => {
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.text('Details')).tap()
     await expect(element(by.text('Claim type'))).toExist()
     await expect(element(by.text('Compensation'))).toExist()
