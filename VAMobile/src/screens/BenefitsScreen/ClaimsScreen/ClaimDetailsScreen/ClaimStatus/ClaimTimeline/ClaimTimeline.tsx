@@ -66,7 +66,6 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
           featureEnabled('claimPhaseExpansion') ? (
             <ClaimPhase
               phase={phase}
-              current={getUserPhase(attributes.phase)}
               attributes={attributes}
               claimID={claimID}
               scrollViewRef={scrollViewRef}

@@ -8,7 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { isDisabilityCompensationClaim } from 'utils/claims'
+import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 /**
@@ -17,8 +17,6 @@ import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 export type ClaimPhaseProps = {
   /** phase number of the current indicator */
   phase: number
-  /** phase that the current claim is on */
-  current: number
   /** attributes object from ClaimData */
   attributes: ClaimAttributesData
   /** given claims ID */
@@ -30,19 +28,20 @@ export type ClaimPhaseProps = {
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-function ClaimPhase({ phase, current, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
+function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
   const { condensedMarginBetween, standardMarginBetween, tinyMarginBetween } = theme.dimensions
 
-  const isCompletedPhase = phase < current
-  const isCurrentPhase = phase === current
-  const isIncompletePhase = phase > current
-
   const isDisabilityClaim = isDisabilityCompensationClaim(attributes.claimTypeCode)
   const translationStepString = isDisabilityClaim ? '8step' : '5step'
   const heading = t(`claimPhase.${translationStepString}.heading.phase${phase}`)
+
+  const current = isDisabilityClaim ? attributes.phase : getUserPhase(attributes.phase)
+  const isCompletedPhase = phase < current
+  const isCurrentPhase = phase === current
+  const isIncompletePhase = phase > current
 
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current) {
