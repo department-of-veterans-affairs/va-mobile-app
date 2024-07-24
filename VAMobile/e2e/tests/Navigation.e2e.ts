@@ -249,6 +249,8 @@ const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(100, 'down')
+      await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
+      return
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -268,13 +270,9 @@ const navigateToPage = async (key, navigationDicValue) => {
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
-    if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
-    } else {
-      await element(by.text(subNavigationArray.slice(-1)[0]))
-        .atIndex(0)
-        .tap()
-    }
+    await element(by.text(subNavigationArray.slice(-1)[0]))
+      .atIndex(0)
+      .tap()
   }
 }
 
