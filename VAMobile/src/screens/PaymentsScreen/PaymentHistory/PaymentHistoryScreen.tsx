@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePayments } from 'api/payments'
 import { PaymentsData } from 'api/types'
 import {
@@ -29,6 +30,7 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -37,12 +39,13 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const [yearPickerOption, setYearPickerOption] = useState<yearsDatePickerOption>()
   const [pickerOptions, setpickerOptions] = useState<Array<yearsDatePickerOption>>([])
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
+  const accessToPaymentHistory = userAuthorizedServices?.paymentHistory
   const {
     data: payments,
     isFetching: loading,
     error: hasError,
     refetch: refetchPayments,
-  } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
+  } = usePayments(yearPickerOption?.label, page)
   const noPayments = payments?.meta.availableYears?.length === 0
 
   type yearsDatePickerOption = {
@@ -147,7 +150,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
           error={hasError}
           onTryAgain={refetchPayments}
         />
-      ) : noPayments ? (
+      ) : noPayments || !accessToPaymentHistory ? (
         <NoPaymentsScreen />
       ) : (
         <>
