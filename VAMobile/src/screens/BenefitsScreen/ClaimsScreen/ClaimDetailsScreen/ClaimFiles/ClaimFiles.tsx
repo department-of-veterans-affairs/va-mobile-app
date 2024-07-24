@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import _ from 'underscore'
 
 import { ClaimData } from 'api/types'
@@ -16,6 +18,7 @@ type ClaimFilesProps = {
 function ClaimFiles({ claim }: ClaimFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const isFocused = useIsFocused()
   const { attributes } = claim
   const events = attributes.eventsTimeline.filter(
     (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
@@ -59,7 +62,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
     return items
   }
   const filesList = files()
-  if (filesList.length > 0) {
+  if (isFocused && filesList.length > 0) {
     return (
       <Box>
         <DefaultList items={files()} />
