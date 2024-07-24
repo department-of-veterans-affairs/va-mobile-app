@@ -211,7 +211,7 @@ const navigateToPage = async (key, navigationDicValue) => {
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
       if (subNavigationArray[k] === 'Review file requests') {
-        await waitFor(element(by.text('Review file requests')))
+        await waitFor(element(by.id('Step3FileRequestButton')))
           .toBeVisible()
           .whileElement(by.id('ClaimDetailsScreen'))
           .scroll(100, 'down')
@@ -241,7 +241,7 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.text('Review file requests')))
+      await waitFor(element(by.id('Step3FileRequestButton')))
         .toBeVisible()
         .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(100, 'down')
