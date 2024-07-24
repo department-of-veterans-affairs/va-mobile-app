@@ -12,6 +12,7 @@ import {
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
+  ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
   CLAIM_1_ID: 'Compensation Received December 05, 2021',
   CLAIM_2_ID: 'Compensation Received December 04, 2021',
   CLAIM_3_ID: 'Compensation Received July 20, 2021',
@@ -77,8 +78,12 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Thank you. VA received your claim'))).not.toExist()
   })
 
-  it('Verify VA sometimes combine claims information', async () => {
+  it('Verify what you claimed section', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await expect(element(by.text("What you've claimed"))).toExist()
+  })
+
+  it('Verify VA sometimes combine claims information', async () => {
     await element(by.id('Find out why we sometimes combine claims')).tap()
     await expect(element(by.text('Find out why we sometimes combine claims'))).toExist()
     await element(by.text('Close')).tap()
@@ -107,6 +112,10 @@ describe('Claims Screen', () => {
   it('should tap on a claim and verify the dates match', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
     await expect(element(by.text('Received January 01, 2021'))).toExist()
+  })
+
+  it('should verify that the review file request alert is visible', async () => {
+    await waitFor(element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
   it('should verify that the review file request button is visible in step 3', async () => {
