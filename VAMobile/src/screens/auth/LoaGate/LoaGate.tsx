@@ -66,7 +66,7 @@ function LoaGate({}: LoaGateProps) {
             <TextView {...bodyTextProps}>{t('loaGate.readMore.itemTwo.OfferProof')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne, { text: t('loaGate.readMore.bulletTwo') }]} paragraphSpacing={true} />
+            <VABulletList listOfText={[bulletOne, { text: t('loaGate.readMore.bulletTwo') }]} />
           </Box>
         </CollapsibleView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
