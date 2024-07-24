@@ -25,8 +25,7 @@ context('ClaimPhase', () => {
   const initializeTestInstance = (phase: number, current: number) => {
     const props: ClaimPhaseProps = {
       phase,
-      current,
-      attributes: claim.attributes,
+      attributes: { ...claim.attributes, phase: current },
       claimID: claim.id,
       scrollViewRef: {} as RefObject<ScrollView>,
     }
@@ -41,20 +40,33 @@ context('ClaimPhase', () => {
   })
 
   describe('when phase is less than current', () => {
-    it('should render text details after pressing icon', () => {
+    it('renders correct label and text after press', () => {
       initializeTestInstance(1, 2)
+      expect(screen.getByLabelText('Step 1. Claim received. Complete.')).toBeTruthy()
       fireEvent.press(screen.getAllByRole('tab')[0])
       expect(screen.getByText('We received your claim in our system.')).toBeTruthy()
     })
   })
 
   describe('when phase is equal to current', () => {
-    it('should render text details after pressing icon', () => {
+    it('renders correct label and text without press', () => {
       initializeTestInstance(2, 2)
+      expect(screen.getByLabelText('Step 2. Initial review. Current step. Step 1 complete.')).toBeTruthy()
       expect(
         screen.getByText(
           "We'll check your claim for basic information we need, like your name and Social Security number.\n\nIf information is missing, we'll contact you.",
         ),
+      ).toBeTruthy()
+    })
+  })
+
+  describe('when phase is greater than current', () => {
+    it('renders correct label and text after press', () => {
+      initializeTestInstance(8, 7)
+      expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
+      fireEvent.press(screen.getAllByRole('tab')[0])
+      expect(
+        screen.getByText("You’ll be able to view and download your decision letter. We'll also mail you this letter."),
       ).toBeTruthy()
     })
   })
