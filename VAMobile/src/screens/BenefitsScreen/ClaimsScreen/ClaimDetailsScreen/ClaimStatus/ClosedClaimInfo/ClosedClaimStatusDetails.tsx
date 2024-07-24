@@ -42,7 +42,9 @@ function ClosedClaimStatusDetails({ claim, claimType, letterIsDownloadable }: Cl
       </TextView>
       <TextView paragraphSpacing={true}>{letterText}</TextView>
 
-      <TextView variant="MobileBodyBold">{t('claimDetails.whatYouHaveClaimed')}</TextView>
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
+        {t('claimDetails.whatYouHaveClaimed')}
+      </TextView>
       {contentionList?.length ? (
         <VABulletList listOfText={contentionList} paragraphSpacing={true} />
       ) : (
@@ -51,7 +53,9 @@ function ClosedClaimStatusDetails({ claim, claimType, letterIsDownloadable }: Cl
         </TextView>
       )}
 
-      <TextView variant="MobileBodyBold">{t('payments')}</TextView>
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
+        {t('payments')}
+      </TextView>
       <TextView>{t('claimDetails.ifyoureentitled')}</TextView>
     </TextArea>
   )
