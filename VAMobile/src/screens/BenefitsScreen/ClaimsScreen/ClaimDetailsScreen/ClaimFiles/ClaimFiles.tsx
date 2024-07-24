@@ -6,6 +6,7 @@ import _ from 'underscore'
 import { ClaimData } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type ClaimFilesProps = {
@@ -32,7 +33,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
           textLines.push({ text: t('appointmentList.documentType', { type: event.documentType }) })
         }
         if (event.uploadDate) {
-          textLines.push({ text: t('appointmentList.received', { date: event.uploadDate }) })
+          textLines.push({ text: t('appointmentList.received', { date: formatDateMMMMDDYYYY(event.uploadDate) }) })
         }
         items.push({ textLines: textLines })
       } else {
@@ -46,7 +47,9 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
               textLines.push({ text: t('appointmentList.documentType', { type: document.documentType }) })
             }
             if (document.uploadDate) {
-              textLines.push({ text: t('appointmentList.received', { date: document.uploadDate }) })
+              textLines.push({
+                text: t('appointmentList.received', { date: formatDateMMMMDDYYYY(document.uploadDate) }),
+              })
             }
             items.push({ textLines: textLines })
           }
