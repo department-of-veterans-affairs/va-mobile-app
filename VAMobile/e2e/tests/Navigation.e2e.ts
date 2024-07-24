@@ -265,10 +265,19 @@ const navigateToPage = async (key, navigationDicValue) => {
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
       scrollID = featureID[subNavigationArray.slice(-1)[0]]
-      await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
-        .toBeVisible()
-        .whileElement(by.id(scrollID))
-        .scroll(50, 'down')
+      if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
+        await waitFor(element(by.id('Step3FileRequestButton')))
+          .toBeVisible()
+          .whileElement(by.id(scrollID))
+          .scroll(100, 'down')
+        await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
+        return
+      } else {
+        await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
+          .toBeVisible()
+          .whileElement(by.id(scrollID))
+          .scroll(50, 'down')
+      }
     }
     await element(by.text(subNavigationArray.slice(-1)[0]))
       .atIndex(0)
