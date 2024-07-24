@@ -25,7 +25,7 @@ export const ClaimsE2eIdConstants = {
   CLAIM_1_STATUS_STEP_4_ID: 'Step 4 of 5.  Preparation for notification',
   CLAIM_1_STATUS_STEP_5_ID: 'Step 5 of 5.  Complete',
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
-  FILE_REQUEST_BUTTON_ID: 'Review file requests',
+  FILE_REQUEST_BUTTON_ID: 'Step3FileRequestButton',
   TAKE_OR_SELECT_PHOTOS_CAMERA_OPTION_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
   TAKE_OR_SELECT_PHOTOS_PHOTO_GALLERY_OPTION_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
   SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',

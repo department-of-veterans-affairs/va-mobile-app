@@ -149,7 +149,7 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
           <Box mt={standardMarginBetween}>
             <Button
               onPress={fileRequestsPress}
-              testID={t('claimPhase.fileRequests.button.label')}
+              testID={'Step3FileRequestButton'}
               label={t('claimPhase.fileRequests.button.label')}
               a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
             />
