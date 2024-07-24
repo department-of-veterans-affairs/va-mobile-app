@@ -264,10 +264,7 @@ const navigateToPage = async (key, navigationDicValue) => {
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
-    if (
-      subNavigationArray[k] === 'Review file requests' ||
-      subNavigationArray.slice(-1)[0] === 'Review file requests'
-    ) {
+    if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
       await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
     } else {
       await element(by.text(subNavigationArray.slice(-1)[0]))
