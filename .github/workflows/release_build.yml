@@ -68,8 +68,12 @@ jobs:
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
           git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
-          git commit -m "Optimize images before release build"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Optimize images before release build"
+            git push
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
   ios:
