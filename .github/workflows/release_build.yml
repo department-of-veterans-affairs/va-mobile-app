@@ -21,7 +21,6 @@ jobs:
     with:
       channel_name: 'va-mobile-app'
       message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
-
   optimize_images:
     name: Optimize Images
     needs: start_slack_thread
@@ -29,10 +28,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
-
       - name: List images before optimization
         run: |
           echo "iOS images before optimization:"
@@ -40,17 +37,14 @@ jobs:
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
-
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
       - name: Optimize iOS images
-        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/    
-
+        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/
       - name: Optimize Android images
         run: |
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
-
       - name: List images after optimization
         run: |
           echo "iOS images after optimization:"
@@ -58,8 +52,7 @@ jobs:
           echo "Android images after optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
-     
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
@@ -75,7 +68,7 @@ jobs:
             git push
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ios:
     name: iOS Release Build
     needs: [start_slack_thread, optimize_images]
