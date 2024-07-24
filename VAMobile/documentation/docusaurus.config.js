@@ -59,6 +59,7 @@ const config = {
       'contributing.md',
       'namingConventions.md',
       'overview.md',
+      'releaseProcess.md',
       'testing.md',
       'versioning.md',
     ]),

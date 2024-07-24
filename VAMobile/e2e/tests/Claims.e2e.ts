@@ -84,20 +84,6 @@ describe('Claims Screen', () => {
     await element(by.text('Close')).tap()
   })
 
-  it('Verify what should I do if disagreement information', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id(`What should I do if I disagree with  V-A 's decision on my disability claim?`)).tap()
-    await expect(
-      element(by.label('What should I do if I disagree with your decision on my  V-A  disability claim?')),
-    ).toExist()
-    await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('DecisionReviewOptionsWebsite')
-    await device.launchApp({ newInstance: false })
-    await element(by.text('Close')).tap()
-  })
-
   it('open claim: verify that the need help? section information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(
@@ -314,11 +300,24 @@ describe('Claims Screen', () => {
 
   it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
+    await expect(element(by.text('Decision letter ready'))).toExist()
     await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(
       element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
     ).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
+  })
+
+  it('Verify what should I do if disagreement information', async () => {
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id('Learn what to do if you disagree with our decision')).atIndex(0).tap()
+    await expect(element(by.text('Learn what to do if you disagree with our decision')).atIndex(0)).toExist()
+    await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('DecisionReviewOptionsWebsite')
+    await device.launchApp({ newInstance: false })
+    await element(by.text('Close')).tap()
   })
 
   it('closed claim: verify that the need help? section display information', async () => {
@@ -339,6 +338,7 @@ describe('Claims Screen', () => {
   })
 
   it('verify details tab infomation', async () => {
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.text('Details')).tap()
     await expect(element(by.text('Claim type'))).toExist()
     await expect(element(by.text('Compensation'))).toExist()
