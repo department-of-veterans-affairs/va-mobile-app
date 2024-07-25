@@ -150,7 +150,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', {
-            name: 'Compensation Received October 01, 2020',
+            name: 'Compensation More information needed Received October 01, 2020',
           }),
         ),
       )
