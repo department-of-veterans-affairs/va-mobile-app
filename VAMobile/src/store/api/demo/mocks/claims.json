@@ -11,7 +11,7 @@
             "dateFiled": "2021-07-20",
             "updatedAt": "2021-07-20",
             "displayTitle": "Compensation",
-            "phase": 1,
+            "phase": 2,
             "claimTypeCode": "",
             "documentsNeeded": false,
             "developmentLetterSent": false
@@ -26,9 +26,9 @@
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-05-05",
             "displayTitle": "Compensation",
-            "phase": 1,
+            "phase": 3,
             "claimTypeCode": "",
-            "documentsNeeded": false,
+            "documentsNeeded": true,
             "developmentLetterSent": false
           }
         },
@@ -41,7 +41,7 @@
             "dateFiled": "2019-03-22",
             "updatedAt": "2019-07-18",
             "displayTitle": "Compensation",
-            "phase": 1,
+            "phase": 3,
             "claimTypeCode": "",
             "documentsNeeded": false,
             "developmentLetterSent": false
@@ -56,7 +56,7 @@
             "dateFiled": "2016-01-01",
             "updatedAt": "2016-07-30",
             "displayTitle": "Dependency",
-            "phase": 1,
+            "phase": 4,
             "claimTypeCode": "",
             "documentsNeeded": false,
             "developmentLetterSent": false
@@ -71,7 +71,7 @@
             "dateFiled": "2021-12-04",
             "updatedAt": "2021-12-04",
             "displayTitle": "Compensation",
-            "phase": 1,
+            "phase": 8,
             "claimTypeCode": "",
             "documentsNeeded": false,
             "developmentLetterSent": false
