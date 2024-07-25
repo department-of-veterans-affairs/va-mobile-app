@@ -255,6 +255,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const headerButton: HeaderButton = {
     label: t('profile.title'),
+    accessibilityRole: 'link',
     icon: {
       name: 'ProfileSelected',
     } as VAIconProps,
