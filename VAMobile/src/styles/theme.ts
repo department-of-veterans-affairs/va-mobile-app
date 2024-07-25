@@ -53,8 +53,6 @@ export type VATextColors = {
   input: string
   inputFocused: string
   brandedPrimaryText: string
-  segmentControllerActive: string
-  segmentControllerInactive: string
   snackBarBtn: string
   snackBarTxt: string
   actionBar: string
@@ -184,7 +182,6 @@ export type VABackgroundColors = {
   textBoxInactive: string
   list: string
   listActive: string
-  segmentedController: string
   headerDropShadow: string
   shadow: string
   profileBanner: string
@@ -276,15 +273,9 @@ export type VAColorScheme = {
   listTag: VAListTagColors
 
   control: {
-    tintColor: string
     switchOnTrack: string
     switchOffTrack: string
     switchOnThumb: string
-    switchOffThumb: string
-  }
-  segmentedControl: {
-    buttonActive: string
-    buttonInactive: string
   }
 }
 
