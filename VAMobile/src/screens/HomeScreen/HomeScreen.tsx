@@ -86,6 +86,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const disabilityRatingInDowntime = useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
+  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const appointmentsQuery = useAppointments(
@@ -193,7 +196,7 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
-  const featureInDowntime = !!(
+  const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
     (authorizedServicesQuery.data?.appeals && appealsInDowntime) ||
     (authorizedServicesQuery.data?.claims && claimsInDowntime) ||
@@ -201,8 +204,17 @@ export function HomeScreen({}: HomeScreenProps) {
     (authorizedServicesQuery.data?.secureMessaging && smInDowntime)
   )
 
+  const activityFeatureActive = !!(
+    (authorizedServicesQuery.data?.appointments && !appointmentsInDowntime) ||
+    (authorizedServicesQuery.data?.appeals && !appealsInDowntime) ||
+    (authorizedServicesQuery.data?.claims && !claimsInDowntime) ||
+    (authorizedServicesQuery.data?.prescriptions && !rxInDowntime) ||
+    (authorizedServicesQuery.data?.secureMessaging && !smInDowntime)
+  )
+
   // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
   const activityNotFetched =
+    activityFeatureActive &&
     !appointmentsQuery.isFetched &&
     !claimsAndAppealsQuery.isFetched &&
     !foldersQuery.isFetched &&
@@ -229,9 +241,18 @@ export function HomeScreen({}: HomeScreenProps) {
     prescriptionsQuery.isError
   )
 
+  const aboutYouFeatureActive = !!(
+    (authorizedServicesQuery.data?.militaryServiceHistory && !serviceHistoryInDowntime) ||
+    (authorizedServicesQuery.data?.disabilityRating && !disabilityRatingInDowntime) ||
+    (authorizedServicesQuery.data?.lettersAndDocuments && !lettersInDowntime)
+  )
+
   // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
   const aboutYouNotFetched =
-    !serviceHistoryQuery.isFetched && !disabilityRatingQuery.isFetched && !letterBeneficiaryQuery.isFetched
+    aboutYouFeatureActive &&
+    !serviceHistoryQuery.isFetched &&
+    !disabilityRatingQuery.isFetched &&
+    !letterBeneficiaryQuery.isFetched
 
   const loadingAboutYou =
     aboutYouNotFetched ||
@@ -302,23 +323,27 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : !hasActivity && !hasActivityError ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <Box
-                flexDirection="row"
-                alignItems="center"
-                accessible={true}
-                accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                <VAIcon
-                  name={'CircleCheckMark'}
-                  fill={Colors.vadsColorSuccessDark}
-                  fill2={theme.colors.icon.transparent}
-                />
-                <TextView
-                  importantForAccessibility={'no'}
-                  ml={theme.dimensions.condensedMarginBetween}
-                  variant="HomeScreen">
-                  {t('noActivity')}
-                </TextView>
-              </Box>
+              {activityFeatureInDowntime ? (
+                <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+              ) : (
+                <Box
+                  flexDirection="row"
+                  alignItems="center"
+                  accessible={true}
+                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
+                  <VAIcon
+                    name={'CircleCheckMark'}
+                    fill={Colors.vadsColorSuccessDark}
+                    fill2={theme.colors.icon.transparent}
+                  />
+                  <TextView
+                    importantForAccessibility={'no'}
+                    ml={theme.dimensions.condensedMarginBetween}
+                    variant="HomeScreen">
+                    {t('noActivity')}
+                  </TextView>
+                </Box>
+              )}
             </Box>
           ) : (
             <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
@@ -358,7 +383,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'prescriptions'}
                 />
               )}
-              {(hasActivityError || featureInDowntime) && (
+              {(hasActivityError || activityFeatureInDowntime) && (
                 <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
               )}
             </Box>
