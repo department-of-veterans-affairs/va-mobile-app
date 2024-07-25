@@ -15,7 +15,7 @@ export const ClaimsE2eIdConstants = {
   CLAIM_1_ID: 'Compensation Received December 05, 2021',
   CLAIM_2_ID: 'Compensation Received December 04, 2021',
   CLAIM_3_ID: 'Compensation Received July 20, 2021',
-  CLAIM_4_ID: 'Compensation Received January 01, 2021',
+  CLAIM_4_ID: 'Compensation More information needed Received January 01, 2021',
   CLAIM_5_ID: 'Compensation Received March 22, 2019',
   CLAIM_6_ID: 'Dependency Received January 01, 2016',
   CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
