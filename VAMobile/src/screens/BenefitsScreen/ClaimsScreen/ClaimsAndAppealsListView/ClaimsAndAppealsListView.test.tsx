@@ -36,6 +36,10 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         dateFiled: '2020-10-01',
         updatedAt: '2020-10-05',
         displayTitle: 'Compensation',
+        phase: 3,
+        claimTypeCode: '',
+        documentsNeeded: true,
+        developmentLetterSent: false,
       },
     },
     {
@@ -48,6 +52,22 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         dateFiled: '2020-12-22',
         updatedAt: '2020-12-28',
         displayTitle: 'Insurance on docket appeal',
+      },
+    },
+    {
+      id: '3',
+      type: 'claim',
+      attributes: {
+        subtype: 'Dependency',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-04',
+        updatedAt: '2020-10-04',
+        displayTitle: 'Dependency',
+        phase: 4,
+        claimTypeCode: '',
+        documentsNeeded: false,
+        developmentLetterSent: false,
       },
     },
   ],
@@ -104,7 +124,11 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() => expect(screen.getByText('Insurance on docket appeal')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
 
+      await waitFor(() => expect(screen.getByText('Dependency')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received October 04, 2020')).toBeTruthy())
+
       await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('More information needed')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
 
       initializeTestInstance('CLOSED')
