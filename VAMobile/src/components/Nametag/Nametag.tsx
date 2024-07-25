@@ -9,7 +9,6 @@ import { BranchesOfServiceConstants } from 'api/types'
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -85,7 +84,7 @@ export const Nametag = () => {
     mx: theme.dimensions.condensedMarginBetween,
     borderRadius: 8,
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },

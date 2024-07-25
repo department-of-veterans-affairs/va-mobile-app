@@ -6,8 +6,6 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library/s
 import { BackgroundVariant, Box, BoxProps, TextView } from 'components'
 import { useExternalLink, useTheme } from 'utils/hooks'
 
-import colors from '../styles/themes/VAColors'
-
 interface AnnouncementBannerProps {
   /** Text for announcement title */
   title: string
@@ -26,7 +24,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
     px: theme.dimensions.cardPadding,
     backgroundColor: theme.colors.buttonBackground.announcementBanner as BackgroundVariant,
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },

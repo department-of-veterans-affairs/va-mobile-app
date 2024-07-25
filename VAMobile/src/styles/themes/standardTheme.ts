@@ -1,10 +1,11 @@
 import { Appearance } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 
-import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
@@ -224,7 +225,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.CategoryLandingAlert,
       scheme.text.categoryLandingWarning,
     ),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.vadsColorWhite),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
     DescriptiveBackButton: buildFont(
       'SourceSansPro-Regular',

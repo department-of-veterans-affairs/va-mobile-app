@@ -8,8 +8,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-import colors from '../styles/themes/VAColors'
-
 const SkeletonLoader = () => {
   const theme = useTheme()
   return (
@@ -61,7 +59,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     mb: theme.dimensions.condensedMarginBetween,
     backgroundColor: 'textBox',
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 2 },
