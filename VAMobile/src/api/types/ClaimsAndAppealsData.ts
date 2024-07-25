@@ -431,10 +431,10 @@ export type ClaimsAndAppealsList = {
     updatedAt: string
     displayTitle: string
     decisionLetterSent: boolean
-    phase: number | string
-    claimTypeCode: string
-    documentsNeeded: boolean
-    developmentLetterSent: boolean
+    phase?: number | string
+    claimTypeCode?: string
+    documentsNeeded?: boolean
+    developmentLetterSent?: boolean
   }
 }
 
