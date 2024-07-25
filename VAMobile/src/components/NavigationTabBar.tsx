@@ -102,7 +102,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             name: `${routeName}${isFocused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
             fill: isFocused ? 'active' : 'inactive',
             label: routeName,
-            labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
+            labelColor: isFocused ? 'link' : 'textWithIconButtonInactive',
           }
 
           return (

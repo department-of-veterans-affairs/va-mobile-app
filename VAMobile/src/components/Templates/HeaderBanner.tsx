@@ -199,7 +199,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (leftButton) {
     leftTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
@@ -226,7 +226,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (rightButton) {
     rightTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,

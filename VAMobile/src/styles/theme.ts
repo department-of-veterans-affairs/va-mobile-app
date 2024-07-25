@@ -2,45 +2,14 @@ import { ColorSchemeTypes } from './themes/standardTheme'
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
-  buttonPrimaryActive: string
-  buttonSecondary: string
-  buttonSecondaryActive: string
-  buttonDisabled: string
   buttonSecondaryDisabled: string
-  buttonDestructive: string
-  buttonDestructiveActive: string
-  buttonWhite: string
-  buttonWhiteActive: string
-  brandedPrimary: string
-  brandedPrimaryActive: string
   overFlowMenuButton: string
   activityButton: string
   announcementBanner: string
 }
 
-export type VAButtonBorderColors = {
-  buttonSecondary: string
-  buttonSecondaryActive: string
-  buttonDestructive: string
-  buttonDestructiveActive: string
-  brandedPrimary: string
-  brandedPrimaryActive: string
-}
-
-export type VAButtonTextColors = {
-  buttonPrimary: string
-  buttonSecondary: string
-  buttonDisabled: string
-  buttonDestructive: string
-  buttonWhite: string
-  brandedPrimary: string
-}
-
 export type VATextColors = {
   appVersionAndBuild: string
-  descriptiveBackButton: string
-  footerButton: string
-  footerButtonActive: string
   navBar: string
   primary: string
   primaryContrast: string
@@ -52,7 +21,6 @@ export type VATextColors = {
   claimPhase: string
   input: string
   inputFocused: string
-  brandedPrimaryText: string
   snackBarBtn: string
   snackBarTxt: string
   actionBar: string
@@ -66,7 +34,6 @@ export type VATextColors = {
   tabSelectorActive: string
   closePanel: string
   labelTag: string
-  textWithIconButton: string
   textWithIconButtonInactive: string
   veteranStatus: string
   veteranStatusBranch: string
@@ -85,8 +52,6 @@ export type VATextColors = {
 }
 
 export type VAIconColors = {
-  footerButton: string
-  footerButtonActive: string
   link: string
   nav: string
   largeNav: string
@@ -108,7 +73,6 @@ export type VAIconColors = {
   chevronCollapsible: string
   chevronListItem: string
   webviewReload: string
-  backButton: string
   unreadMessage: string
   veteransCrisisLineArrow: string
   snackBarIcon: string
@@ -177,7 +141,6 @@ export type VATypographyThemeVariants = {
 export type VABackgroundColors = {
   main: string
   largePanelHeader: string
-  footerButtonActive: string
   textBox: string
   textBoxInactive: string
   list: string
@@ -207,7 +170,6 @@ export type VABackgroundColors = {
   menu: string
   alertBox: string
   panelHeader: string
-  modalButton: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
@@ -234,13 +196,11 @@ export type VABorderColors = {
   pickerAndInput: string
   focusedPickerAndInput: string
   confirmation: string
-  footerButton: string
   menuDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
   photoUpload: string
   prescriptionDivider: string
-  modalButton: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
@@ -267,8 +227,6 @@ export type VAColorScheme = {
   icon: VAIconColors
   text: VATextColors
   buttonBackground: VAButtonBackgroundColors
-  buttonText: VAButtonTextColors
-  buttonBorder: VAButtonBorderColors
   selectCopyText: string
   listTag: VAListTagColors
 
