@@ -183,7 +183,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
-      setTo(message?.recipientId.toString() || '')
+      setTo(message?.recipientId?.toString() || '')
     }
   }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
