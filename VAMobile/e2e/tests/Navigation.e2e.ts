@@ -211,7 +211,7 @@ const navigateToPage = async (key, navigationDicValue) => {
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
       if (subNavigationArray[k] === 'Review file requests') {
-        await waitFor(element(by.id('Step3FileRequestButton')))
+        await waitFor(element(by.text('Review file requests')))
           .toBeVisible()
           .whileElement(by.id('ClaimDetailsScreen'))
           .scroll(100, 'down')
@@ -237,20 +237,14 @@ const navigateToPage = async (key, navigationDicValue) => {
           .whileElement(by.id(scrollID))
           .scroll(50, 'down')
       }
-      if (subNavigationArray[k] === 'Review file requests') {
-        await element(by.id('Step3FileRequestButton')).tap()
-      } else {
-        await element(by.text(subNavigationArray[k])).tap()
-      }
+      await element(by.text(subNavigationArray[k])).tap()
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.id('Step3FileRequestButton')))
+      await waitFor(element(by.text('Review file requests')))
         .toBeVisible()
         .whileElement(by.id('ClaimDetailsScreen'))
         .scroll(100, 'down')
-      await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
-      return
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -265,31 +259,14 @@ const navigateToPage = async (key, navigationDicValue) => {
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
       scrollID = featureID[subNavigationArray.slice(-1)[0]]
-      if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-        await waitFor(element(by.id('Step3FileRequestButton')))
-          .toBeVisible()
-          .whileElement(by.id(scrollID))
-          .scroll(100, 'down')
-        await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
-        return
-      } else {
-        await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
-          .toBeVisible()
-          .whileElement(by.id(scrollID))
-          .scroll(50, 'down')
-      }
-    }
-    if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.id('Step3FileRequestButton')))
+      await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
-        .scroll(100, 'down')
-      await element(by.id('Step3FileRequestButton')).atIndex(0).tap()
-    } else {
-      await element(by.text(subNavigationArray.slice(-1)[0]))
-        .atIndex(0)
-        .tap()
+        .scroll(50, 'down')
     }
+    await element(by.text(subNavigationArray.slice(-1)[0]))
+      .atIndex(0)
+      .tap()
   }
 }
 
