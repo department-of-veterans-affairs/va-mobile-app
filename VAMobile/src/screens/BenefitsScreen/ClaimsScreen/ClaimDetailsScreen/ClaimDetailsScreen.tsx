@@ -213,7 +213,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           onPress: fileRequestsPress,
         }
         return (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
             <Button {...buttonProps} />
           </Box>
         )
@@ -283,7 +283,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-            {getActiveClosedClaimInformationAlertOrSubmitButton()}
+          </Box>
+          {getActiveClosedClaimInformationAlertOrSubmitButton()}
+          <Box mx={theme.dimensions.condensedMarginBetween}>
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}
