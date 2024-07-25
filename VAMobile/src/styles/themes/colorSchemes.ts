@@ -2,7 +2,7 @@ import { colors as DSColors } from '@department-of-veterans-affairs/mobile-token
 
 import colors from './VAColors'
 
-export const primaryTextColor = colors.grayDark
+export const primaryTextColor = DSColors.vadsColorBaseDarker
 
 export const lightTheme = {
   background: {
