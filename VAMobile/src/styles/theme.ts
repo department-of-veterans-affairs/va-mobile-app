@@ -10,15 +10,12 @@ export type VAButtonBackgroundColors = {
 
 export type VATextColors = {
   appVersionAndBuild: string
-  navBar: string
   primary: string
   primaryContrast: string
-  secondary: string
   link: string
   error: string
   placeholder: string
   checkboxDisabled: string
-  claimPhase: string
   input: string
   inputFocused: string
   snackBarBtn: string
@@ -27,12 +24,6 @@ export type VATextColors = {
   actionBarDisabled: string
   bodyText: string
   showAll: string
-  defaultMenuItem: string
-  warningTag: string
-  statusDescription: string
-  tabSelectorInactive: string
-  tabSelectorActive: string
-  closePanel: string
   labelTag: string
   textWithIconButtonInactive: string
   veteranStatus: string
@@ -56,13 +47,10 @@ export type VAIconColors = {
   nav: string
   largeNav: string
   deleteFill: string
-  disclosure: string
   success: string
   error: string
   active: string
   inactive: string
-  contrast: string
-  expandCollapse: string
   checkboxEnabledPrimary: string
   checkboxDisabled: string
   checkboxDisabledContrast: string
@@ -74,13 +62,8 @@ export type VAIconColors = {
   chevronListItem: string
   webviewReload: string
   unreadMessage: string
-  veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
-  statusInfoIcon: string
-  infoIcon: string
-  prescriptionHelper: string
-  infoIconContrast: string
   radioDisabled: string
   tagInfoIcon: string
   transparent: string
@@ -146,7 +129,6 @@ export type VABackgroundColors = {
   list: string
   listActive: string
   headerDropShadow: string
-  shadow: string
   profileBanner: string
   ctaButton: string
   completedPhase: string
@@ -155,13 +137,10 @@ export type VABackgroundColors = {
   splashScreen: string
   loginScreen: string
   carousel: string
-  unreadMessagesTag: string
-  navHeader: string
   modalOverlay: string
   overlayOpacity: string
   pickerSelectedItem: string
   navButton: string
-  brandedMainBackground: string
   carouselTab: string
   contentBox: string
   snackbar: string
@@ -169,7 +148,6 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
-  panelHeader: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
@@ -191,14 +169,10 @@ export type VABorderColors = {
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
   success: string
-  primaryDarkest: string
   photoAdd: string // todo rename photoAdd border color to be more abstract (talk to design)
   pickerAndInput: string
   focusedPickerAndInput: string
-  confirmation: string
   menuDivider: string
-  tabSelectorInactive: string
-  tabSelectorActive: string
   photoUpload: string
   prescriptionDivider: string
   tagBlue: string
@@ -214,13 +188,6 @@ export type VAFontSizes = {
   letterSpacing?: number
 }
 
-export type VAListTagColors = {
-  tagActive: string
-  tagExpired: string
-  tagSuspended: string
-  tagInProgress: string
-}
-
 export type VAColorScheme = {
   background: VABackgroundColors
   border: VABorderColors
@@ -228,7 +195,6 @@ export type VAColorScheme = {
   text: VATextColors
   buttonBackground: VAButtonBackgroundColors
   selectCopyText: string
-  listTag: VAListTagColors
 
   control: {
     switchOnTrack: string

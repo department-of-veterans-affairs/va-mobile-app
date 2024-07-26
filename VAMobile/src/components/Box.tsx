@@ -4,13 +4,12 @@ import { FlexAlignType, View, ViewProps } from 'react-native'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAListTagColors, VATheme } from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VATheme } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
-type VAListTagColorsVariant = keyof VAListTagColors
-export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant | VAListTagColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors
 export type BorderColorVariant = VABorderColorsVariant | VAButtonBackgroundColorsVariant
@@ -186,8 +185,7 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
   }
   return (
     theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
-    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
-    theme.colors.listTag[bgVariant as VAListTagColorsVariant]
+    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant]
   )
 }
 
