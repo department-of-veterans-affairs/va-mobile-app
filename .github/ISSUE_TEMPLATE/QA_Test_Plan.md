@@ -6,7 +6,7 @@ labels: qa
 assignees: ''
 ---
 
-
+<!-- Ticket creator to fill out: -->  
 ## Objective 
 
 The purpose of this ticket is to document the test plan for <!-- List the desired outcome(s) for this ticket -->  
@@ -17,11 +17,24 @@ The purpose of this ticket is to document the test plan for <!-- List the desire
 
 - 
 
+## Known test data:
+<!-- Include information about known test data for QA to use, including staging test users, known variances that will be important to cover, etc) -->  
+
+- 
+
 **Epic(s)**
 <!-- Add link to the feature Epic -->  
 
-## Acceptance Criteria
+## Ticket Checklist
 
+- [ ] Acceptance criteria defined
+- [ ] Labels added (front-end, back-end, feature)
+- [ ] Linked to an Epic
+
+
+<!-- QA to fill out: -->  
+
+## Acceptance Criteria
 <!-- Add a checkbox for each item required to fulfill the user story/issue. -->  
 
 1. - [ ]  Create test plan
@@ -33,9 +46,5 @@ The purpose of this ticket is to document the test plan for <!-- List the desire
 Notes: 
 
 
-## Ticket Checklist
 
-- [ ] Acceptance criteria defined
-- [ ] Labels added (front-end, back-end, feature)
-- [ ] Linked to an Epic
 
