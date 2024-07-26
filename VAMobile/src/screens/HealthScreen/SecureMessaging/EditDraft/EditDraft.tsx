@@ -150,7 +150,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
-  const [to, setTo] = useState(message?.recipientId?.toString() || '')
+  const [to, setTo] = useState((message?.recipientId || '').toString())
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
@@ -183,7 +183,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
-      setTo(message?.recipientId?.toString() || '')
+      setTo((message?.recipientId || '').toString())
     }
   }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
@@ -238,7 +238,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return message?.body !== body
     } else {
       return (
-        message?.recipientId?.toString() !== to ||
+        (message?.recipientId || '').toString() !== to ||
         message?.category !== category ||
         message?.subject !== subject ||
         message?.body !== body
