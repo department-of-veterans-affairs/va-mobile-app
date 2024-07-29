@@ -494,9 +494,7 @@ export const attemptIntializeAuthWithRefreshToken = async (
     if (isErrorObject(error)) {
       console.error(error)
       logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
-      if (error.status) {
-        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
-      }
+      await logAnalyticsEvent(Events.vama_login_token_refresh(error))
     }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use

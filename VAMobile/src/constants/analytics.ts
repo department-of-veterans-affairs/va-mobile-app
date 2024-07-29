@@ -761,11 +761,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_refresh: (status_code: number): Event => {
+  vama_login_token_refresh: (error: Error): Event => {
     return {
       name: 'vama_login_token_refresh',
       params: {
-        status_code,
+        error,
       },
     }
   },
