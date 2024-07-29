@@ -152,7 +152,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            Auth Tokens
+          </TextView>
         </TextArea>
       </Box>
       {Object.keys(tokenInfo).map((key: string) => {
@@ -168,7 +170,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       })}
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Authorized Services</TextView>
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            Authorized Services
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
@@ -187,7 +191,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Environment Variables</TextView>
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            Environment Variables
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
@@ -205,7 +211,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Encouraged Update and What's New Versions</TextView>
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            Encouraged Update and What's New Versions
+          </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
           <TextView>{localVersionName}</TextView>
           <TextView variant="MobileBodyBold">What's New Local Version</TextView>
@@ -261,7 +269,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Push Notifications</TextView>
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            Push Notifications
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>

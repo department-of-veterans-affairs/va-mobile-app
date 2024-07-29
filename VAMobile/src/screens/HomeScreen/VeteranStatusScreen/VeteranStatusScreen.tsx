@@ -87,6 +87,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     const dimensions = {
       width: 34,
       height: 34,
+      preventScaling: true,
     }
 
     switch (branch) {
@@ -132,7 +133,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
-            <Box display="flex" flexDirection="row">
+            <Box display="flex" flexDirection="row" flexWrap="wrap">
               {getBranchSeal()}
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}

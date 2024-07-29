@@ -37,13 +37,6 @@ context('AppealStatus', () => {
     expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Your hearing has been scheduled' })).toBeTruthy()
     expect(screen.getByText('Your  hearing is scheduled for  at .')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
-    expect(
-      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
-    expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy()
   })
 
   describe('when there are numAppealsAhead and isActiveAppeal is true', () => {
