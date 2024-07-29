@@ -20,11 +20,11 @@ context('ClaimDetailsScreen', () => {
       renderWithData(claimData)
       expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
       expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
-      expect(screen.getAllByText('Received: 2020-07-16')).toBeTruthy()
+      expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
 
       expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
       expect(screen.getByText('Document type: L533')).toBeTruthy()
-      expect(screen.getByText('Received: 2019-06-06')).toBeTruthy()
+      expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
     })
   })
 })
