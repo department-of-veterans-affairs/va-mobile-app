@@ -33,13 +33,13 @@ jobs:
       - name: List images before optimization
         run: |
           echo "iOS images before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/
+          ls -lh VAMobile/ios/fastlane/screenshots/en-US
           echo "Android images before optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
       - name: Optimize iOS images
-        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/
+        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
       - name: Optimize Android images
         run: |
           imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
@@ -48,7 +48,7 @@ jobs:
       - name: List images after optimization
         run: |
           echo "iOS images after optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/
+          ls -lh VAMobile/ios/fastlane/screenshots/en-US
           echo "Android images after optimization:"
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
@@ -57,7 +57,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git add VAMobile/ios/fastlane/screenshots
+          git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
           git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
