@@ -303,8 +303,11 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Decision letter ready'))).toExist()
     await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(
-      element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
+      element(by.text('You can download your decision letter. We also mailed you this letter.')),
     ).toExist()
+	await expect(element(by.text('What you\'ve claimed'))).toExist()
+	await expect(element(by.text('Payments'))).toExist()
+	await expect(element(by.text('If you\'re entitled to back payment (based on an effective date), you can expect to receive payment within 1 month of your claim\'s decision date.'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
