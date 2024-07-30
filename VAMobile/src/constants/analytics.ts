@@ -744,7 +744,7 @@ export const Events = {
     return {
       name: 'vama_login_token_fetch',
       params: {
-        error,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -760,7 +760,7 @@ export const Events = {
     return {
       name: 'vama_login_token_refresh',
       params: {
-        error,
+        error: JSON.stringify(error),
       },
     }
   },
