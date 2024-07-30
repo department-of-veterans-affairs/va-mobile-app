@@ -30,6 +30,7 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
+import ClaimFiles from './ClaimFiles/ClaimFiles'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
@@ -42,7 +43,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
+  const controlLabels = [
+    t('claimDetails.status'),
+    featureEnabled('claimPhaseExpansion') ? t('files') : t('claimDetails.details'),
+  ]
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType } = route.params
@@ -230,7 +234,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
             {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-            {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
+            {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
+            {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}
           </Box>
           {renderActiveClosedClaimStatusHelpLink()}
           <Box mt={theme.dimensions.condensedMarginBetween}>
