@@ -745,11 +745,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_fetch: (status_code: number): Event => {
+  vama_login_token_fetch: (error: Error): Event => {
     return {
       name: 'vama_login_token_fetch',
       params: {
-        status_code,
+        error,
       },
     }
   },

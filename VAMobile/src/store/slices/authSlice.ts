@@ -681,9 +681,8 @@ export const handleTokenCallbackUrl =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
-        if (error.status) {
-          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
-        }
+        await logAnalyticsEvent(Events.vama_login_token_fetch(error))
+
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
