@@ -342,13 +342,11 @@ export async function openDeveloperScreen() {
 /**
  * Going back on android and iOS
  */
-export async function backButton() {
+export async function backButton(backButtonName: string) {
   if (device.getPlatform() === 'android') {
     await device.pressBack() // Android only
   } else {
-    await element(by.traits(['button']))
-      .atIndex(0)
-      .tap()
+    await element(by.text(backButtonName)).atIndex(0).tap()
   }
 }
 
