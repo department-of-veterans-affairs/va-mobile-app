@@ -23,7 +23,7 @@ Occasionally, a build may fail for one reason or another, or we may determine th
 
 
 ## App Store screenshot failure
-Occasionally the uploading of screenshots to the iOS App Store will fail due to timeout. A recent fastlane version update included some optmizations to fix this but it's possible it can occur again. Screenshots are uploaded _after_ a successful build has already been uploaded to App Store Connect. Sometimes we can fix the screenshots manually in App Store connect. To do so:
+Occasionally the uploading of screenshots to the iOS App Store will fail due to timeout. A recent fastlane version update included some optimizations to fix this but it's possible it can occur again. Screenshots are uploaded _after_ a successful build has already been uploaded to App Store Connect. Sometimes we can fix the screenshots manually in App Store connect. To do so:
 1. Go to the pending release in [App Store Connect](https://appstoreconnect.apple.com/apps/1559609596/distribution)
 1. On the Distribution tab, you should see the "iOS Previews and Screenshots" section
 1. For each screen size and device:
