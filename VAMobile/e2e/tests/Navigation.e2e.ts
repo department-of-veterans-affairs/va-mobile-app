@@ -174,7 +174,11 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       await element(by.id(key)).atIndex(0).tap()
     }
   } else {
-    if (navigationArray[2] === 'Claim type' || navigationArray[2] === 'Prescriptions') {
+    if (
+      navigationArray[2] === 'Claim type' ||
+      navigationArray[2] === 'Prescriptions' ||
+      navigationArray[2] === 'Appeal details'
+    ) {
       await resetInAppReview()
     }
     await navigateToPage(key, navigationDicValue)
