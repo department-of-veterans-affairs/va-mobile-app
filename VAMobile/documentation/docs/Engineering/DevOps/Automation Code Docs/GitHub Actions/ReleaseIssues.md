@@ -1,4 +1,4 @@
-# Release issues
+# Release Issues
 
 The automated release process works well a vast majority of the time but occasionally there are issues that may require some manual intervention. These issues can be caused by either upstream issues with the app stores or due to issues with our build. This page is meant to document some of the issues we may run into with our releases and how to resolve them.
 
