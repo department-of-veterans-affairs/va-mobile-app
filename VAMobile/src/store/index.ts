@@ -2,7 +2,6 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
-import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import notificationReducer from 'store/slices/notificationSlice'
@@ -12,7 +11,6 @@ import snackbarReducer from 'store/slices/snackBarSlice'
 // Creates the store
 const store = configureStore({
   reducer: {
-    auth: authReducer,
     accessibility: accessabilityReducer,
     demo: demoReducer,
     errors: errorReducer,

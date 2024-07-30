@@ -1,6 +1,7 @@
 import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
 
-import { refreshAccessToken } from 'store/slices/authSlice'
+import { MutateOptions, UseMutateFunction } from '@tanstack/react-query'
+
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
@@ -12,6 +13,13 @@ const FETCH_TIMEOUT_MS = 60000
 
 const fileSystemFatalErrorString = 'File System Error'
 
+let _RefreshAccessToken: UseMutateFunction<Response, Error, string, void> | undefined
+
+export const setFileSystemRefreshAccessToken = (
+  refreshAccessToken: UseMutateFunction<Response, Error, string, void>,
+) => {
+  _RefreshAccessToken = refreshAccessToken
+}
 /**
  * writes to file local filesystem for each mobile platform
  * @param method - string type of call
@@ -60,9 +68,15 @@ export const downloadFile = async (
     // Unauthorized, access-token likely expired
     // TODO: add analytics here to capture failed attempts
     if (accessTokenExpired && retries > 0) {
-      // refresh auth token and re-download
-      await refreshAccessToken(getRefreshToken() || '')
-      return await downloadFile(method, endpoint, fileName, params, retries - 1)
+      // Wait for the token refresh to complete and try the call again
+      if (_RefreshAccessToken) {
+        const mutateOptions: MutateOptions<unknown, Error, string, void> = {
+          onSettled: async () => {
+            return await downloadFile(method, endpoint, fileName, params, retries - 1)
+          },
+        }
+        await _RefreshAccessToken(getRefreshToken() || '', mutateOptions)
+      }
     }
 
     if (statusCode > 399) {

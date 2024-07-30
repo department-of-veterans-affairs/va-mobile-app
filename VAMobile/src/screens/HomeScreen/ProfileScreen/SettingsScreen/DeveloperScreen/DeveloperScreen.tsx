@@ -6,8 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 import { pick } from 'underscore'
 
+import { useAuthSettings, useLogout } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,8 +17,8 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { debugResetFirstTimeLogin } from 'utils/auth'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -33,7 +35,8 @@ type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, '
 
 function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { data: userAuthSettings } = useAuthSettings()
+  const authCredentials = userAuthSettings?.authCredentials
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
     (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
@@ -46,6 +49,8 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const componentMounted = useRef(true)
+  const queryClient = useQueryClient()
+  const { mutate: logout } = useLogout()
 
   async function checkEncourageUpdateLocalVersion() {
     const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
@@ -109,8 +114,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const envVars = getEnv()
 
   const onResetFirstTimeLogin = (): void => {
-    console.debug('Resetting first time login flag')
-    dispatch(debugResetFirstTimeLogin())
+    debugResetFirstTimeLogin(logout, queryClient)
   }
 
   const resetInAppReview = (): void => {
