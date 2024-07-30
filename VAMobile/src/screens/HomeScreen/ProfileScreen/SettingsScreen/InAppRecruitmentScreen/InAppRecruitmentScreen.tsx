@@ -64,11 +64,9 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
           listOfText={[
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.1'),
-              a11yLabel: t('inAppRecruitment.makeAppBetter.bullet.1'),
             },
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.2'),
-              a11yLabel: t('inAppRecruitment.makeAppBetter.bullet.2'),
             },
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.3'),
