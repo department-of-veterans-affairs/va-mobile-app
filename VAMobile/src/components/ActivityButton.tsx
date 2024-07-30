@@ -87,7 +87,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
                 height={24}
                 name="RightArrowInCircle"
                 fill={theme.colors.icon.activityButton}
-                fill2={theme.colors.icon.transparent}
+                fill2={'transparent'}
                 ml={theme.dimensions.listItemDecoratorMarginLeft}
                 preventScaling={true}
               />

@@ -1,7 +1,5 @@
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 
-import colors from './VAColors'
-
 export const primaryTextColor = DSColors.vadsColorBaseDarker
 
 export const lightTheme = {
@@ -22,7 +20,6 @@ export const lightTheme = {
     loginScreen: DSColors.vadsColorWhite,
     carousel: DSColors.vadsColorPrimaryDark,
     modalOverlay: DSColors.vadsColorBase,
-    overlayOpacity: colors.blackWith30PercentOpacity,
     pickerSelectedItem: DSColors.vadsColorPrimaryAltLightest,
     navButton: DSColors.uswdsSystemColorGray2,
     carouselTab: DSColors.vadsColorWhite,
@@ -88,7 +85,6 @@ export const lightTheme = {
     snackBarIcon: DSColors.vadsColorBaseLighter,
     radioDisabled: DSColors.vadsColorBaseLightest,
     tagInfoIcon: DSColors.vadsColorBase,
-    transparent: colors.transparent,
     activityButton: DSColors.vadsColorWhite,
     largeNavButton: DSColors.vadsColorPrimary,
     announcementBanner: DSColors.vadsColorPrimary,
@@ -164,7 +160,6 @@ export const darkTheme = {
     loginScreen: DSColors.vadsColorPrimaryDarker,
     carousel: DSColors.vadsColorPrimaryDark,
     modalOverlay: DSColors.vadsColorBase,
-    overlayOpacity: colors.blackWith30PercentOpacity,
     pickerSelectedItem: DSColors.uswdsSystemColorGray60,
     navButton: DSColors.vadsColorBase,
     carouselTab: DSColors.vadsColorWhite,
@@ -230,7 +225,6 @@ export const darkTheme = {
     snackBarIcon: DSColors.vadsColorBaseDarker,
     radioDisabled: DSColors.vadsColorBaseLightest,
     tagInfoIcon: DSColors.vadsColorBase,
-    transparent: colors.transparent,
     activityButton: DSColors.vadsColorBlack,
     largeNavButton: DSColors.uswdsSystemColorBlueVivid30,
     announcementBanner: DSColors.uswdsSystemColorBlueVivid30,

@@ -54,7 +54,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
           width={32}
           height={32}
           fill={themeColor.icon.photoAdd}
-          fill2={themeColor.icon.transparent}
+          fill2={'transparent'}
           maxWidth={70}
         />
       </Box>

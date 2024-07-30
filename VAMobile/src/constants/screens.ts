@@ -23,7 +23,11 @@ export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   ...(isIOS() && store.getState().accessibility.isVoiceOverTalkBackRunning
     ? {
         ...TransitionPresets.ModalSlideFromBottomIOS,
-        cardStyle: { borderRadius: 0, paddingTop: '30%', backgroundColor: theme.colors.background.overlayOpacity },
+        cardStyle: {
+          borderRadius: 0,
+          paddingTop: '30%',
+          backgroundColor: '#0000004D', // Black with 30% opacity
+        },
       }
     : { cardStyle: { borderRadius: 0 }, cardStyleInterpolator: fullPanelCardStyleInterpolator }),
 }

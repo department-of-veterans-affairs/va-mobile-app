@@ -121,7 +121,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const snackBarIconProps: VAIconProps = {
     name: isError ? 'ExclamationTriangle' : 'CircleCheckMark',
     fill: themeColor.icon.snackBarIcon,
-    fill2: themeColor.icon.transparent,
+    fill2: 'transparent',
     height: 18,
     width: 18,
   }

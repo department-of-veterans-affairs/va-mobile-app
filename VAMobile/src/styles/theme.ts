@@ -66,7 +66,6 @@ export type VAIconColors = {
   defaultMenuItem: string
   radioDisabled: string
   tagInfoIcon: string
-  transparent: string
   activityButton: string
   announcementBanner: string
   inlineSpinner: string
@@ -138,7 +137,6 @@ export type VABackgroundColors = {
   loginScreen: string
   carousel: string
   modalOverlay: string
-  overlayOpacity: string
   pickerSelectedItem: string
   navButton: string
   carouselTab: string
