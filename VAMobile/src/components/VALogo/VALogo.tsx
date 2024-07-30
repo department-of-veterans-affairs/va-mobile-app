@@ -16,9 +16,21 @@ export const VALogo: FC<VALogoProps> = ({ testID }) => {
     height: 57,
   }
   if (theme.mode === 'dark') {
-    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_dark' }} />
+    return (
+      <Image
+        testID={testID}
+        style={logoProps}
+        source={require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')}
+      />
+    )
   } else {
-    return <Image testID={testID} style={logoProps} source={{ uri: 'va_on_light' }} />
+    return (
+      <Image
+        testID={testID}
+        style={logoProps}
+        source={require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')}
+      />
+    )
   }
 }
 
