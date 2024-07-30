@@ -567,11 +567,6 @@ export const Events = {
       },
     }
   },
-  vama_exchange_failed: (): Event => {
-    return {
-      name: 'vama_exchange_failed',
-    }
-  },
   vama_fail: (): Event => {
     return {
       name: 'vama_fail',
