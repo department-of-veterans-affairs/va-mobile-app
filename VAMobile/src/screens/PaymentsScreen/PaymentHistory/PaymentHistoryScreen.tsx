@@ -138,7 +138,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('payments.title')}
+      backLabel={t('payments')}
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
       testID="paymentHistoryTestID">
