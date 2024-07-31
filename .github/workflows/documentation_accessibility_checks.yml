@@ -31,7 +31,12 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
       - name: Install ChromeDriver
-        run: npm install -g chromedriver@126.0.0       
+      
+        run: |
+          # Determine the Chrome version installed
+          chrome_version=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+          # Install the matching ChromeDriver version
+          npm install -g chromedriver@$chrome_version
       - name: Test build
         working-directory: VAMobile
         run: |
@@ -59,13 +64,14 @@ jobs:
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
           if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --timeout=300000 --exit; then
+          if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --chrome-options='--no-sandbox --disable-gpu' --timeout=300000 --exit; then
               echo "No accessibility issues found in $url"
             else
               echo "Accessibility issues found in $url"
               echo "$url" >> accessibility_issues.txt
 
               # Extract number of issues from axe output
-              issues=$(axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --timeout=300000 | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+              issues=$(axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --chrome-options='--no-sandbox --disable-gpu' --timeout=300000 | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
               if [ -n "$issues" ]; then
                 num_issues=$((num_issues + issues))
               fi
@@ -87,7 +93,6 @@ jobs:
 
   start_slack_thread:
     name: Start Slack thread
-    if: ${{ failure() }}
     needs: axe-scan
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
