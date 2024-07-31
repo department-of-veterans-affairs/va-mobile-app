@@ -3775,15 +3775,6 @@
         "vaRepresentative": null,
         "eventsTimeline": [
           {
-            "trackedItemId": null,
-            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
-            "documentType": null,
-            "filename": "Jesse_Gray_600461886_526.pdf",
-            "uploadDate": "2023-12-04",
-            "type": "other_documents_list",
-            "date": "2023-12-04"
-          },
-          {
             "type": "phase1",
             "date": "2023-12-04"
           },

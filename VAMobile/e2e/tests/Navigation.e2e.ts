@@ -48,7 +48,7 @@ const navigationDic = {
       ],
       'Dental disability - More information needed',
     ],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Details'], 'Claim type'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'JESSE_GRAY_600246732_526.pdf'],
     [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
       ['Appeals.e2e', 'AppealsExpanded.e2e'],
@@ -174,7 +174,11 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       await element(by.id(key)).atIndex(0).tap()
     }
   } else {
-    if (navigationArray[2] === 'Claim type' || navigationArray[2] === 'Prescriptions') {
+    if (
+      navigationArray[2] === 'Claim type' ||
+      navigationArray[2] === 'Prescriptions' ||
+      navigationArray[2] === 'Appeal details'
+    ) {
       await resetInAppReview()
     }
     await navigateToPage(key, navigationDicValue)

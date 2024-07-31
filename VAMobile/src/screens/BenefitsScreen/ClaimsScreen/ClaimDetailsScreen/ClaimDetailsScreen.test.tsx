@@ -23,10 +23,14 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (claimType = ClaimTypeConstants.ACTIVE, claim?: Partial<ClaimData>): void => {
+  const renderWithData = (
+    claimType = ClaimTypeConstants.ACTIVE,
+    featureFlag: boolean = false,
+    claim?: Partial<ClaimData>,
+  ): void => {
+    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -69,7 +73,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.ACTIVE, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() =>
@@ -85,13 +89,30 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.ACTIVE, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
 
       await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
+    })
+
+    it('should display the Files component', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .mockResolvedValue({
+          data: {
+            ...claimData,
+          },
+        })
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+        ...claimData,
+      })
+      await waitFor(() => fireEvent.press(screen.getByText('Files')))
+      await waitFor(() => fireEvent.press(screen.getByText('Files')))
+
+      await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
 
@@ -104,7 +125,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.ACTIVE, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
@@ -128,7 +149,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.ACTIVE, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -146,7 +167,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.ACTIVE, {
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
@@ -162,7 +183,7 @@ context('ClaimDetailsScreen', () => {
               ...claimData,
             },
           })
-        renderWithData(ClaimTypeConstants.ACTIVE, {
+        renderWithData(ClaimTypeConstants.ACTIVE, false, {
           ...claimData,
         })
         await waitFor(() =>
@@ -180,7 +201,7 @@ context('ClaimDetailsScreen', () => {
             ...claimData,
           },
         })
-      renderWithData(ClaimTypeConstants.CLOSED, {
+      renderWithData(ClaimTypeConstants.CLOSED, false, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('heading', { name: 'Decision letter mailed' })).toBeTruthy())
@@ -195,7 +216,7 @@ context('ClaimDetailsScreen', () => {
               ...claimData,
             },
           })
-        renderWithData(ClaimTypeConstants.CLOSED, {
+        renderWithData(ClaimTypeConstants.CLOSED, false, {
           ...claimData,
         })
         await waitFor(() =>
