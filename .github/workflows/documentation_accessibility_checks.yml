@@ -64,7 +64,7 @@ jobs:
               echo "$url" >> accessibility_issues.txt
 
               # Extract number of issues from axe output
-              issues=$(axe --chrome-options="no-sandbox,disable-setuid-sandbox,disable-dev-shm-usage" "$url" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+              issues=$(axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver" | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
               if [ -n "$issues" ]; then
                 num_issues=$((num_issues + issues))
               fi
