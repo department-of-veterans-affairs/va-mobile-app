@@ -1,4 +1,3 @@
-
 # On demand builds that can be run via GitHub UI at
 # https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml
 
@@ -32,61 +31,9 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-  optimize_images:
-    name: Optimize Images
-    needs: start_slack_thread
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install imagemin-cli
-        run: npm install -g imagemin-cli
-
-      - name: List images before optimization
-        run: |
-          echo "iOS images before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-          echo "Android images before optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
-      - name: Optimize iOS images
-        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
-
-      - name: Optimize Android images
-        run: |
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
-      - name: List images after optimization
-        run: |
-          echo "iOS images after optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-          echo "Android images after optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/  
-     
-      - name: Commit optimized images
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@users.noreply.github.com'
-          git add VAMobile/ios/fastlane/screenshots/en-US
-          git add VAMobile/android/fastlane/metadata/android/en-US/images
-          git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
-          git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Optimize images before release build"
-            git push
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}         
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread, optimize_images]
+    needs: [queue_build, start_slack_thread]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -95,24 +42,9 @@ jobs:
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
-  notify_ios_failure:
-    name: Notify ios Failure
-    needs: [start_slack_thread, ios]
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Notify Slack on iOS failure
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-        run: |
-          curl -X POST \
-               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-               -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
-               https://slack.com/api/chat.postMessage
   android:
     name: Android On Demand Build
-    needs: [queue_build, start_slack_thread, optimize_images]
+    needs: [queue_build, start_slack_thread]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
@@ -121,19 +53,3 @@ jobs:
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
-  notify_android_failure:
-    name: Notify Android Failure
-    needs: [start_slack_thread, android]
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Notify Slack on Android failure
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-        run: |
-          curl -X POST \
-               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-               -H 'Content-type: application/json' \
-               -d '{"channel": "va-mobile-build-alerts", "text": "The release build failed for android Version ${{ github.ref_name }} See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
-               https://slack.com/api/chat.postMessage
