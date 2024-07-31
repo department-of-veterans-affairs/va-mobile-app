@@ -52,7 +52,7 @@ navigate to `~/VAMobile/ios/fastlane` and then run `fastlane match appstore`. Yo
 
 You should be able to test locally by building with the On-demand Script. If the signing part doesn't fail before build everything should be good to go. You can PR any file changes that may have happened.
 
-:::note
+:::info
 You may need to update the configs and profiles in the VAMobile.plist with xCode if the name strings are changed. If you receive a build error about not finding a cert, double check this first
 :::
 
