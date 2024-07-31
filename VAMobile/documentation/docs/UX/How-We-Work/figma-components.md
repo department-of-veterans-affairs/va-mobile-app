@@ -8,15 +8,15 @@ sidebar_position: 6
 * **Component configuration**
 	* All components should have “simplify all instances” checked.
 	* For components on the doc site:
-	    * **Description**: Add a short description of how the component should be used from the [documentation site](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/).
-	    * **Link**: Add a link to the component’s page on the [documentation site](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/).
+	    * **Description**: Add a short description of how the component should be used from the documentation site.
+	    * **Link**: Add a link to the component’s page on the documentation site.
 	* For components that only live in Figma and do not appear on the doc site:
 	    * **Description**: Add a short description of how the component should be used.
 	    * *Note: Most Figma-only components are sub-parts or building blocks of another component in Figma. They exist in Figma to allow designers to build and use components, but are not required from an engineering perspective. For one component in Figma, there can sometimes be multiple Figma-only components.*
 * **Colors**
-	* All colors should be pulled from the [Design Tokens file](https://www.figma.com/design/XQwpzcNSGyGJN4nXDPoEj0/Design-Tokens---%F0%9F%94%8D-Design-System---VA-Mobile?node-id=5-4251&t=k1l85WLVAXZ6PPmy-1) (not light/dark theme files). It is also recommended that you use any semantic tokens that are available.
+	* All colors should be pulled from the [Design Tokens file](https://www.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?m=auto&t=KYbckwsxuA27CJcc-7) (not light/dark theme files). It is also recommended that you use any semantic tokens that are available.
 * **Typography**
-	* All text styles should be pulled from the [Design Tokens file](https://www.figma.com/file/bGO6g5cCvWycrNjoK66PXc/%F0%9F%93%90-DesignTokens1.0---Library---VAMobile) (not light/dark theme files).
+	* All text styles should be pulled from the [Foundations Library](https://www.figma.com/file/bGO6g5cCvWycrNjoK66PXc/%F0%9F%93%90-DesignTokens1.0---Library---VAMobile) (not light/dark theme files).
 * **Autolayout**
 	* Components must be set up to automatically vertically resize as text changes.
 	    * Typically, a component’s height will need to be set to “hug” to accomplish this.
