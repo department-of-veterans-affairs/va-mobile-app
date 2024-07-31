@@ -45,6 +45,7 @@ jobs:
           yarn build
           yarn serve &
           npx wait-on http://localhost:3000 &
+          sleep 10
 
       - name: Check accessibility issues
         id: accessibility_check
@@ -57,14 +58,14 @@ jobs:
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-          if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --exit; then
+          if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --timeout=30000 --exit; then
               echo "No accessibility issues found in $url"
             else
               echo "Accessibility issues found in $url"
               echo "$url" >> accessibility_issues.txt
 
               # Extract number of issues from axe output
-              issues=$(axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
+              issues=$(axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --timeout=30000 | grep -oP '\d+ Accessibility issues detected' | grep -oP '\d+')
               if [ -n "$issues" ]; then
                 num_issues=$((num_issues + issues))
               fi
