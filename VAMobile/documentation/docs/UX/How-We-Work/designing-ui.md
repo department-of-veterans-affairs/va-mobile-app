@@ -5,7 +5,7 @@ sidebar_position: 3
 
 ## UI best practices
 
-- **Use [components](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/) already available** in the system.
+- **Use [components](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Overview) already available** in the system.
 - Use [Balsamiq](https://balsamiq.cloud/s4uw4la/pnnwuqv) or another **lower fidelity tool to ideate**
 - If you are working on an existing feature, **take a look in the app using demo mode** to see how it’s currently working. Figma’s shipped screens are our best examples of how it should look, but there may be some inconsistencies.
 - Consider which [screen type](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Templates/ScreenTypes) to use.
@@ -29,7 +29,7 @@ There are a few paths that can be taken when updating existing features or creat
 
 ### Best practices in Figma
 
-- Follow the rules around [where we work in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#ui-library-and-feature-designs---figma). Generally, most of your work will be done in the [working file](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#categoryname) for the category your feature is in.
+- Follow the rules around [where we work in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work). Generally, most of your work will be done in the working file for the category your feature is in.
 - Every working file should include a **Cover** page in your file.
 - In your working file, **avoid creating local components** unless it is a new component that will ultimately be imported into the Flagship or Component Library.
 - Tagging folks in comments can be a good way to communicate and work async. Try to have longer discussions outside of comments.
