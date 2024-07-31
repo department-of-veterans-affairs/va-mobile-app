@@ -21,9 +21,8 @@ export const claim: ClaimData = {
     updatedAt: '2020-12-07T20:37:12.041Z',
     contentionList: [
       'Hearing Loss (Increase)',
-      ' ankle strain (related to: PTSD - Combat',
-      'POW) (New)',
-      ' Diabetes mellitus2 (Secondary)',
+      'Ankle strain (related to: PTSD - Combat POW) (New)',
+      'Diabetes mellitus2 (Secondary)',
     ],
     vaRepresentative: 'AMERICAN LEGION',
     eventsTimeline: [

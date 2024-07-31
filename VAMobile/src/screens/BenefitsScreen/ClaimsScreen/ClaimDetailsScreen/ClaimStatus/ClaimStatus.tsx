@@ -17,6 +17,7 @@ import { useRouteNavigation } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
+import ClosedClaimStatusDetails from './ClosedClaimInfo/ClosedClaimStatusDetails'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
 /** props for the ClaimStatus component */
@@ -36,6 +37,13 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: decisionLetterData } = useDecisionLetters()
   const sentEvent = useRef(false)
+
+  const letterIsDownloadable = Boolean(
+    featureEnabled('decisionLettersWaygate') &&
+      userAuthorizedServices?.decisionLetters &&
+      claim.attributes.decisionLetterSent &&
+      (decisionLetterData?.data.length || 0) > 0,
+  )
 
   function renderActiveClaimStatusDetails() {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
@@ -85,7 +93,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
     return <></>
   }
 
-  function renderClosedClaimStatusDetails() {
+  function deprecated_renderClosedClaimStatusDetails() {
     const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
 
     if (isClosedClaim) {
@@ -103,12 +111,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (
-        featureEnabled('decisionLettersWaygate') &&
-        userAuthorizedServices?.decisionLetters &&
-        claim.attributes.decisionLetterSent &&
-        (decisionLetterData?.data.length || 0) > 0
-      ) {
+      if (letterIsDownloadable) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -140,7 +143,11 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   return (
     <Box testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
-      {renderClosedClaimStatusDetails()}
+      {featureEnabled('claimPhaseExpansion') ? (
+        <ClosedClaimStatusDetails claim={claim} claimType={claimType} letterIsDownloadable={letterIsDownloadable} />
+      ) : (
+        deprecated_renderClosedClaimStatusDetails()
+      )}
     </Box>
   )
 }

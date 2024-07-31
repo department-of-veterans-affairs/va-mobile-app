@@ -301,11 +301,22 @@ describe('Claims Screen', () => {
   it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
     await expect(element(by.text('Decision letter ready'))).toExist()
-    await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(
-      element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
+      element(
+        by.text(
+          'We decided your claim on April 09, 2021. You can download your decision letter. We also mailed you this letter.',
+        ),
+      ),
     ).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
+    await expect(element(by.text("What you've claimed"))).toExist()
+    await expect(element(by.text('Payments'))).toExist()
+    await expect(
+      element(
+        by.text(
+          "If you're entitled to back payment (based on an effective date), you can expect to receive payment within 1 month of your claim's decision date.",
+        ),
+      ),
+    ).toExist()
   })
 
   it('Verify what should I do if disagreement information', async () => {
