@@ -32,9 +32,9 @@ _Note: You can always go back and make changes to the content component that you
 
 After you’ve created all of the shipped screens in light mode, you may need to create dark mode versions of your screens. 
 
-1. To create dark mode versions, select all of your light mode layers and duplicate them (on Mac, you can hold down options and click + drag to duplicate). _We recommend visually grouping light mode versions together and dark mode versions together._
+1. To create dark mode versions, select all of your light mode layers and duplicate them (on Mac, you can hold down option and click + drag to duplicate). _We recommend visually grouping light mode versions together and dark mode versions together._
 2. We recommend adding light and/or dark mode to each of your frame names within your shipped file. For example, you may name one of your light mode frames “Profile / Landing / Light” and the dark mode frames  “Profile / Landing / Dark”.
-3. After you have duplicated your light mode versions, you’ll need to change the color mode. You can adjust the mode by clicking the change variable mode icon and switching aech library to "Dark" (see screenshot below).
+3. After you have duplicated your light mode versions, you’ll need to change the color mode. You can adjust the mode by clicking the change variable mode icon and switching each library to "Dark" (see screenshot below).
 
 ![Change variable mode icon in Figma](/img/figma/figma-change-variable-mode-icon.png)
 
