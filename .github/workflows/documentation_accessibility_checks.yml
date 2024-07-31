@@ -31,12 +31,7 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
       - name: Install ChromeDriver
-      
-        run: |
-          # Determine the Chrome version installed
-          chrome_version=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          # Install the matching ChromeDriver version
-          npm install -g chromedriver@$chrome_version
+        run: npm install -g chromedriver@126.0.0  
       - name: Test build
         working-directory: VAMobile
         run: |
