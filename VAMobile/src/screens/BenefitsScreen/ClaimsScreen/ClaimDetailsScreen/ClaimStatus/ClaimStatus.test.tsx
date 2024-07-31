@@ -52,7 +52,7 @@ context('ClaimStatus', () => {
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
+        fireEvent.press(screen.getByRole('menuitem', { name: 'Why does VA sometimes combine claims?' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
       })
     })
@@ -60,7 +60,7 @@ context('ClaimStatus', () => {
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', () => {
         fireEvent.press(
-          screen.getByRole('button', {
+          screen.getByRole('menuitem', {
             name: "What should I do if I disagree with VA's decision on my disability claim?",
           }),
         )
