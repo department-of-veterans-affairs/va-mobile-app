@@ -7,9 +7,7 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
-  push:
-    branches:
-      [bug-axe-check-chome-driver-version]
+
 jobs:
   axe-scan:
     name: Acessibility Check
