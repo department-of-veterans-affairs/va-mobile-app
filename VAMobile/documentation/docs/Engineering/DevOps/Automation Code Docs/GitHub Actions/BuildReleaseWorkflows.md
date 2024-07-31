@@ -141,7 +141,7 @@ on:
 [View on GitHub Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/release_candidate_build.yml)
 
 #### Description
-This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#build_ios) and [`build_android`](#build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case RC-v`int.int.int`. 
+This workflow runs every time a tag with `RC-vX.X.X` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#build_ios) and [`build_android`](#build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case `RC-vX.X.X`. 
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -152,7 +152,7 @@ Tags matching the regular expression `/^RC-v.d+.d+.d+$/`. Our [`release_branch.s
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'RC-v[0-9]+.[0-9]+.[0-9]+'
 ```
 
 ---
@@ -162,7 +162,7 @@ on:
 
 
 #### Description
-This workflow runs every time a tag with v`int.int.int` pattern is pushed to the origin. It builds production versions for both Android and iOS and submits them to the app stores for review.
+This workflow runs every time a tag with `vX.X.X` pattern is pushed to the origin. It builds production versions for both Android and iOS and submits them to the app stores for review.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -196,7 +196,7 @@ These workflows are related to are release process which occurs every 2 weeks.  
 [View on GitHub Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/new_release_branch.yml)
 
 #### Description
-Runs our [`release_branch.sh`](/docs/Engineering/DevOps/Automation%20Code%20Docs/Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
+Runs our [`release_branch.sh`](/docs/Engineering/DevOps/Automation%20Code%20Docs/Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new `release/vX.X.X` branch from the `develop` branch and tags it with `RC-vX.X.X`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with `RC-vX.X.X` and c.
 
 #### Trigger
 Every Wednesday at 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT or manually via GitHub Actions UI.
