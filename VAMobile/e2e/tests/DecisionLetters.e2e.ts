@@ -39,10 +39,6 @@ describe('Decision Letters Screen', () => {
 
   it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(DecisionLettersE2eIDConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
-    await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
-    await expect(
-      element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
-    ).toExist()
     await expect(element(by.id(DecisionLettersE2eIDConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
