@@ -125,7 +125,7 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('button', {
+          screen.getByRole('menuitem', {
             name: 'Compensation Received October 01, 2020',
           }),
         ),
@@ -148,7 +148,7 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('button', {
+          screen.getByRole('menuitem', {
             name: 'Insurance on docket appeal Received December 22, 2020',
           }),
         ),
