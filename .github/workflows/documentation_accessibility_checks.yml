@@ -7,9 +7,6 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
-  push:
-    branches:
-      [bug-axe-check-chome-driver-version]  
 
 jobs:
   axe-scan:
@@ -29,7 +26,7 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
       - name: Install ChromeDriver
-        run: npm install -g chromedriver@126.0.0    
+        run: npm install -g chromedriver@126.0.0
       - name: Test build
         working-directory: VAMobile
         run: |
