@@ -207,6 +207,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ActivityButtonHeader: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.activityButton),
     ActivityButtonSubtext: buildFont('SourceSansPro-Bold', fontSizes.ActivityButtonSubtext, scheme.text.activityButton),
     ActivityFooter: buildFont('SourceSansPro-Regular', fontSizes.ActivityFooter, scheme.text.activityFooter),
+    ActivityFooterBold: buildFont('SourceSansPro-Bold', fontSizes.ActivityFooter, scheme.text.activityFooter),
     AnnouncementBannerTitle: buildFont(
       'SourceSansPro-Bold',
       fontSizes.AnnouncementBannerTitle,

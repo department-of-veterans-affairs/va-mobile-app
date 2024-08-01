@@ -137,6 +137,7 @@ export type VATypographyThemeVariants = {
   ActivityButtonHeader: string
   ActivityButtonSubtext: string
   ActivityFooter: string
+  ActivityFooterBold: string
   AnnouncementBannerTitle: string
   BitterBoldHeading: string
   BitterHeading: string

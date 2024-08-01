@@ -8,7 +8,7 @@ import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
-import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
+import { Box, BoxProps, TextArea, TextView, VAIcon, VA_ICON_MAP } from './index'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -31,6 +31,8 @@ export type AccordionCollapsibleProps = {
   noBorder?: boolean
   /** Ref for the header section */
   headerRef?: Ref<View>
+  /** show and hide instead of arrow */
+  showHideText?: boolean
 }
 
 /**
@@ -48,6 +50,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   children,
   a11yHint,
   headerRef,
+  showHideText,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -75,9 +78,16 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     const data = (
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
-        {!hideArrow && (
+        {!hideArrow && !showHideText && (
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
+          </Box>
+        )}
+        {showHideText && (
+          <Box mr={20}>
+            <TextView color="footerButton" variant="ActivityFooter">
+              {expanded ? t('hide') : t('show')}
+            </TextView>
           </Box>
         )}
       </Box>
@@ -105,19 +115,27 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   const boxProps: BoxProps = {
-    borderBottomColor: 'primary',
-    borderBottomWidth: theme.dimensions.borderWidth,
     accessibilityRole: 'tablist',
   }
 
   return (
     <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} testID={testID} importantForAccessibility={'no'}>
-      <TextArea noBorder={noBorder}>
-        {renderHeader()}
-        {!expanded && collapsedContent}
-        {expanded && expandedContent}
-        {children}
-      </TextArea>
+      {!showHideText && (
+        <TextArea noBorder={noBorder}>
+          {renderHeader()}
+          {!expanded && collapsedContent}
+          {expanded && expandedContent}
+          {children}
+        </TextArea>
+      )}
+      {showHideText && (
+        <Box>
+          {renderHeader()}
+          {!expanded && collapsedContent}
+          {expanded && expandedContent}
+          {children}
+        </Box>
+      )}
     </Box>
   )
 }

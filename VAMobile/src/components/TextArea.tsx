@@ -23,18 +23,9 @@ export type TextAreaProps = {
 const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
   const theme = useTheme()
 
-  const borderProps: BoxProps = noBorder
-    ? {}
-    : {
-        borderStyle: 'solid',
-        borderBottomWidth: 'default',
-        borderBottomColor: 'primary',
-        borderTopWidth: 'default',
-        borderTopColor: 'primary',
-      }
+  const borderProps: BoxProps = noBorder ? {} : {}
 
   const boxProps: BoxProps = {
-    backgroundColor: 'contentBox',
     p: theme.dimensions.cardPadding,
   }
 

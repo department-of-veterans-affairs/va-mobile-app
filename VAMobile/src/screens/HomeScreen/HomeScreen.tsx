@@ -23,6 +23,7 @@ import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { ServiceHistoryData } from 'api/types'
 import {
+  AccordionCollapsible,
   ActivityButton,
   AnnouncementBanner,
   BackgroundVariant,
@@ -435,20 +436,30 @@ export function HomeScreen({}: HomeScreenProps) {
                         : theme.dimensions.standardMarginBetween
                     }
                     pl={theme.dimensions.standardMarginBetween}>
-                    <TextView
-                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
-                      variant={'VeteranStatusBranch'}>
-                      {t('disabilityRating.title')}
-                    </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={
-                        'NametagNumber'
-                      }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
-                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {t('disabilityRating.serviceConnected')}
-                    </TextView>
+                    <AccordionCollapsible
+                      noBorder={true}
+                      showHideText={true}
+                      header={
+                        <TextView
+                          accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                          variant={'VeteranStatusBranch'}>
+                          {t('disabilityRating.title')}
+                        </TextView>
+                      }
+                      expandedContent={
+                        <Box>
+                          <TextView
+                            accessible={false}
+                            importantForAccessibility={'no'}
+                            variant={
+                              'NametagNumber'
+                            }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
+                          <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
+                            {t('disabilityRating.serviceConnected')}
+                          </TextView>
+                        </Box>
+                      }
+                    />
                   </Box>
                 )}
                 {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount &&
@@ -467,17 +478,29 @@ export function HomeScreen({}: HomeScreenProps) {
                     }
                     pl={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
-                    <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}
-                      variant={'VeteranStatusBranch'}>
-                      {t('monthlyCompensationPayment')}
-                    </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={
-                        'NametagNumber'
-                      }>{`$${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                    <AccordionCollapsible
+                      noBorder={true}
+                      showHideText={true}
+                      header={
+                        <Box>
+                          <TextView
+                            accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}
+                            variant={'VeteranStatusBranch'}>
+                            {t('monthlyCompensationPayment')}
+                          </TextView>
+                        </Box>
+                      }
+                      expandedContent={
+                        <Box>
+                          <TextView
+                            accessible={false}
+                            importantForAccessibility={'no'}
+                            variant={
+                              'NametagNumber'
+                            }>{`$${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                        </Box>
+                      }
+                    />
                   </Box>
                 )}
               </Box>
