@@ -160,6 +160,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       text: 'Remote Config',
       decorator: ButtonDecoratorType.Navigation,
       onPress: () => navigateTo('RemoteConfig'),
+      testId: 'Remote Config',
     },
   ]
 
