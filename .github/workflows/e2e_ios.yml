@@ -264,7 +264,7 @@ jobs:
       - name: Determine if ticket needs to be made
         id: find_if_ticket_already_exists
         run: |
-          tickets=$(gh issue list --json number --jq '[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
+          tickets=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$tickets"
           echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
         env:
@@ -279,7 +279,7 @@ jobs:
       
       - name: Get new ticket body
         run: |
-          old_body=$(gh issue view --json body --jq '[] | .body' ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}})
+          old_body=$(gh issue view --json body --jq '.[] | .body' ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}})
           echo "$old_body"
           new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}
         env:
