@@ -264,7 +264,7 @@ jobs:
       - name: Determine if ticket needs to be made
         id: find_if_ticket_already_exists
         run: |
-          tickets = gh issue list --state open --search "Bug - Detox - Fix Overnight Failures in:title"
+          tickets=$(gh issue list --state open --search "Bug - Detox - Fix Overnight Failures in:title")x
           echo "$tickets"
           echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
 
