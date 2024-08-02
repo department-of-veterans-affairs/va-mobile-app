@@ -189,13 +189,14 @@ jobs:
       - name: Run e2e tests for iOS
         id: run_e2e_tests
         run: |
-          if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
-            echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
-          else
-            echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
-          fi
+          yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+# if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
+#   yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+#   echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
+# else
+#   echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
+#   yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+# fi
         continue-on-error: true
 
       - name: Rerun e2e tests for iOS if failed
@@ -224,35 +225,68 @@ jobs:
         run: exit 1
   
   output-slack-results:
-    if: (!cancelled()) && github.event_name == 'schedule'
+    if: (!cancelled()) 
+#&& github.event_name == 'schedule'
     needs: [matrix-e2e-ios, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          
       - name: Download results
         uses: actions/download-artifact@v4
         with:
             path: VAMobile/e2e/test_reports
-      - name: Inform Slack
+
+      # - name: Inform Slack
+      #   id: inform_slack
+      #   shell: bash
+      #   run: |
+      #     if grep -rq "<failure>" .; then
+      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+      #         -H 'Content-type: application/json' \
+      #         --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+      #         https://slack.com/api/chat.postMessage|
+      #         jq -r '.ts')
+      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      #       echo "DATE_OF_ISSUE=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
+      #       echo TEST_FAILURE="true" >> $GITHUB_OUTPUT
+      #     else
+      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+      #       -H 'Content-type: application/json' \
+      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+      #       https://slack.com/api/chat.postMessage|
+      #       jq -r '.ts')
+      #     fi
+      
+      - name: Determine if ticket needs to be made
+        id: find_if_ticket_already_exists
+        run: |
+          tickets = gh issue list --state open --search "Bug - Detox - Fix Overnight Failures in:title"
+          echo "$tickets"
+          echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
+
+      - name: Find failing tests
+        id: failing_tests
         shell: bash
         run: |
-          if grep -rq "<failure>" .; then
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-              -H 'Content-type: application/json' \
-              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-              https://slack.com/api/chat.postMessage|
-              jq -r '.ts')
-            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-          else
-            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
-          fi
+          failing_tests_list = $(grep -rl "<failure>")
+          echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
+
+      # - name: Make a ticket on failure
+      #   if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+      #   uses: JasonEtco/create-an-issue@v2
+      #   with:
+      #     filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
+      #     update_existing: true
+      #     search_existing: open
+      #   env:
+      #     dateOfIssue: ${{ env.DATE_OF_ISSUE }}
+      #     OS: "iOS"
+      #     issues: ${{steps.failing_tests.FAILING_TEST}}
+      #   id: create-issue
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
