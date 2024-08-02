@@ -16,7 +16,6 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
@@ -54,12 +53,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       abortController.abort()
     }
   })
-
-  useEffect(() => {
-    if (appeal && !loadingAppeal && !appealError) {
-      registerReviewEvent()
-    }
-  }, [appeal, loadingAppeal, appealError])
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)

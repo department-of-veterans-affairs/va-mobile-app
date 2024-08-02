@@ -83,13 +83,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     refetch: refetchGenderIdentityOptions,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
-  /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
-  const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
-  if (!reviewEventRegistered) {
-    registerReviewEvent()
-    setReviewEventRegistered(true)
-  }
-
   const personalInformationItems = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = [
       {

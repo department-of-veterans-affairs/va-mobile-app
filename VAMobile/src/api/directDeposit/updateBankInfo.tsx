@@ -12,6 +12,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getErrorKeys } from 'utils/errors'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { directDepositKeys } from './queryKeys'
 
@@ -46,6 +47,7 @@ export const useUpdateBankInfo = () => {
       } else {
         queryClient.invalidateQueries({ queryKey: directDepositKeys.directDeposit })
       }
+      registerReviewEvent()
     },
     onError: async (error) => {
       if (isErrorObject(error)) {

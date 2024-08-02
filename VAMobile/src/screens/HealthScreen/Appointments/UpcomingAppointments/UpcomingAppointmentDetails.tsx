@@ -72,7 +72,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent()
     }
   }, [trueAppointment, pendingAppointment, attributes])
 

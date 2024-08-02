@@ -8,7 +8,6 @@ import { FeatureLandingTemplate } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 import {
   AppointmentDetailsSubTypeConstants,
@@ -51,7 +50,6 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent()
     }
   }, [appointment, pendingAppointment, attributes])
 
