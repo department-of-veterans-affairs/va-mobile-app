@@ -265,18 +265,17 @@ jobs:
         id: failing_tests
         shell: bash
         run: |
-          echo "FAILING_TEST="test"" >> "$GITHUB_OUTPUT"
+          echo "FAILING_TEST=test" >> "$GITHUB_OUTPUT"
 #     failing_tests_list=$(grep -rl "<failure>")
 #     echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
 
       - name: Determine whether ticket needs to be updated or made
         id: find_if_ticket_already_exists
-        shell: bash
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$old_body"
           if [ "$old_body" != '' ]; then
-            new_body=$("$old_body\niOS: "${{steps.failing_tests.outputs.FAILING_TEST}})         
+            new_body=$(echo $old_body"\niOS: "${{steps.failing_tests.outputs.FAILING_TEST}})         
             echo "$new_body" 
           else          
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
