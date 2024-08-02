@@ -276,6 +276,7 @@ jobs:
           echo "$old_body"
           if [ "$old_body" != '' ]; then
             ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
+            echo "$ticket_number"
             new_body=$(echo $old_body"\n"${{ env.DATE_OF_ISSUE}}" iOS: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
             echo "UPDATED_BODY=$new_body" >> "$GITHUB_OUTPUT"
@@ -304,10 +305,10 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
           gh auth login --with-token < token.txt
 
-      - name: Update a ticket on failure (if needed)
-        if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
-        run: |
-          gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b ${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}
+      # - name: Update a ticket on failure (if needed)
+      #   if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
+      #   run: |
+      #     gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b ${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
