@@ -122,7 +122,7 @@ context('NotificationsSettingsScreen', () => {
         },
       }
       when(api.get as jest.Mock)
-        .calledWith(`/v0/push/prefs/1`)
+        .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
       renderWithProps(false, false, [apptPrefOff])
       await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
