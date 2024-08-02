@@ -264,18 +264,18 @@ jobs:
       - name: Determine if ticket needs to be made
         id: find_if_ticket_already_exists
         run: |
-          tickets=$(gh issue list --json number --jq '.number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
+          tickets=$(gh issue list --json number --jq '[.number]' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$tickets"
           echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Find failing tests
-        id: failing_tests
-        shell: bash
-        run: |
-          failing_tests_list=$(grep -rl "<failure>")
-          echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
+      # - name: Find failing tests
+      #   id: failing_tests
+      #   shell: bash
+      #   run: |
+      #     failing_tests_list=$(grep -rl "<failure>")
+      #     echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
       
       - name: Get new ticket body
         run: |
