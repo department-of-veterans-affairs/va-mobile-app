@@ -69,7 +69,7 @@ export const useRegisterDevice = () => {
         variables.userID && (await AsyncStorage.setItem(USER_ID, variables.userID))
       }
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'registerDevice: Service error')
       }
