@@ -18,7 +18,6 @@ import {
   getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import {
