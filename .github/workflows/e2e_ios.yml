@@ -260,7 +260,14 @@ jobs:
       #       https://slack.com/api/chat.postMessage|
       #       jq -r '.ts')
       #     fi
-      
+
+      # - name: Find failing tests
+      #   id: failing_tests
+      #   shell: bash
+      #   run: |
+      #     failing_tests_list=$(grep -rl "<failure>")
+      #     echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
+
       - name: Determine if ticket needs to be made
         id: find_if_ticket_already_exists
         run: |
@@ -269,19 +276,12 @@ jobs:
           echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Find failing tests
-      #   id: failing_tests
-      #   shell: bash
-      #   run: |
-      #     failing_tests_list=$(grep -rl "<failure>")
-      #     echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
       
       - name: Get new ticket body
         run: |
-          old_body=$(gh issue view --json body --jq '.[] | .body' ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}})
+          old_body=$(gh issue view ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}} --json body --jq '.[] | .body')
           echo "$old_body"
-          new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}
+#new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
