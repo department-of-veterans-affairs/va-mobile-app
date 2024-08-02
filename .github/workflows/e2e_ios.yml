@@ -306,7 +306,7 @@ jobs:
       - name: Update a ticket on failure (if needed)
         if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
         run: |
-          gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b ${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}
+          gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b "${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}"
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
