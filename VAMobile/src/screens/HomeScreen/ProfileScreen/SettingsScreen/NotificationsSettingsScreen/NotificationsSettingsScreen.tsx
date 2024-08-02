@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Linking } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -46,7 +46,13 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { mutate: setPushPref, isPending: settingPreference } = useSetPushPref()
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
-    Linking.openSettings()
+    Alert.alert(t('leavingApp.title'), t('leavingApp.body.settings'), [
+      {
+        text: t('leavingApp.cancel'),
+        style: 'cancel',
+      },
+      { text: t('leavingApp.ok'), onPress: () => Linking.openSettings(), style: 'default' },
+    ])
   }
 
   const fetchPreferences = async () => {

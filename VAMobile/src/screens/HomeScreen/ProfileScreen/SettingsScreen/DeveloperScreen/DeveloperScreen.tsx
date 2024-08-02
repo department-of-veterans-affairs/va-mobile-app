@@ -10,13 +10,23 @@ import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { DEVICE_ENDPOINT_SID, useLoadPushPreferences } from 'api/notifications'
-import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
+import {
+  Box,
+  ButtonDecoratorType,
+  FeatureLandingTemplate,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+  VATextInput,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -26,7 +36,7 @@ import {
   overrideLocalVersion,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -40,6 +50,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const resetFirstTimeLoginAlert = useAlert()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
@@ -109,17 +120,49 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const envVars = getEnv()
 
   const onResetFirstTimeLogin = (): void => {
-    console.debug('Resetting first time login flag')
-    dispatch(debugResetFirstTimeLogin())
+    resetFirstTimeLoginAlert({
+      title: t('areYouSure'),
+      message: 'This will clear all session activity and redirect you back to the login screen.',
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+        {
+          text: t('reset'),
+          onPress: () => {
+            console.debug('Resetting first time login flag')
+            dispatch(debugResetFirstTimeLogin())
+          },
+        },
+      ],
+    })
   }
 
-  const resetInAppReview = (): void => {
-    resetReviewActionCount()
+  const resetInAppReview = async () => {
+    try {
+      await resetReviewActionCount()
+      showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
+    } catch {
+      showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
+    }
   }
 
-  const onClickFirebaseDebugMode = (): void => {
-    dispatch(toggleFirebaseDebugMode())
-  }
+  const firebaseList: Array<SimpleListItemObj> = [
+    {
+      text: 'Firebase debug mode',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: firebaseDebugMode,
+      },
+      onPress: () => dispatch(toggleFirebaseDebugMode()),
+    },
+    {
+      text: 'Remote Config',
+      decorator: ButtonDecoratorType.Navigation,
+      onPress: () => navigateTo('RemoteConfig'),
+      testId: 'Remote Config',
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -127,6 +170,13 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
+      <TextView
+        variant={'MobileBodyBold'}
+        accessibilityRole={'header'}
+        mx={theme.dimensions.gutter}
+        mb={theme.dimensions.standardMarginBetween}>
+        Reset options
+      </TextView>
       <Box>
         <TextArea>
           <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
@@ -138,17 +188,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         </TextArea>
       </Box>
       <Box>
-        <TextArea>
-          <Button
-            onPress={onClickFirebaseDebugMode}
-            label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
-          />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
-          <Button onPress={() => navigateTo('RemoteConfig')} label={'Remote Config'} />
-        </TextArea>
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Firebase
+        </TextView>
+        <SimpleList items={firebaseList} />
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>

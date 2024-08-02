@@ -495,16 +495,13 @@ export const attemptIntializeAuthWithRefreshToken = async (
     if (isErrorObject(error)) {
       console.error(error)
       logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
-      if (error.status) {
-        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
-      }
+      await logAnalyticsEvent(Events.vama_login_token_refresh(error))
     }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
-    // await logAnalyticsEvent(Events.vama_exchange_failed())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
   }
 }
@@ -684,10 +681,8 @@ export const handleTokenCallbackUrl =
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
-        await logAnalyticsEvent(Events.vama_exchange_failed())
-        if (error.status) {
-          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
-        }
+        await logAnalyticsEvent(Events.vama_login_token_fetch(error))
+
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
