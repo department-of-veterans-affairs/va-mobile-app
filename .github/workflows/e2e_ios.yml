@@ -273,12 +273,10 @@ jobs:
         id: find_if_ticket_already_exists
         shell: bash
         run: |
-          echo "DATE_OF_ISSUE=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$old_body"
           if [ "$old_body" != '' ]; then
-            new_body=$("$old_body"
-              ${{ env.DATE_OF_ISSUE}}" iOS: "${{steps.failing_tests.outputs.FAILING_TEST}})         
+            new_body=$("$old_body\niOS: "${{steps.failing_tests.outputs.FAILING_TEST}})         
             echo "$new_body" 
           else          
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
@@ -286,6 +284,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      #new_body=$("$old_body"${{ env.DATE_OF_ISSUE}}" iOS: "${{steps.failing_tests.outputs.FAILING_TEST}})         
       # - name: Make a ticket on failure
       #   if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
       #   uses: JasonEtco/create-an-issue@v2
