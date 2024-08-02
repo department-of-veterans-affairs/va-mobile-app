@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
-import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
+import { fixSpecialCharacters, fixedWhiteSpaceString } from 'utils/jsonFormatting'
 
 export type CustomErrorProps = {
   /** optional function called when the Try again button is pressed */
@@ -28,8 +28,6 @@ export type CustomErrorProps = {
 const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, callPhone }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const titleA11y = a11yLabelVA(fixedWhiteSpaceString(titleText))
-  const errorA11y = a11yLabelVA(fixedWhiteSpaceString(errorText))
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
@@ -45,6 +43,13 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
+  const fixSpacingAndSpecialCharacters = (text: string) => {
+    return fixedWhiteSpaceString(fixSpecialCharacters(text))
+  }
+
+  const titleA11y = a11yLabelVA(fixSpacingAndSpecialCharacters(titleText))
+  const errorA11y = a11yLabelVA(fixSpacingAndSpecialCharacters(errorText))
+
   const tryAgain = () => {
     logAnalyticsEvent(Events.vama_be_af_refresh())
     if (onTryAgain) {
@@ -55,14 +60,14 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox title={fixedWhiteSpaceString(titleText)} titleA11yLabel={titleA11y} border="error">
+        <AlertBox title={fixSpacingAndSpecialCharacters(titleText)} titleA11yLabel={titleA11y} border="error">
           <Box>
             <TextView
               variant="MobileBody"
               paragraphSpacing={true}
               mt={theme.dimensions.standardMarginBetween}
               accessibilityLabel={errorA11y}>
-              {fixedWhiteSpaceString(errorText)}
+              {fixSpacingAndSpecialCharacters(errorText)}
             </TextView>
             {!!callPhone && <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />}
             {onTryAgain && (
