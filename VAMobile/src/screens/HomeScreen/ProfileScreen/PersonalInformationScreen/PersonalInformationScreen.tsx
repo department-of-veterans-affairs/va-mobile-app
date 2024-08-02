@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -25,6 +25,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -81,6 +82,13 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
   } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
+
+  /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
+  const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
+  if (!reviewEventRegistered) {
+    registerReviewEvent()
+    setReviewEventRegistered(true)
+  }
 
   const personalInformationItems = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = [

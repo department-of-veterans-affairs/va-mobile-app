@@ -30,6 +30,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const getTextForPhoneData = (
@@ -149,6 +150,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   const navigateTo = useRouteNavigation()
+
+  /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
+  const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
+  if (!reviewEventRegistered) {
+    console.debug('REVIEW EVENT REGISTERED')
+    registerReviewEvent()
+    setReviewEventRegistered(true)
+  }
 
   const onMailingAddress = () => {
     logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))

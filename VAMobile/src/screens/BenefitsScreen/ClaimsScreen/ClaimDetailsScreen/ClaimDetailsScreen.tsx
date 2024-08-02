@@ -24,6 +24,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -73,6 +74,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
+      registerReviewEvent()
       logAnalyticsEvent(
         Events.vama_claim_details_open(
           claimID,
