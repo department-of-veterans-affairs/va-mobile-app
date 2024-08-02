@@ -42,7 +42,7 @@ const registerDevice = async (
         osName: isIOS() ? PushOsName.ios : PushOsName.android,
         debug: false,
       }
-      return await put<PushRegistrationResponse>('/v0/push/register', params)
+      return put<PushRegistrationResponse>('/v0/push/register', params)
     }
   } else {
     await AsyncStorage.removeItem(DEVICE_TOKEN_KEY)
