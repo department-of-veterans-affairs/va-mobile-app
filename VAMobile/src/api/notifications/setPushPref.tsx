@@ -27,7 +27,7 @@ export const useSetPushPref = () => {
 
   return useMutation({
     mutationFn: setPushPref,
-    onSuccess: async (data: unknown, preference: PushPreference) => {
+    onSuccess: (data: unknown, preference: PushPreference) => {
       const pushPreferences = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
       const index = pushPreferences.preferences.findIndex((p) => p.preferenceId === preference.preferenceId)
       const newPrefSetting: PushPreference = {
