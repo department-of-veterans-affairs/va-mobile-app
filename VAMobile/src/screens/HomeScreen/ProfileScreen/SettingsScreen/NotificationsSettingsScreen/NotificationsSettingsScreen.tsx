@@ -4,12 +4,20 @@ import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { MutateOptions } from '@tanstack/react-query'
+import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
-import { DEVICE_ENDPOINT_SID, useLoadPushPreferences, useRegisterDevice, useSetPushPref } from 'api/notifications'
+import {
+  DEVICE_ENDPOINT_SID,
+  notificationKeys,
+  useLoadPushPreferences,
+  useLoadSystemNotificationsSettings,
+  useRegisterDevice,
+  useSetPushPref,
+} from 'api/notifications'
 import { PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import {
   AlertBox,
@@ -35,15 +43,27 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const isFocused = useIsFocused()
   const {
     data: notificationData,
     isFetching: loadingPreferences,
     error: hasError,
     refetch: refetchPushPreferences,
   } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
+  const { data: systemNotificationData, isFetching: loadingSystemNotification } = useLoadSystemNotificationsSettings({
+    enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
+  })
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useSetPushPref()
+
+  const openSettings = () => {
+    queryClient.invalidateQueries({
+      queryKey: [notificationKeys.systemNotifications],
+    })
+    Linking.openSettings()
+  }
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
     Alert.alert(t('leavingApp.title'), t('leavingApp.body.settings'), [
@@ -51,7 +71,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         text: t('leavingApp.cancel'),
         style: 'cancel',
       },
-      { text: t('leavingApp.ok'), onPress: () => Linking.openSettings(), style: 'default' },
+      { text: t('leavingApp.ok'), onPress: openSettings, style: 'default' },
     ])
   }
 
@@ -116,7 +136,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     return <></>
   }
 
-  const loadingCheck = loadingPreferences || registeringDevice || settingPreference
+  const loadingCheck = loadingPreferences || loadingSystemNotification || registeringDevice || settingPreference
 
   return (
     <FeatureLandingTemplate
@@ -125,7 +145,10 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       title={t('notifications.title')}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
-      ) : hasError || (notificationData?.systemNotificationsOn && !notificationData.preferences.length) ? (
+      ) : hasError ||
+        (systemNotificationData?.systemNotificationsOn &&
+          notificationData &&
+          notificationData.preferences.length < 1) ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
           error={hasError}
@@ -133,7 +156,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         />
       ) : (
         <Box mb={contentMarginBottom}>
-          {notificationData?.systemNotificationsOn ? (
+          {systemNotificationData?.systemNotificationsOn ? (
             <>
               <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
                 {t('notifications.settings.personalize.heading')}

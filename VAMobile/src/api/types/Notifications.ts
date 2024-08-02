@@ -59,10 +59,13 @@ export type GetPushPrefsResponse = {
 
 export type LoadPushPreferencesData = {
   preferences: PushPreference[]
-  systemNotificationsOn: boolean
   tappedForegroundNotification?: boolean
   deviceToken?: string
   initialUrl?: string
+}
+
+export type LoadSystemNotificationsData = {
+  systemNotificationsOn: boolean
 }
 
 export type RegisterDeviceParams = {
