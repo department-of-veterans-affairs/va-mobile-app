@@ -268,20 +268,16 @@ jobs:
       #     failing_tests_list=$(grep -rl "<failure>")
       #     echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
 
-      - name: Determine if ticket needs to be made
+      - name: Determine whether ticket needs to be updated or made
         id: find_if_ticket_already_exists
         run: |
-          tickets=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
-          echo "$tickets"
-          echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Get new ticket body
-        run: |
-          old_body=$(gh issue view ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}} --json body --jq '.[] | .body')
+          old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$old_body"
-#new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}
+          if [[ $old_body" != "" ]] then;
+            new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}          
+            echo "$new_body" 
+          else          
+            echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
