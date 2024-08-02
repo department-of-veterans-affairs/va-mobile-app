@@ -2519,10 +2519,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@reduxjs/toolkit@^2.2.6":
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.6.tgz#4a8356dad9d0c1ab255607a555d492168e0e3bc1"
-  integrity sha512-kH0r495c5z1t0g796eDQAkYbEQ3a1OLYN9o8jQQVZyKyw367pfRGS+qZLkHYvFHiUUdafpoSlQ2QYObIApjPWA==
+"@reduxjs/toolkit@^2.2.7":
+  version "2.2.7"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.7.tgz#199e3d10ccb39267cb5aee92c0262fd9da7fdfb2"
+  integrity sha512-faI3cZbSdFb8yv9dhDTmGwclW0vk0z5o1cia+kf7gCbaCwHI5e+7tP57mJUv22pNcNbeA62GSrPpfrUfdXcQ6g==
   dependencies:
     immer "^10.0.3"
     redux "^5.0.1"
@@ -2681,10 +2681,10 @@
   dependencies:
     "@tanstack/query-core" "5.38.0"
 
-"@testing-library/jest-dom@^6.4.6":
-  version "6.4.6"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.4.6.tgz#ec1df8108651bed5475534955565bed88c6732ce"
-  integrity sha512-8qpnGVincVDLEcQXWaHOf6zmlbwTKc6Us6PPu4CRnPXCzo2OGBS5cwgMMOWdxDpEz1mkbvXHpEy99M5Yvt682w==
+"@testing-library/jest-dom@^6.4.8":
+  version "6.4.8"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.4.8.tgz#9c435742b20c6183d4e7034f2b329d562c079daa"
+  integrity sha512-JD0G+Zc38f5MBHA4NgxQMR5XtO5Jx9g86jqturNTt2WUfRmLDIY7iKkWHDCCTiDuFMre6nxAD5wHw9W5kI4rGw==
   dependencies:
     "@adobe/css-tools" "^4.4.0"
     "@babel/runtime" "^7.9.2"
@@ -2695,10 +2695,10 @@
     lodash "^4.17.21"
     redent "^3.0.0"
 
-"@testing-library/react-native@^12.5.1":
-  version "12.5.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.5.1.tgz#8ff67e87589d7d3307fce8ec41131c898c9dbd98"
-  integrity sha512-PApr3f6DmSJF/EIiWYZfcBzuy6w7fK8TW4a6KfQHTeAcfZ6lADtRO7R0QM5WI+b7tJ33JvIPgzCg1MiuRz4v0g==
+"@testing-library/react-native@^12.5.2":
+  version "12.5.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.5.2.tgz#97dcf11e505d7cd05c9261c1f1c65387c4857673"
+  integrity sha512-utFXq9xVc2D/vZk80YzWPTPTNbVXh7jyLYW+DJ2mlmDhj5GaAKf1abf2Dwc6gitxAWn5R22GO3hBME03W0f82w==
   dependencies:
     jest-matcher-utils "^29.7.0"
     pretty-format "^29.7.0"
@@ -9300,10 +9300,10 @@ react-native-svg@15.2.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-svg@^14.1.0:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-14.1.0.tgz#7903bddd3c71bf3a8a503918253c839e6edaa724"
-  integrity sha512-HeseElmEk+AXGwFZl3h56s0LtYD9HyGdrpg8yd9QM26X+d7kjETrRQ9vCjtxuT5dCZEIQ5uggU1dQhzasnsCWA==
+react-native-svg@^14.2.0:
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-14.2.0.tgz#20ef9447c623b3f9a6d9e1c03746ac74f55ea55d"
+  integrity sha512-8Rha6zdDwPxxSXsUVyyqYZcuwRb/J4xiD9GPbYm94FBOqs7JjTnHVSO08Hi4tbUh1kVrnAP0V/7bpi3aeUvnrg==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"
