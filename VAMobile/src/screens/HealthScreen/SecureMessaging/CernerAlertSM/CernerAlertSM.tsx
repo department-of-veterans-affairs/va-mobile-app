@@ -64,7 +64,7 @@ function CernerAlertSM() {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {intro}
         </TextView>
         {hasMultipleFacilities && <VABulletList listOfText={bullets} paragraphSpacing={true} />}
