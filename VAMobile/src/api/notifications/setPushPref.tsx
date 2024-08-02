@@ -38,7 +38,7 @@ export const useSetPushPref = () => {
       pushPreferences.preferences.splice(index, 1, newPrefSetting)
       queryClient.setQueryData(notificationKeys.settings, pushPreferences)
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'setPushPref: Service error')
       }
