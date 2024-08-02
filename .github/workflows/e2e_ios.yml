@@ -274,11 +274,12 @@ jobs:
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           echo "$old_body"
-          if [[ "$old_body" != "" ]] then;
+          if [ "$old_body" != '' ]; then
             new_body=$("$old_body \n"${{ env.DATE_OF_ISSUE}}" iOS: "${{steps.failing_tests.FAILING_TEST}})         
             echo "$new_body" 
           else          
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
