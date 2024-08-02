@@ -267,6 +267,8 @@ jobs:
           tickets=$(gh issue list --state open --search "Bug - Detox - Fix Overnight Failures in:title")x
           echo "$tickets"
           echo "TICKET_EXISTS=$tickets" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Find failing tests
         id: failing_tests
@@ -274,6 +276,14 @@ jobs:
         run: |
           failing_tests_list = $(grep -rl "<failure>")
           echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
+      
+      - name: Get new ticket body
+        run: |
+          old_body=$(gh issue view ${{steps.find_if_ticket_already_exists.TICKET_EXISTS}} | jq '.body')
+          echo "$old_body"
+          new_body=old_body + "\n" + ${{ env.DATE_OF_ISSUE}} + " iOS: " + ${{steps.failing_tests.FAILING_TEST}}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Make a ticket on failure
       #   if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
