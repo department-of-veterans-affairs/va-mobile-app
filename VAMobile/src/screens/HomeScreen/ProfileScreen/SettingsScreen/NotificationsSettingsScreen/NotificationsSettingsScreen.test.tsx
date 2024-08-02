@@ -96,7 +96,7 @@ context('NotificationsSettingsScreen', () => {
         },
       }
       when(api.get as jest.Mock)
-        .calledWith(`/v0/push/prefs/1`)
+        .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
       renderWithProps(true, true, [apptPrefOff])
       await waitFor(() =>
