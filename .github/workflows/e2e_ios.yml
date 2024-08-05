@@ -266,7 +266,7 @@ jobs:
         shell: bash
         run: |
           failing_tests_list=$(grep -rl "<failure>")
-          echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
+#echo "FAILING_TEST=${{ toJSON(failing_tests_list) }}" >> "$GITHUB_OUTPUT"
 
       - name: Determine whether ticket needs to be updated or made
         id: find_if_ticket_already_exists
