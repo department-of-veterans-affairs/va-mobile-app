@@ -38,6 +38,10 @@ type modifyToastType = Omit<ToastType, 'show'> & {
 
 declare var snackBar: modifyToastType
 
+type SnackbarType = import('@department-of-veterans-affairs/mobile-component-library').SnackbarType
+// eslint-disable-next-line no-var
+declare var snackbar: SnackbarType
+
 declare var global: any
 
 declare var process: any

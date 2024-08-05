@@ -17,6 +17,8 @@ const saveDraft = ({ messageID, replyID, messageData }: SaveDraftParameters) => 
     ? `/v0/messaging/health/message_drafts/${replyID}/replydraft`
     : '/v0/messaging/health/message_drafts'
 
+  return Promise.reject('oh no')
+
   if (messageID) {
     return put<SecureMessagingSaveDraftData>(`${url}/${messageID}`, messageData as unknown as Params)
   }

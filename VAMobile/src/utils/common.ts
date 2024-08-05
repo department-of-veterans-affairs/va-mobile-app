@@ -331,24 +331,20 @@ export function showSnackBar(
   isError?: boolean,
   withNavBar = false,
 ): void {
-  if (!snackBar) {
+  if (!snackbar) {
     logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
   }
-  snackBar?.hideAll()
+  snackbar?.hideAll()
   dispatch(
     updatBottomOffset(
       withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset,
     ),
   )
-  snackBar?.show(message, {
-    type: 'custom_snackbar',
+  snackbar?.show(message, {
+    // type: 'custom_snackbar',
     data: {
-      onActionPressed: () => {
-        if (actionPressed) {
-          actionPressed()
-        }
-      },
-      isUndo,
+      onActionPressed: actionPressed,
+      // isUndo,
       isError,
     },
   })
