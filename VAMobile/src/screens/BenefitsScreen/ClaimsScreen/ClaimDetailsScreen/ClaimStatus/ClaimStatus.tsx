@@ -16,6 +16,7 @@ import { useRouteNavigation } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
+import DEPRECATED_ClaimTimeline from './ClaimTimeline/DEPRECATED_ClaimTimeline'
 import ClosedClaimStatusDetails from './ClosedClaimInfo/ClosedClaimStatusDetails'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
@@ -53,7 +54,12 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
 
       return (
         <Box>
-          {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
+          {claim && featureEnabled('claimPhaseExpansion') && (
+            <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
+          )}
+          {claim && !featureEnabled('claimPhaseExpansion') && (
+            <DEPRECATED_ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
+          )}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           {featureEnabled('claimPhaseExpansion') && (
             <TextArea>
