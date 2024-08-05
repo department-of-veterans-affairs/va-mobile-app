@@ -189,7 +189,7 @@ jobs:
       - name: Run e2e tests for iOS
         id: run_e2e_tests
         run: |
-          yarn e2e:ios-test /e2e/tests/SignIn.e2e --take-screenshots failing --updateSnapshot --headless
+          yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
 # if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
 #   yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
 #   echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
