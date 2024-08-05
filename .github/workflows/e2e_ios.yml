@@ -266,6 +266,9 @@ jobs:
         shell: bash
         run: |
           failing_tests_list=$(grep -rl "<failure>")
+          failing_tests_string = $($failing_tests_list | jq --compact-output '.')
+          echo "$failing_tests_list"
+          echo "$failing_tests_string"
 #echo "FAILING_TEST=${{ toJSON(failing_tests_list) }}" >> "$GITHUB_OUTPUT"
 
       - name: Determine whether ticket needs to be updated or made
