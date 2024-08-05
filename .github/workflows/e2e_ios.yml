@@ -265,10 +265,10 @@ jobs:
         id: failing_tests
         shell: bash
         run: |
-          failing_tests_list=$(grep -rl "<failure>")
-          echo $failing_tests_list
-          failing_tests=$(echo $failing_tests_list | tr '\n' '')
-          echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
+          echo "failing_tests_list=$(grep -rl "<failure>")" >> $GITHUB_OUTPUT
+# echo $failing_tests_list
+# failing_tests=$(echo $failing_tests_list | tr '\n' '')
+# echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
 #failing_tests_string = $(echo $failing_tests_list | jq --compact-output '.')
 #echo "$failing_tests_string"
 #echo "FAILING_TEST=${{ toJSON(failing_tests_list) }}" >> "$GITHUB_OUTPUT"
