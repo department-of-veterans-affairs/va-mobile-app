@@ -825,6 +825,7 @@
   "keepRequest": "Keep request",
   "learnAboutPACT": "Learn about PACT Act on VA.gov",
   "leavingApp.body": "You'll go to a website outside of this app.",
+  "leavingApp.body.settings": "You'll go to the system settings for this app.",
   "leavingApp.cancel": "Go back",
   "leavingApp.ok": "Leave",
   "leavingApp.title": "Leave the mobile app?",

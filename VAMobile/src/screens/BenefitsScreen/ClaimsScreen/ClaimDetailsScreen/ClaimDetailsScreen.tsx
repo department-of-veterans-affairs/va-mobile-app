@@ -171,6 +171,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         buttonType: ButtonVariants.Primary,
         label: t('claimDetails.getClaimLetters'),
         onPress: onDecisionLetterPress,
+        testID: 'getClaimLettersTestID',
       }
 
       const alertProps: AlertProps = {
