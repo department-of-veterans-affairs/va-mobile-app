@@ -152,6 +152,11 @@ android {
             pickFirsts += ['**/armeabi-v7a/libc++_shared.so', '**/x86/libc++_shared.so', '**/x86_64/libc++_shared.so', '**/arm64-v8a/libc++_shared.so', '**/libjsc.so']
         }
     }
+    sourceSets {	
+        main {
+            res.srcDirs += ' ../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo'	
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
