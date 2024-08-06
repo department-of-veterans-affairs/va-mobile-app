@@ -272,14 +272,13 @@ jobs:
             if [ "$var" == "0" ]; then
               failing_tests=$(echo "$i")
             else
-              failing_test=$(failing_tests",""$i")
+              failing_test=$(echo $failing_tests",""$i")
             fi
             var=$((var+1))
-            echo "$failing_test"
+            echo $failing_test
           done
-          failing_tests=$(echo $failing_tests_list | jq --compact-output '.')
-          echo "failing_tests_list: $failing_tests"
-          echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
+          echo "FAILING_TEST=$failing_test" >> "$GITHUB_OUTPUT"
+# failing_tests=$(echo $failing_tests_list | jq --compact-output '.')
 #failing_tests_string = $(echo $failing_tests_list | jq --compact-output '.')
 #echo "$failing_tests_string"
 #echo "FAILING_TEST=${{ toJSON(failing_tests_list) }}" >> "$GITHUB_OUTPUT"
