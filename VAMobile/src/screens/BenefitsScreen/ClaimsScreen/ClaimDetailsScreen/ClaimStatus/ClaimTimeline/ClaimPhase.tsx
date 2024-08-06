@@ -53,7 +53,15 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
   const phaseHeader = (
     <Box flexDirection="column">
       <Box flexDirection="row" alignItems="center" mb={isCompletedPhase ? tinyMarginBetween : 0}>
-        {isCompletedPhase && <VAIcon name="CircleCheckMark" fill={theme.colors.icon.success} width={24} height={24} />}
+        {isCompletedPhase && (
+          <VAIcon
+            name="CircleCheckMark"
+            fill={theme.colors.icon.success}
+            width={24}
+            height={24}
+            preventScaling={true}
+          />
+        )}
         <TextView
           variant="MobileBodyBold"
           ml={isCompletedPhase ? condensedMarginBetween : 0}>{`Step ${phase}`}</TextView>
