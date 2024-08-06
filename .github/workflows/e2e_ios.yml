@@ -279,6 +279,11 @@ jobs:
           done
           echo "FAILING_TEST=$failing_test" >> "$GITHUB_OUTPUT"
 
+      - name: Github CLI Authentication
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+          gh auth login --with-token < token.txt
+
       - name: Determine whether ticket needs to be updated or made
         id: find_if_ticket_already_exists
         run: |
@@ -290,6 +295,7 @@ jobs:
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
             echo "UPDATED_BODY="$new_body"" >> "$GITHUB_OUTPUT"
             echo "TICKET_NUMBER=$ticket_number" >> "$GITHUB_OUTPUT"
+            gh issue edit $ticket_number -b "$new_body"
           else          
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
           fi
@@ -309,16 +315,16 @@ jobs:
       #     issues: ${{steps.failing_tests.FAILING_TEST}}
       #   id: create-issue
 
-      - name: Github CLI Authentication
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-          gh auth login --with-token < token.txt
+      # - name: Github CLI Authentication
+      #   run: |
+      #     echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      #     gh auth login --with-token < token.txt
 
-      - name: Update a ticket on failure (if needed)
-        if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
-        run: |
-          echo "${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}"
-          gh issue edit ${{steps.find_if_ticket_already_exists.outputs}} -b ""${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}""
+      # - name: Update a ticket on failure (if needed)
+      #   if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
+      #   run: |
+      #     echo "${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}"
+      #     gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b ""${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}""
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
