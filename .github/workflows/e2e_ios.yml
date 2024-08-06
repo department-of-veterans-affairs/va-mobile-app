@@ -269,13 +269,16 @@ jobs:
           var=0
           for i in ${failing_tests_list[@]}; do
             echo "$i"
-            if [ "$var" == "0" ]; then
-              failing_tests=$(echo "$i")
+            if [ "$var"=="0" ]; then
+              remove_before=${i%.ts*}
+              remove_after=${remove_before#test_reports/*}
+              failing_tests=$(echo "$remove_after")
             else
+              echo $failing_test
               failing_test=$(echo $failing_tests", ""$i")
+              echo $failing_test
             fi
             var=$((var+1))
-            echo $failing_test
           done
           echo "FAILING_TEST=$failing_test" >> "$GITHUB_OUTPUT"
 
@@ -290,7 +293,7 @@ jobs:
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           if [ "$old_body" != '' ]; then
             ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
-            new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" iOS: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
+            new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on iOS: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
             echo "$new_body"
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
             gh issue edit $ticket_number -b "$new_body"
