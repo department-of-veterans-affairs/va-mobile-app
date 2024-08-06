@@ -1,7 +1,7 @@
 # Release builds that are triggered by the v*.*.* tag. Release tags occur when
 # someone comments /approve on the associated release ticket
 
-name: '[Build] Release Build'
+name: '[Build] Optimize Image'
 
 on:
   push:
@@ -46,11 +46,8 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git add .
           git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
-          git add VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
-          git add  VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
