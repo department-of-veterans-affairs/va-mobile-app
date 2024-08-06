@@ -3,7 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
@@ -16,6 +17,9 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimStatus', () => {
   const defaultMaxEstDate = '2019-12-11'
@@ -74,10 +78,9 @@ context('ClaimStatus', () => {
       initializeTestInstance('', 'CLOSED')
       expect(
         screen.getByText(
-          'We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
+          'We decided your claim on January 31, 2019. We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
         ),
       ).toBeTruthy()
-      expect(screen.getByText('We decided your claim on January 31, 2019')).toBeTruthy()
     })
   })
 })
