@@ -275,6 +275,7 @@ jobs:
               failing_test=$(failing_tests",""$i")
             fi
             var=$((var+1))
+          done
           failing_tests=$(echo $failing_tests_list | jq --compact-output '.')
           echo "failing_tests_list: $failing_tests_list"
           echo "FAILING_TEST=$failing_tests_list" >> "$GITHUB_OUTPUT"
