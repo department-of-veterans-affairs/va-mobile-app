@@ -105,6 +105,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Savings account'))).toExist()
+    await setTimeout(2000)
     await expect(element(by.text('Direct deposit information saved'))).toExist()
     await element(by.text('Dismiss')).tap()
   })

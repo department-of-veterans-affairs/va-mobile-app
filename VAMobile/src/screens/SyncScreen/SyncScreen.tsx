@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ViewStyle } from 'react-native'
+import { StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAppointments } from 'api/appointments'
@@ -12,7 +12,7 @@ import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
+import { Box, LoadingComponent, TextView, VALogo, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -32,7 +32,7 @@ function SyncScreen({}: SyncScreenProps) {
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme.colors.background.loginScreen,
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -96,20 +96,27 @@ function SyncScreen({}: SyncScreenProps) {
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <Box
         justifyContent="center"
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
-        <VAIcon name={'Logo'} />
-
+        <VALogo />
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
-          <LoadingComponent justTheSpinnerIcon={true} spinnerColor={colors.grayLightest} />
+          <LoadingComponent
+            justTheSpinnerIcon={true}
+            spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+          />
           <TextView
             variant={'MobileBody'}
             justifyContent={'center'}
-            color={'primaryContrast'}
+            color={'primary'}
             alignItems={'center'}
             textAlign={'center'}
             mt={theme.dimensions.standardMarginBetween}>

@@ -1,10 +1,10 @@
 import React from 'react'
-import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
@@ -17,6 +17,9 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimStatus', () => {
   const defaultMaxEstDate = '2019-12-11'
@@ -44,17 +47,12 @@ context('ClaimStatus', () => {
     expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
     expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
     expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
-    expect(
-      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
   })
 
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
+        fireEvent.press(screen.getByRole('menuitem', { name: 'Why does VA sometimes combine claims?' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
       })
     })
@@ -62,7 +60,7 @@ context('ClaimStatus', () => {
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', () => {
         fireEvent.press(
-          screen.getByRole('button', {
+          screen.getByRole('menuitem', {
             name: "What should I do if I disagree with VA's decision on my disability claim?",
           }),
         )
@@ -80,17 +78,9 @@ context('ClaimStatus', () => {
       initializeTestInstance('', 'CLOSED')
       expect(
         screen.getByText(
-          'We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
+          'We decided your claim on January 31, 2019. We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
         ),
       ).toBeTruthy()
-      expect(screen.getByText('We decided your claim on January 31, 2019')).toBeTruthy()
-    })
-  })
-
-  describe('on click of the call click for action link', () => {
-    it('should call Linking openURL', () => {
-      fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
-      expect(Linking.openURL).toHaveBeenCalled()
     })
   })
 })
