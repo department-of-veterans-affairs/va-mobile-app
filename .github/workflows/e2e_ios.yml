@@ -268,10 +268,12 @@ jobs:
           failing_tests_list=$(grep -rl "<failure>")
           var=0
           for i in ${failing_tests_list[@]}; do
-            echo "$i"
+            echo "$var"
             if [ "$var"=="0" ]; then
               remove_before=${i%.ts*}
+              echo "$remove_before"
               remove_after=${remove_before#test_reports/*}
+              echo "$remove_after"
               failing_tests=$(echo "$remove_after")
             else
               echo $failing_test
