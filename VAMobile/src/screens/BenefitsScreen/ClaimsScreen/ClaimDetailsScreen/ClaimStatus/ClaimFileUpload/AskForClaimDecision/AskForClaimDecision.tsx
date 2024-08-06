@@ -161,7 +161,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
             <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('askForClaimDecision.takingFull30Days')}
             </TextView>
-            <VABulletList listOfText={bulletedListOfText} />
+            <VABulletList listOfText={bulletedListOfText} paragraphSpacing={true} />
           </TextArea>
           <Box mx={gutter}>
             <Box my={standardMarginBetween}>

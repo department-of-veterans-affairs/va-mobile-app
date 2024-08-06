@@ -104,7 +104,6 @@ const featureID = {
   'Claim exam': 'appointmentsTestID',
   'Medication: Naproxen side effects': 'messagesTestID',
   'Drafts (3)': 'messagesTestID',
-  Payments: 'paymentsID',
 }
 
 let scrollID
@@ -171,7 +170,11 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
     checkImages(feature)
 
     if (device.getPlatform() === 'ios') {
-      await element(by.id(key)).atIndex(0).tap()
+      try {
+        await element(by.id(key)).tap()
+      } catch (ex) {
+        await element(by.text(key)).atIndex(0).tap()
+      }
     }
   } else {
     if (
@@ -194,7 +197,11 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
 }
 
 const navigateToPage = async (key, navigationDicValue) => {
-  await element(by.id(key)).tap()
+  try {
+    await element(by.id(key)).tap()
+  } catch (ex) {
+    await element(by.text(key)).atIndex(0).tap()
+  }
   const navigationArray = navigationDicValue
   if (typeof navigationArray[1] === 'string') {
     if (navigationArray[1] in featureID) {

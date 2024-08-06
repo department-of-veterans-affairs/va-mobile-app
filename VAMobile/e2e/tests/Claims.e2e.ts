@@ -309,7 +309,7 @@ describe('Claims Screen', () => {
       ),
     ).toExist()
     await expect(element(by.text("What you've claimed"))).toExist()
-    await expect(element(by.text('Payments'))).toExist()
+    await expect(element(by.text('Payments')).atIndex(0)).toExist()
     await expect(
       element(
         by.text(

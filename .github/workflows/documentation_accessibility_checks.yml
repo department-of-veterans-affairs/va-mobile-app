@@ -7,6 +7,7 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
+
 jobs:
   axe-scan:
     name: Acessibility Check
@@ -24,6 +25,8 @@ jobs:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
+      - name: Install ChromeDriver
+        run: npm install -g chromedriver@126.0.0
       - name: Test build
         working-directory: VAMobile
         run: |
@@ -33,7 +36,7 @@ jobs:
           yarn build
       - name: Start web server
         working-directory: VAMobile/documentation
-        run: npm start & npx wait-on http://localhost:3000 &          
+        run: npm start & npx wait-on http://localhost:3000 &
       - name: Check accessibility issues
         id: accessibility_check
         run: |
@@ -45,7 +48,7 @@ jobs:
     
           # Extract URLs from sitemap and iterate
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            if axe "$url" --exit; then
+            if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --exit; then
               echo "No accessibility issues found in $url"
             else
               echo "Accessibility issues found in $url"
@@ -58,7 +61,7 @@ jobs:
 
           # Fail the workflow if accessibility issues are detected
           if [ "$num_issues" -gt 0 ]; then
-            echo "Accessibility issues were detected."    
+            echo "Accessibility issues were detected."
             exit 1
           else
             echo "No accessibility issues were found."
@@ -81,4 +84,3 @@ jobs:
                -H "Content-Type: application/json" \
                -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
                https://slack.com/api/chat.postMessage
-
