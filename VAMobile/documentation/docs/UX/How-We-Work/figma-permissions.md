@@ -55,19 +55,13 @@ All of our Figma files are set so “**anyone with the link can view**.” If yo
 |Guests|View only|View only|View only|
 
 
-
-### Setting permissions for libraries
-* For **01 Design Libraries project**, set the Owner as the UX Lead and add the Design Librarian as an editor. Then, set the share settings so “Members of VA Mobile App can view.”
-* For **library files**, set the Owner as the UX Lead. Then, set the share settings so “Anyone at Ad Hoc with the link can view.”
-
-
 #### Library permissions by role
 |Team member|Library project|Library files|
 |--- |--- |--- |
 |UX Lead|🔑 Owner|🔑 Owner|
 |Design Librarian|✅ Can edit|✅ Can edit|
-|UX Designer|View only - Required to create a branch to edit|View only - Required to create a branch to edit|
-|UX  Content|View only - Required to create a branch to edit|View only - Required to create a branch to edit|
+|UX Designer|✅ Can edit|✅ Can edit|
+|UX  Content|✅ Can edit|✅ Can edit|
 |UX Researcher|View only - Able to use library in drafts|View only - Able to use library in drafts|
 |Product|View only - Able to use library in drafts|View only - Able to use library in drafts|
 |Engineering|View only - Able to use library in drafts|View only - Able to use library in drafts|

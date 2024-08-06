@@ -567,11 +567,6 @@ export const Events = {
       },
     }
   },
-  vama_exchange_failed: (): Event => {
-    return {
-      name: 'vama_exchange_failed',
-    }
-  },
   vama_fail: (): Event => {
     return {
       name: 'vama_fail',
@@ -745,11 +740,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_fetch: (status_code: number): Event => {
+  vama_login_token_fetch: (error: Error): Event => {
     return {
       name: 'vama_login_token_fetch',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -761,11 +756,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_refresh: (status_code: number): Event => {
+  vama_login_token_refresh: (error: Error): Event => {
     return {
       name: 'vama_login_token_refresh',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -843,6 +838,11 @@ export const Events = {
       params: {
         status,
       },
+    }
+  },
+  vama_review_prompt: (): Event => {
+    return {
+      name: 'vama_review_prompt',
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
