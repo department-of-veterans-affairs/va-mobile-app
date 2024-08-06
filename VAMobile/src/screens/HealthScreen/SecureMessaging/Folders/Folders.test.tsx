@@ -106,8 +106,8 @@ context('Folder', () => {
         .mockResolvedValue(listOfFolders)
       initializeTestInstance()
       expect(screen.getByText('Loading your folders...')).toBeTruthy()
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Drafts (2)' })).toBeTruthy())
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' })))
+      await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Drafts (2)' })).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Drafts (2)' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' }),
       )

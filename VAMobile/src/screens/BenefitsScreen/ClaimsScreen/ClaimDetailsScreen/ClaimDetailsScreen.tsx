@@ -31,6 +31,7 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
+import ClaimFiles from './ClaimFiles/ClaimFiles'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
@@ -44,7 +45,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const scrollViewRef = useRef<ScrollView>(null)
   const navigateTo = useRouteNavigation()
-  const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
+  const controlLabels = [
+    t('claimDetails.status'),
+    featureEnabled('claimPhaseExpansion') ? t('files') : t('claimDetails.details'),
+  ]
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType } = route.params
@@ -150,6 +154,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         buttonType: ButtonVariants.Primary,
         label: t('claimDetails.getClaimLetters'),
         onPress: onDecisionLetterPress,
+        testID: 'getClaimLettersTestID',
       }
 
       const alertProps: AlertProps = {
@@ -235,7 +240,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 0 && (
               <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} scrollViewRef={scrollViewRef} />
             )}
-            {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
+            {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
+            {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}
           </Box>
           {renderActiveClosedClaimStatusHelpLink()}
           <Box mt={theme.dimensions.condensedMarginBetween}>

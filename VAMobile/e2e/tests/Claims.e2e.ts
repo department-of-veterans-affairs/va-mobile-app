@@ -84,7 +84,7 @@ describe('Claims Screen', () => {
   it('Verify the claim status detail page (5-step claim)', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.text('Status'))).toExist()
-    await expect(element(by.text('Details'))).toExist()
+    await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_1_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_3_ID))).toExist()
@@ -350,11 +350,22 @@ describe('Claims Screen', () => {
   it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
     await expect(element(by.text('Decision letter ready'))).toExist()
-    await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(
-      element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
+      element(
+        by.text(
+          'We decided your claim on April 09, 2021. You can download your decision letter. We also mailed you this letter.',
+        ),
+      ),
     ).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
+    await expect(element(by.text("What you've claimed"))).toExist()
+    await expect(element(by.text('Payments')).atIndex(0)).toExist()
+    await expect(
+      element(
+        by.text(
+          "If you're entitled to back payment (based on an effective date), you can expect to receive payment within 1 month of your claim's decision date.",
+        ),
+      ),
+    ).toExist()
   })
 
   it('Verify what should I do if disagreement information', async () => {
@@ -386,14 +397,9 @@ describe('Claims Screen', () => {
     }
   })
 
-  it('verify details tab infomation', async () => {
+  it('verify files tab infomation', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
-    await element(by.text('Details')).tap()
-    await expect(element(by.text('Claim type'))).toExist()
-    await expect(element(by.text('Compensation'))).toExist()
-    await expect(element(by.text("What you've claimed"))).toExist()
-    await expect(element(by.text('Date received'))).toExist()
-    await expect(element(by.text('January 01, 2021')).atIndex(0)).toExist()
-    await expect(element(by.text('Your representative for VA claims'))).toExist()
+    await element(by.text('Files')).tap()
+    await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
   })
 })

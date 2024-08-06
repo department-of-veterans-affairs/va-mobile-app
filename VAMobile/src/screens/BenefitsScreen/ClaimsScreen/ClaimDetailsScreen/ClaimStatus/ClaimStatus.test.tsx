@@ -3,7 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
@@ -16,6 +17,9 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimStatus', () => {
   const defaultMaxEstDate = '2019-12-11'
@@ -48,7 +52,7 @@ context('ClaimStatus', () => {
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', () => {
-        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
+        fireEvent.press(screen.getByRole('menuitem', { name: 'Why does VA sometimes combine claims?' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
       })
     })
@@ -56,7 +60,7 @@ context('ClaimStatus', () => {
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', () => {
         fireEvent.press(
-          screen.getByRole('button', {
+          screen.getByRole('menuitem', {
             name: "What should I do if I disagree with VA's decision on my disability claim?",
           }),
         )
@@ -74,10 +78,9 @@ context('ClaimStatus', () => {
       initializeTestInstance('', 'CLOSED')
       expect(
         screen.getByText(
-          'We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
+          'We decided your claim on January 31, 2019. We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
         ),
       ).toBeTruthy()
-      expect(screen.getByText('We decided your claim on January 31, 2019')).toBeTruthy()
     })
   })
 })
