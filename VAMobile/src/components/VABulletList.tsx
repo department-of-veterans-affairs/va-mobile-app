@@ -51,7 +51,7 @@ export type VABulletListProps = {
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) => {
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
 
@@ -72,7 +72,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) =
   }
 
   return (
-    <Box mb={paragraphSpacing ? theme.paragraphSpacing.spacing20FontSize : undefined}>
+    <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined}>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
         const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
 

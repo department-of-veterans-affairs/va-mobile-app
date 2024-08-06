@@ -106,7 +106,7 @@ export const WhatsNew = () => {
           <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
           {bullets.length ? (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VABulletList listOfText={bullets} />
+              <VABulletList listOfText={bullets} paragraphSpacing={true} />
             </Box>
           ) : undefined}
         </Box>

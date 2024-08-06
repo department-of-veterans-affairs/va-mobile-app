@@ -26,7 +26,7 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('personalInformation.genderIdentity.whatToKnow.description')}
         </TextView>
-        <Box mt={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.standardMarginBetween}>
           <VABulletList
             listOfText={[
               {
@@ -62,7 +62,6 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
                   t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
               },
             ]}
-            paragraphSpacing={true}
           />
         </Box>
         <LinkWithAnalytics
