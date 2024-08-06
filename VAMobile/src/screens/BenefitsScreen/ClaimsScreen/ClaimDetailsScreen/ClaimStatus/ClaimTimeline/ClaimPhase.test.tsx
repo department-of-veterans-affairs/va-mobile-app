@@ -60,6 +60,20 @@ context('ClaimPhase', () => {
     })
   })
 
+  describe('when phase is equal to current with multiple steps complete', () => {
+    it('renders correct label and text without press', () => {
+      initializeTestInstance(6, 6)
+      expect(
+        screen.getByLabelText('Step 6. Preparing decision letter. Current step. Step 1 through 5 complete.'),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          'We’ll prepare your decision letter.\n\nIf we need more evidence or you submit more evidence, your claim will go back to Step 3.',
+        ),
+      ).toBeTruthy()
+    })
+  })
+
   describe('when phase is greater than current', () => {
     it('renders correct label and text after press', () => {
       initializeTestInstance(8, 7)
