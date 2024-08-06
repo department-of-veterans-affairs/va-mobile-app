@@ -2,6 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { DateTime } from 'luxon'
 
+import { Events } from 'constants/analytics'
+
+import { logAnalyticsEvent } from './analytics'
 import { getVersionName } from './deviceData'
 import { requestReview } from './rnReviews'
 
@@ -32,6 +35,7 @@ export const registerReviewEvent = async (): Promise<void> => {
 }
 
 const callReviewAPI = async (versionName: string): Promise<void> => {
+  logAnalyticsEvent(Events.vama_review_prompt())
   await requestReview()
   await AsyncStorage.setItem(STORAGE_REVIEW_EVENT_KEY, '0')
   await AsyncStorage.setItem(STORAGE_LAST_REVIEW_PROMPT_DATE_MILLIS, `${DateTime.now().millisecond}`)

@@ -40,7 +40,7 @@ function HealthHelp({}: HealthHelpProps) {
       <TextView variant="cernerPanelSubtext" mb={theme.dimensions.standardMarginBetween}>
         {t('healthHelp.manageHealthCare.multi.both')}
       </TextView>
-      <VABulletList listOfText={bullets} />
+      <VABulletList listOfText={bullets} paragraphSpacing={true} />
       <TextView variant="cernerPanelSubtext" mb={theme.dimensions.condensedMarginBetween}>
         {t('healthHelp.goToPortal.multi.both')}
       </TextView>

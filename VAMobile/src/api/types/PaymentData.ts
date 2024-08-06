@@ -3,7 +3,7 @@ export type PaymentsGetData = {
   paymentsByDate?: PaymentsByDate
   meta: {
     pagination?: PaymentsMetaPagination
-    availableYears: Array<string> | null
+    availableYears: Array<number> | null
   }
   links: {
     self: string | null
