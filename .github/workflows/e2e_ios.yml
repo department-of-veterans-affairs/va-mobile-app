@@ -267,7 +267,7 @@ jobs:
         run: |
           failing_tests_list=$(grep -rl "<failure>")
           var=0
-          for i in ${failing_tests_list[@]} do
+          for i in ${failing_tests_list[@]}; do
             echo "$i"
             if [ "$var" == "0" ]; then
               failing_tests=$(echo "$i")
