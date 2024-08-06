@@ -94,7 +94,7 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
     }
     dispatch(dispatchSetDowntime(downtimeWindows))
   } catch (e) {
-    logNonFatalErrorToFirebase(e, 'Maintenence Window Retrieval Failure')
+    logNonFatalErrorToFirebase(e, 'Maintenance Window Retrieval Failure')
     dispatch(dispatchSetDowntime(undefined))
   }
 }
