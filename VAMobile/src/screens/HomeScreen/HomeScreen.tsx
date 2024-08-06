@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
@@ -74,6 +75,7 @@ const MemoizedLoadingComponent = React.memo(LoadingComponent)
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
+  const sb = useSnackbar()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -183,7 +185,7 @@ export function HomeScreen({}: HomeScreenProps) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
       logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
     }
-  }, [claimsPrefetch, claimsData, loginTimestamp])
+  }, [claimsPrefetch, claimsData, loginTimestamp, sb])
 
   useEffect(() => {
     if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
@@ -486,7 +488,7 @@ export function HomeScreen({}: HomeScreenProps) {
             {t('vaResources')}
           </TextView>
           <Box mx={theme.dimensions.condensedMarginBetween}>
-            <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
+            <LinkRow title={t('contactUs')} onPress={() => sb.show('test', { offset: 500 })} />
             <LinkRow
               title={t('findLocation.title')}
               titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
