@@ -272,16 +272,12 @@ jobs:
             if [ "$var" == "0" ]; then
               failing_tests=$(echo "$i")
             else
-              failing_test=$(echo $failing_tests",""$i")
+              failing_test=$(echo $failing_tests", ""$i")
             fi
             var=$((var+1))
             echo $failing_test
           done
           echo "FAILING_TEST=$failing_test" >> "$GITHUB_OUTPUT"
-# failing_tests=$(echo $failing_tests_list | jq --compact-output '.')
-#failing_tests_string = $(echo $failing_tests_list | jq --compact-output '.')
-#echo "$failing_tests_string"
-#echo "FAILING_TEST=${{ toJSON(failing_tests_list) }}" >> "$GITHUB_OUTPUT"
 
       - name: Determine whether ticket needs to be updated or made
         id: find_if_ticket_already_exists
@@ -313,15 +309,15 @@ jobs:
       #     issues: ${{steps.failing_tests.FAILING_TEST}}
       #   id: create-issue
 
-      # - name: Github CLI Authentication
-      #   run: |
-      #     echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      #     gh auth login --with-token < token.txt
+      - name: Github CLI Authentication
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+          gh auth login --with-token < token.txt
 
-      # - name: Update a ticket on failure (if needed)
-      #   if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
-      #   run: |
-      #     gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b "${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}"
+      - name: Update a ticket on failure (if needed)
+        if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS != ''
+        run: |
+          gh issue edit ${{steps.find_if_ticket_already_exists.outputs.TICKET_NUMBER}} -b "${{steps.find_if_ticket_already_exists.outputs.UPDATED_BODY}}"
 
   matrix-send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
