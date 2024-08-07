@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import {
-  LoadPushPreferencesData,
+  LoadPushNotificationData,
   PUSH_APP_NAME,
   PushOsName,
   PushRegistration,
@@ -57,9 +57,9 @@ export const useRegisterDevice = () => {
   return useMutation({
     mutationFn: registerDevice,
     onSettled: async (data, error, variables) => {
-      const pushPreferences = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
-      pushPreferences.deviceToken = variables.deviceToken
-      queryClient.setQueryData(notificationKeys.settings, pushPreferences)
+      const notificationData = queryClient.getQueryData(notificationKeys.notificationData) as LoadPushNotificationData
+      notificationData.deviceToken = variables.deviceToken
+      queryClient.setQueryData(notificationKeys.notificationData, notificationData)
       setAnalyticsUserProperty(UserAnalytics.vama_uses_notifications(variables.deviceToken ? true : false))
     },
     onSuccess: async (response, variables) => {
