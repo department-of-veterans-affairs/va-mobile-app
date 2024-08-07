@@ -18,7 +18,7 @@ import {
 } from 'components'
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -146,7 +146,7 @@ function DEPRECATED_ClaimsAndAppealsListView({ claimType, scrollViewRef }: Claim
   }
 
   return (
-    <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
+    <Box>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />

@@ -6,7 +6,6 @@ import { DateTime } from 'luxon'
 
 import { AlertBox, Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'
@@ -67,16 +66,14 @@ function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisi
 
   return (
     <TextArea>
-      <Box {...testIdProps(`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`)} accessible={true}>
+      <Box accessibilityLabel={`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
         <TextView variant="MobileBodyBold">{displayDate}</TextView>
       </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
-        <Box {...testIdProps(subText)} accessible={true}>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {subText}
-          </TextView>
-        </Box>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          {subText}
+        </TextView>
       )}
     </TextArea>
   )

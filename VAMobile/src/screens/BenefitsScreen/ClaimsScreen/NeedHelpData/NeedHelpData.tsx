@@ -46,7 +46,11 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
       <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
         {t('claimDetails.needHelp')}
       </TextView>
-      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} accessible={true}>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.standardMarginBetween}
+        accessible={true}
+        accessibilityLabel={t('claimDetails.callVA.a11yLabel')}>
         {t('claimDetails.callVA')}
       </TextView>
       <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />

@@ -11,7 +11,6 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -126,7 +125,7 @@ function Folders({}: FoldersProps) {
   }
 
   return (
-    <VAScrollView {...testIdProps('', false, 'Folders-page')}>
+    <VAScrollView>
       <Box>
         {getSystemFolders(foldersData?.data || [], theme, t, onFolderPress)}
         {getUserFolders(foldersData?.data || [], theme, t, onFolderPress)}

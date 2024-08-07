@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -21,22 +20,18 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const theme = useTheme()
 
   return (
-    <Box
-      flex={1}
-      justifyContent="center"
-      mx={theme.dimensions.gutter}
-      {...testIdProps('Appointments: No-appointments-page')}
-      alignItems="center">
-      <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
-        <TextView variant="MobileBodyBold" textAlign="center">
-          {t('noAppointments.youDontHave')}
-        </TextView>
-      </Box>
-      <Box {...testIdProps(subTextA11yLabel || subText)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
-          {subText}
-        </TextView>
-      </Box>
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+      <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
+        {t('noAppointments.youDontHave')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        textAlign="center"
+        my={theme.dimensions.standardMarginBetween}
+        accessible={true}
+        accessibilityLabel={subTextA11yLabel}>
+        {subText}
+      </TextView>
       {showVAGovLink && (
         <LinkWithAnalytics
           type="url"

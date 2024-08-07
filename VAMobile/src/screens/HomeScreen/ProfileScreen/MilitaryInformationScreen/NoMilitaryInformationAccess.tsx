@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 function NoMilitaryInformationAccess() {
@@ -19,7 +18,7 @@ function NoMilitaryInformationAccess() {
         variant="MobileBody"
         textAlign="center"
         my={theme.dimensions.standardMarginBetween}
-        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}
+        accessibilityLabel={t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel')}
         testID="noMilitaryAccessTestID">
         {t('militaryInformation.noMilitaryInfoAccess.body')}
       </TextView>

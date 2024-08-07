@@ -13,29 +13,6 @@ const { RNCheckVoiceOver } = NativeModules
 
 const { IS_TEST } = getEnv()
 
-interface AccessabilityProps {
-  accessible?: boolean
-  testID?: string
-  accessibilityLabel?: string
-}
-export const testIdProps = (
-  id: string,
-  disableAccessible?: boolean,
-  integrationTestOnlyTestId?: string,
-): AccessabilityProps => {
-  const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
-
-  const idToUse = IS_TEST && integrationTestOnlyTestId ? integrationTestOnlyTestId : id
-
-  // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
-  // testID is not used on android for the integration tests
-  if (IS_TEST) {
-    return { ...disableAccessibility, testID: idToUse }
-  }
-
-  return { ...disableAccessibility, testID: idToUse, accessibilityLabel: idToUse }
-}
-
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   // Remove a11yHints from tests as it can cause querying issues for android integration tests
   return IS_TEST ? {} : { accessibilityHint: hint }
