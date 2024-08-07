@@ -12,13 +12,10 @@ import {
   Box,
   ChildTemplate,
   ClickToCallPhoneNumber,
-  DefaultList,
-  DefaultListItemObj,
   ErrorComponent,
   LinkWithAnalytics,
   LoadingComponent,
   TextArea,
-  TextLine,
   TextView,
   TextViewProps,
 } from 'components'
@@ -50,10 +47,27 @@ function DisabilityRatingsScreen() {
     enabled: screenContentAllowed('WG_DisabilityRatings'),
   })
 
+  const titleProps: TextViewProps = {
+    variant: 'TableHeaderBold',
+    mx: gutter,
+    mb: condensedMarginBetween,
+    accessibilityRole: 'header',
+  }
+
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
 
-  const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
+  const individualRatingsHeading = () => {
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween} accessible={true} accessibilityRole={'header'}>
+        <TextView {...titleProps} selectable={false}>
+          {t('disabilityRatingDetails.individualTitle')}
+        </TextView>
+      </Box>
+    )
+  }
+
+  const individualRatings: React.ReactNode = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
 
     const decisionText = t('disabilityRatingDetails.serviceConnected', {
@@ -71,15 +85,38 @@ function DisabilityRatingsScreen() {
           })
         : ''
 
-    const textLines: Array<TextLine> = []
-    percentageText && textLines.push({ text: percentageText, variant: 'MobileBodyBold' })
-    textLines.push({ text: capitalizeFirstLetter(diagnosticText) }, { text: decisionText })
-    formattedEffectiveDateText && textLines.push({ text: formattedEffectiveDateText })
-
-    return {
-      textLines,
-      testId: `${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
-    }
+    return (
+      <Box
+        borderTopWidth={theme.dimensions.borderWidth}
+        backgroundColor={'list'}
+        borderStyle="solid"
+        borderColor="primary"
+        accessible={true}>
+        <Box
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}
+          flexDirection="column"
+          flex={1}
+          accessible={false}>
+          {percentageText && (
+            <TextView variant={'MobileBodyBold'} testID={percentageText} accessible={false}>
+              {percentageText}
+            </TextView>
+          )}
+          <TextView accessible={false} testID={diagnosticText}>
+            {capitalizeFirstLetter(diagnosticText)}
+          </TextView>
+          <TextView accessible={false} testID={decisionText}>
+            {decisionText}
+          </TextView>
+          {formattedEffectiveDateText && (
+            <TextView accessible={false} testID={formattedEffectiveDateText}>
+              {formattedEffectiveDateText}
+            </TextView>
+          )}
+        </Box>
+      </Box>
+    )
   })
 
   const getCombinedTotalSection = () => {
@@ -170,13 +207,6 @@ function DisabilityRatingsScreen() {
     )
   }
 
-  const titleProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mx: gutter,
-    mb: condensedMarginBetween,
-    accessibilityRole: 'header',
-  }
-
   return (
     <ChildTemplate
       backLabel={t('benefits.title')}
@@ -197,11 +227,8 @@ function DisabilityRatingsScreen() {
         <>
           <Box>{getCombinedTotalSection()}</Box>
           <Box mb={condensedMarginBetween}>
-            <DefaultList
-              items={individualRatings}
-              title={t('disabilityRatingDetails.individualTitle')}
-              selectable={true}
-            />
+            {individualRatingsHeading()}
+            {individualRatings}
           </Box>
           <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
           <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
