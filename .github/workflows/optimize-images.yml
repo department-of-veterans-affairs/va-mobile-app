@@ -33,8 +33,9 @@ jobs:
 
       - name: Optimize Android images (root) and list optimized files
         run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/
           echo "Optimized Android root images:"
-          for file in VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg}; do
+          for file in *.{png,jpg,jpeg,gif,svg}; do
             size_before=$(stat -c%s "$file")
             imagemin "$file" --out-dir=$(dirname "$file")
             size_after=$(stat -c%s "$file")
@@ -42,6 +43,32 @@ jobs:
               echo "$file"
             fi
           done
+
+      - name: Optimize Android phoneScreenshots images and list optimized files
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          echo "Optimized Android phoneScreeshots images:"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            size_before=$(stat -c%s "$file")
+            imagemin "$file" --out-dir=.
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
+            fi
+          done
+
+      - name: Optimize Android sevenInchScreenShots images and list optimized files
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenShots/
+          echo "Optimized Android sevenInchScreenShots images:"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            size_before=$(stat -c%s "$file")
+            imagemin "$file" --out-dir=.
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
+            fi
+          done    
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
