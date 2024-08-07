@@ -1,18 +1,12 @@
-import React, { RefObject, useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { RefObject } from 'react'
 import { ScrollView } from 'react-native'
 
-import { useFocusEffect, useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 
 import { ClaimAttributesData } from 'api/types'
 import { Box } from 'components'
 import theme from 'styles/themes/standardTheme'
-import {
-  getUserPhase,
-  isDisabilityCompensationClaim,
-  needItemsFromVet,
-  numberOfItemsNeedingAttentionFromVet,
-} from 'utils/claims'
+import { getUserPhase, isDisabilityCompensationClaim, needItemsFromVet } from 'utils/claims'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimPhase from './ClaimPhase'
@@ -29,21 +23,12 @@ export type ClaimTimelineProps = {
 
 function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProps) {
   const isFocused = useIsFocused()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const [count, setCount] = useState(0)
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
 
   const is8Steps = featureEnabled('claimPhaseExpansion') && isDisabilityCompensationClaim(attributes.claimTypeCode)
   const claimStepList = is8Steps ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5]
-
-  useFocusEffect(
-    useCallback(() => {
-      setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
-    }, [attributes]),
-  ) //force a rerender due to react query updating data
 
   return (
     <Box>
