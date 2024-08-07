@@ -68,7 +68,7 @@ describe('Claims Screen', () => {
   it('Verify the claim status detail page (8-step claim)', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
     await expect(element(by.text('Status'))).toExist()
-    await expect(element(by.text('Details'))).toExist()
+    await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_1_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_2_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_3_ID))).toExist()
