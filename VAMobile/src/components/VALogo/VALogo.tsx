@@ -20,7 +20,7 @@ export const VALogo: FC<VALogoProps> = ({ testID }) => {
       <Image
         testID={testID}
         style={logoProps}
-        source={require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')}
+        source={require('../../../node_modules/@expo/samples/assets/images/expo-icon.png')}
       />
     )
   } else {
@@ -28,7 +28,7 @@ export const VALogo: FC<VALogoProps> = ({ testID }) => {
       <Image
         testID={testID}
         style={logoProps}
-        source={require('../../../node_modules/@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')}
+        source={require('../../../node_modules/@expo/samples/assets/images/expo-icon.png')}
       />
     )
   }
