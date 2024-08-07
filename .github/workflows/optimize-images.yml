@@ -20,11 +20,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  
+          node-version: '18'  
+      - name: Update npm
+        run: npm install -g npm@latest    
       - name: Install imagemin-cli
         run: |
           npm install -g imagemin-cli
-          npm install -g strtok3
 
       - name: Optimize iOS images and list optimized files
         run: |
