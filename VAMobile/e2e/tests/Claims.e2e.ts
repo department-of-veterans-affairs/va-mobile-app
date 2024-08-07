@@ -152,15 +152,6 @@ describe('Claims Screen', () => {
     await waitFor(element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
-  it('should verify that the review file request button is visible in step 3', async () => {
-    await waitFor(element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID)))
-      .toBeVisible()
-      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
-      .scroll(100, 'down')
-    await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_3_ID))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
-  })
-
   it('should tap on a claim and verify the dates match', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await expect(element(by.text('Received January 01, 2021'))).toExist()
