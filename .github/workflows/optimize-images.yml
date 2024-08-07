@@ -22,7 +22,7 @@ jobs:
       - name: Optimize iOS images and list optimized files
         run: |
           echo "Optimized iOS images:"
-          for file in Mob/ios/fastlane/screenshots/en-US/*; do
+          for file in VAMobile/ios/fastlane/screenshots/en-US/*; do
             size_before=$(stat -c%s "$file")
             imagemin "$file" --out-dir=$(dirname "$file")
             size_after=$(stat -c%s "$file")
@@ -34,7 +34,7 @@ jobs:
       - name: Optimize Android images (root) and list optimized files
         run: |
           echo "Optimized Android root images:"
-          for file in Mob/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg}; do
+          for file in VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg}; do
             size_before=$(stat -c%s "$file")
             imagemin "$file" --out-dir=$(dirname "$file")
             size_after=$(stat -c%s "$file")
