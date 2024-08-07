@@ -21,8 +21,8 @@ const config = {
     }),
   },
   resolver: {
-    assetExts: assetExts.filter((ext) => ext !== 'svg'),
-    sourceExts: [...sourceExts, 'svg'],
+    assetExts: assetExts.filter((ext) => ext !== 'svg' && ext !== 'png'),
+    sourceExts: [...sourceExts, 'svg', 'png'],
   },
   watchFolders: [path.resolve(__dirname, 'node_modules/@department-of-veterans-affairs/mobile-assets')],
 }
