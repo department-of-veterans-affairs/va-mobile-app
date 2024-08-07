@@ -268,20 +268,16 @@ jobs:
           failing_tests_list=$(grep -rl "<failure>")
           failing_tests=""
           for i in ${failing_tests_list[@]}; do
-            echo "$var"
             remove_before=${i%.ts*}
-            echo "$remove_before"
             remove_after=${remove_before#*test_reports/}
             echo "$remove_after"
             if [ -z "${failing_tests}" ]; then
               failing_tests=$(echo $failing_tests"$remove_after")
-              echo "$test"
             else
-              echo "$test2"
-              failing_test=$(echo $failing_tests", ""$remove_after")
+              failing_tests=$(echo $failing_tests", ""$remove_after")
             fi
           done
-          echo "FAILING_TEST=$failing_test" >> "$GITHUB_OUTPUT"
+          echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
 
       - name: Github CLI Authentication
         run: |
