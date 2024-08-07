@@ -19,29 +19,29 @@ jobs:
         uses: actions/checkout@v2
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
-      - name: List images before optimization
+      - name: Optimize iOS images and list optimized files
         run: |
-          echo "iOS images before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-          echo "Android images before optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
-      - name: Optimize iOS images
-        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
-      - name: Optimize Android images
+          echo "Optimized iOS images:"
+          for file in Mob/ios/fastlane/screenshots/en-US/*; do
+            size_before=$(stat -c%s "$file")
+            imagemin "$file" --out-dir=$(dirname "$file")
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
+            fi
+          done
+
+      - name: Optimize Android images (root) and list optimized files
         run: |
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          imagemin VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
-      - name: List images after optimization
-        run: |
-          echo "iOS images after optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-          echo "Android images after optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
+          echo "Optimized Android root images:"
+          for file in Mob/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg}; do
+            size_before=$(stat -c%s "$file")
+            imagemin "$file" --out-dir=$(dirname "$file")
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
+            fi
+          done
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
