@@ -18,7 +18,7 @@ const config = {
   //   assetExts: assetExts.filter((ext) => ext !== 'svg'),
   //   sourceExts: [...sourceExts, 'svg', 'png'],
   // },
-  // watchFolders: [path.resolve(__dirname, 'node_modules/@department-of-veterans-affairs/mobile-assets')],
+  watchFolders: [path.resolve(__dirname, 'node_modules/@department-of-veterans-affairs/mobile-assets')],
 }
 
 module.exports = mergeConfig(defaultConfig, config)
