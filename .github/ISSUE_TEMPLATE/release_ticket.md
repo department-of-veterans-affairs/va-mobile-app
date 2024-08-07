@@ -31,7 +31,7 @@ This ticket should be complete by {{ env.vaDueDate }}
 <!-- Define the content for the What's New sections of the app stores here -->
 If there aren't any new features, use standard messaging: We added general improvements and fixed a few bugs.
 
-If a Flagship team decides to update the App Stores What's New content, their work should be done in a ticket and provided to the release manager, who will then update this section. If not none provide its assumed not to be used. 
+If a Flagship team decides to update the App Stores What's New content, their work should be done in a ticket and provided to the release manager, who will then update this section. If not provided, it's assumed not to be used. 
 
 ## What's New content (In App/Alert Box) - *optional*
 <!-- Define the content for the What's New alert box here -->
