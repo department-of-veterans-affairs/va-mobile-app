@@ -840,6 +840,11 @@ export const Events = {
       },
     }
   },
+  vama_review_prompt: (): Event => {
+    return {
+      name: 'vama_review_prompt',
+    }
+  },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
     return {
       name: 'vama_request_details',

@@ -51,7 +51,7 @@ function PrescriptionsDetailsBanner() {
           {t('prescription.details.banner.body2')}
         </TextView>
         <Box>
-          <VABulletList listOfText={bullets} />
+          <VABulletList listOfText={bullets} paragraphSpacing={true} />
         </Box>
         <ClickToCallPhoneNumber
           phone={t('5418307563')}
