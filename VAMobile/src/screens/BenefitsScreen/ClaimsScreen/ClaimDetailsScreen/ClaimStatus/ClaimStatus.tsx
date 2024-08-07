@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
+import React, { RefObject, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -26,12 +27,14 @@ type ClaimStatusProps = {
   claim: ClaimData
   /** indicates either open or closed claim */
   claimType: ClaimType
+  /** ref to parent scrollView, used for auto scroll */
+  scrollViewRef: RefObject<ScrollView>
 }
 
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
-function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
+function ClaimStatus({ claim, claimType, scrollViewRef }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -55,7 +58,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       return (
         <Box>
           {claim && featureEnabled('claimPhaseExpansion') && (
-            <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
+            <ClaimTimeline attributes={claim.attributes} claimID={claim.id} scrollViewRef={scrollViewRef} />
           )}
           {claim && !featureEnabled('claimPhaseExpansion') && (
             <DEPRECATED_ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
