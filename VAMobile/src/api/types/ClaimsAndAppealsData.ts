@@ -476,6 +476,7 @@ export type ClaimAttributesData = {
   currentPhaseBack: boolean
   requestedDecision: boolean
   claimType: string
+  claimTypeCode: string
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string

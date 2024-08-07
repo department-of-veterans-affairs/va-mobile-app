@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -42,6 +43,7 @@ type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDe
 function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const scrollViewRef = useRef<ScrollView>(null)
   const navigateTo = useRouteNavigation()
   const controlLabels = [
     t('claimDetails.status'),
@@ -207,6 +209,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
+      scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen">
       {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
@@ -234,7 +237,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             </Box>
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+            {claim && selectedTab === 0 && (
+              <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} scrollViewRef={scrollViewRef} />
+            )}
             {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
             {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}
           </Box>

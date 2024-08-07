@@ -564,6 +564,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "claimTypeCode": "010LCOMP",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
