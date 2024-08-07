@@ -3,7 +3,7 @@ import { by, device, element, expect } from 'detox'
 import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
 
 export const OnboardingE2eIdConstants = {
-  VA_ICON_ID: 'VAIconOnboardingLogo',
+  VA_ICON_ID: 'VAIconOnboardingLogo1',
 }
 
 beforeAll(async () => {
