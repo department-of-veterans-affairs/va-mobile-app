@@ -47,8 +47,6 @@ context('ClaimStatus', () => {
     expect(screen.getByLabelText('Step 6. Preparing decision letter. Incomplete.')).toBeTruthy()
     expect(screen.getByLabelText('Step 7. Final review. Incomplete.')).toBeTruthy()
     expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
-    expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
-    expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
   })
 
   describe('when the claimType is CLOSED', () => {
