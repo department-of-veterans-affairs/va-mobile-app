@@ -10,7 +10,7 @@ import theme from 'styles/themes/standardTheme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 
-import ClaimPhase from './ClaimPhase'
+import DEPRECATED_ClaimPhase from './DEPRECATED_ClaimPhase'
 
 type ClaimTimelineProps = {
   /** attributes object from ClaimData */
@@ -50,7 +50,7 @@ function DEPRECATED_ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
         {[1, 2, 3, 4, 5].map((phase) => (
-          <ClaimPhase
+          <DEPRECATED_ClaimPhase
             phase={phase}
             current={getUserPhase(attributes.phase)}
             attributes={attributes}
