@@ -98,11 +98,6 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     completedStepsA11y = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
   }
 
-  const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
-
-  const detailsText = t(`claimPhase.details.phase${phase}`)
-  const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phase1')) : detailsText
-  const youHaveFileRequestsText = t('claimPhase.youHaveFileRequestVA', { count })
   let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatusA11y}.`
   if (completedStepsA11y) {
     testID += ` ${completedStepsA11y}.`

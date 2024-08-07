@@ -2,13 +2,11 @@ import React, { RefObject, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { useIsFocused } from '@react-navigation/native'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 
 import { ClaimAttributesData } from 'api/types'
 import { Box } from 'components'
 import theme from 'styles/themes/standardTheme'
-import { getUserPhase } from 'utils/claims'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import {
   getUserPhase,
   isDisabilityCompensationClaim,
@@ -54,25 +52,26 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
         borderTopWidth={theme.dimensions.borderWidth}
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
-        {isFocused && claimStepList.map((phase) =>
-          featureEnabled('claimPhaseExpansion') ? (
-            <ClaimPhase
-              phase={phase}
-              attributes={attributes}
-              claimID={claimID}
-              scrollViewRef={scrollViewRef}
-              key={phase}
-            />
-          ) : (
-            <DEPRECATED_ClaimPhase
-              phase={phase}
-              current={getUserPhase(attributes.phase)}
-              attributes={attributes}
-              claimID={claimID}
-              key={phase}
-            />
-          ),
-        )}
+        {isFocused &&
+          claimStepList.map((phase) =>
+            featureEnabled('claimPhaseExpansion') ? (
+              <ClaimPhase
+                phase={phase}
+                attributes={attributes}
+                claimID={claimID}
+                scrollViewRef={scrollViewRef}
+                key={phase}
+              />
+            ) : (
+              <DEPRECATED_ClaimPhase
+                phase={phase}
+                current={getUserPhase(attributes.phase)}
+                attributes={attributes}
+                claimID={claimID}
+                key={phase}
+              />
+            ),
+          )}
       </Box>
     </Box>
   )
