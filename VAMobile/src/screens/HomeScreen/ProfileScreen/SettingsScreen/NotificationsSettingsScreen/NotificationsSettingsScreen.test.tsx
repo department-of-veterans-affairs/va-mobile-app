@@ -46,15 +46,20 @@ context('NotificationsSettingsScreen', () => {
         queryKey: notificationKeys.settings,
         data: {
           preferences: preferences,
-          deviceToken: '1',
-          initialUrl: '1',
-          tappedForegroundNotification: false,
         },
       },
       {
         queryKey: notificationKeys.systemNotifications,
         data: {
           systemNotificationsOn: systemNotificationsOn,
+        },
+      },
+      {
+        queryKey: notificationKeys.notificationData,
+        data: {
+          deviceToken: '1',
+          initialUrl: '1',
+          tappedForegroundNotification: false,
         },
       },
     ]

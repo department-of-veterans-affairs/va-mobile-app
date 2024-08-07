@@ -10,7 +10,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { notificationKeys } from 'api/notifications'
 import queryClient from 'api/queryClient'
-import { LoadPushPreferencesData } from 'api/types'
+import { LoadPushNotificationData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { AppDispatch, AppThunk } from 'store'
@@ -613,12 +613,12 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 
 export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
   const { loggedIn } = getState().auth
-  const notificationData = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
+  const notificationData = queryClient.getQueryData(notificationKeys.notificationData) as LoadPushNotificationData
 
   if (loggedIn && notificationData.tappedForegroundNotification) {
     console.debug('User tapped foreground notification. Skipping initializeAuth.')
     notificationData.tappedForegroundNotification = false
-    queryClient.setQueryData(notificationKeys.settings, notificationData)
+    queryClient.setQueryData(notificationKeys.notificationData, notificationData)
     return
   }
 

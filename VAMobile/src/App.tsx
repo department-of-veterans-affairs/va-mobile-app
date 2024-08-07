@@ -23,7 +23,7 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
-import { useLoadPushPreferences } from 'api/notifications'
+import { useLoadPushNotification } from 'api/notifications'
 import queryClient from 'api/queryClient'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
@@ -393,7 +393,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { data: notificationData } = useLoadPushPreferences()
+  const { data: notificationData } = useLoadPushNotification()
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()

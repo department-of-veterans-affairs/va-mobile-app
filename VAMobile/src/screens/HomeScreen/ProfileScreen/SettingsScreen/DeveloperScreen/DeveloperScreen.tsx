@@ -9,7 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { DEVICE_ENDPOINT_SID, useLoadPushPreferences } from 'api/notifications'
+import { DEVICE_ENDPOINT_SID, useLoadPushNotification } from 'api/notifications'
 import {
   Box,
   ButtonDecoratorType,
@@ -107,7 +107,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { data: notificationData } = useLoadPushPreferences()
+  const { data: notificationData } = useLoadPushNotification()
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)

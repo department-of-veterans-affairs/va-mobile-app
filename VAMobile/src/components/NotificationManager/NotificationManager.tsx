@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { useQueryClient } from '@tanstack/react-query'
 
-import { notificationKeys, useLoadPushPreferences, useRegisterDevice } from 'api/notifications'
+import { notificationKeys, useLoadPushNotification, useRegisterDevice } from 'api/notifications'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
@@ -21,7 +21,7 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
-  const { data: notificationData } = useLoadPushPreferences()
+  const { data: notificationData } = useLoadPushNotification()
   const queryClient = useQueryClient()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
@@ -67,7 +67,7 @@ const NotificationManager: FC = ({ children }) => {
         if (notificationData) {
           const newData = notificationData
           newData.tappedForegroundNotification = true
-          queryClient.setQueryData(notificationKeys.settings, newData)
+          queryClient.setQueryData(notificationKeys.notificationData, newData)
         }
       }
 
@@ -80,7 +80,7 @@ const NotificationManager: FC = ({ children }) => {
           if (notificationData) {
             const newData = notificationData
             newData.initialUrl = notification.payload.url
-            queryClient.setQueryData(notificationKeys.settings, newData)
+            queryClient.setQueryData(notificationKeys.notificationData, newData)
           }
         }
       }
@@ -106,7 +106,7 @@ const NotificationManager: FC = ({ children }) => {
           if (notificationData) {
             const newData = notificationData
             newData.initialUrl = notification.payload.url
-            queryClient.setQueryData(notificationKeys.settings, newData)
+            queryClient.setQueryData(notificationKeys.notificationData, newData)
           }
         }
       })

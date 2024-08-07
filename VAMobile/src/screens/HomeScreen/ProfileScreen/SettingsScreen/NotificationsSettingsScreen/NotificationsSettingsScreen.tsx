@@ -13,6 +13,7 @@ import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 import {
   DEVICE_ENDPOINT_SID,
   notificationKeys,
+  useLoadPushNotification,
   useLoadPushPreferences,
   useLoadSystemNotificationsSettings,
   useRegisterDevice,
@@ -47,11 +48,12 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
   const {
-    data: notificationData,
+    data: pushPreferences,
     isFetching: loadingPreferences,
     error: hasError,
     refetch: refetchPushPreferences,
   } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
+  const { data: notificationData } = useLoadPushNotification()
   const { data: systemNotificationData, isFetching: loadingSystemNotification } = useLoadSystemNotificationsSettings({
     enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
   })
@@ -112,8 +114,8 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   useOnResumeForeground(fetchPreferences)
 
   const preferenceList = (): ReactNode => {
-    if (notificationData) {
-      const prefsItems = notificationData.preferences.map((pref): SimpleListItemObj => {
+    if (pushPreferences) {
+      const prefsItems = pushPreferences.preferences.map((pref): SimpleListItemObj => {
         return {
           a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
           text: pref.preferenceName,
@@ -146,9 +148,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
       ) : hasError ||
-        (systemNotificationData?.systemNotificationsOn &&
-          notificationData &&
-          notificationData.preferences.length < 1) ? (
+        (systemNotificationData?.systemNotificationsOn && pushPreferences && pushPreferences.preferences.length < 1) ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
           error={hasError}

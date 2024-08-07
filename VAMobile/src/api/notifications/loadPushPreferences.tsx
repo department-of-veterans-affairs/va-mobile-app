@@ -16,12 +16,8 @@ const loadPushPreferences = async (): Promise<LoadPushPreferencesData | undefine
   const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
   if (!endpoint_sid) return
   const response = await get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-  const previousData = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
   return {
     preferences: response?.data.attributes.preferences || [],
-    deviceToken: previousData?.deviceToken,
-    initialUrl: previousData?.initialUrl,
-    tappedForegroundNotification: previousData?.tappedForegroundNotification || false,
   }
 }
 
