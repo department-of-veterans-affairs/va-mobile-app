@@ -49,6 +49,7 @@ export const ClaimsE2eIdConstants = {
   ACCEPTED_FILE_TYPES_TEXT: 'PDF (unlocked), GIF, JPEG, JPG, BMP, TXT',
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
+  CLAIMS_HISTORY_SCREEN_ID: 'claimsHistoryID',
 }
 
 beforeAll(async () => {
@@ -72,7 +73,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify the claim status detail page (8-step claim)', async () => {
-    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)
+    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_1_ID))).toExist()
@@ -88,7 +89,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify the claim status detail page (5-step claim)', async () => {
-    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_3_ID, ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)
+    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_3_ID, ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_1_ID))).toExist()
@@ -300,7 +301,7 @@ describe('Claims Screen', () => {
   it('should verify details of claim on step 3 w/ waiver', async () => {
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)))
       .toBeVisible()
-      .whileElement(by.id('claimsHistoryID'))
+      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
     await expect(
@@ -326,7 +327,7 @@ describe('Claims Screen', () => {
     await openClaimsHistory()
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)))
       .toBeVisible()
-      .whileElement(by.id('claimsHistoryID'))
+      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)).tap()
     await expect(
@@ -337,7 +338,7 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 5', async () => {
-    await element(by.id('claimsHistoryID')).scrollTo('top')
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID)).tap()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Step 5. Complete. Complete.')).tap()
