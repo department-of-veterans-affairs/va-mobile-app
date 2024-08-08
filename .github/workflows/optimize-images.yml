@@ -17,10 +17,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
 
@@ -83,7 +79,7 @@ jobs:
               fi
             fi
           done
-
+          
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
