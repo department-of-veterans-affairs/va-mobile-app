@@ -17,19 +17,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Check current Node.js version
-        run: node -v
 
       - name: Install latest Node.js version
         uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
       
-      - name: Verify Node.js version
-        run: node -v  
-        
-      - name: Install imagemin-cli
-        run: npm install -g imagemin-cli
+      - name: Install sharp-cli
+        run: npm install -g sharp-cli
 
       - name: Optimize iOS images and list optimized files
         run: |
@@ -38,7 +33,7 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --out-dir=.
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
@@ -53,14 +48,13 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --out-dir=.
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
               fi
             fi
           done
-
       - name: Optimize Android phoneScreenshots images and list optimized files
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
@@ -68,7 +62,7 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --out-dir=.
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
@@ -83,7 +77,7 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --out-dir=.
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
