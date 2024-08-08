@@ -8,8 +8,10 @@ export const DisabilityRatingsIdConstants = {
   COMBINED_DISABILITY_RATING_BODY_TEXT:
     "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
   INDIVIDUAL_RATING_TEXT: 'Individual ratings',
-  INDIVIDUAL_RATING_1_ID:
-    '20% Dr Diagnosis (claimed as Heart disease Service-connected disability?  Yes Effective date:  06/06/2017',
+  INDIVIDUAL_RATING_1_ID: '20%',
+  INDIVIDUAL_RATING_1_ID_2: 'Dr Diagnosis (claimed as Heart disease',
+  INDIVIDUAL_RATING_1_ID_3: 'Service-connected disability?  No',
+  INDIVIDUAL_RATING_1_ID_4: 'Effective date:  06/06/2017',
   DISABILITY_RATING_PAGE_ID: 'disabilityRatingTestID',
   ABOUT_DISABILITY_RATINGS_LINK_ID: 'aboutDisabilityRatingsTestID',
 }
@@ -26,6 +28,9 @@ describe('Disability Ratings', () => {
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_TEXT))).toExist()
     await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID))).toExist()
+    await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID_2))).toExist()
+    await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID_3))).toExist()
+    await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID_4))).toExist()
     await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
     await expect(element(by.text('Learn about VA disability ratings'))).toExist()
     await expect(element(by.text('Need Help?'))).toExist()
