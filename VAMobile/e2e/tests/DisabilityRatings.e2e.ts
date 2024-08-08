@@ -10,7 +10,7 @@ export const DisabilityRatingsIdConstants = {
   INDIVIDUAL_RATING_TEXT: 'Individual ratings',
   INDIVIDUAL_RATING_1_ID: '20%',
   INDIVIDUAL_RATING_1_ID_2: 'Dr Diagnosis (claimed as Heart disease',
-  INDIVIDUAL_RATING_1_ID_3: 'Service-connected disability?  Yes',
+  INDIVIDUAL_RATING_1_ID_3: 'Service-connected disability?  No',
   INDIVIDUAL_RATING_1_ID_4: 'Effective date:  06/06/2017',
   DISABILITY_RATING_PAGE_ID: 'disabilityRatingTestID',
   ABOUT_DISABILITY_RATINGS_LINK_ID: 'aboutDisabilityRatingsTestID',
