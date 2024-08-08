@@ -1,13 +1,25 @@
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
-import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
+import {
+  DEVICE_ENDPOINT_SID,
+  notificationKeys,
+  useLoadPushNotification,
+  useLoadPushPreferences,
+  useLoadSystemNotificationsSettings,
+  useRegisterDevice,
+  useSetPushPref,
+} from 'api/notifications'
+import { PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import {
   AlertBox,
   Box,
@@ -22,22 +34,38 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
+  const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } =
-    useSelector<RootState, NotificationsState>((state) => state.notifications)
+  const isFocused = useIsFocused()
+  const {
+    data: pushPreferences,
+    isFetching: loadingPreferences,
+    error: hasError,
+    refetch: refetchPushPreferences,
+  } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
+  const { data: notificationData } = useLoadPushNotification()
+  const { data: systemNotificationData, isFetching: loadingSystemNotification } = useLoadSystemNotificationsSettings({
+    enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
+  })
+  const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
+  const { mutate: setPushPref, isPending: settingPreference } = useSetPushPref()
+
+  const openSettings = () => {
+    queryClient.invalidateQueries({
+      queryKey: [notificationKeys.systemNotifications],
+    })
+    Linking.openSettings()
+  }
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
     Alert.alert(t('leavingApp.title'), t('leavingApp.body.settings'), [
@@ -45,67 +73,90 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         text: t('leavingApp.cancel'),
         style: 'cancel',
       },
-      { text: t('leavingApp.ok'), onPress: () => Linking.openSettings(), style: 'default' },
+      { text: t('leavingApp.ok'), onPress: openSettings, style: 'default' },
     ])
   }
-  const dispatch = useAppDispatch()
 
-  useOnResumeForeground(() => {
-    if (deviceToken) {
-      dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+  const fetchPreferences = async () => {
+    const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+
+    if (endpoint_sid && notificationData?.deviceToken) {
+      refetchPushPreferences()
     } else {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
-        dispatch(registerDevice(event.deviceToken, true))
+        const registerParams = {
+          deviceToken: event.deviceToken,
+        }
+        const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
+          {
+            onSettled: () => {
+              refetchPushPreferences()
+            },
+          }
+        registerDevice(registerParams, mutateOptions)
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
-        dispatch(registerDevice())
+        const registerParams = {
+          deviceToken: undefined,
+        }
+        const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
+          {
+            onSettled: () => {
+              refetchPushPreferences()
+            },
+          }
+        registerDevice(registerParams, mutateOptions)
       })
       Notifications.registerRemoteNotifications()
     }
-  })
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_NotificationsSettings')) {
-      dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
-    }
-  }, [dispatch])
-
-  const preferenceList = (): ReactNode => {
-    const prefsItems = preferences.map((pref): SimpleListItemObj => {
-      return {
-        a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
-        text: pref.preferenceName,
-        decorator: ButtonDecoratorType.Switch,
-        decoratorProps: {
-          on: pref.value,
-        },
-        onPress: () => {
-          logAnalyticsEvent(Events.vama_toggle(pref.preferenceName, !pref.value, t('notifications.title')))
-          dispatch(setPushPref(pref))
-        },
-      }
-    })
-    return (
-      <Box mt={condensedMarginBetween}>
-        <SimpleList items={prefsItems} />
-      </Box>
-    )
   }
 
-  const loadingCheck = loadingPreferences || registeringDevice || settingPreference
+  useOnResumeForeground(fetchPreferences)
+
+  const preferenceList = (): ReactNode => {
+    if (pushPreferences) {
+      const prefsItems = pushPreferences.preferences.map((pref): SimpleListItemObj => {
+        return {
+          a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
+          text: pref.preferenceName,
+          decorator: ButtonDecoratorType.Switch,
+          decoratorProps: {
+            on: pref.value,
+          },
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_toggle(pref.preferenceName, !pref.value, t('notifications.title')))
+            setPushPref(pref)
+          },
+        }
+      })
+      return (
+        <Box mt={condensedMarginBetween}>
+          <SimpleList items={prefsItems} />
+        </Box>
+      )
+    }
+    return <></>
+  }
+
+  const loadingCheck = loadingPreferences || loadingSystemNotification || registeringDevice || settingPreference
 
   return (
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       title={t('notifications.title')}>
-      {hasError ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
-      ) : loadingCheck ? (
+      {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
+      ) : hasError ||
+        (systemNotificationData?.systemNotificationsOn && pushPreferences && pushPreferences.preferences.length < 1) ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
+          error={hasError}
+          onTryAgain={fetchPreferences}
+        />
       ) : (
         <Box mb={contentMarginBottom}>
-          {systemNotificationsOn ? (
+          {systemNotificationData?.systemNotificationsOn ? (
             <>
               <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
                 {t('notifications.settings.personalize.heading')}

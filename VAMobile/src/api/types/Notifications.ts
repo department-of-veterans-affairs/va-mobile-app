@@ -56,3 +56,22 @@ export type GetPushPrefsResponse = {
     }
   }
 }
+
+export type LoadPushPreferencesData = {
+  preferences: PushPreference[]
+}
+
+export type LoadPushNotificationData = {
+  tappedForegroundNotification?: boolean
+  deviceToken?: string
+  initialUrl?: string
+}
+
+export type LoadSystemNotificationsData = {
+  systemNotificationsOn: boolean
+}
+
+export type RegisterDeviceParams = {
+  deviceToken?: string
+  userID?: string
+}

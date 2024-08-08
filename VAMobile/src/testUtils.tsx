@@ -20,7 +20,6 @@ import analyticsReducer from 'store/slices/analyticsSlice'
 import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
-import notificationReducer from 'store/slices/notificationSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
@@ -81,7 +80,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       demo: demoReducer as any,
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
-      notifications: notificationReducer as any,
       snackBar: snackbarReducer as any,
       settings: settingsReducer as any,
     },
