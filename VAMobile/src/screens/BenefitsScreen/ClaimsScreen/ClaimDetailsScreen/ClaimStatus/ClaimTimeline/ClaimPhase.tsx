@@ -112,6 +112,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
         isExpanded || false,
         attributes.phaseChangeDate || '',
         attributes.dateFiled,
+        current,
       ),
     )
   }
