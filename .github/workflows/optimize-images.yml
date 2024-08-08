@@ -20,23 +20,22 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  
-      - name: Update npm
-        run: npm install -g npm@latest    
-      - name: Install imagemin-cli
-        run: |
-          npm install -g imagemin-cli
+          node-version: '14'
+      - name: Install sharp-cli
+        run: npm install -g sharp-cli
 
       - name: Optimize iOS images and list optimized files
         run: |
           echo "Optimized iOS images:"
           cd VAMobile/ios/fastlane/screenshots/en-US/
-          for file in *; do
-            size_before=$(stat -c%s "$file")
-            imagemin "$file" --out-dir=$(dirname "$file")
-            size_after=$(stat -c%s "$file")
-            if [ "$size_after" -lt "$size_before" ]; then
-              echo "$file"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --resize 800x600 -o "$file"
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
             fi
           done
 
@@ -45,24 +44,29 @@ jobs:
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
           echo "Optimized Android root images:"
           for file in *.{png,jpg,jpeg,gif,svg}; do
-            size_before=$(stat -c%s "$file")
-            imagemin "$file" --out-dir=$(dirname "$file")
-            size_after=$(stat -c%s "$file")
-            if [ "$size_after" -lt "$size_before" ]; then
-              echo "$file"
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --resize 800x600 -o "$file"
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
             fi
           done
+
 
       - name: Optimize Android phoneScreenshots images and list optimized files
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           echo "Optimized Android phoneScreeshots images:"
           for file in *.{png,jpg,jpeg,gif,svg}; do
-            size_before=$(stat -c%s "$file")
-            imagemin "$file" --out-dir=.
-            size_after=$(stat -c%s "$file")
-            if [ "$size_after" -lt "$size_before" ]; then
-              echo "$file"
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --resize 800x600 -o "$file"
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
             fi
           done
 
@@ -71,13 +75,15 @@ jobs:
           cd VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenShots/
           echo "Optimized Android sevenInchScreenShots images:"
           for file in *.{png,jpg,jpeg,gif,svg}; do
-            size_before=$(stat -c%s "$file")
-            imagemin "$file" --out-dir=.
-            size_after=$(stat -c%s "$file")
-            if [ "$size_after" -lt "$size_before" ]; then
-              echo "$file"
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --resize 800x600 -o "$file"
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
             fi
-          done    
+          done
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
