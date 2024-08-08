@@ -31,7 +31,7 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --resize 800x600 -o "$file"
+              imagemin "$file" --out-dir=.
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
@@ -46,14 +46,13 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --resize 800x600 -o "$file"
+              imagemin "$file" --out-dir=.
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
               fi
             fi
           done
-
 
       - name: Optimize Android phoneScreenshots images and list optimized files
         run: |
@@ -62,7 +61,7 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --resize 800x600 -o "$file"
+              imagemin "$file" --out-dir=.
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
@@ -77,13 +76,14 @@ jobs:
           for file in *.{png,jpg,jpeg,gif,svg}; do
             if [ -e "$file" ]; then
               size_before=$(stat -c%s "$file")
-              imagemin "$file" --resize 800x600 -o "$file"
+              imagemin "$file" --out-dir=.
               size_after=$(stat -c%s "$file")
               if [ "$size_after" -lt "$size_before" ]; then
                 echo "$file"
               fi
             fi
           done
+
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
