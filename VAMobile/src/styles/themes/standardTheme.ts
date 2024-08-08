@@ -32,7 +32,6 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
     mode: scheme,
     typography: buildTypography(colorScheme),
   }
-  changeNavigationBarColor(scheme === 'dark' ? '#121212' : '#EFEFEF', scheme === 'dark' ? true : false, true)
 }
 
 export const getTheme = (): VATheme => {
