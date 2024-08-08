@@ -5,8 +5,6 @@ import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
-import colors from '../styles/themes/VAColors'
-
 interface ActivityButtonProps {
   /** Text for header */
   title: string
@@ -28,7 +26,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     px: theme.dimensions.buttonPadding,
     backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
@@ -89,7 +87,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
                 height={24}
                 name="RightArrowInCircle"
                 fill={theme.colors.icon.activityButton}
-                fill2={theme.colors.icon.transparent}
+                fill2={'transparent'}
                 ml={theme.dimensions.listItemDecoratorMarginLeft}
                 preventScaling={true}
               />

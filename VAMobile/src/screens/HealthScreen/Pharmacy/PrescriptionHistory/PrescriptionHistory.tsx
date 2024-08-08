@@ -523,7 +523,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const helpIconProps: VAIconProps = {
     name: 'QuestionMark',
-    fill2: theme.colors.icon.transparent,
+    fill2: 'transparent',
   }
 
   const headerButton = {
