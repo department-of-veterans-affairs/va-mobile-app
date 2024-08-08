@@ -8,6 +8,7 @@ import {
   openClaims,
   openClaimsHistory,
   resetInAppReview,
+  scrollToIDThenTap,
   toggleRemoteConfigFlag,
 } from './utils'
 
@@ -71,7 +72,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify the claim status detail page (8-step claim)', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
+    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_1_ID))).toExist()
@@ -87,7 +88,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify the claim status detail page (5-step claim)', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
+    await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_3_ID, ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Files'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_1_ID))).toExist()
