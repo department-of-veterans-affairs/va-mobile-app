@@ -92,11 +92,7 @@ function DisabilityRatingsScreen() {
         borderStyle="solid"
         borderColor="primary"
         accessible={true}>
-        <Box
-          mx={theme.dimensions.gutter}
-          my={theme.dimensions.standardMarginBetween}
-          flexDirection="column"
-          accessible={false}>
+        <Box mx={theme.dimensions.gutter} my={theme.dimensions.buttonPadding} flexDirection="column" accessible={false}>
           {percentageText && (
             <TextView variant={'MobileBodyBold'} testID={percentageText} accessible={false}>
               {percentageText}
