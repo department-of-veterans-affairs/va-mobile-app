@@ -88,6 +88,14 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
           mt: margin,
           mb: margin,
         })
+      } else if (attributes.documentsNeeded) {
+        const margin = theme.dimensions.condensedMarginBetween
+        textLines.push({
+          text: t('claims.moreInfoNeeded'),
+          textTag: { labelType: LabelTagTypeConstants.tagYellow },
+          mt: margin,
+          mb: margin,
+        })
       }
 
       textLines.push({ text: t('claimDetails.receivedOn', { date: formatDateMMMMDDYYYY(attributes.dateFiled) }) })
