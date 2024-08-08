@@ -62,10 +62,10 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         completed: false,
         decisionLetterSent: false,
         dateFiled: '2020-10-04',
-        updatedAt: '2020-10-04',
+        updatedAt: '2020-11-18',
         displayTitle: 'Dependency',
-        phase: 4,
-        claimTypeCode: '',
+        phase: 6,
+        claimTypeCode: '010LCOMP',
         documentsNeeded: false,
         developmentLetterSent: false,
       },
@@ -126,10 +126,16 @@ context('ClaimsAndAppealsListView', () => {
 
       await waitFor(() => expect(screen.getByText('Dependency')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received October 04, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Step 6 of 8: Preparing decision letter')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Moved to this step on November 18, 2020')).toBeTruthy())
 
       await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('More information needed')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText('Step 3 of 5: Evidence gathering, review, and decision')).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Moved to this step on October 05, 2020')).toBeTruthy())
 
       initializeTestInstance('CLOSED')
       await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
@@ -150,7 +156,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('menuitem', {
-            name: 'Compensation More information needed Received October 01, 2020',
+            name: 'Compensation More information needed Received October 01, 2020 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on October 05, 2020',
           }),
         ),
       )
