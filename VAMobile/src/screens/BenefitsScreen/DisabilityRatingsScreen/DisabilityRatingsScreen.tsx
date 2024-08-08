@@ -96,7 +96,6 @@ function DisabilityRatingsScreen() {
           mx={theme.dimensions.gutter}
           my={theme.dimensions.standardMarginBetween}
           flexDirection="column"
-          flex={1}
           accessible={false}>
           {percentageText && (
             <TextView variant={'MobileBodyBold'} testID={percentageText} accessible={false}>
