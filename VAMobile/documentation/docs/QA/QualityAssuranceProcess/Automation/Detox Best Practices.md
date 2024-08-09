@@ -21,7 +21,7 @@ The following must be done for all new feature detox work no matter whether you 
 	- Move the correct manual cases to the automated folder/split a case if needed in testRail
 	- Confirm that all test runs for the new automated script can be recorded in TestRail (preferably automatically, but at least manually)
 - Ensure the new/updating script provides artifacts (where necessary) for success and failure
-- Ensure that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](/docs/QA/Quality Assurance Process/Automation/AddingNewFeatures)
+- Ensure that the new test has been added to the array/dictionary in the Navigation.e2e and AvailabilityFramework.e2e tests (if needed). How to add new tests can be found [here](/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures)
 - Ensure that the test is named for the screen/feature its automating ('Prescriptions', 'HomeScreen', etc.) and that the test has been placed in the e2e folder.
 - Ensure that e2e_detox_mapping.yml has been updated to account for any added/deleted files
 

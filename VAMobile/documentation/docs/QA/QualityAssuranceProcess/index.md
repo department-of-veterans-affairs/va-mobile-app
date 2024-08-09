@@ -1,4 +1,4 @@
-# VA Mobile App Quality Assurance Process
+# Quality Assurance Process
 
  A quality assurance process is an agreement between the project developers, product managers and quality assurance on the process for testing and verifying the delivery of product functionality. (See [this whitepaper](https://www.altexsoft.com/whitepapers/quality-assurance-quality-control-and-testing-the-basics-of-software-quality-management/) for some great QA-related basic terms and definitions, including "quality assurance process")
 
@@ -8,7 +8,7 @@ The objective of this QA process is to document how we will verify that the soft
 
 ## Test strategy
 
-We are taking an integrated approach to testing - building QA activities into the agile development process so that testing takes place early and often as a key part of sprint operations. Identifying issues during development will minimize technical and functional debt and make for better product quality and more accurate progress reporting and delivery status. In addition, we will leverage automated testing tools in the development delivery chain to provide real time [unit](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting), [UI](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Quality Assurance Process/Automation) and service reliability (_no documentation yet_) checks.
+We are taking an integrated approach to testing - building QA activities into the agile development process so that testing takes place early and often as a key part of sprint operations. Identifying issues during development will minimize technical and functional debt and make for better product quality and more accurate progress reporting and delivery status. In addition, we will leverage automated testing tools in the development delivery chain to provide real time [unit](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting), [UI](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation) and service reliability (_no documentation yet_) checks.
 
 ## Features to test
 
