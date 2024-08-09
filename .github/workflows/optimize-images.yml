@@ -34,7 +34,7 @@ jobs:
             size_before=$(stat -c%s "$file")
   
             # Optimize image without resizing
-            sharp "$file" --output "$file" --quality 80
+            sharp ipadPro129-screen-1.png --resize 800 --output ipadPro129-screen-1.png
   
             size_after=$(stat -c%s "$file")
             if [ "$size_after" -lt "$size_before" ]; then
