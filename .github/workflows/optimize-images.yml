@@ -1,0 +1,102 @@
+# Release builds that are triggered by the v*.*.* tag. Release tags occur when
+# someone comments /approve on the associated release ticket
+
+name: '[Build] Optimize Image'
+
+on:
+  push:
+    branches:
+      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+      - 'chanel-6809-add--mage-optimization-into-ci-for-app-store-submissions'
+
+jobs:
+
+  optimize_images:
+    name: Optimize Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install latest Node.js version
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      
+      - name: Install sharp-cli
+        run: npm install -g sharp-cli
+
+      - name: Optimize iOS images and list optimized files
+        run: |
+          echo "Optimized iOS images:"
+          cd VAMobile/ios/fastlane/screenshots/en-US/
+          for file in *; do
+            size_before=$(stat -c%s "$file")
+  
+            # Optimize image without resizing
+            sharp ipadPro129-screen-1.png --resize 800 --output ipadPro129-screen-1.png
+  
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
+            fi
+          done
+
+      - name: Optimize Android images (root) and list optimized files
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/
+          echo "Optimized Android root images:"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
+            fi
+          done
+      - name: Optimize Android phoneScreenshots images and list optimized files
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          echo "Optimized Android phoneScreeshots images:"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
+            fi
+          done
+
+      - name: Optimize Android sevenInchScreenShots images and list optimized files
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenShots/
+          echo "Optimized Android sevenInchScreenShots images:"
+          for file in *.{png,jpg,jpeg,gif,svg}; do
+            if [ -e "$file" ]; then
+              size_before=$(stat -c%s "$file")
+              sharp "$file" --output "$file" --resize 800 600 --quality 80
+              size_after=$(stat -c%s "$file")
+              if [ "$size_after" -lt "$size_before" ]; then
+                echo "$file"
+              fi
+            fi
+          done
+          
+      - name: Commit optimized images
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add VAMobile/ios/fastlane/screenshots/en-US
+          git add VAMobile/android/fastlane/metadata/android/en-US/images
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Optimize images before release build"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
