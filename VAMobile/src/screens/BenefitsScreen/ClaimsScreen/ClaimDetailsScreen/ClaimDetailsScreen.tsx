@@ -7,10 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Alert, ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
-import {
-  Button,
-  ButtonProps,
-} from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
+import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
