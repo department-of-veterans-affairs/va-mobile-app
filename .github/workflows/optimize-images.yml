@@ -30,14 +30,15 @@ jobs:
         run: |
           echo "Optimized iOS images:"
           cd VAMobile/ios/fastlane/screenshots/en-US/
-          for file in *.{png,jpg,jpeg,gif,svg}; do
-            if [ -e "$file" ]; then
-              size_before=$(stat -c%s "$file")
-              sharp "$file" resize 800 --output "$file" --quality 80
-              size_after=$(stat -c%s "$file")
-              if [ "$size_after" -lt "$size_before" ]; then
-                echo "$file"
-              fi
+          for file in *; do
+            size_before=$(stat -c%s "$file")
+  
+            # Optimize image without resizing
+            sharp "$file" --output "$file" --quality 80
+  
+            size_after=$(stat -c%s "$file")
+            if [ "$size_after" -lt "$size_before" ]; then
+              echo "$file"
             fi
           done
 
