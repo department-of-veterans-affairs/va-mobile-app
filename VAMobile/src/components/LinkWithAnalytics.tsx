@@ -37,7 +37,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
   }
 
   return (
-    <Box flexDirection={'row'} py={py} pr={pr}>
+    <Box flexDirection={'row'} flexWrap="wrap" py={py} pr={pr}>
       <Link analytics={analytics} icon={{ preventScaling: true }} {...props} />
     </Box>
   )
