@@ -465,7 +465,7 @@ context('AppealStatus', () => {
       expect(
         screen.getByText('for the decision review that contains the issues from this appeal, or learn more about'),
       ).toBeTruthy()
-      expect(screen.getByText('decision reviews under the Appeals Modernization Act')).toBeTruthy()
+      expect(screen.getByText('decision reviews under the Appeals Modernization Act.')).toBeTruthy()
     })
   })
 
