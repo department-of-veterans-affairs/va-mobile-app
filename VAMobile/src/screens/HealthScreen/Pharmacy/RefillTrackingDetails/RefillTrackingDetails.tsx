@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTrackingInfo } from 'api/prescriptions'
@@ -26,6 +27,7 @@ import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -71,6 +73,12 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   useBeforeNavBackListener(navigation, () => {
     logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
   })
+
+  useFocusEffect(
+    React.useCallback(() => {
+      registerReviewEvent()
+    }, []),
+  )
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
