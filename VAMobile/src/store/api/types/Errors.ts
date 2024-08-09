@@ -14,6 +14,9 @@ export type APIError = {
       detail: string
       code: string
       source: string
+      body?: string
+      telephone?: string
+      refreshable?: boolean
       meta?: {
         messages?: Array<ErrorMessage>
       }
