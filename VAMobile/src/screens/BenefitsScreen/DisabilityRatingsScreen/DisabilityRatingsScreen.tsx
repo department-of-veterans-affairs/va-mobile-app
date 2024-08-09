@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
@@ -28,6 +28,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useDowntime, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
@@ -49,6 +50,12 @@ function DisabilityRatingsScreen() {
   } = useDisabilityRating({
     enabled: screenContentAllowed('WG_DisabilityRatings'),
   })
+
+  useFocusEffect(
+    React.useCallback(() => {
+      registerReviewEvent()
+    }, []),
+  )
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
