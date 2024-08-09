@@ -35,7 +35,7 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
   const [count, setCount] = useState(0)
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
-  const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
+  const mt = itemsNeededFromVet && !featureEnabled('claimPhaseExpansion') ? 0 : theme.dimensions.condensedMarginBetween
 
   const is8Steps = featureEnabled('claimPhaseExpansion') && isDisabilityCompensationClaim(attributes.claimTypeCode)
   const claimStepList = is8Steps ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5]
@@ -48,7 +48,7 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
 
   return (
     <Box>
-      {itemsNeededFromVet && !attributes.waiverSubmitted && (
+      {itemsNeededFromVet && !attributes.waiverSubmitted && !featureEnabled('claimPhaseExpansion') && (
         <Box my={theme.dimensions.standardMarginBetween}>
           <AlertBox
             border={'warning'}

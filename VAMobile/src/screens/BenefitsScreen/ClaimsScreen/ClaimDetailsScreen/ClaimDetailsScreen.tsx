@@ -7,7 +7,10 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Alert, ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
-import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
+import {
+  Button,
+  ButtonProps,
+} from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
@@ -16,13 +19,22 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
+import {
+  AlertBox,
+  Box,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LinkWithAnalytics,
+  LoadingComponent,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -64,7 +76,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
-  const { dateFiled } = attributes || ({} as ClaimAttributesData)
+  const { dateFiled, eventsTimeline } = attributes || ({} as ClaimAttributesData)
+  const itemsNeededFromVet = eventsTimeline ? needItemsFromVet(attributes) : false
+  const count = itemsNeededFromVet ? numberOfItemsNeedingAttentionFromVet(eventsTimeline) : 0
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -139,6 +153,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const onDecisionLetterPress = () => {
     logAnalyticsEvent(Events.vama_ddl_status_click())
     navigateTo('ClaimLettersScreen')
+  }
+
+  const fileRequestsPress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    navigateTo('FileRequest', { claimID })
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
@@ -226,6 +245,31 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
+            {itemsNeededFromVet && !attributes.waiverSubmitted && featureEnabled('claimPhaseExpansion') ? (
+              <Box mt={theme.dimensions.standardMarginBetween} mx={-10}>
+                <AlertBox border={'warning'} title={t('claimPhase.youHaveFileRequest.2', { count })}>
+                  <Box mt={theme.dimensions.standardMarginBetween}>
+                    <Button
+                      onPress={fileRequestsPress}
+                      testID={t('claimPhase.fileRequests.button.label')}
+                      label={t('claimPhase.fileRequests.button.label')}
+                      a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
+                    />
+                  </Box>
+                </AlertBox>
+              </Box>
+            ) : (
+              featureEnabled('claimPhaseExpansion') && (
+                <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+                  <Button
+                    onPress={fileRequestsPress}
+                    testID={t('submitEvidence')}
+                    label={t('submitEvidence')}
+                    a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
+                  />
+                </Box>
+              )
+            )}
             {getActiveClosedClaimInformationAlertOrSubmitButton()}
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
