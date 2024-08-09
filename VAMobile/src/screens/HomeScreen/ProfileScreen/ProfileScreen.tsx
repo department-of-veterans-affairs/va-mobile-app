@@ -18,6 +18,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
 
@@ -70,6 +71,12 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
           <NameTag />
           <LoadingComponent text={t('profile.loading')} />
         </Box>
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          onTryAgain={refetchUserAuthorizedServices}
+          screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+        />
       ) : errorCheck ? (
         <Box>
           <ErrorComponent
