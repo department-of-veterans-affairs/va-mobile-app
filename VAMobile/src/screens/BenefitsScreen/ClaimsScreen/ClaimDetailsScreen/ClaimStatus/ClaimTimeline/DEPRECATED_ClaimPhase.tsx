@@ -120,6 +120,7 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
         isExpanded || false,
         attributes.phaseChangeDate || '',
         attributes.dateFiled,
+        attributes.phase,
       ),
     )
   }
