@@ -160,6 +160,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     navigateTo('FileRequest', { claimID })
   }
 
+  const submitEvidencePress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    navigateTo('SubmitEvidence', { claimID })
+  }
+
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
@@ -262,7 +267,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               featureEnabled('claimPhaseExpansion') && (
                 <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
                   <Button
-                    onPress={fileRequestsPress}
+                    onPress={submitEvidencePress}
                     testID={t('submitEvidence')}
                     label={t('submitEvidence')}
                     a11yHint={t('claimPhase.fileRequests.button.a11yHint')}

@@ -27,9 +27,9 @@ import {
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
-type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
+type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFileDeprecated'>
 
-function UploadFile({ navigation, route }: UploadFileProps) {
+function UploadFileDeprecated({ navigation, route }: UploadFileProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimID, request: originalRequest, fileUploaded } = route.params
@@ -96,21 +96,15 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   }, [documentType])
 
   const onUploadConfirmed = () => {
-    logAnalyticsEvent(
-      Events.vama_evidence_cont_3(claim?.id || '', request?.trackedItemId || null, request?.type, 'file'),
-    )
+    logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
     const mutateOptions = {
       onMutate: () => {
-        logAnalyticsEvent(
-          Events.vama_claim_upload_start(claimID, request?.trackedItemId || null, request?.type, 'file'),
-        )
+        logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'file'))
       },
       onSuccess: () => {
         setFilesList([])
         setFilesUploadedSuccess(true)
-        logAnalyticsEvent(
-          Events.vama_claim_upload_compl(claimID, request?.trackedItemId || null, request?.type, 'file'),
-        )
+        logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'file'))
         showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
       },
       onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
@@ -124,8 +118,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
         claim?.id || '',
-        request?.trackedItemId || null,
-        request?.type,
+        request.trackedItemId || null,
+        request.type,
         'file',
         totalSize,
         filesList.length,
@@ -150,16 +144,14 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const onDocumentTypeChange = (selectedType: string) => {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
     logAnalyticsEvent(
-      Events.vama_evidence_type(claim?.id || '', request?.trackedItemId || null, request?.type, 'file', typeLabel),
+      Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'file', typeLabel),
     )
     setDocumentType(selectedType)
   }
 
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
-      logAnalyticsEvent(
-        Events.vama_evidence_conf(claim?.id || '', request?.trackedItemId || null, request?.type, 'file'),
-      )
+      logAnalyticsEvent(Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
     }
     setConfirmed(isChecked)
   }
@@ -201,7 +193,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       title={t('fileUpload.uploadFiles')}
       onLeftButtonPress={() => {
         logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(claim?.id || '', request?.trackedItemId || null, request?.type, 'file'),
+          Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'),
         )
         navigation.dispatch(StackActions.pop(2))
       }}>
@@ -211,7 +203,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         <>
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {request?.displayName}
+              {request.displayName}
             </TextView>
           </Box>
           <FileList files={[fileUploaded]} onDelete={onFileDelete} />
@@ -238,4 +230,4 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   )
 }
 
-export default UploadFile
+export default UploadFileDeprecated

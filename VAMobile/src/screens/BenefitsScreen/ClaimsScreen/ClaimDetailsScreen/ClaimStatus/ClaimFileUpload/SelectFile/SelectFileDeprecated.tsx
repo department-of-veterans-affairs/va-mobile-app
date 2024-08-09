@@ -19,9 +19,9 @@ import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTh
 
 const { IS_TEST } = getEnv()
 
-type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
+type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFileDeprecated'>
 
-function SelectFile({ navigation, route }: SelectFilesProps) {
+function SelectFileDeprecated({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -43,7 +43,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       types: { images, plainText, pdf },
     } = DocumentPicker
 
-    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request?.trackedItemId || null, request?.type || '', 'file'))
+    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'file'))
 
     try {
       const document = (await pickSingle({
@@ -75,7 +75,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      navigateTo('UploadFile', { claimID, request, fileUploaded: 'test file' })
+      navigateTo('UploadFileDeprecated', { claimID, request, fileUploaded: 'test file' })
       return
     }
 
@@ -102,9 +102,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   const onCancel = () => {
-    logAnalyticsEvent(
-      Events.vama_evidence_cancel_1(claimID, request?.trackedItemId || null, request?.type || '', 'file'),
-    )
+    logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'file'))
     navigation.goBack()
   }
 
@@ -122,21 +120,13 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         )}
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {request
-              ? t('fileUpload.selectAFileToUpload', {
-                  requestTitle: request?.displayName || t('fileUpload.theRequest'),
-                })
-              : t('fileUpload.selectAFileToUpload.2')}
+            {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
-              <TextView variant="MobileBody">
-                {request
-                  ? t('fileUpload.pleaseRequestFromPhoneFiles.pt2')
-                  : t('fileUpload.pleaseRequestFromPhoneFiles.pt2.2')}
-              </TextView>
+              <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
             </TextView>
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
@@ -158,4 +148,4 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   )
 }
 
-export default SelectFile
+export default SelectFileDeprecated

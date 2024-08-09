@@ -8,7 +8,10 @@ import { ClaimType } from 'constants/claims'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
+import SelectFileDeprecated from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFileDeprecated'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
+import UploadFileDeprecated from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFileDeprecated'
+import SubmitEvidence from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
@@ -58,6 +61,9 @@ export type BenefitsStackParamList = {
   FileRequest: {
     claimID: string
   }
+  SubmitEvidence: {
+    claimID: string
+  }
   FileRequestDetails: {
     claimID: string
     request: ClaimEventData
@@ -72,6 +78,11 @@ export type BenefitsStackParamList = {
   }
   SelectFile: {
     claimID: string
+    request?: ClaimEventData
+    focusOnSnackbar?: boolean
+  }
+  SelectFileDeprecated: {
+    claimID: string
     request: ClaimEventData
     focusOnSnackbar?: boolean
   }
@@ -81,6 +92,12 @@ export type BenefitsStackParamList = {
     firstImageResponse: ImagePickerResponse
   }
   UploadFile: {
+    claimID: string
+    request: ClaimEventData
+    fileUploaded: DocumentPickerResponse
+    imageUploaded: ImagePickerResponse
+  }
+  UploadFileDeprecated: {
     claimID: string
     request: ClaimEventData
     fileUploaded: DocumentPickerResponse
@@ -117,9 +134,21 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <BenefitsStack.Screen
+      key={'SubmitEvidence'}
+      name="SubmitEvidence"
+      component={SubmitEvidence}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
       key={'SelectFile'}
       name="SelectFile"
       component={SelectFile}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'SelectFileDeprecated'}
+      name="SelectFileDeprecated"
+      component={SelectFileDeprecated}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <BenefitsStack.Screen
@@ -132,6 +161,12 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       key={'UploadFile'}
       name="UploadFile"
       component={UploadFile}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'UploadFileDeprecated'}
+      name="UploadFileDeprecated"
+      component={UploadFileDeprecated}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
   ]

@@ -61,7 +61,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })
+    navigateTo('SelectFileDeprecated', { claimID, request })
   }
 
   const onPhotoPress = () => {
