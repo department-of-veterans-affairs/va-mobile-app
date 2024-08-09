@@ -195,7 +195,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       )
     }
     if (claimPhaseExpansionFlag) {
-      if (count > 0) {
+      if (count > 0 && !claim?.attributes?.waiverSubmitted) {
         const buttonProps: ButtonProps = {
           buttonType: ButtonVariants.Primary,
           label: t('claimPhase.fileRequests.button.label'),
@@ -211,17 +211,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         return (
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Alert {...alertProps} />
-          </Box>
-        )
-      } else if (attributes.open) {
-        const buttonProps: ButtonProps = {
-          buttonType: ButtonVariants.Primary,
-          label: t('claimDetails.submitEvidence'),
-          onPress: fileRequestsPress,
-        }
-        return (
-          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-            <Button {...buttonProps} />
           </Box>
         )
       }

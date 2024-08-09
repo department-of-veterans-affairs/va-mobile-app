@@ -72,9 +72,7 @@ function ClaimStatus({ claim, claimType, scrollViewRef }: ClaimStatusProps) {
               {claim.attributes.contentionList && claim.attributes.contentionList.length > 0 ? (
                 <VABulletList listOfText={claim.attributes.contentionList} />
               ) : (
-                <TextView variant="MobileBody" paragraphSpacing={true}>
-                  {t('noneNoted')}
-                </TextView>
+                <TextView variant="MobileBody">{t('noneNoted')}</TextView>
               )}
             </TextArea>
           )}
