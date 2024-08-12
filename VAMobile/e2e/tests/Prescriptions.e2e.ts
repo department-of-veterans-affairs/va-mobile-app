@@ -195,6 +195,9 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text('10/27/2021'))).toExist()
     await expect(element(by.text('VA facility'))).toExist()
     await expect(element(by.text('SLC10 TEST LAB'))).toExist()
+    await resetInAppReview()
+    await openHealth()
+    await openPrescriptions()
   })
 
   it('prescription details: verify status label information', async () => {

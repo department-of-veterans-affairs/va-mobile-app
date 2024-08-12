@@ -46,6 +46,11 @@ const checkLocatorAndContactLinks = async () => {
 
 export async function updateGenderIdentify(genderIdentityOption) {
   it('should update gender identity for ' + genderIdentityOption, async () => {
+    if (genderIdentityOption === 'Transgender Man') {
+      await resetInAppReview()
+      await openProfile()
+      await openContactInfo()
+    }
     await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()

@@ -272,6 +272,11 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify user can remove the extension', async () => {
+    if (phoneType === 'Work') {
+      await resetInAppReview()
+      await openProfile()
+      await openContactInfo()
+    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
