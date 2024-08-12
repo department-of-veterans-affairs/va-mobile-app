@@ -5,6 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
+import { ClaimTypeConstants } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -12,16 +13,29 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { claim as claimData } from '../claimData'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 jest.mock('utils/remoteConfig')
 
 context('ClaimDetailsScreen', () => {
-  const renderWithData = (featureFlag: boolean = false, claim?: Partial<ClaimData>): void => {
+  const renderWithData = (
+    claimType = ClaimTypeConstants.ACTIVE,
+    featureFlag: boolean = false,
+    claim?: Partial<ClaimData>,
+  ): void => {
     when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
         {
-          queryKey: [claimsAndAppealsKeys.claim, '0'],
+          queryKey: [claimsAndAppealsKeys.claim, '600156928'],
           data: {
             ...claim,
           },
@@ -37,11 +51,21 @@ context('ClaimDetailsScreen', () => {
         setOptions: jest.fn(),
         goBack: jest.fn(),
       },
-      { params: { claimID: '0', claimType: 'ACTIVE' } },
+      { params: { claimID: '600156928', claimType: claimType } },
     )
 
     render(<ClaimDetailsScreen {...props} />, { queriesData })
   }
+
+  beforeEach(() => {
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+      .mockResolvedValue({
+        data: {
+          ...claimData,
+        },
+      })
+  })
 
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
@@ -52,14 +76,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('when the selected tab is status', () => {
     it('should display the ClaimStatus component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() =>
@@ -68,14 +85,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should display the ClaimDetails component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -85,14 +95,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should display the Files component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(true, {
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Files')))
@@ -104,14 +107,7 @@ context('ClaimDetailsScreen', () => {
 
   describe('need help section', () => {
     it('should always display on claim status tab', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
@@ -128,14 +124,7 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should display on claim details, to be renamed files tab', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
-        .mockResolvedValue({
-          data: {
-            ...claimData,
-          },
-        })
-      renderWithData(false, {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText('Details')))
@@ -144,10 +133,56 @@ context('ClaimDetailsScreen', () => {
     })
   })
 
+  describe('when the claimType is ACTIVE or closed', () => {
+    it('Active should have file request alert and what you claimed sections', async () => {
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('header', { name: "What you've claimed" })).toBeTruthy())
+    })
+
+    describe('Active on click of Find out why we sometimes combine claims.', () => {
+      it('should call useRouteNavigation', async () => {
+        renderWithData(ClaimTypeConstants.ACTIVE, false, {
+          ...claimData,
+        })
+        await waitFor(() =>
+          fireEvent.press(screen.getByRole('link', { name: 'Find out why we sometimes combine claims' })),
+        )
+        await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote'))
+      })
+    })
+
+    it('Closed should have decision letter alert', async () => {
+      renderWithData(ClaimTypeConstants.CLOSED, false, {
+        ...claimData,
+      })
+      await waitFor(() => expect(screen.getByRole('heading', { name: 'Decision letter mailed' })).toBeTruthy())
+    })
+
+    describe('Closed on click of WhatDoIDoIfDisagreement', () => {
+      it('should call useRouteNavigation', async () => {
+        renderWithData(ClaimTypeConstants.CLOSED, false, {
+          ...claimData,
+        })
+        await waitFor(() =>
+          fireEvent.press(screen.getByRole('link', { name: 'Learn what to do if you disagree with our decision' })),
+        )
+        await waitFor(() =>
+          expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
+            claimID: '600156928',
+            claimStep: 3,
+            claimType: 'Compensation',
+          }),
+        )
+      })
+    })
+  })
+
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/0`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData()
