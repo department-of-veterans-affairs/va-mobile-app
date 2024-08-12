@@ -28,22 +28,22 @@ jobs:
         run: |
           cd VAMobile/ios/fastlane/screenshots/en-US
           imagemin * --out-dir=.
-      - name: Optimized Android images
+      - name: Optimize Android images
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
-          imagemin *.{png,jpg,jpeg,gif,svg} --out-dir=.
+          imagemin * --out-dir=.
 
           cd phoneScreenshots/
-          imagemin *.{png,jpg,jpeg,gif,svg} --out-dir=.
-          
+          imagemin * --out-dir=.
+
           cd ../sevenInchScreenshots/
-          imagemin *.{png,jpg,jpeg,gif,svg} --out-dir=.
-          
-      - name: Optimized iOS images
+          imagemin * --out-dir=.
+
+      - name: List iOS images after optimization
         run: |
-         echo "Optimized iOS only:"
+         echo "Optimized iOS images only:"
          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-      - name: Optimized Android images
+      - name: List Android images after optimization
         run: |
           echo "Optimized Android images only:"
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
