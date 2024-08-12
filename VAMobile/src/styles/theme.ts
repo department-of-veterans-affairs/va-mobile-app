@@ -19,7 +19,7 @@ export type VATextColors = {
   input: string
   inputFocused: string
   snackBarBtn: string
-  snackBarTxt: string
+  snackBar: string
   actionBar: string
   actionBarDisabled: string
   bodyText: string

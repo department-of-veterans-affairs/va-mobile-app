@@ -85,7 +85,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageProp: TextViewProps = {
     variant: 'HelperText',
-    color: 'snackBarTxt',
+    color: 'snackBar',
   }
 
   // adjust style depending on if there are 1 or 2 buttons
