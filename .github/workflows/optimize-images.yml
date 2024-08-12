@@ -16,14 +16,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
-      - name: List images before optimization
+      - name: Save images size before optimization
         run: |
-          echo "iOS images before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US
-          echo "Android images before optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/
+          echo "iOS images sizes before optimization:"
+          ls -lh VAMobile/ios/fastlane/screenshots/en-US > ios_sizes_before.txt
+          echo "Android images sizes before optimization:"
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/  > android_images_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/ > android_phoneScreeshots_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/ > android_seven_inch_sizes_before.txt
       - name: Optimize iOS images
         run: |
           cd VAMobile/ios/fastlane/screenshots/en-US
@@ -41,19 +41,28 @@ jobs:
 
       - name: List iOS images after optimization
         run: |
-         echo "Optimized iOS images only:"
-         ls -lh VAMobile/ios/fastlane/screenshots/en-US
+         cd VAMobile/ios/fastlane/screenshots/en-US
+         ls -lh > ios_sizes_after.txt
+         echo "Optimized iOS images:"
+          diff ios_sizes_before.txt ios_sizes_after.txt | grep '^>' || echo "No images were optimized."
       - name: List Android images after optimization
         run: |
-          echo "Optimized Android images only:"
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh *.{png,jpg,jpeg,gif,svg}
+          ls -lh > android_images_sizes_after.txt
+          echo "Optimized Android images:"
+          diff ../android_images_sizes_before.txt android_images_sizes_after.txt | grep '^>' || echo "No images were optimized."
 
           cd phoneScreenshots/
-          ls -lh *.{png,jpg,jpeg,gif,svg}
+          ls -lh > android_phone_sizes_after.txt
+          echo "Optimized Android phone screenshots:"
+          diff ../android_phoneScreeshots_sizes_before.txt android_phone_sizes_after.txt | grep '^>' || echo "No images were optimized."
 
           cd ../sevenInchScreenshots/
-          ls -lh *.{png,jpg,jpeg,gif,svg}
+          ls -lh > android_seven_inch_sizes_after.txt
+          echo "Optimized Android seven-inch screenshots:"
+          diff ../android_seven_inch_sizes_before.txt android_seven_inch_sizes_after.txt | grep '^>' || echo "No images were optimized."
+
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
