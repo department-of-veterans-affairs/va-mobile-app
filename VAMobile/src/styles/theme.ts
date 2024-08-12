@@ -44,7 +44,6 @@ export type VATextColors = {
 
 export type VAIconColors = {
   link: string
-  nav: string
   largeNav: string
   deleteFill: string
   success: string

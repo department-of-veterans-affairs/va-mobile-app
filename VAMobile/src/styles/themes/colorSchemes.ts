@@ -63,7 +63,6 @@ export const lightTheme = {
   },
   icon: {
     link: colors.vadsColorPrimary,
-    nav: colors.vadsColorLink,
     largeNav: colors.vadsColorPrimary,
     deleteFill: colors.vadsColorBase,
     success: colors.uswdsSystemColorGreenCoolVivid50,
@@ -203,7 +202,6 @@ export const darkTheme = {
   },
   icon: {
     link: colors.uswdsSystemColorBlueVivid30,
-    nav: colors.uswdsSystemColorBlueVivid30,
     largeNav: colors.uswdsSystemColorBlueVivid30,
     deleteFill: colors.vadsColorBase,
     success: colors.uswdsSystemColorGreenCoolVivid50,
