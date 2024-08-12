@@ -11,6 +11,7 @@ import {
   MaintenanceWindowsGetData,
   ScreenIDTypes,
 } from 'store/api/types'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 import { ScreenIDTypesConstants } from '../api/types/Screens'
 
@@ -68,29 +69,34 @@ export const initialErrorsState: ErrorsState = {
  * clears all metadata and current downtimes first and sets errors based on which downtime is active from API call
  */
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
-  const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
-  if (!response) {
-    dispatch(dispatchSetDowntime(undefined))
-    return
-  }
+  try {
+    const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
+    if (!response) {
+      dispatch(dispatchSetDowntime(undefined))
+      return
+    }
 
-  // filtering out any maintenance windows we haven't mapped to a screen in the app
-  const maintWindows = response.data.filter((w) =>
-    Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service),
-  )
-  let downtimeWindows = {} as DowntimeWindowsByFeatureType
-  for (const m of maintWindows) {
-    const maintWindow = m.attributes
-    const metadata: DowntimeWindow = {
-      startTime: DateTime.fromISO(maintWindow.startTime),
-      endTime: DateTime.fromISO(maintWindow.endTime),
+    // filtering out any maintenance windows we haven't mapped to a screen in the app
+    const maintWindows = response.data.filter((w) =>
+      Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service),
+    )
+    let downtimeWindows = {} as DowntimeWindowsByFeatureType
+    for (const m of maintWindows) {
+      const maintWindow = m.attributes
+      const metadata: DowntimeWindow = {
+        startTime: DateTime.fromISO(maintWindow.startTime),
+        endTime: DateTime.fromISO(maintWindow.endTime),
+      }
+      downtimeWindows = {
+        ...downtimeWindows,
+        [maintWindow.service]: metadata,
+      }
     }
-    downtimeWindows = {
-      ...downtimeWindows,
-      [maintWindow.service]: metadata,
-    }
+    dispatch(dispatchSetDowntime(downtimeWindows))
+  } catch (e) {
+    logNonFatalErrorToFirebase(e, 'Maintenance Window Retrieval Failure')
+    dispatch(dispatchSetDowntime(undefined))
   }
-  dispatch(dispatchSetDowntime(downtimeWindows))
 }
 
 /**
