@@ -180,7 +180,8 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
     if (
       navigationArray[2] === 'Claim type' ||
       navigationArray[2] === 'Prescriptions' ||
-      navigationArray[2] === 'Appeal details'
+      navigationArray[2] === 'Appeal details' ||
+      navigationArray[2] === 'File requests'
     ) {
       await resetInAppReview()
     }
@@ -225,12 +226,17 @@ const navigateToPage = async (key, navigationDicValue) => {
         await waitFor(element(by.text('Review file requests')))
           .toBeVisible()
           .whileElement(by.id('ClaimDetailsScreen'))
-          .scroll(100, 'down')
+          .scroll(100, 'up')
       } else if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
           .whileElement(by.id('claimsHistoryID'))
           .scroll(100, 'down')
+      } else if (subNavigationArray[k] === 'Files') {
+        await waitFor(element(by.text('Files')))
+          .toBeVisible()
+          .whileElement(by.id('ClaimDetailsScreen'))
+          .scroll(100, 'up')
       }
 
       if (k == 0 && key in featureID) {
@@ -255,7 +261,7 @@ const navigateToPage = async (key, navigationDicValue) => {
       await waitFor(element(by.text('Review file requests')))
         .toBeVisible()
         .whileElement(by.id('ClaimDetailsScreen'))
-        .scroll(100, 'down')
+        .scroll(100, 'up')
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -266,6 +272,11 @@ const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')
+    } else if (subNavigationArray.slice(-1)[0] === 'Files') {
+      await waitFor(element(by.text('Files')))
+        .toBeVisible()
+        .whileElement(by.id('ClaimDetailsScreen'))
+        .scroll(100, 'up')
     }
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
