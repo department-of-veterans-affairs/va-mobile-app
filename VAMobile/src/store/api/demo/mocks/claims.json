@@ -27,7 +27,7 @@
             "updatedAt": "2021-05-05",
             "displayTitle": "Compensation",
             "phase": 3,
-            "claimTypeCode": "",
+            "claimTypeCode": "010LCOMP",
             "documentsNeeded": true,
             "developmentLetterSent": false
           }
