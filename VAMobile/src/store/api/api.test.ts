@@ -82,6 +82,13 @@ context('api', () => {
     fetch.mockResolvedValue(response)
     const formData = new FormData()
 
+    it("returns undefined when the Content-Type of a successful response is not 'application/json'", async () => {
+      const responseBlob = new Blob(['Success'])
+      const response = new Response(responseBlob, { status: 200, headers: { 'Content-Type': 'text/html' } })
+      fetch.mockResolvedValue(response)
+      const result = await get<Types.UserData>('/foo')
+      expect(result).toEqual(undefined)
+    })
     const result = await post('/foo', { formData }, contentTypes.multipart)
 
     const headers = expect.objectContaining({ 'Content-Type': contentTypes.multipart })
