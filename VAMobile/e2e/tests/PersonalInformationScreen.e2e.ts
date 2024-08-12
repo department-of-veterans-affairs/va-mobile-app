@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openPersonalInformation, openProfile, resetInAppReview } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',

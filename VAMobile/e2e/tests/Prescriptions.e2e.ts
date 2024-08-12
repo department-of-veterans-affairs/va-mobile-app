@@ -8,6 +8,7 @@ import {
   loginToDemoMode,
   openHealth,
   openPrescriptions,
+  resetInAppReview,
 } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
