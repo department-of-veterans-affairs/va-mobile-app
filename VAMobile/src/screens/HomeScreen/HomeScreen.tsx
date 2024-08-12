@@ -430,7 +430,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasAboutYouInfo && !hasAboutYouError ? (
+          ) : !hasAboutYouInfo ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
