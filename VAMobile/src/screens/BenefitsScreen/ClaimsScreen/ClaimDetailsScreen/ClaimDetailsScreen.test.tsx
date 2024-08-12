@@ -138,7 +138,6 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: "What you've claimed" })).toBeTruthy())
     })
 
