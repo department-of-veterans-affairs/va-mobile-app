@@ -19,11 +19,11 @@ jobs:
       - name: Save images size before optimization
         run: |
           echo "iOS images sizes before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US/*. > ios_sizes_before.txt
+          ls -lh VAMobile/ios/fastlane/screenshots/en-US/* > ios_sizes_before.txt
           echo "Android images sizes before optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/*. > android_images_sizes_before.txt
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*. > android_phoneScreeshots_sizes_before.txt
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*. > android_seven_inch_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/* > android_images_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/* > android_phoneScreeshots_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/* > android_seven_inch_sizes_before.txt
       - name: Optimize iOS images
         run: |
           cd VAMobile/ios/fastlane/screenshots/en-US
