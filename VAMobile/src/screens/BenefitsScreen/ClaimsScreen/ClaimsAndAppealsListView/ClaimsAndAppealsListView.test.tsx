@@ -179,7 +179,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('menuitem', {
-            name: 'Insurance on docket appeal Received December 22, 2020',
+            name: 'Insurance on docket appeal Received December 22, 2020 Moved to this step on December 28, 2020',
           }),
         ),
       )
