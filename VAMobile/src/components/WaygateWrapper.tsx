@@ -1,7 +1,7 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useIsFocused, useNavigationState } from '@react-navigation/native'
+import { useNavigationState } from '@react-navigation/native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -25,9 +25,8 @@ export type WaygateWrapperProps = {
 export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
   const theme = useTheme()
   const waygateStateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
-  const waygateScreen = waygateName || waygateStateScreen
+  const [waygateScreen] = useState(waygateName || waygateStateScreen)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isFocused = useIsFocused()
   const openAppStore = useOpenAppStore()
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
@@ -81,7 +80,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
   }, [bypassAlertBox, waygateScreen, showAlertBox, waygate.appUpdateButton])
 
-  if (isFocused && showAlertBox) {
+  if (showAlertBox) {
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
