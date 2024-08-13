@@ -19,11 +19,11 @@ jobs:
       - name: Save images size before optimization
         run: |
           echo "iOS images sizes before optimization:"
-          ls -lh VAMobile/ios/fastlane/screenshots/en-US > ios_sizes_before.txt
+          ls -lh VAMobile/ios/fastlane/screenshots/en-US/*.{png,jpg,jpeg,gif,svg} > ios_sizes_before.txt
           echo "Android images sizes before optimization:"
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/  > android_images_sizes_before.txt
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/ > android_phoneScreeshots_sizes_before.txt
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/ > android_seven_inch_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg}  > android_images_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} > android_phoneScreeshots_sizes_before.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} > android_seven_inch_sizes_before.txt
       - name: Optimize iOS images
         run: |
           cd VAMobile/ios/fastlane/screenshots/en-US
@@ -41,28 +41,39 @@ jobs:
 
       - name: List iOS images after optimization
         run: |
-         cd VAMobile/ios/fastlane/screenshots/en-US
-         ls -lh > ios_sizes_after.txt
+         ls -lh VAMobile/ios/fastlane/screenshots/en-US/*.{png,jpg,jpeg,gif,svg} > ios_sizes_after.txt
          echo "Optimized iOS images:"
-          diff ios_sizes_before.txt ios_sizes_after.txt | grep '^>' || echo "No images were optimized."
+         if [ -f ios_sizes_before.txt ]; then
+           diff ios_sizes_before.txt ios_sizes_after.txt | grep '^>' || echo "No images were optimized."
+         else
+           echo "ios_sizes_before.txt not found."
+         fi
       - name: List Android images after optimization
         run: |
-          cd VAMobile/android/fastlane/metadata/android/en-US/images/
-          ls -lh > android_images_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} > android_images_sizes_after.txt
           echo "Optimized Android images:"
-          diff ../android_images_sizes_before.txt android_images_sizes_after.txt | grep '^>' || echo "No images were optimized."
+          if [ -f android_images_sizes_before.txt ]; then
+            diff android_images_sizes_before.txt android_images_sizes_after.txt | grep '^>' || echo "No images were optimized."
+          else
+            echo "android_images_sizes_before.txt not found."
+          fi
 
-          cd phoneScreenshots/
-          ls -lh > android_phone_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} > android_phoneScreeshots_sizes_after.txt
           echo "Optimized Android phone screenshots:"
-          diff ../android_phoneScreeshots_sizes_before.txt android_phone_sizes_after.txt | grep '^>' || echo "No images were optimized."
+          if [ -f android_phoneScreeshots_sizes_before.txt ]; then
+            diff android_phoneScreeshots_sizes_before.txt android_phoneScreeshots_sizes_after.txt.txt | grep '^>' || echo "No images were optimized."
+          else
+            echo "android_phoneScreeshots_sizes_before.txt not found."
+          fi
 
-          cd ../sevenInchScreenshots/
-          ls -lh > android_seven_inch_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} > android_seven_inch_sizes_after.txt
           echo "Optimized Android seven-inch screenshots:"
-          diff ../android_seven_inch_sizes_before.txt android_seven_inch_sizes_after.txt | grep '^>' || echo "No images were optimized."
+          if [ -f android_seven_inch_sizes_before.txt ]; then
+            diff android_seven_inch_sizes_before.txt android_seven_inch_sizes_after.txt | grep '^>' || echo "No images were optimized."
+          else
+            echo "android_seven_inch_sizes_before.txt not found."
+          fi
 
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} --out-dir=VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
       - name: Commit optimized images
         run: |
           git config --global user.name 'github-actions'
