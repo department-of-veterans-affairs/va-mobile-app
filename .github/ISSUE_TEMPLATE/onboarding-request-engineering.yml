@@ -1,0 +1,65 @@
+name: Onboarding Request (Engineering)
+description: Fill out this form to request initiation of engineering onboarding for 
+title: "Onboarding: [name]"
+labels: [ onboarding ]
+assignees: timwright12
+body:
+- type: markdown
+  attributes:
+    value: |
+      **Please read before continuing**: This issue form is to request to start the onboarding process for an engineer planning to work in the VA Mobile App.
+
+- type: input
+  id: fullname
+  attributes:
+    label: Full Name
+    description: Users Full Name
+    placeholder: Alex Smith
+  validations:
+    required: true
+- type: input
+  id: username
+  attributes:
+    label: GitHub Username
+    description: Before mobile onboarding this user must already be within the VA Github Organization
+    placeholder: '@Alex-smith-va'
+  validations:
+    required: true
+
+- type: input
+  id: vaemail
+  attributes:
+    label: VA Email Address
+    description: Onboarding requires a VA email address to access developer systems
+    placeholder: 'Alex.Smith1@va.gov'
+  validations:
+    required: true
+
+- type: markdown
+  attributes:
+    value: |
+      ## Process Documentation
+
+      - [] [checklist item 1](#)
+      - [] [checklist item 2](#)
+      - [] [checklist item 3](#)
+      - [] [checklist item 4](#)
+      - [] [checklist item 5](#)
+      - [] [checklist item 6](#)
+      - [] [checklist item 7](#)
+
+      ## Access
+
+      - [] App store connect (H&B will provide)
+      - [] Firebase (H&B will provide)
+      - [] Repo write access (H&B will provide)
+      - [] Join [#va-mobile-app slack channel](#)
+
+      # Engineering Setup
+
+      - [] [App local setup documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+      - [] [Remote Configuration](#)
+
+
+
+
