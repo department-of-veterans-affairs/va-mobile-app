@@ -50,7 +50,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
       scrollRef.current = scrollViewRef.current
       scrollToCurrentPhase(-standardMarginBetween)
     }
-  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef, standardMarginBetween])
+  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef, standardMarginBetween, disableScroll])
 
   const phaseHeader = (
     <Box flexDirection="column">
