@@ -111,9 +111,8 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
         const stepName = t(`claimPhase.${translationStepString}.heading.phase${current}`)
 
         textLines.push({ text: `${stepXofY}: ${stepName}` })
-        textLines.push({ text: t('movedToThisStepOn', { date: formatDateMMMMDDYYYY(attributes.updatedAt) }) })
       }
-
+      textLines.push({ text: t('movedToThisStepOn', { date: formatDateMMMMDDYYYY(attributes.updatedAt) }) })
       const position = (page - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
       listItems.push({
