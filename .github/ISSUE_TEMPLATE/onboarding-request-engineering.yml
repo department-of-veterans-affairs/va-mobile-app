@@ -49,6 +49,10 @@ body:
     - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
     - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Features/PushNotifications)
     - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/AccessibilityInformation)
+    - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
+    - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
+    - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+   
 
 - type: checkboxes
   attributes:
@@ -75,8 +79,5 @@ body:
     - label: Review [information about unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting)
     - label: Review [information about end-to-end testing with Detox](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/)
     - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/Detox%20Best%20Practices)
-    - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
-    - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
-    - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
     - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Releases/release-process)
     - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
