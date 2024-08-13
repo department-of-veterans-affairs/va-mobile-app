@@ -41,7 +41,7 @@ jobs:
 
       - name: List iOS images after optimization
         run: |
-         ls -lh VAMobile/ios/fastlane/screenshots/en-US/*.{png,jpg,jpeg,gif,svg} > ios_sizes_after.txt
+         ls -lh VAMobile/ios/fastlane/screenshots/en-US/* > ios_sizes_after.txt
          echo "Optimized iOS images:"
          if [ -f ios_sizes_before.txt ]; then
            diff ios_sizes_before.txt ios_sizes_after.txt | grep '^>' || echo "No images were optimized."
@@ -50,7 +50,7 @@ jobs:
          fi
       - name: List Android images after optimization
         run: |
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/*.{png,jpg,jpeg,gif,svg} > android_images_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/* > android_images_sizes_after.txt
           echo "Optimized Android images:"
           if [ -f android_images_sizes_before.txt ]; then
             diff android_images_sizes_before.txt android_images_sizes_after.txt | grep '^>' || echo "No images were optimized."
@@ -58,7 +58,7 @@ jobs:
             echo "android_images_sizes_before.txt not found."
           fi
 
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/*.{png,jpg,jpeg,gif,svg} > android_phoneScreeshots_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/* > android_phoneScreeshots_sizes_after.txt
           echo "Optimized Android phone screenshots:"
           if [ -f android_phoneScreeshots_sizes_before.txt ]; then
             diff android_phoneScreeshots_sizes_before.txt android_phoneScreeshots_sizes_after.txt.txt | grep '^>' || echo "No images were optimized."
@@ -66,7 +66,7 @@ jobs:
             echo "android_phoneScreeshots_sizes_before.txt not found."
           fi
 
-          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/*.{png,jpg,jpeg,gif,svg} > android_seven_inch_sizes_after.txt
+          ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots/* > android_seven_inch_sizes_after.txt
           echo "Optimized Android seven-inch screenshots:"
           if [ -f android_seven_inch_sizes_before.txt ]; then
             diff android_seven_inch_sizes_before.txt android_seven_inch_sizes_after.txt | grep '^>' || echo "No images were optimized."
