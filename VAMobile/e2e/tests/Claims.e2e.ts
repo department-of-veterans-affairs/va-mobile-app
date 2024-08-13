@@ -165,7 +165,7 @@ describe('Claims Screen', () => {
   })
 
   it('verify number of requests in review file requests', async () => {
-    await expect(element(by.label('You have 3 file requests from  V-A '))).toExist()
+    await expect(element(by.label('You have 3 file requests'))).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
@@ -278,6 +278,7 @@ describe('Claims Screen', () => {
   // })
 
   it('should verify details of claim on step 1', async () => {
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
