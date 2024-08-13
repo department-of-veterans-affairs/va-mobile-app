@@ -61,7 +61,7 @@ jobs:
           ls -lh VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/* > android_phoneScreeshots_sizes_after.txt
           echo "Optimized Android phone screenshots:"
           if [ -f android_phoneScreeshots_sizes_before.txt ]; then
-            diff android_phoneScreeshots_sizes_before.txt android_phoneScreeshots_sizes_after.txt.txt | grep '^>' || echo "No images were optimized."
+            diff android_phoneScreeshots_sizes_before.txt android_phoneScreeshots_sizes_after.txt | grep '^>' || echo "No images were optimized."
           else
             echo "android_phoneScreeshots_sizes_before.txt not found."
           fi
