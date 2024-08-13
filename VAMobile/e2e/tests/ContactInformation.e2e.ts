@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview, toggleRemoteConfigFlag, } from './utils'
+import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview, toggleRemoteConfigFlag, CommonE2eIdConstants, } from './utils'
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
