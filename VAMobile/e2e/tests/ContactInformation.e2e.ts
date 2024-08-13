@@ -349,6 +349,7 @@ export async function removeContactInfoFeature(contactInfoTypeText: string, type
 }
 
 export async function verifyNonUSorMilitaryAddresses(addressID: string, addressType: string) {
+  await resetReviewforContact()
   it(addressType + ': should verify non-US address', async () => {
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
@@ -489,6 +490,5 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  resetReviewforContact()
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
 })
