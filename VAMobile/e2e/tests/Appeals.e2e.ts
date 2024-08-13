@@ -11,7 +11,7 @@ import {
 } from './utils'
 
 export const AppealsIdConstants = {
-  APPEAL_1_ID: 'Disability compensation appeal Received June 12, 2008',
+  APPEAL_1_ID: 'Disability compensation appeal Received June 12, 2008 Moved to this step on November 22, 2011',
   REVIEW_PAST_EVENTS_ID: 'reviewPastEventsTestID',
   ISSUES_TAB_TEXT: 'Issues',
   STATUS_TAB_TEXT: 'Status',
