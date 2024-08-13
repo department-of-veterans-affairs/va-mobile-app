@@ -30,6 +30,13 @@ export const ContactInfoE2eIdConstants = {
   DISMISS_TEXT: 'Dismiss',
 }
 
+// many possible false fails from in-app review, depending on how many other scripts running
+export async function resetReviewforContact() {
+  await resetInAppReview()
+  await openProfile()
+  await openContactInfo()
+}
+
 export async function updateAddress() {
   await waitFor(element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
@@ -71,6 +78,7 @@ export async function fillHomeAddressFields() {
 }
 
 export async function validateAddresses(addressID: string, addressType: string) {
+  await resetReviewforContact()
   it('update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(addressID)))
@@ -170,12 +178,8 @@ export async function validateAddresses(addressID: string, addressType: string) 
 }
 
 export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
+  await resetReviewforContact()
   it('should open the ' + phoneType + ' phone number', async () => {
-    if (phoneType === 'Mobile') {
-      await resetInAppReview()
-      await openProfile()
-      await openContactInfo()
-    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
@@ -272,11 +276,6 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify user can remove the extension', async () => {
-    if (phoneType === 'Work') {
-      await resetInAppReview()
-      await openProfile()
-      await openContactInfo()
-    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
@@ -300,6 +299,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
 }
 
 export async function removeContactInfoFeature(contactInfoTypeText: string, type: string) {
+  await resetReviewforContact()
   it('should tap remove ' + type + ' and verify remove pop up appears', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(contactInfoTypeText)))
@@ -406,6 +406,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
   })
 }
+
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
@@ -441,9 +442,6 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
 
   it('should open the email address', async () => {
-    await resetInAppReview()
-    await openProfile()
-    await openContactInfo()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
@@ -470,6 +468,7 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   it('should update the email address and remove the +', async () => {
+    await resetReviewforContact()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
     await element(by.id('emailAddressEditTestID')).clearText()
@@ -490,5 +489,6 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
+  resetReviewforContact()
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
 })
