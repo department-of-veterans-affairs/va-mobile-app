@@ -8,7 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
+import { getUserPhase, isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 /**
@@ -42,13 +42,15 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
   const isIncompletePhase = phase > current
+  const disableScroll =
+    numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0 && !attributes?.waiverSubmitted
 
   useEffect(() => {
-    if (phase > 1 && isCurrentPhase && scrollViewRef?.current) {
+    if (phase > 1 && isCurrentPhase && scrollViewRef?.current && !disableScroll) {
       scrollRef.current = scrollViewRef.current
       scrollToCurrentPhase(-standardMarginBetween)
     }
-  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef, standardMarginBetween])
+  }, [phase, isCurrentPhase, scrollToCurrentPhase, scrollRef, scrollViewRef, standardMarginBetween, disableScroll])
 
   const phaseHeader = (
     <Box flexDirection="column">
