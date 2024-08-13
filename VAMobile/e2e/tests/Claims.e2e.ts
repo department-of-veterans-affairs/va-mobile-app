@@ -62,7 +62,7 @@ beforeAll(async () => {
   await openClaimsHistory()
 })
 
-describe('Claims Screen', () => {
+describe(':ios: Claims Screen', () => {
   it('should match the Claims history page design', async () => {
     await expect(element(by.text('Your active claims, decision reviews, and appeals'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID))).toExist()
