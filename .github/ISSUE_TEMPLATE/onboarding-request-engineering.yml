@@ -35,6 +35,17 @@ body:
   validations:
     required: true
 
+- type: checkboxes
+  attributes:
+    label: Process Documentations
+    description: Testing
+    options:
+    - label: Checklist Item 1
+    - label: Checklist Item 2
+    - label: Read [App local setup documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+    - label: Checklist Item 4
+
+
 - type: markdown
   attributes:
     value: |
