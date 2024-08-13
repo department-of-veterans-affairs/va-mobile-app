@@ -1,7 +1,13 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openPersonalInformation,
+  openProfile,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -68,6 +74,7 @@ export async function updateGenderIdentify(genderIdentityOption) {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openPersonalInformation()
