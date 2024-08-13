@@ -23,6 +23,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -65,6 +66,16 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
+
+  const [count, setCount] = useState(0)
+
+  useFocusEffect(
+    useCallback(() => {
+      setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
+    }, [attributes]),
+  ) //force a rerender due to react query updating data
+
+  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -141,6 +152,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     navigateTo('ClaimLettersScreen')
   }
 
+  const fileRequestsPress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    navigateTo('FileRequest', { claimID })
+  }
+
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
@@ -175,19 +191,45 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         </Box>
       )
     }
+    if (claimPhaseExpansionFlag) {
+      if (count > 0 && !claim?.attributes?.waiverSubmitted) {
+        const buttonProps: ButtonProps = {
+          buttonType: ButtonVariants.Primary,
+          label: t('claimPhase.fileRequests.button.label'),
+          a11yHint: t('claimPhase.fileRequests.button.a11yHint'),
+          onPress: fileRequestsPress,
+        }
+        const alertProps: AlertProps = {
+          variant: 'warning',
+          header: t('claimPhase.youHaveFileRequest', { count }),
+          primaryButton: buttonProps,
+          expandable: false,
+        }
+        return (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Alert {...alertProps} />
+          </Box>
+        )
+      }
+    }
     return <></>
   }
 
-  function renderActiveClosedClaimStatusHelpLink() {
-    const whatShouldOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_disag(claimID, claimType, attributes.phase))
-      navigateTo('WhatDoIDoIfDisagreement', {
-        claimID: claimID,
-        claimType: claimType,
-        claimStep: attributes.phase,
-      })
-    }
+  const whatShouldOnPress = () => {
+    logAnalyticsEvent(Events.vama_claim_disag(claimID, attributes.claimType, attributes.phase))
+    navigateTo('WhatDoIDoIfDisagreement', {
+      claimID: claimID,
+      claimType: attributes.claimType,
+      claimStep: attributes.phase,
+    })
+  }
 
+  const whyWeCombineOnPress = () => {
+    logAnalyticsEvent(Events.vama_claim_why_combine(claimID, attributes.claimType, attributes.phase))
+    navigateTo('ConsolidatedClaimsNote')
+  }
+
+  function renderActiveClosedClaimStatusHelpLink() {
     if (claimType === ClaimTypeConstants.CLOSED) {
       return (
         <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
@@ -201,7 +243,16 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       )
     }
 
-    return <></>
+    return (
+      <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
+        <LinkWithAnalytics
+          type="custom"
+          text={t('claimDetails.whyWeCombineNew')}
+          testID={t('claimDetails.whyWeCombineNew')}
+          onPress={whyWeCombineOnPress}
+        />
+      </Box>
+    )
   }
 
   return (
@@ -226,7 +277,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
               {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-            {getActiveClosedClaimInformationAlertOrSubmitButton()}
+          </Box>
+          {getActiveClosedClaimInformationAlertOrSubmitButton()}
+          <Box mx={theme.dimensions.condensedMarginBetween}>
             <Box mt={theme.dimensions.standardMarginBetween}>
               <SegmentedControl
                 labels={controlLabels}
