@@ -53,7 +53,7 @@ VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on ou
 ### Get added to Figma
 
 1. Go to [figma.com](https://www.figma.com/) and [create a Figma account](https://help.figma.com/hc/en-us/articles/360039811114-Create-a-Figma-account)
-2. In the ##va-mobile-app-shared-systems channel in Slack, ping a Figma admin (currently Jen Ecker and Jessica Woodin) requesting to be added.
+2. In the [#va-mobile-app-shared-systems](https://dsva.slack.com/archives/C05HF9ULKJ4) channel in Slack, ping a Figma admin (currently Jen Ecker and Jessica Woodin) requesting to be added.
 3. Receive the invite via email and accept the invitation.
 4. Boom, you’re in!
 
