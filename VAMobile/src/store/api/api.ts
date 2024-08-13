@@ -187,6 +187,11 @@ const call = async function <T>(
       throw { status: response.status, endpoint, text, json }
     }
 
+    // Guard against responses that can't be parsed as JSON
+    if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
+      return
+    }
+
     // No errors found, return the response
     return await response.json()
   } else {

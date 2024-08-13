@@ -150,6 +150,7 @@ export const Events = {
     step_expanded: boolean,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_current_step: number,
   ): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -160,6 +161,7 @@ export const Events = {
         step_expanded,
         claim_step_change,
         claim_submitted_date,
+        claim_current_step,
       },
     }
   },
