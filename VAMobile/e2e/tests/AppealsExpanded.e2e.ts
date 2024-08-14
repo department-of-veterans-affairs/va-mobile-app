@@ -24,7 +24,7 @@ export const AppealsExpandedIdConstants = {
   HLR_DECISION_APPEAL_ID:
     'Higher level review decision appeal Received July 12, 2008 Moved to this step on December 21, 2011',
   HLR_RECIEVED_APPEAL_ID:
-    'Higher level review recieved appeal Received July 11, 2008 Moved to this step on December 20, 2011',
+    'Higher level review received appeal Received July 11, 2008 Moved to this step on December 20, 2011',
   SC_RECIEVED_APPEAL_ID:
     'Supplemental claim received appeal Received July 10, 2008 Moved to this step on December 19, 2011',
   BVA_DECISION_EFFECTUATION_APPEAL_ID:

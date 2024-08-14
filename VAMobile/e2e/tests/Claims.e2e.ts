@@ -7,8 +7,8 @@ import {
   openBenefits,
   openClaims,
   openClaimsHistory,
-  resetInAppReview,
   scrollToIDThenTap,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
@@ -53,6 +53,7 @@ export const ClaimsE2eIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -279,15 +280,11 @@ describe(':ios: Claims Screen', () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
-    await expect(element(by.text('Thank you. VA recieved your claim')))
+    await expect(element(by.text('Thank you. VA received your claim')))
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 2', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.id('Step 2. Initial review. Current step. Step 1 complete.'))).toExist()
     await expect(
@@ -327,10 +324,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should verify details of claim on step 4', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)))
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
@@ -353,10 +346,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should tap on the closed tab', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await element(by.text('Closed')).tap()
   })
 
