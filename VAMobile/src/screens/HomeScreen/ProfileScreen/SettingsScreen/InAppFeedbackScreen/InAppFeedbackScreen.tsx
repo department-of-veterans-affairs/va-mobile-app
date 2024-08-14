@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
-import RadioGroupModal from 'components/RadioGroupModal'
+import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -19,7 +17,6 @@ type InAppFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'InAppFeedb
 function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const currentScreenName = useNavigationState((state) => state.routes[state.routes.length - 1]).name
   const [taskCompleted, setTaskCompleted] = useState('')
   const [satisfaction, setSatisfaction] = useState('')
 
