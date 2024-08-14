@@ -3,7 +3,14 @@ import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
 import { HomeE2eIdConstants } from './HomeScreen.e2e'
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openMessages,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export async function getDateWithTimeZone(dateString: string) {
   const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
@@ -78,6 +85,7 @@ let messageCollapsed
 let messageExpanded
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openMessages()
@@ -190,9 +198,6 @@ describe('Messages Screen', () => {
   })
 
   it('verify appointment message details', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
@@ -233,9 +238,6 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on and then cancel the move option', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Cancel')).tap()
@@ -457,7 +459,6 @@ describe('Messages Screen', () => {
   })
 
   it('navigate to the sent folder and select the first message', async () => {
-    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
@@ -499,10 +500,6 @@ describe('Messages Screen', () => {
   })
 
   it('click the newest message in drafts folder', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
     await waitFor(element(by.text('Test: Test Inquiry')))
@@ -552,12 +549,6 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
-    await expect(element(by.text('Drafts (3)'))).toExist()
-    await element(by.text('Drafts (3)')).tap()
     await waitFor(element(by.text('Test: Test Inquiry')))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
