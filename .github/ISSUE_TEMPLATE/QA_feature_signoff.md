@@ -10,6 +10,7 @@ assignees:
 Before the [name of feature] feature merges to develop, QA needs to complete these tasks:
 
 - [ ] All implementation tickets tested
+- [ ] Accessibility testing has been performed
 - [ ] All bugs found during testing have been prioritized
 - [ ] MVP-necessary bug fixes tested
 - [ ] Finished "just before merge to develop" testing - including feature happy path and merge conflict resolution spot-testing 

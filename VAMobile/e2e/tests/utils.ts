@@ -144,6 +144,19 @@ export async function scrollToThenTap(text: string, containerID: string) {
   await element(by.text(text)).tap()
 }
 
+/* Scroll down inside container until specified testID is found, then tap the testID
+ *
+ * @param scrollToID - testID of the item to scroll to
+ * @param containerID - testID of the container
+ */
+export async function scrollToIDThenTap(scrollToID: string, containerID: string) {
+  await waitFor(element(by.id(scrollToID)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+  await element(by.id(scrollToID)).tap()
+}
+
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -228,7 +241,6 @@ export async function checkImages(screenshotPath) {
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',
-    customSnapshotIdentifier: 'customSnapshotName',
   })
 }
 
@@ -342,13 +354,11 @@ export async function openDeveloperScreen() {
 /**
  * Going back on android and iOS
  */
-export async function backButton() {
+export async function backButton(backButtonName: string) {
   if (device.getPlatform() === 'android') {
     await device.pressBack() // Android only
   } else {
-    await element(by.traits(['button']))
-      .atIndex(0)
-      .tap()
+    await element(by.text(backButtonName)).atIndex(0).tap()
   }
 }
 

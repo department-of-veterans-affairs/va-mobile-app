@@ -51,7 +51,7 @@ type FeatureToggleValues = {
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   cernerTrueForDemo: false,
-  claimPhaseExpansion: false,
+  claimPhaseExpansion: true,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,

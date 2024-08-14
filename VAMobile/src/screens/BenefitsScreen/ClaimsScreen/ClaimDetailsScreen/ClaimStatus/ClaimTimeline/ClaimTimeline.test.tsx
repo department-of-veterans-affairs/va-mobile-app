@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { RefObject } from 'react'
+import { ScrollView } from 'react-native'
 
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim } from '../../../claimData'
 import ClaimTimeline from './ClaimTimeline'
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimTimeline', () => {
   const { attributes, id } = claim
@@ -17,23 +22,22 @@ context('ClaimTimeline', () => {
     const props = {
       attributes: { ...claim.attributes, eventsTimeline: events },
       claimID: id,
+      scrollViewRef: {} as RefObject<ScrollView>,
     }
 
     render(<ClaimTimeline {...props} />)
   }
 
-  it('initializes correctly', () => {
+  it('shows full list of steps', () => {
     initializeTestInstance(false)
     expect(screen.queryByText('You have 2 file requests from VA')).toBeFalsy()
-    expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
-    expect(screen.getByTestId('Step 2 of 5. completed. Initial review June 6, 2019')).toBeTruthy()
-    expect(
-      screen.getByTestId('Step 3 of 5. current. Evidence gathering, review, and decision July 16, 2020'),
-    ).toBeTruthy()
-    expect(screen.getByTestId('Step 4 of 5.  Preparation for notification')).toBeTruthy()
-    expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
-
-    initializeTestInstance(true)
-    expect(screen.getAllByText('You have 2 file requests from VA')).toBeTruthy()
+    expect(screen.getByLabelText('Step 1. Claim received. Complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 2. Initial review. Complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 3. Evidence gathering. Current step. Step 1 through 2 complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 4. Evidence review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 5. Rating. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 6. Preparing decision letter. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 7. Final review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
   })
 })

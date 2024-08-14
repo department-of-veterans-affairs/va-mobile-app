@@ -53,18 +53,18 @@ function SyncScreen({}: SyncScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     {
-      enabled: loggedIn && downtimeWindowsFetched,
+      enabled: !loggingOut && loggedIn && downtimeWindowsFetched,
     },
   )
-  useClaimsAndAppeals('ACTIVE', { enabled: loggedIn && downtimeWindowsFetched })
-  useFolders({ enabled: loggedIn && downtimeWindowsFetched })
-  usePrescriptions({ enabled: loggedIn && downtimeWindowsFetched })
-  useFacilitiesInfo({ enabled: loggedIn })
+  useClaimsAndAppeals('ACTIVE', { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useFolders({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useFacilitiesInfo({ enabled: !loggingOut && loggedIn })
 
   // Prefetch data for `About you` section
-  useServiceHistory({ enabled: loggedIn && downtimeWindowsFetched })
-  useDisabilityRating({ enabled: loggedIn && downtimeWindowsFetched })
-  useLetterBeneficiaryData({ enabled: loggedIn && downtimeWindowsFetched })
+  useServiceHistory({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useDisabilityRating({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useLetterBeneficiaryData({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 

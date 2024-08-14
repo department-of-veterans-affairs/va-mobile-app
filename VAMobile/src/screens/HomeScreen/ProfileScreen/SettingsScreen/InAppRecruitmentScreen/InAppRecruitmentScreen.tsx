@@ -64,17 +64,16 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
           listOfText={[
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.1'),
-              a11yLabel: t('secureMessaging.replyHelp.ifYouThink') + t('secureMessaging.replyHelp.call911OrGoTo'),
             },
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.2'),
-              a11yLabel: t('secureMessaging.replyHelp.ifYouThink') + t('secureMessaging.replyHelp.call911OrGoTo'),
             },
             {
               text: t('inAppRecruitment.makeAppBetter.bullet.3'),
               a11yLabel: a11yLabelVA(t('inAppRecruitment.makeAppBetter.bullet.3')),
             },
           ]}
+          paragraphSpacing={true}
         />
         <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
         <Box mt={theme.dimensions.standardMarginBetween}>

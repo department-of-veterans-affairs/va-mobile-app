@@ -20,7 +20,7 @@ export type SecureMessagingMessageAttributes = {
   sentDate: string
   senderId: number
   senderName: string
-  recipientId: number
+  recipientId?: number
   recipientName: string
   readReceipt?: string
 }

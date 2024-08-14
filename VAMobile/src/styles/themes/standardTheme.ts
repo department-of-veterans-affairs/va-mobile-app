@@ -4,7 +4,6 @@ import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
-import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
@@ -33,7 +32,6 @@ export const setColorScheme = (scheme: ColorSchemeTypes): void => {
     mode: scheme,
     typography: buildTypography(colorScheme),
   }
-  changeNavigationBarColor(scheme === 'dark' ? '#121212' : '#EFEFEF', scheme === 'dark' ? true : false, true)
 }
 
 export const getTheme = (): VATheme => {
