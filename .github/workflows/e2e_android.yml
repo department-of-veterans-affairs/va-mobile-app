@@ -251,8 +251,7 @@ jobs:
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled()) 
-#&& github.event_name == 'schedule'
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
@@ -265,25 +264,25 @@ jobs:
         with:
             path: VAMobile/e2e/test_reports
 
-      # - name: Inform Slack
-      #   id: inform_slack
-      #   shell: bash
-      #   run: |
-      #     if grep -rq "<failure>" .; then
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #         -H 'Content-type: application/json' \
-      #         --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-      #         https://slack.com/api/chat.postMessage|
-      #         jq -r '.ts')
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #     else
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #       -H 'Content-type: application/json' \
-      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-      #       https://slack.com/api/chat.postMessage|
-      #       jq -r '.ts')
-      #     fi
+      - name: Inform Slack
+        id: inform_slack
+        shell: bash
+        run: |
+          if grep -rq "<failure>" .; then
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+          else
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          fi
 
       - name: Find failing tests
         id: failing_tests
@@ -314,7 +313,7 @@ jobs:
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
           if [[ "$old_body" != '' ]]; then
             ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
-            new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on iOS: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
+            new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on Android: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
             echo "$new_body"
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
             gh issue edit $ticket_number -b "$new_body"

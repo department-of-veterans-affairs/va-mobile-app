@@ -225,8 +225,7 @@ jobs:
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled()) 
-##&& github.event_name == 'schedule'
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-ios, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
@@ -239,27 +238,27 @@ jobs:
         with:
             path: VAMobile/e2e/test_reports
 
-      # - name: Inform Slack
-      #   id: inform_slack
-      #   shell: bash
-      #   run: |
-      #     if grep -rq "<failure>" .; then
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #         -H 'Content-type: application/json' \
-      #         --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-      #         https://slack.com/api/chat.postMessage|
-      #         jq -r '.ts')
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #       echo "DATE_OF_ISSUE=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
-      #       echo TEST_FAILURE="true" >> $GITHUB_OUTPUT
-      #     else
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #       -H 'Content-type: application/json' \
-      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-      #       https://slack.com/api/chat.postMessage|
-      #       jq -r '.ts')
-      #     fi
+      - name: Inform Slack
+        id: inform_slack
+        shell: bash
+        run: |
+          if grep -rq "<failure>" .; then
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            echo "DATE_OF_ISSUE=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
+            echo TEST_FAILURE="true" >> $GITHUB_OUTPUT
+          else
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          fi
 
       - name: Find failing tests
         id: failing_tests
