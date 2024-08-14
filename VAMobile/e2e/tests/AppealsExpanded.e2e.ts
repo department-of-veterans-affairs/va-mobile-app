@@ -6,7 +6,7 @@ import {
   openBenefits,
   openClaims,
   openClaimsHistory,
-  resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 let i = 0
@@ -129,6 +129,7 @@ const expectedInformation = [
 ]
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -185,39 +186,7 @@ describe('AppealsExpanded', () => {
     })
 
     it('should close ' + key, async () => {
-      i++
       await element(by.text('Claims')).tap()
-      if (i % 6 === 0) {
-        await resetInAppReview()
-        await openBenefits()
-        await openClaims()
-        await openClaimsHistory()
-        if (i >= 4 && i <= 13) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 14 && i <= 23) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 24 && i <= 33) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 34) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        }
-      }
     })
   }
 })
