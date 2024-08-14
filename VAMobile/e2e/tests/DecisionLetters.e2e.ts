@@ -1,7 +1,14 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAppReview } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openClaimsHistory,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const DecisionLettersE2eIDConstants = {
   CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
@@ -12,6 +19,7 @@ export const DecisionLettersE2eIDConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -20,10 +28,6 @@ beforeAll(async () => {
 
 describe('Decision Letters Screen', () => {
   it('should tap on the closed tab', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await element(by.text('Closed')).tap()
   })
 

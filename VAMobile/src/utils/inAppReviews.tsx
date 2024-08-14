@@ -31,13 +31,6 @@ export const registerReviewEvent = async (): Promise<void> => {
 
       if (days > IN_APP_REVIEW_INTERVAL_DAYS && lastReviewVersion !== versionName) {
         await callReviewAPI(versionName)
-      } else {
-        const days = DateTime.fromMillis(parseInt(lastReview, 10)).diffNow('days').days
-        const lastReviewVersion = await AsyncStorage.getItem(STORAGE_LAST_REVIEW_VERSION)
-
-        if (days > IN_APP_REVIEW_INTERVAL_DAYS && lastReviewVersion !== versionName) {
-          await callReviewAPI(versionName)
-        }
       }
     }
   }
