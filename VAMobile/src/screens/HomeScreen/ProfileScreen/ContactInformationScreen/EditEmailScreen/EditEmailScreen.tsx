@@ -15,7 +15,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -93,7 +92,6 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
 
     const mutateOptions = {
       onSuccess: () => {
-        registerReviewEvent()
         showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
       },
       onError: (error: unknown) => {

@@ -5,6 +5,7 @@ import { ClaimData } from 'api/types'
 import { TextArea, TextView, VABulletList } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { isDisabilityCompensationClaim } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 
 type ClosedClaimStatusDetailsProps = {
@@ -35,10 +36,14 @@ function ClosedClaimStatusDetails({ claim, claimType, letterIsDownloadable }: Cl
     ? t('claimDetails.weDecidedDownload', { date: completedDate })
     : t('claimDetails.weDecidedMailed', { date: completedDate })
 
+  const stepDefinition = isDisabilityCompensationClaim(claim.attributes.claimTypeCode)
+    ? t('claimDetails.step8of8')
+    : t('claimDetails.step5of5')
+
   return (
     <TextArea>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('claimDetails.step8of8')}
+        {stepDefinition}
       </TextView>
       <TextView paragraphSpacing={true}>{letterText}</TextView>
 

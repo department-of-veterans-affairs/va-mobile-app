@@ -353,7 +353,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               {details[0]}
             </TextView>
             <Box mt={marginTop}>
-              <VABulletList listOfText={[details[1], details[2]]} />
+              <VABulletList listOfText={[details[1], details[2]]} paragraphSpacing={true} />
             </Box>
           </Box>
         )
@@ -378,7 +378,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               {details[1]}
             </TextView>
             <Box mt={marginTop}>
-              <VABulletList listOfText={bulletList} />
+              <VABulletList listOfText={bulletList} paragraphSpacing={true} />
             </Box>
           </Box>
         )

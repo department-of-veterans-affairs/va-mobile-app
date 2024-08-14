@@ -1,15 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openBenefits,
-  openClaims,
-  openClaimsHistory,
-  resetInAppReview,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAppReview } from './utils'
 
 export const DecisionLettersE2eIDConstants = {
   CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
@@ -20,8 +12,6 @@ export const DecisionLettersE2eIDConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await loginToDemoMode()
   await openBenefits()
   await openClaims()

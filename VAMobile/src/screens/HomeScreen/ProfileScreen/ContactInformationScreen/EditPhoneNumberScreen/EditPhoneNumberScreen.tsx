@@ -17,7 +17,6 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject, showSnackBar } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
@@ -123,7 +122,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     const save = (): void => {
       const mutateOptions = {
         onSuccess: () => {
-          registerReviewEvent()
           showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
         },
         onError: (error: unknown) =>

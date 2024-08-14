@@ -23,7 +23,8 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { darkTheme } from 'styles/themes/colorSchemes'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -31,7 +32,7 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
-function VeteranStatusScreen({}: VeteranStatusScreenProps) {
+function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
@@ -47,6 +48,10 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const combinedPercentText = ratingIsDefined
     ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
     : undefined
+
+  useBeforeNavBackListener(navigation, () => {
+    registerReviewEvent()
+  })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })

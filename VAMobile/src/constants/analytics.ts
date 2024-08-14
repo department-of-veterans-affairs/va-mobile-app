@@ -123,6 +123,16 @@ export const Events = {
       name: 'vama_cerner_alert_exp',
     }
   },
+  vama_be_af_refresh: (): Event => {
+    return {
+      name: 'vama_be_af_refresh',
+    }
+  },
+  vama_be_af_shown: (): Event => {
+    return {
+      name: 'vama_be_af_shown',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -140,6 +150,7 @@ export const Events = {
     step_expanded: boolean,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_current_step: number,
   ): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -150,6 +161,7 @@ export const Events = {
         step_expanded,
         claim_step_change,
         claim_submitted_date,
+        claim_current_step,
       },
     }
   },
