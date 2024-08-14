@@ -102,6 +102,11 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
+  const onFeedback = () => {
+    logAnalyticsEvent(Events.vama_feedback_page_entered())
+    navigateTo('InAppFeedback')
+  }
+
   const items: Array<SimpleListItemObj> = _.flatten([
     { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity') },
     // don't even show the biometrics option if it's not available
@@ -109,10 +114,11 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     {
-      text: t('inAppRecruitment.giveFeedback'),
-      a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'),
+      text: t('inAppRecruitment.userResearch'),
+      a11yHintText: t('inAppRecruitment.userResearch.a11yHint'),
       onPress: () => navigateTo('InAppRecruitment'),
     },
+    { text: t('inAppFeedback.title'), a11yHintText: t('inAppFeedback.a11yHint'), onPress: onFeedback },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 

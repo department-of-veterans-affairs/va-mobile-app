@@ -49,7 +49,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
   }
 
   return (
-    <LargePanel title={t('inAppRecruitment.giveFeedback')} rightButtonText={t('close')}>
+    <LargePanel title={t('inAppRecruitment.userResearch')} rightButtonText={t('close')}>
       <Box
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
