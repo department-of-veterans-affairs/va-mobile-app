@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview, toggleRemoteConfigFlag, CommonE2eIdConstants, } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openContactInfo, openProfile, toggleRemoteConfigFlag } from './utils'
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
@@ -171,11 +171,6 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
 export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should open the ' + phoneType + ' phone number', async () => {
-    if (phoneType === 'Mobile') {
-      await resetInAppReview()
-      await openProfile()
-      await openContactInfo()
-    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
@@ -437,9 +432,6 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
 
   it('should open the email address', async () => {
-    await resetInAppReview()
-    await openProfile()
-    await openContactInfo()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
