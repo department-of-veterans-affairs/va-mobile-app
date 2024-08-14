@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, resetInAppReview, toggleRemoteConfigFlag } from './utils'
+import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
 var navigationValue = process.argv[7]
 
@@ -293,8 +293,6 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await device.launchApp({ newInstance: false })
   await loginToDemoMode()
 })
