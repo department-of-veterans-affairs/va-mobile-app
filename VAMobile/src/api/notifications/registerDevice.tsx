@@ -1,23 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
-import {
-  LoadPushNotificationData,
-  PUSH_APP_NAME,
-  PushOsName,
-  PushRegistration,
-  PushRegistrationResponse,
-  RegisterDeviceParams,
-} from 'api/types'
+import { PUSH_APP_NAME, PushOsName, PushRegistration, PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { put } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getDeviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
-
-import { notificationKeys } from './queryKeys'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
 export const DEVICE_ENDPOINT_SID = '@store_device_endpoint_sid'
@@ -53,13 +44,9 @@ const registerDevice = async (
  * Returns a mutation for regestering users device for push notifications
  */
 export const useRegisterDevice = () => {
-  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: registerDevice,
     onSettled: async (data, error, variables) => {
-      const notificationData = queryClient.getQueryData(notificationKeys.notificationData) as LoadPushNotificationData
-      notificationData.deviceToken = variables.deviceToken
-      queryClient.setQueryData(notificationKeys.notificationData, notificationData)
       setAnalyticsUserProperty(UserAnalytics.vama_uses_notifications(variables.deviceToken ? true : false))
     },
     onSuccess: async (response, variables) => {

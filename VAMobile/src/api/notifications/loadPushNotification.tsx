@@ -11,7 +11,6 @@ import { notificationKeys } from './queryKeys'
 const loadPushNotification = async (): Promise<LoadPushNotificationData | undefined> => {
   const previousData = queryClient.getQueryData(notificationKeys.settings) as LoadPushNotificationData
   return {
-    deviceToken: previousData?.deviceToken,
     initialUrl: previousData?.initialUrl,
     tappedForegroundNotification: previousData?.tappedForegroundNotification || false,
   }

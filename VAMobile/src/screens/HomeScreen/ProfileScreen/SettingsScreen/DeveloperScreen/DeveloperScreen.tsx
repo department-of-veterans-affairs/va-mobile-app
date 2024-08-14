@@ -9,7 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { DEVICE_ENDPOINT_SID, useLoadPushNotification } from 'api/notifications'
+import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import {
   Box,
   ButtonDecoratorType,
@@ -107,9 +107,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { data: notificationData } = useLoadPushNotification()
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
+  const [deviceToken, setDeviceToken] = useState<string>('')
+  getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
   Object.keys(tokenInfo).forEach((key) => {
@@ -325,7 +326,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Device Token</TextView>
-            <TextView selectable={true}>{notificationData?.deviceToken}</TextView>
+            <TextView selectable={true}>{deviceToken}</TextView>
           </TextArea>
         </Box>
       </Box>

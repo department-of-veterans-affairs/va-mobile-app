@@ -63,7 +63,6 @@ export type LoadPushPreferencesData = {
 
 export type LoadPushNotificationData = {
   tappedForegroundNotification?: boolean
-  deviceToken?: string
   initialUrl?: string
 }
 

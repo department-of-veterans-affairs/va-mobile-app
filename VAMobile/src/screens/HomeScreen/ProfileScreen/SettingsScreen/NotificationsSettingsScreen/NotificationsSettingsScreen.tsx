@@ -12,8 +12,8 @@ import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
 import {
   DEVICE_ENDPOINT_SID,
+  DEVICE_TOKEN_KEY,
   notificationKeys,
-  useLoadPushNotification,
   useLoadPushPreferences,
   useLoadSystemNotificationsSettings,
   useRegisterDevice,
@@ -53,7 +53,6 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     error: hasError,
     refetch: refetchPushPreferences,
   } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
-  const { data: notificationData } = useLoadPushNotification()
   const { data: systemNotificationData, isFetching: loadingSystemNotification } = useLoadSystemNotificationsSettings({
     enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
   })
@@ -79,8 +78,9 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
 
   const fetchPreferences = async () => {
     const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+    const deviceToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
 
-    if (endpoint_sid && notificationData?.deviceToken) {
+    if (endpoint_sid && deviceToken) {
       refetchPushPreferences()
     } else {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
