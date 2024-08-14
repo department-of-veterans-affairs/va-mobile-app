@@ -364,23 +364,8 @@ export async function backButton(backButtonName: string) {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  if (
-    (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
-      AFFeature === 'WG_HowDoIUpdate' ||
-      AFFeature === 'WG_PreferredName' ||
-      AFFeature === 'WG_HowWillYou' ||
-      AFFeature === 'WG_GenderIdentity' ||
-      AFFeature === 'WG_WhatToKnow' ||
-      AFFeature === 'WG_EditAddress' ||
-      AFFeature === 'WG_EditPhoneNumber' ||
-      AFFeature === 'WG_EditEmail') &&
-    AFUseCase === 'DenyAccess'
-  ) {
-    await resetInAppReview()
-  } else {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
-  }
+  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
