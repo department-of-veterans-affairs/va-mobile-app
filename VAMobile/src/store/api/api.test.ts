@@ -13,13 +13,23 @@ jest.mock('store/slices', () => {
 
 context('api', () => {
   it('should handle GET requests', async () => {
-    fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ foo: 'test' }) })
+    const responseBlob = new Blob([JSON.stringify({ foo: 'test' }, null, 2)])
+    const response = new Response(responseBlob, {
+      status: 200,
+      headers: { 'Content-Type': contentTypes.applicationJson },
+    })
+    fetch.mockResolvedValue(response)
     const result = await get<Types.UserData>('/foo')
     expect(result).toEqual(expect.objectContaining({ foo: 'test' }))
   })
 
   it('should handle GET request params', async () => {
-    fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ foo: 'test' }) })
+    const responseBlob = new Blob([JSON.stringify({ foo: 'test' }, null, 2)])
+    const response = new Response(responseBlob, {
+      status: 200,
+      headers: { 'Content-Type': contentTypes.applicationJson },
+    })
+    fetch.mockResolvedValue(response)
     const result = await get('/foo', { p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
     expect(result).toEqual(expect.objectContaining({ foo: 'test' }))
     // query params should be properly escaped
@@ -43,7 +53,12 @@ context('api', () => {
   })
 
   it('should handle POST correctly if contentType not specified', async () => {
-    fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ res: 'response' }) })
+    const responseBlob = new Blob([JSON.stringify({ res: 'response' }, null, 2)])
+    const response = new Response(responseBlob, {
+      status: 200,
+      headers: { 'Content-Type': contentTypes.applicationJson },
+    })
+    fetch.mockResolvedValue(response)
     const result = await post('/foo', { p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
 
     // Default content type should be application/json
@@ -59,7 +74,12 @@ context('api', () => {
   })
 
   it('should handle POST correctly if contentType is specified to be multipart/form-data', async () => {
-    fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ res: 'response' }) })
+    const responseBlob = new Blob([JSON.stringify({ res: 'response' }, null, 2)])
+    const response = new Response(responseBlob, {
+      status: 200,
+      headers: { 'Content-Type': contentTypes.applicationJson },
+    })
+    fetch.mockResolvedValue(response)
     const formData = new FormData()
 
     const result = await post('/foo', { formData }, contentTypes.multipart)
@@ -73,5 +93,13 @@ context('api', () => {
       expect.objectContaining({ method: 'POST', body, headers }),
     )
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
+  })
+
+  it("returns undefined when the Content-Type of a successful response is not 'application/json'", async () => {
+    const responseBlob = new Blob(['Success'])
+    const response = new Response(responseBlob, { status: 200, headers: { 'Content-Type': 'text/html' } })
+    fetch.mockResolvedValue(response)
+    const result = await get<Types.UserData>('/foo')
+    expect(result).toEqual(undefined)
   })
 })
