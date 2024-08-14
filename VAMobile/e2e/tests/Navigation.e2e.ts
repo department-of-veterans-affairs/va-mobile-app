@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
 var navigationValue = process.argv[7]
 
@@ -177,14 +177,6 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       }
     }
   } else {
-    if (
-      navigationArray[2] === 'Claim type' ||
-      navigationArray[2] === 'Prescriptions' ||
-      navigationArray[2] === 'Appeal details' ||
-      navigationArray[2] === 'File requests'
-    ) {
-      await resetInAppReview()
-    }
     await navigateToPage(key, navigationDicValue)
     await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
     for (let i = 0; i < appTabs.length; i++) {
@@ -294,6 +286,7 @@ const navigateToPage = async (key, navigationDicValue) => {
 
 beforeAll(async () => {
   await device.launchApp({ newInstance: false })
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
 })
 
