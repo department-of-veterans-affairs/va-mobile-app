@@ -1,4 +1,4 @@
-name: Add User from Issues
+name: '[Utils] Onboarding'
 
 on:
   issues:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Step 1
-        run: echo ${{ github.event.issue.body }}
+        run: echo ${{ github.event.issue }}
   # initiate-onboarding:
   #   if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
   #   name: Start Slack thread
