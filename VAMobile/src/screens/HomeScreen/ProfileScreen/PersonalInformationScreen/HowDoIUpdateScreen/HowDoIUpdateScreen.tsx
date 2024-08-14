@@ -36,23 +36,20 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))}
-          paragraphSpacing={true}>
+          my={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.ifEnrolledInVAHealth')}
         </TextView>
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <LinkWithAnalytics
-            type="url"
-            url={WEBVIEW_URL_FACILITY_LOCATOR}
-            text={t('howDoIUpdate.findYourNearestVAMedicalCenter')}
-            a11yLabel={a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter'))}
-            a11yHint={t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint')}
-          />
-        </Box>
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_FACILITY_LOCATOR}
+          text={t('howDoIUpdate.findYourNearestVAMedicalCenter')}
+          a11yLabel={a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter'))}
+          a11yHint={t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint')}
+        />
         <TextView
           variant="MobileBody"
           accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')}
-          mt={theme.dimensions.standardMarginBetween}
-          paragraphSpacing={true}>
+          my={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
         </TextView>
         <ClickToCallPhoneNumber
@@ -70,18 +67,22 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView
+          variant="MobileBody"
+          mt={theme.dimensions.condensedMarginBetween}
+          mb={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.name.legalName')}
         </TextView>
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <LinkWithAnalytics
-            type="url"
-            url={WEBVIEW_URL_CHANGE_LEGAL_NAME}
-            text={t('howDoIUpdate.learnToChangeLegalName')}
-            a11yLabel={a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName'))}
-          />
-        </Box>
-        <TextView variant="MobileBody" paragraphSpacing={true} mt={theme.dimensions.standardMarginBetween}>
+        <LinkWithAnalytics
+          type="url"
+          url={WEBVIEW_URL_CHANGE_LEGAL_NAME}
+          text={t('howDoIUpdate.learnToChangeLegalName')}
+          a11yLabel={a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName'))}
+        />
+        <TextView
+          variant="MobileBody"
+          mt={theme.dimensions.standardMarginBetween}
+          mb={theme.dimensions.condensedMarginBetween}>
           {t('howDoIUpdate.name.incorrectRecords')}
         </TextView>
         {renderVAMedicalCenterSection()}
@@ -95,7 +96,7 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('howDoIUpdate.dateOfBirth.body')}
         </TextView>
         {renderVAMedicalCenterSection()}

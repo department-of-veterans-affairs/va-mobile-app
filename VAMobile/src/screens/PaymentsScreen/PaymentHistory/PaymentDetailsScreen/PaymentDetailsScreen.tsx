@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
@@ -8,6 +9,7 @@ import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 
@@ -18,6 +20,12 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  useFocusEffect(
+    React.useCallback(() => {
+      registerReviewEvent()
+    }, []),
+  )
 
   const placeHolder = t('noneNoted')
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions

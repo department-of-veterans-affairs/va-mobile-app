@@ -85,7 +85,7 @@ _Note: Remote push notifications will only work on a physical device with a non-
 
 ### Local testing
 
-If you're not able to test your deep link via remote push notifications, or would like a quicker way of testing, you can test your deep link locally with either [uri-scheme](https://github.com/expo/expo-cli/tree/main/packages/uri-scheme) or [Detox](../../../QA/Automation/index.md#detox-our-ui-automation-tool).
+If you're not able to test your deep link via remote push notifications, or would like a quicker way of testing, you can test your deep link locally with either [uri-scheme](https://github.com/expo/expo-cli/tree/main/packages/uri-scheme) or [Detox](../../../QA/QualityAssuranceProcess/Automation/index.md#detox-our-ui-automation-tool).
 
 #### uri-scheme
 
