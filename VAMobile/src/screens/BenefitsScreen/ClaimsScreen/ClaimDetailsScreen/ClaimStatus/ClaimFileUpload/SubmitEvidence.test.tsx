@@ -1,10 +1,6 @@
 import React from 'react'
 
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { ClaimEventData } from 'api/types'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import * as api from 'store/api'
-import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor, when } from 'testUtils'
+import { context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 
 import SubmitEvidence from './SubmitEvidence'
 
