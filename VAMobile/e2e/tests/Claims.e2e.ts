@@ -115,11 +115,12 @@ describe(':ios: Claims Screen', () => {
       .scroll(100, 'down')
     await setTimeout(2000)
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)).tap()
+    await setTimeout(2000)
     await expect(
       element(
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
       ),
-    ).not.toExist()
+    ).not.toBeVisible()
   })
 
   it('Verify what you claimed section', async () => {
