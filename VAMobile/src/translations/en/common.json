@@ -1405,6 +1405,7 @@
   "statusDefinition.transferred": "A prescription moved to VA’s new electronic health record. This prescription may also be described as “Discontinued” on medication lists from your healthcare team. Take your medications as prescribed by your healthcare team.",
   "statusDefinition.unknown": "The status cannot be determined. Contact your VA care team when you need more of this VA prescription. A prescription stopped by a VA provider. It is no longer available to be filled.",
   "stepXofY": "Step {{current}} of {{total}}",
+  "submit": "Submit",
   "success": "Success",
   "sync.progress.signin": "Signing you in...",
   "sync.progress.signout": "Signing you out...",
