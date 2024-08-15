@@ -171,6 +171,8 @@ export const Events = {
     claim_step: number,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_type_code: string,
+    is_disability_comp_claim: boolean,
   ): Event => {
     return {
       name: 'vama_claim_details_open',
@@ -180,6 +182,8 @@ export const Events = {
         claim_step,
         claim_step_change,
         claim_submitted_date,
+        claim_type_code,
+        is_disability_comp_claim,
       },
     }
   },
