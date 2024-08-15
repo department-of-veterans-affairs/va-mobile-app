@@ -13,6 +13,7 @@ import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
+import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -44,7 +45,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     filesList,
   )
   const confirmAlert = useDestructiveActionSheet()
-  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
@@ -69,7 +70,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         {
           text: t('fileUpload.cancelUpload'),
           onPress: () => {
-            navigation.dispatch(e.data.action)
+            navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
           },
         },
       ],
@@ -78,38 +79,59 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
     }
-  }, [filesUploadedSuccess, claim, navigateTo])
+  }, [filesUploadedSuccess, claimID, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
-    setRequest((prevRequest) => {
-      return {
-        ...prevRequest,
+    if (originalRequest) {
+      setRequest({
+        ...originalRequest,
         documentType,
-      }
-    })
-  }, [documentType])
+      })
+    }
+  }, [documentType, originalRequest])
 
   const onUploadConfirmed = () => {
-    logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_3(
+        claim?.id || '',
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'file',
+      ),
+    )
     const mutateOptions = {
       onMutate: () => {
-        logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'file'))
+        logAnalyticsEvent(
+          Events.vama_claim_upload_start(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'file',
+          ),
+        )
       },
       onSuccess: () => {
         setFilesList([])
         setFilesUploadedSuccess(true)
-        logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'file'))
+        logAnalyticsEvent(
+          Events.vama_claim_upload_compl(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'file',
+          ),
+        )
         showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
       },
       onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
     }
-    const params: UploadFileToClaimParamaters = { claimID, request, files: filesList }
+    const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)
   }
 
@@ -118,8 +140,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
         claim?.id || '',
-        request.trackedItemId || null,
-        request.type,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
         'file',
         totalSize,
         filesList.length,
@@ -144,14 +166,27 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const onDocumentTypeChange = (selectedType: string) => {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
     logAnalyticsEvent(
-      Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'file', typeLabel),
+      Events.vama_evidence_type(
+        claim?.id || '',
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'file',
+        typeLabel,
+      ),
     )
     setDocumentType(selectedType)
   }
 
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
-      logAnalyticsEvent(Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
+      logAnalyticsEvent(
+        Events.vama_evidence_conf(
+          claim?.id || '',
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'file',
+        ),
+      )
     }
     setConfirmed(isChecked)
   }
@@ -193,7 +228,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       title={t('fileUpload.uploadFiles')}
       onLeftButtonPress={() => {
         logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'),
+          Events.vama_evidence_cancel_2(
+            claim?.id || '',
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'file',
+          ),
         )
         navigation.dispatch(StackActions.pop(2))
       }}>
@@ -201,11 +241,15 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
         <>
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {request && (
+            <TextView
+              variant="MobileBodyBold"
+              accessibilityRole="header"
+              mb={theme.dimensions.contentMarginBottom}
+              mx={theme.dimensions.gutter}>
               {request.displayName}
             </TextView>
-          </Box>
+          )}
           <FileList files={[fileUploaded]} onDelete={onFileDelete} />
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper

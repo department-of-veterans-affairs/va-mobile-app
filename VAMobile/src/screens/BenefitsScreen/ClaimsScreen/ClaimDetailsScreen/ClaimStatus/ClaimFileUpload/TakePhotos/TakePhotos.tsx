@@ -11,7 +11,7 @@ import { AlertBox, Box, LinkWithAnalytics, TextArea, TextView } from 'components
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
-import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -31,7 +31,6 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const { claimID, request } = route.params
-  const { displayName } = request
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
@@ -68,8 +67,15 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   )
 
   const onCancel = () => {
-    logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigation.goBack()
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_1(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+      ),
+    )
+    navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
   }
 
   return (
@@ -94,12 +100,14 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
       </Box>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('fileUpload.uploadFileUsingCamera', { displayName })}
+          {request
+            ? t('fileUpload.uploadFileUsingCamera', { displayName: request.displayName || '' })
+            : t('fileUpload.uploadFileUsingCameraSubmitEvidence')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.takePhotoEachPage')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
+        <TextView variant="MobileBody" {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
           {t('fileUpload.ifMoreThan10.1')}
           <TextView variant="MobileBodyBold">
             {t('fileUpload.ifMoreThan10.2')}
@@ -108,11 +116,15 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
             </TextView>
           </TextView>
         </TextView>
-        <TextView variant="MobileBodyBold">{t('fileUpload.maxFileSize')}</TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('fileUpload.maxFileSize')}
+        </TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
           {t('fileUpload.50MB')}
         </TextView>
-        <TextView variant="MobileBodyBold">{t('fileUpload.acceptedFileTypes')}</TextView>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('fileUpload.acceptedFileTypes')}
+        </TextView>
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
       </TextArea>
       <Box

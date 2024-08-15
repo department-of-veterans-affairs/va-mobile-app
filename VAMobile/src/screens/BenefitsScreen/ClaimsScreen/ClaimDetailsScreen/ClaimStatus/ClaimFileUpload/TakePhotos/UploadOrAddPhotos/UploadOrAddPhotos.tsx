@@ -25,7 +25,7 @@ import {
 import { SnackbarMessages } from 'components/SnackBar'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
-import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -67,7 +67,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   )
   const confirmAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
-  const [request, setRequest] = useState<ClaimEventData>(originalRequest)
+  const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
@@ -94,7 +94,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         {
           text: t('fileUpload.cancelUpload'),
           onPress: () => {
-            navigation.dispatch(e.data.action)
+            navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
           },
         },
       ],
@@ -103,40 +103,64 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
     }
-  }, [filesUploadedSuccess, claim, navigateTo])
+  }, [filesUploadedSuccess, claimID, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [confirmed, setConfirmed] = useState(false)
 
   useEffect(() => {
-    setRequest((prevRequest) => {
-      return {
-        ...prevRequest,
+    if (originalRequest) {
+      setRequest({
+        ...originalRequest,
         documentType,
-      }
-    })
-  }, [documentType])
+      })
+    }
+  }, [documentType, originalRequest])
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
-      Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+      Events.vama_evidence_cont_3(
+        claim?.id || '',
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+      ),
     )
     const mutateOptions = {
       onMutate: () => {
-        logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'photo'))
+        logAnalyticsEvent(
+          Events.vama_claim_upload_start(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'photo',
+          ),
+        )
       },
       onSuccess: () => {
         setImagesList([])
         setFilesUploadedSuccess(true)
-        logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'photo'))
+        logAnalyticsEvent(
+          Events.vama_claim_upload_compl(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'photo',
+          ),
+        )
         showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
       },
       onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
     }
-    const params: UploadFileToClaimParamaters = { claimID, request, files: imagesList || [] }
+    const params: UploadFileToClaimParamaters = {
+      claimID,
+      documentType: documentType,
+      request,
+      files: imagesList || [],
+    }
     uploadFileToClaim(params, mutateOptions)
   }
 
@@ -145,8 +169,8 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
         claim?.id || '',
-        request.trackedItemId || null,
-        request.type,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
         'photo',
         totalSize || 0,
         imagesList?.length || 0,
@@ -172,7 +196,13 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const onDocumentTypeChange = (selectedType: string) => {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
     logAnalyticsEvent(
-      Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'photo', typeLabel),
+      Events.vama_evidence_type(
+        claim?.id || '',
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+        typeLabel,
+      ),
     )
     setDocumentType(selectedType)
   }
@@ -180,7 +210,12 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
       logAnalyticsEvent(
-        Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+        Events.vama_evidence_conf(
+          claim?.id || '',
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'photo',
+        ),
       )
     }
     setConfirmed(isChecked)
@@ -324,7 +359,12 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       title={t('fileUpload.uploadPhotos')}
       onLeftButtonPress={() => {
         logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+          Events.vama_evidence_cancel_2(
+            claim?.id || '',
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'photo',
+          ),
         )
         navigation.dispatch(StackActions.pop(2))
       }}>
@@ -343,9 +383,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
-            {request.displayName}
-          </TextView>
+          {request && (
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
+              {request.displayName}
+            </TextView>
+          )}
           <Box
             backgroundColor={'contentBox'}
             borderTopWidth={1}

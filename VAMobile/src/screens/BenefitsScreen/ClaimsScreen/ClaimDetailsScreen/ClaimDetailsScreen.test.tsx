@@ -31,6 +31,7 @@ context('ClaimDetailsScreen', () => {
     claim?: Partial<ClaimData>,
   ): void => {
     when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
+    when(featureEnabled).calledWith('submitEvidenceExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [

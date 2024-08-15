@@ -67,24 +67,27 @@ export type BenefitsStackParamList = {
   }
   TakePhotos: {
     claimID: string
-    request: ClaimEventData
+    request?: ClaimEventData
     focusOnSnackbar?: boolean
   }
   SelectFile: {
     claimID: string
-    request: ClaimEventData
+    request?: ClaimEventData
     focusOnSnackbar?: boolean
+  }
+  SubmitEvidence: {
+    claimID: string
   }
   UploadOrAddPhotos: {
     claimID: string
-    request: ClaimEventData
     firstImageResponse: ImagePickerResponse
+    request?: ClaimEventData
   }
   UploadFile: {
     claimID: string
-    request: ClaimEventData
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
+    request?: ClaimEventData
   }
 }
 

@@ -6,8 +6,9 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, ChildTemplate, TextArea, TextView } from 'components'
+import { Box, BoxProps, FullScreenSubtask, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
+import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -70,9 +71,11 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <ChildTemplate
-      backLabel={t('request.backLabel')}
-      backLabelOnPress={navigation.goBack}
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={() => {
+        navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+      }}
       title={displayName || ''}
       testID="fileRequestDetailsID">
       <Box mb={contentMarginBottom} flex={1}>
@@ -129,10 +132,18 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
                 buttonType={ButtonVariants.Secondary}
               />
             </Box>
+            <Box mt={theme.dimensions.condensedMarginBetween}>
+              <Button
+                onPress={navigation.goBack}
+                label={t('back')}
+                testID={t('back')}
+                buttonType={ButtonVariants.Secondary}
+              />
+            </Box>
           </Box>
         </Box>
       )}
-    </ChildTemplate>
+    </FullScreenSubtask>
   )
 }
 
