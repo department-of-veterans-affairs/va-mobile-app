@@ -114,7 +114,7 @@ describe(':ios: Claims Screen', () => {
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
     await setTimeout(2000)
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)).tap()
+    await element(by.text('Step 2')).tap()
     await setTimeout(2000)
     await expect(
       element(
