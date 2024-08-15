@@ -405,9 +405,9 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
-                {details[4]}
-              </TextView>
+            </TextView>
+            <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+              {details[4]}
               <TextView variant="MobileBody">.</TextView>
             </TextView>
           </Box>
