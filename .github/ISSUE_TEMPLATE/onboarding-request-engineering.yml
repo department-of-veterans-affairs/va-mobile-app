@@ -47,7 +47,7 @@ body:
 - type: input
   id: vaoctopo
   attributes:
-    label: Who is the OCTO Product Owner for this person\'s team? 
+    label: Who is the OCTO Product Owner for this person's team? 
     description: Add a PO helps us triage requests, and know who the main point of contact is.
   validations:
     required: true
@@ -55,7 +55,7 @@ body:
 - type: input
   id: slackchannel
   attributes:
-    label: What is the main Slack channel for this person\'s team primary team?
+    label: What is the main Slack channel for this person's team primary team?
     description: Slack channels help when we need to contact the rest of the team or easily check in.
     placeholder: '#va-mobile-app'
   validations:
