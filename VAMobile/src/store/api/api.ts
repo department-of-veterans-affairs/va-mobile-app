@@ -192,7 +192,7 @@ const call = async function <T>(
       if (endpoint === '/v0/user/logged-in') {
         return
       } else {
-        logAnalyticsEvent(Events.vama_9385_api_contentType(endpoint, response.headers.get('Content-Type') || ''))
+        logAnalyticsEvent(Events.vama_9385_api_cType(endpoint, response.headers.get('Content-Type') || ''))
       }
     }
 

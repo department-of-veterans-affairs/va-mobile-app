@@ -6,9 +6,9 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  vama_9385_api_contentType: (endpoint: string, contentType: string): Event => {
+  vama_9385_api_cType: (endpoint: string, contentType: string): Event => {
     return {
-      name: 'vama_9385_api_contentType',
+      name: 'vama_9385_api_cType',
       params: {
         endpoint: endpoint,
         contentType: contentType,
