@@ -113,7 +113,8 @@ describe(':ios: Claims Screen', () => {
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)).atIndex(0).tap()
+    await setTimeout(2000)
+    await element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)).tap()
     await expect(
       element(
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),

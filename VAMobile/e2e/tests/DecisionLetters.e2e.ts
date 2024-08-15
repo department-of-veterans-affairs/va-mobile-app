@@ -21,8 +21,6 @@ export const DecisionLettersE2eIDConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
