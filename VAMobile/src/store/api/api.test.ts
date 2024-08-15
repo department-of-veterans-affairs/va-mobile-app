@@ -99,7 +99,7 @@ context('api', () => {
     const responseBlob = new Blob(['Success'])
     const response = new Response(responseBlob, { status: 200, headers: { 'Content-Type': 'text/html' } })
     fetch.mockResolvedValue(response)
-    const result = await get<Types.UserData>('/foo')
+    const result = await post('/user/logged-in')
     expect(result).toEqual(undefined)
   })
 })
