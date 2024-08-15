@@ -148,7 +148,7 @@ function BenefitsStackScreen() {
         component={DisabilityRatingsScreen}
         options={{ headerShown: false }}
       />
-      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={FULLSCREEN_SUBTASK_OPTIONS} />
       <BenefitsScreenStack.Screen
         name="SubmitEvidence"
         component={SubmitEvidence}
@@ -157,7 +157,7 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen
         name="FileRequestDetails"
         component={FileRequestDetails}
-        options={{ headerShown: false }}
+        options={FULLSCREEN_SUBTASK_OPTIONS}
       />
       <BenefitsScreenStack.Screen
         name="GenericLetter"
