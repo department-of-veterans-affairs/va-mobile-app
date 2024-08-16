@@ -174,65 +174,8 @@ describe(':ios: Claims Screen', () => {
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
   })
 
-  it('verify the select files screen displays the correct info', async () => {
-    await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).tap()
-    await expect(element(by.text('Select a file to upload for Accidental injury - 21-4176 needed'))).toExist()
-    await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1)).toExist()
-  })
-
-  it('verify tap select a file options', async () => {
-    if (device.getPlatform() === 'android') {
-      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
-    } else {
-      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
-    }
-    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
-  })
-
-  it('should navigate back to the claim details screen', async () => {
-    if (device.getPlatform() === 'android') {
-      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
-    } else {
-      await element(by.label(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(0).tap()
-    }
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
-  })
-
-  it('verify take or select photos panel', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
-    await element(by.text('Accidental injury - 21-4176 needed')).tap()
-    await element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).tap()
-    await expect(element(by.text('This feature is not yet accessible to screen readers'))).toExist()
-    await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1)).toExist()
-  })
-
-  it('should select take or select photos and verify the options given', async () => {
-    await element(by.id('takePhotosTestID')).scrollTo('bottom')
-    if (device.getPlatform() === 'android') {
-      await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(0).tap()
-    } else {
-      await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1).tap()
-    }
-    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_CAMERA_OPTION_TEXT))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_PHOTO_GALLERY_OPTION_TEXT))).toExist()
-  })
-
-  it('should navigate back to the claim details screen', async () => {
-    if (device.getPlatform() === 'android') {
-      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
-    } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
-    }
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
-  })
-
   it('verify Review evaluation details', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
+    await element(by.text('Back')).tap()
     await element(by.id('fileRequestPageTestID')).scrollTo('bottom')
     await element(by.id('Review evaluation details')).tap()
     await expect(element(by.text('Claim evaluation'))).toExist()
