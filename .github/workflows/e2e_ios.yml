@@ -216,7 +216,7 @@ jobs:
         if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
 
       - name: Fail workflow if needed(View e2e step for details)
