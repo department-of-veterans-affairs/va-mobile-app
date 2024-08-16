@@ -431,6 +431,10 @@ export type ClaimsAndAppealsList = {
     updatedAt: string
     displayTitle: string
     decisionLetterSent: boolean
+    phase?: number | string
+    claimTypeCode?: string
+    documentsNeeded?: boolean
+    developmentLetterSent?: boolean
   }
 }
 
@@ -472,6 +476,7 @@ export type ClaimAttributesData = {
   currentPhaseBack: boolean
   requestedDecision: boolean
   claimType: string
+  claimTypeCode: string
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string

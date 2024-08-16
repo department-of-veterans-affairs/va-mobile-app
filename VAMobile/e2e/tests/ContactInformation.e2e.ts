@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview } from './utils'
+import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview, toggleRemoteConfigFlag, CommonE2eIdConstants, } from './utils'
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
@@ -402,6 +402,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
   })
 }
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openContactInfo()

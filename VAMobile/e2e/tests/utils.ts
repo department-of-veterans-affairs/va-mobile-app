@@ -56,6 +56,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
+  IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
 }
 
 /** Log the automation into demo mode
@@ -144,6 +145,19 @@ export async function scrollToThenTap(text: string, containerID: string) {
   await element(by.text(text)).tap()
 }
 
+/* Scroll down inside container until specified testID is found, then tap the testID
+ *
+ * @param scrollToID - testID of the item to scroll to
+ * @param containerID - testID of the container
+ */
+export async function scrollToIDThenTap(scrollToID: string, containerID: string) {
+  await waitFor(element(by.id(scrollToID)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+  await element(by.id(scrollToID)).tap()
+}
+
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -228,7 +242,6 @@ export async function checkImages(screenshotPath) {
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',
-    customSnapshotIdentifier: 'customSnapshotName',
   })
 }
 

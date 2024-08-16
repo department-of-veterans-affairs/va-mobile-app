@@ -8,6 +8,7 @@ import {
   loginToDemoMode,
   openHealth,
   openPrescriptions,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const PrescriptionsE2eIdConstants = {
@@ -48,6 +49,7 @@ let tempPath
 const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openPrescriptions()
