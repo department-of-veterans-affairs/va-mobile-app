@@ -152,7 +152,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
           {getRefillVAHealthButton()}
           <Box mb={contentMarginBottom}>
             <TextArea>
-              <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
+              <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
               <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
                 {rxNumber}
               </TextView>

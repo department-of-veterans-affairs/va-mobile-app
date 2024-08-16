@@ -49,7 +49,7 @@ function NotEnrolledSM() {
           accessible={true}
           mx={theme.dimensions.gutter}
           mb={standardMarginBetween}>
-          <TextView variant="MobileBodyBold">{t('notEnrolledSM.title')}</TextView>
+          <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
           <TextArea>

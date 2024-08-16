@@ -612,7 +612,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
+      <TextView variant="BitterBoldHeading" accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
       <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">

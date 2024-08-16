@@ -82,7 +82,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
               {displayDate}
             </TextView>
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{displayName}</TextView>
+              <TextView variant="BitterBoldHeading">{displayName}</TextView>
             </Box>
             <TextView variant="MobileBodyBold" selectable={true}>
               {t('vaccines.details.typeAndDosage')}

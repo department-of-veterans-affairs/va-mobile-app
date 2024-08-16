@@ -15,7 +15,7 @@ function NoClaimsAndAppealsAccess() {
   return (
     <VAScrollView {...testIdProps('Claims: No-claims-and-appeals-page')}>
       <Box mb={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold">{t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
+        <TextView variant="BitterBoldHeading">{t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
       </Box>
       <TextArea>
         <TextView

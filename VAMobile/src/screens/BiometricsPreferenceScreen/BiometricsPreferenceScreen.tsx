@@ -45,7 +45,7 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
     <VAScrollView {...testIdProps('Biometrics-preference-page')}>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
-          variant="BitterHeading"
+          variant="BitterBoldHeading"
           accessibilityRole="header"
           {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}

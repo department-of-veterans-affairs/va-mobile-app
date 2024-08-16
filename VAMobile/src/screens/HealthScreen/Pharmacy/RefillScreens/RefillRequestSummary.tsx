@@ -175,7 +175,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
     return (
       <>
         <Box>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
             {t('prescriptions.refillRequestSummary')}
           </TextView>
         </Box>

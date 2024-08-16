@@ -52,7 +52,7 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
             {formatDateUtc(date, 'MMMM d, yyyy')}
           </TextView>
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-            <TextView variant="MobileBodyBold">{paymentType}</TextView>
+            <TextView variant="BitterBoldHeading">{paymentType}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.amount')}
