@@ -159,7 +159,7 @@ describe(':ios: Claims Screen', () => {
 
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
-    await expect(element(by.label('You have 3 file requests from V-A'))).toExist()
+    await expect(element(by.text('You have 3 file requests from VA'))).toExist()
     await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
