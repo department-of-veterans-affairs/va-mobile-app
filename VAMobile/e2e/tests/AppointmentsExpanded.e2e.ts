@@ -310,7 +310,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify confirmed CC appt', async () => {
     if (pastAppointment) {
-      await openHealth()
+      await element(by.text('Health')).atIndex(0).tap()
       await openAppointments()
       await waitFor(element(by.text('Upcoming')))
         .toExist()
@@ -629,7 +629,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -721,7 +721,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -819,7 +819,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -920,7 +920,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
