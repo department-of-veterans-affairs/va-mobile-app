@@ -17,52 +17,55 @@ export let overrideRemote = false
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
   | 'appointmentRequests'
-  | 'prescriptions'
-  | 'testFeature'
-  | 'inAppRecruitment'
-  | 'inAppUpdates'
-  | 'preferredNameGenderWaygate'
-  | 'haptics'
-  | 'homeScreenPrefetch'
-  | 'whatsNewUI'
-  | 'decisionLettersWaygate'
-  | 'patientCheckIn'
-  | 'patientCheckInWaygate'
   | 'cernerTrueForDemo'
   | 'claimPhaseExpansion'
+  | 'decisionLettersWaygate'
+  | 'haptics'
+  | 'homeScreenPrefetch'
+  | 'inAppRecruitment'
+  | 'inAppReview'
+  | 'inAppUpdates'
+  | 'patientCheckIn'
+  | 'patientCheckInWaygate'
+  | 'preferredNameGenderWaygate'
+  | 'prescriptions'
+  | 'testFeature'
+  | 'whatsNewUI'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
-  prescriptions: boolean
-  testFeature: boolean
-  inAppRecruitment: boolean
-  inAppUpdates: boolean
-  preferredNameGenderWaygate: boolean
-  haptics: boolean
-  homeScreenPrefetch: boolean
-  whatsNewUI: boolean
-  decisionLettersWaygate: boolean
-  patientCheckIn: boolean
-  patientCheckInWaygate: boolean
   cernerTrueForDemo: boolean
   claimPhaseExpansion: boolean
+  decisionLettersWaygate: boolean
+  haptics: boolean
+  homeScreenPrefetch: boolean
+  inAppRecruitment: boolean
+  inAppReview: boolean
+  inAppUpdates: boolean
+  patientCheckIn: boolean
+  patientCheckInWaygate: boolean
+  preferredNameGenderWaygate: boolean
+  prescriptions: boolean
+  testFeature: boolean
+  whatsNewUI: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
-  prescriptions: true,
-  testFeature: false,
-  inAppRecruitment: false,
-  inAppUpdates: true,
-  preferredNameGenderWaygate: true,
+  cernerTrueForDemo: false,
+  claimPhaseExpansion: true,
+  decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
-  whatsNewUI: true,
-  decisionLettersWaygate: true,
+  inAppRecruitment: false,
+  inAppReview: true,
+  inAppUpdates: true,
   patientCheckIn: false,
   patientCheckInWaygate: true,
-  cernerTrueForDemo: false,
-  claimPhaseExpansion: false,
+  preferredNameGenderWaygate: true,
+  prescriptions: true,
+  testFeature: false,
+  whatsNewUI: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults

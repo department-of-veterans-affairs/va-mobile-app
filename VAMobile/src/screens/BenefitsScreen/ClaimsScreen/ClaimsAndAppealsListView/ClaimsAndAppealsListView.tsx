@@ -19,6 +19,7 @@ import {
 import { ClaimType } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -88,10 +89,30 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
           mt: margin,
           mb: margin,
         })
+      } else if (attributes.documentsNeeded) {
+        const margin = theme.dimensions.condensedMarginBetween
+        textLines.push({
+          text: t('claims.moreInfoNeeded'),
+          textTag: { labelType: LabelTagTypeConstants.tagYellow },
+          mt: margin,
+          mb: margin,
+        })
       }
 
       textLines.push({ text: t('claimDetails.receivedOn', { date: formatDateMMMMDDYYYY(attributes.dateFiled) }) })
 
+      if (type === ClaimOrAppealConstants.claim) {
+        const isDisabilityClaim = isDisabilityCompensationClaim(attributes.claimTypeCode || '')
+        const current = isDisabilityClaim ? attributes.phase : getUserPhase(Number(attributes.phase))
+        const total = isDisabilityClaim ? 8 : 5
+        const stepXofY = t('stepXofY', { current, total })
+
+        const translationStepString = isDisabilityClaim ? '8step' : '5step'
+        const stepName = t(`claimPhase.${translationStepString}.heading.phase${current}`)
+
+        textLines.push({ text: `${stepXofY}: ${stepName}` })
+      }
+      textLines.push({ text: t('movedToThisStepOn', { date: formatDateMMMMDDYYYY(attributes.updatedAt) }) })
       const position = (page - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
       listItems.push({

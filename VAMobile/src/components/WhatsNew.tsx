@@ -102,7 +102,7 @@ export const WhatsNew = () => {
           secondaryButton={{ label: t('whatsNew.dismissMessage'), onPress }}
           analytics={{ onExpand: expandCollapsible, onCollapse: closeCollapsible }}>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            {bullets.length ? <VABulletList listOfText={bullets} /> : undefined}
+            {bullets.length ? <VABulletList listOfText={bullets} paragraphSpacing={true} /> : undefined}
           </Box>
         </AlertWithHaptics>
       </Box>

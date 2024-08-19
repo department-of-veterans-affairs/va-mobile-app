@@ -1,24 +1,24 @@
-import React, { useRef } from 'react'
+import React, { RefObject, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimData } from 'api/types'
-import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
+import DEPRECATED_ClaimTimeline from './ClaimTimeline/DEPRECATED_ClaimTimeline'
+import ClosedClaimStatusDetails from './ClosedClaimInfo/ClosedClaimStatusDetails'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
 /** props for the ClaimStatus component */
@@ -27,60 +27,55 @@ type ClaimStatusProps = {
   claim: ClaimData
   /** indicates either open or closed claim */
   claimType: ClaimType
+  /** ref to parent scrollView, used for auto scroll */
+  scrollViewRef: RefObject<ScrollView>
 }
 
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
-function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
-  const theme = useTheme()
+function ClaimStatus({ claim, claimType, scrollViewRef }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: decisionLetterData } = useDecisionLetters()
   const sentEvent = useRef(false)
 
+  const letterIsDownloadable = Boolean(
+    featureEnabled('decisionLettersWaygate') &&
+      userAuthorizedServices?.decisionLetters &&
+      claim.attributes.decisionLetterSent &&
+      (decisionLetterData?.data.length || 0) > 0,
+  )
+
   function renderActiveClaimStatusDetails() {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
-    const whyWeCombineOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_why_combine(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      navigateTo('ConsolidatedClaimsNote')
-    }
-
-    const whatShouldOnPress = () => {
-      logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      navigateTo('WhatDoIDoIfDisagreement', {
-        claimID: claim.id,
-        claimType: claim.attributes.claimType,
-        claimStep: claim.attributes.phase,
-      })
-    }
-
     if (isActiveClaim) {
-      const detailsFAQListItems: Array<SimpleListItemObj> = [
-        {
-          text: t('claimDetails.whyWeCombine'),
-          onPress: whyWeCombineOnPress,
-          testId: a11yLabelVA(t('claimDetails.whyWeCombine')),
-        },
-        {
-          text: t('claimDetails.whatShouldIDoIfDisagree'),
-          onPress: whatShouldOnPress,
-          testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')),
-        },
-      ]
-
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
-          {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
+        <Box>
+          {claim && featureEnabled('claimPhaseExpansion') && (
+            <ClaimTimeline attributes={claim.attributes} claimID={claim.id} scrollViewRef={scrollViewRef} />
+          )}
+          {claim && !featureEnabled('claimPhaseExpansion') && (
+            <DEPRECATED_ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
+          )}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
-          <Box>
-            <SimpleList items={detailsFAQListItems} />
-          </Box>
+          {featureEnabled('claimPhaseExpansion') && (
+            <TextArea>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {t('claimDetails.whatYouHaveClaimed')}
+              </TextView>
+              {claim.attributes.contentionList && claim.attributes.contentionList.length > 0 ? (
+                <VABulletList listOfText={claim.attributes.contentionList} />
+              ) : (
+                <TextView variant="MobileBody">{t('noneNoted')}</TextView>
+              )}
+            </TextArea>
+          )}
         </Box>
       )
     }
@@ -88,7 +83,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
     return <></>
   }
 
-  function renderClosedClaimStatusDetails() {
+  function deprecated_renderClosedClaimStatusDetails() {
     const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
 
     if (isClosedClaim) {
@@ -106,12 +101,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (
-        featureEnabled('decisionLettersWaygate') &&
-        userAuthorizedServices?.decisionLetters &&
-        claim.attributes.decisionLetterSent &&
-        (decisionLetterData?.data.length || 0) > 0
-      ) {
+      if (letterIsDownloadable) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -121,16 +111,14 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       }
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box>
           <TextArea>
-            <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
-            </Box>
-            <Box {...testIdProps(letterAvailable)} accessible={true}>
-              <TextView variant="MobileBody" paragraphSpacing={showButton ? true : false}>
-                {letterAvailable}
-              </TextView>
-            </Box>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
+              {claimDecidedOn}
+            </TextView>
+            <TextView variant="MobileBody" accessible={true} paragraphSpacing={showButton}>
+              {letterAvailable}
+            </TextView>
             {showButton && (
               <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />
             )}
@@ -143,10 +131,13 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   }
 
   return (
-    <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')} testID="claimStatusDetailsID">
+    <Box testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
-      {renderClosedClaimStatusDetails()}
-      <NeedHelpData />
+      {featureEnabled('claimPhaseExpansion') ? (
+        <ClosedClaimStatusDetails claim={claim} claimType={claimType} letterIsDownloadable={letterIsDownloadable} />
+      ) : (
+        deprecated_renderClosedClaimStatusDetails()
+      )}
     </Box>
   )
 }

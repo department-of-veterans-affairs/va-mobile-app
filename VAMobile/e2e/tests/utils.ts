@@ -56,6 +56,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
+  IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
 }
 
 /** Log the automation into demo mode
@@ -144,6 +145,19 @@ export async function scrollToThenTap(text: string, containerID: string) {
   await element(by.text(text)).tap()
 }
 
+/* Scroll down inside container until specified testID is found, then tap the testID
+ *
+ * @param scrollToID - testID of the item to scroll to
+ * @param containerID - testID of the container
+ */
+export async function scrollToIDThenTap(scrollToID: string, containerID: string) {
+  await waitFor(element(by.id(scrollToID)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+  await element(by.id(scrollToID)).tap()
+}
+
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -228,7 +242,6 @@ export async function checkImages(screenshotPath) {
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',
-    customSnapshotIdentifier: 'customSnapshotName',
   })
 }
 
@@ -342,13 +355,11 @@ export async function openDeveloperScreen() {
 /**
  * Going back on android and iOS
  */
-export async function backButton() {
+export async function backButton(backButtonName: string) {
   if (device.getPlatform() === 'android') {
     await device.pressBack() // Android only
   } else {
-    await element(by.traits(['button']))
-      .atIndex(0)
-      .tap()
+    await element(by.text(backButtonName)).atIndex(0).tap()
   }
 }
 
@@ -493,8 +504,8 @@ const navigateToFeature = async (featureNavigationArray) => {
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (
-      featureNavigationArray[j] === 'Why does VA sometimes combine claims?' ||
-      featureNavigationArray[j] === "What should I do if I disagree with VA's decision on my disability claim?"
+      featureNavigationArray[j] === 'Find out why we sometimes combine claims' ||
+      featureNavigationArray[j] === 'Learn what to do if you disagree with our decision'
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
@@ -508,6 +519,12 @@ const navigateToFeature = async (featureNavigationArray) => {
         await element(by.text('Request Refill ')).tap()
       }
     } else if (featureNavigationArray[j] === 'Contact us') {
+      await waitFor(element(by.text(featureNavigationArray[j])))
+        .toBeVisible()
+        .whileElement(by.id('homeScreenID'))
+        .scroll(200, 'down')
+      await element(by.text(featureNavigationArray[j])).tap()
+    } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] !== 'Appointments') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))

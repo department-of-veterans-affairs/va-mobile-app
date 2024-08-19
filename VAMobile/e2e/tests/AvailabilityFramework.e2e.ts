@@ -51,6 +51,10 @@ const AFNavigationForIndividual = [
   ['SettingsScreen.e2e', 'WG_NotificationsSettings', 'Profile', 'Settings', 'Notifications'],
   ['SettingsScreen.e2e', 'WG_InAppRecruitment', 'Profile', 'Settings', 'Give feedback'],
   ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact us'],
+  ['HomeScreen.e2e', 'WG_SecureMessaging', 'Messages'],
+  ['HomeScreen.e2e', 'WG_PrescriptionHistory', 'Prescriptions'],
+  ['HomeScreen.e2e', 'WG_ClaimsHistoryScreen', 'Claims'],
+  ['HomeScreen.e2e', 'WG_Appointments', 'Appointments'],
   ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'Talk to the Veterans Crisis Line now'],
   ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],
@@ -134,7 +138,7 @@ const AFNavigationForIndividual = [
     'Claims',
     'Claims history',
     'Received December 05, 2021',
-    'Why does VA sometimes combine claims?',
+    'Find out why we sometimes combine claims',
   ],
   [
     'Claims.e2e',
@@ -142,8 +146,9 @@ const AFNavigationForIndividual = [
     'Benefits',
     'Claims',
     'Claims history',
-    'Received December 05, 2021',
-    "What should I do if I disagree with VA's decision on my disability claim?",
+    'Closed',
+    'Received January 01, 2021',
+    'Learn what to do if you disagree with our decision',
   ],
 ]
 

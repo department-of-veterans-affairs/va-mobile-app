@@ -1,16 +1,23 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openContactInfo,
+  openProfile,
+  resetInAppReview,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
   HOME_ADDRESS_ID: 'Home address Add your home address',
-  HOME_PHONE_ID: 'homePhoneTestID',
-  WORK_PHONE_ID: 'workPhoneTestID',
-  MOBILE_PHONE_ID: 'mobilePhoneTestID',
-  EMAIL_ADDRESS_ID: 'emailAddressTestID',
+  HOME_PHONE_ID: 'homePhone',
+  WORK_PHONE_ID: 'workPhone',
+  MOBILE_PHONE_ID: 'mobilePhone',
+  EMAIL_ADDRESS_ID: 'emailAddress',
   HOW_WE_USE_TEXT: 'How we use your contact information',
   COUNTRY_PICKER_ID: 'countryPickerTestID',
   STREET_ADDRESS_LINE_1_ID: 'streetAddressLine1TestID',
@@ -52,6 +59,24 @@ export async function updateAddress() {
     .withTimeout(4000)
 }
 
+export async function fillHomeAddressFields() {
+  await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+  await expect(element(by.text('United States'))).toExist()
+  await element(by.text('United States')).tap()
+  await element(by.text('Done')).tap()
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id('EditAddressTestID'))
+    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
+  await element(by.text('Arizona')).tap()
+  await element(by.text('Done')).tap()
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
+  await element(by.id('EditAddressTestID')).scrollTo('top')
+}
+
 export async function validateAddresses(addressID: string, addressType: string) {
   it('update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
@@ -66,21 +91,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     if (addressType === 'Home') {
-      await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-      await expect(element(by.text('United States'))).toExist()
-      await element(by.text('United States')).tap()
-      await element(by.text('Done')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
-        .toBeVisible()
-        .whileElement(by.id('EditAddressTestID'))
-        .scroll(100, 'down', NaN, 0.8)
-      await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
-      await element(by.text('Arizona')).tap()
-      await element(by.text('Done')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
-      await element(by.id('EditAddressTestID')).scrollTo('top')
+      await fillHomeAddressFields()
     }
     await updateAddress()
   })
@@ -122,18 +133,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
       .toBeVisible()
       .withTimeout(4000)
     if (addressType === 'Home') {
-      await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-      await expect(element(by.text('United States'))).toExist()
-      await element(by.text('United States')).tap()
-      await element(by.text('Done')).tap()
-      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
-        .toBeVisible()
-        .whileElement(by.id('EditAddressTestID'))
-        .scroll(100, 'down', NaN, 0.8)
-      await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
-      await element(by.text('Arizona')).tap()
-      await element(by.text('Done')).tap()
-      await element(by.id('EditAddressTestID')).scrollTo('top')
+      await fillHomeAddressFields()
       await updateAddress()
     }
   })
@@ -409,6 +409,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
   })
 }
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openContactInfo()

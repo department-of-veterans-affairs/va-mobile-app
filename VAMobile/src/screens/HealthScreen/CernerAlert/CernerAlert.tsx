@@ -27,12 +27,12 @@ function CernerAlert() {
   }, [cernerFacilities.length])
 
   if (!facilitiesInfo) {
-    return null
+    return <></>
   }
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
-    return null
+    return <></>
   }
 
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
@@ -83,15 +83,17 @@ function CernerAlert() {
   }
 
   return (
-    <AlertWithHaptics
-      variant="warning"
-      expandable={true}
-      focusOnError={false}
-      header={headerText}
-      headerA11yLabel={headerA11yLabel}
-      analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
-      {accordionContent()}
-    </AlertWithHaptics>
+    <Box mb={theme.dimensions.condensedMarginBetween}>
+      <AlertWithHaptics
+        variant="warning"
+        expandable={true}
+        focusOnError={false}
+        header={headerText}
+        headerA11yLabel={headerA11yLabel}
+        analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
+        {accordionContent()}
+      </AlertWithHaptics>
+    </Box>
   )
 }
 

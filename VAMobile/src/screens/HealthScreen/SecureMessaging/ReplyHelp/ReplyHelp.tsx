@@ -45,6 +45,7 @@ function ReplyHelp() {
               a11yLabel: t('secureMessaging.replyHelp.ifYoureInCrisis') + t('secureMessaging.replyHelp.connectWithOur'),
             },
           ]}
+          paragraphSpacing={true}
         />
 
         <VeteransCrisisLineNumbers />
@@ -58,6 +59,7 @@ function ReplyHelp() {
                 a11yLabel: t('secureMessaging.replyHelp.ifYouThink') + t('secureMessaging.replyHelp.call911OrGoTo'),
               },
             ]}
+            paragraphSpacing={true}
           />
         </Box>
         <ClickToCallPhoneNumber

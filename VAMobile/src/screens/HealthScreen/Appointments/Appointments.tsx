@@ -85,7 +85,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     })
     if (serviceError) {
       return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           <AlertWithHaptics
             variant="error"
             header={t('appointments.appointmentsStatusSomeUnavailable')}
@@ -129,7 +129,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
           error={appointmentsHasError}
         />
       ) : (
-        <Box flex={1} justifyContent="flex-start">
+        <Box>
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
@@ -139,14 +139,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          {CernerAlert ? (
-            <Box mb={theme.dimensions.contentMarginBottom}>
-              <CernerAlert />
-            </Box>
-          ) : (
-            <></>
-          )}
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+          <CernerAlert />
+          <Box mb={theme.dimensions.contentMarginBottom}>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}

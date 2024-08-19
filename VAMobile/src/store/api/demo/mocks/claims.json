@@ -10,7 +10,11 @@
             "completed": false,
             "dateFiled": "2021-07-20",
             "updatedAt": "2021-07-20",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 2,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -21,7 +25,11 @@
             "completed": false,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-05-05",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 3,
+            "claimTypeCode": "010LCOMP",
+            "documentsNeeded": true,
+            "developmentLetterSent": false
           }
         },
         {
@@ -32,7 +40,11 @@
             "completed": false,
             "dateFiled": "2019-03-22",
             "updatedAt": "2019-07-18",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 3,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -43,7 +55,11 @@
             "completed": false,
             "dateFiled": "2016-01-01",
             "updatedAt": "2016-07-30",
-            "displayTitle": "Dependency"
+            "displayTitle": "Dependency",
+            "phase": 7,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -54,7 +70,11 @@
             "completed": false,
             "dateFiled": "2021-12-04",
             "updatedAt": "2021-12-04",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 8,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -65,7 +85,11 @@
             "completed": false,
             "dateFiled": "2021-12-05",
             "updatedAt": "2021-12-05",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 1,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -494,7 +518,11 @@
             "decisionLetterSent": true,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-04-09",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 8,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         }
       ],
@@ -536,6 +564,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "claimTypeCode": "010LCOMP",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -3774,15 +3803,6 @@
         "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
-          {
-            "trackedItemId": null,
-            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
-            "documentType": null,
-            "filename": "Jesse_Gray_600461886_526.pdf",
-            "uploadDate": "2023-12-04",
-            "type": "other_documents_list",
-            "date": "2023-12-04"
-          },
           {
             "type": "phase1",
             "date": "2023-12-04"

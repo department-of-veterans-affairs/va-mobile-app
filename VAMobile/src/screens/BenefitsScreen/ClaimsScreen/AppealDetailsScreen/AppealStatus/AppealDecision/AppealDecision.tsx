@@ -56,7 +56,7 @@ function AppealDecision({ issues, aoj, ama, boardDecision }: AppealDecisionProps
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold">{header}</TextView>
         <TextView variant="MobileBody">{subText}</TextView>
-        <VABulletList listOfText={getIssuesListOfText(specificIssues)} />
+        <VABulletList listOfText={getIssuesListOfText(specificIssues)} paragraphSpacing={true} />
       </Box>
     )
   }

@@ -31,7 +31,6 @@ import { States } from 'constants/states'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { showSnackBar } from 'utils/common'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
 import { profileAddressOptions } from '../AddressSummary'
@@ -282,7 +281,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
             if (data?.confirmedSuggestedAddresses) {
               setShowAddressValidation(true)
             } else {
-              registerReviewEvent()
               setAddressValidated(true)
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
             }

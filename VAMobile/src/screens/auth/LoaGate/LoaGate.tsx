@@ -42,14 +42,14 @@ function LoaGate({}: LoaGateProps) {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         mx={theme.dimensions.gutter}>
-        <TextView paragraphSpacing={true} {...bodyTextProps}>
+        <TextView mb={theme.dimensions.standardMarginBetween} {...bodyTextProps}>
           {t('loaGate.p1')}
         </TextView>
-        <TextView paragraphSpacing={true} {...bodyTextProps}>
+        <TextView mb={theme.dimensions.standardMarginBetween} {...bodyTextProps}>
           {t('loaGate.p2')}
         </TextView>
         <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false}>
-          <TextView paragraphSpacing={true} {...bodyTextProps}>
+          <TextView my={theme.dimensions.standardMarginBetween} {...bodyTextProps}>
             {t('loaGate.readMore.p1')}
           </TextView>
           <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
