@@ -5,7 +5,7 @@ import { ViewStyle } from 'react-native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -60,7 +60,10 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox title={fixSpacingAndSpecialCharacters(titleText)} titleA11yLabel={titleA11y} border="error">
+        <AlertWithHaptics
+          variant="error"
+          header={fixSpacingAndSpecialCharacters(titleText)}
+          headerA11yLabel={titleA11y}>
           <Box>
             <TextView
               variant="MobileBody"
@@ -76,7 +79,7 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
               </Box>
             )}
           </Box>
-        </AlertBox>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )
