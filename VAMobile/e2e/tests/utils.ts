@@ -504,8 +504,8 @@ const navigateToFeature = async (featureNavigationArray) => {
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (
-      featureNavigationArray[j] === 'Why does VA sometimes combine claims?' ||
-      featureNavigationArray[j] === "What should I do if I disagree with VA's decision on my disability claim?"
+      featureNavigationArray[j] === 'Find out why we sometimes combine claims' ||
+      featureNavigationArray[j] === 'Learn what to do if you disagree with our decision'
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
