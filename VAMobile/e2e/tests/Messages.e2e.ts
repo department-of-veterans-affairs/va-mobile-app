@@ -26,6 +26,7 @@ export const MessagesE2eIdConstants = {
   MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
   MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
   MESSAGE_2_ID: 'Unread: Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
+  MESSAGE_2_READ_ID: 'Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md October 26, 2021 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md October 26, 2021 Appointment: Please read and prepare appropriately',
   MESSAGE_5_ID: 'Vija A. Ravi, Md October 21, 2021 General: Summary of visit',
@@ -326,7 +327,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap and move a message', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Custom Folder 2')).tap()
     if (device.getPlatform() === 'android') {
