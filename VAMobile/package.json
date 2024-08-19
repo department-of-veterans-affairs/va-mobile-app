@@ -104,7 +104,7 @@
     "@tsconfig/react-native": "^3.0.5",
     "@types/detox": "^18.1.0",
     "@types/jest-when": "^3.5.5",
-    "@types/lodash": "^4.17.6",
+    "@types/lodash": "^4.17.7",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.14.10",
     "@types/react-native": "0.73.0",
