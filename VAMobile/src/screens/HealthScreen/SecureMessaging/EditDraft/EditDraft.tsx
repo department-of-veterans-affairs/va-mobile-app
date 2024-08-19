@@ -626,7 +626,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               borderColor={'primary'}
               borderBottomWidth={'default'}
               p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterHeading">{subjectHeader}</TextView>
+              <TextView variant="MobileBodyBold">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messageThread)}
           </Box>
