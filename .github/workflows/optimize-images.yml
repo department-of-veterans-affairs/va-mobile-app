@@ -1,6 +1,6 @@
 
-# Release builds that are triggered by the v*.*.* tag. Release tags occur when
-# someone comments /approve on the associated release ticket
+#Image optimization before release build.This workflow commit only images that have been optimized
+
 
 name: '[Build] Optimize Image'
 
