@@ -24,6 +24,7 @@ export async function getDateWithTimeZone(dateString: string) {
 
 export const MessagesE2eIdConstants = {
   MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
+  MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
   MESSAGE_2_ID: 'Unread: Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md October 26, 2021 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md October 26, 2021 Appointment: Please read and prepare appropriately',
@@ -238,7 +239,11 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on and then cancel the move option', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(400, 'up')
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Cancel')).tap()
   })
