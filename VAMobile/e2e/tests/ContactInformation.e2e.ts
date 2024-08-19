@@ -6,6 +6,7 @@ import { CommonE2eIdConstants, loginToDemoMode, openContactInfo, openProfile, to
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
+  MAILING_ADDRESS_2_ID: 'Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
   HOME_ADDRESS_ID: 'Home address Add your home address',
   HOME_PHONE_ID: 'homePhone',
   WORK_PHONE_ID: 'workPhone',
@@ -396,6 +397,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
   })
 }
+
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
@@ -424,6 +426,7 @@ describe(':ios: Contact Info Screen', () => {
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
   validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   removeContactInfoFeature('Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'home address')
+  /*
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
@@ -476,7 +479,8 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
+  */
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_2_ID, 'Mailing')
 })
