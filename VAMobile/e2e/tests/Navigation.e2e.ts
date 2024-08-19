@@ -225,10 +225,7 @@ const navigateToPage = async (key, navigationDicValue) => {
           .whileElement(by.id('claimsHistoryID'))
           .scroll(100, 'down')
       } else if (subNavigationArray[k] === 'Files') {
-        await waitFor(element(by.text('Files')))
-          .toBeVisible()
-          .whileElement(by.id('ClaimDetailsScreen'))
-          .scroll(100, 'up')
+        await element(by.id('ClaimsDetailsScreen')).scrollTo('top')
       }
 
       if (k == 0 && key in featureID) {
@@ -265,10 +262,7 @@ const navigateToPage = async (key, navigationDicValue) => {
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Files') {
-      await waitFor(element(by.text('Files')))
-        .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
-        .scroll(100, 'up')
+      await element(by.id('ClaimDetailsScreen')).scrollTo('top')
     }
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
