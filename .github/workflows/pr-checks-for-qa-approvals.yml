@@ -14,7 +14,6 @@ on:
       - 'VAMobile/package.json'
       - 'VAMobile/.detoxrc.json'
       - '!VAMobile/src/*.test.tsx'
-      - '!.github/**'
   pull_request_review:
     types: [submitted, dismissed]
 
