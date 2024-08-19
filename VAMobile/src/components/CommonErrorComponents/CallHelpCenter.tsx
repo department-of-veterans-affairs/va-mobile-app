@@ -70,7 +70,6 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
             <TextView
               variant="MobileBody"
               paragraphSpacing={true}
-              mt={theme.paragraphSpacing.spacing20FontSize}
               accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>

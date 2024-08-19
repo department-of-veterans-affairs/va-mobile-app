@@ -148,14 +148,11 @@ function AddressValidation({
       <Box>
         <TextView
           variant="MobileBody"
-          mt={standardMarginBetween}
           paragraphSpacing={true}
           accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
           {t('editAddress.validation.verifyAddress.body.1')}
         </TextView>
-        <TextView variant="MobileBody" mb={standardMarginBetween}>
-          {t('editAddress.validation.verifyAddress.body.2')}
-        </TextView>
+        <TextView variant="MobileBody">{t('editAddress.validation.verifyAddress.body.2')}</TextView>
       </Box>
     )
   }

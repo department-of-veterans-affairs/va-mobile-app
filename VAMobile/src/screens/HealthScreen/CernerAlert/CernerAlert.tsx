@@ -66,7 +66,7 @@ function CernerAlert() {
     }
 
     return (
-      <Box mt={theme.paragraphSpacing.spacing20FontSize}>
+      <>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('cernerAlert.ourRecordsShow')}
         </TextView>
@@ -78,7 +78,7 @@ function CernerAlert() {
           {t('cernerAlert.footer')}
         </TextView>
         <LinkWithAnalytics {...linkProps} />
-      </Box>
+      </>
     )
   }
 

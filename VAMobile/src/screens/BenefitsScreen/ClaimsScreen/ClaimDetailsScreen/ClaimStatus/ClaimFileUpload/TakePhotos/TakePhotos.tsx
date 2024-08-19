@@ -50,7 +50,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   }
 
   const collapsibleContent = (
-    <Box mt={theme.dimensions.standardMarginBetween}>
+    <>
       <TextView
         variant="MobileBody"
         paragraphSpacing={true}
@@ -63,7 +63,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         text={t('goToVAGov')}
         a11yLabel={a11yLabelVA(t('goToVAGov'))}
       />
-    </Box>
+    </>
   )
 
   const onCancel = () => {
