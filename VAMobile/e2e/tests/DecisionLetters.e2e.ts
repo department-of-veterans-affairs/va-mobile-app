@@ -1,10 +1,19 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAppReview } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openClaimsHistory,
+  resetInAppReview,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const DecisionLettersE2eIDConstants = {
-  CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
+  CLOSED_CLAIM_DECISION_LETTER_ID:
+    'Compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
   DECISION_CLAIM_LETTER_1_ID: 'March 11, 2023 letter Notification Letter (e.g. VA 20-8993, VA 21-0290, PCGL)',
   DECISION_CLAIM_LETTER_2_ID: 'September 21, 2022 letter Decision Rating Letter',
