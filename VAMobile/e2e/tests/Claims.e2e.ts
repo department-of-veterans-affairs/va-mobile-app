@@ -232,7 +232,6 @@ describe(':ios: Claims Screen', () => {
 
   it('should verify submit evidence button exists', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
-    await expect(element(by.text('Submit evidence'))).toExist()
     await element(by.text('Submit evidence')).tap()
   })
 

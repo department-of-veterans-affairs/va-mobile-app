@@ -22,6 +22,9 @@ import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Uploads a File to Claim
+ *
+ * request is only required if the upload is tied to a file request
+ * if the upload is not tied to a file request, request is null but documentType is required
  */
 const uploadFileToClaim = ({ claimID, documentType, request, files }: UploadFileToClaimParamaters) => {
   if (files.length > 1) {
@@ -83,6 +86,7 @@ const uploadFileToClaim = ({ claimID, documentType, request, files }: UploadFile
 
 /**
  * Returns a mutation for Uploading a File to Claim
+ * request is only required if the upload is tied to a file request
  */
 export const useUploadFileToClaim = (
   claimID: string,
