@@ -207,6 +207,7 @@ jobs:
             yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
           else
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+          fi
 
       - name: Upload e2e-junit
         if: failure() || success()
