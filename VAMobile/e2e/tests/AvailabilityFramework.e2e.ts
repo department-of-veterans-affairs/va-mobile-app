@@ -1,4 +1,4 @@
-import { CommonE2eIdConstants, enableAF, toggleRemoteConfigFlag, verifyAF } from './utils'
+import { enableAF, verifyAF } from './utils'
 
 var AFValue = process.argv[7]
 
@@ -154,8 +154,6 @@ const AFNavigationForIndividual = [
 
 export async function runTests(testRun, AFNavigationArray, x) {
   it('should verify AF use case 1 for: ' + testRun, async () => {
-    await device.launchApp({ newInstance: true })
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await enableAF(AFNavigationArray[x][1], 'DenyAccess')
     await verifyAF(AFNavigationArray[x], 'DenyAccess')
   })
