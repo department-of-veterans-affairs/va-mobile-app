@@ -54,13 +54,6 @@ context('NotificationsSettingsScreen', () => {
           systemNotificationsOn: systemNotificationsOn,
         },
       },
-      {
-        queryKey: notificationKeys.notificationData,
-        data: {
-          initialUrl: '1',
-          tappedForegroundNotification: false,
-        },
-      },
     ]
 
     render(<NotificationsSettingsScreen {...props} />, { queriesData: notificationQueriesData })
