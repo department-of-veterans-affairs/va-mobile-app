@@ -33,7 +33,7 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
-  const { setTappedForegroundNotification, setInitialUrl } = useContext(NotificationContext)
+  const { setTappedForegroundNotification, setInitialUrl } = useNotificationContext()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {
@@ -131,6 +131,6 @@ const NotificationManager: FC = ({ children }) => {
   )
 }
 
-export const useStateContext = () => useContext(NotificationContext)
+export const useNotificationContext = () => useContext(NotificationContext)
 
 export default NotificationManager

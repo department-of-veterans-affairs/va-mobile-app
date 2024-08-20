@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
@@ -64,7 +64,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager, { NotificationContext } from './components/NotificationManager'
+import NotificationManager, { NotificationContext, useNotificationContext } from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -189,7 +189,7 @@ export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
     useSelector<RootState, AuthState>((state) => state.auth)
-  const { tappedForegroundNotification, setTappedForegroundNotification } = useContext(NotificationContext)
+  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -269,22 +269,24 @@ export function AuthGuard() {
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
-
+    console.log(loggedIn)
+    console.log(tappedForegroundNotification)
     if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
       return
-    }
-    dispatch(initializeAuth())
+    } else {
+      dispatch(initializeAuth())
 
-    const listener = (event: { url: string }): void => {
-      if (event.url?.startsWith('vamobile://login-success?')) {
-        dispatch(handleTokenCallbackUrl(event.url))
+      const listener = (event: { url: string }): void => {
+        if (event.url?.startsWith('vamobile://login-success?')) {
+          dispatch(handleTokenCallbackUrl(event.url))
+        }
       }
-    }
-    const sub = Linking.addEventListener('url', listener)
-    return (): void => {
-      sub?.remove()
+      const sub = Linking.addEventListener('url', listener)
+      return (): void => {
+        sub?.remove()
+      }
     }
   }, [dispatch, tappedForegroundNotification, loggedIn, setTappedForegroundNotification])
 
@@ -399,7 +401,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { initialUrl } = useContext(NotificationContext)
+  const { initialUrl } = useNotificationContext()
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()
