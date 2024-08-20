@@ -1462,10 +1462,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@department-of-veterans-affairs/eslint-config-mobile@0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.15.0.tgz#f86b29f5ef8bad6c8a36cea8340e5cfa18ff93a1"
-  integrity sha512-sEFu9Akkommf9y7aDWXjvWfwDfY50cqjMBTAIaYctixGonUX0wKzk2yEhgGzlwF3Feo/zkyLhLBi1VixrhT3xg==
+"@department-of-veterans-affairs/eslint-config-mobile@0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.18.0.tgz#4187517fb890af6f271a23364255f52cfe106cfd"
+  integrity sha512-JTLMMiRWhriVMo3hkG88nhXvF0q1W4nxhSFIQPQaBTrSmX6JcX/gaThSMz1MsoFokFNgDlzeimbk60PRSTQJlg==
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
