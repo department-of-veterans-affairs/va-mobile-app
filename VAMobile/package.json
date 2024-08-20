@@ -96,7 +96,7 @@
     "@department-of-veterans-affairs/eslint-config-mobile": "0.15.0",
     "@react-native/babel-preset": "0.74.83",
     "@react-native/eslint-config": "^0.73.2",
-    "@react-native/metro-config": "^0.74.84",
+    "@react-native/metro-config": "^0.75.1",
     "@react-native/typescript-config": "0.74.84",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react-native": "^12.6.0",
