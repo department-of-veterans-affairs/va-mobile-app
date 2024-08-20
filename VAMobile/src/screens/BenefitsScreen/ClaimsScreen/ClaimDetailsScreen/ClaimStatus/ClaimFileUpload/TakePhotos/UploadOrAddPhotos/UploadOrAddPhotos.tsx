@@ -9,7 +9,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
+import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import {
   AlertBox,
@@ -51,7 +51,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
   const { claimID, request: originalRequest, firstImageResponse } = route.params
-  const { data: claim } = useClaim(claimID)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()

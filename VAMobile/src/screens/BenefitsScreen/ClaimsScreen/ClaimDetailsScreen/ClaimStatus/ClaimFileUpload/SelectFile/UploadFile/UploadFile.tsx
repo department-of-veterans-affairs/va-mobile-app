@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
+import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import FileList from 'components/FileList'
@@ -34,7 +34,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimID, request: originalRequest, fileUploaded } = route.params
-  const { data: claim } = useClaim(claimID)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
