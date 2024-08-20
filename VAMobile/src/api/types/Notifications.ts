@@ -61,11 +61,6 @@ export type LoadPushPreferencesData = {
   preferences: PushPreference[]
 }
 
-export type LoadPushNotificationData = {
-  tappedForegroundNotification?: boolean
-  initialUrl?: string
-}
-
 export type LoadSystemNotificationsData = {
   systemNotificationsOn: boolean
 }

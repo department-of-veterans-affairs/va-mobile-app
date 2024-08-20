@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
@@ -23,7 +23,6 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
-import { useLoadPushNotification } from 'api/notifications'
 import queryClient from 'api/queryClient'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
@@ -65,7 +64,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager from './components/NotificationManager'
+import NotificationManager, { NotificationContext } from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -190,6 +189,7 @@ export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
     useSelector<RootState, AuthState>((state) => state.auth)
+  const { tappedForegroundNotification, setTappedForegroundNotification } = useContext(NotificationContext)
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -269,6 +269,12 @@ export function AuthGuard() {
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
+
+    if (loggedIn && tappedForegroundNotification) {
+      console.debug('User tapped foreground notification. Skipping initializeAuth.')
+      setTappedForegroundNotification(false)
+      return
+    }
     dispatch(initializeAuth())
 
     const listener = (event: { url: string }): void => {
@@ -280,7 +286,7 @@ export function AuthGuard() {
     return (): void => {
       sub?.remove()
     }
-  }, [dispatch])
+  }, [dispatch, tappedForegroundNotification, loggedIn])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -393,8 +399,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { data: notificationData } = useLoadPushNotification()
-
+  const { initialUrl } = useContext(NotificationContext)
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()
@@ -403,10 +408,10 @@ export function AuthedApp() {
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
   useEffect(() => {
-    if (notificationData?.initialUrl) {
-      Linking.openURL(notificationData?.initialUrl)
+    if (initialUrl) {
+      Linking.openURL(initialUrl)
     }
-  }, [notificationData?.initialUrl])
+  }, [initialUrl])
 
   return (
     <>

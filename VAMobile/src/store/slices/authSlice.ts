@@ -8,9 +8,7 @@ import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { notificationKeys } from 'api/notifications'
 import queryClient from 'api/queryClient'
-import { LoadPushNotificationData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { AppDispatch, AppThunk } from 'store'
@@ -611,17 +609,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
-export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
-  const { loggedIn } = getState().auth
-  const notificationData = queryClient.getQueryData(notificationKeys.notificationData) as LoadPushNotificationData
-
-  if (loggedIn && notificationData.tappedForegroundNotification) {
-    console.debug('User tapped foreground notification. Skipping initializeAuth.')
-    notificationData.tappedForegroundNotification = false
-    queryClient.setQueryData(notificationKeys.notificationData, notificationData)
-    return
-  }
-
+export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()

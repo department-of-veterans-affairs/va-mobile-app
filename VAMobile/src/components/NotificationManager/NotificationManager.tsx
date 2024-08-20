@@ -1,11 +1,9 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
-import { useQueryClient } from '@tanstack/react-query'
-
-import { notificationKeys, useLoadPushNotification, useRegisterDevice } from 'api/notifications'
+import { useRegisterDevice } from 'api/notifications'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
@@ -14,6 +12,20 @@ import { logAnalyticsEvent } from 'utils/analytics'
 
 const foregroundNotifications: Array<string> = []
 
+interface NotificationContextType {
+  tappedForegroundNotification: boolean
+  initialUrl: string
+  setTappedForegroundNotification: Dispatch<SetStateAction<boolean>>
+  setInitialUrl: Dispatch<SetStateAction<string>>
+}
+
+export const NotificationContext = createContext<NotificationContextType>({
+  tappedForegroundNotification: false,
+  initialUrl: '',
+  setTappedForegroundNotification: () => {},
+  setInitialUrl: () => {},
+})
+
 /**
  * notification manager component to handle all push logic
  */
@@ -21,8 +33,7 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
-  const { data: notificationData } = useLoadPushNotification()
-  const queryClient = useQueryClient()
+  const { setTappedForegroundNotification, setInitialUrl } = useContext(NotificationContext)
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {
@@ -64,11 +75,7 @@ const NotificationManager: FC = ({ children }) => {
        */
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
       if (foregroundNotifications.includes(notification.identifier)) {
-        if (notificationData) {
-          const newData = notificationData
-          newData.tappedForegroundNotification = true
-          queryClient.setQueryData(notificationKeys.notificationData, newData)
-        }
+        setTappedForegroundNotification(true)
       }
 
       // Open deep link from the notification when present. If the user is
@@ -77,11 +84,7 @@ const NotificationManager: FC = ({ children }) => {
         if (loggedIn) {
           Linking.openURL(notification.payload.url)
         } else {
-          if (notificationData) {
-            const newData = notificationData
-            newData.initialUrl = notification.payload.url
-            queryClient.setQueryData(notificationKeys.notificationData, newData)
-          }
+          setInitialUrl(notification.payload.url)
         }
       }
       console.debug('Notification opened by device user', notification)
@@ -103,11 +106,7 @@ const NotificationManager: FC = ({ children }) => {
         console.debug('Initial notification was:', notification || 'N/A')
 
         if (notification?.payload.url) {
-          if (notificationData) {
-            const newData = notificationData
-            newData.initialUrl = notification.payload.url
-            queryClient.setQueryData(notificationKeys.notificationData, newData)
-          }
+          setInitialUrl(notification.payload.url)
         }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
@@ -119,7 +118,19 @@ const NotificationManager: FC = ({ children }) => {
   }
 
   const s = { flex: 1 }
-  return <View style={s}>{children}</View>
+  return (
+    <NotificationContext.Provider
+      value={{
+        tappedForegroundNotification: false,
+        initialUrl: '',
+        setTappedForegroundNotification: () => {},
+        setInitialUrl: () => {},
+      }}>
+      <View style={s}>{children}</View>
+    </NotificationContext.Provider>
+  )
 }
+
+export const useStateContext = () => useContext(NotificationContext)
 
 export default NotificationManager
