@@ -74,7 +74,7 @@ const uploadFileToClaim = ({ claimID, documentType, request, files }: UploadFile
       formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
       formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
     } else {
-      formData.append('documentType', JSON.parse(JSON.stringify(documentType)))
+      formData.append('documentType', documentType)
     }
     return post<ClaimDocUploadData>(
       `/v0/claim/${claimID}/documents`,
