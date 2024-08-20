@@ -22,7 +22,7 @@ function TermsAndConditions() {
           accessible={true}
           mx={gutter}
           mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
+          <TextView variant="MobileBodyBold">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
           <TextView
