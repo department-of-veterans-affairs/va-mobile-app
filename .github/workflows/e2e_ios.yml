@@ -199,11 +199,14 @@ jobs:
         continue-on-error: true
 
       - name: Rerun e2e tests for iOS if failed
-        if: steps.run_e2e_tests.outcome == 'failure' && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        if: steps.run_e2e_tests.outcome == 'failure'
         id: rerun_e2e_tests
         run: |
-            yarn jest:clear;
+          yarn jest:clear;
+          if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
             yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+          else
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
 
       - name: Upload e2e-junit
         if: failure() || success()
