@@ -98,12 +98,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
-      Events.vama_evidence_cont_3(
-        claim?.id || '',
-        request?.trackedItemId || null,
-        request?.type || 'Submit Evidence',
-        'file',
-      ),
+      Events.vama_evidence_cont_3(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'file'),
     )
     const mutateOptions = {
       onMutate: () => {
@@ -139,7 +134,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     const totalSize = filesList.reduce((sum, file) => sum + file.size, 0)
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
-        claim?.id || '',
+        claimID,
         request?.trackedItemId || null,
         request?.type || 'Submit Evidence',
         'file',
@@ -167,7 +162,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
     logAnalyticsEvent(
       Events.vama_evidence_type(
-        claim?.id || '',
+        claimID,
         request?.trackedItemId || null,
         request?.type || 'Submit Evidence',
         'file',
@@ -180,12 +175,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
       logAnalyticsEvent(
-        Events.vama_evidence_conf(
-          claim?.id || '',
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'file',
-        ),
+        Events.vama_evidence_conf(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'file'),
       )
     }
     setConfirmed(isChecked)
@@ -194,7 +184,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const onFileDelete = () => {
     setFilesList([])
     showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
-    navigateTo('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+    navigateTo('SelectFile', { claimID: claimID, request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
@@ -229,7 +219,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       onLeftButtonPress={() => {
         logAnalyticsEvent(
           Events.vama_evidence_cancel_2(
-            claim?.id || '',
+            claimID,
             request?.trackedItemId || null,
             request?.type || 'Submit Evidence',
             'file',

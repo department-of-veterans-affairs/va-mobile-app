@@ -122,12 +122,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
-      Events.vama_evidence_cont_3(
-        claim?.id || '',
-        request?.trackedItemId || null,
-        request?.type || 'Submit Evidence',
-        'photo',
-      ),
+      Events.vama_evidence_cont_3(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'photo'),
     )
     const mutateOptions = {
       onMutate: () => {
@@ -168,7 +163,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     const totalSize = imagesList?.reduce((sum, image) => sum + (image.fileSize || 0), 0)
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
-        claim?.id || '',
+        claimID,
         request?.trackedItemId || null,
         request?.type || 'Submit Evidence',
         'photo',
@@ -197,7 +192,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
     logAnalyticsEvent(
       Events.vama_evidence_type(
-        claim?.id || '',
+        claimID,
         request?.trackedItemId || null,
         request?.type || 'Submit Evidence',
         'photo',
@@ -210,12 +205,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
       logAnalyticsEvent(
-        Events.vama_evidence_conf(
-          claim?.id || '',
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'photo',
-        ),
+        Events.vama_evidence_conf(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'photo'),
       )
     }
     setConfirmed(isChecked)
@@ -297,7 +287,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
                   setErrorMessage,
                   callbackIfUri,
                   totalBytesUsed || 0,
-                  claim?.id || '',
+                  claimID,
                   request,
                 )
               }}
@@ -337,7 +327,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     if (response.length === 0) {
       setImagesList([])
       showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-      navigateTo('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+      navigateTo('TakePhotos', { claimID: claimID, request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -360,7 +350,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       onLeftButtonPress={() => {
         logAnalyticsEvent(
           Events.vama_evidence_cancel_2(
-            claim?.id || '',
+            claimID,
             request?.trackedItemId || null,
             request?.type || 'Submit Evidence',
             'photo',
