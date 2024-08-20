@@ -195,14 +195,11 @@ describe(':ios: Claims Screen', () => {
     await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
   })
 
-  it('should navigate back to the claims history screen', async () => {
-    await element(by.text('Cancel')).tap()
-    await element(by.text('Cancel')).tap()
-    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
-  })
-
   it('should verify details of claim on step 1', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
+    await resetInAppReview()
+    await openBenefits()
+    await openClaims()
+    await openClaimsHistory()
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
