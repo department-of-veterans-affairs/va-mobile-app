@@ -190,7 +190,7 @@ jobs:
         id: run_e2e_tests
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
