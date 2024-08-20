@@ -57,13 +57,11 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           }
           focusOnError={false}
           testID="AFUseCase2TestID">
-          <Box my={theme.dimensions.standardMarginBetween}>
-            <ClickToCallPhoneNumber
-              displayedText={displayedTextPhoneNumber(phoneNumber)}
-              phone={phoneNumber}
-              a11yLabel={a11yLabelID(phoneNumber)}
-            />
-          </Box>
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(phoneNumber)}
+            phone={phoneNumber}
+            a11yLabel={a11yLabelID(phoneNumber)}
+          />
         </AlertWithHaptics>
       </Box>
     )
