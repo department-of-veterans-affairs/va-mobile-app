@@ -151,7 +151,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     }
     const params: UploadFileToClaimParamaters = {
       claimID,
-      documentType: documentType,
+      documentType,
       request,
       files: imagesList || [],
     }
