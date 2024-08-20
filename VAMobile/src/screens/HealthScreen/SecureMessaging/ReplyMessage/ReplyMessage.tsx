@@ -364,7 +364,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
               borderColor={'primary'}
               borderBottomWidth={'default'}
               p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="MobileBodyBold">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, thread)}
           </Box>
