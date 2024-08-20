@@ -364,7 +364,7 @@ export async function backButton(backButtonName: string) {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await device.launchApp({ newInstance: false, permissions: { notifications: 'YES' } })
   await loginToDemoMode()
   await openProfile()
   await openSettings()
@@ -417,7 +417,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  await device.launchApp({ newInstance: true })
+  await device.launchApp({ newInstance: false })
   if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
     await loginToDemoMode()
   }
@@ -427,7 +427,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id('Home')).tap()
   } else {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await device.launchApp({ newInstance: false, permissions: { notifications: 'YES' } })
     await loginToDemoMode()
   }
   await openProfile()

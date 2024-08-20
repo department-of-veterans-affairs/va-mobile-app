@@ -1,4 +1,4 @@
-import { enableAF, verifyAF } from './utils'
+import { CommonE2eIdConstants, enableAF, toggleRemoteConfigFlag, verifyAF } from './utils'
 
 var AFValue = process.argv[7]
 
@@ -168,6 +168,11 @@ export async function runTests(testRun, AFNavigationArray, x) {
     await verifyAF(AFNavigationArray[x], 'DenyContent', true)
   })
 }
+
+beforeAll(async () => {
+  await device.launchApp({ newInstance: true })
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+})
 
 describe('Availability Framework', () => {
   if (AFValue !== undefined) {
