@@ -1,3 +1,5 @@
+import { device } from 'detox'
+
 import { CommonE2eIdConstants, enableAF, toggleRemoteConfigFlag, verifyAF } from './utils'
 
 var AFValue = process.argv[7]
