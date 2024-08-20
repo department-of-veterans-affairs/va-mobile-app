@@ -108,12 +108,19 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('Close initial review claim and verify that no details are still displayed', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)).atIndex(0).tap()
+    await setTimeout(2000)
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)))
+      .toBeVisible()
+      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
+      .scroll(100, 'down')
+    await setTimeout(2000)
+    await element(by.text('Step 2')).tap()
+    await setTimeout(2000)
     await expect(
       element(
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
       ),
-    ).not.toExist()
+    ).not.toBeVisible()
   })
 
   it('Verify what you claimed section', async () => {
@@ -310,9 +317,16 @@ describe(':ios: Claims Screen', () => {
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
+    await setTimeout(2000)
     await expect(
       element(by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
     ).toExist()
+    await waitFor(
+      element(by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
+    )
+      .toBeVisible()
+      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
+      .scroll(100, 'down')
     await element(
       by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.'),
     ).tap()

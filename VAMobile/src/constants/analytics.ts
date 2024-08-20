@@ -6,6 +6,15 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
+  vama_9385_api_cType: (endpoint: string, contentType: string): Event => {
+    return {
+      name: 'vama_9385_api_cType',
+      params: {
+        endpoint: endpoint,
+        contentType: contentType,
+      },
+    }
+  },
   vama_accordion_click: (section: string, isOpened: boolean): Event => {
     return {
       name: 'vama_accordion_click',
@@ -171,6 +180,8 @@ export const Events = {
     claim_step: number,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_type_code: string,
+    is_disability_comp_claim: boolean,
   ): Event => {
     return {
       name: 'vama_claim_details_open',
@@ -180,6 +191,8 @@ export const Events = {
         claim_step,
         claim_step_change,
         claim_submitted_date,
+        claim_type_code,
+        is_disability_comp_claim,
       },
     }
   },

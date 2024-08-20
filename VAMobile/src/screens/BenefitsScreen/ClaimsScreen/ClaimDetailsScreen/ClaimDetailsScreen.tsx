@@ -26,7 +26,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
@@ -99,6 +99,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           attributes.phase,
           attributes.phaseChangeDate || '',
           attributes.dateFiled,
+          attributes.claimTypeCode,
+          isDisabilityCompensationClaim(attributes.claimTypeCode),
         ),
       )
     }
