@@ -49,23 +49,6 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   }
 
-  const collapsibleContent = (
-    <>
-      <TextView
-        variant="MobileBody"
-        paragraphSpacing={true}
-        accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
-        {t('fileUpload.accessibilityAlert.body')}
-      </TextView>
-      <LinkWithAnalytics
-        type="url"
-        url={LINK_URL_GO_TO_VA_GOV}
-        text={t('goToVAGov')}
-        a11yLabel={a11yLabelVA(t('goToVAGov'))}
-      />
-    </>
-  )
-
   const onCancel = () => {
     logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'photo'))
     navigation.goBack()
@@ -84,8 +67,18 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         </Box>
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertWithHaptics variant="info" expandable={true} header={t('fileUpload.accessibilityAlert.title')}>
-          {collapsibleContent}
+        <AlertWithHaptics
+          variant="info"
+          expandable={true}
+          header={t('fileUpload.accessibilityAlert.title')}
+          description={t('fileUpload.accessibilityAlert.body')}
+          descriptionA11yLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_GO_TO_VA_GOV}
+            text={t('goToVAGov')}
+            a11yLabel={a11yLabelVA(t('goToVAGov'))}
+          />
         </AlertWithHaptics>
       </Box>
       <TextArea>

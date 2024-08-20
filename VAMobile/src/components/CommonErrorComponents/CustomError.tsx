@@ -3,9 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -41,8 +39,6 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
     logAnalyticsEvent(Events.vama_be_af_shown())
   }, [])
 
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
-
   const fixSpacingAndSpecialCharacters = (text: string) => {
     return fixedWhiteSpaceString(fixSpecialCharacters(text))
   }
@@ -63,22 +59,11 @@ const CustomError: FC<CustomErrorProps> = ({ onTryAgain, titleText, errorText, c
         <AlertWithHaptics
           variant="error"
           header={fixSpacingAndSpecialCharacters(titleText)}
-          headerA11yLabel={titleA11y}>
-          <Box>
-            <TextView
-              variant="MobileBody"
-              paragraphSpacing={true}
-              mt={theme.dimensions.standardMarginBetween}
-              accessibilityLabel={errorA11y}>
-              {fixSpacingAndSpecialCharacters(errorText)}
-            </TextView>
-            {!!callPhone && <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />}
-            {onTryAgain && (
-              <Box mt={standardMarginBetween} accessibilityRole="button">
-                <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
-              </Box>
-            )}
-          </Box>
+          headerA11yLabel={titleA11y}
+          description={fixSpacingAndSpecialCharacters(errorText)}
+          descriptionA11yLabel={errorA11y}
+          primaryButton={onTryAgain && { label: t('refresh'), onPress: tryAgain, testID: t('refresh') }}>
+          {!!callPhone && <ClickToCallPhoneNumber a11yLabel={a11yLabelID(callPhone)} phone={callPhone} />}
         </AlertWithHaptics>
       </Box>
     </VAScrollView>
