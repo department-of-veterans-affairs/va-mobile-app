@@ -226,7 +226,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           onPress: submitEvidencePress,
         }
         return (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <Button {...buttonProps} />
           </Box>
         )
