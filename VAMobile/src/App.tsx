@@ -64,7 +64,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager, { NotificationContext, useNotificationContext } from './components/NotificationManager'
+import NotificationManager, { useNotificationContext } from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
