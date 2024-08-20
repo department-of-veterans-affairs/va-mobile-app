@@ -2,7 +2,6 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
-import { HomeE2eIdConstants } from './HomeScreen.e2e'
 import {
   CommonE2eIdConstants,
   checkImages,
