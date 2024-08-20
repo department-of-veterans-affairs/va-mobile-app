@@ -389,6 +389,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
+      api.setDeviceSecret(authResponse.device_secret)
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
