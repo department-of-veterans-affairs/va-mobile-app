@@ -153,10 +153,9 @@ const AFNavigationForIndividual = [
 ]
 
 export async function runTests(testRun, AFNavigationArray, x) {
-  await device.launchApp({ newInstance: true })
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-
   it('should verify AF use case 1 for: ' + testRun, async () => {
+    await device.launchApp({ newInstance: true })
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
     await enableAF(AFNavigationArray[x][1], 'DenyAccess')
     await verifyAF(AFNavigationArray[x], 'DenyAccess')
   })
