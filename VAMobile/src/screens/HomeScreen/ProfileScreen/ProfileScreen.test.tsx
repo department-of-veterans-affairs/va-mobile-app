@@ -90,7 +90,7 @@ context('ProfileScreen', () => {
       initializeTestInstance()
 
       await waitFor(() =>
-        expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
+        expect(screen.getByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
       )
     })
   })

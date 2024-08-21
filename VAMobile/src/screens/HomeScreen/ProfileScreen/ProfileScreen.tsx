@@ -18,8 +18,8 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -35,7 +35,9 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { isLoading: loadingServiceHistory, error: serviceHistoryError } = useServiceHistory()
+  const { isLoading: loadingServiceHistory, isError: serviceHistoryError } = useServiceHistory()
+
+  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
@@ -85,9 +87,9 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
           )}
           <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
           <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
-          {serviceHistoryError && (
+          {(serviceHistoryError || serviceHistoryInDowntime) && (
             <Box mx={theme.dimensions.condensedMarginBetween}>
-              <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={true} />
+              <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={serviceHistoryError} />
             </Box>
           )}
         </>
