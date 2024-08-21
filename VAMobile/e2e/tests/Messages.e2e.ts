@@ -61,6 +61,7 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
+  EDIT_DRAFT_PAGE_TEST_ID: 'editDraftTestID',
 }
 
 const tapItems = async (items: string, type: string) => {
@@ -340,6 +341,7 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
@@ -515,6 +517,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify action sheet for edited drafts message', async () => {
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -544,7 +547,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify a draft can be saved and that a alert appears', async () => {
-    await element(by.id('editDraftTestID')).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
