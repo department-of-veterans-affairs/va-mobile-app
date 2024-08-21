@@ -5,7 +5,16 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView } from 'components'
+import {
+  BorderColorVariant,
+  Box,
+  LargePanel,
+  PickerItem,
+  RadioGroup,
+  RadioGroupProps,
+  TextView,
+  VAModalPicker,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -14,11 +23,13 @@ import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 
 type InAppFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'InAppFeedback'>
 
-function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
+function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [taskCompleted, setTaskCompleted] = useState('')
   const [satisfaction, setSatisfaction] = useState('')
+  let task = route?.params?.task || ''
+  const [taskSelected, setTaskSelected] = useState(task)
 
   useBeforeNavBackListener(navigation, () => {
     logAnalyticsEvent(Events.vama_feedback_page_closed())
@@ -75,6 +86,63 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     value: satisfaction,
   }
 
+  const getInAppFeedbackCategoryPickerOptions = (): Array<PickerItem> => {
+    return [
+      {
+        value: 'Cancel Appointment',
+        label: 'Cancel Appointment',
+      },
+      {
+        value: 'Review Appointment',
+        label: 'Review Appointment',
+      },
+      {
+        value: 'Review Claim',
+        label: 'Review Claim',
+      },
+      {
+        value: 'Submit Claim',
+        label: 'Submit Claim',
+      },
+      {
+        value: 'Submit Claim Evidence',
+        label: 'Submit Claim Evidence',
+      },
+      {
+        value: 'Submit File Request',
+        label: 'Submit File Request',
+      },
+      {
+        value: 'Read New Message',
+        label: 'Read New Message',
+      },
+      {
+        value: 'Send New Message',
+        label: 'Send New Message',
+      },
+      {
+        value: 'Review Prescription',
+        label: 'Review Prescription',
+      },
+      {
+        value: 'Refill Prescription',
+        label: 'Refill Prescription',
+      },
+      {
+        value: 'Track Prescription',
+        label: 'Refill Prescription',
+      },
+      {
+        value: 'View Vaccine Record',
+        label: 'View Vaccine Record',
+      },
+      {
+        value: 'View Letters',
+        label: 'View Letters',
+      },
+    ]
+  }
+
   return (
     <LargePanel title={t('inAppFeedback.title')} rightButtonText={t('close')}>
       <Box
@@ -90,6 +158,15 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         <Box
           borderTopWidth={theme.dimensions.borderWidth}
           borderColor={theme.colors.border.menuDivider as BorderColorVariant}>
+          <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+            {t('inAppFeedback.taskSelection.header')}
+          </TextView>
+          <VAModalPicker
+            selectedValue={taskSelected || ''}
+            onSelectionChange={setTaskSelected}
+            pickerOptions={getInAppFeedbackCategoryPickerOptions()}
+            includeBlankPlaceholder={true}
+            disabled={!!route?.params?.task}></VAModalPicker>
           <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.taskCompletedQuestion.header')}
           </TextView>
@@ -108,5 +185,15 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     </LargePanel>
   )
 }
+
+//      fieldProps: {
+//   labelKey: 'secureMessaging.startNewMessage.category',
+//   selectedValue: category,
+//   onSelectionChange: onCategoryChange,
+//   pickerOptions: getStartNewMessageCategoryPickerOptions(t),
+//   includeBlankPlaceholder: true,
+//   isRequiredField: true,
+//   testID: 'picker',
+// },
 
 export default InAppFeedbackScreen

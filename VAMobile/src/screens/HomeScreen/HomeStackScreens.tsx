@@ -33,7 +33,7 @@ export type HomeStackParamList = WebviewStackParams & {
   GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
-  InAppFeedback: undefined
+  InAppFeedback: { task?: string }
   InAppRecruitment: undefined
   IncorrectServiceInfo: undefined
   AccountSecurity: undefined

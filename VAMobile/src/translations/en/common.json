@@ -837,6 +837,7 @@
   "inAppFeedback.a11yHint": "Go to the give feedback page",
   "inAppFeedback.needYourFeedback.header": "We need your feedback",
   "inAppFeedback.needYourFeedback.body": "We use your feedback to make this App better for you and all Veterans. We keep your feedback confidential. Only give us feedback here if you don't need a response.",
+  "inAppFeedback.taskSelection.header": "What task were you trying to do today?",
   "inAppFeedback.taskCompletedQuestion.header": "Were you able to do your task today?",
   "inAppFeedback.overallSatisfaction.header": "What is your overall satisfaction with the App?",
   "inAppFeedback.overallSatisfaction.notAtAllSatisfied": "Not at all satisfied",
