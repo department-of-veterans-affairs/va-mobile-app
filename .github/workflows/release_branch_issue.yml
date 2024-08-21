@@ -72,3 +72,30 @@ jobs:
           OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
           NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
           gh issue edit $TICKET_NUM -b $NEW_BODY
+  start_slack_thread:
+    name: Start Slack thread
+    if: ${{ success() }}
+    needs: release_ticket
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: |
+        Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:
+        Release Ticket: ${{ needs.release_ticket.outputs.ticketNumber }}
+        Release Report: Github Report Link to be provided
+        Release Date: ${{ needs.release_ticket.outputs.releaseDate }}
+        
+        Approval Timing:
+        - QA Approval Due:  ${{ needs.release_ticket.outputs.qaDueDate }}
+        - Tickets Tagged Appropriately: ...
+        - Product Approval Due: ${{ needs.release_ticket.outputs.prodDueDate }}
+        - VA Approval  Due: ${{ needs.release_ticket.outputs.vaDueDate }}
+        
+        Contacts:
+        - Release Testing: @Tom Gammons
+        - QART Tech Lead: @TKDickson
+        - Release Ticket Validation: @Jon Bindbeutel
+        - Engineering: @Jon Bindbeutel, @Tim Wright
+        - Mobile Product Approvers: H&B and Global - @Alayna  Global- @Ameet Sarkar
+        - VA Approvers: @Rachel Han CC: @Don McCaughey, @rtwell
