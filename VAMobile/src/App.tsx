@@ -284,7 +284,7 @@ export function AuthGuard() {
     return (): void => {
       sub?.remove()
     }
-  }, [dispatch, loggedIn, tappedForegroundNotification])
+  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
