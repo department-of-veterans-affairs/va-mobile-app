@@ -83,7 +83,7 @@ context('ProfileScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('render error message', async () => {
+    it('renders error message', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/military-service-history')
         .mockRejectedValue({ networkError: true } as api.APIError)
