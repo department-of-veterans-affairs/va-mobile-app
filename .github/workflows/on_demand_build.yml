@@ -53,3 +53,42 @@ jobs:
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+
+  release_coordination:
+    name: Notify Android Failure
+    needs: [start_slack_thread, android]
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Notify Slack on Android failure
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d '{
+                    "channel": "va-mobile-build-alerts",
+                    "text": |
+                      *Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*
+                      *Release Ticket: ${{ needs.release_ticket.outputs.ticketNumber }}
+                      *Release Report:* Github Report Link to be provided
+                      *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
+                      
+                      *Approval Timing:* 
+                        - *QA Approval Due:*  ${{ needs.release_ticket.outputs.qaDueDate }}
+                        - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}
+                        - *VA Approval  Due:* ${{ needs.release_ticket.outputs.vaDueDate }}
+                        - Tickets Tagged Appropriately: ...
+                        
+                      *Contacts:*
+                        - *Release Testing:* @charnelle.domguia
+                        - *QART Tech Lead:* @TK
+                        - *Engineering:* @J, @charnelle.domguia
+                        - *Mobile Product Approvers:* H&B and Global - @Al  Global- @Am
+                        - *VA PO for awareness:* @Ra CC: @D, @charnelle.domguia.", 
+                    "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
+                  }' \
+               https://slack.com/api/chat.postMessage
+ 
