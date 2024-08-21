@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
@@ -36,11 +36,6 @@ const NotificationManager: FC = ({ children }) => {
   const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
   const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
-
-  const contextValues = useMemo(
-    () => ({ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }),
-    [tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl],
-  )
 
   useEffect(() => {
     const register = () => {
@@ -126,7 +121,8 @@ const NotificationManager: FC = ({ children }) => {
 
   const s = { flex: 1 }
   return (
-    <NotificationContext.Provider value={contextValues}>
+    <NotificationContext.Provider
+      value={{ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }}>
       <View style={s}>{children}</View>
     </NotificationContext.Provider>
   )
