@@ -157,7 +157,7 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen
         name="FileRequestDetails"
         component={FileRequestDetails}
-        options={FULLSCREEN_SUBTASK_OPTIONS}
+        options={{ headerShown: false }}
       />
       <BenefitsScreenStack.Screen
         name="GenericLetter"

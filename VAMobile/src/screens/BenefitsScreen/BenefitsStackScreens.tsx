@@ -111,31 +111,31 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       key={'AskForClaimDecision'}
       name="AskForClaimDecision"
       component={AskForClaimDecision}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'TakePhotos'}
       name="TakePhotos"
       component={TakePhotos}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'SelectFile'}
       name="SelectFile"
       component={SelectFile}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'UploadOrAddPhotos'}
       name="UploadOrAddPhotos"
       component={UploadOrAddPhotos}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'UploadFile'}
       name="UploadFile"
       component={UploadFile}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
   ]
 }
