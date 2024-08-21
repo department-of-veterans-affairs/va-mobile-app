@@ -74,22 +74,17 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
         <>
           {displayName}
           <NameTag />
-          <Box>
-            {userAuthorizedServices?.userProfileUpdate && (
-              <>
-                <LargeNavButton
-                  title={t('personalInformation.title')}
-                  onPress={() => navigateTo('PersonalInformation')}
-                />
-                <LargeNavButton
-                  title={t('contactInformation.title')}
-                  onPress={() => navigateTo('ContactInformation')}
-                />
-              </>
-            )}
-            <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
-            <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
-          </Box>
+          {userAuthorizedServices?.userProfileUpdate && (
+            <>
+              <LargeNavButton
+                title={t('personalInformation.title')}
+                onPress={() => navigateTo('PersonalInformation')}
+              />
+              <LargeNavButton title={t('contactInformation.title')} onPress={() => navigateTo('ContactInformation')} />
+            </>
+          )}
+          <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
+          <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
           {serviceHistoryError && (
             <Box mx={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={true} />
