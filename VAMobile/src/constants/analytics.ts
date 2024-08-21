@@ -140,6 +140,7 @@ export const Events = {
     step_expanded: boolean,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_current_step: number,
   ): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -150,6 +151,7 @@ export const Events = {
         step_expanded,
         claim_step_change,
         claim_submitted_date,
+        claim_current_step,
       },
     }
   },
@@ -838,6 +840,11 @@ export const Events = {
       params: {
         status,
       },
+    }
+  },
+  vama_review_prompt: (): Event => {
+    return {
+      name: 'vama_review_prompt',
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {

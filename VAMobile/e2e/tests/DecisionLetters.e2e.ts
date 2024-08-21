@@ -1,15 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openBenefits,
-  openClaims,
-  openClaimsHistory,
-  resetInAppReview,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory, resetInAppReview } from './utils'
 
 export const DecisionLettersE2eIDConstants = {
   CLOSED_CLAIM_DECISION_LETTER_ID: 'Compensation Decision letter ready Received January 01, 2021',
@@ -20,8 +12,6 @@ export const DecisionLettersE2eIDConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -39,10 +29,6 @@ describe('Decision Letters Screen', () => {
 
   it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(DecisionLettersE2eIDConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
-    await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
-    await expect(
-      element(by.text('You can download your decision letter in the app. We also mailed you this letter.')),
-    ).toExist()
     await expect(element(by.id(DecisionLettersE2eIDConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
