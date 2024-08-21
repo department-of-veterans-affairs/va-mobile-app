@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
@@ -33,8 +33,15 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
-  const { setTappedForegroundNotification, setInitialUrl } = useNotificationContext()
+  const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
+  const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
+
+  const contextValues = useMemo(
+    () => ({ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }),
+    [tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl],
+  )
+
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -119,13 +126,7 @@ const NotificationManager: FC = ({ children }) => {
 
   const s = { flex: 1 }
   return (
-    <NotificationContext.Provider
-      value={{
-        tappedForegroundNotification: false,
-        initialUrl: '',
-        setTappedForegroundNotification: () => {},
-        setInitialUrl: () => {},
-      }}>
+    <NotificationContext.Provider value={contextValues}>
       <View style={s}>{children}</View>
     </NotificationContext.Provider>
   )

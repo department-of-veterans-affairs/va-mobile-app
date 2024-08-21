@@ -269,26 +269,22 @@ export function AuthGuard() {
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
-    console.log(loggedIn)
-    console.log(tappedForegroundNotification)
     if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
-      return
     } else {
       dispatch(initializeAuth())
-
-      const listener = (event: { url: string }): void => {
-        if (event.url?.startsWith('vamobile://login-success?')) {
-          dispatch(handleTokenCallbackUrl(event.url))
-        }
-      }
-      const sub = Linking.addEventListener('url', listener)
-      return (): void => {
-        sub?.remove()
+    }
+    const listener = (event: { url: string }): void => {
+      if (event.url?.startsWith('vamobile://login-success?')) {
+        dispatch(handleTokenCallbackUrl(event.url))
       }
     }
-  }, [dispatch, tappedForegroundNotification, loggedIn, setTappedForegroundNotification])
+    const sub = Linking.addEventListener('url', listener)
+    return (): void => {
+      sub?.remove()
+    }
+  }, [dispatch, loggedIn, tappedForegroundNotification])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
