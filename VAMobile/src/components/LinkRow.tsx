@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, TextView, VAIcon } from 'components'
+import { TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
