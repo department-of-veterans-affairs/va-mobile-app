@@ -44,8 +44,8 @@ jobs:
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
-          git checkout -b dev-to-release
-          git push -u origin dev-to-release
+          git checkout -b release- ${{inputs.version}}-to-develop
+          git push -u origin release- ${{inputs.version}}-to-develop
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Merge changes to main and tag for release build'
         run: |
@@ -67,12 +67,3 @@ jobs:
         run: |
           echo "::set-output name=dev::${{env.DEV_PR}}"
           echo "::set-output name=release::${{env.RELEASE_HASH}}"
-  start_slack_thread:
-    name: Start Slack thread
-    if: ${{ failure() }}
-    needs: create_prs
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: 'The `/approve` command for release ${{inputs.version}} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
