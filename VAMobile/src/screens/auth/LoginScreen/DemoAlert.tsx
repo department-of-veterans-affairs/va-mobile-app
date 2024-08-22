@@ -95,21 +95,13 @@ function DemoAlert({ visible, setVisible, onConfirm }: AlertPromptProps) {
             <Box flexDirection={'row'} justifyContent={'flex-end'}>
               <Box mr={theme.dimensions.standardMarginBetween}>
                 <Pressable {...cancelButtonProps}>
-                  <TextView
-                    allowFontScaling={false}
-                    variant="MobileBody"
-                    textTransform="uppercase"
-                    color="buttonSecondary">
+                  <TextView allowFontScaling={false} variant="MobileBody" textTransform="uppercase" color="link">
                     {'Cancel'}
                   </TextView>
                 </Pressable>
               </Box>
               <Pressable {...demoButtonProps}>
-                <TextView
-                  allowFontScaling={false}
-                  variant="MobileBody"
-                  textTransform="uppercase"
-                  color="buttonSecondary">
+                <TextView allowFontScaling={false} variant="MobileBody" textTransform="uppercase" color="link">
                   {'Demo'}
                 </TextView>
               </Pressable>

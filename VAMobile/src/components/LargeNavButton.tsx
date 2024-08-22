@@ -8,8 +8,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-import colors from '../styles/themes/VAColors'
-
 const SkeletonLoader = () => {
   const theme = useTheme()
   return (
@@ -61,7 +59,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     mb: theme.dimensions.condensedMarginBetween,
     backgroundColor: 'textBox',
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 2 },
@@ -111,7 +109,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             height={24}
             name="RightArrowInCircle"
             fill={theme.colors.icon.largeNavButton}
-            fill2={theme.colors.icon.transparent}
+            fill2={'transparent'}
             ml={theme.dimensions.listItemDecoratorMarginLeft}
             preventScaling={true}
           />

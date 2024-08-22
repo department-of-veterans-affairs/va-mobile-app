@@ -6,7 +6,6 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import colors from 'styles/themes/VAColors'
 import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
@@ -168,7 +167,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
     style: bannerShadow
       ? {
-          shadowColor: colors.black,
+          shadowColor: 'black',
           ...Platform.select({
             ios: {
               shadowOffset: { width: 0, height: 6 },
@@ -200,7 +199,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (leftButton) {
     leftTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
@@ -227,7 +226,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (rightButton) {
     rightTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,

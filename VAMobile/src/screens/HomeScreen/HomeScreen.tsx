@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
@@ -49,7 +49,6 @@ import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
-import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
@@ -297,7 +296,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const boxProps: BoxProps = {
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
@@ -343,11 +342,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   alignItems="center"
                   accessible={true}
                   accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                  <VAIcon
-                    name={'CircleCheckMark'}
-                    fill={Colors.vadsColorSuccessDark}
-                    fill2={theme.colors.icon.transparent}
-                  />
+                  <VAIcon name={'CircleCheckMark'} fill={colors.vadsColorSuccessDark} fill2={'transparent'} />
                   <TextView
                     importantForAccessibility={'no'}
                     ml={theme.dimensions.condensedMarginBetween}

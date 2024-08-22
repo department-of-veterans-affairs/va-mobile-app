@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
@@ -19,7 +21,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
-import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
@@ -111,7 +112,7 @@ function SyncScreen({}: SyncScreenProps) {
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
           <LoadingComponent
             justTheSpinnerIcon={true}
-            spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+            spinnerColor={theme.mode === 'dark' ? colors.vadsColorBaseLightest : colors.vadsColorPrimary}
           />
           <TextView
             variant={'MobileBody'}

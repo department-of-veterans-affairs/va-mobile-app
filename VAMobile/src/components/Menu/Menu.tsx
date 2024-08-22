@@ -16,8 +16,6 @@ import {
 
 import theme from 'styles/themes/standardTheme'
 
-import colors from '../../styles/themes/VAColors'
-
 export enum Position {
   TOP_LEFT,
   TOP_RIGHT,
@@ -414,14 +412,14 @@ const styles = StyleSheet.create({
     /* Shadow */
     ...Platform.select({
       ios: {
-        shadowColor: colors.black,
+        shadowColor: 'black',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.6,
         shadowRadius: 4,
       },
       android: {
         elevation: 20,
-        shadowColor: colors.black,
+        shadowColor: 'black',
       },
     }),
   },

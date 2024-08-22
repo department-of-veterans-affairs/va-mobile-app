@@ -81,7 +81,7 @@ export const BackButton: FC<BackButtonProps> = ({
         {chevron}
         <TextView
           variant="ActionBar"
-          color={webview ? 'footerButton' : undefined}
+          color={webview ? 'link' : undefined}
           ml={theme.dimensions.textIconMargin}
           allowFontScaling={false}
           accessible={false}>
