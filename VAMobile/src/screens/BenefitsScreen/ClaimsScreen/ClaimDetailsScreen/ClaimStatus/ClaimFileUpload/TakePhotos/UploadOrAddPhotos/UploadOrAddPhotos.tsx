@@ -326,7 +326,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     if (response.length === 0) {
       setImagesList([])
       showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-      navigateTo('TakePhotos', { claimID: claimID, request, focusOnSnackbar: true })
+      navigation.goBack()
     } else {
       setErrorMessage('')
       setImagesList(response)

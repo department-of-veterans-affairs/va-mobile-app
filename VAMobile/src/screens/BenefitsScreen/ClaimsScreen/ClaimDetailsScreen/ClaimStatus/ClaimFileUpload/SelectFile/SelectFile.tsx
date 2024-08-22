@@ -113,13 +113,13 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         'file',
       ),
     )
-    navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+    navigation.goBack()
   }
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
+      leftButtonText={t('back')}
       onLeftButtonPress={onCancel}
       title={t('fileUpload.selectFiles')}>
       <Box mb={theme.dimensions.contentMarginBottom}>

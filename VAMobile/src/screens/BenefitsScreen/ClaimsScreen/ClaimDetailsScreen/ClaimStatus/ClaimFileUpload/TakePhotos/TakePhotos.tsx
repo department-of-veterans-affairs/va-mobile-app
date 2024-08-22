@@ -57,13 +57,13 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         'photo',
       ),
     )
-    navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+    navigation.goBack()
   }
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
+      leftButtonText={t('back')}
       onLeftButtonPress={onCancel}
       title={t('fileUpload.selectPhotos')}
       testID="takePhotosTestID">

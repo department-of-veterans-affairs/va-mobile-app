@@ -72,10 +72,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   return (
     <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={() => {
-        navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
-      }}
+      leftButtonText={t('back')}
+      onLeftButtonPress={navigation.goBack}
       title={displayName || ''}
       testID="fileRequestDetailsID">
       <Box mb={contentMarginBottom} flex={1}>
@@ -129,14 +127,6 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
                 onPress={onPhotoPress}
                 label={t('fileUpload.takePhotos')}
                 testID={t('fileUpload.takePhotos')}
-                buttonType={ButtonVariants.Secondary}
-              />
-            </Box>
-            <Box mt={theme.dimensions.condensedMarginBetween}>
-              <Button
-                onPress={navigation.goBack}
-                label={t('back')}
-                testID={t('back')}
                 buttonType={ButtonVariants.Secondary}
               />
             </Box>

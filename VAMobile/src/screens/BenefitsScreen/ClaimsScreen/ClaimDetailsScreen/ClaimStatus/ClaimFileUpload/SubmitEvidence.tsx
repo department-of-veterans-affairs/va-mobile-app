@@ -32,7 +32,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
 
   return (
     <FullScreenSubtask
-      leftButtonText={t('cancel')}
+      leftButtonText={t('close')}
       title={t('claimDetails.submitEvidence')}
       onLeftButtonPress={navigation.goBack}>
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>

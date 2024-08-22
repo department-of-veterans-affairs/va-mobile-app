@@ -183,7 +183,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const onFileDelete = () => {
     setFilesList([])
     showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
-    navigateTo('SelectFile', { claimID: claimID, request, focusOnSnackbar: true })
+    navigation.goBack()
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
