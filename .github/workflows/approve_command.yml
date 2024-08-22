@@ -54,6 +54,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'The `/approve` command for release ${{inputs.version}} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-        
-
+      message: 'The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
