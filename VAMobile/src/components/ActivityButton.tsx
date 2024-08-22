@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { Box, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -22,28 +22,23 @@ interface ActivityButtonProps {
 const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: ActivityButtonProps) => {
   const theme = useTheme()
 
-  const boxProps: BoxProps = {
-    style: {
-      shadowColor: colors.black,
-      ...Platform.select({
-        ios: {
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
-          shadowRadius: 8,
-        },
-        android: {
-          elevation: 8,
-        },
-      }),
-    },
-  }
-
   const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     flexDirection: 'row',
     borderRadius: 8,
     backgroundColor: pressed
       ? theme.colors.buttonBackground.activityButtonActive
       : theme.colors.buttonBackground.activityButton,
+    shadowColor: colors.black,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
   })
 
   const onActivityPress = () => {
@@ -63,41 +58,36 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
   }
 
   return (
-    <Box {...boxProps}>
-      <Pressable
-        style={pressableStyle}
-        onPress={onActivityPress}
-        accessible={true}
-        accessibilityRole={'link'}
-        accessibilityLabel={title}
-        accessibilityValue={{ text: subText }}
-        testID={title}>
-        <Box flex={1} my={theme.dimensions.cardPadding} mx={theme.dimensions.buttonPadding}>
-          <Box
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
-            <TextView variant="ActivityButtonHeader">{title}</TextView>
-          </Box>
-          {!!subText && (
-            <Box flexDirection={'row'} alignItems="center">
-              <Box flex={1}>
-                <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
-              </Box>
-              <VAIcon
-                width={24}
-                height={24}
-                name="RightArrowInCircle"
-                fill={theme.colors.icon.activityButton}
-                fill2={theme.colors.icon.transparent}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-                preventScaling={true}
-              />
-            </Box>
-          )}
+    <Pressable
+      style={pressableStyle}
+      onPress={onActivityPress}
+      accessible={true}
+      accessibilityRole={'link'}
+      accessibilityLabel={title}
+      accessibilityValue={{ text: subText }}
+      testID={title}>
+      <Box flex={1} my={theme.dimensions.cardPadding} mx={theme.dimensions.buttonPadding}>
+        <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
+          <TextView variant="ActivityButtonHeader">{title}</TextView>
         </Box>
-      </Pressable>
-    </Box>
+        {!!subText && (
+          <Box flexDirection={'row'} alignItems="center">
+            <Box flex={1}>
+              <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
+            </Box>
+            <VAIcon
+              width={24}
+              height={24}
+              name="RightArrowInCircle"
+              fill={theme.colors.icon.activityButton}
+              fill2={theme.colors.icon.transparent}
+              ml={theme.dimensions.listItemDecoratorMarginLeft}
+              preventScaling={true}
+            />
+          </Box>
+        )}
+      </Box>
+    </Pressable>
   )
 }
 

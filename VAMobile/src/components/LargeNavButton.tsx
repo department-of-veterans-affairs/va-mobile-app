@@ -3,7 +3,7 @@ import ContentLoader, { Rect } from 'react-content-loader/native'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -55,70 +55,63 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const boxProps: BoxProps = {
-    style: {
-      shadowColor: colors.black,
-      ...Platform.select({
-        ios: {
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-        },
-        android: {
-          elevation: 2,
-        },
-      }),
-    },
-  }
-
   const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     width: '100%',
     backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.background.textBox,
     paddingVertical: theme.dimensions.cardPadding,
     paddingHorizontal: theme.dimensions.buttonPadding,
     marginBottom: theme.dimensions.condensedMarginBetween,
+    shadowColor: colors.black,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   })
 
   const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subText || ''}`.trim()
 
   return (
-    <Box {...boxProps}>
-      <Pressable
-        style={pressableStyle}
-        onPress={onPress}
-        accessible={true}
-        accessibilityRole={'link'}
-        testID={title}
-        accessibilityLabel={accessibilityLabel}
-        {...a11yHintProp(a11yHint || '')}>
-        <Box flexDirection="row">
-          <Box flex={1}>
-            <TextView variant="LargeNavButton">{title}</TextView>
-            {showLoading ? (
-              <TextView mt={30} flexDirection={'row'}>
-                <SkeletonLoader />
-              </TextView>
-            ) : subText ? (
-              <TextView mt={20} variant={'LargeNavSubtext'}>
-                {subText}
-              </TextView>
-            ) : (
-              <></>
-            )}
-          </Box>
-          <VAIcon
-            flexDirection="row"
-            alignItems="flex-end"
-            width={24}
-            height={24}
-            name="RightArrowInCircle"
-            fill={theme.colors.icon.largeNavButton}
-            fill2={theme.colors.icon.transparent}
-            ml={theme.dimensions.listItemDecoratorMarginLeft}
-            preventScaling={true}
-          />
+    <Pressable
+      style={pressableStyle}
+      onPress={onPress}
+      accessible={true}
+      accessibilityRole={'link'}
+      testID={title}
+      accessibilityLabel={accessibilityLabel}
+      {...a11yHintProp(a11yHint || '')}>
+      <Box flexDirection="row">
+        <Box flex={1}>
+          <TextView variant="LargeNavButton">{title}</TextView>
+          {showLoading ? (
+            <TextView mt={30} flexDirection={'row'}>
+              <SkeletonLoader />
+            </TextView>
+          ) : subText ? (
+            <TextView mt={20} variant={'LargeNavSubtext'}>
+              {subText}
+            </TextView>
+          ) : (
+            <></>
+          )}
         </Box>
-      </Pressable>
-    </Box>
+        <VAIcon
+          flexDirection="row"
+          alignItems="flex-end"
+          width={24}
+          height={24}
+          name="RightArrowInCircle"
+          fill={theme.colors.icon.largeNavButton}
+          fill2={theme.colors.icon.transparent}
+          ml={theme.dimensions.listItemDecoratorMarginLeft}
+          preventScaling={true}
+        />
+      </Box>
+    </Pressable>
   )
 }
 
