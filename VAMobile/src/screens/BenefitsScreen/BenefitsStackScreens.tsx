@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'

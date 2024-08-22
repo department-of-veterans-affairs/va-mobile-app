@@ -10,7 +10,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
-import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
+import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'

@@ -10,7 +10,6 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
-import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'

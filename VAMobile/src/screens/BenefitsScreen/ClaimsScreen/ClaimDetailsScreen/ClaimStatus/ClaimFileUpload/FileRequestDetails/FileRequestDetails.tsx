@@ -8,7 +8,6 @@ import { map } from 'underscore'
 
 import { Box, BoxProps, FullScreenSubtask, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
-import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
