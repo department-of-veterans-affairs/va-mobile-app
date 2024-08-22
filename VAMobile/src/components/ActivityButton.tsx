@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Linking, Platform, Pressable, ViewStyle } from 'react-native'
+import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
 import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -23,10 +23,6 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
   const theme = useTheme()
 
   const boxProps: BoxProps = {
-    borderRadius: 8,
-    py: theme.dimensions.cardPadding,
-    px: theme.dimensions.buttonPadding,
-    backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
     style: {
       shadowColor: colors.black,
       ...Platform.select({
@@ -42,9 +38,13 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     },
   }
 
-  const pressableStyles: ViewStyle = {
+  const pressableStyles = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     flexDirection: 'row',
-  }
+    borderRadius: 8,
+    backgroundColor: pressed
+      ? theme.colors.buttonBackground.activityButtonActive
+      : theme.colors.buttonBackground.activityButton,
+  })
 
   const onActivityPress = () => {
     let useCaseOneString = ''
@@ -72,7 +72,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
         accessibilityLabel={title}
         accessibilityValue={{ text: subText }}
         testID={title}>
-        <Box flex={1}>
+        <Box flex={1} my={theme.dimensions.cardPadding} mx={theme.dimensions.buttonPadding}>
           <Box
             flexDirection={'row'}
             flexWrap={'wrap'}

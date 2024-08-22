@@ -15,6 +15,7 @@ export type VAButtonBackgroundColors = {
   brandedPrimaryActive: string
   overFlowMenuButton: string
   activityButton: string
+  activityButtonActive: string
   announcementBanner: string
   crisisLine: string
   crisisLineActive: string
