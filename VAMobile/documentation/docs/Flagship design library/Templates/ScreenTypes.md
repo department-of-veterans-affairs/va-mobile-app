@@ -5,7 +5,7 @@ sidebar_position: 3
 The VA mobile app has 5 main screen types that fall into two categories:
 
 **Hierarchical screens:** 
- * The categories, features, and child screens that make up much of the app. 
+* The categories, features, and child screens that make up much of the app. 
 * Make one choice per screen (descending deeper into the app’s hierarchy) until you reach a destination. 
 * These screens always display the tab bar.
 
@@ -63,18 +63,17 @@ The VA mobile app has 5 main screen types that fall into two categories:
 ### Fullscreen task/subtask​
 <iframe width = "750" height = "500" alt="image of fullscreen task/subtask mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2736%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
-* **Definition:** A contained, linear flow that is presented modally at any level of the app’s hierarchy, opening on a layer over the current screen and taking up the whole screen. A fullscreen task/subtask can be one or multiple steps, and it requires an explicit close or cancel button to exit. Use a task/subtask to enable something complex in order to lock in focus. Because it covers the entire screen, it is the only modally appearing screen over which other dialogs or panels can appear. Does not display the tab bar.
+* **Definition:** A contained, linear flow that is presented modally at any level of the app’s hierarchy, opening on a layer over the current screen and taking up the whole screen. A fullscreen task/subtask can be one or multiple steps, and it requires an explicit close or cancel button to exit. Use a task/subtask to enable something complex in order to lock in focus. Because it covers the entire screen, it is the only modally appearing screen over which other dialogs or panels can appear. It does not display the tab bar.
 * **Behaviors & Logic:**
   * **Screen Transition:** Screen transition is vertical (pushing on & off from the bottom) to open the subtask, then horizontal between sequential steps (if applicable).
   * **Scroll behavior:** Content (including primary & secondary action buttons) scrolls if it exceeds the panel height.
   * **Button behavior & display logic**
-    * Top bar action button behavior & display logic
-      * Left button: Cancel only, must be accompanied by primary action button. Closes editable view without saving changes and/or closes entire multi-strep flow without saving changes (Display "Are you sure?" confirmation modal).
+    * Top bar action buttons:
+      * Left button: Cancel (use for single step task or first step in a multi-step task) or Back (use only for subsequent steps in a multi-step task). Must be accompanied by primary action button. Closes editable view without saving changes and/or closes entire multi-strep flow without saving changes (Display "Are you sure?" confirmation modal before closing). 
       * Right button: Done or Close. Does not appear with a primary action button. Closes non-editable view.
-    * Bottom action button behavior & display logic
-      * Locked to bottom of screen
-      * Primary action button: May appear alone or with a secondary action button. If task is a single step, tap to save/submit and close view. If task is multi-step, tap to advance to next step (mid-task) or save/submit and close view (end of task) Always accompanied by Cancel.
-      * Secondary action button: Appears in a multi-step task, accompanied by a primary action button. Tap to go back one step.
+    * Embedded action buttons:
+      * Primary action button: May appear alone or with a secondary action button. If task is a single step, tap to save/submit and close view. If task is multi-step, tap to advance to next step (mid-task) or save/submit and close view (end of task). Always accompanied by a Cancel or Back button, never used with Close or Done.
+      * Secondary action button: May appear above the primary action button, but not alone. 
 * **Example:** Create an appointment, Refill a prescription
 * **Resources:**
   * [Figma file: Fullscreen subtask](https://www.figma.com/file/cdp7Be4UdYesq9fXeqaOgt/IA%2FNAV-Screen-Templates?node-id=155%3A2706)
