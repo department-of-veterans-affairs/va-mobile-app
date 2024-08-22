@@ -711,6 +711,7 @@
   "errors.networkConnection.a11yHint": "Tries to reconnect to internet",
   "errors.networkConnection.body": "You aren't connected to the internet. Check your internet connection and try again.",
   "errors.networkConnection.header": "The app can't be loaded.",
+  "expandToReview": "Expand to review more details",
   "field": "Field",
   "file.removeFile": "Remove file?",
   "files": "Files",

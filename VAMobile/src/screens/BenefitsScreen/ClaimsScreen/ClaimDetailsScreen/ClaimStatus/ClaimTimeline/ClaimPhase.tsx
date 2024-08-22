@@ -127,6 +127,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
       expandedInitialValue={isCurrentPhase}
       customOnPress={accordionPress}
       headerRef={viewRef}
+      a11yHint={t('expandToReview')}
       testID={testID}
     />
   )
