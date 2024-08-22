@@ -18,9 +18,9 @@ _'Relevant for this epic?' column to include Y or N, and explanation if a N_
 | Standards | Feature testing summary written and reviewed with feature team | |  
 | Testing | ACs met on all implementation tickets | |
 | Testing | Accessibility testing per a11y design annotations | |
-| Testing | API errors handled well | |
+| Testing | [API errors](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8943) handled well | |
 | Testing | New screens respect availability framework | |
-| Testing | Screens & API calls follow maintenance windows during downtime | |
+| Testing | Screens & API calls follow [maintenance windows](https://dsvavsp.testrail.io/index.php?/cases/view/33977&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8943) during downtime | |
 | Testing | Existing detox cases all still pass | |
 | Testing | New detox cases are comprehensive and all pass | |
 | Testing | ACs met on all MVP-necessary bug fixes | |
@@ -30,8 +30,8 @@ _'Relevant for this epic?' column to include Y or N, and explanation if a N_
 | -- | -- | -- | -- |
 | Standards | UX notified (in all three categories - UX/interaction, content, and accessibility) when UXQA could be done | | |
 | Standards | Analytics (new or updates) also ready to merge to develop | | |
-| Standards | Website comparison completed | | |
-| Testing | Feature flags (for slow rollout or offswitch) tested | | |
+| Standards | [Website comparison](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_id=8945&group_order=asc&display_deleted_cases=0) completed | | |
+| Testing | [Feature flags](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8942) (for slow rollout or offswitch) tested | | |
 | Testing | Updates to in-app review code to include this feature tested | | |
 | Testing | Compatibility testing (old client & new APIs; new client & old APIs) completed | | |
 | Testing | Finished "just before merge to develop" testing - including feature happy path and merge conflict resolution spot-testing | |
