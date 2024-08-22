@@ -7,17 +7,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
 import {
   DEVICE_ENDPOINT_SID,
   DEVICE_TOKEN_KEY,
   notificationKeys,
-  useLoadPushPreferences,
-  useLoadSystemNotificationsSettings,
+  usePushPreferences,
   useRegisterDevice,
-  useSetPushPref,
+  useSystemNotificationsSettings,
+  useUpdatePushPreferences,
 } from 'api/notifications'
 import { PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import {
@@ -45,23 +44,23 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const queryClient = useQueryClient()
-  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
   const {
     data: pushPreferences,
     isFetching: loadingPreferences,
     error: hasError,
     refetch: refetchPushPreferences,
-  } = useLoadPushPreferences({ enabled: screenContentAllowed('WG_NotificationsSettings') })
-  const { data: systemNotificationData, isFetching: loadingSystemNotification } = useLoadSystemNotificationsSettings({
+  } = usePushPreferences({ enabled: isFocused && screenContentAllowed('WG_NotificationsSettings') })
+  const { data: systemNotificationData, isFetching: loadingSystemNotification } = useSystemNotificationsSettings({
     enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
   })
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
-  const { mutate: setPushPref, isPending: settingPreference } = useSetPushPref()
+  const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
 
   const openSettings = () => {
     queryClient.invalidateQueries({
-      queryKey: [notificationKeys.systemNotifications],
+      queryKey: [notificationKeys.systemSettings],
     })
     Linking.openSettings()
   }
@@ -114,28 +113,27 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   useOnResumeForeground(fetchPreferences)
 
   const preferenceList = (): ReactNode => {
-    if (pushPreferences) {
-      const prefsItems = pushPreferences.preferences.map((pref): SimpleListItemObj => {
-        return {
-          a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
-          text: pref.preferenceName,
-          decorator: ButtonDecoratorType.Switch,
-          decoratorProps: {
-            on: pref.value,
-          },
-          onPress: () => {
-            logAnalyticsEvent(Events.vama_toggle(pref.preferenceName, !pref.value, t('notifications.title')))
-            setPushPref(pref)
-          },
-        }
-      })
-      return (
-        <Box mt={condensedMarginBetween}>
-          <SimpleList items={prefsItems} />
-        </Box>
-      )
-    }
-    return <></>
+    if (!pushPreferences) return <></>
+
+    const prefsItems = pushPreferences.preferences.map((pref): SimpleListItemObj => {
+      return {
+        a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
+        text: pref.preferenceName,
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: pref.value,
+        },
+        onPress: () => {
+          logAnalyticsEvent(Events.vama_toggle(pref.preferenceName, !pref.value, t('notifications.title')))
+          setPushPref(pref)
+        },
+      }
+    })
+    return (
+      <Box mt={condensedMarginBetween}>
+        <SimpleList items={prefsItems} />
+      </Box>
+    )
   }
 
   const loadingCheck = loadingPreferences || loadingSystemNotification || registeringDevice || settingPreference

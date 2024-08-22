@@ -8,21 +8,21 @@ import { notificationKeys } from './queryKeys'
 /**
  * Fetch user system notification settings
  */
-const loadSystemNotificationsSettings = async (): Promise<LoadSystemNotificationsData | undefined> => {
+const getSystemNotificationsSettings = async (): Promise<LoadSystemNotificationsData | undefined> => {
   const systemNotificationsOn = await notificationsEnabled()
   return {
-    systemNotificationsOn: systemNotificationsOn,
+    systemNotificationsOn,
   }
 }
 
 /**
  * Returns a query for user system notification settings
  */
-export const useLoadSystemNotificationsSettings = (options?: { enabled?: boolean }) => {
+export const useSystemNotificationsSettings = (options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: notificationKeys.systemNotifications,
-    queryFn: () => loadSystemNotificationsSettings(),
+    queryKey: notificationKeys.systemSettings,
+    queryFn: () => getSystemNotificationsSettings(),
     meta: {
       errorName: 'loadPushPreferences: Service error',
     },

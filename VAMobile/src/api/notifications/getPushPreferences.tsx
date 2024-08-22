@@ -11,10 +11,12 @@ import { DEVICE_ENDPOINT_SID } from './registerDevice'
 /**
  * Fetch user push preferences
  */
-const loadPushPreferences = async (): Promise<LoadPushPreferencesData | undefined> => {
+const getPushPreferences = async (): Promise<LoadPushPreferencesData | undefined> => {
   const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-  if (!endpoint_sid) return
-  const response = await get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
+  let response
+  if (endpoint_sid) {
+    response = await get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
+  }
   return {
     preferences: response?.data.attributes.preferences || [],
   }
@@ -23,13 +25,13 @@ const loadPushPreferences = async (): Promise<LoadPushPreferencesData | undefine
 /**
  * Returns a query for user push preferences
  */
-export const useLoadPushPreferences = (options?: { enabled?: boolean }) => {
+export const usePushPreferences = (options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: notificationKeys.settings,
-    queryFn: () => loadPushPreferences(),
+    queryKey: notificationKeys.pushPreferences,
+    queryFn: () => getPushPreferences(),
     meta: {
-      errorName: 'loadPushPreferences: Service error',
+      errorName: 'getPushPreferences: Service error',
     },
   })
 }

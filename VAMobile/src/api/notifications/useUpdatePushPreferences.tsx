@@ -13,7 +13,7 @@ import { DEVICE_ENDPOINT_SID } from './registerDevice'
 /**
  * Updates a user's push preference
  */
-const setPushPref = async (preference: PushPreference) => {
+const updatePushPreferences = async (preference: PushPreference) => {
   const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
   const params = { preference: preference.preferenceId, enabled: !preference.value }
   return put(`/v0/push/prefs/${endpoint_sid}`, params)
@@ -22,13 +22,13 @@ const setPushPref = async (preference: PushPreference) => {
 /**
  * Returns a mutation for updating users push preference
  */
-export const useSetPushPref = () => {
+export const useUpdatePushPreferences = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: setPushPref,
+    mutationFn: updatePushPreferences,
     onSuccess: (data: unknown, preference: PushPreference) => {
-      const pushPreferences = queryClient.getQueryData(notificationKeys.settings) as LoadPushPreferencesData
+      const pushPreferences = queryClient.getQueryData(notificationKeys.pushPreferences) as LoadPushPreferencesData
       const index = pushPreferences.preferences.findIndex((p) => p.preferenceId === preference.preferenceId)
       const newPrefSetting: PushPreference = {
         preferenceId: preference.preferenceId,
@@ -36,7 +36,7 @@ export const useSetPushPref = () => {
         value: !preference.value,
       }
       pushPreferences.preferences.splice(index, 1, newPrefSetting)
-      queryClient.setQueryData(notificationKeys.settings, pushPreferences)
+      queryClient.setQueryData(notificationKeys.pushPreferences, pushPreferences)
     },
     onError: (error) => {
       if (isErrorObject(error)) {

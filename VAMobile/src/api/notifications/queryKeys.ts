@@ -1,4 +1,4 @@
 export const notificationKeys = {
-  settings: ['settings'] as const,
-  systemNotifications: ['systemNotifications'] as const,
+  pushPreferences: ['pushPreferences'] as const,
+  systemSettings: ['systemSettings'] as const,
 }

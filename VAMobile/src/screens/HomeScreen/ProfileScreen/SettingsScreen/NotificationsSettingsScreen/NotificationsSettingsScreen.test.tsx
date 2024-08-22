@@ -43,13 +43,13 @@ context('NotificationsSettingsScreen', () => {
 
     const notificationQueriesData: QueriesData = [
       {
-        queryKey: notificationKeys.settings,
+        queryKey: notificationKeys.pushPreferences,
         data: {
           preferences: preferences,
         },
       },
       {
-        queryKey: notificationKeys.systemNotifications,
+        queryKey: notificationKeys.systemSettings,
         data: {
           systemNotificationsOn: systemNotificationsOn,
         },

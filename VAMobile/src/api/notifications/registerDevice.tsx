@@ -14,7 +14,7 @@ export const DEVICE_TOKEN_KEY = '@store_device_token'
 export const DEVICE_ENDPOINT_SID = '@store_device_endpoint_sid'
 export const USER_ID = '@store_user_id'
 /**
- * Updates a user's push preference
+ * Registers device for push notifications
  */
 const registerDevice = async (
   registerDeviceParams: RegisterDeviceParams,
@@ -41,7 +41,7 @@ const registerDevice = async (
 }
 
 /**
- * Returns a mutation for regestering users device for push notifications
+ * Returns a mutation for registering users device for push notifications
  */
 export const useRegisterDevice = () => {
   return useMutation({
