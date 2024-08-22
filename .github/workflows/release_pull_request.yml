@@ -44,8 +44,8 @@ jobs:
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
-          git checkout -b release- ${{inputs.version}}-to-develop
-          git push -u origin release- ${{inputs.version}}-to-develop
+          git checkout -b release-${{inputs.version}}-to-develop
+          git push -u origin release-${{inputs.version}}-to-develop
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Merge changes to main and tag for release build'
         run: |
@@ -53,7 +53,7 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout main
           git checkout release/${{inputs.version}}
-          git checkout -b merge-to-main
+          git checkout -b merge-${{inputs.version}}-to-main
           git merge -s ours main -m "merge main changes"
           git checkout main
           git merge merge-to-main --squash
