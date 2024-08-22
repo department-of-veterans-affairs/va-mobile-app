@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import ContentLoader, { Rect } from 'react-content-loader/native'
 import { useTranslation } from 'react-i18next'
-import { Platform, Pressable, ViewStyle } from 'react-native'
+import { Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -56,10 +56,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {
-    py: theme.dimensions.cardPadding,
-    px: theme.dimensions.buttonPadding,
-    mb: theme.dimensions.condensedMarginBetween,
-    backgroundColor: 'textBox',
     style: {
       shadowColor: colors.black,
       ...Platform.select({
@@ -74,15 +70,20 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     },
   }
 
-  const pressableStyles: ViewStyle = {
+  const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     width: '100%',
-  }
+    backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.background.textBox,
+    paddingVertical: theme.dimensions.cardPadding,
+    paddingHorizontal: theme.dimensions.buttonPadding,
+    marginBottom: theme.dimensions.condensedMarginBetween,
+  })
+
   const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subText || ''}`.trim()
 
   return (
     <Box {...boxProps}>
       <Pressable
-        style={pressableStyles}
+        style={pressableStyle}
         onPress={onPress}
         accessible={true}
         accessibilityRole={'link'}
