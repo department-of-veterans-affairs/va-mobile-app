@@ -164,7 +164,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })
+    navigateTo('FileRequest', { claimID, claim })
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {

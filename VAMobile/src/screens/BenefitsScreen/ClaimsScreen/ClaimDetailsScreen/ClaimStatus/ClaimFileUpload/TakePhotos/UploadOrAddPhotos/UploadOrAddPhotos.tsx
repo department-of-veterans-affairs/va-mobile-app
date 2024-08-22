@@ -103,7 +103,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '', claim })
     }
   }, [filesUploadedSuccess, claim, navigateTo])
 
