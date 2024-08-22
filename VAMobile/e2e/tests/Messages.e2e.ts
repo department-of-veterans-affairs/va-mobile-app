@@ -2,8 +2,14 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
-import { HomeE2eIdConstants } from './HomeScreen.e2e'
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openMessages, resetInAppReview } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openMessages,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export async function getDateWithTimeZone(dateString: string) {
   const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
@@ -17,7 +23,9 @@ export async function getDateWithTimeZone(dateString: string) {
 
 export const MessagesE2eIdConstants = {
   MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
+  MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
   MESSAGE_2_ID: 'Unread: Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
+  MESSAGE_2_READ_ID: 'Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md October 26, 2021 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md October 26, 2021 Appointment: Please read and prepare appropriately',
   MESSAGE_5_ID: 'Vija A. Ravi, Md October 21, 2021 General: Summary of visit',
@@ -53,6 +61,7 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
+  EDIT_DRAFT_PAGE_TEST_ID: 'editDraftTestID',
 }
 
 const tapItems = async (items: string, type: string) => {
@@ -78,6 +87,7 @@ let messageCollapsed
 let messageExpanded
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openMessages()
@@ -190,9 +200,6 @@ describe('Messages Screen', () => {
   })
 
   it('verify appointment message details', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
@@ -233,10 +240,11 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on and then cancel the move option', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(400, 'up')
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Cancel')).tap()
   })
@@ -319,7 +327,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap and move a message', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Custom Folder 2')).tap()
     if (device.getPlatform() === 'android') {
@@ -333,6 +341,7 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
@@ -457,7 +466,6 @@ describe('Messages Screen', () => {
   })
 
   it('navigate to the sent folder and select the first message', async () => {
-    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
@@ -499,10 +507,6 @@ describe('Messages Screen', () => {
   })
 
   it('click the newest message in drafts folder', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
     await waitFor(element(by.text('Test: Test Inquiry')))
@@ -513,6 +517,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify action sheet for edited drafts message', async () => {
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -542,7 +547,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify a draft can be saved and that a alert appears', async () => {
-    await element(by.id('editDraftTestID')).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -552,12 +557,6 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted', async () => {
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
-    await expect(element(by.text('Drafts (3)'))).toExist()
-    await element(by.text('Drafts (3)')).tap()
     await waitFor(element(by.text('Test: Test Inquiry')))
       .toBeVisible()
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))

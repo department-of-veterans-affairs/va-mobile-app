@@ -8,8 +8,8 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
 import {
-  AlertBox,
-  AlertBoxProps,
+  AlertWithHaptics,
+  AlertWithHapticsProps,
   Box,
   BoxProps,
   LoadingComponent,
@@ -80,42 +80,37 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   })
 
   const renderAlert = (): ReactElement => {
-    let alertBoxProps: AlertBoxProps
+    let alertBoxProps: AlertWithHapticsProps
     switch (status) {
       case REQUEST_STATUS.SUCCESS:
         alertBoxProps = {
-          border: 'success',
-          title: t('prescriptions.refillRequestSummary.success'),
+          variant: 'success',
+          header: t('prescriptions.refillRequestSummary.success'),
         }
         break
       case REQUEST_STATUS.MIX:
       case REQUEST_STATUS.FAILED:
       default:
         alertBoxProps = {
-          border: 'error',
-          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
-          text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          variant: 'error',
+          header: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
+          description: t('prescriptions.refillRequestSummary.tryAgain'),
+          descriptionA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          primaryButton: {
+            label: t('tryAgain'),
+            onPress: () => {
+              requestRefill(requestFailed)
+              const prescriptionIds = requestFailed.map((prescription) => prescription.id)
+              logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
+            },
+            a11yHint: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
+          },
         }
         break
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertBox {...alertBoxProps}>
-          {status !== REQUEST_STATUS.SUCCESS && (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <Button
-                onPress={() => {
-                  requestRefill(requestFailed)
-                  const prescriptionIds = requestFailed.map((prescription) => prescription.id)
-                  logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
-                }}
-                label={t('tryAgain')}
-                a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
-              />
-            </Box>
-          )}
-        </AlertBox>
+        <AlertWithHaptics {...alertBoxProps} />
       </Box>
     )
   }

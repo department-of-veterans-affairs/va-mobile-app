@@ -19,10 +19,9 @@ import {
   RefillStatusConstants,
 } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   BoxProps,
-  CollapsibleAlert,
-  CollapsibleAlertProps,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
@@ -404,34 +403,26 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
     }
 
-    const props: CollapsibleAlertProps = {
-      border: 'warning',
-      headerText: t('prescription.history.transferred.title'),
-      body: (
-        <>
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          expandable={true}
+          focusOnError={false}
+          header={t('prescription.history.transferred.title')}
+          description={t('prescription.history.transferred.instructions')}
+          descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
+          analytics={{
+            onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
+          }}>
           <TextView
             mt={theme.dimensions.standardMarginBetween}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
-            paragraphSpacing={true}>
-            {t('prescription.history.transferred.instructions')}
-          </TextView>
-          <TextView
             paragraphSpacing={true}
             accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <LinkWithAnalytics {...linkProps} />
-        </>
-      ),
-      a11yLabel: t('prescription.history.transferred.title'),
-      onExpand() {
-        logAnalyticsEvent(Events.vama_cerner_alert_exp())
-      },
-    }
-
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert {...props} />
+        </AlertWithHaptics>
       </Box>
     )
   }

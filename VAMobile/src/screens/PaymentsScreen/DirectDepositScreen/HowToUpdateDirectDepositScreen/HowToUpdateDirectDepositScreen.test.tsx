@@ -15,7 +15,7 @@ context('HowToUpdateDirectDepositScreen', () => {
   it('initializes correctly', () => {
     expect(screen.getByLabelText('Direct deposit')).toBeTruthy()
     expect(
-      screen.getByRole('header', {
+      screen.getByRole('heading', {
         name: 'You’ll need to sign in with a verified ID.me or Login.gov account to update your direct deposit information',
       }),
     ).toBeTruthy()

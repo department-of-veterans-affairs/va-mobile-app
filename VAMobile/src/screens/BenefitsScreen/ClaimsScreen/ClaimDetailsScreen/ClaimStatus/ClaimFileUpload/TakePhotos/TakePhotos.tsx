@@ -7,8 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
-import CollapsibleAlert from 'components/CollapsibleAlert'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
@@ -49,23 +48,6 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   }
 
-  const collapsibleContent = (
-    <Box mt={theme.dimensions.standardMarginBetween}>
-      <TextView
-        variant="MobileBody"
-        paragraphSpacing={true}
-        accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
-        {t('fileUpload.accessibilityAlert.body')}
-      </TextView>
-      <LinkWithAnalytics
-        type="url"
-        url={LINK_URL_GO_TO_VA_GOV}
-        text={t('goToVAGov')}
-        a11yLabel={a11yLabelVA(t('goToVAGov'))}
-      />
-    </Box>
-  )
-
   const onCancel = () => {
     logAnalyticsEvent(
       Events.vama_evidence_cancel_1(
@@ -87,16 +69,23 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
       testID="takePhotosTestID">
       {!!error && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
+          <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
         </Box>
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert
-          border="informational"
-          headerText={t('fileUpload.accessibilityAlert.title')}
-          body={collapsibleContent}
-          a11yLabel={t('fileUpload.accessibilityAlert.title')}
-        />
+        <AlertWithHaptics
+          variant="info"
+          expandable={true}
+          header={t('fileUpload.accessibilityAlert.title')}
+          description={t('fileUpload.accessibilityAlert.body')}
+          descriptionA11yLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_GO_TO_VA_GOV}
+            text={t('goToVAGov')}
+            a11yLabel={a11yLabelVA(t('goToVAGov'))}
+          />
+        </AlertWithHaptics>
       </Box>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
