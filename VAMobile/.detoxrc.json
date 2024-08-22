@@ -53,5 +53,19 @@
     "init": {
       "exposeGlobals": false
     }
+  },
+  "artifacts": {
+    "plugins": {
+      "screenshot": {
+        "enabled": true,
+        "shouldTakeAutomaticSnapshots": true,
+        "keepOnlyFailedTestsArtifacts": false,
+        "takeWhen": {
+          "testStart": false,
+          "testDone": true,
+          "appNotReady": true
+        }
+      }
+    }
   }
 }
