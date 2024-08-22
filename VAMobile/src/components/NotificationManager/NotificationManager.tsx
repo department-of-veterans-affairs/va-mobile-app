@@ -19,7 +19,7 @@ interface NotificationContextType {
   setInitialUrl: Dispatch<SetStateAction<string>>
 }
 
-export const NotificationContext = createContext<NotificationContextType>({
+const NotificationContext = createContext<NotificationContextType>({
   tappedForegroundNotification: false,
   initialUrl: '',
   setTappedForegroundNotification: () => {},

@@ -46,14 +46,22 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
+
+  const {
+    data: systemNotificationData,
+    isFetching: loadingSystemNotification,
+    refetch: refetchSystemNotificationSettings,
+  } = useSystemNotificationsSettings({
+    enabled: screenContentAllowed('WG_NotificationsSettings'),
+  })
   const {
     data: pushPreferences,
     isFetching: loadingPreferences,
     error: hasError,
     refetch: refetchPushPreferences,
-  } = usePushPreferences({ enabled: isFocused && screenContentAllowed('WG_NotificationsSettings') })
-  const { data: systemNotificationData, isFetching: loadingSystemNotification } = useSystemNotificationsSettings({
-    enabled: isFocused && screenContentAllowed('WG_NotificationsSettings'),
+  } = usePushPreferences({
+    enabled:
+      isFocused && systemNotificationData?.systemNotificationsOn && screenContentAllowed('WG_NotificationsSettings'),
   })
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
@@ -111,6 +119,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   }
 
   useOnResumeForeground(fetchPreferences)
+  useOnResumeForeground(refetchSystemNotificationSettings)
 
   const preferenceList = (): ReactNode => {
     if (!pushPreferences) return <></>

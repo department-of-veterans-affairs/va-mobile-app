@@ -24,7 +24,7 @@ export const useSystemNotificationsSettings = (options?: { enabled?: boolean }) 
     queryKey: notificationKeys.systemSettings,
     queryFn: () => getSystemNotificationsSettings(),
     meta: {
-      errorName: 'loadPushPreferences: Service error',
+      errorName: 'getSystemNotificationsSettings: Failed to retrieve system notification setting',
     },
   })
 }
