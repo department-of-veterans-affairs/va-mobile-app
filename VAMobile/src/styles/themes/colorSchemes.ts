@@ -17,7 +17,6 @@ export const lightTheme = {
     headerDropShadow: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
-    ctaButton: colors.secondaryDark,
     completedPhase: colors.greenDarker,
     currentPhase: colors.primary,
     upcomingPhase: colors.grayLight,
@@ -190,6 +189,8 @@ export const lightTheme = {
     overFlowMenuButton: colors.primaryAltLightest,
     activityButton: DSColors.vadsColorPrimaryDarker,
     announcementBanner: colors.white,
+    crisisLine: colors.secondaryDark,
+    crisisLineActive: DSColors.vadsColorActionSurfaceDestructiveActiveOnLight,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -242,7 +243,6 @@ export const darkTheme = {
     headerDropShadow: colors.black,
     shadow: colors.grayWarmLight,
     profileBanner: colors.primaryDarker2,
-    ctaButton: DSColors.uswdsSystemColorRedVivid40,
     completedPhase: colors.greenLight,
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
@@ -412,6 +412,8 @@ export const darkTheme = {
     overFlowMenuButton: colors.darkmodeBorder,
     activityButton: DSColors.uswdsSystemColorBlueVivid30,
     announcementBanner: colors.darkmodeGrayWarmDark,
+    crisisLine: DSColors.uswdsSystemColorRedVivid40,
+    crisisLineActive: DSColors.vadsColorActionSurfaceDestructiveActiveOnDark,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,
