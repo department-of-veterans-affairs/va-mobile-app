@@ -18,7 +18,7 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
   const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     borderRadius: 8,
     padding: theme.dimensions.buttonPadding,
-    backgroundColor: pressed ? theme.colors.background.linkRowActive : theme.colors.background.linkRow,
+    backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.background.linkRow,
     marginBottom: theme.dimensions.condensedMarginBetween,
     flexDirection: 'row',
     alignItems: 'center',
