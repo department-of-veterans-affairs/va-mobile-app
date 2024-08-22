@@ -6,10 +6,8 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ButtonDecoratorType,
   ErrorComponent,
@@ -35,7 +33,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
-  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } =
     useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
@@ -116,14 +114,15 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               {preferenceList()}
             </>
           ) : (
-            <AlertBox
-              border={'informational'}
-              title={t('notifications.settings.alert.title')}
-              text={t('notifications.settings.alert.text')}>
-              <Box mt={standardMarginBetween}>
-                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
-              </Box>
-            </AlertBox>
+            <AlertWithHaptics
+              variant="info"
+              header={t('notifications.settings.alert.title')}
+              description={t('notifications.settings.alert.text')}
+              primaryButton={{
+                label: t('notifications.settings.alert.openSettings'),
+                onPress: goToSettings,
+              }}
+            />
           )}
           <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
             {t('notifications.settings.privacy')}
