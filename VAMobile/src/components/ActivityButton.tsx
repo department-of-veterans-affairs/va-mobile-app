@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -38,7 +38,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     },
   }
 
-  const pressableStyles = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
+  const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     flexDirection: 'row',
     borderRadius: 8,
     backgroundColor: pressed
@@ -65,7 +65,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
   return (
     <Box {...boxProps}>
       <Pressable
-        style={pressableStyles}
+        style={pressableStyle}
         onPress={onActivityPress}
         accessible={true}
         accessibilityRole={'link'}
