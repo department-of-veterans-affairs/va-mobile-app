@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Alert, ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
 import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
@@ -16,7 +16,15 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LinkWithAnalytics,
+  LoadingComponent,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -156,7 +164,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })
+    navigateTo('FileRequest', { claimID, claim })
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
@@ -189,7 +197,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <Alert {...alertProps} />
+          <AlertWithHaptics {...alertProps} />
         </Box>
       )
     }
@@ -209,7 +217,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         }
         return (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Alert {...alertProps} />
+            <AlertWithHaptics {...alertProps} />
           </Box>
         )
       }

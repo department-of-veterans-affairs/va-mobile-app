@@ -12,7 +12,7 @@ import _ from 'underscore'
 import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
@@ -103,7 +103,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      navigateTo('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '', claim })
     }
   }, [filesUploadedSuccess, claim, navigateTo])
 
@@ -334,11 +334,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         <Box mb={theme.dimensions.contentMarginBottom}>
           {!!errorMessage && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox
+              <AlertWithHaptics
+                variant="error"
+                header={t('fileUpload.PhotosNotUploaded')}
+                description={errorMessage}
                 scrollViewRef={scrollViewRef}
-                title={t('fileUpload.PhotosNotUploaded')}
-                text={errorMessage}
-                border="error"
                 focusOnError={onSaveClicked}
               />
             </Box>
