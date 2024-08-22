@@ -73,6 +73,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
               a11yLabel: a11yLabelVA(t('inAppRecruitment.makeAppBetter.bullet.3')),
             },
           ]}
+          paragraphSpacing={true}
         />
         <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
         <Box mt={theme.dimensions.standardMarginBetween}>

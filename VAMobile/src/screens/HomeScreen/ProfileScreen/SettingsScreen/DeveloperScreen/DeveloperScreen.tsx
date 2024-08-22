@@ -200,7 +200,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Auth Tokens
           </TextView>
         </TextArea>
@@ -218,7 +218,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       })}
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Authorized Services
           </TextView>
         </TextArea>
@@ -239,7 +239,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Environment Variables
           </TextView>
         </TextArea>
@@ -259,7 +259,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Encouraged Update and What's New Versions
           </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
@@ -317,7 +317,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Push Notifications
           </TextView>
         </TextArea>

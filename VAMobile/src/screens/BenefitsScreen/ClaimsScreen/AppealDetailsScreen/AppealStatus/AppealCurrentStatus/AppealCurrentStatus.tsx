@@ -353,7 +353,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               {details[0]}
             </TextView>
             <Box mt={marginTop}>
-              <VABulletList listOfText={[details[1], details[2]]} />
+              <VABulletList listOfText={[details[1], details[2]]} paragraphSpacing={true} />
             </Box>
           </Box>
         )
@@ -378,7 +378,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               {details[1]}
             </TextView>
             <Box mt={marginTop}>
-              <VABulletList listOfText={bulletList} />
+              <VABulletList listOfText={bulletList} paragraphSpacing={true} />
             </Box>
           </Box>
         )
@@ -405,9 +405,9 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
-                {details[4]}
-              </TextView>
+            </TextView>
+            <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+              {details[4]}
               <TextView variant="MobileBody">.</TextView>
             </TextView>
           </Box>
@@ -612,10 +612,10 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading" accessibilityRole="header">
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
-      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
+      <TextView variant="MobileBody" mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}

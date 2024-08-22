@@ -5,6 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { contactInformationKeys } from './queryKeys'
 import { validateAddress } from './validateAddress'
@@ -39,6 +40,7 @@ export const useSaveAddress = () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       logAnalyticsEvent(Events.vama_prof_update_address())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
+      registerReviewEvent()
     },
     onError: (error) => {
       if (isErrorObject(error)) {

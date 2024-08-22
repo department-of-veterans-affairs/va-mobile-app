@@ -11,6 +11,6 @@ context('DowntimeError', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Maintenance on mobile app' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Maintenance on mobile app' })).toBeTruthy()
   })
 })

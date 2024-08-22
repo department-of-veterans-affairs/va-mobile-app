@@ -1,11 +1,12 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openContactInfo, openProfile, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openContactInfo, openProfile, toggleRemoteConfigFlag } from './utils'
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
+  MAILING_ADDRESS_2_ID: 'Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
   HOME_ADDRESS_ID: 'Home address Add your home address',
   HOME_PHONE_ID: 'homePhone',
   WORK_PHONE_ID: 'workPhone',
@@ -171,11 +172,6 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
 export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should open the ' + phoneType + ' phone number', async () => {
-    if (phoneType === 'Mobile') {
-      await resetInAppReview()
-      await openProfile()
-      await openContactInfo()
-    }
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
@@ -401,7 +397,9 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
   })
 }
+
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openContactInfo()
@@ -436,9 +434,6 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
 
   it('should open the email address', async () => {
-    await resetInAppReview()
-    await openProfile()
-    await openContactInfo()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
@@ -485,5 +480,5 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_2_ID, 'Mailing')
 })

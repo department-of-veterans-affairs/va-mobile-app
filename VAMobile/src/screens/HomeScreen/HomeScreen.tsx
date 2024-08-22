@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
@@ -265,6 +265,18 @@ export function HomeScreen({}: HomeScreenProps) {
     !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
     !!serviceHistoryQuery.data?.mostRecentBranch
 
+  const aboutYouFeatureInDowntime = !!(
+    (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
+    (authorizedServicesQuery.data?.disabilityRating && disabilityRatingInDowntime) ||
+    (authorizedServicesQuery.data?.lettersAndDocuments && lettersInDowntime)
+  )
+
+  const hasAboutYouError = !!(
+    disabilityRatingQuery.isError ||
+    letterBeneficiaryQuery.isError ||
+    serviceHistoryQuery.isError
+  )
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -333,7 +345,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
                   <VAIcon
                     name={'CircleCheckMark'}
-                    fill={Colors.vadsColorSuccessDark}
+                    fill={DSColors.vadsColorSuccessDark}
                     fill2={theme.colors.icon.transparent}
                   />
                   <TextView
@@ -418,7 +430,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasAboutYouInfo ? (
+          ) : !hasAboutYouInfo && !hasAboutYouError ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
@@ -481,6 +493,9 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
               </Box>
+              {(hasAboutYouError || aboutYouFeatureInDowntime) && (
+                <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={hasAboutYouError} />
+              )}
             </Box>
           )}
         </Box>
