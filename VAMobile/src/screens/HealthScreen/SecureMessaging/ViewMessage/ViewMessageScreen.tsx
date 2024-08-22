@@ -44,6 +44,7 @@ import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -150,6 +151,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
+      registerReviewEvent()
     }
   }, [threadFetched])
 
