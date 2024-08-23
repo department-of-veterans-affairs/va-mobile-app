@@ -3,9 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -52,8 +50,6 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
     logAnalyticsEvent(Events.vama_fail())
   }, [])
 
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
-
   const tryAgain = () => {
     logAnalyticsEvent(Events.vama_fail_refresh())
     if (onTryAgain) {
@@ -64,16 +60,16 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox
-          title={titleText ? titleText : t('errors.callHelpCenter.vaAppNotWorking')}
-          titleA11yLabel={titleA11yHint ? titleA11yHint : a11yLabelVA(t('errors.callHelpCenter.vaAppNotWorking'))}
-          text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
-          border="error">
+        <AlertWithHaptics
+          variant="error"
+          header={titleText ? titleText : t('errors.callHelpCenter.vaAppNotWorking')}
+          headerA11yLabel={titleA11yHint ? titleA11yHint : a11yLabelVA(t('errors.callHelpCenter.vaAppNotWorking'))}
+          description={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
+          primaryButton={onTryAgain && { label: t('refresh'), onPress: tryAgain, testID: t('refresh') }}>
           <Box>
             <TextView
               variant="MobileBody"
               paragraphSpacing={true}
-              mt={theme.paragraphSpacing.spacing20FontSize}
               accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
@@ -82,13 +78,8 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
               displayedText={callPhone ? undefined : displayedTextPhoneNumber(t('8006982411'))}
               phone={callPhone ? callPhone : t('8006982411')}
             />
-            {onTryAgain && (
-              <Box mt={standardMarginBetween} accessibilityRole="button">
-                <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
-              </Box>
-            )}
           </Box>
-        </AlertBox>
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )
