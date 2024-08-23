@@ -204,7 +204,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should verify details of claim on step 1', async () => {
-    await resetInAppReview()
     await openBenefits()
     await openClaims()
     await openClaimsHistory()
