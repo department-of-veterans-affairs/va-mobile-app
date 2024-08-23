@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native/types'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
@@ -71,7 +71,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     e.preventDefault()
     confirmAlert({
       title: t('fileUpload.discard.confirm.title'),
-      message: t('fileUpload.discard.confirm.message'),
+      message: request
+        ? t('fileUpload.discard.confirm.message.requestFile')
+        : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
       cancelButtonIndex: 0,
       destructiveButtonIndex: 1,
       buttons: [
@@ -81,7 +83,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         {
           text: t('fileUpload.cancelUpload'),
           onPress: () => {
-            navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+            if (request) {
+              navigateTo('FileRequestDetails', { claimID, request })
+            } else {
+              navigateTo('SubmitEvidence', { claimID })
+            }
           },
         },
       ],
@@ -323,7 +329,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                   {t('fileUpload.requiredFile')}
                 </TextView>
               )}
-              <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} />
+              <Button
+                buttonType={ButtonVariants.Secondary}
+                onPress={onSelectFile}
+                label={t('fileUpload.selectAFile')}
+              />
             </Box>
           )}
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>

@@ -204,9 +204,10 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should verify details of claim on step 1', async () => {
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
+    await element(by.text('Back')).tap()
+    await element(by.text('Cancel')).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()

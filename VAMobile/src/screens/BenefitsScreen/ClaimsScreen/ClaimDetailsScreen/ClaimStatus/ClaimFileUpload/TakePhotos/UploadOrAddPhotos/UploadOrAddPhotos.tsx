@@ -83,7 +83,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     e.preventDefault()
     confirmAlert({
       title: t('fileUpload.discard.confirm.title.photos'),
-      message: t('fileUpload.discard.confirm.message.photos'),
+      message: request
+        ? t('fileUpload.discard.confirm.message.requestPhotos')
+        : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
       cancelButtonIndex: 0,
       destructiveButtonIndex: 1,
       buttons: [
@@ -94,7 +96,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         {
           text: t('fileUpload.cancelUpload'),
           onPress: () => {
-            navigateTo('ClaimDetailsScreen', { claimID: claimID, claimType: ClaimTypeConstants.ACTIVE })
+            if (request) {
+              navigateTo('FileRequestDetails', { claimID, request })
+            } else {
+              navigateTo('SubmitEvidence', { claimID })
+            }
           },
         },
       ],
