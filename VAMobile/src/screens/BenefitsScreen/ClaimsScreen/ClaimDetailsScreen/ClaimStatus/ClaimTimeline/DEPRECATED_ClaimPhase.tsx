@@ -127,7 +127,7 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })
+    navigateTo('FileRequest', { claimID, undefined })
   }
 
   return (
