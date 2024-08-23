@@ -72,6 +72,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
   }
+  const [imagesEmptyError, setImagesEmptyError] = useState(false)
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
 
@@ -159,6 +160,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   }
 
   const onUpload = (): void => {
+    if (imagesEmptyError) {
+      return
+    }
     const totalSize = imagesList?.reduce((sum, image) => sum + (image.fileSize || 0), 0)
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
@@ -310,35 +314,29 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         imagesCopy?.push(asset)
       })
       setImagesList(imagesCopy)
+      setImagesEmptyError(false)
       let fileSizeAdded = 0
       response.assets?.forEach((asset) => {
         if (asset.fileSize) {
           fileSizeAdded = fileSizeAdded + asset.fileSize
         }
       })
-      if (fileSizeAdded && totalBytesUsed) {
+      if (fileSizeAdded && (totalBytesUsed || totalBytesUsed === 0)) {
         setTotalBytesUsed(totalBytesUsed + fileSizeAdded)
       }
     }
   }
 
   const deleteCallbackIfUri = (response: Asset[]): void => {
-    if (response.length === 0) {
-      setImagesList([])
-      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-      navigation.goBack()
-    } else {
-      setErrorMessage('')
-      setImagesList(response)
-      let bytesUsed = 0
-      response.forEach((image) => {
-        if (image.fileSize) {
-          bytesUsed = bytesUsed + image.fileSize
-        }
-      })
-      setTotalBytesUsed(bytesUsed)
-      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-    }
+    setErrorMessage('')
+    setImagesList(response)
+    let bytesUsed = 0
+    response.forEach((image) => {
+      if (image.fileSize) {
+        bytesUsed = bytesUsed + image.fileSize
+      }
+    })
+    setTotalBytesUsed(bytesUsed)
   }
 
   return (
@@ -384,11 +382,15 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             borderBottomWidth={1}
             borderBottomColor="primary"
             pt={theme.dimensions.standardMarginBetween}
-            pb={theme.dimensions.standardMarginBetween}
-            display="flex"
-            flexDirection="row"
-            flexWrap="wrap">
-            {displayImages()}
+            pb={theme.dimensions.standardMarginBetween}>
+            {imagesEmptyError && (
+              <TextView variant="MobileBodyBold" color="error" mb={3} ml={theme.dimensions.gutter}>
+                {t('fileUpload.requiredPhoto')}
+              </TextView>
+            )}
+            <Box display="flex" flexDirection="row" flexWrap="wrap">
+              {displayImages()}
+            </Box>
           </Box>
           <Box
             justifyContent="space-between"
@@ -418,6 +420,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
               <Button
                 onPress={() => {
+                  if (imagesList?.length === 0) {
+                    setImagesEmptyError(true)
+                  }
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}

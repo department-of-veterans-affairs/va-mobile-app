@@ -772,6 +772,8 @@
   "fileUpload.pleaseRequestFromPhoneFiles.bolded": "only submit 1 file ",
   "fileUpload.pleaseRequestFromPhoneFiles.pt2": "with this request.",
   "fileUpload.pleaseRequestFromPhoneFiles.pt2SubmitEvidence": "at a time.",
+  "fileUpload.requiredFile": "File is required",
+  "fileUpload.requiredPhoto": "Photo is required",
   "fileUpload.selectAFile": "Select a file",
   "fileUpload.selectAFileToUpload": "Select a file to upload for {{requestTitle}}",
   "fileUpload.selectAFileToUploadSubmitEvidence": "Select a file to upload",

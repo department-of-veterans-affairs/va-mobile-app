@@ -110,7 +110,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
   return (
     <FullScreenSubtask
-      leftButtonText={t('close')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       title={t('fileRequest.title')}
       testID="fileRequestPageTestID">

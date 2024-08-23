@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import DocumentPicker from 'react-native-document-picker'
+import { ScrollView } from 'react-native/types'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -8,7 +11,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
-import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
+import { AlertWithHaptics, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -17,13 +20,15 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import {
   useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useRouteNavigation,
+  useShowActionSheet,
   useTheme,
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
@@ -49,10 +54,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
   }
+  const [error, setError] = useState('')
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
+  const [filesEmptyError, setFilesEmptyError] = useState(false)
+  const showActionSheet = useShowActionSheet()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const waygate = getWaygateToggles().WG_UploadFile
-
   useBeforeNavBackListener(navigation, (e) => {
+    if (isActionSheetVisible) {
+      e.preventDefault()
+    }
     if (filesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
@@ -130,6 +142,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   }
 
   const onUpload = (): void => {
+    if (filesEmptyError) {
+      return
+    }
     const totalSize = filesList.reduce((sum, file) => sum + file.size, 0)
     logAnalyticsEvent(
       Events.vama_evidence_cont_2(
@@ -182,8 +197,63 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   const onFileDelete = () => {
     setFilesList([])
-    showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
-    navigation.goBack()
+  }
+
+  const onFileFolder = async (): Promise<void> => {
+    const {
+      pickSingle,
+      types: { images, plainText, pdf },
+    } = DocumentPicker
+
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_1(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'file'),
+    )
+
+    try {
+      const document = (await pickSingle({
+        type: [images, plainText, pdf],
+      })) as DocumentPickerResponse
+
+      if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
+        setError(t('fileUpload.fileSizeError'))
+        return
+      }
+
+      if (!isValidFileType(document.type)) {
+        setError(t('fileUpload.fileTypeError'))
+        return
+      }
+      setFilesEmptyError(false)
+      setError('')
+      setFilesList([document])
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (docError: any) {
+      if (DocumentPicker.isCancel(docError as Error)) {
+        return
+      }
+      logNonFatalErrorToFirebase(docError, 'onFileFolder: SelectFile.tsx Error')
+      setError(docError.code)
+    }
+  }
+
+  const onSelectFile = (): void => {
+    const options = [t('fileUpload.fileFolder'), t('cancel')]
+
+    setIsActionSheetVisible(true)
+    showActionSheet(
+      {
+        options,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        setIsActionSheetVisible(false)
+        switch (buttonIndex) {
+          case 0:
+            onFileFolder()
+            break
+        }
+      },
+    )
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
@@ -230,6 +300,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
         <>
+          {!!error && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
+            </Box>
+          )}
           {request && (
             <TextView
               variant="MobileBodyBold"
@@ -239,7 +314,18 @@ function UploadFile({ navigation, route }: UploadFileProps) {
               {request.displayName}
             </TextView>
           )}
-          <FileList files={[fileUploaded]} onDelete={onFileDelete} />
+          {filesList && filesList.length > 0 ? (
+            <FileList files={filesList} onDelete={onFileDelete} />
+          ) : (
+            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
+              {filesEmptyError && (
+                <TextView variant="MobileBodyBold" color="error" mb={3}>
+                  {t('fileUpload.requiredFile')}
+                </TextView>
+              )}
+              <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} />
+            </Box>
+          )}
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper
               fieldsList={pickerField}
@@ -250,6 +336,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
               <Button
                 onPress={() => {
+                  if (filesList?.length === 0) {
+                    setFilesEmptyError(true)
+                  }
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
