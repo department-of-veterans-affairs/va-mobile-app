@@ -306,55 +306,57 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
         <>
-          {!!error && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
-            </Box>
-          )}
-          {request && (
-            <TextView
-              variant="MobileBodyBold"
-              accessibilityRole="header"
-              mb={theme.dimensions.contentMarginBottom}
-              mx={theme.dimensions.gutter}>
-              {request.displayName}
-            </TextView>
-          )}
-          {filesList && filesList.length > 0 ? (
-            <FileList files={filesList} onDelete={onFileDelete} />
-          ) : (
-            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
-              {filesEmptyError && (
-                <TextView variant="MobileBodyBold" color="error" mb={3}>
-                  {t('fileUpload.requiredFile')}
-                </TextView>
-              )}
-              <Button
-                buttonType={ButtonVariants.Secondary}
-                onPress={onSelectFile}
-                label={t('fileUpload.selectAFile')}
+          <Box flex={1}>
+            {!!error && (
+              <Box mb={theme.dimensions.standardMarginBetween}>
+                <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
+              </Box>
+            )}
+            {request && (
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                mb={theme.dimensions.contentMarginBottom}
+                mx={theme.dimensions.gutter}>
+                {request.displayName}
+              </TextView>
+            )}
+            {filesList && filesList.length > 0 ? (
+              <FileList files={filesList} onDelete={onFileDelete} />
+            ) : (
+              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
+                {filesEmptyError && (
+                  <TextView variant="MobileBodyBold" color="error" mb={3}>
+                    {t('fileUpload.requiredFile')}
+                  </TextView>
+                )}
+                <Button
+                  buttonType={ButtonVariants.Secondary}
+                  onPress={onSelectFile}
+                  label={t('fileUpload.selectAFile')}
+                />
+              </Box>
+            )}
+            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+              <FormWrapper
+                fieldsList={pickerField}
+                onSave={onUpload}
+                onSaveClicked={onSaveClicked}
+                setOnSaveClicked={setOnSaveClicked}
               />
             </Box>
-          )}
-          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-            <FormWrapper
-              fieldsList={pickerField}
-              onSave={onUpload}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
+          </Box>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+            <Button
+              onPress={() => {
+                if (filesList?.length === 0) {
+                  setFilesEmptyError(true)
+                }
+                setOnSaveClicked(true)
+              }}
+              label={t('fileUpload.submit')}
+              testID={t('fileUpload.submit')}
             />
-            <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <Button
-                onPress={() => {
-                  if (filesList?.length === 0) {
-                    setFilesEmptyError(true)
-                  }
-                  setOnSaveClicked(true)
-                }}
-                label={t('fileUpload.submit')}
-                testID={t('fileUpload.submit')}
-              />
-            </Box>
           </Box>
         </>
       )}

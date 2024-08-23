@@ -364,79 +364,83 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          {!!errorMessage && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertWithHaptics
-                variant="error"
-                header={t('fileUpload.PhotosNotUploaded')}
-                description={errorMessage}
-                scrollViewRef={scrollViewRef}
-                focusOnError={onSaveClicked}
-              />
-            </Box>
-          )}
-          {request && (
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
-              {request.displayName}
-            </TextView>
-          )}
-          <Box
-            backgroundColor={'contentBox'}
-            borderTopWidth={1}
-            borderTopColor="primary"
-            borderBottomWidth={1}
-            borderBottomColor="primary"
-            pt={theme.dimensions.standardMarginBetween}
-            pb={theme.dimensions.standardMarginBetween}>
-            {imagesEmptyError && (
-              <TextView variant="MobileBodyBold" color="error" mb={3} ml={theme.dimensions.gutter}>
-                {t('fileUpload.requiredPhoto')}
+        <>
+          <Box flex={1}>
+            {!!errorMessage && (
+              <Box mb={theme.dimensions.standardMarginBetween}>
+                <AlertWithHaptics
+                  variant="error"
+                  header={t('fileUpload.PhotosNotUploaded')}
+                  description={errorMessage}
+                  scrollViewRef={scrollViewRef}
+                  focusOnError={onSaveClicked}
+                />
+              </Box>
+            )}
+            {request && (
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
+                {request.displayName}
               </TextView>
             )}
-            <Box display="flex" flexDirection="row" flexWrap="wrap">
-              {displayImages()}
+            <Box
+              backgroundColor={'contentBox'}
+              borderTopWidth={1}
+              borderTopColor="primary"
+              borderBottomWidth={1}
+              borderBottomColor="primary"
+              pt={theme.dimensions.standardMarginBetween}
+              pb={theme.dimensions.standardMarginBetween}>
+              {imagesEmptyError && (
+                <TextView variant="MobileBodyBold" color="error" mb={3} ml={theme.dimensions.gutter}>
+                  {t('fileUpload.requiredPhoto')}
+                </TextView>
+              )}
+              <Box display="flex" flexDirection="row" flexWrap="wrap">
+                {displayImages()}
+              </Box>
             </Box>
-          </Box>
-          <Box
-            justifyContent="space-between"
-            flexDirection="row"
-            flexWrap="wrap"
-            mx={theme.dimensions.gutter}
-            mt={theme.dimensions.condensedMarginBetween}
-            mb={theme.dimensions.standardMarginBetween}>
-            <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
-            <TextView
-              variant="HelperText"
-              accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', {
-                sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false),
-              })}>
-              {t('fileUpload.ofFiftyMB', {
-                sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false),
-              })}
-            </TextView>
-          </Box>
-          <Box mx={theme.dimensions.gutter}>
-            <FormWrapper
-              fieldsList={pickerField}
-              onSave={onUpload}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-            <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <Button
-                onPress={() => {
-                  if (imagesList?.length === 0) {
-                    setImagesEmptyError(true)
-                  }
-                  setOnSaveClicked(true)
-                }}
-                label={t('fileUpload.submit')}
-                testID={t('fileUpload.submit')}
+            <Box
+              justifyContent="space-between"
+              flexDirection="row"
+              flexWrap="wrap"
+              mx={theme.dimensions.gutter}
+              mt={theme.dimensions.condensedMarginBetween}
+              mb={theme.dimensions.standardMarginBetween}>
+              <TextView variant="HelperText">
+                {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
+              </TextView>
+              <TextView
+                variant="HelperText"
+                accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', {
+                  sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false),
+                })}>
+                {t('fileUpload.ofFiftyMB', {
+                  sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false),
+                })}
+              </TextView>
+            </Box>
+            <Box mx={theme.dimensions.gutter}>
+              <FormWrapper
+                fieldsList={pickerField}
+                onSave={onUpload}
+                onSaveClicked={onSaveClicked}
+                setOnSaveClicked={setOnSaveClicked}
               />
             </Box>
           </Box>
-        </Box>
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+            <Button
+              onPress={() => {
+                if (imagesList?.length === 0) {
+                  setImagesEmptyError(true)
+                }
+                setOnSaveClicked(true)
+              }}
+              label={t('fileUpload.submit')}
+              testID={t('fileUpload.submit')}
+            />
+          </Box>
+        </>
       )}
     </FullScreenSubtask>
   )

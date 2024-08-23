@@ -121,7 +121,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       leftButtonText={t('back')}
       onLeftButtonPress={onCancel}
       title={t('fileUpload.selectFiles')}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
+      <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
@@ -155,9 +155,9 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
-        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
-        </Box>
+      </Box>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
       </Box>
     </FullScreenSubtask>
   )
