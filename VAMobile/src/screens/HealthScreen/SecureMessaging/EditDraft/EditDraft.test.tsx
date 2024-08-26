@@ -273,7 +273,7 @@ context('EditDraft', () => {
         .mockResolvedValue(recipients)
       initializeTestInstance()
       await waitFor(() =>
-        expect(screen.getByRole('header', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
+        expect(screen.getByRole('heading', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
       )
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Add Files' })).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('button', { name: 'Send' })).toBeFalsy())

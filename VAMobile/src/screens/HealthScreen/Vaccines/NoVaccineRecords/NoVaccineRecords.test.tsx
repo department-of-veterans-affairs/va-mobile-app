@@ -13,7 +13,7 @@ context('NoVaccineRecords', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: "We couldn't find information about your VA vaccines" })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: "We couldn't find information about your VA vaccines" })).toBeTruthy()
     expect(
       screen.getByText(
         "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",

@@ -36,6 +36,31 @@ body:
   validations:
     required: true
 
+- type: input
+  id: teamname
+  attributes:
+    label: Which team is this person on?
+    description: Exposing the primary team name helps us sort access requests
+  validations:
+    required: true
+
+- type: input
+  id: vaoctopo
+  attributes:
+    label: Who is the OCTO Product Owner for this person's team? 
+    description: Add a PO helps us triage requests, and know who the main point of contact is.
+  validations:
+    required: true
+
+- type: input
+  id: slackchannel
+  attributes:
+    label: What is the main Slack channel for this person's team primary team?
+    description: Slack channels help when we need to contact the rest of the team or easily check in.
+    placeholder: '#va-mobile-app'
+  validations:
+    required: true
+
 - type: markdown
   attributes:
     value: |
