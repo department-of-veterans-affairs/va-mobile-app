@@ -36,7 +36,7 @@ context('RadioGroup', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getAllByRole('radio').length).toEqual(mockOptions.length)
+    expect(screen.getAllByRole('link').length).toEqual(mockOptions.length)
     expect(screen.getAllByLabelText('RadioEmpty').length).toEqual(mockOptions.length - 1)
     expect(screen.getAllByLabelText('RadioFilled').length).toEqual(1)
   })
