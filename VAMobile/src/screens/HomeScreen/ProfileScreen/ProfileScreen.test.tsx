@@ -83,13 +83,15 @@ context('ProfileScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component', async () => {
+    it('renders error message', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/military-service-history')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
 
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
   })
 })
