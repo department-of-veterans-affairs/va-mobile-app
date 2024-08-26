@@ -74,7 +74,7 @@ context('UploadFile', () => {
 
   describe('on click of the upload button', () => {
     it('should display an error if the checkbox is not checked', () => {
-      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Document type picker required' }))
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
       fireEvent.press(screen.getByRole('button', { name: 'Done' }))
       fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
@@ -83,7 +83,7 @@ context('UploadFile', () => {
     })
 
     it('should bring up confirmation requirements are met', () => {
-      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Document type picker required' }))
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
       fireEvent.press(screen.getByRole('button', { name: 'Done' }))
       fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
