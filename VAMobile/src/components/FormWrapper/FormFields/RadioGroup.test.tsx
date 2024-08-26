@@ -42,7 +42,7 @@ context('RadioGroup', () => {
   })
 
   it('calls setSelected on press', () => {
-    fireEvent.press(screen.getByRole('radio', { name: '2 ' }))
+    fireEvent.press(screen.getByRole('link', { name: '2 ' }))
     expect(setSelected).toHaveBeenCalled()
   })
 })
