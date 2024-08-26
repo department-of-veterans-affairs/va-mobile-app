@@ -77,6 +77,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const [count, setCount] = useState(0)
 
+  const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
+
   useFocusEffect(
     useCallback(() => {
       setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
@@ -107,6 +109,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           isDisabilityCompensationClaim(attributes.claimTypeCode),
         ),
       )
+
+      // Prevent tab switching or panel opening from triggering autoscroll
+      setScrollIsEnabled(false)
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
 
@@ -301,7 +306,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
             {claim && selectedTab === 0 && (
-              <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} scrollViewRef={scrollViewRef} />
+              <ClaimStatus
+                claim={claim || ({} as ClaimData)}
+                claimType={claimType}
+                scrollIsEnabled={scrollIsEnabled}
+                scrollViewRef={scrollViewRef}
+              />
             )}
             {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
             {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}

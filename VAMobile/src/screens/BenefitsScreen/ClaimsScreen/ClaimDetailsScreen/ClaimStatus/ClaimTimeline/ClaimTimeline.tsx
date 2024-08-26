@@ -17,11 +17,13 @@ export type ClaimTimelineProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
 
-function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProps) {
+function ClaimTimeline({ attributes, claimID, scrollIsEnabled, scrollViewRef }: ClaimTimelineProps) {
   const isFocused = useIsFocused()
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
@@ -44,6 +46,7 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
                 phase={phase}
                 attributes={attributes}
                 claimID={claimID}
+                scrollIsEnabled={scrollIsEnabled}
                 scrollViewRef={scrollViewRef}
                 key={phase}
               />
