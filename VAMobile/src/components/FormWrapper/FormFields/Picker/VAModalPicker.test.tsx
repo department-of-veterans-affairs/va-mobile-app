@@ -37,7 +37,7 @@ context('VAModalPicker', () => {
     })
 
     it('should update selected to the value of that option and select done', () => {
-      fireEvent.press(screen.getByRole('menuitem', { name: 'Java' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Java' }))
 
       fireEvent.press(screen.getByRole('button', { name: 'Done' }))
 
@@ -45,7 +45,7 @@ context('VAModalPicker', () => {
     })
 
     it('should not update selected to the value of that option and select cancel', async () => {
-      fireEvent.press(screen.getByRole('menuitem', { name: 'JavaScript2' }))
+      fireEvent.press(screen.getByRole('link', { name: 'JavaScript2' }))
 
       fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
 
