@@ -56,7 +56,7 @@ jobs:
 
   release_coordination:
     name: release coordintion
-    needs: [start_slack_thread]
+    needs: [start_slack_thread, android]
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
@@ -90,4 +90,3 @@ jobs:
                     "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
                   }' \
                https://slack.com/api/chat.postMessage
- 
