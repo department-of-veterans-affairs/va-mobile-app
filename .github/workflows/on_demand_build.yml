@@ -71,7 +71,7 @@ jobs:
                     "channel": "va-mobile-build-alerts",
                     "text": |
                       *Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*
-                      *Release Ticket: ${{ needs.release_ticket.outputs.ticketNumber }}
+                      *Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}
                       *Release Report:* Github Report Link to be provided
                       *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
                       
