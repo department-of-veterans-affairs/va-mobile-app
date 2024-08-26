@@ -24,7 +24,7 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ErrorComponent,
   FieldType,
@@ -375,13 +375,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   function renderContent() {
     if (noProviderError) {
       return (
-        <AlertBox
-          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
-          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
-          border="error">
+        <AlertWithHaptics
+          variant="error"
+          header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertBox>
+        </AlertWithHaptics>
       )
     }
 

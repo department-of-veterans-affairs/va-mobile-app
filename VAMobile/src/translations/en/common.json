@@ -17,6 +17,7 @@
   "aboutYou": "About you",
   "aboutYou.loading": "Loading your information...",
   "aboutYou.noInformation": "We can’t show your information right now.",
+  "aboutYou.error.cantShowAllInfo": "We can’t show all your information right now. Check back later.",
   "accountSecurity": "Account security",
   "accountSecurity.signIn": "Sign-in information",
   "accountSecurity.description": "To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.",
