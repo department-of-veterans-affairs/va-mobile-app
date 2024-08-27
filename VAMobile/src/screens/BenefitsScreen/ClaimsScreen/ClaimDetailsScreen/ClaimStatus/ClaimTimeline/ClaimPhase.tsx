@@ -2,6 +2,8 @@ import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { ClaimAttributesData } from 'api/types'
 import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
