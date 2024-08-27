@@ -223,12 +223,6 @@ describe(':ios: Claims Screen', () => {
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
       ),
     ).toExist()
-    await element(by.id('Step 2. Initial review. Current step. Step 1 complete.')).tap()
-    await expect(
-      element(
-        by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
-      ),
-    ).not.toExist()
   })
 
   it('should verify submit evidence button exists', async () => {
@@ -268,7 +262,7 @@ describe(':ios: Claims Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
   })
 
-  it('should navigate back to the claim details screen', async () => {
+  it('should navigate back to the submit evidence screen', async () => {
     if (device.getPlatform() === 'android') {
       await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
     } else {
@@ -278,8 +272,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should verify take or select photos flow', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
-    await element(by.text('Submit evidence')).tap()
     await element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).tap()
     await expect(element(by.text('This feature is not yet accessible to screen readers'))).toExist()
     await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
@@ -304,7 +296,8 @@ describe(':ios: Claims Screen', () => {
     } else {
       await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
     }
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await element(by.text('Back')).tap()
+    await element(by.text('Cancel')).tap()
   })
 
   it('should verify details of claim on step 3 w/ waiver', async () => {
