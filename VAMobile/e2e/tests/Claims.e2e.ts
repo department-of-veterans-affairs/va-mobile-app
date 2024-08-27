@@ -211,7 +211,7 @@ describe(':ios: Claims Screen', () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
-    await expect(element(by.text('Thank you. VA recieved your claim'))).toExist()
+    await expect(element(by.text('Thank you. VA received your claim'))).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
@@ -260,9 +260,9 @@ describe(':ios: Claims Screen', () => {
 
   it('verify tap select a file options', async () => {
     if (device.getPlatform() === 'android') {
-      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
     } else {
-      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
     }
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
@@ -272,9 +272,9 @@ describe(':ios: Claims Screen', () => {
     if (device.getPlatform() === 'android') {
       await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
     } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(0).tap()
     }
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await element(by.text('Back')).tap()
   })
 
   it('should verify take or select photos flow', async () => {
