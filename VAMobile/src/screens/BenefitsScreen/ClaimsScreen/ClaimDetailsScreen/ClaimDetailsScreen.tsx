@@ -110,7 +110,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         ),
       )
 
-      // Prevent tab switching or panel opening from triggering autoscroll
+      // Keep tab switching or panel opening from triggering autoscroll
       setScrollIsEnabled(false)
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
