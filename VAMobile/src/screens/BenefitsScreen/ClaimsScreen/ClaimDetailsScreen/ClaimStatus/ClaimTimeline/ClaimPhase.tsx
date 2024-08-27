@@ -2,8 +2,6 @@ import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { ClaimAttributesData } from 'api/types'
 import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
@@ -129,26 +127,8 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
       expandedInitialValue={isCurrentPhase}
       customOnPress={accordionPress}
       headerRef={viewRef}
-      testID={testID}>
-      {phase === 3 && showClaimFileUploadBtn && (
-        <Box mt={standardMarginBetween}>
-          <TextView
-            variant={'MobileBodyBold'}
-            accessibilityLabel={a11yLabelVA(youHaveFileRequestsText)}
-            accessibilityRole="header"
-            accessible={true}
-            mb={standardMarginBetween}>
-            {youHaveFileRequestsText}
-          </TextView>
-          <Button
-            onPress={fileRequestsPress}
-            testID={t('claimPhase.fileRequests.button.label')}
-            label={t('claimPhase.fileRequests.button.label')}
-            a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
-          />
-        </Box>
-      )}
-    </AccordionCollapsible>
+      testID={testID}
+    />
   )
 }
 
