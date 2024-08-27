@@ -68,25 +68,8 @@ jobs:
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
                -d '{
-                    "channel": "va-mobile-build-alerts",
-                    "text": |
-                      *Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*
-                      *Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}
-                      *Release Report:* Github Report Link to be provided
-                      *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
-                      
-                      *Approval Timing:* 
-                        - *QA Approval Due:*  ${{ needs.release_ticket.outputs.qaDueDate }}
-                        - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}
-                        - *VA Approval  Due:* ${{ needs.release_ticket.outputs.vaDueDate }}
-                        - Tickets Tagged Appropriately: ...
-                        
-                      *Contacts:*
-                        - *Release Testing:* @charnelle.domguia
-                        - *QART Tech Lead:* @TK
-                        - *Engineering:* @J, @charnelle.domguia
-                        - *Mobile Product Approvers:* H&B and Global - @Al  Global- @Am
-                        - *VA PO for awareness:* @Ra CC: @D, @charnelle.domguia.", 
-                    "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
-                  }' \
-               https://slack.com/api/chat.postMessage
+                  "channel": "va-mobile-build-alerts",
+                  "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *VA Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- Tickets Tagged Appropriately: ...\n\n*Contacts:*\n- *Release Testing:* @charnelle.domguia\n- *QART Tech Lead:* @TK\n- *Engineering:* @J, @charnelle.domguia\n- *Mobile Product Approvers:* H&B and Global - @Al Global - @Am\n- *VA PO for awareness:* @Ra CC: @D, @charnelle.domguia.",
+                  "thread_ts": "'"${{ needs.start_slack_thread.outputs.thread_ts }}"'"
+                }' \
+             https://slack.com/api/chat.postMessage
