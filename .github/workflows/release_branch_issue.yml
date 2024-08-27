@@ -10,6 +10,9 @@ jobs:
       ticketNumber: ${{steps.create-issue.outputs.number}}
       versionNumber: ${{env.VERSION}}
       releaseDate: ${{env.RELEASE_DATE}}
+      qaDueDate: ${{env.QA_DUE_DATE}}
+      prodDueDate: ${{env.PROD_DUE_DATE}}
+      vaDueDate: ${{env.VA_DUE_DATE}}
     steps:
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
@@ -85,6 +88,7 @@ jobs:
         *Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}
         *Release Report:* Github Report Link to be provided
         *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
+        
         
         *Approval Timing:*
         - *QA Approval Due:*  ${{ needs.release_ticket.outputs.qaDueDate }}
