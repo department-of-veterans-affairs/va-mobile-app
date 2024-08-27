@@ -7,7 +7,7 @@ index 4fbcda1..7df6342 100644
          accessibilityHint={a11yHints ? a11yHints[index] : ''}
          accessibilityValue={accessibilityValue}
 -        role={'tab'}
-+        role={'button'}
++        role={'link'}
          accessibilityState={{ selected: isSelected }}
          style={PressableOpacityStyle()}
          testID={testIDs?.[index]}>
