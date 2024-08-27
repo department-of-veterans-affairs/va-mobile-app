@@ -266,7 +266,7 @@ describe(':ios: Claims Screen', () => {
     if (device.getPlatform() === 'android') {
       await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
     } else {
-      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(0).tap()
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
     }
     await element(by.text('Back')).tap()
   })
