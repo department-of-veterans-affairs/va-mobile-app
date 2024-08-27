@@ -190,20 +190,24 @@ jobs:
         id: run_e2e_tests
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
           fi
         continue-on-error: true
 
       - name: Rerun e2e tests for iOS if failed
-        if: steps.run_e2e_tests.outcome == 'failure' && steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN != ''
+        if: steps.run_e2e_tests.outcome == 'failure'
         id: rerun_e2e_tests
         run: |
-            yarn jest:clear;
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          yarn jest:clear;
+          if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+          else
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+          fi
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -218,10 +222,10 @@ jobs:
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
           path: VAMobile/artifacts
-          retention-days: 3
+          retention-days: 1
 
       - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests.outcome == 'failure'
+        if: steps.run_e2e_tests.outcome == 'failure' && steps.rerun_e2e_tests.outcome == 'failure'
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:

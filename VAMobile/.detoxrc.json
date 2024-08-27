@@ -28,7 +28,7 @@
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 15 Pro Max",
-        "os": "iOS 17.4"
+        "os": "iOS 17.2"
       }
     },
     "emulator": {
@@ -52,6 +52,20 @@
   "behavior": {
     "init": {
       "exposeGlobals": false
+    }
+  },
+  "artifacts": {
+    "plugins": {
+      "screenshot": {
+        "enabled": true,
+        "shouldTakeAutomaticSnapshots": true,
+        "keepOnlyFailedTestsArtifacts": false,
+        "takeWhen": {
+          "testStart": false,
+          "testDone": true,
+          "appNotReady": true
+        }
+      }
     }
   }
 }

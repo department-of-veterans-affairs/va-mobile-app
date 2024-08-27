@@ -3,7 +3,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { ClaimEventData, LetterTypes } from 'api/types'
+import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
@@ -57,6 +57,7 @@ export type BenefitsStackParamList = {
   }
   FileRequest: {
     claimID: string
+    claim: ClaimData | undefined
   }
   FileRequestDetails: {
     claimID: string
