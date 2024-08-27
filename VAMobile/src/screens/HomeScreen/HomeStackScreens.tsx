@@ -16,7 +16,6 @@ import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderId
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
-import InAppFeedbackScreen from './ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
 import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -33,7 +32,6 @@ export type HomeStackParamList = WebviewStackParams & {
   GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
-  InAppFeedback: { task?: string }
   InAppRecruitment: undefined
   IncorrectServiceInfo: undefined
   AccountSecurity: undefined
@@ -98,12 +96,6 @@ export const getHomeScreens = () => {
       key={'HowWillYou'}
       name="HowWillYou"
       component={HowWillYouScreen}
-      options={LARGE_PANEL_OPTIONS}
-    />,
-    <HomeStack.Screen
-      key={'InAppFeedback'}
-      name="InAppFeedback"
-      component={InAppFeedbackScreen}
       options={LARGE_PANEL_OPTIONS}
     />,
     <HomeStack.Screen

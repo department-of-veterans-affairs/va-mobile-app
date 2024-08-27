@@ -49,6 +49,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import {
+  askToGiveFeedback,
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
@@ -75,6 +76,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
+  const inAppFeedback = askToGiveFeedback()
   const queryClient = useQueryClient()
 
   const snackbarMessages: SnackbarMessages = {
@@ -365,6 +367,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           navigateTo('SecureMessaging', { activeTab: 0 })
+          inAppFeedback('Send New Message')
         },
       }
       const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }

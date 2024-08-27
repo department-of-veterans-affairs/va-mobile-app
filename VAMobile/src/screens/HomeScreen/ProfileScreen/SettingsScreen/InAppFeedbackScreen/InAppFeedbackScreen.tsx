@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { RootNavStackParamList } from 'App'
 
 import {
   BorderColorVariant,
@@ -17,18 +18,17 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 
-type InAppFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'InAppFeedback'>
+type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
 function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [taskCompleted, setTaskCompleted] = useState('')
   const [satisfaction, setSatisfaction] = useState('')
-  let task = route?.params?.task || ''
+  const task = route?.params?.task || ''
   const [taskSelected, setTaskSelected] = useState(task)
 
   useBeforeNavBackListener(navigation, () => {
@@ -166,7 +166,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
             onSelectionChange={setTaskSelected}
             pickerOptions={getInAppFeedbackCategoryPickerOptions()}
             includeBlankPlaceholder={true}
-            disabled={!!route?.params?.task}></VAModalPicker>
+          />
           <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.taskCompletedQuestion.header')}
           </TextView>
@@ -185,15 +185,5 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
     </LargePanel>
   )
 }
-
-//      fieldProps: {
-//   labelKey: 'secureMessaging.startNewMessage.category',
-//   selectedValue: category,
-//   onSelectionChange: onCategoryChange,
-//   pickerOptions: getStartNewMessageCategoryPickerOptions(t),
-//   includeBlankPlaceholder: true,
-//   isRequiredField: true,
-//   testID: 'picker',
-// },
 
 export default InAppFeedbackScreen
