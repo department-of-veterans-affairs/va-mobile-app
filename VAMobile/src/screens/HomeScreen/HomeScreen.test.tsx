@@ -4,7 +4,13 @@ import { Linking } from 'react-native'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { DisabilityRatingData, FacilitiesPayload, LetterBeneficiaryDataPayload } from 'api/types'
+import {
+  DisabilityRatingData,
+  FacilitiesPayload,
+  LetterBeneficiaryDataPayload,
+  MilitaryServiceHistoryData,
+  ServiceHistoryAttributes,
+} from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
@@ -74,107 +80,135 @@ const getLetterBeneficiaryPayload = (monthlyAwardAmount: number): LetterBenefici
   },
 })
 
+const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttributes): MilitaryServiceHistoryData => ({
+  data: {
+    type: 'a',
+    id: 'string',
+    attributes: serviceHistory,
+  },
+})
+
 context('HomeScreen', () => {
   const initializeTestInstance = (options?: RenderParams) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     render(<HomeScreen {...props} />, { ...options })
   }
 
-  it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
-    initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'Contact us' }))
-    expect(mockNavigationSpy).toBeCalledWith('ContactVA')
-  })
+  describe('Activity section', () => {
+    it('displays error message when one of the API calls fails', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(3))
+        .calledWith('/v0/claims-and-appeals-overview', expect.anything())
+        .mockResolvedValue(getClaimsAndAppealsPayload(3))
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(getFoldersPayload(3))
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockRejectedValue('failure')
 
-  it('launches WebView when the "Find a VA location" link is pressed', () => {
-    initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'Find a VA location' }))
-    expect(mockNavigationSpy).toBeCalledWith('Webview', {
-      displayTitle: 'va.gov',
-      url: 'https://www.va.gov/find-locations/',
-      loadingMessage: 'Loading VA location finder...',
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
+      )
     })
-  })
 
-  it('displays error message when one of the API calls fails', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
-      .calledWith('/v0/claims-and-appeals-overview', expect.anything())
-      .mockResolvedValue(getClaimsAndAppealsPayload(3))
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(getFoldersPayload(3))
-      .calledWith('/v0/health/rx/prescriptions', expect.anything())
-      .mockRejectedValue('failure')
+    it('displays error message when one of the features are in downtime', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(3))
+        .calledWith('/v0/claims-and-appeals-overview', expect.anything())
+        .mockResolvedValue(getClaimsAndAppealsPayload(3))
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(getFoldersPayload(3))
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(3))
 
-    initializeTestInstance()
-    await waitFor(() =>
-      expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
-    )
-  })
-
-  it('displays error message when one of the module features are in downtime', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
-      .calledWith('/v0/claims-and-appeals-overview', expect.anything())
-      .mockResolvedValue(getClaimsAndAppealsPayload(3))
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(getFoldersPayload(3))
-      .calledWith('/v0/health/rx/prescriptions', expect.anything())
-      .mockResolvedValue(getPrescriptionsPayload(3))
-
-    initializeTestInstance({
-      preloadedState: {
-        errors: {
-          downtimeWindowsByFeature: {
-            rx_refill: {
-              startTime: DateTime.now(),
-              endTime: DateTime.now().plus({ minutes: 1 }),
+      initializeTestInstance({
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              rx_refill: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ minutes: 1 }),
+              },
             },
-          },
-        } as ErrorsState,
-      },
+          } as ErrorsState,
+        },
+      })
+      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
+      )
     })
-    await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-    await waitFor(() =>
-      expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
-    )
-  })
 
-  it('does not display an error message when all API calls succeed', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
-      .calledWith('/v0/claims-and-appeals-overview', expect.anything())
-      .mockResolvedValue(getClaimsAndAppealsPayload(3))
-      .calledWith('/v0/messaging/health/folders')
-      .mockResolvedValue(getFoldersPayload(3))
-      .calledWith('/v0/health/rx/prescriptions', expect.anything())
-      .mockResolvedValue(getPrescriptionsPayload(3))
+    it('displays error message when all the features are in downtime', async () => {
+      const downtimeWindow = {
+        startTime: DateTime.now(),
+        endTime: DateTime.now().plus({ minutes: 1 }),
+      }
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(3))
+        .calledWith('/v0/claims-and-appeals-overview', expect.anything())
+        .mockResolvedValue(getClaimsAndAppealsPayload(3))
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(getFoldersPayload(3))
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(3))
 
-    initializeTestInstance()
-    await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-    await waitFor(() =>
-      expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeFalsy(),
-    )
-  })
+      initializeTestInstance({
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              appointments: downtimeWindow,
+              appeals: downtimeWindow,
+              claims: downtimeWindow,
+              secure_messaging: downtimeWindow,
+              rx_refill: downtimeWindow,
+            },
+          } as ErrorsState,
+        },
+      })
+      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
+      )
+    })
 
-  it('displays cerner related message if veteran has a cerner facility', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/facilities-info')
-      .mockResolvedValue(getFacilitiesPayload(true))
-    initializeTestInstance()
-    await waitFor(() => expect(screen.getByText('Information from My VA Health portal not included.')).toBeTruthy())
-  })
+    it('does not display an error message when all API calls succeed', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(3))
+        .calledWith('/v0/claims-and-appeals-overview', expect.anything())
+        .mockResolvedValue(getClaimsAndAppealsPayload(3))
+        .calledWith('/v0/messaging/health/folders')
+        .mockResolvedValue(getFoldersPayload(3))
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(3))
 
-  it('does not display cerner related message if veteran does not have a cerner facility', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/facilities-info')
-      .mockResolvedValue(getFacilitiesPayload(false))
-    initializeTestInstance()
-    await waitFor(() => expect(get).toBeCalledWith('/v0/facilities-info'))
-    await waitFor(() => expect(screen.queryByText('Information from My VA Health portal not included.')).toBeFalsy())
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeFalsy(),
+      )
+    })
+
+    it('displays cerner related message if veteran has a cerner facility', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(getFacilitiesPayload(true))
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText('Information from My VA Health portal not included.')).toBeTruthy())
+    })
+
+    it('does not display cerner related message if veteran does not have a cerner facility', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(getFacilitiesPayload(false))
+      initializeTestInstance()
+      await waitFor(() => expect(get).toBeCalledWith('/v0/facilities-info'))
+      await waitFor(() => expect(screen.queryByText('Information from My VA Health portal not included.')).toBeFalsy())
+    })
   })
 
   describe('Appointments module', () => {
@@ -458,13 +492,20 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
     })
 
-    it('does not display disability rating percentage when disability ratings API call fails', async () => {
+    it('does not display disability rating percentage and show error message when disability ratings API call fails', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockRejectedValue('fail')
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(3084.75))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
 
     it('displays monthly payment amount when veteran has monthly compensation payment', async () => {
@@ -484,13 +525,20 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
     })
 
-    it('does not display monthly payment amount when the beneficiary API call fails', async () => {
+    it('does not display monthly payment and show error message when the beneficiary API call fails', async () => {
       when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(100))
         .calledWith('/v0/letters/beneficiary')
         .mockRejectedValue('fail')
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
 
     it("displays message when no 'About you' info exists", async () => {
@@ -499,9 +547,74 @@ context('HomeScreen', () => {
         .mockResolvedValue(getDisabilityRatingPayload(0))
         .calledWith('/v0/letters/beneficiary')
         .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
 
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeFalsy(),
+      )
+    })
+
+    it('displays error message when one of the features are in downtime', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(100))
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(3000))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
+      initializeTestInstance({
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              letters_and_documents: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ minutes: 1 }),
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
+    })
+
+    it("displays error message when some 'About you' info doesn't exist and rest of info has errors", async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(0))
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/military-service-history')
+        .mockRejectedValue('fail')
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
+    })
+  })
+
+  describe('VA resources section', () => {
+    it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
+      initializeTestInstance()
+      fireEvent.press(screen.getByRole('link', { name: 'Contact us' }))
+      expect(mockNavigationSpy).toBeCalledWith('ContactVA')
+    })
+
+    it('launches WebView when the "Find a VA location" link is pressed', () => {
+      initializeTestInstance()
+      fireEvent.press(screen.getByRole('link', { name: 'Find a VA location' }))
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {
+        displayTitle: 'va.gov',
+        url: 'https://www.va.gov/find-locations/',
+        loadingMessage: 'Loading VA location finder...',
+      })
     })
   })
 })

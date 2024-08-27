@@ -29,20 +29,20 @@ function IncorrectServiceInfo({}: IncorrectServiceInfoScreenProps) {
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')}
           variant="MobileBody"
-          mt={theme.dimensions.standardMarginBetween}
-          paragraphSpacing={true}>
+          mt={theme.dimensions.condensedMarginBetween}
+          mb={theme.dimensions.formMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body.1')}
         </TextView>
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')}
           variant="MobileBody"
-          paragraphSpacing={true}>
+          mb={theme.dimensions.formMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body.2')}
         </TextView>
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')}
           variant="MobileBody"
-          paragraphSpacing={true}>
+          mb={theme.dimensions.standardMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body.3')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} />

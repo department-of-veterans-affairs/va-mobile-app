@@ -72,7 +72,7 @@ context('VaccineListScreen', () => {
       initializeTestInstance()
       await waitFor(() =>
         expect(
-          screen.getByRole('header', { name: "We couldn't find information about your VA vaccines" }),
+          screen.getByRole('heading', { name: "We couldn't find information about your VA vaccines" }),
         ).toBeTruthy(),
       )
       await waitFor(() =>

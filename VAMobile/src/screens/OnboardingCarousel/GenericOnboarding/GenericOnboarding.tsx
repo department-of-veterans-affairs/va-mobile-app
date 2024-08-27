@@ -70,7 +70,7 @@ function GenericOnboarding({
         )}
         {listOfText && (
           <Box mt={theme.dimensions.standardMarginBetween} ml={theme.dimensions.gutter}>
-            <VABulletList listOfText={listOfText} />
+            <VABulletList listOfText={listOfText} paragraphSpacing={true} />
           </Box>
         )}
       </Box>

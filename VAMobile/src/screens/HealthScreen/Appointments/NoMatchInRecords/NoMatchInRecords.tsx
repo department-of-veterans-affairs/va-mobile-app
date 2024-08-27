@@ -35,7 +35,7 @@ function NoMatchInRecords() {
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView
-            variant="BitterBoldHeading"
+            variant="MobileBodyBold"
             accessibilityLabel={a11yLabelVA(t('noMatch.title'))}
             accessibilityRole="header"
             accessible={true}>

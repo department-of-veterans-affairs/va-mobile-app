@@ -43,7 +43,7 @@ function NotEnrolledSM() {
     <VAScrollView>
       <Box mb={contentMarginBottom}>
         <TextView
-          variant="BitterBoldHeading"
+          variant="MobileBodyBold"
           accessibilityRole="header"
           accessible={true}
           mx={theme.dimensions.gutter}

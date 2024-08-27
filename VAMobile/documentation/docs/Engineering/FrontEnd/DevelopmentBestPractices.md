@@ -18,6 +18,17 @@ Every ticket must contain at least the following information:
 
 If possible, choose the relevant template for your ticket. For example, if you're creating a bug ticket, choose the Bug Report Template and include severity in the title, labels, and body.
 
+### Scoping tickets
+
+We recommend creating smaller tickets because they are easier to implement and test. Always be on the lookout for ways to break up large tickets into smaller, more manageable pieces. Here are some strategies you can use to divide tickets:
+
+- Instead of biting off a whole screen containing multiple components in one ticket, create a separate small ticket for each individual component.
+- When you need to refactor messy code before adding functionality, create one ticket for refactoring, and another for new functionality.
+- Don't expand a ticket's scope if you encounter a bug or technical debt during your work. Instead create a separate bug or code upkeep ticket to address the issue.
+- For large refactoring projects, divide the work by feature (Appointments, Claims, Messaging, etc) or by category (Health, Benefits, Global).
+
+If there's any risk that a ticket might not be completed in a single sprint, break it into smaller tickets. An estimate of 13 or larger is a clear indication that the ticket is too large.
+
 ### Working on tickets
 
 All engineering work requires a ticket.
@@ -103,7 +114,7 @@ Click the "Connect issue" button and choose the associated ticket. You must be l
 It's critical to link the PR to the ticket with the "Connect issue" button so we can track the work performed.
 :::
 
-Hit "Create pull request" when everything is ready. If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions.
+Hit "Create pull request" when everything is ready. If your PR is especially complex, you can annotate the PR with comments to help reviewers understand why you made particular decisions. Adding comments to large PRs can also help reviewers know where to focus their attention.
 
 :::info
 If you're still actively working on your branch, create a draft PR. Move the PR out of draft status when it's complete and ready for review.

@@ -7,7 +7,15 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
 import { LetterTypeConstants, LettersDownloadParams } from 'api/types'
-import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import {
+  AlertWithHaptics,
+  BasicError,
+  Box,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextArea,
+  TextView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { useTheme } from 'utils/hooks'
@@ -49,9 +57,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <Box mb={theme.dimensions.contentMarginBottom}>
       {letterType === LetterTypeConstants.serviceVerification && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox border="informational">
-            <TextView variant="MobileBody">{t('letters.serviceVerificationLetter.informational')}</TextView>
-          </AlertBox>
+          <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
         </Box>
       )}
       <TextArea>

@@ -30,7 +30,7 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ErrorComponent,
   FieldType,
@@ -150,7 +150,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
-  const [to, setTo] = useState(message?.recipientId?.toString() || '')
+  const [to, setTo] = useState((message?.recipientId || '').toString())
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
@@ -183,7 +183,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
-      setTo(message?.recipientId.toString() || '')
+      setTo((message?.recipientId || '').toString())
     }
   }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
@@ -238,7 +238,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return message?.body !== body
     } else {
       return (
-        message?.recipientId?.toString() !== to ||
+        (message?.recipientId || '').toString() !== to ||
         message?.category !== category ||
         message?.subject !== subject ||
         message?.body !== body
@@ -511,11 +511,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
-        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-            {t('secureMessaging.reply.olderThan45Days')}
-          </TextView>
-        </AlertBox>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.youCanNoLonger')}
+          description={t('secureMessaging.reply.olderThan45Days')}
+        />
       </Box>
     )
   }
@@ -523,14 +523,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderForm() {
     if (noProviderError) {
       return (
-        <AlertBox
-          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
-          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
-          border="error"
+        <AlertWithHaptics
+          variant="error"
+          header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertBox>
+        </AlertWithHaptics>
       )
     }
 
@@ -626,7 +626,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               borderColor={'primary'}
               borderBottomWidth={'default'}
               p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="MobileBodyBold">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messageThread)}
           </Box>

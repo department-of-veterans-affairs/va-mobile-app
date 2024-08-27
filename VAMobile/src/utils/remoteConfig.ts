@@ -23,6 +23,7 @@ export type FeatureToggleType =
   | 'haptics'
   | 'homeScreenPrefetch'
   | 'inAppRecruitment'
+  | 'inAppReview'
   | 'inAppUpdates'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
@@ -39,6 +40,7 @@ type FeatureToggleValues = {
   haptics: boolean
   homeScreenPrefetch: boolean
   inAppRecruitment: boolean
+  inAppReview: boolean
   inAppUpdates: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
@@ -51,11 +53,12 @@ type FeatureToggleValues = {
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   cernerTrueForDemo: false,
-  claimPhaseExpansion: false,
+  claimPhaseExpansion: true,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
   inAppRecruitment: false,
+  inAppReview: true,
   inAppUpdates: true,
   patientCheckIn: false,
   patientCheckInWaygate: true,
