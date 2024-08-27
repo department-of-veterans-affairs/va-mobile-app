@@ -169,7 +169,7 @@ const RadioGroup = <T,>({
               : ButtonDecoratorType.RadioEmpty,
         onPress: onSelectorChange,
         minHeight: 64,
-        a11yRole: 'radio',
+        a11yRole: 'link',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
         testId: `${option.a11yLabel || option.labelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
