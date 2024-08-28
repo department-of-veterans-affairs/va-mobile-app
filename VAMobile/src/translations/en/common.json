@@ -429,7 +429,7 @@
   "claimDetails.whatShouldIDoIfDisagree": "What should I do if I disagree with VA's decision on my disability claim?",
   "claimDetails.whatYouHaveClaimed": "What you've claimed",
   "claimDetails.whyWeCombineNew": "Find out why we sometimes combine claims",
-  "claimDetails.whyWeCombine": "Why does VA sometimes combine claims?",
+  "claimDetails.whyWeCombine.a11yLabel": "Why we sometimes combine claims",
   "claimDetails.youCanDownload": "You can download your decision letter in the app. We also mailed you this letter.",
   "claimDetails.yourRepresentative": "Your representative for VA claims",
   "claimInformation.loading": "Loading your claim details...",
