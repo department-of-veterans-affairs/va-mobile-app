@@ -56,6 +56,7 @@ const config = {
   plugins: [
     './docusaurus-plugin-react-native-web',
     engineeringDocForm('documentation', 'documentation', [
+      'CHANGELOG.md',
       'contributing.md',
       'namingConventions.md',
       'overview.md',
@@ -63,7 +64,6 @@ const config = {
       'testing.md',
       'versioning.md',
     ]),
-    engineeringDocForm('changelog', '', ['CHANGELOG.md']),
     engineeringDocForm('assets', 'packages/assets', ['README.md']),
     engineeringDocForm('components', 'packages/components', ['README.md']),
     engineeringDocForm('linting', 'packages/linting', ['README.md']),
