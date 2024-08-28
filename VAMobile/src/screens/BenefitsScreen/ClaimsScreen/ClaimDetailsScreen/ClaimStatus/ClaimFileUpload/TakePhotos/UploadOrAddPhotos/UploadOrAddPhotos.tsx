@@ -1,7 +1,8 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dimensions, ScrollView } from 'react-native'
+import { Animated, Dimensions, Image, Pressable, ScrollView, StyleSheet } from 'react-native'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { SharedElement, SharedElementNode, SharedElementTransition } from 'react-native-shared-element'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -61,10 +62,17 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     originalRequest,
     imagesList,
   )
+  const [progress, setProgress] = useState(new Animated.Value(0))
+  const [isScene2Visible, setIsScene2Visible] = useState(false)
+  const [isInProgress, setIsInProgress] = useState(false)
+  const [scene2Ancestor, setScene2Ancestor] = useState<SharedElementNode | null>(null)
+  const [scene2Node, setScene2Node] = useState<SharedElementNode | null>(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
   )
+  const [assetImage, setAssetImage] = useState<Asset | undefined>(undefined)
+  const [assetIndex, setAssetIndex] = useState(0)
   const confirmAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
@@ -72,6 +80,31 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
     errorMsg: t('fileUpload.submitted.error'),
+  }
+
+  const onPressNavigate = (asset: Asset, index: number) => {
+    setIsScene2Visible(true)
+    setIsInProgress(true)
+    setAssetImage(asset)
+    setAssetIndex(index)
+    Animated.timing(progress, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => setIsInProgress(false))
+  }
+
+  const onPressBack = () => {
+    setIsInProgress(true)
+    Animated.timing(progress, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => {
+      setIsScene2Visible(false)
+      setIsInProgress(false)
+    })
+    setAssetImage(undefined)
   }
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
@@ -225,14 +258,13 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         return (
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
-
           <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
               image={asset}
-              onDeleteCallback={(): void => {
-                deletePhoto(deleteCallbackIfUri, index, imagesList || [])
+              onPress={() => {
+                onPressNavigate(asset, index)
               }}
               photoPosition={t(
                 imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto',
@@ -317,6 +349,24 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     }
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.main,
+    },
+    scene: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    image: {
+      resizeMode: 'cover',
+      width: Dimensions.get('window').width,
+      height: 300,
+      borderRadius: 0,
+    },
+  })
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
@@ -394,6 +444,89 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               />
             </Box>
           </Box>
+          {isScene2Visible ? (
+            <Animated.View
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                transform: [
+                  {
+                    scale: Animated.multiply(0.5, Animated.add(progress, 1)),
+                  },
+                ],
+              }}>
+              <SharedElement style={styles.scene} onNode={setScene2Ancestor}>
+                <SharedElement onNode={setScene2Node}>
+                  <Pressable style={styles.container} onPress={onPressBack}>
+                    <Image style={styles.image} source={assetImage} />
+                    <TextView
+                      variant="MobileBody"
+                      mx={theme.dimensions.gutter}
+                      mt={theme.dimensions.standardMarginBetween}>
+                      {t('fileUpload.fileSize')}
+                      <TextView
+                        variant="MobileBody"
+                        accessibilityLabel={
+                          assetImage?.fileSize ? bytesToFinalSizeDisplayA11y(assetImage?.fileSize, t, false) : undefined
+                        }>
+                        {assetImage?.fileSize ? bytesToFinalSizeDisplay(assetImage?.fileSize, t, false) : undefined}
+                      </TextView>
+                    </TextView>
+                    <TextView
+                      variant="MobileBody"
+                      mx={theme.dimensions.gutter}
+                      my={theme.dimensions.standardMarginBetween}>
+                      {t('fileUpload.fileName')}
+                      <TextView variant="MobileBody">{assetImage?.fileName}</TextView>
+                    </TextView>
+                    <Box mx={theme.dimensions.gutter}>
+                      <Button
+                        label={t('fileUpload.deletePhoto')}
+                        a11yHint={t('fileUpload.deletePhoto.a11yHint')}
+                        onPress={() => {
+                          confirmAlert({
+                            title: t('removePhoto'),
+                            cancelButtonIndex: 0,
+                            destructiveButtonIndex: 1,
+                            buttons: [
+                              {
+                                text: t('keep'),
+                              },
+                              {
+                                text: t('remove'),
+                                onPress: () => {
+                                  setProgress(new Animated.Value(0))
+                                  setIsScene2Visible(false)
+                                  deletePhoto(deleteCallbackIfUri, assetIndex, imagesList || [])
+                                },
+                              },
+                            ],
+                          })
+                        }}
+                      />
+                    </Box>
+                  </Pressable>
+                </SharedElement>
+              </SharedElement>
+            </Animated.View>
+          ) : undefined}
+          {isInProgress ? (
+            <Box>
+              <SharedElementTransition
+                start={{
+                  node: null,
+                  ancestor: null,
+                }}
+                end={{
+                  node: scene2Node,
+                  ancestor: scene2Ancestor,
+                }}
+                position={progress}
+                animation="fade-out"
+                resize="auto"
+                align="auto"
+              />
+            </Box>
+          ) : undefined}
         </Box>
       )}
     </FullScreenSubtask>
