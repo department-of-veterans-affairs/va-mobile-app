@@ -101,7 +101,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             key: route.name,
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
-            accessibilityRole: 'tab',
+            accessibilityRole: 'link',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
             accessible: true,
           }

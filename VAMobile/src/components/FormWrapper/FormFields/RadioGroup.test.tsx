@@ -36,13 +36,13 @@ context('RadioGroup', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getAllByRole('radio').length).toEqual(mockOptions.length)
+    expect(screen.getAllByRole('link').length).toEqual(mockOptions.length)
     expect(screen.getAllByLabelText('RadioEmpty').length).toEqual(mockOptions.length - 1)
     expect(screen.getAllByLabelText('RadioFilled').length).toEqual(1)
   })
 
   it('calls setSelected on press', () => {
-    fireEvent.press(screen.getByRole('radio', { name: '2 ' }))
+    fireEvent.press(screen.getByRole('link', { name: '2 ' }))
     expect(setSelected).toHaveBeenCalled()
   })
 })
