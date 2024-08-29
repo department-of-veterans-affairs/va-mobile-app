@@ -20,28 +20,17 @@ jobs:
   #     - name: Step 1
   #       run: echo ${{ github.event.issue }}
 
+  queue_build:
+    name: Queue Build
+    uses: ./.github/workflows/queue_builds.yml
+    secrets: inherit
+
   start_slack_thread:
-    # needs: [start_worlflow]
     name: Start Slack thread
+    needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
-      message: ':tada: A new onboarding request has been initiated for: Fake Alex Smith'
-
-  output-slack-results:
-    needs: [start_slack_thread]
-    runs-on: macos-latest-xl
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-      - name: Inform Slack
-        shell: bash
-        run: |
-           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Threading is working"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
+      channel_name: 'va-mobile-sandbox'
+      message: 'Test Slack into sandbox'
 
