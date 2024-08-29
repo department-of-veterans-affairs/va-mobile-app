@@ -7,10 +7,26 @@ env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
   CHANNEL_ID: 'C07JWHB0U86'
   MESSAGE: ':mega: A new onboarding request has been initiated, <@U01DBDAJZ18>'
+  TITLE: 'Onboarding: Fake Alex Smith'
 
 jobs:
+  user_lookup_by_name:
+    name: User lookup by name
+    runs-on: ubuntu-latest
+    outputs: 
+      slack_user_name: ${{ steps.get_slack_name.outputs.SLACK_USER_NAME }}
+    steps:
+      - id: get_slack_name
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"name":"Tim Wright"}' \
+            https://slack.com/api/users.identity|
+            jq -r '.ts')
+          echo SLACK_USER_NAME=${ts} >> $GITHUB_OUTPUT
   start_thread:
     name: Start thread
+    needs: user_lookup_by_name
     runs-on: ubuntu-latest
     outputs:
       thread_ts: ${{ steps.post_message.outputs.SLACK_THREAD_TS }}
@@ -20,7 +36,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"channel":"${{ env.CHANNEL_ID }}","text":"${{ env.MESSAGE }}"}' \
+            --data '{"channel":"${{ env.CHANNEL_ID }}","text":"${{ env.MESSAGE }} ${{ needs.user_lookup_by_name.outputs.slack_user_name }}"}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
