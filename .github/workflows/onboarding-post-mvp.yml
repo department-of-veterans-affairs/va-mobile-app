@@ -6,7 +6,7 @@ on:
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
   CHANNEL_ID: 'C07JWHB0U86'
-  MESSAGE: ':tada: :megphone: Alerting Slack, but not the way we want?'
+  MESSAGE: ':mega: A new onboarding request has been initiated, @Tim Wright'
 
 jobs:
   start_thread:
@@ -20,7 +20,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"channel":"C07JWHB0U86","text":"${{ env.MESSAGE }}"}' \
+            --data '{"channel":"${{ env.CHANNEL_ID }}","text":"${{ env.MESSAGE }}"}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
