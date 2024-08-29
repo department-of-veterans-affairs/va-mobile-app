@@ -20,8 +20,8 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"name":"Tim Wright"}' \
-            https://slack.com/api/users.identity|
+            --data '{"user":"U01DBDAJZ18"}' \
+            https://slack.com/api/users.profile.get|
             jq -r '.ts')
           echo SLACK_USER_NAME=${ts} >> $GITHUB_OUTPUT
   start_thread:
