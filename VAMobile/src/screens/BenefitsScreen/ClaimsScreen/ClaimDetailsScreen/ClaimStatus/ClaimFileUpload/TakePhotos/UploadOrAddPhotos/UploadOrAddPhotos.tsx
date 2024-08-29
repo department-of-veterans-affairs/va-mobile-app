@@ -263,6 +263,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               width={calculatedWidth}
               height={calculatedWidth}
               image={asset}
+              onDeleteCallback={() => {
+                deletePhoto(deleteCallbackIfUri, assetIndex, imagesList || [])
+              }}
               onPress={() => {
                 onPressNavigate(asset, index)
               }}

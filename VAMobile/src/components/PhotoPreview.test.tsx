@@ -19,7 +19,9 @@ context('PhotoPreview', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    render(<PhotoPreview width={110} height={110} image={image} onPress={onPressSpy} />)
+    render(
+      <PhotoPreview width={110} height={110} image={image} onDeleteCallback={onPressSpy} onPress={jest.fn(() => {})} />,
+    )
   })
 
   it('renders correctly', () => {

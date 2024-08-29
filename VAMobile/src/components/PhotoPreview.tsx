@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { Asset } from 'react-native-image-picker/src/types'
@@ -7,10 +7,12 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
+import VAIcon from './VAIcon'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -19,6 +21,8 @@ type PhotoPreviewProps = {
   height: number
   /** imagePickerResponse with asset to style for component and fileSize */
   image: Asset
+  /** function callback for if deletion is selected */
+  onDeleteCallback: () => void
   /** function callback for if it is pressed */
   onPress?: () => void
   /** Photo Position in array */
@@ -40,10 +44,16 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onPress, photoPosition }) => {
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, onPress, photoPosition }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { colors: themeColor } = useTheme()
+  const [selected, setSelected] = useState(false)
   const uri = image.uri
+  const confirmAlert = useDestructiveActionSheet()
+  const photoPreviewIconSize = 30
+  const photoPreviewMaxIconSize = 50
   const photoPreviewBorderRadius = 5
+  const photoPreviewIconPadding = 5
 
   const photo = (): ReactNode => {
     return <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoPreviewBorderRadius} />
@@ -52,11 +62,41 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onPress, ph
   const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined
   const imageSizeA11y = image.fileSize ? bytesToFinalSizeDisplayA11y(image.fileSize, t, false) : undefined
 
+  const onDeletePress = (): void => {
+    setSelected(true)
+    confirmAlert({
+      title: t('removePhoto'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('keep'),
+          onPress: () => {
+            setSelected(false)
+          },
+        },
+        {
+          text: t('remove'),
+          onPress: () => {
+            setSelected(false)
+            onDeleteCallback()
+          },
+        },
+      ],
+    })
+  }
+
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
-    accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
     accessibilityLabel: imageSizeA11y ? photoPosition?.concat(imageSizeA11y) : photoPosition,
+  }
+
+  const deletePressableProps: PressableProps = {
+    onPress: onDeletePress,
+    accessibilityRole: 'button',
+    accessibilityHint: t('fileUpload.deletePhoto.a11yHint'),
+    accessibilityLabel: t('fileUpload.deletePhoto'),
   }
 
   const boxProps: BoxProps = {
@@ -71,14 +111,43 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onPress, ph
   }
 
   return (
-    <Pressable {...pressableProps}>
+    <>
       <Box {...boxProps}>
-        <Box>{photo()}</Box>
+        <Pressable {...pressableProps}>
+          <Box>{photo()}</Box>
+        </Pressable>
+        <Pressable {...deletePressableProps}>
+          <Box
+            mt={-height}
+            pt={photoPreviewIconPadding}
+            pr={photoPreviewIconPadding}
+            position="absolute"
+            alignSelf="flex-end">
+            {selected && (
+              <VAIcon
+                name={'Minus'}
+                width={photoPreviewIconSize}
+                height={photoPreviewIconSize}
+                maxWidth={photoPreviewMaxIconSize}
+                fill={themeColor.icon.photoAdd}
+              />
+            )}
+            {!selected && (
+              <VAIcon
+                name={'Remove'}
+                width={photoPreviewIconSize}
+                height={photoPreviewIconSize}
+                maxWidth={photoPreviewMaxIconSize}
+                fill={themeColor.icon.deleteFill}
+              />
+            )}
+          </Box>
+        </Pressable>
       </Box>
       <Box width={width} flexDirection="row">
         <TextView {...textProps}>{imageSize}</TextView>
       </Box>
-    </Pressable>
+    </>
   )
 }
 
