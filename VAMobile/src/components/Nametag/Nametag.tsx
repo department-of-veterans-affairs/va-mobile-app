@@ -36,6 +36,8 @@ export const Nametag = () => {
     (service) => service.honorableServiceIndicator === 'Y',
   )
 
+  const hasData = showVeteranStatus || branch !== ''
+
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
       width: 40,
@@ -101,7 +103,7 @@ export const Nametag = () => {
 
   return (
     <Box>
-      {accessToMilitaryInfo && (
+      {accessToMilitaryInfo && hasData && (
         <Pressable {...pressableProps}>
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
             {getBranchSeal()}
