@@ -121,7 +121,8 @@ function LoginScreen() {
           my={theme.dimensions.standardMarginBetween}
           testID="va-icon"
           accessible={true}
-          accessibilityRole="button">
+          accessibilityRole="image"
+          accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
