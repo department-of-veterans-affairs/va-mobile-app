@@ -5,12 +5,10 @@ on:
 
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  CHANNEL_ID: 'C07JWHB0U86'
+  MESSAGE: ':tada: :megphone: Alerting Slack, but not the way we want'
 
 jobs:
-  # queue_build:
-  #   name: Queue Build
-  #   uses: ./.github/workflows/queue_builds.yml
-  #   # secrets: env.SLACK_API_TOKEN
   start_thread:
     name: Start thread
     runs-on: ubuntu-latest
@@ -22,7 +20,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"channel":"C07JWHB0U86","text":"working now"}' \
+            --data '{"channel":"$CHANNEL_ID","text":"$MESSAGE"}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
