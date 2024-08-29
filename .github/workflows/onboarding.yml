@@ -1,22 +1,47 @@
 name: '[Utils] Onboarding'
 
 on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Name
+        default: Friend
+        required: true
+  pull_request:
   issues:
     types: [labeled]
 
 jobs:
-  start-worlflow:
+  start_worlflow:
     if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Step 1
         run: echo ${{ github.event.issue }}
-  # initiate-onboarding:
-  #   if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
-  #   name: Start Slack thread
-  #   uses: ./.github/workflows/start_slack_thread.yml
-  #   secrets: inherit
-  #   with:
-  #     channel_name: va-mobile-build-alerts
-  #     message: ':tada: A new onboarding request has been initiated'
+
+  start_slack_thread:
+    needs: [start_worlflow]
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: ':tada: A new onboarding request has been initiated for: ${{ inputs.name }}'
+
+  output-slack-results:
+    needs: [start_slack_thread]
+    runs-on: macos-latest-xl
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Inform Slack
+        shell: bash
+        run: |
+           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Threading is working"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+
