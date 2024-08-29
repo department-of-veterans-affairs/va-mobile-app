@@ -6,7 +6,7 @@ on:
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
   CHANNEL_ID: 'C07JWHB0U86'
-  MESSAGE: ':mega: A new onboarding request has been initiated, @Tim Wright'
+  MESSAGE: ':mega: A new onboarding request has been initiated, <@U01DBDAJZ18>'
 
 jobs:
   start_thread:
