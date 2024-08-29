@@ -1,24 +1,24 @@
 name: '[Utils] Onboarding'
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: Name
-        default: Friend
-        required: true
+  # workflow_dispatch:
+  #   inputs:
+  #     name:
+  #       description: Name
+  #       default: Friend
+  #       required: true
   pull_request:
-  issues:
-    types: [labeled]
+  # issues:
+  #   types: [labeled]
 
 jobs:
-  start_worlflow:
-    if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Step 1
-        run: echo ${{ github.event.issue }}
+  # start_worlflow:
+  #   if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Step 1
+  #       run: echo ${{ github.event.issue }}
 
   start_slack_thread:
     # needs: [start_worlflow]
@@ -27,7 +27,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: ':tada: A new onboarding request has been initiated for: ${{ inputs.name }}'
+      message: ':tada: A new onboarding request has been initiated for: Fake Alex Smith'
 
   output-slack-results:
     needs: [start_slack_thread]
