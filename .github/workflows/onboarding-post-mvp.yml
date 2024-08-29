@@ -20,7 +20,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"channel":"$CHANNEL_ID","text":"$MESSAGE"}' \
+            --data '{"channel":"C07JWHB0U86","text":"$MESSAGE"}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
