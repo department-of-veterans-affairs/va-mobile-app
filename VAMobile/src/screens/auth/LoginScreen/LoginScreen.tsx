@@ -119,7 +119,9 @@ function LoginScreen() {
           justifyContent={'center'}
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
-          testID="va-icon">
+          testID="va-icon"
+          accessible={true}
+          accessibilityRole="button">
           <VALogo testID="VALogo" />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
