@@ -36,6 +36,7 @@ const navigationDic = {
     ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received January 01, 2021', 'Review file requests'], 'File requests'],
     [
       'Claims.e2e',
