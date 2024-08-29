@@ -3,17 +3,26 @@ name: '[Utils] Post MVP Onboarding'
 on:
   pull_request:
 
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
 jobs:
   queue_build:
     name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
-    secrets: inherit
-  start_slack_thread:
-    name: Start Slack thread
-    needs: queue_build
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-sandbox
-      message: 'Slack alerts are working'
- 
+    # secrets: env.SLACK_API_TOKEN
+  start_thread:
+    name: Start thread
+    runs-on: ubuntu-latest
+    outputs:
+      thread_ts: ${{ steps.post_message.outputs.SLACK_THREAD_TS }}
+    steps:
+      - name: Post message to Slack
+        id: post_message
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"C07JWHB0U86","text":"working now"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
