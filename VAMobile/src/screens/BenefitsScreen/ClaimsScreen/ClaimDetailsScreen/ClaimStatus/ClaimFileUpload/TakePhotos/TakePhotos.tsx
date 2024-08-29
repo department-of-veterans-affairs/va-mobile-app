@@ -118,7 +118,10 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
       </Box>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        mt={theme.dimensions.standardMarginBetween}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Button
           onPress={(): void =>
             onAddPhotos(
