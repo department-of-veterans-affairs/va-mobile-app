@@ -1,36 +1,22 @@
 name: '[Utils] Onboarding'
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     name:
-  #       description: Name
-  #       default: Friend
-  #       required: true
-  pull_request:
-  # issues:
-  #   types: [labeled]
+  issues:
+    types: [labeled]
 
 jobs:
-  # start_worlflow:
+  start-worlflow:
+    if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Step 1
+        run: echo ${{ github.event.issue }}
+  # initiate-onboarding:
   #   if: contains(github.event.issue.labels.*.name, 'onboarding') && !contains(github.event.issue.labels.*.name, 'processed') && !contains(github.event.issue.labels.*.name, 'complete')
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Step 1
-  #       run: echo ${{ github.event.issue }}
-
-  queue_build:
-    name: Queue Build
-    uses: ./.github/workflows/queue_builds.yml
-    secrets: inherit
-
-  start_slack_thread:
-    name: Start Slack thread
-    needs: queue_build
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: 'va-mobile-sandbox'
-      message: 'Test Slack into sandbox'
-
+  #   name: Start Slack thread
+  #   uses: ./.github/workflows/start_slack_thread.yml
+  #   secrets: inherit
+  #   with:
+  #     channel_name: va-mobile-build-alerts
+  #     message: ':tada: A new onboarding request has been initiated'
