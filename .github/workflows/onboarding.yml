@@ -21,7 +21,7 @@ jobs:
         run: echo ${{ github.event.issue }}
 
   start_slack_thread:
-    needs: [start_worlflow]
+    # needs: [start_worlflow]
     name: Start Slack thread
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
