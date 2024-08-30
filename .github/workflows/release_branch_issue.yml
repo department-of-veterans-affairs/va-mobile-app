@@ -78,28 +78,51 @@ jobs:
   start_slack_thread:
     name: Start Slack thread
     if: ${{ success() }}
+    
     needs: release_ticket
-    uses: ./.github/workflows/start_slack_thread.yml
+    runs-on: ubuntu-latest
     secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: |
-        *Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*
-        *Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}
-        *Release Report:* Github Report Link to be provided
-        *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
-        
-        
-        *Approval Timing:*
-        - *QA Approval Due:*  ${{ needs.release_ticket.outputs.qaDueDate }}
-        - *Tickets Tagged Appropriately:* ...
-        - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}
-        - *VA Approval  Due:* ${{ needs.release_ticket.outputs.vaDueDate }}
-        
-        *Contacts:*
-        - *Release Testing:* @Tom Gammons
-        - *QART Tech Lead:* @TKDickson
-        - *Release Ticket Validation:* @Jon Bindbeutel
-        - *Engineering:* @Jon Bindbeutel, @Tim Wright
-        - *Mobile Product Approvers:* H&B and Global - @Alayna  Global- @Ameet Sarkar
-        - *VA PO for awareness:* @Rachel Han CC: @Don McCaughey, @rtwell
+
+    steps:
+      - name: Map GitHub usernames to Slack usernames
+        id: map_slack_ids
+        run: |
+          echo "GITHUB_TO_SLACK_MAP=$(cat <<EOF
+          {
+            \"DJUltraTom\": \"@tom.gammons\",
+            \"kellylein\": \"@kelly \",
+            \"dumathane\": \"@Jon\",
+            \"timwright12\": \"@Tim Wright\",
+            \"ala-yna\": \"@alayna\",
+            \"ajsarkar28\": \"@Ameet Sarkar\",
+            \"rachelhanster\": \"@Rachel Han\",
+            \"DonMcCaugheyUSDS\": \"@Don McCaughey \",
+            \"IsraelleHub\": \"@charnelle.domguia\",
+            \"rtwell\": \"@rtwell\"
+          }
+          EOF
+          )" >> $GITHUB_ENV
+      
+      - name: Start Slack thread
+        uses: ./.github/workflows/start_slack_thread.yml
+        with:
+          channel_name: va-mobile-build-alerts
+          message: |
+            *Release  ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*
+            *Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}
+            *Release Report:* Github Report Link to be provided
+            *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}
+
+            *Approval Timing:*
+            - *QA Approval Due:*  ${{ needs.release_ticket.outputs.qaDueDate }}
+            - *Tickets Tagged Appropriately:* ...
+            - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}
+            - *VA Approval  Due:* ${{ needs.release_ticket.outputs.vaDueDate }}
+            
+            *Contacts:*
+            - *Release Testing:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).DJUltraTom}}
+            - Release Manager:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).kellylein }}
+            - *Release Ticket Validation:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).dumathane }}
+            - *Engineering:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).dumathane }}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).timwright12 }}
+            - *Mobile Product Approvers:* H&B and Global - ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).ala-yna}}, Global- ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).ajsarkar28}}
+            - *VA PO for awareness:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).rachelhanster }}, CC: ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).DonMcCaugheyUSDS }}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).rtwell }}
