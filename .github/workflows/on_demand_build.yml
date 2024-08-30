@@ -16,7 +16,9 @@ on:
           - production
       notes:
         description: Notes
-        required: true
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  CHANNEL_ID: 'C07JWHB0U86'    
 
 jobs:
   queue_build:
@@ -25,6 +27,7 @@ jobs:
     secrets: inherit
   start_slack_thread:
     name: Start Slack thread
+    
     needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
