@@ -64,7 +64,7 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
       decorator,
       testId: testIdToUse,
       a11yValue,
-      a11yRole: 'menuitem',
+      a11yRole: 'link',
       a11yState,
     }
   })
