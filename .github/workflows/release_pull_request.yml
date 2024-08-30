@@ -30,10 +30,6 @@ jobs:
       devPrUrl: ${{steps.urls.outputs.dev}}
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
-      - name: 'Define branch variables'
-        run: |
-          echo "MERGE_TO_DEV_BRANCH=release-${{inputs.version}}-to-develop" >> $GITHUB_ENV
-          echo "MERGE_TO_MAIN_BRANCH=merge-${{inputs.version}}-to-main" >> $GITHUB_ENV  
       - name: 'Checkout repo'
         uses: actions/checkout@v3
         with:
@@ -43,25 +39,26 @@ jobs:
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
       - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
-     
       - name: 'Create PR to merge changes back to develop'
         run: |
+          MERGE_TO_DEV_BRANCH=release-${{inputs.version}}-to-develop
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
-          git checkout -b ${{env.MERGE_TO_DEV_BRANCH}}
-          git push -u origin ${{env.MERGE_TO_DEV_BRANCH}}
+          git checkout -b $MERGE_TO_DEV_BRANCH
+          git push -u origin $MERGE_TO_DEV_BRANCH
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Merge changes to main and tag for release build'
         run: |
+          MERGE_TO_MAIN_BRANCH=merge-${{inputs.version}}-to-main
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout main
           git checkout release/${{inputs.version}}
-          git checkout -b ${{env.MERGE_TO_MAIN_BRANCH}}
+          git checkout -b $MERGE_TO_MAIN_BRANCH
           git merge -s ours main -m "merge main changes"
           git checkout main
-          git merge ${{env.MERGE_TO_MAIN_BRANCH}} --squash
+          git merge $MERGE_TO_MAIN_BRANCH --squash
           git commit  -m ${{inputs.version}}
           git push
           git tag -a ${{inputs.version}} -m ${{inputs.version}}
