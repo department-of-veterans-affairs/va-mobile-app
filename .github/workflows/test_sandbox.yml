@@ -34,16 +34,16 @@ jobs:
         run: |
           echo "GITHUB_TO_SLACK_MAP=$(jq -n \
           '{
-            \"DJUltraTom\": \"@tom.gammons\",
-            \"kellylein\": \"@kelly\",
-            \"dumathane\": \"@Jon\",
-            \"timwright12\": \"@Tim Wright\",
-            \"ala-yna\": \"@alayna\",
-            \"ajsarkar28\": \"@Ameet Sarkar\",
-            \"rachelhanster\": \"@Rachel Han\",
-            \"DonMcCaugheyUSDS\": \"@Don McCaughey \",
-            \"IsraelleHub\": \"@charnelle.domguia\",
-            \"rtwell\": \"@rtwell\"
+            "DJUltraTom": "@tom.gammons",
+            "kellylein": "@kelly",
+            "dumathane": "@Jon",
+            "timwright12": "@Tim Wright",
+            "ala-yna": "@alayna",
+            "ajsarkar28": "@Ameet Sarkar",
+            "rachelhanster": "@Rachel Han",
+            "DonMcCaugheyUSDS": "@Don McCaughey",
+            "IsraelleHub": "@charnelle.domguia",
+            "rtwell": "@rtwell"
           }')" >> $GITHUB_ENV
       - name: Notify Slack for release coordination
         env:
@@ -55,6 +55,6 @@ jobs:
                -d '{
                   "channel": "va-mobile-sandbox",
                   "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *VA Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- Tickets Tagged Appropriately: ...\n\n*Contacts:*\n- *Release Testing:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *QART Tech Lead:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}n- *Engineering:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *Mobile Product Approvers:* H&B and Global - @${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}} Global - ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *VA PO for awareness:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}CC: ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}.",
-                  "thread_ts": "'"${{ needs.start_slack_thread.outputs.thread_ts }}"'"
+                  "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
                 }' \
              https://slack.com/api/chat.postMessage
