@@ -1462,12 +1462,12 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@department-of-veterans-affairs/eslint-config-mobile@0.15.0":
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.15.0.tgz#f86b29f5ef8bad6c8a36cea8340e5cfa18ff93a1"
-  integrity sha512-sEFu9Akkommf9y7aDWXjvWfwDfY50cqjMBTAIaYctixGonUX0wKzk2yEhgGzlwF3Feo/zkyLhLBi1VixrhT3xg==
+"@department-of-veterans-affairs/eslint-config-mobile@0.22.1":
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.22.1.tgz#a152f8aef16d3d5d78af5b47735c32d672b1f149"
+  integrity sha512-Toy1qkkUxPZHokt50AT9ttPrbcHAHeUFXjmthOY9lc97eTqTAKyoKYk43L4io7hBPX3E9SuIbPyDdbhqgUAf5g==
   dependencies:
-    eslint-plugin-deprecate "^0.8.4"
+    eslint-plugin-deprecate "^0.8.5"
 
 "@department-of-veterans-affairs/mobile-assets@0.12.0":
   version "0.12.0"
@@ -5408,10 +5408,10 @@ eslint-config-prettier@^9.1.0:
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-9.1.0.tgz#31af3d94578645966c082fcb71a5846d3c94867f"
   integrity sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==
 
-eslint-plugin-deprecate@^0.8.4:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.8.4.tgz#1bbedca80f763cadf228c66a4cf639eb16aeca68"
-  integrity sha512-bzpQTyXNWXbMWRH77XiuzfAthOhQhizEZrTf7krRiMYrq6ENUsWfbCe8A3SeRNa4eW8T2QrHsg/lXmxLq9xXXA==
+eslint-plugin-deprecate@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.8.5.tgz#3297e2f0535e01af4ffbebda74824a951d3f073b"
+  integrity sha512-nBH14smi2O1qsQY/deVf1xg1XPMB5ADPPcXWpUDp5ptGrWuNGD7Ghe0mIQKmsoFr6VjjDxJZ5tt78hb5GaCScA==
 
 eslint-plugin-eslint-comments@^3.2.0:
   version "3.2.0"
