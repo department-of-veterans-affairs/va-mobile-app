@@ -32,28 +32,37 @@ jobs:
       - name: Map GitHub usernames to Slack IDs
         id: map_slack_ids
         run: |
-          echo "GITHUB_TO_SLACK_MAP=$(jq -n --argjson map '{
-            \"DJUltraTom\": \"@tom.gammons\",
-            \"kellylein\": \"@kelly \",
-            \"dumathane\": \"@Jon\",
-            \"timwright12\": \"@Tim Wright\",
-            \"ala-yna\": \"@alayna\",
-            \"ajsarkar28\": \"@Ameet Sarkar\",
-            \"rachelhanster\": \"@Rachel Han\",
-            \"DonMcCaugheyUSDS\": \"@Don McCaughey \",
-            \"IsraelleHub\": \"@charnelle.domguia\",
-            \"rtwell\": \"@rtwell\"
-          }' '$map')" >> $GITHUB_ENV
+          
+          echo "DJUltraTom=@tom.gammons" >> $GITHUB_ENV
+          echo "kellylein=@kelly" >> $GITHUB_ENV
+          echo "dumathane=@Jon" >> $GITHUB_ENV
+          echo "timwright12=@Tim Wright" >> $GITHUB_ENV
+          echo "ala-yna=@alayna" >> $GITHUB_ENV
+          echo "ajsarkar28=@Ameet Sarkar" >> $GITHUB_ENV
+          echo "rachelhanster=@Rachel Han" >> $GITHUB_ENV
+          echo "DonMcCaugheyUSDS=@Don McCaughey " >> $GITHUB_ENV
+          echo "IsraelleHub=@charnelle.domguia\" >> $GITHUB_ENV
+          echo "rtwell=@rtwell" >> $GITHUB_ENV
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          SLACK_DJUltraTom: ${{ env.DJUltraTom }}
+          SLACK_kellylein: ${{ env.kellylein }}
+          SLACK_dumathane: ${{ env.dumathane }}
+          SLACK_timwright12: ${{ env.timwright12 }}
+          SLACK_ala-yna: ${{ env.ala-yna }}
+          SLACK_ajsarkar28: ${{ env.ajsarkar28 }}
+          SLACK_rachelhanster: ${{ env.rachelhanster }}
+          SLACK_DonMcCaugheyUSDS: ${{ env.DonMcCaugheyUSDS }}
+          SLACK_IsraelleHub: ${{ env.IsraelleHub }}
+          SLACK_rtwel: ${{ env.rtwel }}
         run: |
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
                -d '{
                   "channel": "va-mobile-test",
-                  "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *VA Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- Tickets Tagged Appropriately: ...\n\n*Contacts:*\n- *Release Testing:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *QART Tech Lead:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}n- *Engineering:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *Mobile Product Approvers:* H&B and Global - @${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}} Global - ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}\n- *VA PO for awareness:* ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}CC: ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}, ${{ fromJson(steps.map_slack_ids.outputs.GITHUB_TO_SLACK_MAP).IsraelleHub}}.",
+                  "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *VA Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- Tickets Tagged Appropriately: ...\n\n*Contacts:*\n- *Release Testing:* $SLACK_IsraelleHub\n- *QART Tech Lead:* $SLACK_IsraelleHubn- *Engineering:* $SLACK_IsraelleHub, $SLACK_IsraelleHub\n- *Mobile Product Approvers:* H&B and Global - $SLACK_IsraelleHub Global - $SLACK_IsraelleHub\n- *VA PO for awareness:* $SLACK_IsraelleHub CC: $SLACK_IsraelleHub, $SLACK_IsraelleHub.",
                   "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
                 }' \
              https://slack.com/api/chat.postMessage
