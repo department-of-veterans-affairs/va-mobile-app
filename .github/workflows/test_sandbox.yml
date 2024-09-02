@@ -41,7 +41,7 @@ jobs:
           echo "ajsarkar28=@Ameet Sarkar" >> $GITHUB_ENV
           echo "rachelhanster=@Rachel Han" >> $GITHUB_ENV
           echo "DonMcCaugheyUSDS=@Don McCaughey " >> $GITHUB_ENV
-          echo "IsraelleHub=@charnelle.domguia\" >> $GITHUB_ENV
+          echo "IsraelleHub=@charnelle.domguia" >> $GITHUB_ENV
           echo "rtwell=@rtwell" >> $GITHUB_ENV
       - name: Notify Slack for release coordination
         env:
