@@ -22,6 +22,7 @@ context('ClaimTimeline', () => {
     const props = {
       attributes: { ...claim.attributes, eventsTimeline: events },
       claimID: id,
+      scrollIsEnabled: false,
       scrollViewRef: {} as RefObject<ScrollView>,
     }
 

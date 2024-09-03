@@ -6,7 +6,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants } from 'api/types'
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -72,63 +72,61 @@ export const Nametag = () => {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
     accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
     accessibilityLabel: accLabel,
-  }
-
-  const boxProps: BoxProps = {
-    pl: theme.dimensions.buttonPadding,
-    backgroundColor: theme.colors.background.veteranStatusHome as BackgroundVariant,
-    minHeight: accessToMilitaryInfo ? 82 : undefined,
-    display: 'flex',
-    justifyContent: 'center',
-    mb: theme.dimensions.standardMarginBetween,
-    pr: theme.dimensions.buttonPadding,
-    mx: theme.dimensions.condensedMarginBetween,
-    borderRadius: 8,
-    style: {
-      shadowColor: colors.black,
-      ...Platform.select({
-        ios: {
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.15,
-          shadowRadius: 8,
-        },
-        android: {
-          elevation: 8,
-        },
-      }),
-    },
+    style: ({ pressed }) => [
+      {
+        backgroundColor: pressed
+          ? theme.colors.background.listActive
+          : (theme.colors.background.veteranStatusHome as BackgroundVariant),
+        justifyContent: 'center',
+        minHeight: accessToMilitaryInfo ? 82 : undefined,
+        paddingLeft: theme.dimensions.buttonPadding,
+        borderRadius: 8,
+        marginBottom: theme.dimensions.standardMarginBetween,
+        paddingRight: theme.dimensions.buttonPadding,
+        marginHorizontal: theme.dimensions.condensedMarginBetween,
+        shadowColor: colors.black,
+        ...Platform.select({
+          ios: {
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.15,
+            shadowRadius: 8,
+          },
+          android: {
+            elevation: 8,
+          },
+        }),
+      },
+    ],
   }
 
   return (
     <Box>
-      {accessToMilitaryInfo && (
+      {accessToMilitaryInfo && branch !== '' && (
         <Pressable {...pressableProps}>
-          <Box {...boxProps}>
-            <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-              {getBranchSeal()}
-              <Box ml={theme.dimensions.buttonPadding} flex={1}>
-                <TextView variant={'VeteranStatusBranch'} pb={4}>
-                  {branch}
-                </TextView>
-                {showVeteranStatus && (
-                  <Box flexDirection={'row'} alignItems={'center'}>
-                    <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
-                      {t('veteranStatus.proofOf')}
-                    </TextView>
-                  </Box>
-                )}
-              </Box>
+          <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
+            {getBranchSeal()}
+            <Box ml={theme.dimensions.buttonPadding} flex={1}>
+              <TextView variant={'VeteranStatusBranch'} pb={4}>
+                {branch}
+              </TextView>
               {showVeteranStatus && (
-                <VAIcon
-                  name={'ChevronRight'}
-                  fill={theme.colors.icon.linkRow}
-                  width={theme.dimensions.chevronListItemWidth}
-                  height={theme.dimensions.chevronListItemHeight}
-                  preventScaling={true}
-                  ml={theme.dimensions.listItemDecoratorMarginLeft}
-                />
+                <Box flexDirection={'row'} alignItems={'center'}>
+                  <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                    {t('veteranStatus.proofOf')}
+                  </TextView>
+                </Box>
               )}
             </Box>
+            {showVeteranStatus && (
+              <VAIcon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.linkRow}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+                preventScaling={true}
+                ml={theme.dimensions.listItemDecoratorMarginLeft}
+              />
+            )}
           </Box>
         </Pressable>
       )}

@@ -1,8 +1,6 @@
 import React, { RefObject } from 'react'
 import { ScrollView } from 'react-native'
 
-import { useIsFocused } from '@react-navigation/native'
-
 import { ClaimAttributesData } from 'api/types'
 import { Box } from 'components'
 import theme from 'styles/themes/standardTheme'
@@ -17,12 +15,13 @@ export type ClaimTimelineProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
 
-function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProps) {
-  const isFocused = useIsFocused()
+function ClaimTimeline({ attributes, claimID, scrollIsEnabled, scrollViewRef }: ClaimTimelineProps) {
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
@@ -37,26 +36,26 @@ function ClaimTimeline({ attributes, claimID, scrollViewRef }: ClaimTimelineProp
         borderTopWidth={theme.dimensions.borderWidth}
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
-        {isFocused &&
-          claimStepList.map((phase) =>
-            featureEnabled('claimPhaseExpansion') ? (
-              <ClaimPhase
-                phase={phase}
-                attributes={attributes}
-                claimID={claimID}
-                scrollViewRef={scrollViewRef}
-                key={phase}
-              />
-            ) : (
-              <DEPRECATED_ClaimPhase
-                phase={phase}
-                current={getUserPhase(attributes.phase)}
-                attributes={attributes}
-                claimID={claimID}
-                key={phase}
-              />
-            ),
-          )}
+        {claimStepList.map((phase) =>
+          featureEnabled('claimPhaseExpansion') ? (
+            <ClaimPhase
+              phase={phase}
+              attributes={attributes}
+              claimID={claimID}
+              scrollIsEnabled={scrollIsEnabled}
+              scrollViewRef={scrollViewRef}
+              key={phase}
+            />
+          ) : (
+            <DEPRECATED_ClaimPhase
+              phase={phase}
+              current={getUserPhase(attributes.phase)}
+              attributes={attributes}
+              claimID={claimID}
+              key={phase}
+            />
+          ),
+        )}
       </Box>
     </Box>
   )
