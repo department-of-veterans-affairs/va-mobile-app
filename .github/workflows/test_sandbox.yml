@@ -33,16 +33,22 @@ jobs:
         id: map_slack_ids
         run: |
           
-          echo "SLACK_DJUltraTom=U02BBL9L0CU" >> $GITHUB_ENV
-          echo "SLACK_kellylein=UJHA49K6X" >> $GITHUB_ENV
-          echo "SLACK_dumathane=U02RC1BRZBP" >> $GITHUB_ENV
-          echo "SLACK_timwright12=U01DBDAJZ18" >> $GITHUB_ENV
-          echo "SLACK_ala-yna=UQC180926" >> $GITHUB_ENV
-          echo "SLACK_ajsarkar28=U05BNQLJ9UZ" >> $GITHUB_ENV
-          echo "SLACK_rachelhanster=U047Q1LKDFY" >> $GITHUB_ENV
-          echo "SLACK_DonMcCaugheyUSDS=U06PCD1R0EL" >> $GITHUB_ENV
-          echo "SLACK_IsraelleHub:=U06N7M2QSUA" >> $GITHUB_ENV
-          echo "SLACK_rtwel=UEY4D750B" >> $GITHUB_ENV
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["DJUltraTom"]="U02BBL9L0CU"
+          GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
+          GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
+          GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
+          GITHUB_TO_SLACK_MAP["ala-yna"]="UQC180926"
+          GITHUB_TO_SLACK_MAP["ajsarkar28"]="U05BNQLJ9UZ"
+          GITHUB_TO_SLACK_MAP["rachelhanster"]="U047Q1LKDFY"
+          GITHUB_TO_SLACK_MAP["DonMcCaugheyUSDS"]="U06PCD1R0EL"
+          GITHUB_TO_SLACK_MAP["IsraelleHub"]="U06N7M2QSUA"
+          GITHUB_TO_SLACK_MAP["rtwel"]="UEY4D750B"
+
+          # Example: Convert mapping to environment variables
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
@@ -56,7 +62,6 @@ jobs:
           SLACK_DonMcCaugheyUSDS: ${{ env.SLACK_DonMcCaugheyUSDS }}
           SLACK_IsraelleHub: ${{ env.SLACK_IsraelleHub }}
           SLACK_rtwel: ${{ env.SLACK_rtwel }}
-          SLACK_USER_ID: U06N7M2QSUA
         run: |
           curl -X POST \
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
