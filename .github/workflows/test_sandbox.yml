@@ -18,7 +18,7 @@ jobs:
             -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
             -H 'Content-type: application/json' \
             -d '{
-              "channel": "va-mobile-test",
+              "channel": "va-mobile-sandbox",
               "text": "On demand build started by ${{ github.actor }}: \"${{ github.event.inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
             }' \
             https://slack.com/api/chat.postMessage | jq -r '.ts')
@@ -67,7 +67,7 @@ jobs:
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
                -d '{
-                  "channel": "va-mobile-test",
+                  "channel": "va-mobile-sandbox",
                   "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *VA Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- Tickets Tagged Appropriately: ...\n\n*Contacts:*\n- *Release Testing:* <@${{ env.SLACK_IsraelleHub }}>\n- *QART Tech Lead:* <@${{ env.SLACK_IsraelleHub }}>\n- *Engineering:* <@${{ env.SLACK_IsraelleHub }}>, <@${{ env.SLACK_IsraelleHub }}>\n- *Mobile Product Approvers:* H&B and Global - <@${{ env.SLACK_IsraelleHub }}> Global - <@${{ env.SLACK_IsraelleHub }}>\n- *VA PO for awareness:* <@${{ env.SLACK_IsraelleHub }}> CC: <@${{ env.SLACK_IsraelleHub }}>, <@${{ env.SLACK_IsraelleHub }}>, <@U06N7M2QSUA>.",
                   "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"
                 }' \
