@@ -1,4 +1,4 @@
-import { Colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import colors from './VAColors'
 
@@ -17,7 +17,6 @@ export const lightTheme = {
     headerDropShadow: colors.grayLighter,
     shadow: colors.grayMedium,
     profileBanner: colors.primary,
-    ctaButton: colors.secondaryDark,
     completedPhase: colors.greenDarker,
     currentPhase: colors.primary,
     upcomingPhase: colors.grayLight,
@@ -189,7 +188,10 @@ export const lightTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.primaryAltLightest,
     activityButton: DSColors.vadsColorPrimaryDarker,
+    activityButtonActive: DSColors.uswdsSystemColorBlue90,
     announcementBanner: colors.white,
+    crisisLine: colors.secondaryDark,
+    crisisLineActive: DSColors.vadsColorActionSurfaceDestructiveActiveOnLight,
   },
   buttonText: {
     buttonPrimary: colors.white,
@@ -242,7 +244,6 @@ export const darkTheme = {
     headerDropShadow: colors.black,
     shadow: colors.grayWarmLight,
     profileBanner: colors.primaryDarker2,
-    ctaButton: DSColors.uswdsSystemColorRedVivid40,
     completedPhase: colors.greenLight,
     currentPhase: colors.primaryDarker2,
     upcomingPhase: colors.darkmodeBorder,
@@ -411,7 +412,10 @@ export const darkTheme = {
     brandedPrimaryActive: colors.primaryDarkest,
     overFlowMenuButton: colors.darkmodeBorder,
     activityButton: DSColors.uswdsSystemColorBlueVivid30,
+    activityButtonActive: DSColors.vadsColorActionSurfaceDefaultActiveOnDark,
     announcementBanner: colors.darkmodeGrayWarmDark,
+    crisisLine: DSColors.uswdsSystemColorRedVivid40,
+    crisisLineActive: DSColors.vadsColorActionSurfaceDestructiveActiveOnDark,
   },
   buttonText: {
     buttonPrimary: colors.grayLightest,

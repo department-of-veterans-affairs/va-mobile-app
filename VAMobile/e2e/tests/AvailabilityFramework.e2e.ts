@@ -138,7 +138,7 @@ const AFNavigationForIndividual = [
     'Claims',
     'Claims history',
     'Received December 05, 2021',
-    'Why does VA sometimes combine claims?',
+    'Find out why we sometimes combine claims',
   ],
   [
     'Claims.e2e',
@@ -146,8 +146,9 @@ const AFNavigationForIndividual = [
     'Benefits',
     'Claims',
     'Claims history',
-    'Received December 05, 2021',
-    "What should I do if I disagree with VA's decision on my disability claim?",
+    'Closed',
+    'Received January 01, 2021',
+    'Learn what to do if you disagree with our decision',
   ],
 ]
 

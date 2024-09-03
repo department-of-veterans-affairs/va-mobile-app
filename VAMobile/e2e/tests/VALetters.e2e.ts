@@ -9,7 +9,7 @@ import {
   openContactInfo,
   openLetters,
   openProfile,
-  resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const LettersConstants = {
@@ -61,6 +61,7 @@ export const LettersConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openLetters()
@@ -114,7 +115,6 @@ describe('VA Letters', () => {
     it(`should view ${letterType.name}`, async () => {
       // need in-app reset in iOS before checking proof of service card to avoid false fail
       if (device.getPlatform() === 'ios' && letterType.name === 'Proof of minimum essential coverage letter') {
-        await resetInAppReview()
         await openBenefits()
         await openLetters()
         await element(by.text('Review letters')).tap()
