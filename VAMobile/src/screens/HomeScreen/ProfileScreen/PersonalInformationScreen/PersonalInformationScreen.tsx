@@ -122,6 +122,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
         },
         { text: birthdate },
       ],
+      a11yRole: 'text',
     },
   ]
 
