@@ -52,7 +52,7 @@ context('LettersOverviewScreen', () => {
 
   it('initializes correctly', () => {
     expect(screen.getByText('Downloaded documents will list your address as:')).toBeTruthy()
-    expect(screen.getByRole('menuitem', { name: 'Mailing address Add your mailing address' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Mailing address Add your mailing address' })).toBeTruthy()
     expect(
       screen.getByText(
         'If this address is incorrect you may want to update it, but your letter will still be valid even with the incorrect address.',
@@ -62,7 +62,7 @@ context('LettersOverviewScreen', () => {
   })
 
   it('should go to edit address when the address is pressed', () => {
-    fireEvent.press(screen.getByRole('menuitem', { name: 'Mailing address Add your mailing address' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Mailing address Add your mailing address' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', {
       displayTitle: 'Mailing address',
       addressType: profileAddressOptions.MAILING_ADDRESS,
