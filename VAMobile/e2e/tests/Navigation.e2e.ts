@@ -262,7 +262,7 @@ const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')
-    } else if (subNavigationArray.slice(-1)[0] === 'Files') {
+    } else if (subNavigationArray.slice(-1)[0] === 'Files' || subNavigationArray.slice(-1)[0] === 'Submit evidence') {
       await element(by.id('ClaimDetailsScreen')).scrollTo('top')
     }
 
