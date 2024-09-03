@@ -27,6 +27,7 @@ context('ClaimPhase', () => {
       phase,
       attributes: { ...claim.attributes, phase: current },
       claimID: claim.id,
+      scrollIsEnabled: false,
       scrollViewRef: {} as RefObject<ScrollView>,
     }
 
