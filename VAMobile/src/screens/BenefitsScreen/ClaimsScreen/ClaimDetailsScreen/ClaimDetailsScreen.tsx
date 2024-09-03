@@ -234,7 +234,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             <AlertWithHaptics {...alertProps} />
           </Box>
         )
-      } else if (submitEvidenceExpansionFlag && attributes.open) {
+      } else if (submitEvidenceExpansionFlag && attributes?.open) {
         const buttonProps: ButtonProps = {
           buttonType: ButtonVariants.Primary,
           label: t('claimDetails.submitEvidence'),
