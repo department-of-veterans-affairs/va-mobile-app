@@ -28,6 +28,7 @@ context('ClaimStatus', () => {
     const props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
+      scrollIsEnabled: false,
       scrollViewRef: {} as RefObject<ScrollView>,
     })
     render(<ClaimStatus {...props} />)
