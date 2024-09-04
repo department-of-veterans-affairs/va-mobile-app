@@ -19,7 +19,7 @@ jobs:
             -H 'Content-type: application/json' \
             -d '{
               "channel": "va-mobile-sandbox",
-              "text": "On demand build started by ${{ github.actor }}: \"${{ github.event.inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+              "text": "Debug slack user id mapping by ${{ github.actor }}: \"${{ github.event.inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
             }' \
             https://slack.com/api/chat.postMessage | jq -r '.ts')
 
@@ -49,6 +49,10 @@ jobs:
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
+      - name: Debug Slack User ID Mapping
+        run: |
+          echo "DJUltraTom Slack ID: $DJUltraTom"
+            
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
