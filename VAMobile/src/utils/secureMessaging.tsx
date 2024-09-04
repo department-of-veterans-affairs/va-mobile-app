@@ -603,8 +603,8 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     }
   })
   return (
-    <Box>
-      <TextView paragraphSpacing={true}>{textReconstructedBody}</TextView>
+    <Box mb={theme.paragraphSpacing.spacing20FontSize} flexDirection="row" flexWrap="wrap">
+      {textReconstructedBody}
     </Box>
   )
 }
