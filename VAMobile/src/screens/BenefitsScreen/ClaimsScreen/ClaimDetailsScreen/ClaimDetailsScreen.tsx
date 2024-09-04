@@ -245,8 +245,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
           <LinkWithAnalytics
             type="custom"
-            text={t('claimDetails.learnWhatToDoIfDisagree')}
-            testID={t('claimDetails.learnWhatToDoIfDisagree')}
+            text={t('claimDetails.learnWhatToDoIfDisagreeLink')}
+            testID={t('claimDetails.learnWhatToDoIfDisagreeLink')}
             onPress={whatShouldOnPress}
           />
         </Box>
@@ -257,8 +257,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       <Box my={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.gutter}>
         <LinkWithAnalytics
           type="custom"
-          text={t('claimDetails.whyWeCombineNew')}
-          testID={t('claimDetails.whyWeCombineNew')}
+          text={t('claimDetails.whyWeCombineLink')}
+          testID={t('claimDetails.whyWeCombineLink')}
           onPress={whyWeCombineOnPress}
         />
       </Box>
