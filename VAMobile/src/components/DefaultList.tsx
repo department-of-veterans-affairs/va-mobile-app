@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { AccessibilityRole } from 'react-native'
 
 import { generateTestIDForTextList } from 'utils/common'
 
@@ -23,8 +22,6 @@ export type DefaultListProps = {
   items: Array<DefaultListItemObj>
   /** if true the text will be selectable */
   selectable?: boolean
-  /** optional accessibility role */
-  a11yRole?: AccessibilityRole
 } & Partial<ListProps>
 
 /**

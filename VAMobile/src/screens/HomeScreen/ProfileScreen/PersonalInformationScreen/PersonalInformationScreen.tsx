@@ -169,9 +169,8 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
           </Box>
           <Box
             my={theme.dimensions.standardMarginBetween}
-            mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}
-            role={'list'}>
-            <DefaultList items={birthdateItems()} a11yRole={'text'} />
+            mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+            <DefaultList items={birthdateItems()} selectable={false} />
           </Box>
           <Box mx={theme.dimensions.gutter} mb={formMarginBetween}>
             <LinkWithAnalytics
