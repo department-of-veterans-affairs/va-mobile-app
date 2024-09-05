@@ -245,23 +245,6 @@ export async function checkImages(screenshotPath) {
   })
 }
 
-/*This function resets the in-app review counter then relaunches app, so the review pop-up doesn't break tests
- *
- * @param matchString - string of the text or id to match
- * @param findbyText - boolean to search by testID or Text
- * @param cancelPopUp - boolean to either cancel the popUp or leave the app
- */
-export async function resetInAppReview() {
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
-  await openProfile()
-  await openSettings()
-  await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.RESET_INAPP_REVIEW_BUTTON_TEXT)).tap()
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
-}
-
 /**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
