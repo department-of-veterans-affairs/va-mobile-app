@@ -8,11 +8,11 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 
 ### Default
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/snackbar--default)  |   [Figma](https://www.figma.com/design/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library---Design-System---VA-Mobile?node-id=263-702&t=1BgtKDvOeoxfzmzR-4)
-<iframe width="620" height="100" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/snackbar--default&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="120" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/snackbar--default&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Variations
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/snackbar--with-action)  |   [Figma](https://www.figma.com/design/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library---Design-System---VA-Mobile?node-id=263-702&t=1BgtKDvOeoxfzmzR-4)
-<iframe width="620" height="100" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/snackbar--with-action&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="120" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/snackbar--with-action&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ## Usage
 
