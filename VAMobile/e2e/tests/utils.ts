@@ -364,24 +364,8 @@ export async function backButton(backButtonName: string) {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  if (
-    (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
-      AFFeature === 'WG_HowDoIUpdate' ||
-      AFFeature === 'WG_PreferredName' ||
-      AFFeature === 'WG_HowWillYou' ||
-      AFFeature === 'WG_GenderIdentity' ||
-      AFFeature === 'WG_WhatToKnow' ||
-      AFFeature === 'WG_EditAddress' ||
-      AFFeature === 'WG_EditPhoneNumber' ||
-      AFFeature === 'WG_EditEmail' ||
-	  AFFeature === 'WG_ConsolidatedClaimsNote') &&
-    AFUseCase === 'DenyAccess'
-  ) {
-    await resetInAppReview()
-  } else {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
-  }
+  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -390,6 +374,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
   await element(by.text('Remote Config')).tap()
+  if (AFUseCase === 'DenyAccess') {
+    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('remoteConfigTestID'))
+      .scroll(600, 'down')
+    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
+  }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
@@ -433,9 +424,17 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  await device.launchApp({ newInstance: true })
-  if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-    await loginToDemoMode()
+  if (AFUseCase === 'DenyAccess') {
+    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('remoteConfigTestID'))
+      .scroll(600, 'up')
+    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+      await loginToDemoMode()
+    }
+  } else {
+    await element(by.text('Home')).tap()
   }
 }
 
@@ -461,13 +460,16 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
+
+  await element(by.text('Home')).tap()
+
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
     await expect(element(by.text('AF Heading Test'))).not.toExist()
     await expect(element(by.text('AF Body Test'))).not.toExist()
   }
+  await device.uninstallApp()
+  await device.installApp()
 }
 
 const navigateToFeature = async (featureNavigationArray) => {
