@@ -101,11 +101,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
         <NoMilitaryInformationAccess />
       ) : (
         <>
-          <Box
-            mb={theme.dimensions.standardMarginBetween}
-            mt={-theme.dimensions.standardMarginBetween}
-            accessible={false}
-            accessibilityRole={'text'}>
+          <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
