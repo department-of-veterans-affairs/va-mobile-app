@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { AccessibilityRole } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -50,6 +51,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
 
+    const a11yRole: AccessibilityRole = 'text'
     const textLines: Array<TextLine> = [
       {
         text: branch,
@@ -61,6 +63,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     ]
     return {
       textLines,
+      a11yRole,
       testId: `${branch} ${t('militaryInformation.historyA11yLabel', {
         begin: service.formattedBeginDate,
         end: service.formattedEndDate,
