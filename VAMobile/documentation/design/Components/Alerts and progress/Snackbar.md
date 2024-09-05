@@ -53,7 +53,7 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 
 ## Accessibility considerations
 - To ensure that the snackbar and its content is accessible to all users, the snackbar should not close on its own or after a certain amount of time. The snackbar can only be closed by the user selecting the “dismiss” button, another snackbar opening, or the user navigating to a different screen. 
-- Screen readers should automatically focus/announce when a snackbar opens and begin reading its content. The screen reader will announce the component as an Alert as soon as the action is completed. Each action will be announced as a button.
+- Screen readers should automatically announce when a snackbar opens and begin reading its content. The screen reader will announce the component as an Alert as soon as the action is completed. Each action will be announced as a button.
 - If a screen has bottom navigation, the snackbar should open above the navigation.
 - There should only ever be one snackbar on the screen. Opening a new snackbar will close the previous snackbar.
 
