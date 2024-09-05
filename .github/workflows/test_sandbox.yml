@@ -38,7 +38,7 @@ jobs:
           GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
           GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
           GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
-          GITHUB_TO_SLACK_MAP["ala-yna"]="UQC180926"
+          GITHUB_TO_SLACK_MAP["ala_yna"]="UQC180926"
           GITHUB_TO_SLACK_MAP["ajsarkar28"]="U05BNQLJ9UZ"
           GITHUB_TO_SLACK_MAP["rachelhanster"]="U047Q1LKDFY"
           GITHUB_TO_SLACK_MAP["DonMcCaugheyUSDS"]="U06PCD1R0EL"
@@ -57,7 +57,7 @@ jobs:
           SLACK_kellylein: $kellylein
           SLACK_dumathane: $dumathane
           SLACK_timwright12: $timwright12
-          SLACK_alayna: $ala-yna
+          SLACK_alayna: $ala_yna
           SLACK_ajsarkar28: $ajsarkar28
           SLACK_rachelhanster: $rachelhanster
           SLACK_DonMcCaugheyUSDS: $DonMcCaugheyUSDS
