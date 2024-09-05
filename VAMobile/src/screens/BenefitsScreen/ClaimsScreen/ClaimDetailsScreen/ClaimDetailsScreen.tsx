@@ -7,7 +7,10 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
-import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
+import {
+  Button,
+  ButtonProps,
+} from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
@@ -86,6 +89,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   ) //force a rerender due to react query updating data
 
   const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
+  const submitEvidenceExpansionFlag = featureEnabled('submitEvidenceExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -172,6 +176,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     navigateTo('FileRequest', { claimID, claim })
   }
 
+  const submitEvidencePress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    navigateTo('SubmitEvidence', { claimID })
+  }
+
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
@@ -223,6 +232,17 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         return (
           <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertWithHaptics {...alertProps} />
+          </Box>
+        )
+      } else if (submitEvidenceExpansionFlag && attributes?.open) {
+        const buttonProps: ButtonProps = {
+          buttonType: ButtonVariants.Primary,
+          label: t('claimDetails.submitEvidence'),
+          onPress: submitEvidencePress,
+        }
+        return (
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <Button {...buttonProps} />
           </Box>
         )
       }
