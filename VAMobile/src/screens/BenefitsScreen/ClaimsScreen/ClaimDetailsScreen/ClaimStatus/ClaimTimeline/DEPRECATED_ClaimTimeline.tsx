@@ -29,7 +29,7 @@ function DEPRECATED_ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
 
   useFocusEffect(
     useCallback(() => {
-      setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
+      setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []))
     }, [attributes]),
   ) //force a rerender due to react query updating data
 

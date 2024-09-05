@@ -7,7 +7,10 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { ButtonVariants, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { AlertProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Alert/Alert'
-import { ButtonProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
+import {
+  Button,
+  ButtonProps,
+} from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
@@ -77,6 +80,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const [count, setCount] = useState(0)
 
+  const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
+
   useFocusEffect(
     useCallback(() => {
       setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
@@ -84,6 +89,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   ) //force a rerender due to react query updating data
 
   const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
+  const submitEvidenceExpansionFlag = featureEnabled('submitEvidenceExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
@@ -107,6 +113,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           isDisabilityCompensationClaim(attributes.claimTypeCode),
         ),
       )
+
+      // Keep tab switching or panel opening from triggering autoscroll
+      setScrollIsEnabled(false)
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
 
@@ -167,6 +176,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     navigateTo('FileRequest', { claimID, claim })
   }
 
+  const submitEvidencePress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    navigateTo('SubmitEvidence', { claimID })
+  }
+
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
     if (claimType === ClaimTypeConstants.CLOSED) {
       const isDecisionLetterReady =
@@ -218,6 +232,17 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         return (
           <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertWithHaptics {...alertProps} />
+          </Box>
+        )
+      } else if (submitEvidenceExpansionFlag && attributes?.open) {
+        const buttonProps: ButtonProps = {
+          buttonType: ButtonVariants.Primary,
+          label: t('claimDetails.submitEvidence'),
+          onPress: submitEvidencePress,
+        }
+        return (
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <Button {...buttonProps} />
           </Box>
         )
       }
@@ -301,7 +326,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
             {claim && selectedTab === 0 && (
-              <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} scrollViewRef={scrollViewRef} />
+              <ClaimStatus
+                claim={claim || ({} as ClaimData)}
+                claimType={claimType}
+                scrollIsEnabled={scrollIsEnabled}
+                scrollViewRef={scrollViewRef}
+              />
             )}
             {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
             {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}
