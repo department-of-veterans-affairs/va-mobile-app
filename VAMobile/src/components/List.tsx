@@ -59,11 +59,15 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   }
 
   const buttons = items.map((item, index) => {
-    const { content, a11yHintText, decoratorProps } = item
+    const { content, a11yHintText, a11yRole, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
     return (
-      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
+      <BaseListItem
+        key={index}
+        a11yHint={a11yHintText || dProps?.a11yHint || ''}
+        a11yRole={a11yRole ? a11yRole : 'button'}
+        {...item}>
         {content}
       </BaseListItem>
     )
