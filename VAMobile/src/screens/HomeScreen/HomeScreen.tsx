@@ -66,6 +66,7 @@ import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
@@ -587,6 +588,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="OverrideAPI"
+        component={OverrideAPIScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}
