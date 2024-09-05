@@ -27,6 +27,8 @@ const engineeringDocForm = (name, URLextension, documentsList) => {
             header = `---\nsidebar_position: 1\n---\n\n`
             break
           case 'CHANGELOG.md':
+            filename = 'changelog.md'
+            break
           case 'README.md':
             const title = name.charAt(0).toUpperCase() + name.substring(1)
             filename = `${name}.md`
