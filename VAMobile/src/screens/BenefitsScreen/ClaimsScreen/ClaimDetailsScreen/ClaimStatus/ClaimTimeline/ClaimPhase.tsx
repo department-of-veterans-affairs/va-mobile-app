@@ -21,6 +21,8 @@ export type ClaimPhaseProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
@@ -28,7 +30,7 @@ export type ClaimPhaseProps = {
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
+function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
@@ -42,8 +44,8 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
   const isIncompletePhase = phase > current
-  const disableScroll =
-    numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0 && !attributes?.waiverSubmitted
+  const hasFileRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0
+  const disableScroll = !scrollIsEnabled || (hasFileRequests && !attributes?.waiverSubmitted)
 
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current && !disableScroll) {
