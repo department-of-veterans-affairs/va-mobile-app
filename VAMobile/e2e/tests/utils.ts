@@ -373,7 +373,8 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       AFFeature === 'WG_WhatToKnow' ||
       AFFeature === 'WG_EditAddress' ||
       AFFeature === 'WG_EditPhoneNumber' ||
-      AFFeature === 'WG_EditEmail') &&
+      AFFeature === 'WG_EditEmail' ||
+	  AFFeature === 'WG_ConsolidatedClaimsNote') &&
     AFUseCase === 'DenyAccess'
   ) {
     await resetInAppReview()

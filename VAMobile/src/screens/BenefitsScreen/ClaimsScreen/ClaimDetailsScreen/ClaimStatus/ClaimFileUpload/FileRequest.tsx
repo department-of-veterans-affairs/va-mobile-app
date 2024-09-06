@@ -10,8 +10,8 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import {
   Box,
-  ChildTemplate,
   ErrorComponent,
+  FullScreenSubtask,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
@@ -109,9 +109,9 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   }
 
   return (
-    <ChildTemplate
-      backLabel={t('claim.backLabel')}
-      backLabelOnPress={navigation.goBack}
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={navigation.goBack}
       title={t('fileRequest.title')}
       testID="fileRequestPageTestID">
       {loadingClaim ? (
@@ -161,7 +161,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           </Box>
         </Box>
       )}
-    </ChildTemplate>
+    </FullScreenSubtask>
   )
 }
 
