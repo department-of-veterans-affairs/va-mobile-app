@@ -341,6 +341,7 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
+    device.disableSynchronization()
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     console.log('1')
@@ -355,6 +356,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     console.log('6')
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
+    device.enableSynchronization()
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
