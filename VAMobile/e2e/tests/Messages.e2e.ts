@@ -94,7 +94,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => {
-  /*it('should match the messages page design', async () => {
+  it('should match the messages page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -338,7 +338,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Message moved to Custom Folder 2'))).toExist()
     await element(by.text('Dismiss')).tap()
     await element(by.text('Messages')).tap()
-  })*/
+  })
 
   it('tap start new message and verify information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
