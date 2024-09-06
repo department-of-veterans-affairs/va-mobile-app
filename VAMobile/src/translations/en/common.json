@@ -1057,7 +1057,6 @@
   "paymentDetails.title": "Details",
   "paymentIssues.body": "If there is an error with your payment, or if you have questions about your payment, please call the Veterans Help Line. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.",
   "paymentIssues.body.a11yLabel": "If there is an error with your payment, or if you have questions about your payment, please call the Veterans Help Line. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. Eastern Time.",
-  "payments": "Payments",
   "payments.ifIAmMissingPayemt": "What if I'm missing a payment?",
   "payments.ifMyPaymentDoesNotLookRight": "What if my payment information doesn't look right?",
   "payments.loading": "Loading your payment history...",
