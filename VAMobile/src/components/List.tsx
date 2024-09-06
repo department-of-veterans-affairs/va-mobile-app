@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { AccessibilityRole } from 'react-native'
 
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -41,12 +42,15 @@ export type ListProps = {
 
   /**optional a11y hint for the title */
   titleA11yLabel?: string
+
+  /** optional accessibility role. By default it will be button */
+  a11yRole?: AccessibilityRole
 }
 
 /**
  * A common component for showing a list of <ListItem>.
  */
-const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
+const List: FC<ListProps> = ({ items, a11yRole, title, titleA11yLabel }) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -59,15 +63,11 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   }
 
   const buttons = items.map((item, index) => {
-    const { content, a11yHintText, a11yRole, decoratorProps } = item
+    const { content, a11yHintText, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
     return (
-      <BaseListItem
-        key={index}
-        a11yHint={a11yHintText || dProps?.a11yHint || ''}
-        a11yRole={a11yRole ? a11yRole : 'button'}
-        {...item}>
+      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
         {content}
       </BaseListItem>
     )
@@ -83,7 +83,9 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
         </Box>
       )}
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
-        <Box backgroundColor={'list'}>{buttons}</Box>
+        <Box backgroundColor={'list'} accessibilityRole={a11yRole ? a11yRole : 'button'}>
+          {buttons}
+        </Box>
       </Box>
     </Box>
   )
