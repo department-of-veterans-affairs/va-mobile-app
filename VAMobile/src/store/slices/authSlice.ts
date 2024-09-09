@@ -541,7 +541,10 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
-      const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
+      const queryString = new URLSearchParams({
+        refresh_token: refreshToken ?? '',
+        device_secret: api.getDeviceSecret() ?? '',
+      }).toString()
 
       const response = await fetch(AUTH_SIS_REVOKE_URL, {
         method: 'POST',
