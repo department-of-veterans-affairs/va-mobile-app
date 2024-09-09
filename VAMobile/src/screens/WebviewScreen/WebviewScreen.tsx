@@ -179,6 +179,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   const INJECTED_JAVASCRIPT = `(function() {
+    localStorage.setItem('hasSession', true);
     document.getElementsByClassName("header")[0].style.display='none';
   	document.getElementsByClassName("va-nav-breadcrumbs")[0].style.display='none';
   	document.getElementsByClassName("footer")[0].style.display='none';
@@ -215,7 +216,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
         source={{
-          uri: 'https://staging-api.va.gov/v0/user',
+          uri: url,
         }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         sharedCookiesEnabled={true}
