@@ -235,7 +235,6 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressIn: _onPressIn,
     onPressOut: _onPressOut,
     accessible: true,
-    accessibilityRole,
     disabled: decorator === ButtonDecoratorType.RadioDisabled,
   }
 
@@ -258,6 +257,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     ...a11yHintProp(a11yHint),
     ...a11yValueProp(a11yValue ? { text: a11yValue } : {}),
     accessibilityState: a11yState ? a11yState : {},
+    accessibilityRole: onPress ? accessibilityRole : 'text',
   }
 
   if (isSwitchRow && decoratorProps) {
