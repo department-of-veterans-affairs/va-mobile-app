@@ -341,7 +341,6 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
-    await device.disableSynchronization()
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
@@ -350,250 +349,249 @@ describe('Messages Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
-    await device.enableSynchronization()
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
     await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
+  // })
+
+  it('verify only use messages for non-urgent needs information', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
+    await expect(element(by.text('Only use messages for non-urgent needs')))
+    await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
+    await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
+    await device.disableSynchronization()
+    if (device.getPlatform() === 'android') {
+      await element(by.text('Call 988 and select 1')).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot('messagesHelpCrisisLinePhone')
+      await device.launchApp({ newInstance: false })
+
+      await element(by.id('messageHelpTestID')).scrollTo('bottom')
+
+      await element(by.text('TTY: 800-799-4889')).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot('messagesHelpCrisisLineTTY')
+      await device.launchApp({ newInstance: false })
+
+      await element(by.text('Call 911')).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot('messagesHelpCrisisLineTTY')
+      await device.launchApp({ newInstance: false })
+
+      await element(by.id('messageHelpTestID')).scrollTo('top')
+    }
+
+    await element(by.text('Text 838255')).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('messagesHelpText')
+    await device.launchApp({ newInstance: false })
+
+    await element(by.text('Start a confidential chat')).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('messagesHelpChat')
+    await device.launchApp({ newInstance: false })
+    await device.enableSynchronization()
   })
 
-  // it('verify only use messages for non-urgent needs information', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
-  //   await expect(element(by.text('Only use messages for non-urgent needs')))
-  //   await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
-  //   await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
-  //   await device.disableSynchronization()
-  //   if (device.getPlatform() === 'android') {
-  //     await element(by.text('Call 988 and select 1')).tap()
-  //     await setTimeout(5000)
-  //     await device.takeScreenshot('messagesHelpCrisisLinePhone')
-  //     await device.launchApp({ newInstance: false })
+  it('should close the messages help panel', async () => {
+    await element(by.id('messagesHelpCloseTestID')).tap()
+  })
 
-  //     await element(by.id('messageHelpTestID')).scrollTo('bottom')
+  it('verify the correct errors displayed on save', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
+    await expect(element(by.text('We need more information'))).toExist()
+    await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
+    await expect(element(by.text('Select a category')).atIndex(0)).toExist()
+    await expect(element(by.text('Enter a message')).atIndex(0)).toExist()
+  })
 
-  //     await element(by.text('TTY: 800-799-4889')).tap()
-  //     await setTimeout(5000)
-  //     await device.takeScreenshot('messagesHelpCrisisLineTTY')
-  //     await device.launchApp({ newInstance: false })
+  it('should tap the to field and select a name', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
+    await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
+    await element(by.text('Done')).tap()
+  })
 
-  //     await element(by.text('Call 911')).tap()
-  //     await setTimeout(5000)
-  //     await device.takeScreenshot('messagesHelpCrisisLineTTY')
-  //     await device.launchApp({ newInstance: false })
+  it('should tap the category field and select a category', async () => {
+    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
+      .scroll(50, 'down')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)).tap()
+    await element(by.text('Medication')).tap()
+    await element(by.text('Done')).tap()
+  })
 
-  //     await element(by.id('messageHelpTestID')).scrollTo('top')
-  //   }
+  it('should add and delete text in the subject field', async () => {
+    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
+      .scroll(50, 'down')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
+  })
 
-  //   await element(by.text('Text 838255')).tap()
-  //   await setTimeout(5000)
-  //   await device.takeScreenshot('messagesHelpText')
-  //   await device.launchApp({ newInstance: false })
+  it('verify cancel action sheet display', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
+    await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
+    await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+  })
 
-  //   await element(by.text('Start a confidential chat')).tap()
-  //   await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-  //   await setTimeout(5000)
-  //   await device.takeScreenshot('messagesHelpChat')
-  //   await device.launchApp({ newInstance: false })
-  //   await device.enableSynchronization()
-  // })
+  it('verify the previous made fields are filled on keep editing', async () => {
+    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+    await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
+    await expect(element(by.text('Medication'))).toExist()
+  })
 
-  // it('should close the messages help panel', async () => {
-  //   await element(by.id('messagesHelpCloseTestID')).tap()
-  // })
+  it('verify the user is returned to messages inbox on delete', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
+    await expect(
+      element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
+    ).toExist()
+  })
 
-  // it('verify the correct errors displayed on save', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
-  //   await expect(element(by.text('We need more information'))).toExist()
-  //   await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
-  //   await expect(element(by.text('Select a category')).atIndex(0)).toExist()
-  //   await expect(element(by.text('Enter a message')).atIndex(0)).toExist()
-  // })
+  it('verify the attachment is on message with attachment', async () => {
+    await element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')).tap()
+    await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
+  })
 
-  // it('should tap the to field and select a name', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
-  //   await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
-  //   await element(by.text('Done')).tap()
-  // })
+  it('navigate to the sent folder and select the first message', async () => {
+    await openHealth()
+    await openMessages()
+    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
+    await element(by.text('Sent')).tap()
+  })
 
-  // it('should tap the category field and select a category', async () => {
-  //   await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
-  //     .toBeVisible()
-  //     .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-  //     .scroll(50, 'down')
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)).tap()
-  //   await element(by.text('Medication')).tap()
-  //   await element(by.text('Done')).tap()
-  // })
+  it('verify a message threads', async () => {
+    await element(
+      by.id(
+        'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
+      ),
+    ).tap()
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
+    await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
+    await expect(element(by.text('Testing '))).toExist()
+    await expect(
+      element(
+        by.text(
+          'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
+        ),
+      ),
+    ).toExist()
+  })
 
-  // it('should add and delete text in the subject field', async () => {
-  //   await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
-  //     .toBeVisible()
-  //     .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-  //     .scroll(50, 'down')
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
-  // })
+  it('verify message threads with more than two lines', async () => {
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    messageCollapsed = await device.takeScreenshot('MessageCollapsed')
+    checkImages(messageCollapsed)
+    await element(
+      by.text(
+        'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
+      ),
+    ).tap()
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    messageExpanded = await device.takeScreenshot('MessageExpanded')
+    await element(by.text('Sent')).tap()
+    await element(by.text('Messages')).tap()
+  })
 
-  // it('verify cancel action sheet display', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
-  //   await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
-  //   await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
-  // })
+  it('click the newest message in drafts folder', async () => {
+    await expect(element(by.text('Drafts (3)'))).toExist()
+    await element(by.text('Drafts (3)')).tap()
+    await waitFor(element(by.text('Test: Test Inquiry')))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(300, 'down', NaN, 0.8)
+    await element(by.text('Test: Test Inquiry')).tap()
+  })
 
-  // it('verify the previous made fields are filled on keep editing', async () => {
-  //   await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-  //   await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
-  //   await expect(element(by.text('Medication'))).toExist()
-  // })
+  it('verify action sheet for edited drafts message', async () => {
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
+    await expect(element(by.text('Delete changes to draft?'))).toExist()
+    await expect(element(by.text("If you save your changes, we'll remove the attachments."))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+  })
 
-  // it('verify the user is returned to messages inbox on delete', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
-  //   await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
-  //   await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
-  //   await expect(
-  //     element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
-  //   ).toExist()
-  // })
+  it('drafts: verify the previous made fields are filled on keep editing', async () => {
+    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+    await expect(element(by.text('Testing'))).toExist()
+  })
 
-  // it('verify the attachment is on message with attachment', async () => {
-  //   await element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')).tap()
-  //   await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
-  // })
+  it('verify that the draft is still in the list after cancel', async () => {
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT)).tap()
+    await expect(element(by.text('Test: Test Inquiry'))).toExist()
+  })
 
-  // it('navigate to the sent folder and select the first message', async () => {
-  //   await openHealth()
-  //   await openMessages()
-  //   await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
-  //   await element(by.text('Sent')).tap()
-  // })
+  it('verify that no changes were made to draft after cancel', async () => {
+    await element(by.text('Test: Test Inquiry')).tap()
+    await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
+    await expect(element(by.text('Test'))).toExist()
+    await expect(element(by.text('Test Inquiry'))).toExist()
+  })
 
-  // it('verify a message threads', async () => {
-  //   await element(
-  //     by.id(
-  //       'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
-  //     ),
-  //   ).tap()
-  //   await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-  //   await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
-  //   await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
-  //   await expect(element(by.text('Testing '))).toExist()
-  //   await expect(
-  //     element(
-  //       by.text(
-  //         'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
-  //       ),
-  //     ),
-  //   ).toExist()
-  // })
+  it('verify a draft can be saved and that a alert appears', async () => {
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
+    await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT)).tap()
+    await expect(element(by.text('Draft saved'))).toExist()
+    await element(by.text('Dismiss')).tap()
+  })
 
-  // it('verify message threads with more than two lines', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-  //   messageCollapsed = await device.takeScreenshot('MessageCollapsed')
-  //   checkImages(messageCollapsed)
-  //   await element(
-  //     by.text(
-  //       'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
-  //     ),
-  //   ).tap()
-  //   await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-  //   messageExpanded = await device.takeScreenshot('MessageExpanded')
-  //   await element(by.text('Sent')).tap()
-  //   await element(by.text('Messages')).tap()
-  // })
+  it('should open a draft message and verify it can be deleted', async () => {
+    await waitFor(element(by.text('Test: Test Inquiry')))
+      .toBeVisible()
+      .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+      .scroll(300, 'down', NaN, 0.8)
+    await element(by.text('Test: Test Inquiry')).tap()
+    await element(by.text('More')).tap()
+    await element(by.text('Delete')).tap()
+    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
+  })
 
-  // it('click the newest message in drafts folder', async () => {
-  //   await expect(element(by.text('Drafts (3)'))).toExist()
-  //   await element(by.text('Drafts (3)')).tap()
-  //   await waitFor(element(by.text('Test: Test Inquiry')))
-  //     .toBeVisible()
-  //     .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
-  //     .scroll(300, 'down', NaN, 0.8)
-  //   await element(by.text('Test: Test Inquiry')).tap()
-  // })
+  it('verify that the sent folder opens and is displayed', async () => {
+    await element(by.text('Messages')).tap()
+    await element(by.text('Sent')).tap()
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+    await expect(
+      element(
+        by.id(
+          'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
+        ),
+      ),
+    ).toExist()
+  })
 
-  // it('verify action sheet for edited drafts message', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
-  //   await expect(element(by.text('Delete changes to draft?'))).toExist()
-  //   await expect(element(by.text("If you save your changes, we'll remove the attachments."))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT))).toExist()
-  //   await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
-  // })
+  it('verify a sent messages can display attachments', async () => {
+    await element(
+      by.id(
+        'Va Flagship Mobile Applications Interface 2_dayt29 November 3, 2021 Has attachment Education: Education Inquiry',
+      ),
+    ).tap()
+    await expect(element(by.text('rn_image_picker_lib_temp_52383988-331b-4acc-baaf-9ae21c8a508e.jpg (0.92 MB)')))
+  })
 
-  // it('drafts: verify the previous made fields are filled on keep editing', async () => {
-  //   await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-  //   await expect(element(by.text('Testing'))).toExist()
-  // })
-
-  // it('verify that the draft is still in the list after cancel', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
-  //   await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT)).tap()
-  //   await expect(element(by.text('Test: Test Inquiry'))).toExist()
-  // })
-
-  // it('verify that no changes were made to draft after cancel', async () => {
-  //   await element(by.text('Test: Test Inquiry')).tap()
-  //   await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
-  //   await expect(element(by.text('Test'))).toExist()
-  //   await expect(element(by.text('Test Inquiry'))).toExist()
-  // })
-
-  // it('verify a draft can be saved and that a alert appears', async () => {
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_PAGE_TEST_ID)).scrollTo('bottom')
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
-  //   await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
-  //   await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT)).tap()
-  //   await expect(element(by.text('Draft saved'))).toExist()
-  //   await element(by.text('Dismiss')).tap()
-  // })
-
-  // it('should open a draft message and verify it can be deleted', async () => {
-  //   await waitFor(element(by.text('Test: Test Inquiry')))
-  //     .toBeVisible()
-  //     .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
-  //     .scroll(300, 'down', NaN, 0.8)
-  //   await element(by.text('Test: Test Inquiry')).tap()
-  //   await element(by.text('More')).tap()
-  //   await element(by.text('Delete')).tap()
-  //   await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
-  // })
-
-  // it('verify that the sent folder opens and is displayed', async () => {
-  //   await element(by.text('Messages')).tap()
-  //   await element(by.text('Sent')).tap()
-  //   await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-  //   await expect(
-  //     element(
-  //       by.id(
-  //         'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
-  //       ),
-  //     ),
-  //   ).toExist()
-  // })
-
-  // it('verify a sent messages can display attachments', async () => {
-  //   await element(
-  //     by.id(
-  //       'Va Flagship Mobile Applications Interface 2_dayt29 November 3, 2021 Has attachment Education: Education Inquiry',
-  //     ),
-  //   ).tap()
-  //   await expect(element(by.text('rn_image_picker_lib_temp_52383988-331b-4acc-baaf-9ae21c8a508e.jpg (0.92 MB)')))
-  // })
-
-  // it('verify that custom folders exist with messages', async () => {
-  //   await element(by.text('Sent')).tap()
-  //   await element(by.text('Messages')).tap()
-  //   await expect(element(by.text('Custom Folder 2'))).toExist()
-  // })
+  it('verify that custom folders exist with messages', async () => {
+    await element(by.text('Sent')).tap()
+    await element(by.text('Messages')).tap()
+    await expect(element(by.text('Custom Folder 2'))).toExist()
+  })
 })
