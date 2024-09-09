@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Linking, StatusBar, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 
+import CookieManager from '@react-native-cookies/cookies'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, BoxProps, LoadingComponent } from 'components'
@@ -90,10 +91,6 @@ export type WebviewStackParams = {
 
 type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 
-type Cookies = {
-  [key: string]: string
-}
-
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
@@ -105,7 +102,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
   const [loading, setLoading] = useState(true)
-  const [headers, setHeaders] = useState<Cookies>()
 
   const { url, displayTitle, loadingMessage, useSSO } = route.params
 
@@ -147,14 +143,13 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           }).toString(),
         })
 
-        const cookieHeaders = response.headers.get('Set-Cookie')
-        const cookiesObj = cookieHeaders?.split(';').reduce((cookies: Cookies, cookie) => {
-          const [key, value] = cookie.split('=')
-          cookies[key.trim()] = value ? value.trim() : ''
-          return cookies
-        }, {})
+        const cookieHeaders = response.headers.get('set-cookie') || ''
+        console.log('Cookie headers', cookieHeaders)
 
-        setHeaders(cookiesObj)
+        await CookieManager.clearAll()
+        await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders).then((success) => {
+          console.log('CookieManager.setFromResponse =>', success)
+        })
       } catch (error) {
         logNonFatalErrorToFirebase(error, `Error fetching SSO cookies: ${error}`)
       } finally {
@@ -162,8 +157,8 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       }
     }
 
-    useSSO && fetchSSOCookies()
-  }, [useSSO])
+    fetchSSOCookies()
+  }, [])
 
   const backPressed = (): void => {
     webviewRef?.current.goBack()
@@ -217,8 +212,12 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
-        source={{ uri: url, headers }}
+        source={{
+          uri: 'https://staging-api.va.gov/v0/user',
+        }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
+        sharedCookiesEnabled={true}
+        thirdPartyCookiesEnabled
         ref={webviewRef}
         // onMessage is required to be present for injected javascript to work on iOS
         onMessage={(): void => {
