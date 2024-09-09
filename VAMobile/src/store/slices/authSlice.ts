@@ -1,6 +1,7 @@
 import * as Keychain from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -538,6 +539,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await clearCookies()
+    await CookieManager.clearAll()
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
