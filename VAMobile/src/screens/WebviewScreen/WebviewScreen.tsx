@@ -17,6 +17,7 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
@@ -95,15 +96,16 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
+  const { url, displayTitle, loadingMessage, useSSO } = route.params
+  const isSSOSession = featureEnabled('sso') && useSSO
+
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
-  const [loading, setLoading] = useState(true)
-
-  const { url, displayTitle, loadingMessage, useSSO } = route.params
+  const [loading, setLoading] = useState(isSSOSession)
 
   const onReloadPressed = (): void => {
     webviewRef?.current.reload()
@@ -157,7 +159,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       }
     }
 
-    fetchSSOCookies()
+    isSSOSession && fetchSSOCookies()
   }, [])
 
   const backPressed = (): void => {
