@@ -102,7 +102,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
       ) : (
         <>
           <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
-            <DefaultList a11yRole={'text'} items={historyItems} title={t('militaryInformation.periodOfService')} />
+            <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
             <LinkWithAnalytics
