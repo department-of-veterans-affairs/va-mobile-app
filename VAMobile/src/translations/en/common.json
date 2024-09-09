@@ -476,6 +476,7 @@
   "claimPhase.heading.a11y.current": "current.",
   "claimPhase.heading.a11y.step": "Step {{step}}.",
   "claimPhase.heading.a11y.stepOf5": "Step {{step}} of 5.",
+  "claimPhase.heading.a11y.stepOf8": "Step {{step}} of 8.",
   "claimPhase.heading.a11y.step1Complete": "Step 1 complete",
   "claimPhase.heading.a11y.stepCompleteRange": "Step 1 through {{lastStep}} complete",
   "claimPhase.youHaveFileRequest": "You have {{count}} file request",

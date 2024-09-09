@@ -86,6 +86,10 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
     </TextView>
   )
 
+  const stepNumberA11y = isDisabilityClaim
+    ? t('claimPhase.heading.a11y.stepOf8', { step: phase })
+    : t('claimPhase.heading.a11y.stepOf5', { step: phase })
+
   let currentStatusA11y = ''
   if (isIncompletePhase) {
     currentStatusA11y = t('incomplete')
@@ -102,7 +106,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
     completedStepsA11y = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
   }
 
-  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatusA11y}.`
+  let testID = `${stepNumberA11y} ${heading}. ${currentStatusA11y}.`
   if (completedStepsA11y) {
     testID += ` ${completedStepsA11y}.`
   }
