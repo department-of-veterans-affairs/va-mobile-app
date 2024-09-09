@@ -119,7 +119,7 @@ context('FileRequest', () => {
           ),
         ).toBeTruthy(),
       )
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Request 1' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Request 1' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
           claimID: '600156928',

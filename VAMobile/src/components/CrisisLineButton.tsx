@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 
-import { Box, BoxProps, TextView } from 'components/index'
+import { Box, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -10,33 +10,35 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
  * Crisis Line Button component
  */
 const CrisisLineButton: FC = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const touchableProps: TouchableWithoutFeedbackProps = {
+  const pressableProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'link',
-  }
-
-  const boxProps: BoxProps = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: 'ctaButton',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mx: theme.dimensions.gutter,
-    my: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.headerLeftButtonFromTextPadding,
-    px: theme.dimensions.cardPadding,
-    borderRadius: 40,
+    onPress: () => navigateTo('VeteransCrisisLine'),
+    style: ({ pressed }) => [
+      {
+        backgroundColor: pressed
+          ? theme.colors.buttonBackground.crisisLineActive
+          : theme.colors.buttonBackground.crisisLine,
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: theme.dimensions.touchableMinHeight,
+        borderRadius: 40,
+      },
+    ],
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => navigateTo('VeteransCrisisLine')} {...touchableProps}>
-      <Box {...boxProps}>
-        <TextView variant={'CrisisLineButton'}>{t('crisisLineButton.label')}</TextView>
-      </Box>
-    </TouchableWithoutFeedback>
+    <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+      <Pressable {...pressableProps}>
+        <TextView variant={'CrisisLineButton'} py={14}>
+          {t('crisisLineButton.label')}
+        </TextView>
+      </Pressable>
+    </Box>
   )
 }
 

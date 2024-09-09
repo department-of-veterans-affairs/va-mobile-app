@@ -4,7 +4,13 @@ import { Linking } from 'react-native'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { DisabilityRatingData, FacilitiesPayload, LetterBeneficiaryDataPayload } from 'api/types'
+import {
+  DisabilityRatingData,
+  FacilitiesPayload,
+  LetterBeneficiaryDataPayload,
+  MilitaryServiceHistoryData,
+  ServiceHistoryAttributes,
+} from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
@@ -71,6 +77,14 @@ const getLetterBeneficiaryPayload = (monthlyAwardAmount: number): LetterBenefici
       },
       militaryService: [],
     },
+  },
+})
+
+const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttributes): MilitaryServiceHistoryData => ({
+  data: {
+    type: 'a',
+    id: 'string',
+    attributes: serviceHistory,
   },
 })
 
@@ -478,13 +492,20 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
     })
 
-    it('does not display disability rating percentage when disability ratings API call fails', async () => {
+    it('does not display disability rating percentage and show error message when disability ratings API call fails', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockRejectedValue('fail')
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(3084.75))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
 
     it('displays monthly payment amount when veteran has monthly compensation payment', async () => {
@@ -504,13 +525,20 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
     })
 
-    it('does not display monthly payment amount when the beneficiary API call fails', async () => {
+    it('does not display monthly payment and show error message when the beneficiary API call fails', async () => {
       when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(100))
         .calledWith('/v0/letters/beneficiary')
         .mockRejectedValue('fail')
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
       await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
 
     it("displays message when no 'About you' info exists", async () => {
@@ -519,9 +547,56 @@ context('HomeScreen', () => {
         .mockResolvedValue(getDisabilityRatingPayload(0))
         .calledWith('/v0/letters/beneficiary')
         .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
 
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeFalsy(),
+      )
+    })
+
+    it('displays error message when one of the features are in downtime', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(100))
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(3000))
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
+      initializeTestInstance({
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              letters_and_documents: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ minutes: 1 }),
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
+    })
+
+    it("displays error message when some 'About you' info doesn't exist and rest of info has errors", async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(0))
+        .calledWith('/v0/letters/beneficiary')
+        .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/military-service-history')
+        .mockRejectedValue('fail')
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
+      )
     })
   })
 

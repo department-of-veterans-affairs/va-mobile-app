@@ -9,7 +9,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -85,14 +85,14 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     })
     if (serviceError) {
       return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
+        <Box mb={theme.dimensions.condensedMarginBetween}>
+          <AlertWithHaptics
+            variant="error"
+            header={t('appointments.appointmentsStatusSomeUnavailable')}
+            headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            description={t('appointments.troubleLoadingSomeAppointments')}
+            descriptionA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
             scrollViewRef={scrollViewRef}
-            title={t('appointments.appointmentsStatusSomeUnavailable')}
-            text={t('appointments.troubleLoadingSomeAppointments')}
-            border="error"
-            titleA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
-            textA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
           />
         </Box>
       )
@@ -129,7 +129,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
           error={appointmentsHasError}
         />
       ) : (
-        <Box flex={1} justifyContent="flex-start">
+        <Box>
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
@@ -139,14 +139,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          {CernerAlert ? (
-            <Box mb={theme.dimensions.contentMarginBottom}>
-              <CernerAlert />
-            </Box>
-          ) : (
-            <></>
-          )}
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+          <CernerAlert />
+          <Box mb={theme.dimensions.contentMarginBottom}>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}

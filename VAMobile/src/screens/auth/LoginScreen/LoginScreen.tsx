@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
+import { AlertWithHaptics, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -106,7 +106,7 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
-      {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
+      {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}
@@ -119,7 +119,10 @@ function LoginScreen() {
           justifyContent={'center'}
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
-          testID="va-icon">
+          testID="va-icon"
+          accessible={true}
+          accessibilityRole="image"
+          accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>

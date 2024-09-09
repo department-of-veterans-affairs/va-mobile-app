@@ -50,38 +50,38 @@ context('NavigationTabBar', () => {
   })
 
   it('navigates when tab is pressed', () => {
-    fireEvent.press(screen.getByRole('tab', { name: 'Home' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Home' }))
     expect(emitSpy).toBeCalled()
   })
 
   it('navigates when tab is long pressed', async () => {
-    await userEvent.longPress(screen.getByRole('tab', { name: 'Benefits' }))
+    await userEvent.longPress(screen.getByRole('link', { name: 'Benefits' }))
     expect(emitSpy).toBeCalled()
   })
 
   it('calls nav and emit spies when tab is not focused and defaultPrevented is false', () => {
     emitSpy.mockReturnValue({ defaultPrevented: false })
-    fireEvent.press(screen.getByRole('tab', { name: 'Benefits' }))
+    fireEvent.press(screen.getByRole('link', { name: 'Benefits' }))
     expect(emitSpy).toBeCalled()
     expect(mockNavigationSpy).toBeCalled()
   })
 
   it('selects correct tab for Home route', () => {
-    expect(screen.getByRole('tab', { name: 'Home', selected: true })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Home', selected: true })).toBeTruthy()
   })
 
   it('selects correct tab for Benefits route', () => {
     renderWithRoute(1)
-    expect(screen.getByRole('tab', { name: 'Benefits', selected: true })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Benefits', selected: true })).toBeTruthy()
   })
 
   it('selects correct tab for Health route', () => {
     renderWithRoute(2)
-    expect(screen.getByRole('tab', { name: 'Health', selected: true })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Health', selected: true })).toBeTruthy()
   })
 
   it('selects correct tab for Payments route', () => {
     renderWithRoute(3)
-    expect(screen.getByRole('tab', { name: 'Payments', selected: true })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Payments', selected: true })).toBeTruthy()
   })
 })

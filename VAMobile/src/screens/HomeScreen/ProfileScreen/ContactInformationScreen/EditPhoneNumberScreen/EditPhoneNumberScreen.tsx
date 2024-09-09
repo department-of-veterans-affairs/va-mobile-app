@@ -9,7 +9,15 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  FullScreenSubtask,
+  LoadingComponent,
+} from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -17,7 +25,6 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject, showSnackBar } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
@@ -123,7 +130,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     const save = (): void => {
       const mutateOptions = {
         onSuccess: () => {
-          registerReviewEvent()
           showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
         },
         onError: (error: unknown) =>
@@ -267,14 +273,14 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
+          <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertBox
-                scrollViewRef={scrollViewRef}
-                title={t('editPhoneNumber.checkPhoneNumber')}
-                border="error"
+              <AlertWithHaptics
+                variant="error"
+                header={t('editPhoneNumber.checkPhoneNumber')}
                 focusOnError={onSaveClicked}
+                scrollViewRef={scrollViewRef}
               />
             </Box>
           )}

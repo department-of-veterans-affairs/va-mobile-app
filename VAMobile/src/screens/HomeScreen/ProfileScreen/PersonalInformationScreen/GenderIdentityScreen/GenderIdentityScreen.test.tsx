@@ -70,13 +70,13 @@ context('GenderIdentityScreen', () => {
         ),
       ).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Non-binary' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Transgender man' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Transgender woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Woman' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'Prefer not to answer' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'A gender not listed here' })).toBeTruthy())
     await waitFor(() =>
       expect(
         screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' }),

@@ -1,10 +1,10 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
-import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
+import { NavigationHelpers, ParamListBase, TabNavigationState, useIsFocused } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
 import styled from 'styled-components'
@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { themeFn } from 'utils/theme'
 
 import Box from './Box'
@@ -45,6 +46,13 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isNavBarFocused = useIsFocused()
+
+  useEffect(() => {
+    const navBarColor = isNavBarFocused ? theme.colors.background.navButton : theme.colors.background.main
+    const isLightTheme = theme.mode === 'light'
+    changeNavigationBarColor(navBarColor, isLightTheme, false)
+  }, [isNavBarFocused, theme])
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -93,7 +101,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             key: route.name,
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
-            accessibilityRole: 'tab',
+            accessibilityRole: 'link',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
             accessible: true,
           }
