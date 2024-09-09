@@ -203,7 +203,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     bottom: 0,
   }
 
-  return useSSO && loading ? (
+  return loading ? (
     <WebviewLoading loadingMessage={loadingMessage} />
   ) : (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
