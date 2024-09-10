@@ -1,7 +1,9 @@
 import { QueryKey } from '@tanstack/react-query'
 
+import { ErrorMessage } from 'store/api'
+
 export type ErrorData = {
-  errors: Array<errors>
+  overrideErrors: Array<errors>
 }
 
 export type errors = {
@@ -17,5 +19,18 @@ export type errorOverride = {
   status: number
   endpoint: string
   text: string
-  json: any
+  json?: {
+    errors: Array<{
+      title: string
+      detail: string
+      code: string
+      source: string
+      body?: string
+      telephone?: string
+      refreshable?: boolean
+      meta?: {
+        messages?: Array<ErrorMessage>
+      }
+    }>
+  }
 }

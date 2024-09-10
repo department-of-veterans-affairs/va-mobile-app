@@ -14,7 +14,7 @@ import { vaccineKeys } from './queryKeys'
 const getVaccines = (queryClient: QueryClient): Promise<VaccineListPayload | undefined> => {
   const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
   if (data) {
-    _.forEach(data.errors, (error) => {
+    _.forEach(data.overrideErrors, (error) => {
       if (error.queryKey[0] === vaccineKeys.vaccines[0]) {
         throw error.error
       }

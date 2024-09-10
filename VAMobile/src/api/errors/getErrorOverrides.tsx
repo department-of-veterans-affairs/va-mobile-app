@@ -9,7 +9,7 @@ import { errorKeys } from './queryKeys'
  */
 const getErrorOverrides = async (queryClient: QueryClient): Promise<ErrorData> => {
   const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  return data || { errors: [] }
+  return data || { overrideErrors: [] }
 }
 
 /**
