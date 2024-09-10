@@ -15,11 +15,11 @@ _'Relevant for this epic?' column to include Y or N, and explanation if a N_
 | -- | -- | -- |
 | Standards | Test plan was peer reviewed |  |
 | Standards | All tickets found during testing have been prioritized | |
-| Standards | Feature testing summary written and reviewed with feature team | |  
+| Standards | Feature testing summary written and reviewed with feature team ([example](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/features/design-personalization/qa/findings.md)) | |  
 | Testing | ACs met on all implementation tickets | |
-| Testing | Accessibility testing per a11y design annotations | |
+| Testing | Accessibility testing per accessibility design annotations | |
 | Testing | [API errors](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8943) handled well | |
-| Testing | New screens respect availability framework | |
+| Testing | New screens/updated existing screens respect availability framework | |
 | Testing | Screens & API calls follow [maintenance windows](https://dsvavsp.testrail.io/index.php?/cases/view/33977&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8943) during downtime | |
 | Testing | Existing detox cases all still pass | |
 | Testing | New detox cases are comprehensive and all pass | |
