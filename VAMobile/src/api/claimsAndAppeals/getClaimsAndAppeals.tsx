@@ -1,8 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload, ErrorData } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
@@ -22,7 +24,18 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
 /**
  * Fetch user ClaimsAndAppeals
  */
-const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
+const getClaimsAndAppeals = async (
+  claimType: ClaimType,
+  queryClient: QueryClient,
+): Promise<ClaimsAndAppealsListPayload | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === claimsAndAppealsKeys.claimsAndAppeals[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -61,12 +74,12 @@ export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: 
         // claims will already be loaded if a user views the closed claims tab.
         queryClient.prefetchQuery({
           queryKey: closedClaimsAndAppealsQueryKey,
-          queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED),
+          queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED, queryClient),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
 
-      return getClaimsAndAppeals(claimType)
+      return getClaimsAndAppeals(claimType, queryClient)
     },
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',

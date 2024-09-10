@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ErrorData, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { sortByDate } from 'utils/common'
@@ -14,7 +16,15 @@ import { lettersKeys } from './queryKeys'
 /**
  * Fetch user letter beneficiary data
  */
-const getLetterBeneficiaryData = async (): Promise<LetterBeneficiaryData | undefined> => {
+const getLetterBeneficiaryData = async (queryClient: QueryClient): Promise<LetterBeneficiaryData | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === lettersKeys.beneficiaryData[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
   if (response) {
     const attributes = response.data.attributes
@@ -43,12 +53,13 @@ export const useLetterBeneficiaryData = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.lettersAndDocuments && !lettersInDowntime && queryEnabled),
     queryKey: lettersKeys.beneficiaryData,
-    queryFn: () => getLetterBeneficiaryData(),
+    queryFn: () => getLetterBeneficiaryData(queryClient),
     meta: {
       errorName: 'getLetterBeneficiaryData: Service error',
     },

@@ -1,6 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
+import { errorKeys } from 'api/errors'
+import { ErrorData } from 'api/types'
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -12,7 +15,16 @@ import { contactInformationKeys } from './queryKeys'
 /**
  * Fetch user contact information
  */
-const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
+const getContactInformation = async (queryClient: QueryClient): Promise<UserContactInformation | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === contactInformationKeys.contactInformation[0]) {
+        throw error.error
+      }
+    })
+  }
+
   const response = await get<ContactInformationPayload>('/v0/user/contact-info')
   const contactInformation = response?.data.attributes
 
@@ -30,6 +42,7 @@ const getContactInformation = async (): Promise<UserContactInformation | undefin
  * Returns a query for user contact information
  */
 export const useContactInformation = (options?: { enabled?: boolean }) => {
+  const queryClient = useQueryClient()
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
@@ -37,7 +50,7 @@ export const useContactInformation = (options?: { enabled?: boolean }) => {
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: contactInformationKeys.contactInformation,
-    queryFn: () => getContactInformation(),
+    queryFn: () => getContactInformation(queryClient),
     meta: {
       errorName: 'getContactInfo: Service error',
     },

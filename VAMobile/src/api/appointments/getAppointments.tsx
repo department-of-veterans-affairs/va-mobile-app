@@ -1,8 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { AppointmentsGetData } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { AppointmentsGetData, ErrorData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
@@ -19,7 +21,17 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
+  queryClient: QueryClient,
 ): Promise<AppointmentsGetData | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === appointmentsKeys.appointments[0]) {
+        throw error.error
+      }
+    })
+  }
+
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
@@ -64,7 +76,7 @@ export const useAppointments = (
         })
       }
 
-      return getAppointments(startDate, endDate, timeFrame)
+      return getAppointments(startDate, endDate, timeFrame, queryClient)
     },
     meta: {
       errorName: 'getAppointments: Service error',

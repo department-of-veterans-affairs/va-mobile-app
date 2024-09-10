@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { SecureMessagingFoldersGetData } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ErrorData, SecureMessagingFoldersGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
@@ -14,7 +16,15 @@ import { secureMessagingKeys } from './queryKeys'
 /**
  * Fetch user folders
  */
-const getFolders = async (): Promise<SecureMessagingFoldersGetData | undefined> => {
+const getFolders = async (queryClient: QueryClient): Promise<SecureMessagingFoldersGetData | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === secureMessagingKeys.folders[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
   if (response) {
     return {
@@ -33,12 +43,13 @@ export const useFolders = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const secureMessagingInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.secureMessaging && !secureMessagingInDowntime && queryEnabled),
     queryKey: secureMessagingKeys.folders,
-    queryFn: () => getFolders(),
+    queryFn: () => getFolders(queryClient),
     meta: {
       errorName: 'getFolders: Service error',
     },

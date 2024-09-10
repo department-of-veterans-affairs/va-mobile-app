@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { PaymentsGetData } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ErrorData, PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -14,7 +16,19 @@ import { paymentsKeys } from './queryKeys'
 /**
  * Fetch user payments history
  */
-const getPayments = async (year: string | undefined, page: number): Promise<PaymentsGetData | undefined> => {
+const getPayments = async (
+  year: string | undefined,
+  page: number,
+  queryClient: QueryClient,
+): Promise<PaymentsGetData | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === paymentsKeys.payments[0]) {
+        throw error.error
+      }
+    })
+  }
   const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
   const params: Params =
@@ -42,11 +56,13 @@ export const usePayments = (year: string | undefined, page: number, options?: { 
   const { data: authorizedServices } = useAuthorizedServices()
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const queryClient = useQueryClient()
+
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.paymentHistory && !paymentsInDowntime && queryEnabled),
     queryKey: [paymentsKeys.payments, year, page],
-    queryFn: () => getPayments(year, page),
+    queryFn: () => getPayments(year, page, queryClient),
     meta: {
       errorName: 'getPayments: Service error',
     },

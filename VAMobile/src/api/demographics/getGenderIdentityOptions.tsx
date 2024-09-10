@@ -1,6 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
+import { errorKeys } from 'api/errors'
+import { ErrorData } from 'api/types'
 import { GenderIdentityOptions, GenderIdentityOptionsPayload } from 'api/types/DemographicsData'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
@@ -12,7 +15,15 @@ import { demographicsKeys } from './queryKeys'
 /**
  * Fetch gender identity options
  */
-const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions> => {
+const getGenderIdentityOptions = async (queryClient: QueryClient): Promise<GenderIdentityOptions> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === demographicsKeys.genderIdentityOptions[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<GenderIdentityOptionsPayload>('/v0/user/gender_identity/edit')
   const responseOptions = response?.data.attributes.options || {}
 
@@ -31,12 +42,13 @@ const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions> => {
 export const useGenderIdentityOptions = (options?: { enabled?: boolean }) => {
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: demographicsKeys.genderIdentityOptions,
-    queryFn: () => getGenderIdentityOptions(),
+    queryFn: () => getGenderIdentityOptions(queryClient),
     meta: {
       analyticsUserProperty: UserAnalytics.vama_uses_profile(),
       errorName: 'getGenderIdentityOptions: Service error',

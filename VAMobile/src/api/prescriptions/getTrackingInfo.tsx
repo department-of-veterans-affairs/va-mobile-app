@@ -1,6 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 
-import { PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ErrorData, PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
@@ -10,7 +12,18 @@ import { prescriptionKeys } from './queryKeys'
 /**
  * Fetch user prescription tracking information
  */
-const getTrackingInfo = async (id: string): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
+const getTrackingInfo = async (
+  id: string,
+  queryClient: QueryClient,
+): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === prescriptionKeys.trackingInfo[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
   setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
   return response?.data
@@ -20,10 +33,12 @@ const getTrackingInfo = async (id: string): Promise<Array<PrescriptionTrackingIn
  * Returns a query for user prescription tracking information
  */
 export const useTrackingInfo = (id: string, options?: { enabled?: boolean }) => {
+  const queryClient = useQueryClient()
+
   return useQuery({
     ...options,
     queryKey: [prescriptionKeys.trackingInfo, id],
-    queryFn: () => getTrackingInfo(id),
+    queryFn: () => getTrackingInfo(id, queryClient),
     meta: {
       errorName: 'getTrackingInfo: Service error',
     },

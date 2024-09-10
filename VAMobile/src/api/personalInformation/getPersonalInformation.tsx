@@ -1,7 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import _ from 'lodash'
 import { has } from 'underscore'
 
-import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
+import { errorKeys } from 'api/errors'
+import { ErrorData, PersonalInformationData, PersonalInformationPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -14,7 +16,17 @@ import { personalInformationKeys } from './queryKeys'
 /**
  * Fetch user personal information
  */
-export const getPersonalInformation = async (): Promise<PersonalInformationData | undefined> => {
+export const getPersonalInformation = async (
+  queryClient: QueryClient,
+): Promise<PersonalInformationData | undefined> => {
+  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+  if (data) {
+    _.forEach(data.overrideErrors, (error) => {
+      if (error.queryKey[0] === personalInformationKeys.personalInformation[0]) {
+        throw error.error
+      }
+    })
+  }
   const response = await get<PersonalInformationPayload>('/v2/user')
   const personalInformation = response?.data.attributes
 
@@ -41,12 +53,13 @@ export const getPersonalInformation = async (): Promise<PersonalInformationData 
 export const usePersonalInformation = (options?: { enabled?: boolean }) => {
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: personalInformationKeys.personalInformation,
-    queryFn: () => getPersonalInformation(),
+    queryFn: () => getPersonalInformation(queryClient),
     meta: {
       errorName: 'getPersonalInformation: Service error',
     },
