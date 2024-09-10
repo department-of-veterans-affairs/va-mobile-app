@@ -71,7 +71,12 @@ export const useAppointments = (
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
           queryFn: () =>
-            getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
+            getAppointments(
+              pastRange.startDate,
+              pastRange.endDate,
+              TimeFrameTypeConstants.PAST_THREE_MONTHS,
+              queryClient,
+            ),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
