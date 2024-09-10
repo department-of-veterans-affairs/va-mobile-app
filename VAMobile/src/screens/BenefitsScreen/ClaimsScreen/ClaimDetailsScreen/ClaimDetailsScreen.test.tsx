@@ -31,6 +31,7 @@ context('ClaimDetailsScreen', () => {
     claim?: Partial<ClaimData>,
   ): void => {
     when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
+    when(featureEnabled).calledWith('submitEvidenceExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [
@@ -71,6 +72,19 @@ context('ClaimDetailsScreen', () => {
     it('should show loading screen', async () => {
       renderWithData()
       expect(screen.getByText('Loading your claim details...')).toBeTruthy()
+    })
+  })
+
+  describe('submit evidence ', () => {
+    it('submit evidence button should exist', async () => {
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          phase: 2,
+        },
+      })
+      await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
     })
   })
 
@@ -123,12 +137,12 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
     })
 
-    it('should display on claim details, to be renamed files tab', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+    it('should display on claim files tab', async () => {
+      renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
+      await waitFor(() => fireEvent.press(screen.getByText('Files')))
+      await waitFor(() => fireEvent.press(screen.getByText('Files')))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
     })
   })

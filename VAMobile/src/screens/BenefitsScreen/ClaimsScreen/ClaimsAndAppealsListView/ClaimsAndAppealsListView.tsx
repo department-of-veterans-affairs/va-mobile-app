@@ -16,7 +16,7 @@ import {
   PaginationProps,
   TextLine,
 } from 'components'
-import { ClaimType } from 'constants/claims'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
@@ -114,7 +114,8 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
       }
       textLines.push({ text: t('movedToThisStepOn', { date: formatDateMMMMDDYYYY(attributes.updatedAt) }) })
       const position = (page - 1) * perPage + index + 1
-      const a11yValue = t('listPosition', { position, total: totalEntries })
+      const claimTypeTranslation = claimType === ClaimTypeConstants.ACTIVE ? t('activeClaims') : t('closedClaims')
+      const a11yValue = `${t('listPosition', { position, total: totalEntries })} ${claimTypeTranslation}`
       listItems.push({
         textLines,
         a11yValue,

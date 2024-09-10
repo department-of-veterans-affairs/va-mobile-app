@@ -61,10 +61,12 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     setExpanded(!expanded)
   }
 
+  const defaultA11yHint = expanded ? undefined : t('expandToReview')
+
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
-    accessibilityHint: a11yHint || t('viewMoreDetails'),
+    accessibilityHint: a11yHint || defaultA11yHint,
     accessibilityRole: 'tab',
   }
 
