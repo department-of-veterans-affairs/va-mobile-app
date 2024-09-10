@@ -357,12 +357,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
   }, [clearData, queryClient])
 
   const saveErrors = () => {
-    _.forEach(overrideErrors, (error) => {
-      queryClient.invalidateQueries({
-        queryKey: error.queryKey,
-      })
-    })
-
+    queryClient.clear()
     queryClient.setQueryData(errorKeys.errorOverrides, { overrideErrors })
   }
 
