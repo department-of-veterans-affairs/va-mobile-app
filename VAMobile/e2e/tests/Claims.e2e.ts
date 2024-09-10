@@ -131,7 +131,7 @@ describe(':ios: Claims Screen', () => {
 
   it('Verify VA sometimes combine claims information', async () => {
     await element(by.id('Find out why we sometimes combine claims')).tap()
-    await expect(element(by.text('Find out why we sometimes combine claims'))).toExist()
+    await expect(element(by.text('Why we sometimes combine claims'))).toExist()
     await element(by.text('Close')).tap()
   })
 
@@ -380,7 +380,7 @@ describe(':ios: Claims Screen', () => {
   it('Verify what should I do if disagreement information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Learn what to do if you disagree with our decision')).atIndex(0).tap()
-    await expect(element(by.text('Learn what to do if you disagree with our decision')).atIndex(0)).toExist()
+    await expect(element(by.text('What to do if you disagree with our decision')).atIndex(0)).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
