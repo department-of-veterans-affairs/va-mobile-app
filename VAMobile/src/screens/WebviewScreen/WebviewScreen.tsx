@@ -129,6 +129,16 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
   useEffect(() => {
     const fetchSSOCookies = async () => {
+      // Check if any cookies are present
+      const ssoCookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
+      const cookiesArray = Object.values(ssoCookies)
+      const hasCookies = cookiesArray.some((cookie) => cookie.name)
+
+      if (hasCookies) {
+        setLoading(false)
+        return
+      }
+
       try {
         const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
           method: 'POST',
@@ -145,13 +155,8 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           }).toString(),
         })
 
-        const cookieHeaders = response.headers.get('set-cookie') || ''
-        console.log('Cookie headers', cookieHeaders)
-
-        await CookieManager.clearAll()
-        await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders).then((success) => {
-          console.log('CookieManager.setFromResponse =>', success)
-        })
+        const cookieHeaders = response.headers.get('set-cookie')
+        cookieHeaders && (await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders))
       } catch (error) {
         logNonFatalErrorToFirebase(error, `Error fetching SSO cookies: ${error}`)
       } finally {
@@ -215,12 +220,9 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
-        source={{
-          uri: url,
-        }}
+        source={{ uri: url }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         sharedCookiesEnabled={true}
-        thirdPartyCookiesEnabled
         ref={webviewRef}
         // onMessage is required to be present for injected javascript to work on iOS
         onMessage={(): void => {
