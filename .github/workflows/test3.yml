@@ -8,11 +8,20 @@ on:
 jobs:
   start_slack_thread:
     name: Start Slack thread
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-sandbox
-      message: '*Release $version Coordination :thread:'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Slack thread
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        run: |
+          thread_ts=$(curl -X POST \
+            -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+            -H 'Content-type: application/json' \
+            -d '{
+              "channel": "va-mobile-sandbox",
+              "text": "*Release $version Coordination :thread:."
+            }' \
+            https://slack.com/api/chat.postMessage | jq -r '.ts')
   release_coordination:
     name: release coordination
     needs: [start_slack_thread]
