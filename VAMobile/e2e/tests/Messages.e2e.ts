@@ -338,10 +338,10 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Message moved to Custom Folder 2'))).toExist()
     await element(by.text('Dismiss')).tap()
     await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
   })
 
   it('tap start new message and verify information', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await device.disableSynchronization()
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
