@@ -349,7 +349,6 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
-    await device.enableSynchronization()
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
@@ -364,7 +363,6 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
-    await device.disableSynchronization()
     if (device.getPlatform() === 'android') {
       await element(by.text('Call 988 and select 1')).tap()
       await setTimeout(5000)
