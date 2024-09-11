@@ -20,7 +20,12 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const theme = useTheme()
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center" mt={theme.dimensions.textAndButtonLargeMargin}>
+    <Box
+      flex={1}
+      justifyContent="center"
+      mx={theme.dimensions.gutter}
+      alignItems="center"
+      mt={theme.dimensions.textAndButtonLargeMargin}>
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
         {t('noAppointments.youDontHave')}
       </TextView>
