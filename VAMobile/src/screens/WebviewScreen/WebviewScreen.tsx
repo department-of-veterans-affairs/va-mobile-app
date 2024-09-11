@@ -42,6 +42,7 @@ function ReloadButton({ reloadPressed }: ReloadButtonProps) {
         icon={'Redo'}
         fill={colors.icon.webviewReload}
         testID={t('refresh')}
+        a11yLabel={t('refresh')}
       />
     </Box>
   )
