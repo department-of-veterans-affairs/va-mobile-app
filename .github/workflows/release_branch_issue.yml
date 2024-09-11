@@ -75,16 +75,23 @@ jobs:
           OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
           NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
           gh issue edit $TICKET_NUM -b $NEW_BODY
+  start_slack_thread:
+    name: Start Slack thread
+    needs: release_ticket
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app
+      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:'
   release_coordination:
     name: release coordination
     if: ${{ success() }}
-    needs: [release_ticket]
+    needs: [start_slack_thread, release_ticket]
     runs-on: ubuntu-latest
     steps:
       - name: Map GitHub usernames to Slack IDs
         id: map_slack_ids
         run: |
-          
           declare -A GITHUB_TO_SLACK_MAP
           GITHUB_TO_SLACK_MAP["DJUltraTom"]="U02BBL9L0CU"
           GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
@@ -101,7 +108,6 @@ jobs:
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
-
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
@@ -113,12 +119,13 @@ jobs:
           SLACK_ajsarkar28: $ajsarkar28
           SLACK_rachelhanster: $rachelhanster
           SLACK_DonMcCaugheyUSDS: $DonMcCaugheyUSDS
-          SLACK_rtwel: $rtwel
+          SLACK_rtwell: $rtwell
         run: |
           SLACK_MESSAGE=$(cat <<EOF
           {
             "channel": "va-mobile-app",
-            "text": "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:*\n*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n*Contacts:*\n- *Release Testing:* <@${SLACK_DJUltraTom}>\n- *Release Manager:* <@${SLACK_kellylein}>\n- *Release Ticket Validation:* <@${SLACK_dumathane}>\n- *Engineering:* <@${SLACK_dumathane}>, <@${SLACK_timwright12}>\n- *Mobile Product Approvers:* H&B and Global - <@${SLACK_alayna}> Global - <@${SLACK_ajsarkar28}>\n- *VA PO for awareness:* <@${SLACK_rachelhanster}> CC: <@${SLACK_DonMcCaugheyUSDS}>, <@${SLACK_rtwell}>."
+            "text": "*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n*Contacts:*\n- *Release Testing:* <@${SLACK_DJUltraTom}>\n- *Release Manager:* <@${SLACK_kellylein}>\n- *Release Ticket Validation:* <@${SLACK_dumathane}>\n- *Engineering:* <@${SLACK_dumathane}>, <@${SLACK_timwright12}>\n- *Mobile Product Approvers:* H&B and Global - <@${SLACK_alayna}> Global - <@${SLACK_ajsarkar28}>\n- *VA PO for awareness:* <@${SLACK_rachelhanster}> CC: <@${SLACK_DonMcCaugheyUSDS}>, <@${SLACK_rtwell}>."
+            "thread_ts": "${{needs.start_slack_thread.outputs.thread_ts}}"
           }
           EOF
           )
