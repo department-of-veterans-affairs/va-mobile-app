@@ -26,7 +26,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:*'
+      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:* build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   release_coordination:
     name: release coordination
     if: ${{ success() }}
@@ -71,7 +71,6 @@ jobs:
             "channel": "va-mobile-build-alerts",
             "text": "*Release Ticket:* ${{ needs.release_ticket.outputs.ticketNumber }}\n*Release Report:* Github Report Link to be provided\n*Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n*Approval Timing:*\n- *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n- *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n- *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n- *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n*Contacts:*\n- *Release Testing:* <@${SLACK_IsraelleHub}>\n- *Release Manager:* <@${SLACK_IsraelleHub}>\n- *Release Ticket Validation:* <@${SLACK_IsraelleHub}>\n- *Engineering:* <@${SLACK_IsraelleHub}>, <@${SLACK_IsraelleHub}>\n- *Mobile Product Approvers:* H&B and Global - <@${SLACK_IsraelleHub}> Global - <@${SLACK_IsraelleHub}>\n- *VA PO for awareness:* <@${SLACK_IsraelleHub}> CC: <@${SLACK_IsraelleHub}>, <@${SLACK_IsraelleHub}>",
             "thread_ts": "${{needs.start_slack_thread.outputs.thread_ts}}"
-          }
           }
           EOF
           )
