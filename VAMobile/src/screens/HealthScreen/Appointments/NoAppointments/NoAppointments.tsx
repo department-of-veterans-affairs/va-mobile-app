@@ -40,7 +40,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
         </TextView>
       </Box>
       {showVAGovLink &&
-        (true ? (
+        (featureEnabled('sso') ? (
           <LinkWithAnalytics
             type="custom"
             onPress={() =>
