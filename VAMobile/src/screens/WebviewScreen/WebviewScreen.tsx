@@ -164,7 +164,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     }
 
     isSSOSession && fetchSSOCookies()
-  }, [])
+  }, [isSSOSession])
 
   const backPressed = (): void => {
     webviewRef?.current.goBack()
