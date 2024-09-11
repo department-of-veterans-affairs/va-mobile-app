@@ -45,7 +45,7 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  if (true) {
+  if (!appointmentsData || appointmentsData.data.length < 1) {
     return (
       <NoAppointments
         subText={t('noAppointments.youCanSchedule')}
