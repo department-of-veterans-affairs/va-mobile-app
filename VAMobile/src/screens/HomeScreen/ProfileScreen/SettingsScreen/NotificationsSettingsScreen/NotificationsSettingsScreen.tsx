@@ -110,7 +110,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         <Box mb={contentMarginBottom}>
           {systemNotificationsOn ? (
             <>
-              <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter}>
+              <TextView variant={'MobileBody'} mx={gutter}>
                 {t('notifications.settings.personalize.text.systemNotificationsOn')}
               </TextView>
               {preferenceList()}
