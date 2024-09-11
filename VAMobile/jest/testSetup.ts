@@ -59,6 +59,8 @@ jest.mock('../src/store/api', () => ({
   setAccessToken: jest.fn(),
   getAccessToken: jest.fn(),
   setRefreshToken: jest.fn(),
+  getDeviceSecret: jest.fn(),
+  setDeviceSecret: jest.fn(),
 }))
 
 jest.mock('../src/utils/hooks', () => {
