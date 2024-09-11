@@ -355,7 +355,7 @@ describe('Messages Screen', () => {
     await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
-  // })
+  })
 
   it('verify only use messages for non-urgent needs information', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
