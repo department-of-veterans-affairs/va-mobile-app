@@ -105,7 +105,7 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
     testID = `${testID} ${updatedLastDate}`
   }
 
-  const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
+  const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline || [])
 
   const detailsText = t(`claimPhase.5step.details.phase${phase}`)
   const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.5step.details.phase1')) : detailsText
@@ -127,7 +127,7 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })
+    navigateTo('FileRequest', { claimID, undefined })
   }
 
   return (

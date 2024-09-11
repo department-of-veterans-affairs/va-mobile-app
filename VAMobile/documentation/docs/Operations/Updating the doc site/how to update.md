@@ -5,6 +5,8 @@ sidebar_position: 2
 
 # How to update the VA Mobile doc site 
 
+_These instructions are for people who are comfortable with maintaining and troubleshooting setup on their local machine. If that's not you, please reach out to the QART tech lead for assistance._
+
 Follow these steps each time you want to make an update to the [VA Mobile doc site](https://department-of-veterans-affairs.github.io/va-mobile-app/).
 
 You need:

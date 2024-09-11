@@ -7,8 +7,8 @@ import {
   openBenefits,
   openClaims,
   openClaimsHistory,
-  resetInAppReview,
   scrollToIDThenTap,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
@@ -53,6 +53,7 @@ export const ClaimsE2eIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -154,147 +155,67 @@ describe(':ios: Claims Screen', () => {
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
-  it('automatically expands and scrolls to current step', async () => {
+  it('automatically expands and scrolls to current step and dates match', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
     await expect(element(by.text('Received January 01, 2021'))).toExist()
   })
 
   it('should verify that the review file request alert is visible', async () => {
+    await expect(element(by.label('You have 3 file requests'))).toExist()
     await waitFor(element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
-  it('should tap on a claim and verify the dates match', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
-    await expect(element(by.text('Received January 01, 2021'))).toExist()
+  it('should verify that user is sent to File requests screen', async () => {
+    await element(by.id(ClaimsE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
+    await expect(element(by.text('You have 3 file requests from VA'))).toExist()
+    await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
-  it('verify number of requests in review file requests', async () => {
-    await expect(element(by.label('You have 3 file requests'))).toExist()
-    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+  it('verify that the user is sent to the file upload page', async () => {
+    await element(by.text('Dental disability - More information needed')).tap()
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
 
-  /******* Commented out because file request/review details buttons are moving *******/
-  //
-  // it('should verify that the review file request button is visible in step 3', async () => {
-  //   await waitFor(element(by.text('Review file requests')))
-  //     .toBeVisible()
-  //     .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
-  //     .scroll(100, 'down')
-  // })
+  it('should back out of the file request screen and reenter a new file request screen', async () => {
+    await element(by.text('Back')).tap()
+    await element(by.text('Accidental injury - 21-4176 needed')).tap()
+  })
 
-  // it('expand step 3 and verify that the review file request button is visible', async () => {
-  //   await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
-  //   await expect(element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID))).toExist()
-  //   await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
-  // })
+  it('verify Review evaluation details', async () => {
+    await element(by.text('Back')).tap()
+    await element(by.id('fileRequestPageTestID')).scrollTo('bottom')
+    await element(by.id('Review evaluation details')).tap()
+    await expect(element(by.text('Claim evaluation'))).toExist()
+    await expect(
+      element(
+        by.text(
+          'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
+        ),
+      ),
+    ).toExist()
+    await expect(element(by.id('Request claim evaluation'))).toExist()
+  })
 
-  // it('verify that the user is sent to the file upload page', async () => {
-  //   await element(by.text('Dental disability - More information needed')).tap()
-  //   await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
-  //   await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
-  // })
-
-  // it('should back out of the file request screen and reenter a new file request screen', async () => {
-  //   await element(by.text('Requests')).tap()
-  //   await element(by.text('Accidental injury - 21-4176 needed')).tap()
-  // })
-
-  // it('verify the select files screen displays the correct info', async () => {
-  //   await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).tap()
-  //   await expect(element(by.text('Select a file to upload for Accidental injury - 21-4176 needed'))).toExist()
-  //   await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
-  //   await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
-  //   await expect(element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1)).toExist()
-  // })
-
-  // it('verify tap select a file options', async () => {
-  //   if (device.getPlatform() === 'android') {
-  //     await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
-  //   } else {
-  //     await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
-  //   }
-  //   await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
-  //   await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
-  // })
-
-  // it('should navigate back to the request <x> select a file screen', async () => {
-  //   if (device.getPlatform() === 'android') {
-  //     await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
-  //   } else {
-  //     await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
-  //   }
-  //   await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
-  // })
-
-  // it('verify take or select photos panel', async () => {
-  //   await element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).tap()
-  //   await expect(element(by.text('This feature is not yet accessible to screen readers'))).toExist()
-  //   await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
-  //   await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
-  //   await expect(element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1)).toExist()
-  // })
-
-  // it('should select take or select photos and verify the options given', async () => {
-  //   await element(by.id('takePhotosTestID')).scrollTo('bottom')
-  //   if (device.getPlatform() === 'android') {
-  //     await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(0).tap()
-  //   } else {
-  //     await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1).tap()
-  //   }
-  //   await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_CAMERA_OPTION_TEXT))).toExist()
-  //   await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_PHOTO_GALLERY_OPTION_TEXT))).toExist()
-  // })
-
-  // it('should navigate back to the file request screen', async () => {
-  //   if (device.getPlatform() === 'android') {
-  //     await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
-  //   } else {
-  //     await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
-  //   }
-  //   await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
-  //   await element(by.text('Requests')).tap()
-  // })
-
-  // it('verify Review evaluation details', async () => {
-  //   await element(by.id('fileRequestPageTestID')).scrollTo('bottom')
-  //   await element(by.id('Review evaluation details')).tap()
-  //   await expect(element(by.text('Claim evaluation'))).toExist()
-  //   await expect(
-  //     element(
-  //       by.text(
-  //         'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
-  //       ),
-  //     ),
-  //   ).toExist()
-  //   await expect(element(by.id('Request claim evaluation'))).toExist()
-  // })
-
-  // it('verify error is displayed when request claim evaluation isnt checked', async () => {
-  //   await element(by.id('askForClaimDecisionPageTestID')).scrollTo('bottom')
-  //   await element(by.id('Request claim evaluation')).tap()
-  //   await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
-  // })
-
-  // it('should navigate back to the claims history screen', async () => {
-  //   await element(by.text('Cancel')).tap()
-  //   await element(by.text('Claim')).tap()
-  //   await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
-  // })
+  it('verify error is displayed when request claim evaluation isnt checked', async () => {
+    await element(by.id('askForClaimDecisionPageTestID')).scrollTo('bottom')
+    await element(by.id('Request claim evaluation')).tap()
+    await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
+  })
 
   it('should verify details of claim on step 1', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
+    await element(by.text('Back')).tap()
+    await element(by.text('Cancel')).tap()
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+    await element(by.id('claimsHistoryID')).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
-    await expect(element(by.text('Thank you. VA recieved your claim')))
+    await expect(element(by.text('Thank you. VA received your claim'))).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
 
   it('should verify details of claim on step 2', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.id('Step 2. Initial review. Current step. Step 1 complete.'))).toExist()
     await expect(
@@ -302,10 +223,85 @@ describe(':ios: Claims Screen', () => {
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
       ),
     ).toExist()
-    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+  })
+
+  it('should verify submit evidence button exists', async () => {
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
+    await element(by.text('Submit evidence')).tap()
+  })
+
+  it('should verify submit evidence screen', async () => {
+    await expect(element(by.text('Submit evidence'))).toExist()
+    await expect(element(by.text('What to know before you submit evidence'))).toExist()
+    await expect(
+      element(
+        by.text(
+          'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, your claim will go back to that step for review.',
+        ),
+      ),
+    ).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
+  })
+
+  it('verify the select files screen displays the correct info', async () => {
+    await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).tap()
+    await expect(element(by.text('Select a file to upload'))).toExist()
+    await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1)).toExist()
+  })
+
+  it('verify tap select a file options', async () => {
+    if (device.getPlatform() === 'android') {
+      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
+    } else {
+      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
+    }
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
+  })
+
+  it('should navigate back to the submit evidence screen', async () => {
+    if (device.getPlatform() === 'android') {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
+    } else {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
+    }
+    await element(by.text('Back')).tap()
+  })
+
+  it('should verify take or select photos flow', async () => {
+    await element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).tap()
+    await expect(element(by.text('This feature is not yet accessible to screen readers'))).toExist()
+    await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1)).toExist()
+  })
+
+  it('should select take or select photos and verify the options given', async () => {
+    await element(by.id('takePhotosTestID')).scrollTo('bottom')
+    if (device.getPlatform() === 'android') {
+      await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(0).tap()
+    } else {
+      await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1).tap()
+    }
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_CAMERA_OPTION_TEXT))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_PHOTO_GALLERY_OPTION_TEXT))).toExist()
+  })
+
+  it('should navigate back to the claim details screen', async () => {
+    if (device.getPlatform() === 'android') {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
+    } else {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
+    }
+    await element(by.text('Back')).tap()
+    await element(by.text('Cancel')).tap()
   })
 
   it('should verify details of claim on step 3 w/ waiver', async () => {
+    await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)))
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
@@ -335,10 +331,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should verify details of claim on step 4', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)))
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
@@ -361,10 +353,6 @@ describe(':ios: Claims Screen', () => {
   })
 
   it('should tap on the closed tab', async () => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
     await element(by.text('Closed')).tap()
   })
 

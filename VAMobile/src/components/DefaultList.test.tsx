@@ -35,6 +35,6 @@ context('DefaultList', () => {
   })
 
   it('calls onPress when item is clicked', () => {
-    fireEvent.press(screen.getByRole('menuitem', { name: 'another line' }))
+    fireEvent.press(screen.getByRole('link', { name: 'another line' }))
   })
 })

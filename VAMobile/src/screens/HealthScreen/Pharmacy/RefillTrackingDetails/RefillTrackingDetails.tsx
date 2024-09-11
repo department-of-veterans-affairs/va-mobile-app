@@ -180,7 +180,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
     return (
       <>
-        <TextView variant="BitterBoldHeading" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
           {prescriptionName}
         </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>

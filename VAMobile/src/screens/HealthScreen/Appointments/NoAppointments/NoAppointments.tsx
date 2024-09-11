@@ -28,7 +28,8 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
       justifyContent="center"
       mx={theme.dimensions.gutter}
       {...testIdProps('Appointments: No-appointments-page')}
-      alignItems="center">
+      alignItems="center"
+      mt={theme.dimensions.textAndButtonLargeMargin}>
       <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center">
           {t('noAppointments.youDontHave')}
