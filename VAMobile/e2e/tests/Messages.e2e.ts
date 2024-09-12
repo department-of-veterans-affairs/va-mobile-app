@@ -344,7 +344,7 @@ describe('Messages Screen', () => {
 
   //running on iOS only for the next few tests due to android wonkiness due to detox
   it('tap start new message and verify information', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
       await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
       await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
@@ -356,7 +356,7 @@ describe('Messages Screen', () => {
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
       await expect(element(by.text('Veterans Crisis Line'))).toExist()
       await element(by.text('Done')).tap()
@@ -364,7 +364,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify only use messages for non-urgent needs information', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
       await expect(element(by.text('Only use messages for non-urgent needs')))
@@ -409,13 +409,13 @@ describe('Messages Screen', () => {
   })
 
   it('should close the messages help panel', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id('messagesHelpCloseTestID')).tap()
     }
   })
 
   it('verify the correct errors displayed on save', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
       await expect(element(by.text('We need more information'))).toExist()
       await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
@@ -425,7 +425,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap the to field and select a name', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
       await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
       await element(by.text('Done')).tap()
@@ -433,7 +433,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap the category field and select a category', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
         .toBeVisible()
         .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
@@ -445,7 +445,7 @@ describe('Messages Screen', () => {
   })
 
   it('should add and delete text in the subject field', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
         .toBeVisible()
         .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
@@ -456,7 +456,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify cancel action sheet display', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
       await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
       await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
@@ -467,7 +467,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify the previous made fields are filled on keep editing', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
       await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
       await expect(element(by.text('Medication'))).toExist()
@@ -475,7 +475,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify the user is returned to messages inbox on delete', async () => {
-    if (isIOS()) {
+    if (device.getPlatform() === 'ios') {
       await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
       await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
       await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
