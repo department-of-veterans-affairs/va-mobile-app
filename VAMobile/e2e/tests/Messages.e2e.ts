@@ -341,15 +341,15 @@ describe('Messages Screen', () => {
   })
 
   it('tap start new message and verify information', async () => {
-    await device.disableSynchronization()
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+    await device.disableSynchronization()
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
+    await device.enableSynchronization()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
-    await device.enableSynchronization()
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
