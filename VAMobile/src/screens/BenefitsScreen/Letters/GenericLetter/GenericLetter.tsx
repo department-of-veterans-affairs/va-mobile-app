@@ -18,8 +18,6 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
@@ -67,7 +65,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
           {header}
         </TextView>
         <TextView
-          {...testIdProps(descriptionA11yLabel || description)}
+          accessibilityLabel={descriptionA11yLabel}
           variant="MobileBody"
           mt={theme.dimensions.standardMarginBetween}
           paragraphSpacing={true}>
@@ -86,8 +84,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <FeatureLandingTemplate
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
-      title={t('letters.details.title')}
-      {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
+      title={t('letters.details.title')}>
       {downloading ? (
         <LoadingComponent text={t('letters.loading')} />
       ) : letterDownloadError ? (

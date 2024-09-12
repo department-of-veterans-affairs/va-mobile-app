@@ -10,7 +10,6 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 
@@ -43,6 +42,7 @@ function ReloadButton({ reloadPressed }: ReloadButtonProps) {
         icon={'Redo'}
         fill={colors.icon.webviewReload}
         testID={t('refresh')}
+        a11yLabel={t('refresh')}
       />
     </Box>
   )
@@ -157,7 +157,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   return (
-    <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
+    <Box {...mainViewBoxProps} testID="Webview-page">
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
@@ -178,7 +178,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           setCanGoForward(navState.canGoForward)
           setCurrentUrl(navState.url)
         }}
-        {...testIdProps('Webview-web', true)}
+        testID="Webview-web"
       />
       <WebviewControls {...controlProps} />
     </Box>
