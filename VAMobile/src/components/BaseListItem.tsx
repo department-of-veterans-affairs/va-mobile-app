@@ -3,7 +3,7 @@ import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, P
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
-import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
 
@@ -254,10 +254,10 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   }
 
   const a11yProps: AccessibilityProps = {
-    ...testIdProps(testId || ''),
     ...a11yHintProp(a11yHint),
     ...a11yValueProp(a11yValue ? { text: a11yValue } : {}),
     accessibilityState: a11yState ? a11yState : {},
+    accessibilityLabel: testId,
   }
 
   if (isSwitchRow && decoratorProps) {
@@ -270,7 +270,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const generateItem = (accessibilityProps?: AccessibilityProps): ReactElement => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
-      <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
+      <Box {...boxProps} {...accessibilityProps} testID={accessibilityProps?.accessibilityLabel} accessible={!onPress}>
         {claimsRequestNumber !== undefined ? (
           <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} />
         ) : (
@@ -289,7 +289,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...a11yProps} {...pressableProps}>
+      <Pressable {...a11yProps} {...pressableProps} testID={testId}>
         {generateItem()}
       </Pressable>
     )

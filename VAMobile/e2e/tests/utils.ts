@@ -504,7 +504,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       } else {
         await element(by.text('Request Refill ')).tap()
       }
-    } else if (featureNavigationArray[j] === 'Contact us') {
+    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Proof of Veteran status') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
@@ -535,23 +535,39 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
   if (AFUseCase === 'DenyAccess') {
-    await element(by.text('OK')).tap()
+    try {
+      await element(by.text('OK')).tap()
+    } catch (ex) {
+      await element(by.text('OK')).atIndex(0).tap()
+    }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      try {
+        await element(by.text('800-698-2411')).atIndex(0).tap()
+      } catch (ex) {
+        await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
       await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      try {
+        await element(by.text('TTY: 711')).atIndex(0).tap()
+      } catch (ex) {
+        await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
+
     if (AFUseCaseUpgrade) {
-      await expect(element(by.text('Update now'))).toExist()
+      try {
+        await expect(element(by.text('Update now'))).toExist()
+      } catch (ex) {
+        await expect(element(by.text('Update now')).atIndex(1)).toExist()
+      }
     }
   }
 
