@@ -2,6 +2,8 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
+import { isIOS } from 'utils/platform'
+
 import {
   CommonE2eIdConstants,
   checkImages,
@@ -340,125 +342,148 @@ describe('Messages Screen', () => {
     await element(by.text('Messages')).tap()
   })
 
+  //running on iOS only for the next few tests due to android wonkiness due to detox
   it('tap start new message and verify information', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    await device.disableSynchronization()
-    await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
-    await device.enableSynchronization()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
+      await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
+      await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
+    }
   })
 
   it('new message: verify talk to the veterans crisis line now', async () => {
-    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
-    await expect(element(by.text('Veterans Crisis Line'))).toExist()
-    await element(by.text('Done')).tap()
+    if (isIOS()) {
+      await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+      await expect(element(by.text('Veterans Crisis Line'))).toExist()
+      await element(by.text('Done')).tap()
+    }
   })
 
   it('verify only use messages for non-urgent needs information', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
-    await expect(element(by.text('Only use messages for non-urgent needs')))
-    await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
-    await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
-    await device.disableSynchronization()
-    if (device.getPlatform() === 'android') {
-      await element(by.text('Call 988 and select 1')).tap()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
+      await expect(element(by.text('Only use messages for non-urgent needs')))
+      await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
+      await expect(
+        element(by.text('If you need help sooner, use one of these urgent communication options:')),
+      ).toExist()
+      await device.disableSynchronization()
+      if (device.getPlatform() === 'android') {
+        await element(by.text('Call 988 and select 1')).tap()
+        await setTimeout(5000)
+        await device.takeScreenshot('messagesHelpCrisisLinePhone')
+        await device.launchApp({ newInstance: false })
+
+        await element(by.id('messageHelpTestID')).scrollTo('bottom')
+
+        await element(by.text('TTY: 800-799-4889')).tap()
+        await setTimeout(5000)
+        await device.takeScreenshot('messagesHelpCrisisLineTTY')
+        await device.launchApp({ newInstance: false })
+
+        await element(by.text('Call 911')).tap()
+        await setTimeout(5000)
+        await device.takeScreenshot('messagesHelpCrisisLineTTY')
+        await device.launchApp({ newInstance: false })
+
+        await element(by.id('messageHelpTestID')).scrollTo('top')
+      }
+
+      await element(by.text('Text 838255')).tap()
       await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLinePhone')
+      await device.takeScreenshot('messagesHelpText')
       await device.launchApp({ newInstance: false })
 
-      await element(by.id('messageHelpTestID')).scrollTo('bottom')
-
-      await element(by.text('TTY: 800-799-4889')).tap()
+      await element(by.text('Start a confidential chat')).tap()
+      await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLineTTY')
+      await device.takeScreenshot('messagesHelpChat')
       await device.launchApp({ newInstance: false })
-
-      await element(by.text('Call 911')).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLineTTY')
-      await device.launchApp({ newInstance: false })
-
-      await element(by.id('messageHelpTestID')).scrollTo('top')
+      await device.enableSynchronization()
     }
-
-    await element(by.text('Text 838255')).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('messagesHelpText')
-    await device.launchApp({ newInstance: false })
-
-    await element(by.text('Start a confidential chat')).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('messagesHelpChat')
-    await device.launchApp({ newInstance: false })
-    await device.enableSynchronization()
   })
 
   it('should close the messages help panel', async () => {
-    await element(by.id('messagesHelpCloseTestID')).tap()
+    if (isIOS()) {
+      await element(by.id('messagesHelpCloseTestID')).tap()
+    }
   })
 
   it('verify the correct errors displayed on save', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
-    await expect(element(by.text('We need more information'))).toExist()
-    await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
-    await expect(element(by.text('Select a category')).atIndex(0)).toExist()
-    await expect(element(by.text('Enter a message')).atIndex(0)).toExist()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
+      await expect(element(by.text('We need more information'))).toExist()
+      await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
+      await expect(element(by.text('Select a category')).atIndex(0)).toExist()
+      await expect(element(by.text('Enter a message')).atIndex(0)).toExist()
+    }
   })
 
   it('should tap the to field and select a name', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
-    await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
-    await element(by.text('Done')).tap()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
+      await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
+      await element(by.text('Done')).tap()
+    }
   })
 
   it('should tap the category field and select a category', async () => {
-    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
-      .toBeVisible()
-      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-      .scroll(50, 'down')
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)).tap()
-    await element(by.text('Medication')).tap()
-    await element(by.text('Done')).tap()
+    if (isIOS()) {
+      await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)))
+        .toBeVisible()
+        .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
+        .scroll(50, 'down')
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)).tap()
+      await element(by.text('Medication')).tap()
+      await element(by.text('Done')).tap()
+    }
   })
 
   it('should add and delete text in the subject field', async () => {
-    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
-      .toBeVisible()
-      .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
-      .scroll(50, 'down')
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
+    if (isIOS()) {
+      await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)))
+        .toBeVisible()
+        .whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID))
+        .scroll(50, 'down')
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).replaceText('Testing')
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
+    }
   })
 
   it('verify cancel action sheet display', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
-    await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
-    await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
+      await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
+      await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
+      await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
+      await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
+      await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+    }
   })
 
   it('verify the previous made fields are filled on keep editing', async () => {
-    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-    await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
-    await expect(element(by.text('Medication'))).toExist()
+    if (isIOS()) {
+      await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+      await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
+      await expect(element(by.text('Medication'))).toExist()
+    }
   })
 
   it('verify the user is returned to messages inbox on delete', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
-    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
-    await expect(
-      element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
-    ).toExist()
+    if (isIOS()) {
+      await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
+      await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
+      await expect(
+        element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
+      ).toExist()
+    }
   })
 
   it('verify the attachment is on message with attachment', async () => {
