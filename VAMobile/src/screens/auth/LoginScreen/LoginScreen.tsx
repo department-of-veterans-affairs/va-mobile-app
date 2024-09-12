@@ -15,7 +15,7 @@ import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
-import { testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -98,7 +98,7 @@ function LoginScreen() {
         }
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
+    <VAScrollView testID="Login-page" contentContainerStyle={mainViewStyle} removeInsets={true}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
@@ -129,7 +129,12 @@ function LoginScreen() {
           <Button onPress={onLoginInit} label={t('signin')} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={70}>
-          <Button onPress={onFacilityLocator} label={t('findLocation.title')} buttonType={ButtonVariants.Secondary} />
+          <Button
+            onPress={onFacilityLocator}
+            label={t('findLocation.title')}
+            a11yLabel={a11yLabelVA(t('findLocation.title'))}
+            buttonType={ButtonVariants.Secondary}
+          />
         </Box>
         <AppVersionAndBuild textColor={'appVersionAndBuild'} />
       </Box>

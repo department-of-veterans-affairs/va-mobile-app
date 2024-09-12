@@ -8,7 +8,6 @@ import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
-import { testIdProps } from 'utils/accessibility'
 import {
   getSupportedBiometricA11yLabel,
   getSupportedBiometricText,
@@ -42,12 +41,12 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   }
 
   return (
-    <VAScrollView {...testIdProps('Biometrics-preference-page')}>
+    <VAScrollView>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
           variant="BitterHeading"
           accessibilityRole="header"
-          {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
+          accessibilityLabel={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
         <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>
