@@ -31,6 +31,8 @@
 		4EF6FBFA2727104E009917AA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6FBF92727104E009917AA /* Colors.xcassets */; };
 		7699B88040F8A987B510C191 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		83098BFE2C9352DD00AEF46E /* RNCheckExternalKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83098BFC2C9352DD00AEF46E /* RNCheckExternalKeyboard.swift */; };
+		83098BFF2C9352DD00AEF46E /* RNCheckExternalKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 83098BFD2C9352DD00AEF46E /* RNCheckExternalKeyboard.m */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
 		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
@@ -59,7 +61,7 @@
 		063E6E51934F27E13811FC7D /* Pods-VAMobile.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.rc.xcconfig"; sourceTree = "<group>"; };
 		1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppUpdate.m; sourceTree = "<group>"; };
 		1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNInAppUpdate.swift; sourceTree = "<group>"; };
-		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; };
+		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* VAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VAMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = VAMobile/AppDelegate.mm; sourceTree = "<group>"; };
@@ -68,7 +70,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-VAMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = launch_icon.jpeg; path = ../assets/fonts/launch_icon.jpeg; sourceTree = "<group>"; };
+		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = launch_icon.jpeg; path = ../assets/fonts/launch_icon.jpeg; sourceTree = "<group>"; };
 		3553357295992E19D8D2C691 /* Pods-VAMobile-VAMobileTests.qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.qa.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.qa.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-VAMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
@@ -92,6 +94,8 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-VAMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		777E110798F2E81A4C795C5A /* Pods-VAMobile-VAMobileTests.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.rc.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VAMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		83098BFC2C9352DD00AEF46E /* RNCheckExternalKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNCheckExternalKeyboard.swift; sourceTree = "<group>"; };
+		83098BFD2C9352DD00AEF46E /* RNCheckExternalKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCheckExternalKeyboard.m; sourceTree = "<group>"; };
 		8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Bold.ttf"; path = "../assets/fonts/Bitter/Bitter-Bold.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Italic.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Italic.ttf"; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				4080A7BB25631521007C9A8E /* RNCalendar.swift */,
 				4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */,
 				4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */,
+				83098BFC2C9352DD00AEF46E /* RNCheckExternalKeyboard.swift */,
+				83098BFD2C9352DD00AEF46E /* RNCheckExternalKeyboard.m */,
 				40F6C1AA266919E300852B10 /* RNAuthSession.swift */,
 				40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */,
 				40B4AE272682CC8A00BD1DD9 /* RNSecureRandom.swift */,
@@ -590,6 +596,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83098BFF2C9352DD00AEF46E /* RNCheckExternalKeyboard.m in Sources */,
 				4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				1101F1DF291F0FB300366337 /* RNInAppUpdate.swift in Sources */,
@@ -598,6 +605,7 @@
 				40B4AE292682CC8A00BD1DD9 /* RNSecureRandom.swift in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
+				83098BFE2C9352DD00AEF46E /* RNCheckExternalKeyboard.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				1101F1DD291F0F8D00366337 /* RNInAppUpdate.m in Sources */,
 				4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */,
