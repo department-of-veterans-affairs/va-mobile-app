@@ -483,6 +483,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     .reverse()
     .filter((value) => value !== '')
   let dontAddNextString = false
+  let savedText = ''
   _.forEach(bodySplit, (text, index) => {
     if (dontAddNextString) {
       //if previous entry was a phone number with xxx xxx xxxx format need to not add xxxx again
@@ -500,6 +501,12 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
         textReconstructedBody.pop()
         textReconstructedBody.pop()
         textReconstructedBody.push(
+          <TextView selectable={savedText.length > 0} variant="MobileBody">
+            {savedText}
+          </TextView>,
+        )
+        savedText = ''
+        textReconstructedBody.push(
           <LinkWithAnalytics
             type="call"
             phoneNumber={previousText + text + nextText}
@@ -510,7 +517,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
             a11yHint={t('openInPhoneMessaging.a11yHint')}
           />,
         )
-        textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+        savedText += whiteSpace.pop() || ''
         dontAddNextString = true
         return
       }
@@ -524,6 +531,12 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     if (emailMatch) {
       //matches <email address> only
       textReconstructedBody.push(
+        <TextView selectable={savedText.length > 0} variant="MobileBody">
+          {savedText}
+        </TextView>,
+      )
+      savedText = ''
+      textReconstructedBody.push(
         <LinkWithAnalytics
           type="url"
           url={'mailto:' + text}
@@ -534,9 +547,15 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInEmailMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+      savedText += whiteSpace.pop() || ''
     } else if (mailToMatch) {
       // matches mailto:<email address>
+      textReconstructedBody.push(
+        <TextView selectable={savedText.length > 0} variant="MobileBody">
+          {savedText}
+        </TextView>,
+      )
+      savedText = ''
       textReconstructedBody.push(
         <LinkWithAnalytics
           type="url"
@@ -548,9 +567,15 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInEmailMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+      savedText += whiteSpace.pop() || ''
     } else if (phoneMatch) {
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
+      textReconstructedBody.push(
+        <TextView selectable={savedText.length > 0} variant="MobileBody">
+          {savedText}
+        </TextView>,
+      )
+      savedText = ''
       textReconstructedBody.push(
         <LinkWithAnalytics
           type="call"
@@ -562,10 +587,15 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInPhoneMessaging.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+      savedText += whiteSpace.pop() || ''
     } else if (urlMatch) {
       // matches any https, http url
-      textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
+      textReconstructedBody.push(
+        <TextView selectable={savedText.length > 0} variant="MobileBody">
+          {savedText}
+        </TextView>,
+      )
+      savedText = ''
       textReconstructedBody.push(
         <LinkWithAnalytics
           type="url"
@@ -577,10 +607,16 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInBrowser.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+      savedText += whiteSpace.pop() || ''
     } else if (url2Match) {
       // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
       // into a link - may need to update this if we need to include other domains greater than 3 digits)
+      textReconstructedBody.push(
+        <TextView selectable={savedText.length > 0} variant="MobileBody">
+          {savedText}
+        </TextView>,
+      )
+      savedText = ''
       textReconstructedBody.push(
         <LinkWithAnalytics
           type="url"
@@ -592,16 +628,21 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
           a11yHint={t('openInBrowser.a11yHint')}
         />,
       )
-      textReconstructedBody.push(<TextView variant="MobileBody">{whiteSpace.pop() || ''}</TextView>)
+      savedText += whiteSpace.pop() || ''
     } else {
       const spacing = whiteSpace.pop() || ''
-      textReconstructedBody.push(
-        <TextView selectable={true} variant="MobileBody">
-          {text + spacing}
-        </TextView>,
-      )
+      savedText += text + spacing
     }
   })
+
+  if (savedText.length > 0) {
+    textReconstructedBody.push(
+      <TextView selectable={true} variant="MobileBody">
+        {savedText}
+      </TextView>,
+    )
+  }
+
   return (
     <Box mb={theme.paragraphSpacing.spacing20FontSize} flexDirection="row" flexWrap="wrap">
       {textReconstructedBody}
