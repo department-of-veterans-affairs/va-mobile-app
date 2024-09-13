@@ -32,13 +32,15 @@ context('ClaimTimeline', () => {
   it('shows full list of steps', () => {
     initializeTestInstance(false)
     expect(screen.queryByText('You have 2 file requests from VA')).toBeFalsy()
-    expect(screen.getByLabelText('Step 1. Claim received. Complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 2. Initial review. Complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 3. Evidence gathering. Current step. Step 1 through 2 complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 4. Evidence review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 5. Rating. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 6. Preparing decision letter. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 7. Final review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 1 of 8. Claim received. Complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 2 of 8. Initial review. Complete.')).toBeTruthy()
+    expect(
+      screen.getByLabelText('Step 3 of 8. Evidence gathering. Current step. Step 1 through 2 complete.'),
+    ).toBeTruthy()
+    expect(screen.getByLabelText('Step 4 of 8. Evidence review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 5 of 8. Rating. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 6 of 8. Preparing decision letter. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 7 of 8. Final review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 8 of 8. Claim decided. Incomplete.')).toBeTruthy()
   })
 })

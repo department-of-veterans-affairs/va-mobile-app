@@ -25,6 +25,7 @@ import {
   ButtonDecoratorType,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
@@ -34,9 +35,13 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { LINK_URL_VA_NOTIFICATIONS } = getEnv()
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
@@ -165,10 +170,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         <Box mb={contentMarginBottom}>
           {systemNotificationData?.systemNotificationsOn ? (
             <>
-              <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
-                {t('notifications.settings.personalize.heading')}
-              </TextView>
-              <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
+              <TextView variant={'MobileBody'} mx={gutter}>
                 {t('notifications.settings.personalize.text.systemNotificationsOn')}
               </TextView>
               {preferenceList()}
@@ -176,7 +178,6 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
           ) : (
             <AlertWithHaptics
               variant="info"
-              header={t('notifications.settings.alert.title')}
               description={t('notifications.settings.alert.text')}
               primaryButton={{
                 label: t('notifications.settings.alert.openSettings'),
@@ -187,6 +188,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
           <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
             {t('notifications.settings.privacy')}
           </TextView>
+          <Box mx={gutter}>
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_VA_NOTIFICATIONS}
+              text={t('notifications.settings.link.text')}
+              a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
+            />
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>

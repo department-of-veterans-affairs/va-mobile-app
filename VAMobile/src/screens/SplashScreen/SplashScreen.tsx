@@ -2,7 +2,6 @@ import React from 'react'
 import { StatusBar, ViewStyle } from 'react-native'
 
 import { Box, VALogo, VAScrollView } from 'components'
-import { testIdProps } from 'utils/accessibility'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 export type SplashScreenProps = Record<string, unknown>
@@ -16,7 +15,7 @@ function SplashScreen({}: SplashScreenProps) {
   const isPortrait = useOrientation()
 
   return (
-    <VAScrollView {...testIdProps('Splash-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+    <VAScrollView testID="Splash-page" contentContainerStyle={splashStyles} removeInsets={true}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
