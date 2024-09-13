@@ -21,6 +21,8 @@ export type ClaimPhaseProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
@@ -28,7 +30,7 @@ export type ClaimPhaseProps = {
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
+function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
@@ -42,8 +44,8 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
   const isIncompletePhase = phase > current
-  const disableScroll =
-    numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0 && !attributes?.waiverSubmitted
+  const hasFileRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0
+  const disableScroll = !scrollIsEnabled || (hasFileRequests && !attributes?.waiverSubmitted)
 
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current && !disableScroll) {
@@ -84,6 +86,8 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     </TextView>
   )
 
+  const stepNumberA11y = t('stepXofY', { current: phase, total: isDisabilityClaim ? 8 : 5 })
+
   let currentStatusA11y = ''
   if (isIncompletePhase) {
     currentStatusA11y = t('incomplete')
@@ -100,7 +104,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     completedStepsA11y = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
   }
 
-  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatusA11y}.`
+  let testID = `${stepNumberA11y}. ${heading}. ${currentStatusA11y}.`
   if (completedStepsA11y) {
     testID += ` ${completedStepsA11y}.`
   }

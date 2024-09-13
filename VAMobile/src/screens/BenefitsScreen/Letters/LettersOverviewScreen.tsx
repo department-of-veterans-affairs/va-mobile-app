@@ -14,7 +14,6 @@ import AddressSummary, {
   addressDataField,
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -41,7 +40,6 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
       backLabel={t('benefits.title')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.title')}
-      {...testIdProps('Letters-page')}
       testID="lettersPageID">
       {!userAuthorizedServices?.lettersAndDocuments ? (
         <NoLettersScreen />
