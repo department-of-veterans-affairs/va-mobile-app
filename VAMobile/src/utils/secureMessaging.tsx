@@ -498,8 +498,9 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       const testString = previousText + ' ' + text + ' ' + nextText
       const phoneMatch = PHONE_REGEX_EXP.exec(testString)
       if (phoneMatch) {
-        textReconstructedBody.pop()
-        textReconstructedBody.pop()
+        if (savedText.length > 2) {
+          savedText = savedText.slice(0, savedText.length - 4)
+        }
         textReconstructedBody.push(
           <TextView selectable={savedText.length > 0} variant="MobileBody">
             {savedText}
