@@ -129,11 +129,7 @@ context('NotificationsSettingsScreen', () => {
       renderWithProps(false, false, [apptPrefOff])
       await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
       await waitFor(() =>
-        expect(
-          screen.getByText(
-            "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
-          ),
-        ).toBeTruthy(),
+        expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy(),
       )
     })
   })
