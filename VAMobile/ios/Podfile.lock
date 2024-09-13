@@ -1783,14 +1783,14 @@ PODS:
     - React-NativeModulesApple
     - React-RCTFabric
     - React-RCTImage
-  - RNSharedElement (0.8.9):
-    - React-Core
     - React-rendererdebug
     - React-utils
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSharedElement (0.8.9):
+    - React-Core
   - RNSVG (14.2.0):
     - React-Core
   - SDWebImage/Core (5.19.7)
@@ -2205,8 +2205,8 @@ SPEC CHECKSUMS:
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
   RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
-  RNSharedElement: 3fd05877bd6bc95f71b332801bf4356ca69ab7f6
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
+  RNSharedElement: 3fd05877bd6bc95f71b332801bf4356ca69ab7f6
   RNSVG: 963a95f1f5d512a13d11ffd50d351c87fb5c6890
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380

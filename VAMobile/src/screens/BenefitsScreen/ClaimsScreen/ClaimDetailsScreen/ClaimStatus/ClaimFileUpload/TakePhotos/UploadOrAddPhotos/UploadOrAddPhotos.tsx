@@ -576,7 +576,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               />
             </Box>
           ) : undefined}
-        </Box>
+        </>
       )}
     </FullScreenSubtask>
   )
