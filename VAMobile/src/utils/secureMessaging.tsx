@@ -498,7 +498,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       const testString = previousText + ' ' + text + ' ' + nextText
       const phoneMatch = PHONE_REGEX_EXP.exec(testString)
       if (phoneMatch) {
-        if (savedText.length > 2) {
+        if (savedText.length > 3) {
           savedText = savedText.slice(0, savedText.length - 4)
         }
         textReconstructedBody.push(
