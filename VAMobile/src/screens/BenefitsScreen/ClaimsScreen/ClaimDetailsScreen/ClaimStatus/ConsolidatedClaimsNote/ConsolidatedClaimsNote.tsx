@@ -18,7 +18,7 @@ function ConsolidatedClaimsNote({}: ConsolidatedClaimsNoteProps) {
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('claimDetails.whyWeCombineNew')}
+          {t('claimDetails.whyWeCombinePanel')}
         </TextView>
         <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>
       </Box>
