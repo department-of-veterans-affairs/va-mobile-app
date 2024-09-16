@@ -20,7 +20,6 @@ import { RootState } from 'store'
 import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
-import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -95,7 +94,7 @@ function SyncScreen({}: SyncScreenProps) {
   }, [dispatch, loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, ENVIRONMENT])
 
   return (
-    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+    <VAScrollView contentContainerStyle={splashStyles} removeInsets={true}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}

@@ -6,7 +6,6 @@ import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type NoClaimsAndAppealsProps = {
@@ -45,22 +44,13 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   }
 
   return (
-    <Box
-      flex={1}
-      justifyContent="center"
-      mx={theme.dimensions.gutter}
-      {...testIdProps('Claims: No-claims-page')}
-      alignItems="center">
-      <Box {...testIdProps(header)} accessible={true}>
-        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
-          {header}
-        </TextView>
-      </Box>
-      <Box {...testIdProps(text)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
-          {text}
-        </TextView>
-      </Box>
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+      <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
+        {header}
+      </TextView>
+      <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessible={true}>
+        {text}
+      </TextView>
     </Box>
   )
 }
