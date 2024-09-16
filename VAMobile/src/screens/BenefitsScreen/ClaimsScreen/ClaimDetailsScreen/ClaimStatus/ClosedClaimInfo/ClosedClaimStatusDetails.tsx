@@ -59,7 +59,7 @@ function ClosedClaimStatusDetails({ claim, claimType, letterIsDownloadable }: Cl
       )}
 
       <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('payments')}
+        {t('payments.title')}
       </TextView>
       <TextView>{t('claimDetails.ifyoureentitled')}</TextView>
     </TextArea>
