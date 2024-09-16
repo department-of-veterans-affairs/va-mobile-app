@@ -303,8 +303,8 @@ const StyledBox = styled(View)`
  *
  * @returns TextView component
  */
-const Box: FC<BoxProps> = (props, { testID }) => {
-  return <StyledBox testID={testID} {...props} />
+const Box: FC<BoxProps> = (props) => {
+  return <StyledBox {...props} />
 }
 
 export default Box

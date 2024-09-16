@@ -14,7 +14,6 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import getEnv from 'utils/env'
@@ -97,7 +96,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.takePhotoEachPage')}
           </TextView>
-          <TextView variant="MobileBody" {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
+          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.ifMoreThan10.a11y')}>
             {t('fileUpload.ifMoreThan10.1')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.ifMoreThan10.2')}

@@ -4,7 +4,6 @@ import { Pressable, PressableProps, View } from 'react-native'
 
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
@@ -113,7 +112,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   return (
-    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} testID={testID} importantForAccessibility={'no'}>
+    <Box {...boxProps} testID={testID} importantForAccessibility={'no'}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}
