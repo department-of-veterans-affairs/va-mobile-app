@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
@@ -72,11 +71,13 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
-        <Box accessible={true} accessibilityRole={'header'}>
-          <TextView {...titleProps} {...testIdProps(titleA11yLabel ? titleA11yLabel : title)}>
-            {title}
-          </TextView>
-        </Box>
+        <TextView
+          {...titleProps}
+          accessibilityLabel={titleA11yLabel}
+          testID={titleA11yLabel || title}
+          accessible={true}>
+          {title}
+        </TextView>
       )}
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>

@@ -6,7 +6,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -24,11 +23,8 @@ function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          accessibilityLabel={a11yLabelVA(t('claimsDetails.whatDoIDoIfDisagreement.header'))}>
-          {t('claimsDetails.whatDoIDoIfDisagreement.header')}
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('claimDetails.learnWhatToDoIfDisagreePanel')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.content')}

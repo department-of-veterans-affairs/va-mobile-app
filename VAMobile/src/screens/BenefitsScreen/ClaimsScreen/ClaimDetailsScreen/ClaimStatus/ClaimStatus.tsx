@@ -27,6 +27,8 @@ type ClaimStatusProps = {
   claim: ClaimData
   /** indicates either open or closed claim */
   claimType: ClaimType
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
@@ -34,7 +36,7 @@ type ClaimStatusProps = {
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
-function ClaimStatus({ claim, claimType, scrollViewRef }: ClaimStatusProps) {
+function ClaimStatus({ claim, claimType, scrollIsEnabled, scrollViewRef }: ClaimStatusProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -58,7 +60,12 @@ function ClaimStatus({ claim, claimType, scrollViewRef }: ClaimStatusProps) {
       return (
         <Box>
           {claim && featureEnabled('claimPhaseExpansion') && (
-            <ClaimTimeline attributes={claim.attributes} claimID={claim.id} scrollViewRef={scrollViewRef} />
+            <ClaimTimeline
+              attributes={claim.attributes}
+              claimID={claim.id}
+              scrollIsEnabled={scrollIsEnabled}
+              scrollViewRef={scrollViewRef}
+            />
           )}
           {claim && !featureEnabled('claimPhaseExpansion') && (
             <DEPRECATED_ClaimTimeline attributes={claim.attributes} claimID={claim.id} />
