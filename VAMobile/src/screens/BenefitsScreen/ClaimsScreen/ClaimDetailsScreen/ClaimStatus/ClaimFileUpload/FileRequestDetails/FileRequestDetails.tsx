@@ -106,6 +106,9 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           </Box>
         )}
         <TextArea>
+          <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+            {displayName}
+          </TextView>
           <TextView variant="MobileBody">{description}</TextView>
         </TextArea>
       </Box>
