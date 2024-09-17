@@ -4,9 +4,9 @@ name: '[Release] Go Live'
 
 on:
   workflow_dispatch:
-  # Tuesdays 14:00 UTC, 10AM ET, 7AM PT
+  # Tuesdays 12:00 UTC, 8AM ET, 5AM PT
   schedule:
-    - cron: '0 14 * * 2'
+    - cron: '0 12 * * 2'
 
 jobs:
   get_workflow_environment:
