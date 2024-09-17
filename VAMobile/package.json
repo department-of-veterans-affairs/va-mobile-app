@@ -57,7 +57,7 @@
     "i18next": "^23.7.18",
     "jsc-android": "^250231.0.0",
     "lottie-react-native": "^5.1.6",
-    "luxon": "^3.4.4",
+    "luxon": "^3.5.0",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "react": "18.3.1",
