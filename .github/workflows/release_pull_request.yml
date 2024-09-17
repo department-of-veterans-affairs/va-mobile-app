@@ -41,22 +41,24 @@ jobs:
         run: gh auth login --with-token < token.txt
       - name: 'Create PR to merge changes back to develop'
         run: |
+          MERGE_TO_DEV_BRANCH=release-${{inputs.version}}-to-develop
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout release/${{inputs.version}}
-          git checkout -b dev-to-release
-          git push -u origin dev-to-release
+          git checkout -b $MERGE_TO_DEV_BRANCH
+          git push -u origin $MERGE_TO_DEV_BRANCH
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
       - name: 'Merge changes to main and tag for release build'
         run: |
+          MERGE_TO_MAIN_BRANCH=merge-${{inputs.version}}-to-main
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git checkout main
           git checkout release/${{inputs.version}}
-          git checkout -b merge-to-main
+          git checkout -b $MERGE_TO_MAIN_BRANCH
           git merge -s ours main -m "merge main changes"
           git checkout main
-          git merge merge-to-main --squash
+          git merge $MERGE_TO_MAIN_BRANCH --squash
           git commit  -m ${{inputs.version}}
           git push
           git tag -a ${{inputs.version}} -m ${{inputs.version}}
@@ -67,12 +69,3 @@ jobs:
         run: |
           echo "::set-output name=dev::${{env.DEV_PR}}"
           echo "::set-output name=release::${{env.RELEASE_HASH}}"
-  start_slack_thread:
-    name: Start Slack thread
-    if: ${{ failure() }}
-    needs: create_prs
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: 'The `/approve` command for release ${{inputs.version}} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
