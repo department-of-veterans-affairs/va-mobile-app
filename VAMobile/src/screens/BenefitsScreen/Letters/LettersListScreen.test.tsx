@@ -107,30 +107,32 @@ context('LettersListScreen', () => {
   it('should render correctly', async () => {
     initializeTestInstance(lettersData)
     expect(screen.getByText('Loading your letters list...')).toBeTruthy()
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Benefit summary letter' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Benefit verification letter' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Civil service preference letter' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Commissary letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Benefit summary letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Benefit verification letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Civil service preference letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Commissary letter' })).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: 'Proof of creditable prescription drug coverage letter' })).toBeTruthy(),
+      expect(
+        screen.getByRole('menuitem', { name: 'Proof of creditable prescription drug coverage letter' }),
+      ).toBeTruthy(),
     )
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: 'Proof of minimum essential coverage letter' })).toBeTruthy(),
+      expect(screen.getByRole('menuitem', { name: 'Proof of minimum essential coverage letter' })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Proof of service card' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Service verification letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Proof of service card' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Service verification letter' })).toBeTruthy())
   })
 
   describe('when a link is clicked', () => {
     it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Benefit summary letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Benefit summary letter' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitSummaryServiceVerificationLetter'))
     })
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Benefit verification letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Benefit verification letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
           description:
@@ -146,7 +148,7 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Civil Service Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Civil service preference letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Civil service preference letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
           description:
@@ -160,7 +162,7 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Commissary Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Commissary letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Commissary letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
           description:
@@ -175,7 +177,9 @@ context('LettersListScreen', () => {
     it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
       initializeTestInstance(lettersData)
       await waitFor(() =>
-        fireEvent.press(screen.getByRole('link', { name: 'Proof of creditable prescription drug coverage letter' })),
+        fireEvent.press(
+          screen.getByRole('menuitem', { name: 'Proof of creditable prescription drug coverage letter' }),
+        ),
       )
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
@@ -191,7 +195,7 @@ context('LettersListScreen', () => {
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
       initializeTestInstance(lettersData)
       await waitFor(() =>
-        fireEvent.press(screen.getByRole('link', { name: 'Proof of minimum essential coverage letter' })),
+        fireEvent.press(screen.getByRole('menuitem', { name: 'Proof of minimum essential coverage letter' })),
       )
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
@@ -208,7 +212,7 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Proof of Service Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Proof of service card' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Proof of service card' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
           description:
@@ -222,7 +226,7 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Service Verification Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Service verification letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('menuitem', { name: 'Service verification letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
           description:
