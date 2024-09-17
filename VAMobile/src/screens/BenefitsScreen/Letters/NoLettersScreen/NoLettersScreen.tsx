@@ -5,7 +5,6 @@ import { ViewStyle } from 'react-native'
 import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -19,7 +18,7 @@ function NoLettersScreen() {
   }
 
   return (
-    <VAScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters: No-letters-page')}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
         <TextView
           variant="MobileBodyBold"

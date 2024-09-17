@@ -25,19 +25,19 @@ export const ClaimsE2eIdConstants = {
     'Dependency Received January 01, 2016 Step 4 of 5: Preparation for notification Moved to this step on July 30, 2016',
   CLOSED_CLAIM_DECISION_LETTER_ID:
     'Compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
-  CLAIM_3_STATUS_STEP_1_ID: 'Step 1. Claim received. Complete.',
-  CLAIM_3_STATUS_STEP_2_ID: 'Step 2. Initial review. Current step. Step 1 complete.',
-  CLAIM_3_STATUS_STEP_3_ID: 'Step 3. Evidence gathering, review, and decision. Incomplete.',
-  CLAIM_3_STATUS_STEP_4_ID: 'Step 4. Preparation for notification. Incomplete.',
-  CLAIM_3_STATUS_STEP_5_ID: 'Step 5. Complete. Incomplete.',
-  CLAIM_4_STATUS_STEP_1_ID: 'Step 1. Claim received. Complete.',
-  CLAIM_4_STATUS_STEP_2_ID: 'Step 2. Initial review. Complete.',
-  CLAIM_4_STATUS_STEP_3_ID: 'Step 3. Evidence gathering. Current step. Step 1 through 2 complete.',
-  CLAIM_4_STATUS_STEP_4_ID: 'Step 4. Evidence review. Incomplete.',
-  CLAIM_4_STATUS_STEP_5_ID: 'Step 5. Rating. Incomplete.',
-  CLAIM_4_STATUS_STEP_6_ID: 'Step 6. Preparing decision letter. Incomplete.',
-  CLAIM_4_STATUS_STEP_7_ID: 'Step 7. Final review. Incomplete.',
-  CLAIM_4_STATUS_STEP_8_ID: 'Step 8. Claim decided. Incomplete.',
+  CLAIM_3_STATUS_STEP_1_ID: 'Step 1 of 5. Claim received. Complete.',
+  CLAIM_3_STATUS_STEP_2_ID: 'Step 2 of 5. Initial review. Current step. Step 1 complete.',
+  CLAIM_3_STATUS_STEP_3_ID: 'Step 3 of 5. Evidence gathering, review, and decision. Incomplete.',
+  CLAIM_3_STATUS_STEP_4_ID: 'Step 4 of 5. Preparation for notification. Incomplete.',
+  CLAIM_3_STATUS_STEP_5_ID: 'Step 5 of 5. Complete. Incomplete.',
+  CLAIM_4_STATUS_STEP_1_ID: 'Step 1 of 8. Claim received. Complete.',
+  CLAIM_4_STATUS_STEP_2_ID: 'Step 2 of 8. Initial review. Complete.',
+  CLAIM_4_STATUS_STEP_3_ID: 'Step 3 of 8. Evidence gathering. Current step. Step 1 through 2 complete.',
+  CLAIM_4_STATUS_STEP_4_ID: 'Step 4 of 8. Evidence review. Incomplete.',
+  CLAIM_4_STATUS_STEP_5_ID: 'Step 5 of 8. Rating. Incomplete.',
+  CLAIM_4_STATUS_STEP_6_ID: 'Step 6 of 8. Preparing decision letter. Incomplete.',
+  CLAIM_4_STATUS_STEP_7_ID: 'Step 7 of 8. Final review. Incomplete.',
+  CLAIM_4_STATUS_STEP_8_ID: 'Step 8 of 8. Claim decided. Incomplete.',
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
   FILE_REQUEST_BUTTON_ID: 'Step3FileRequestButton',
   CURRENT_STEP_TEXT: 'Current step',
@@ -131,7 +131,7 @@ describe(':ios: Claims Screen', () => {
 
   it('Verify VA sometimes combine claims information', async () => {
     await element(by.id('Find out why we sometimes combine claims')).tap()
-    await expect(element(by.text('Find out why we sometimes combine claims'))).toExist()
+    await expect(element(by.text('Why we sometimes combine claims'))).toExist()
     await element(by.text('Close')).tap()
   })
 
@@ -209,7 +209,7 @@ describe(':ios: Claims Screen', () => {
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
     await element(by.id('claimsHistoryID')).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
-    await expect(element(by.id('Step 1. Claim received. Current step.'))).toExist()
+    await expect(element(by.id('Step 1 of 5. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
     await expect(element(by.text('Thank you. VA received your claim'))).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
@@ -217,7 +217,7 @@ describe(':ios: Claims Screen', () => {
 
   it('should verify details of claim on step 2', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
-    await expect(element(by.id('Step 2. Initial review. Current step. Step 1 complete.'))).toExist()
+    await expect(element(by.id('Step 2 of 5. Initial review. Current step. Step 1 complete.'))).toExist()
     await expect(
       element(
         by.text('Your claim has been assigned to a reviewer who is determining if additional information is needed.'),
@@ -310,16 +310,16 @@ describe(':ios: Claims Screen', () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
     await setTimeout(2000)
     await expect(
-      element(by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
+      element(by.id('Step 3 of 5. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
     ).toExist()
     await waitFor(
-      element(by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
+      element(by.id('Step 3 of 5. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
     )
       .toBeVisible()
       .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
     await element(
-      by.id('Step 3. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.'),
+      by.id('Step 3 of 5. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.'),
     ).tap()
     await expect(
       element(
@@ -338,7 +338,7 @@ describe(':ios: Claims Screen', () => {
       .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)).tap()
     await expect(
-      element(by.id('Step 4. Preparation for notification. Current step. Step 1 through 3 complete.')),
+      element(by.id('Step 4 of 5. Preparation for notification. Current step. Step 1 through 3 complete.')),
     ).toExist()
     await expect(element(by.text('We are preparing your claim decision packet to be mailed.'))).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
@@ -348,7 +348,7 @@ describe(':ios: Claims Screen', () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID)).tap()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id('Step 5. Complete. Complete.')).tap()
+    await element(by.id('Step 5 of 5. Complete. Complete.')).tap()
     await expect(element(by.text('Complete')).atIndex(1)).toExist()
     await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
   })
@@ -381,7 +381,7 @@ describe(':ios: Claims Screen', () => {
   it('Verify what should I do if disagreement information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Learn what to do if you disagree with our decision')).atIndex(0).tap()
-    await expect(element(by.text('Learn what to do if you disagree with our decision')).atIndex(0)).toExist()
+    await expect(element(by.text('What to do if you disagree with our decision')).atIndex(0)).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
