@@ -32,7 +32,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app-automation-test-channel
-      message: '*Release v2.37 Coordination :thread:* build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+      message: '*Release v2.37 ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:* build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   release_coordination:
     name: release coordination
     if: ${{ success() }}
