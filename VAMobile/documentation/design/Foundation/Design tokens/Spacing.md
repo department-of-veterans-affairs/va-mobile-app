@@ -15,6 +15,7 @@ The number 8 is easily broken down into smaller measurements before it approache
 The VA follows the USWDS spacing unit tokens and then adds additional semantic tokens for the website. In the mobile app, React Native requires that spacing tokens are unitless. A unique set of spacing tokens are used in the mobile app. A different naming convention is also used to avoid confusion with the web’s spacing tokens.
 
 ### Primitive
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-spacing--docs#primitive)
 <iframe width="800" height="1200" alt="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?node-id=1606-1663&t=PljikYyjG5LVlwDo-4" allowfullscreen></iframe>
 
 ## How to use spacing tokens

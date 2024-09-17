@@ -10,12 +10,15 @@ Our color palette is organized into semantic color tokens, which have specific m
 To learn more about color tokens, see the [slides](https://docs.google.com/presentation/d/1grihSnsCPHBidOhe2T-sAC2HUo1_aU54XN8mqmyYySw/edit#slide=id.g26f52ea1451_0_0) from Sprint Demo on May 7, 2024.
 
 ## Primitive
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-colors--docs#primitive)
 <iframe width="800" height="1200" alt="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?node-id=570-942&t=Ko6aa9sM96UxylvN-4" allowfullscreen></iframe>
 
 ## Semantic
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-colors--docs#semantic)
 <iframe width="800" height="3000" alt="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?node-id=1239-695&t=PljikYyjG5LVlwDo-4" allowfullscreen></iframe>
 
 ## Component
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-colors--docs#component)
 <iframe width="800" height="450" alt="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens?type=design&node-id=298-1044&mode=design&t=MjPMv5xnusbkvlb0-4" allowfullscreen></iframe>
 
 ## How to use color tokens
