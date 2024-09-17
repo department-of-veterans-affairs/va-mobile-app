@@ -32,6 +32,6 @@ In Figma, spacing tokens can be applied to padding, margins, and gaps in Auto La
 Are there any instructions you'd like to provide here? VADS includes some technical guidance: https://design.va.gov/foundation/spacing-units
 
 ## How to use the Spacer component
-The Spacer component is a convenience component for handling spacing without managing margin/padding between elements. It’s recommended to use the Spacer component instead of spacing tokens when [DESCRIBE SITUATIONS?]. To use the Spacer component:
+The [Spacer component](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/spacer--docs) is a convenience component for handling spacing without managing margin/padding between elements. It’s recommended to use the Spacer component instead of spacing tokens when [DESCRIBE SITUATIONS?]. To use the Spacer component:
 
 1. Are there any instructions we should describe here?
