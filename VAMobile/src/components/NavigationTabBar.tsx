@@ -10,7 +10,7 @@ import { TFunction } from 'i18next'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yValueProp } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { themeFn } from 'utils/theme'
@@ -101,7 +101,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             key: route.name,
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
-            accessibilityRole: 'tab',
+            accessibilityRole: 'link',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
             accessible: true,
           }
@@ -115,7 +115,8 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
           return (
             <TouchableWithoutFeedback
-              {...testIdProps(translatedName)}
+              accessibilityLabel={translatedName}
+              testID={translatedName}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>

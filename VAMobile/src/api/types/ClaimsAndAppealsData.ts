@@ -588,6 +588,7 @@ export const FILE_REQUEST_STATUS: {
 
 export type UploadFileToClaimParamaters = {
   claimID: string
-  request: ClaimEventData
+  documentType: string
+  request: ClaimEventData | undefined
   files: Array<Asset> | Array<DocumentPickerResponse>
 }

@@ -22,8 +22,11 @@ import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Uploads a File to Claim
+ *
+ * request is only required if the upload is tied to a file request
+ * if the upload is not tied to a file request, request is null but documentType is required
  */
-const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamaters) => {
+const uploadFileToClaim = ({ claimID, documentType, request, files }: UploadFileToClaimParamaters) => {
   if (files.length > 1) {
     const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
       return file.base64
@@ -32,8 +35,8 @@ const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamat
     const payload = JSON.parse(
       JSON.stringify({
         files: fileStrings,
-        trackedItemId: request.trackedItemId,
-        document_type: request.documentType,
+        trackedItemId: request?.trackedItemId,
+        document_type: request?.documentType || documentType,
       }),
     )
     return post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, payload as unknown as Params)
@@ -67,8 +70,12 @@ const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamat
       ),
     )
 
-    formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
-    formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
+    if (request) {
+      formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
+      formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
+    } else {
+      formData.append('documentType', documentType)
+    }
     return post<ClaimDocUploadData>(
       `/v0/claim/${claimID}/documents`,
       formData as unknown as Params,
@@ -79,29 +86,43 @@ const uploadFileToClaim = ({ claimID, request, files }: UploadFileToClaimParamat
 
 /**
  * Returns a mutation for Uploading a File to Claim
+ * request is only required if the upload is tied to a file request
  */
 export const useUploadFileToClaim = (
   claimID: string,
-  request: ClaimEventData,
+  request: ClaimEventData | undefined,
   files: Array<Asset> | Array<DocumentPickerResponse> | undefined,
 ) => {
   const queryClient = useQueryClient()
-  const dateUploadedString = DateTime.local().toISO()
-  const claimData = queryClient.getQueryData([claimsAndAppealsKeys.claim, claimID]) as ClaimData
-  const indexOfRequest = claimData.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-  claimData.attributes.eventsTimeline[indexOfRequest].uploaded = true
-  claimData.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
-  claimData.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
-    files || [],
-    request?.trackedItemId || undefined,
-    request?.documentType || '',
-    dateUploadedString,
-  )
-  claimData.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
-
   return useMutation({
     mutationFn: uploadFileToClaim,
     onSuccess: () => {
+      const dateUploadedString = DateTime.local().toISO()
+      const claimData = queryClient.getQueryData([claimsAndAppealsKeys.claim, claimID]) as ClaimData
+      if (request) {
+        const indexOfRequest = claimData.attributes.eventsTimeline.findIndex(
+          (el) => el.description === request.description,
+        )
+        claimData.attributes.eventsTimeline[indexOfRequest].uploaded = true
+        claimData.attributes.eventsTimeline[indexOfRequest].status = FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW
+        claimData.attributes.eventsTimeline[indexOfRequest].documents = createFileRequestDocumentsArray(
+          files || [],
+          request?.trackedItemId || undefined,
+          request?.documentType || '',
+          dateUploadedString,
+        )
+        claimData.attributes.eventsTimeline[indexOfRequest].uploadDate = dateUploadedString
+      } else {
+        const claimEvent: ClaimEventData = {
+          type: '',
+          date: dateUploadedString,
+          status: FILE_REQUEST_STATUS.SUBMITTED_AWAITING_REVIEW,
+          uploaded: true,
+          uploadDate: dateUploadedString,
+          documents: createFileRequestDocumentsArray(files || [], undefined, '', dateUploadedString),
+        }
+        claimData.attributes.eventsTimeline.push(claimEvent)
+      }
       const setDataOptions: SetDataOptions = {
         updatedAt: DateTime.now().toMillis(),
       }

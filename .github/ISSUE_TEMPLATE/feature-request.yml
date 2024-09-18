@@ -75,7 +75,7 @@ body:
 - type: input
   id: discussion_VAHB_PO
   attributes:
-    label: 10.) Has this change been discussed with VAHB POs (Rachel, Ryan, or Don)? 
+    label: 10.) Has this change been discussed with VAHB POs (Ryan or Don)? 
     description: 
     placeholder: VAHB PO Name  - Yes / No
   validations:
