@@ -56,7 +56,7 @@ const NotificationManager: FC = ({ children }) => {
       Notifications.registerRemoteNotifications()
     }
 
-    if (loggedIn) {
+    if (loggedIn && personalInformation?.id) {
       register()
     }
   }, [loggedIn, personalInformation?.id, registerDevice])
