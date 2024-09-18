@@ -16,7 +16,7 @@ import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
@@ -80,29 +80,22 @@ function LoginScreen() {
     await AsyncStorage.setItem(NEW_SESSION, 'true')
   }
 
-  // const onLoginInit = demoMode
-  //   ? () => {
-  //       setNewSession()
-  //       dispatch(loginStart(true))
-  //     }
-  //   : firstTimeLogin
-  //     ? () => {
-  //         setFirstTimeLogin()
-  //         setNewSession()
+  const onLoginInit = demoMode
+    ? () => {
+        setNewSession()
+        dispatch(loginStart(true))
+      }
+    : firstTimeLogin
+      ? () => {
+          setFirstTimeLogin()
+          setNewSession()
 
-  //         navigateTo('LoaGate')
-  //       }
-  //     : () => {
-  //         setNewSession()
-  //         startAuth()
-  //       }
-
-  const onLoginInit = () => {
-    logNonFatalErrorToFirebase(
-      { status: 404, endpoint: '/v0/appointments', text: 'Test', json: { error: 'fail' } },
-      'Test crash error',
-    )
-  }
+          navigateTo('LoaGate')
+        }
+      : () => {
+          setNewSession()
+          startAuth()
+        }
 
   return (
     <VAScrollView testID="Login-page" contentContainerStyle={mainViewStyle} removeInsets={true}>
