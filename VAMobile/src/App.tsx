@@ -255,8 +255,8 @@ export function AuthGuard() {
     const toggle =
       firebaseDebugMode ||
       !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
-    crashlytics().setCrashlyticsCollectionEnabled(toggle)
-    analytics().setAnalyticsCollectionEnabled(toggle)
+    crashlytics().setCrashlyticsCollectionEnabled(true)
+    analytics().setAnalyticsCollectionEnabled(true)
     performance().setPerformanceCollectionEnabled(toggle)
   }, [firebaseDebugMode])
 
