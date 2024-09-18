@@ -22,7 +22,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
   return (
     <>
       <FeatureLandingTemplate
-        backLabel={t('payments')}
+        backLabel={t('payments.title')}
         backLabelOnPress={navigation.goBack}
         title={t('directDeposit.title')}>
         <AlertWithHaptics
