@@ -119,6 +119,18 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
 
+  useEffect(() => {
+    if (claimType === ClaimTypeConstants.ACTIVE) {
+      if (claimPhaseExpansionFlag) {
+        if (count > 0 && attributes?.waiverSubmitted) {
+          logAnalyticsEvent(Events.vama_claim_file_request(claimID))
+        } else if (submitEvidenceExpansionFlag && attributes?.open) {
+          logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
+        }
+      }
+    }
+  }, [claimType, claimPhaseExpansionFlag, submitEvidenceExpansionFlag, count, attributes, claimID])
+
   // Track how long user maintains focus on this screen
   useFocusEffect(
     useCallback(() => {
@@ -177,7 +189,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   }
 
   const submitEvidencePress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    logAnalyticsEvent(Events.vama_claim_submit_tap(claimID, attributes.claimType))
     navigateTo('SubmitEvidence', { claimID })
   }
 
