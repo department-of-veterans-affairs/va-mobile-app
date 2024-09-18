@@ -20,6 +20,8 @@ The VA follows the USWDS spacing unit tokens and then adds additional semantic t
 
 ## How to use spacing tokens
 
+Designers and engineers are encouraged to use spacing tokens as much as possible.
+
 **Designers**
 
 In Figma, spacing tokens can be applied to padding, margins, and gaps in Auto Layout. To apply spacing tokens:
@@ -30,9 +32,7 @@ In Figma, spacing tokens can be applied to padding, margins, and gaps in Auto La
 
 **Engineers**
 
-Are there any instructions you'd like to provide here? VADS includes some technical guidance: https://design.va.gov/foundation/spacing-units
+There are two ways for engineers to leverage spacing tokens:
 
-## How to use the Spacer component
-The [Spacer component](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/spacer--docs) is a convenience component for handling spacing without managing margin/padding between elements. It’s recommended to use the Spacer component instead of spacing tokens when [DESCRIBE SITUATIONS?]. To use the Spacer component:
-
-1. Are there any instructions we should describe here?
+* Use the tokens directly when setting spacing values (e.g. margin/padding) on Views and other stylized elements
+* Use the [Spacer component](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/spacer--docs) to separate visually distinct components or elements at the same display level (e.g. within the same View)
