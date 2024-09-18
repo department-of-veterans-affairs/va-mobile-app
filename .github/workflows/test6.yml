@@ -32,7 +32,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app-automation-test-channel
-      message: '*Release v2.37 Coordination :thread:* build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+      message: '*Release v2.37 Coordination :thread:*'
   release_coordination:
     name: release coordination
     if: ${{ success() }}
@@ -75,7 +75,7 @@ jobs:
           SLACK_MESSAGE=$(cat <<EOF
           {
             "channel": "va-mobile-app-automation-test-channel",
-            "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9368|9368>\n\
+            "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9570|9570>\n\
           *Release Report:* Github Report Link to be provided\n\
           *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
           *Approval Timing:*\n\

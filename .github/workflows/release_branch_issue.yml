@@ -124,7 +124,7 @@ jobs:
           SLACK_MESSAGE=$(cat <<EOF
           {
             "channel": "va-mobile-app",
-            "text": "*Release Ticket #:* ${{ needs.release_ticket.outputs.ticketNumber }}\n\
+            "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
           *Release Report:* Github Report Link to be provided\n\
           *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
           *Approval Timing:*\n\
