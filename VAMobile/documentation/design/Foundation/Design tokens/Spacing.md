@@ -5,14 +5,13 @@ sidebar_position: 3
 
 # Spacing
 
-Spacing units are based on multiples of 8 on the website and 4 on the mobile app to maintain a consistent rhythm when applied to margins, padding, and other dimensions.
+Spacing tokens are used to maintain a consistent rhythm when applied to margins, padding, and other dimensions.
 
-**Why multiples of 8 and 4?**
-The number 8 is easily broken down into smaller measurements before it approaches sub-pixel units. Additionally, many popular screen sizes are also divisible by 8. In the mobile app, smaller units are required in increments of 4. [Read more about the 8-point grid](https://spec.fm/specifics/8-pt-grid).
+Spacing units are are based on multiples of 8 on the website and 4 on the mobile app. The number 8 is easily broken down into smaller measurements before it approaches sub-pixel units. Additionally, many popular screen sizes are also divisible by 8. In the mobile app, smaller units are required in increments of 4. [Read more about the 8-point grid](https://spec.fm/specifics/8-pt-grid).
 
 ## Spacing tokens
 
-The VA follows the USWDS spacing unit tokens and then adds additional semantic tokens for the website. In the mobile app, React Native requires that spacing tokens are unitless. A unique set of spacing tokens are used in the mobile app. A different naming convention is also used to avoid confusion with the web’s spacing tokens.
+The VA follows the USWDS spacing tokens and adds additional semantic tokens for the website. In the mobile app, React Native requires that spacing tokens are unitless, so a unique set of spacing tokens are used in the mobile app. A different naming convention is also used to avoid confusion with the web’s spacing tokens.
 
 ### Primitive
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-spacing--docs#primitive)
@@ -20,7 +19,7 @@ The VA follows the USWDS spacing unit tokens and then adds additional semantic t
 
 ## How to use spacing tokens
 
-Designers and engineers are encouraged to use spacing tokens as much as possible.
+Designers and engineers are encouraged to use spacing tokens to ensure consistent spacing between elements.
 
 **Designers**
 
