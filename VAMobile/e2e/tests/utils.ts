@@ -55,7 +55,6 @@ export const CommonE2eIdConstants = {
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
 }
 
