@@ -636,7 +636,8 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     }
   })
 
-  if (savedText.length > 0) {
+  if (savedText.length > 0 && savedText.split(/\s/).filter((value) => value !== '').length > 0) {
+    //prohibits whitespace only being added to the end after a link
     textReconstructedBody.push(
       <TextView selectable={true} variant="MobileBody">
         {savedText}
