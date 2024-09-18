@@ -92,9 +92,7 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
-      await waitFor(() =>
-        expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByTestId('Step 1 of 8. Claim received. Complete.')).toBeTruthy())
     })
 
     it('should display the Files component', async () => {
