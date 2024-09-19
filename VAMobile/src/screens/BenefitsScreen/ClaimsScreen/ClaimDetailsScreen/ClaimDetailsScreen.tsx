@@ -61,7 +61,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     t('claimDetails.status'),
     featureEnabled('claimPhaseExpansion') ? t('files') : t('claimDetails.details'),
   ]
-  const controlIDs = ['claimsStatusID', 'claimsFilesID']
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType } = route.params
@@ -272,7 +271,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagreeLink')}
-            testID="claimDetailsLearnWhatToDoIFDisagreeLinkID"
+            testID={t('claimDetails.learnWhatToDoIfDisagreeLink')}
             onPress={whatShouldOnPress}
           />
         </Box>
@@ -284,7 +283,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <LinkWithAnalytics
           type="custom"
           text={t('claimDetails.whyWeCombineLink')}
-          testID="claimDetailsWhyWeCombineLinkID"
+          testID={t('claimDetails.whyWeCombineLink')}
           onPress={whyWeCombineOnPress}
         />
       </Box>
@@ -297,8 +296,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
-      testID="ClaimDetailsScreen"
-      backLabelTestID="claimsDetailsBackTestID">
+      testID="ClaimDetailsScreen">
       {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
       ) : claimError ? (
@@ -323,7 +321,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={a11yHints}
-                testIDs={controlIDs}
               />
             </Box>
           </Box>

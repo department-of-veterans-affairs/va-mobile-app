@@ -146,8 +146,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
-      testID="PersonalInformationTestID"
-      backLabelTestID="backToProfileID">
+      testID="PersonalInformationTestID">
       {loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
       ) : errorCheck ? (
@@ -166,7 +165,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
               type="custom"
               text={t('personalInformation.howToFixLegalName')}
               onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })}
-              testID="howToFixLegalNameID"
             />
           </Box>
           <Box
@@ -179,7 +177,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
               type="custom"
               text={t('personalInformation.howToFixDateOfBirth')}
               onPress={() => navigateTo('HowDoIUpdate', { screenType: 'DOB' })}
-              testID="howToFixDOBID"
             />
           </Box>
           {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}

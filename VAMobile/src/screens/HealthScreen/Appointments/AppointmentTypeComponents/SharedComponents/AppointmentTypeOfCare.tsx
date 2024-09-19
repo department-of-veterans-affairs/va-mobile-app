@@ -48,7 +48,7 @@ function AppointmentTypeOfCare({ attributes, subType, type }: AppointmentTypeOfC
         const isNonPendingClaimExam = !isPending && type === AppointmentDetailsTypeConstants.ClaimExam
         return isNonPendingClaimExam ? null : (
           <Box>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" testID="typeOfCareHeadingID">
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
               {heading}
             </TextView>
             <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>

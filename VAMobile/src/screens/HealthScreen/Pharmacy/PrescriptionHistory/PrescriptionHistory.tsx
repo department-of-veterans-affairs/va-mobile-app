@@ -264,7 +264,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <Box mr={8}>
               <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
             </Box>
-            <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
+            <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
               {t('prescription.history.tracking')}
             </TextView>
           </Box>
@@ -414,8 +414,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
           analytics={{
             onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
-          }}
-          testID="prescriptionRefillWarningTestID">
+          }}>
           <TextView
             mt={theme.dimensions.standardMarginBetween}
             paragraphSpacing={true}
@@ -432,7 +431,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button
-          testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
           onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
         />

@@ -143,8 +143,7 @@ describe('AppealsExpanded', () => {
       if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
-        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID ||
-        value === AppealsExpandedIdConstants.MULTIPLE_DECISION_APPEAL_ID
+        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
       ) {
         await element(by.id('claimsHistoryID')).scrollTo('bottom')
         await element(by.id('next-page')).tap()
@@ -188,7 +187,37 @@ describe('AppealsExpanded', () => {
 
     it('should close ' + key, async () => {
       i++
-      await element(by.id('appealsBackID')).tap()
+      await element(by.text('Claims')).tap()
+      if (i % 6 === 0) {
+        await openBenefits()
+        await openClaims()
+        await openClaimsHistory()
+        if (i >= 4 && i <= 13) {
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+        } else if (i >= 14 && i <= 23) {
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+        } else if (i >= 24 && i <= 33) {
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+        } else if (i >= 34) {
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+          await element(by.id('claimsHistoryID')).scrollTo('bottom')
+          await element(by.id('next-page')).tap()
+        }
+      }
     })
   }
 })

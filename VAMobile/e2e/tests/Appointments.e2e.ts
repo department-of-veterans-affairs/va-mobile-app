@@ -104,7 +104,7 @@ describe('Appointments Screen', () => {
 
   it('should tap on and show past appointments', async () => {
     await element(by.id('appointmentsTestID')).scrollTo('top')
-    await element(by.id('apptsPastID')).tap()
+    await element(by.text('Past')).tap()
     if (device.getPlatform() === 'android') {
       await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
@@ -116,10 +116,10 @@ describe('Appointments Screen', () => {
     await element(by.id('getDateRangeTestID')).tap()
     if (device.getPlatform() === 'android') {
       await element(by.text('Past 3 months')).atIndex(0).tap()
-      await element(by.id('pastApptsDateRangeCancelID')).tap()
+      await element(by.text('Cancel')).tap()
       await expect(element(by.text('Past 3 months')).atIndex(0)).toExist()
     } else {
-      await element(by.id('pastApptsDateRangeCancelID')).tap()
+      await element(by.text('Cancel')).tap()
       await expect(element(by.text('Past 3 months'))).toExist()
     }
   })
@@ -137,7 +137,7 @@ describe('Appointments Screen', () => {
           threeMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: six months - eight months earlier verification', async () => {
@@ -153,7 +153,7 @@ describe('Appointments Screen', () => {
           sixMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: eleven months - nine months earlier verification', async () => {
@@ -169,18 +169,18 @@ describe('Appointments Screen', () => {
           nineMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: current year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + currentYear)).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: previous year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + lastYear)).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 })

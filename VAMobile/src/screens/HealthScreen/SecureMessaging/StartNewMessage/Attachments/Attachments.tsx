@@ -175,7 +175,6 @@ function Attachments({ navigation, route }: AttachmentsProps) {
       scrollViewRef={scrollViewRef}
       title={t('secureMessaging.startNewMessage.attachments.title')}
       leftButtonText={t('cancel')}
-      leftButtonTestID="attachmentsCancelID"
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={
         displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')

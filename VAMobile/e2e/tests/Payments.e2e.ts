@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
+import { loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
 
 export const PaymentsE2eIDConstants = {
   PAYMENTS_YEAR_PICKER_ID: 'selectAYearTestID',
@@ -26,18 +26,18 @@ describe('Payments Screen', () => {
 
   it("verify what if I'm missing a payment information", async () => {
     await element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID)).tap()
-    await expect(element(by.id('paymentsMissingPanelID'))).toExist()
+    await expect(element(by.text("What if I'm missing a payment?")).atIndex(1)).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
+      await element(by.text('800-827-1000')).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
+      await element(by.text('TTY: 711')).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.id('paymentsMissingCloseID')).tap()
+    await element(by.text('Close')).tap()
   })
 
   it('payment details: verify the payment details for paper check', async () => {
@@ -51,19 +51,19 @@ describe('Payments Screen', () => {
 
   it("verify what if my payment information doesn't look right info", async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)).tap()
-    await expect(element(by.id('paymentsIssuesPanelID'))).toExist()
+    await expect(element(by.text("What if my payment information doesn't look right?")).atIndex(1)).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
-      await device.takeScreenshot('PaymentsMissingAndroidCallingScreen')
+      await element(by.text('800-827-1000')).tap()
+      await device.takeScreenshot('PaymentIncorrectAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
-      await device.takeScreenshot('PaymentsMissingAndroidCallingScreenTTY')
+      await element(by.text('TTY: 711')).tap()
+      await device.takeScreenshot('PaymentIncorrectAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.id('paymentIssuesCloseID')).tap()
-    await element(by.id('paymentDetailsBackID')).tap()
+    await element(by.text('Close')).tap()
+    await element(by.text('History')).tap()
   })
 
   it('verify the payment details for direct deposit', async () => {
@@ -74,21 +74,21 @@ describe('Payments Screen', () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).tap()
     await expect(element(by.text('BANK OF AMERICA, N.A.'))).toExist()
     await expect(element(by.text('********0567'))).toExist()
-    await element(by.id('paymentDetailsBackID')).tap()
+    await element(by.text('History')).tap()
   })
 
   it('should tap on and cancel the select a year picker', async () => {
     await element(by.id('paymentHistoryTestID')).scrollTo('top')
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
     await expect(element(by.text('Select a year'))).toExist()
-    await element(by.id('selectAYearCancelTestID')).tap()
+    await element(by.text('Cancel')).tap()
     await expect(element(by.text('2017')).atIndex(0)).toExist()
   })
 
   it('should tap on and select 2016 from the select a year picker', async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
     await element(by.text('2016')).tap()
-    await element(by.id('selectAYearConfirmTestID')).tap()
+    await element(by.text('Done')).tap()
     await expect(element(by.text('2016')).atIndex(0)).toExist()
   })
 

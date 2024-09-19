@@ -198,8 +198,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     <FullScreenSubtask
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
-      testID="refillTrackingDetailsTestID"
-      rightButtonTestID="prescriptionsBackTestID">
+      testID="refillTrackingDetailsTestID">
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingTrackingInfo ? (

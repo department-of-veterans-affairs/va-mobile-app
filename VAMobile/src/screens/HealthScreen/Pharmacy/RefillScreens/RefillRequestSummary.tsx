@@ -215,8 +215,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
         onLeftButtonPress={() => {
           onNavToHistory()
         }}
-        title={t('refillRequest')}
-        leftButtonTestID="prescriptionsBackTestID">
+        title={t('refillRequest')}>
         {showLoadingScreenRequestRefillsRetry ? (
           <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
         ) : (

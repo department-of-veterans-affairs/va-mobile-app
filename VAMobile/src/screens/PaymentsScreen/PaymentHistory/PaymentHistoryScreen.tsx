@@ -81,8 +81,6 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
     testID: 'selectAYearTestID',
-    cancelTestID: 'selectAYearCancelTestID',
-    confirmTestID: 'selectAYearConfirmTestID',
   }
 
   const getPaymentsData = (): ReactNode => {

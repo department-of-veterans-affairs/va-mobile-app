@@ -21,10 +21,7 @@ function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')
 
   return (
-    <LargePanel
-      title={t('claimDetails.claimsHelp.pageTitle')}
-      rightButtonText={t('close')}
-      rightButtonTestID="claimsWhatToDoDisagreementCloseID">
+    <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimDetails.learnWhatToDoIfDisagreePanel')}

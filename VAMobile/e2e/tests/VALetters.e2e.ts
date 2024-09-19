@@ -75,18 +75,18 @@ describe('VA Letters', () => {
   it('should tap address and open edit screen', async () => {
     await element(by.text(LettersConstants.MAILING_ADDRESS)).tap()
 
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await element(by.id('streetAddressLine2TestID')).typeText('2')
+    await element(by.id('streetAddressLine2TestID')).tapReturnKey()
 
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+    await element(by.text('Save')).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
 
     await expect(element(by.text(LettersConstants.DOWNLOAD_DOCUMENTS_TEXT))).toExist()
   })
 
   it('should verify address change is reflected in contact info', async () => {
-    await element(by.id('Home')).tap()
+    await element(by.text('Home')).tap()
     await openProfile()
     await openContactInfo()
     await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
@@ -96,15 +96,15 @@ describe('VA Letters', () => {
     await openBenefits()
     await element(by.text('3101 N Fort Valley Rd, 2')).tap()
 
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).clearText()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+    await element(by.id('streetAddressLine2TestID')).clearText()
+    await element(by.text('Save')).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
   it('should view letter types', async () => {
-    await element(by.id('lettersOverviewViewLettersButtonID')).tap()
+    await element(by.text('Review letters')).tap()
 
     for (const letterType of LettersConstants.LETTER_TYPES) {
       await expect(element(by.text(letterType.name))).toExist()
@@ -113,6 +113,13 @@ describe('VA Letters', () => {
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
     it(`should view ${letterType.name}`, async () => {
+      // need in-app reset in iOS before checking proof of service card to avoid false fail
+      if (device.getPlatform() === 'ios' && letterType.name === 'Proof of minimum essential coverage letter') {
+        await openBenefits()
+        await openLetters()
+        await element(by.text('Review letters')).tap()
+      }
+
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
@@ -122,19 +129,19 @@ describe('VA Letters', () => {
 
         if (isBenefitSummaryLetter) {
           await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom')
-          await element(by.id('lettersBenefitServiceGoToAskVAID')).tap()
+          await element(by.text('Go to Ask VA')).tap()
           await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
         }
 
-        await element(by.id('lettersBenefitServiceViewLetterID')).tap()
+        await element(by.text('Review letter')).tap()
         await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
         await element(by.text('Done')).tap()
       }
 
-      await element(by.id('BenefitSummaryServiceVerificationBackID')).tap()
+      await element(by.text('Review letters')).tap()
     })
   }
 })

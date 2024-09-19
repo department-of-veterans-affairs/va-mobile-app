@@ -375,8 +375,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('reviewMessage')}
       headerButton={headerButton}
-      testID="viewMessageTestID"
-      backLabelTestID="backToMessagesID">
+      testID="viewMessageTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
@@ -412,7 +411,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 variant="warning"
                 header={t('secureMessaging.reply.youCanNoLonger')}
                 description={t('secureMessaging.reply.olderThan45Days')}
-                testID="secureMessagingOlderThan45DaysAlertID"
               />
             </Box>
           )}

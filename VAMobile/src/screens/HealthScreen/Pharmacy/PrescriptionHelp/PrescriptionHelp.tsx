@@ -39,11 +39,7 @@ function PrescriptionHelp({}: PrescriptionHelpProps) {
   ]
 
   return (
-    <LargePanel
-      testID="PrescriptionsHelpTestID"
-      title={t('prescriptionsHelp')}
-      rightButtonText={t('close')}
-      rightButtonTestID="prescriptionsBackTestID">
+    <LargePanel testID="PrescriptionsHelpTestID" title={t('prescriptionsHelp')} rightButtonText={t('close')}>
       <Box mx={gutter} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>

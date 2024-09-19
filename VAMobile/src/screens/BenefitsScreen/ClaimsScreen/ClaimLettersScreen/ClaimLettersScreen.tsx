@@ -94,11 +94,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   })
 
   return (
-    <FeatureLandingTemplate
-      backLabel={backLabel}
-      backLabelOnPress={navigation.goBack}
-      title={t('claimLetters.title')}
-      backLabelTestID="claimLettersBackTestID">
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
       {loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
       ) : letterInfoError || claimsInDowntime ? (

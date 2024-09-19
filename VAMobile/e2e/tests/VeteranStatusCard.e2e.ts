@@ -13,7 +13,7 @@ import {
 } from './utils'
 
 export const VeteranStatusCardConstants = {
-  VETERAN_STATUS_ID: 'veteranStatusButtonID',
+  VETERAN_STATUS_TEXT: 'Proof of Veteran status',
   VETERAN_STATUS_NAME_TEXT: 'Kimberly Washington',
   VETERAN_STATUS_MILITARY_BRANCH_TEXT: 'United States Coast Guard',
   VETERAN_STATUS_DISABILITY_RATING_TEXT: '100% service connected',
@@ -26,7 +26,6 @@ export const VeteranStatusCardConstants = {
   VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT: '800-827-1000',
   VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT: 'TTY: 711',
   VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT: '800-538-9552',
-  VETERAN_STATUS_CLOSE_ID: 'veteranStatusCloseID',
 }
 
 beforeAll(async () => {
@@ -101,39 +100,39 @@ export async function verifyMilitaryInfo(militaryBranch) {
       militaryBranch,
     )
     await element(by.text('Home')).tap()
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)))
       .toBeVisible()
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
+    await element(by.text('Close')).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
-    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
+    await element(by.text('Close')).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
   })
 }
 describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)))
       .toBeVisible()
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await validateVeteranStatusDesign()
   })
 
   tapPhoneAndTTYLinks()
 
   it('should match design in the profile screen', async () => {
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await element(by.text('Close')).tap()
     await openProfile()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await validateVeteranStatusDesign()
   })
 
@@ -144,28 +143,28 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await element(by.text('Close')).tap()
     await openMilitaryInformation()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
-    await element(by.id('backToProfileID')).tap()
+    await element(by.text('Profile')).tap()
   })
 
   it('verify the date of birth matches the dob in the app', async () => {
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DATE_OF_BIRTH_TEXT))).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await element(by.text('Close')).tap()
     await openPersonalInformation()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DATE_OF_BIRTH_TEXT))).toExist()
-    await element(by.id('backToProfileID')).tap()
+    await element(by.text('Profile')).tap()
   })
 
   it('verify the disability rating matches the app', async () => {
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISABILITY_RATING_TEXT))).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await element(by.text('Close')).tap()
     await openBenefits()
     await openDisabilityRating()
     await expect(element(by.text('100%')).atIndex(1)).toExist()

@@ -82,8 +82,8 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it('should update the ' + addressType + ' address', async () => {
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).replaceText('2')
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     if (addressType === 'Home') {
       await fillHomeAddressFields()
     }
@@ -91,7 +91,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify action sheet for cancel', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.text('Cancel')).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -109,7 +109,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify contact info screen is displayed on delete', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(addressID))).toExist()
   })
@@ -121,9 +121,9 @@ export async function validateAddresses(addressID: string, addressType: string) 
       .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
       .scroll(100, 'down')
     await element(by.id(addressID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
-    await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)))
       .toBeVisible()
       .withTimeout(4000)
     if (addressType === 'Home') {
@@ -133,7 +133,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify your address screen is displayed on save', async () => {
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
     await element(by.id('verifyYourAddressTestID')).tap()
     await expect(element(by.text("We can't confirm the address you entered with the U.S. Postal Service."))).toExist()
@@ -151,13 +151,13 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify your address screen is displayed on save 2', async () => {
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
   })
 
   it(addressType + ': verify contact info is displayed when saved', async () => {
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
     try {
       await setTimeout(5000)
       await expect(element(by.text(addressType + ' address saved'))).toExist()
@@ -181,7 +181,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
 
   it(phoneType + ': verify error handling', async () => {
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Check your phone number'))).toExist()
   })
 
@@ -208,10 +208,10 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify action sheet for cancel', async () => {
-    await waitFor(element(by.id('contactInfoBackTestID')))
+    await waitFor(element(by.text('Cancel')))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.text('Cancel')).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -225,7 +225,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.text('Cancel')).tap()
     await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
@@ -253,10 +253,10 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
-    await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     try {
       await setTimeout(2000)
       await expect(element(by.text(phoneType + ' phone saved'))).toExist()
@@ -275,10 +275,10 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
-    await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     try {
       await setTimeout(2000)
       await expect(element(by.text(phoneType + ' phone saved'))).toExist()
@@ -359,9 +359,9 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.id('stateTestID')).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('AD500')
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
     await setTimeout(2000)
     await expect(
       element(
@@ -390,9 +390,9 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.text('Done')).tap()
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('12345')
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
     await setTimeout(2000)
     await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
   })
@@ -420,7 +420,7 @@ describe(':ios: Contact Info Screen', () => {
     await expect(element(by.id('howWeUseContactInfoLinkTestID'))).toExist()
     await element(by.id('howWeUseContactInfoLinkTestID')).tap()
     await expect(element(by.text('How we use your contact information')).atIndex(0)).toExist()
-    await element(by.id('ContactInfoCloseTestID')).atIndex(0).tap()
+    await element(by.text('Close')).atIndex(0).tap()
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
@@ -440,7 +440,7 @@ describe(':ios: Contact Info Screen', () => {
 
   it('email address: verify error handling', async () => {
     await element(by.id('emailAddressEditTestID')).clearText()
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Check your email address'))).toExist()
   })
 
@@ -448,10 +448,10 @@ describe(':ios: Contact Info Screen', () => {
     await element(by.id('emailAddressEditTestID')).clearText()
     await element(by.id('emailAddressEditTestID')).typeText('attended1+@gmail.com')
     await element(by.id('emailAddressEditTestID')).tapReturnKey()
-    await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     try {
       await setTimeout(5000)
       await expect(element(by.text('Email address saved'))).toExist()
@@ -465,10 +465,10 @@ describe(':ios: Contact Info Screen', () => {
     await element(by.id('emailAddressEditTestID')).clearText()
     await element(by.id('emailAddressEditTestID')).typeText('attended1@gmail.com')
     await element(by.id('emailAddressEditTestID')).tapReturnKey()
-    await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     try {
       await setTimeout(5000)
       await expect(element(by.text('Email address saved'))).toExist()

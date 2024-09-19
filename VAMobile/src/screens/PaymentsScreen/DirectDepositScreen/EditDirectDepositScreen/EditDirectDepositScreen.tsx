@@ -241,9 +241,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         leftButtonText={t('cancel')}
         rightButtonText={saving ? '' : t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
-        title={saving ? '' : displayTitle}
-        leftButtonTestID="directDepositBackID"
-        rightButtonTestID="directDepositSaveID">
+        title={saving ? '' : displayTitle}>
         {saving ? (
           <LoadingComponent text={t('directDeposit.savingInformation')} />
         ) : (
@@ -273,7 +271,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
               <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
             </Box>
             <Box mt={condensedMarginBetween}>
-              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')} testID="directDepositFindTheseNumbersID">
+              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
                 <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
               </CollapsibleView>
             </Box>

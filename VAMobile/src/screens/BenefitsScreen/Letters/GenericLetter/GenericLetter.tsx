@@ -74,7 +74,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
         <Button
           onPress={onViewLetter}
           label={t('letters.benefitService.viewLetter')}
-          testID="lettersBenefitServiceViewLetterID"
+          testID={t('letters.benefitService.viewLetter')}
         />
       </TextArea>
     </Box>
@@ -84,8 +84,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <FeatureLandingTemplate
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
-      title={t('letters.details.title')}
-      backLabelTestID="BenefitSummaryServiceVerificationBackID">
+      title={t('letters.details.title')}>
       {downloading ? (
         <LoadingComponent text={t('letters.loading')} />
       ) : letterDownloadError ? (

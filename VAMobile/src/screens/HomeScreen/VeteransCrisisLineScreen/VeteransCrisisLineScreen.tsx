@@ -23,10 +23,7 @@ function VeteransCrisisLineScreen() {
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
   return (
-    <LargePanel
-      title={t('veteransCrisisLine.title')}
-      rightButtonText={t('done')}
-      rightButtonTestID="veteranCrisisLineBackID">
+    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
           variant="MobileBodyBold"

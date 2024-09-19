@@ -117,8 +117,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       rightButtonText={t('close')}
       dividerMarginBypass={true}
       removeInsets={true}
-      testID="veteranStatusTestID"
-      rightButtonTestID="veteranStatusCloseID">
+      testID="veteranStatusTestID">
       <Box
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"

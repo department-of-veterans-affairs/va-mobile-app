@@ -84,6 +84,7 @@ const tapItems = async (items: string, type: string) => {
   await setTimeout(3000)
 }
 
+let dateWithTimeZone
 let messageCollapsed
 let messageExpanded
 
@@ -116,18 +117,24 @@ describe('Messages Screen', () => {
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
-    await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
+    await expect(element(by.text('This conversation is too old for new replies'))).toExist()
+    await expect(
+      element(
+        by.text(
+          'The last message in this conversation is more than 45 days old. To continue this conversation, start a new message.',
+        ),
+      ),
+    ).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
   })
 
   it('verify the message just opened is displayed as read', async () => {
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
     await expect(
       element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
     ).toExist()
-    await expect(element(by.text('Inbox (2)'))).toExist()
   })
 
   it('verify message NEWER than 45 days information', async () => {
@@ -136,6 +143,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
+    await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
 
   it(':android: verify phone links open', async () => {
@@ -175,22 +183,22 @@ describe('Messages Screen', () => {
   })
 
   it('verify medication message details', async () => {
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
     await element(by.id('Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects')).tap()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify COVID message details', async () => {
     await element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')).tap()
     await expect(element(by.text('COVID: Your requested info'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify general message details', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify appointment message details', async () => {
@@ -200,7 +208,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
     await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify other message details', async () => {
@@ -210,7 +218,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_5_ID)).tap()
     await expect(element(by.text('General: COVID vaccine booster?'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify test_results message details', async () => {
@@ -220,7 +228,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_6_ID)).tap()
     await expect(element(by.text('Test: Preparing for your visit'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('verify education message details', async () => {
@@ -230,7 +238,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID)).tap()
     await expect(element(by.text('Education: Good morning to you'))).toExist()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   it('should tap on and then cancel the move option', async () => {
@@ -254,9 +262,9 @@ describe('Messages Screen', () => {
   })
 
   it('reply: verify talk to the veterans crisis line now is displayed', async () => {
-    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
-    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('should tap add files and verify the correct info is displayed', async () => {
@@ -273,7 +281,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap cancel and verify that the reply page is displayed', async () => {
-    await element(by.id('attachmentsCancelID')).tap()
+    await element(by.text('Cancel')).atIndex(0).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT))).toExist()
@@ -292,10 +300,10 @@ describe('Messages Screen', () => {
   it('should close the action sheet and tap cancel', async () => {
     if (device.getPlatform() === 'android') {
       await element(by.text('Cancel ')).tap()
-      await element(by.id('attachmentsCancelID')).tap()
+      await element(by.text('Cancel')).atIndex(1).tap()
     } else {
       await element(by.text('Cancel')).atIndex(2).tap()
-      await element(by.id('attachmentsCancelID')).tap()
+      await element(by.text('Cancel')).atIndex(0).tap()
     }
   })
 
@@ -331,7 +339,7 @@ describe('Messages Screen', () => {
     }
     await expect(element(by.text('Message moved to Custom Folder 2'))).toExist()
     await element(by.text('Dismiss')).tap()
-    await element(by.id('backToMessagesID')).tap()
+    await element(by.text('Messages')).tap()
   })
 
   //running on iOS only for the next few tests due to android wonkiness due to detox
@@ -345,10 +353,10 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
-  it('new message: verify talk to the veterans crisis line now', async () => {
-    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
+  it(':ios: new message: verify talk to the veterans crisis line now', async () => {
+    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
-    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
+    await element(by.text('Done')).tap()
   })
 
   it(':ios: verify only use messages for non-urgent needs information', async () => {
