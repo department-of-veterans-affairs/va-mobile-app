@@ -18,6 +18,7 @@ import {
   useSystemNotificationsSettings,
   useUpdatePushPreferences,
 } from 'api/notifications'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { PushRegistrationResponse, RegisterDeviceParams } from 'api/types'
 import {
   AlertWithHaptics,
@@ -68,6 +69,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     enabled:
       isFocused && systemNotificationData?.systemNotificationsOn && screenContentAllowed('WG_NotificationsSettings'),
   })
+  const { data: personalInformation } = usePersonalInformation()
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
 
@@ -98,6 +100,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
         const registerParams = {
           deviceToken: event.deviceToken,
+          userID: personalInformation?.id,
         }
         const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
           {
@@ -110,6 +113,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
         const registerParams = {
           deviceToken: undefined,
+          userID: undefined,
         }
         const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
           {

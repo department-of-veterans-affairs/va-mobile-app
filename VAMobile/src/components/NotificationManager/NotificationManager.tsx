@@ -39,19 +39,23 @@ const NotificationManager: FC = ({ children }) => {
 
   useEffect(() => {
     const register = () => {
-      Notifications.events().registerRemoteNotificationsRegistered((event) => {
+      const registeredNotifications = Notifications.events().registerRemoteNotificationsRegistered((event) => {
         const registerParams = {
           deviceToken: event.deviceToken,
           userID: personalInformation?.id,
         }
         registerDevice(registerParams)
       })
-      Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
+      const failedNotifications = Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
         const registerParams = {
           deviceToken: undefined,
           userID: undefined,
         }
         registerDevice(registerParams)
+      })
+      Notifications.events().registerRemoteNotificationsRegistrationDenied(() => {
+        registeredNotifications.remove()
+        failedNotifications.remove()
       })
       Notifications.registerRemoteNotifications()
     }
