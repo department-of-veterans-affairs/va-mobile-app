@@ -81,22 +81,21 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
     const hideIcon = props.icon === 'no icon'
 
     return (
-      <Box flexDirection={'row'} flexWrap="wrap" py={py} pr={pr}>
-        <ClickForActionLinkDeprecated
-          displayedText={props.text}
-          linkType={LinkTypeOptionsConstants[linkType as keyof typeof LinkTypeOptionsConstants]}
-          numberOrUrlLink={props.url || props.phoneNumber || props.TTYnumber || props.textNumber || directionsURL}
-          linkUrlIconType={LinkUrlIconType.Arrow}
-          a11yLabel={props.a11yLabel || props.text}
-          fireAnalytic={() => {
-            props.analytics?.onPress?.()
-            analyticsOnPress && analyticsOnPress()
-          }}
-          customOnPress={props.onPress}
-          hideIcon={hideIcon}
-          testID={props.testID}
-        />
-      </Box>
+      <ClickForActionLinkDeprecated
+        displayedText={props.text}
+        linkType={LinkTypeOptionsConstants[linkType as keyof typeof LinkTypeOptionsConstants]}
+        numberOrUrlLink={props.url || props.phoneNumber || props.TTYnumber || props.textNumber || directionsURL}
+        linkUrlIconType={LinkUrlIconType.Arrow}
+        a11yLabel={props.a11yLabel || props.text}
+        fireAnalytic={() => {
+          props.analytics?.onPress?.()
+          analyticsOnPress && analyticsOnPress()
+        }}
+        customOnPress={props.onPress}
+        hideIcon={hideIcon}
+        disablePadding={disablePadding}
+        testID={props.testID}
+      />
     )
   } else {
     return (

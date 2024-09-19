@@ -80,6 +80,9 @@ export type LinkButtonProps = AccessibilityProps & {
   /** hide icon */
   hideIcon?: boolean
 
+  /** disable padding */
+  disablePadding?: boolean
+
   /** Optional TestID */
   testID?: string
 }
@@ -99,10 +102,14 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   colorOverride,
   customOnPress,
   hideIcon = false,
+  disablePadding = false,
   testID,
   ...props
 }) => {
   const theme = useTheme()
+  const py = disablePadding ? 0 : theme.dimensions.buttonPadding
+  const pr = disablePadding ? 0 : theme.dimensions.gutter
+
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -191,7 +198,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
 
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
-      <Box flexDirection={'row'} alignItems={'center'}>
+      <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
         {!hideIcon && (
           <VAIcon
             name={getIconName()}
