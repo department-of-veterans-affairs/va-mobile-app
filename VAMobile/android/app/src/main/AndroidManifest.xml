@@ -49,6 +49,7 @@
         android:resource="@drawable/notification_icon" />
         <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel_id"
+        tools:replace="android:value"
         android:value="general" />
         <activity
             android:name="MainActivity"
