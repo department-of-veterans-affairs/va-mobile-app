@@ -50,7 +50,7 @@ describe('Home Screen', () => {
   })
 
   it('should show primary home page header content', async () => {
-    await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
   })
 
@@ -144,7 +144,7 @@ describe('Home Screen', () => {
       .whileElement(by.id('homeScreenID'))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
   })
 
   it('should tap home then show home page about you section content', async () => {
@@ -186,11 +186,11 @@ describe('Home Screen', () => {
     ).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-698-2411')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ContactVAAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ContactVATTYAndroidCallingScreen')
       await device.launchApp({ newInstance: false })

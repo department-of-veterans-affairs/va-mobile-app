@@ -103,17 +103,27 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity') },
+    { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity'), detoxTestID: 'accountSecurityID' },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },
-    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    {
+      text: t('notifications.title'),
+      onPress: () => navigateTo('NotificationsSettings'),
+      detoxTestID: 'notificationsID',
+    },
+    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), detoxTestID: 'shareAppID', onPress: onShare },
     {
       text: t('inAppRecruitment.giveFeedback'),
       a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'),
       onPress: () => navigateTo('InAppRecruitment'),
+      detoxTestID: 'inAppRecruitmentID',
     },
-    { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
+    {
+      text: t('privacyPolicy.title'),
+      a11yHintText: t('privacyPolicy.a11yHint'),
+      onPress: onPrivacyPolicy,
+      detoxTestID: 'privacyPolicyID',
+    },
   ])
 
   const debugMenu = (): ReactNode => {

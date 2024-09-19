@@ -18,7 +18,7 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} rightButtonTestID="whatToKnowBackID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}

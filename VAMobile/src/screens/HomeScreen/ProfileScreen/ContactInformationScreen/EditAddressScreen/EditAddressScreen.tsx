@@ -563,7 +563,9 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
       onLeftButtonPress={onCancel}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      testID="EditAddressTestID">
+      testID="EditAddressTestID"
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {loadingCheck ? (
         <LoadingComponent
           text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')}

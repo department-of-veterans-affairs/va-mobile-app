@@ -45,6 +45,7 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
           text={t('howDoIUpdate.findYourNearestVAMedicalCenter')}
           a11yLabel={a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter'))}
           a11yHint={t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint')}
+          testID="findNearestVAMedicalCenterID"
         />
         <TextView
           variant="MobileBody"
@@ -78,6 +79,7 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
           url={WEBVIEW_URL_CHANGE_LEGAL_NAME}
           text={t('howDoIUpdate.learnToChangeLegalName')}
           a11yLabel={a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName'))}
+          testID="learnToChangeLegalNameID"
         />
         <TextView
           variant="MobileBody"

@@ -1,7 +1,14 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { changeMockData, checkImages, loginToDemoMode, openMilitaryInformation, openProfile } from './utils'
+import {
+  CommonE2eIdConstants,
+  changeMockData,
+  checkImages,
+  loginToDemoMode,
+  openMilitaryInformation,
+  openProfile,
+} from './utils'
 
 export const MilitaryInformationE2eIdConstants = {
   MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
@@ -65,11 +72,11 @@ describe('Military Info Screen', () => {
     await expect(
       element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_3)),
     ).toExist()
-    await expect(element(by.id('CallVATestID'))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
     await element(by.id('IncorrectServiceTestID')).swipe('up')
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.id('CallVATestID')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.enableSynchronization()
       await device.launchApp({ newInstance: false })

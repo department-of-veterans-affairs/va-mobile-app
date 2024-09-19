@@ -163,7 +163,9 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={errorCheck || loadingCheck ? undefined : t('save')}
       onPrimaryContentButtonPress={onSave}
-      testID="PersonalInformationTestID">
+      testID="PersonalInformationTestID"
+      leftButtonTestID="genderIdentityBackID"
+      primaryButtonTestID="genderIdentitySaveID">
       {loadingCheck ? (
         <LoadingComponent
           text={
@@ -189,8 +191,8 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
             <TextView variant="MobileBody">.</TextView>
           </TextView>
           <RadioGroup {...radioGroupProps} />
-          <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
-            <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+          <Pressable onPress={goToHelp} accessibilityRole="link">
+            <TextView variant="MobileBodyLink" paragraphSpacing={true} testID="whatToKnowTestID">
               {t('personalInformation.genderIdentity.whatToKnow')}
             </TextView>
           </Pressable>

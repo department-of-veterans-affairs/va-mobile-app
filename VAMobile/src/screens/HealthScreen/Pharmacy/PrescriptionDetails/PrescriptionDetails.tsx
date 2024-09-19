@@ -143,7 +143,8 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     <ChildTemplate
       backLabel={t('prescription.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('prescriptionDetails')}>
+      title={t('prescriptionDetails')}
+      backLabelTestID="prescriptionsDetailsBackTestID">
       {loadingHistory ? (
         <LoadingComponent text={t('prescription.details.loading')} />
       ) : (

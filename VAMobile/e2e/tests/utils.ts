@@ -18,7 +18,8 @@ export const CommonE2eIdConstants = {
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
-  VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -53,10 +54,19 @@ export const CommonE2eIdConstants = {
   OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
-  PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
+  CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
+  GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
+  CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
+  CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
 }
 
 /** Log the automation into demo mode
@@ -245,6 +255,23 @@ export async function checkImages(screenshotPath) {
   })
 }
 
+/*This function resets the in-app review counter then relaunches app, so the review pop-up doesn't break tests
+ *
+ * @param matchString - string of the text or id to match
+ * @param findbyText - boolean to search by testID or Text
+ * @param cancelPopUp - boolean to either cancel the popUp or leave the app
+ */
+export async function resetInAppReview() {
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.id(CommonE2eIdConstants.RESET_INAPP_REVIEW_BUTTON_TEXT)).tap()
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
+}
+
 /**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
@@ -252,7 +279,7 @@ export async function checkImages(screenshotPath) {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {
@@ -347,8 +374,24 @@ export async function backButton(backButtonName: string) {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
+  if (
+    (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
+      AFFeature === 'WG_HowDoIUpdate' ||
+      AFFeature === 'WG_PreferredName' ||
+      AFFeature === 'WG_HowWillYou' ||
+      AFFeature === 'WG_GenderIdentity' ||
+      AFFeature === 'WG_WhatToKnow' ||
+      AFFeature === 'WG_EditAddress' ||
+      AFFeature === 'WG_EditPhoneNumber' ||
+      AFFeature === 'WG_EditEmail' ||
+      AFFeature === 'WG_ConsolidatedClaimsNote') &&
+    AFUseCase === 'DenyAccess'
+  ) {
+    await resetInAppReview()
+  } else {
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
+  }
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -357,13 +400,6 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
   await element(by.text('Remote Config')).tap()
-  if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id('remoteConfigTestID'))
-      .scroll(600, 'down')
-    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
-  }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
@@ -407,17 +443,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id('remoteConfigTestID'))
-      .scroll(600, 'up')
-    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
-    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-      await loginToDemoMode()
-    }
-  } else {
-    await element(by.text('Home')).tap()
+  await device.launchApp({ newInstance: true })
+  if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+    await loginToDemoMode()
   }
 }
 
@@ -443,16 +471,13 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
-
-  await element(by.text('Home')).tap()
-
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
     await expect(element(by.text('AF Heading Test'))).not.toExist()
     await expect(element(by.text('AF Body Test'))).not.toExist()
   }
-  await device.uninstallApp()
-  await device.installApp()
 }
 
 const navigateToFeature = async (featureNavigationArray) => {
