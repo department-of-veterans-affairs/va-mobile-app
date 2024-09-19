@@ -200,13 +200,15 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
         {!hideIcon && (
-          <VAIcon
-            name={getIconName()}
-            fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
-            fill2={colorOverride ? 'transparent' : ''}
-            width={25}
-            height={25}
-          />
+          <Box pr={3}>
+            <VAIcon
+              name={getIconName()}
+              fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
+              fill2={colorOverride ? 'transparent' : ''}
+              width={25}
+              height={25}
+            />
+          </Box>
         )}
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
