@@ -16,18 +16,15 @@ import {
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
   HEALTH_CATEGORY_ID: 'healthCategoryTestID',
-  CERNER_NOTE_HEADING_TEXT: 'Your VA health care team may be using the My VA Health portal',
-  CERNER_NOTE_RECORDS_SHOW_TEXT: 'Our records show you’re registered at:',
-  CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center (Now using My VA Health)',
-  CERNER_NOTE_FACILITY_2_TEXT: 'Cheyenne VA Medical Center (Now using My VA Health)',
-  CERNER_NOTE_MESSAGES_TEXT:
-    "This facility currently uses our My VA Health portal. You'll need to go there to send your message.",
-  CERNER_NOTE_MESSAGES_HEADER_TEXT: "Make sure you're in the right health portal",
+  CERNER_NOTE_HEADING_TEXT: 'Your care team uses My VA Health',
+  CERNER_NOTE_RECORDS_SHOW_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
+  CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center',
+  CERNER_NOTE_FACILITY_2_TEXT: 'Cheyenne VA Medical Center',
+  CERNER_NOTE_MESSAGES_TEXT: 'Sending a message to a care team at these facilities:',
+  CERNER_NOTE_MESSAGES_HEADER_TEXT: 'Your care team uses My VA Health',
   CERNER_HOME_SUBTEXT_TEXT: 'Information from My VA Health portal not included.',
-  CERNER_PANEL_MULTI_ALL_TEXT: 'Your VA health facilities use My VA Health',
-  CERNER_PANEL_MANAGE_MULTI_TEXT: 'Need to manage your health care at these facilities?',
-  CERNER_PANEL_PORTAL_MULTI_TEXT:
-    "You'll need to go to our My VA Health portal to manage your health care at these facilities.",
+  CERNER_PANEL_MULTI_ALL_TEXT: 'Your care team uses My VA Health',
+  CERNER_PANEL_MANAGE_MULTI_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
   CERNER_HEALTH_HELP_SUBTEXT_TEXT:
     "Some VA health facilities use our My VA Health portal. Information from that portal isn't included here.",
   CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your facility uses My VA Health',
@@ -78,7 +75,6 @@ describe(':android: Cerner Notice', () => {
   it('should have correct cerner-only multiple facilities content', async () => {
     await expect(element(by.text(CernerIdConstants.CERNER_PANEL_MULTI_ALL_TEXT))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_PANEL_MANAGE_MULTI_TEXT))).toExist()
-    await expect(element(by.text(CernerIdConstants.CERNER_PANEL_PORTAL_MULTI_TEXT))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
@@ -99,7 +95,9 @@ describe(':android: Cerner Notice', () => {
     await element(by.id(CernerIdConstants.HEALTH_CATEGORY_ID)).scrollTo('top')
     await openAppointments()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_HEADING_TEXT))).toExist()
-    await expect(element(by.text('Our records show you`re registered at:'))).not.toExist()
+    await expect(
+      element(by.text("You'll need to use our My VA Health portal to manage your care at these facilities:")),
+    ).not.toExist()
   })
 
   it('should match the cerner notice design', async () => {
@@ -137,16 +135,10 @@ describe(':android: Cerner Notice', () => {
 
   it('verify the correct information is displayed for multiple facilities', async () => {
     await element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT)).tap()
-    await expect(element(by.text('Sending a message to a care team at one of these health facilities?'))).toExist()
+    await expect(element(by.text('Sending a message to a care team at these facilities:'))).toExist()
     await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
     await expect(element(by.text('Cary VA Medical Center'))).toExist()
-    await expect(
-      element(
-        by.text(
-          "These facilities currently use our My VA Health portal. You'll need to go there to send your message.",
-        ),
-      ),
-    ).toExist()
+    await expect(element(by.text("You'll need to use our My VA Health portal to send your message"))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 })
