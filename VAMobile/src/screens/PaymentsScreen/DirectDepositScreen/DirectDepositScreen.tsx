@@ -93,7 +93,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('payments')}
+      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount">
@@ -111,7 +111,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
             <TextView
               variant="MobileBody"
               mb={theme.dimensions.standardMarginBetween}
-              accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
+              accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText.a11yLabel'))}>
               {t('directDeposit.viewAndEditText')}
             </TextView>
           </Box>

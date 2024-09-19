@@ -1,1 +1,1 @@
-We created a new personalized Home screen. It shows important activity happening with your VA health and benefits. We also made other improvements and fixed a few bugs.
+We fixed an accessibility issue where some users were not able use a keyboard to navigate the app.

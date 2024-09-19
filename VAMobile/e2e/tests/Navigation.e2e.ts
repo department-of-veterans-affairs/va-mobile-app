@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, resetInAppReview, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
 var navigationValue = process.argv[7]
 
@@ -36,6 +36,7 @@ const navigationDic = {
     ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received January 01, 2021', 'Review file requests'], 'File requests'],
     [
       'Claims.e2e',
@@ -177,13 +178,6 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
       }
     }
   } else {
-    if (
-      navigationArray[2] === 'Claim type' ||
-      navigationArray[2] === 'Prescriptions' ||
-      navigationArray[2] === 'Appeal details'
-    ) {
-      await resetInAppReview()
-    }
     await navigateToPage(key, navigationDicValue)
     await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
     for (let i = 0; i < appTabs.length; i++) {
@@ -225,12 +219,14 @@ const navigateToPage = async (key, navigationDicValue) => {
         await waitFor(element(by.text('Review file requests')))
           .toBeVisible()
           .whileElement(by.id('ClaimDetailsScreen'))
-          .scroll(100, 'down')
+          .scroll(100, 'up')
       } else if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
           .whileElement(by.id('claimsHistoryID'))
           .scroll(100, 'down')
+      } else if (subNavigationArray[k] === 'Files') {
+        await element(by.id('ClaimsDetailsScreen')).scrollTo('top')
       }
 
       if (k == 0 && key in featureID) {
@@ -255,7 +251,7 @@ const navigateToPage = async (key, navigationDicValue) => {
       await waitFor(element(by.text('Review file requests')))
         .toBeVisible()
         .whileElement(by.id('ClaimDetailsScreen'))
-        .scroll(100, 'down')
+        .scroll(100, 'up')
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
@@ -266,6 +262,8 @@ const navigateToPage = async (key, navigationDicValue) => {
         .toBeVisible()
         .whileElement(by.id('claimsHistoryID'))
         .scroll(100, 'down')
+    } else if (subNavigationArray.slice(-1)[0] === 'Files' || subNavigationArray.slice(-1)[0] === 'Submit evidence') {
+      await element(by.id('ClaimDetailsScreen')).scrollTo('top')
     }
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
@@ -282,9 +280,8 @@ const navigateToPage = async (key, navigationDicValue) => {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CLAIM_PHASE_TOGGLE_TEXT)
-
   await device.launchApp({ newInstance: false })
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
 })
 

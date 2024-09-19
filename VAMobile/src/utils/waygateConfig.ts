@@ -95,6 +95,7 @@ export type WaygateToggleType =
   | 'WG_FileRequest'
   | 'WG_FileRequestDetails'
   | 'WG_AskForClaimDecision'
+  | 'WG_SubmitEvidence'
   | 'WG_SelectFile'
   | 'WG_TakePhotos'
   | 'WG_UploadFile'
@@ -143,6 +144,7 @@ type WaygateToggleValues = {
   WG_VaccineList: Waygate
   WG_ViewMessage: Waygate
   WG_PrepareForVideoVisit: Waygate
+  WG_SubmitEvidence: Waygate
   WG_StartNewMessage: Waygate
   WG_ReplyMessage: Waygate
   WG_EditDraft: Waygate
@@ -263,6 +265,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_AppealDetailsScreen: { ...waygateDefault },
   WG_ConsolidatedClaimsNote: { ...waygateDefault },
   WG_WhatDoIDoIfDisagreement: { ...waygateDefault },
+  WG_SubmitEvidence: { ...waygateDefault },
   WG_FileRequest: { ...waygateDefault },
   WG_FileRequestDetails: { ...waygateDefault },
   WG_AskForClaimDecision: { ...waygateDefault },

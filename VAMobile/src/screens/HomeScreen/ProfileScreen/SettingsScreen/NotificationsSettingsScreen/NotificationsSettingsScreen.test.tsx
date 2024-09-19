@@ -90,12 +90,13 @@ context('NotificationsSettingsScreen', () => {
     it('hides the notification switches', () => {
       renderWithProps(false, false, [apptPrefOff])
       expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy()
-      expect(
-        screen.getByText(
-          "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy()
     })
+  })
+
+  describe('when screen loads link should always exist', () => {
+    renderWithProps(false, true, [apptPrefOn])
+    expect(screen.getByRole('link', { name: 'Manage email and text notifications on VA.gov' })).toBeTruthy()
   })
 
   describe('when common error occurs', () => {

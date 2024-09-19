@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { CallHelpCenter, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
+import { CallHelpCenter, CustomError, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -42,6 +42,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     }
 
     if (error && isErrorObject(error)) {
+      let custom
       const reactQueryErrorType = getCommonErrorFromAPIError(error, screenID)
       switch (reactQueryErrorType) {
         case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
@@ -74,6 +75,21 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
               onTryAgain={tryAgain}
               titleText={t('errors.callHelpCenter.vaAppNotWorking')}
               callPhone={displayedTextPhoneNumber(t('8006982411'))}
+            />
+          )
+        case CommonErrorTypesConstants.CUSTOM_ERROR:
+          custom = error.json?.errors[0]
+          return (
+            <CustomError titleText={custom?.title || ''} errorText={custom?.body || ''} callPhone={custom?.telephone} />
+          )
+        case CommonErrorTypesConstants.CUSTOM_ERROR_WITH_REFRESH:
+          custom = error.json?.errors[0]
+          return (
+            <CustomError
+              onTryAgain={tryAgain}
+              titleText={custom?.title || ''}
+              errorText={custom?.body || ''}
+              callPhone={custom?.telephone}
             />
           )
         default:

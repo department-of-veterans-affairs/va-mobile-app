@@ -2,18 +2,18 @@
 # Detox e2e tests in CI
 #
 
-name: '[e2e] Detox Mapping'
+name: "[e2e] Detox Mapping"
 
 on:
   workflow_call:
-      outputs:
-        test_matrix:
-          description: "The matrix output for the e2e tests"
-          value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
-        test_run:
-          description: "String saying test has been run"
-          value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
-  
+    outputs:
+      test_matrix:
+        description: "The matrix output for the e2e tests"
+        value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
+      test_run:
+        description: "String saying test has been run"
+        value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
+
 defaults:
   run:
     working-directory: VAMobile
@@ -39,11 +39,11 @@ env:
 jobs:
   find_detox_tests_to_run:
     runs-on: ubuntu-latest
-    outputs: 
+    outputs:
       output1: ${{ steps.testing_matrix.outputs.TESTING_MATRIX }}
       output2: ${{ steps.testing_matrix.outputs.TEST_RUN}}
 
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -61,7 +61,7 @@ jobs:
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
-        with: 
+        with:
           json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get testing matrix array
@@ -71,7 +71,7 @@ jobs:
             jq 'select(contains(["Login"])) += ["LoginScreen"] | 
             select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
-            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
             select(contains(["ClaimsLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"]) or contains(["letters"])) += ["VALetters"] |
@@ -130,10 +130,9 @@ jobs:
             select(contains(["RadioGroup"])) += ["PersonalInformationScreen", "ContactInformation"] |
             select(contains(["VATextInput"]) or contains(["WaygateWrapper"])) += ["AvailabilityFramework"] |
             select(contains(["AccordionCollapsible"])) += ["Claims", "Messages"] |
-            select(contains(["AlertBox"])) += ["AvailabilityFramework", "VALetters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit"] |
+            select(contains(["AlertWithHaptics"])) += ["AvailabilityFramework", "VALetters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit", "Cerner", "Prescriptions", "ContactInformation"] |
             select(contains(["AppVersionAndBuild"])) += ["LoginScreen", "SettingsScreen"] |
             select(contains(["ClickForActionLink"]) or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"] |
-            select(contains(["CollapsibileAlert"])) += ["Cerner", "Prescriptions", "ContactInformation"] |
             select(contains(["CollapsibleView"])) += ["Appeals", "AppealsExpanded", "Messages", "DirectDeposit"] |
             select(contains(["DefaultList"])) += ["Claims", "DisabilityRattings", "VALetters", "ContactInformation", "Appointments", "VaccineRecords", "MilitaryInformation", "PersonalInformationScreen", "DirectDeposit", "Prescriptions", "Payments", "SettingsScreen"] |
             select(contains(["LabelTag"])) += ["Prescriptions", "Messages"] |

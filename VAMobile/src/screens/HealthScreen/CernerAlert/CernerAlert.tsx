@@ -5,7 +5,7 @@ import { LinkProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import { Box, CollapsibleAlert, LinkWithAnalytics, TextView } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -27,12 +27,12 @@ function CernerAlert() {
   }, [cernerFacilities.length])
 
   if (!facilitiesInfo) {
-    return null
+    return <></>
   }
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
-    return null
+    return <></>
   }
 
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
@@ -66,7 +66,7 @@ function CernerAlert() {
     }
 
     return (
-      <Box mt={theme.paragraphSpacing.spacing20FontSize}>
+      <>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('cernerAlert.ourRecordsShow')}
         </TextView>
@@ -78,18 +78,22 @@ function CernerAlert() {
           {t('cernerAlert.footer')}
         </TextView>
         <LinkWithAnalytics {...linkProps} />
-      </Box>
+      </>
     )
   }
 
   return (
-    <CollapsibleAlert
-      border="warning"
-      headerText={headerText}
-      body={accordionContent()}
-      a11yLabel={headerA11yLabel}
-      onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
-    />
+    <Box mb={theme.dimensions.condensedMarginBetween}>
+      <AlertWithHaptics
+        variant="warning"
+        expandable={true}
+        focusOnError={false}
+        header={headerText}
+        headerA11yLabel={headerA11yLabel}
+        analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
+        {accordionContent()}
+      </AlertWithHaptics>
+    </Box>
   )
 }
 

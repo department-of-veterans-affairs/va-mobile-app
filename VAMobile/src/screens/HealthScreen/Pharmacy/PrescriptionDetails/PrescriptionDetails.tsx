@@ -18,6 +18,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import DetailsTextSections from './DetailsTextSections'
@@ -59,6 +60,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   useFocusEffect(
     React.useCallback(() => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
+      registerReviewEvent()
     }, []),
   )
 
@@ -150,7 +152,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
           {getRefillVAHealthButton()}
           <Box mb={contentMarginBottom}>
             <TextArea>
-              <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+              <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
               <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
                 {rxNumber}
               </TextView>

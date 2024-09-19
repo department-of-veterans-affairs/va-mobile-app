@@ -21,7 +21,7 @@ function HowWillYouScreen({}: HowWillYouScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('contactInformation.howWillYouUseContactInfo')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('howWillYou.useInfo.1')}
         </TextView>
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howWillYou.useInfo.2'))}>

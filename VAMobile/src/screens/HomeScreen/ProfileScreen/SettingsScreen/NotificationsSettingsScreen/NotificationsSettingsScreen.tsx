@@ -6,14 +6,13 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ButtonDecoratorType,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
@@ -25,9 +24,13 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { LINK_URL_VA_NOTIFICATIONS } = getEnv()
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
@@ -35,7 +38,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
-  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } =
     useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
@@ -107,27 +110,32 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         <Box mb={contentMarginBottom}>
           {systemNotificationsOn ? (
             <>
-              <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
-                {t('notifications.settings.personalize.heading')}
-              </TextView>
-              <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
+              <TextView variant={'MobileBody'} mx={gutter}>
                 {t('notifications.settings.personalize.text.systemNotificationsOn')}
               </TextView>
               {preferenceList()}
             </>
           ) : (
-            <AlertBox
-              border={'informational'}
-              title={t('notifications.settings.alert.title')}
-              text={t('notifications.settings.alert.text')}>
-              <Box mt={standardMarginBetween}>
-                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
-              </Box>
-            </AlertBox>
+            <AlertWithHaptics
+              variant="info"
+              description={t('notifications.settings.alert.text')}
+              primaryButton={{
+                label: t('notifications.settings.alert.openSettings'),
+                onPress: goToSettings,
+              }}
+            />
           )}
           <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
             {t('notifications.settings.privacy')}
           </TextView>
+          <Box mx={gutter}>
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_VA_NOTIFICATIONS}
+              text={t('notifications.settings.link.text')}
+              a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
+            />
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>

@@ -8,7 +8,7 @@ import { TFunction } from 'i18next'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
-import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
 
 import { logAnalyticsEvent } from './analytics'
 
@@ -231,7 +231,7 @@ export const onAddPhotos = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
   claimID: string,
-  request: ClaimEventData,
+  request?: ClaimEventData,
   setIsActionSheetVisible?: (isVisible: boolean) => void,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
@@ -246,7 +246,14 @@ export const onAddPhotos = (
       setIsActionSheetVisible && setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
-          logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
+          logAnalyticsEvent(
+            Events.vama_evidence_cont_1(
+              claimID,
+              request?.trackedItemId || null,
+              request?.type || 'Submit Evidence',
+              'camera',
+            ),
+          )
           launchCamera(
             { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
             (response: ImagePickerResponse): void => {
@@ -256,7 +263,12 @@ export const onAddPhotos = (
           break
         case 1:
           logAnalyticsEvent(
-            Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'gallery'),
+            Events.vama_evidence_cont_1(
+              claimID,
+              request?.trackedItemId || null,
+              request?.type || 'Submit Evidence',
+              'gallery',
+            ),
           )
           launchImageLibrary(
             { selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true },
@@ -322,4 +334,13 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
       </TextView>
     )
   }
+}
+
+/**
+ * Returns true if the provided claim type code is for a disability compensation claim
+ *
+ * @param claimTypeCode - claimTypeCode attribute for a claim
+ */
+export function isDisabilityCompensationClaim(claimTypeCode: string) {
+  return DISABILITY_COMPENSATION_CLAIM_TYPE_CODES.includes(claimTypeCode)
 }

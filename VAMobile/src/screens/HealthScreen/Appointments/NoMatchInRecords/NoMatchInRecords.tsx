@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -32,11 +31,11 @@ function NoMatchInRecords() {
   }
 
   return (
-    <VAScrollView {...testIdProps('Health care: No match in records')}>
+    <VAScrollView>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView
-            variant="BitterBoldHeading"
+            variant="MobileBodyBold"
             accessibilityLabel={a11yLabelVA(t('noMatch.title'))}
             accessibilityRole="header"
             accessible={true}>

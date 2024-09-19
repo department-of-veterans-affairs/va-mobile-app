@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { RefObject } from 'react'
+import { ScrollView } from 'react-native'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
 import { context, mockNavProps, render, when } from 'testUtils'
@@ -27,6 +28,8 @@ context('ClaimStatus', () => {
     const props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
+      scrollIsEnabled: false,
+      scrollViewRef: {} as RefObject<ScrollView>,
     })
     render(<ClaimStatus {...props} />)
   }
@@ -37,40 +40,16 @@ context('ClaimStatus', () => {
   })
 
   it('Renders ClaimStatus', () => {
-    expect(screen.getAllByText('You have 2 file requests from VA')).toBeTruthy()
-    expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
-    expect(screen.getByTestId('Step 2 of 5. completed. Initial review June 6, 2019')).toBeTruthy()
+    expect(screen.getByLabelText('Step 1 of 8. Claim received. Complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 2 of 8. Initial review. Complete.')).toBeTruthy()
     expect(
-      screen.getByTestId('Step 3 of 5. current. Evidence gathering, review, and decision July 16, 2020'),
+      screen.getByLabelText('Step 3 of 8. Evidence gathering. Current step. Step 1 through 2 complete.'),
     ).toBeTruthy()
-    expect(screen.getByTestId('Step 4 of 5.  Preparation for notification')).toBeTruthy()
-    expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
-    expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
-    expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
-  })
-
-  describe('when the claimType is ACTIVE', () => {
-    describe('on click of Find out why we sometimes combine claims. list item', () => {
-      it('should call useRouteNavigation', () => {
-        fireEvent.press(screen.getByRole('menuitem', { name: 'Why does VA sometimes combine claims?' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
-      })
-    })
-
-    describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
-      it('should call useRouteNavigation', () => {
-        fireEvent.press(
-          screen.getByRole('menuitem', {
-            name: "What should I do if I disagree with VA's decision on my disability claim?",
-          }),
-        )
-        expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
-          claimID: '600156928',
-          claimStep: 3,
-          claimType: 'Compensation',
-        })
-      })
-    })
+    expect(screen.getByLabelText('Step 4 of 8. Evidence review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 5 of 8. Rating. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 6 of 8. Preparing decision letter. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 7 of 8. Final review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 8 of 8. Claim decided. Incomplete.')).toBeTruthy()
   })
 
   describe('when the claimType is CLOSED', () => {

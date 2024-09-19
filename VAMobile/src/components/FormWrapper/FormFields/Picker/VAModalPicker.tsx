@@ -173,7 +173,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
-    accessibilityRole: 'spinbutton',
+    accessibilityRole: 'button',
   }
 
   const renderSelectionBox = (): ReactElement => {
