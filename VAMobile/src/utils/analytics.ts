@@ -46,9 +46,10 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
+export const logNonFatalErrorToFirebase = async (error: any, errorName?: string) => {
   let errorObject: Error = Error()
   let apiErrorObject: ErrorObject | undefined
+  let attributes: { [key: string]: string } | undefined
 
   // if the error is a string
   if (typeof error === 'string') {
@@ -59,6 +60,11 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
     if ('json' in error && error.json) {
       apiErrorObject = error
       const { text, json, networkError, status } = error
+      attributes = {
+        text: String(text),
+        networkError: String(networkError),
+        status: String(status),
+      }
       // if the json's errors array has data if not than it creates an error object with the service call status
       if (json.errors?.length > 0) {
         const { detail, title } = json.errors[0]
@@ -84,6 +90,11 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
         apiErrorObject?.endpoint,
       ),
     )
+
+    if (attributes) {
+      await crashlytics().setAttributes(attributes)
+    }
+
     crashlytics().recordError(errorObject, errorName)
   }
 }
