@@ -68,7 +68,7 @@ export const defaults: FeatureToggleValues = {
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
-  submitEvidenceExpansion: true,
+  submitEvidenceExpansion: false,
   sso: true,
   testFeature: false,
   whatsNewUI: true,

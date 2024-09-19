@@ -1,5 +1,9 @@
+import { Platform } from 'react-native'
+
 import _ from 'underscore'
 
+import { deviceKeys } from 'api/device/queryKeys'
+import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
@@ -19,6 +23,10 @@ let _store: ReduxToolkitStore | undefined
 
 const DEMO_MODE_DELAY = 300
 const METHODS_THAT_ALLOW_PARAMS = ['GET']
+// @ts-expect-error
+const DEVICE_MODEL = Platform.OS === 'ios' ? 'iPhone' : Platform.constants.Model
+// @ts-expect-error
+const OS_VERSION = Platform.OS === 'ios' ? `iOS ${Platform.Version}` : `Android ${Platform.constants.Release}`
 
 export const setAccessToken = (token?: string): void => {
   _token = token
@@ -81,6 +89,9 @@ const doRequest = async function (
       'X-Key-Inflection': 'camel',
       'Source-App-Name': 'va-health-benefits-app',
       'Authentication-Method': 'SIS',
+      'Device-Model': DEVICE_MODEL,
+      'OS-Version': OS_VERSION,
+      'App-Version': queryClient.getQueryData(deviceKeys.appVersion) || '',
     },
     ...({ signal: abortSignal } || {}),
   }
