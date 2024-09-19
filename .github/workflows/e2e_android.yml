@@ -277,6 +277,7 @@ jobs:
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            echo "TEST_FAILURE=true" >> "$GITHUB_OUTPUT"
           else
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -289,19 +290,21 @@ jobs:
         id: failing_tests
         shell: bash
         run: |
-          failing_tests_list=$(grep -rl "<failure>")
-          failing_tests=""
-          for i in ${failing_tests_list[@]}; do
-            remove_before=${i%.ts*}
-            remove_after=${remove_before#*test_reports/}
-            echo "$remove_after"
-            if [ -z "${failing_tests}" ]; then
-              failing_tests=$(echo $failing_tests"$remove_after")
-            else
-              failing_tests=$(echo $failing_tests", ""$remove_after")
-            fi
-          done
-          echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
+          if grep -rq "<failure>" .; then
+            failing_tests_list=$(grep -rl "<failure>")
+            failing_tests=""
+            for i in ${failing_tests_list[@]}; do
+              remove_before=${i%.ts*}
+              remove_after=${remove_before#*test_reports/}
+              echo "$remove_after"
+              if [ -z "${failing_tests}" ]; then
+                failing_tests=$(echo $failing_tests"$remove_after")
+              else
+                failing_tests=$(echo $failing_tests", ""$remove_after")
+              fi
+            done
+            echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Github CLI Authentication
         run: |
@@ -309,6 +312,7 @@ jobs:
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
+        if: steps.inform_slack.outputs.TEST_FAILURE != ''
         id: find_if_ticket_already_exists
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
