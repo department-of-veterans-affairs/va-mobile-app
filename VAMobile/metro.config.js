@@ -1,5 +1,4 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
-const path = require('path')
 
 const defaultConfig = getDefaultConfig(__dirname)
 const { assetExts, sourceExts } = defaultConfig.resolver
@@ -13,18 +12,11 @@ const { assetExts, sourceExts } = defaultConfig.resolver
 const config = {
   transformer: {
     babelTransformerPath: require.resolve('react-native-svg-transformer'),
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false, // Disable inline requires
-      },
-    }),
   },
   resolver: {
-    assetExts: assetExts.filter((ext) => ext !== 'svg' && ext !== 'png'),
-    sourceExts: [...sourceExts, 'svg', 'png'],
+    assetExts: assetExts.filter((ext) => ext !== 'svg'),
+    sourceExts: [...sourceExts, 'svg'],
   },
-  watchFolders: [path.resolve(__dirname, 'node_modules/@department-of-veterans-affairs/mobile-assets')],
 }
 
 module.exports = mergeConfig(defaultConfig, config)
