@@ -36,7 +36,7 @@ function CernerAlert() {
   }
 
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
-  const allCernerFacilities = facilitiesInfo.length !== cernerFacilities.length
+  const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('healthHelp.usesVAHealth') : t('cernerAlert.header.some')
   const headerA11yLabel = allCernerFacilities
     ? a11yLabelVA(t('healthHelp.usesVAHealth'))
