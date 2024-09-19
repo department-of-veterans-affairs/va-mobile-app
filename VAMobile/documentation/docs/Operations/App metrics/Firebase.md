@@ -3,12 +3,12 @@ title: Firebase
 sidebar_position: 3
 ---
 
-
 ## Overview
 
 Firebase is a Google Cloud system which can capture analytics, performance, and crash data from our deployed app.
 The [Firebase Console](https://console.firebase.google.com/u/0/project/va-mobile-app/) offers an overview into the app
-* If you are unable to access the console, request access from the team or project lead
+
+- If you are unable to access the console, request access from the team or project lead
 
 Further information available in each of the subcategories in the navigation menu
 
@@ -48,15 +48,18 @@ Analytics provides metrics on discrete events within the app. Most general event
 
 ### To Add a New Analytics Event
 
-Add an event name with optional parameters to the `Events` constant in `constants/analytics.ts`. 
+Add an event name with optional parameters to the `Events` constant in `constants/analytics.ts`.
+
 ### Naming Requirements
-* [Snake case](https://en.wikipedia.org/wiki/Snake_case)
-* Prefixed with `vama_`
-* Limited to 24 characters including the `vama_` prefix
+
+- [Snake case](https://en.wikipedia.org/wiki/Snake_case)
+- Prefixed with `vama_`
+- Limited to 24 characters including the `vama_` prefix
 
 See examples below or in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts)
 
 Additionally, if user properties need to be tracked, they can be added to the `UserAnalytics` object:
+
 ```
 export const Events = {
   ... ,
@@ -80,7 +83,9 @@ export const UserAnalytics = {
   },
 }
 ```
+
 Then include the analytics utility functions in your screen or store slice and call the event name:
+
 ```
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 
@@ -114,30 +119,33 @@ The Events page shows a list of all discrete events in the app, the count of eac
 
 ### DebugView
 
-DebugView allows developers to get a live stream of events in real-time, with up to a 60 second delay when first starting. An `Enable Firebase Debug Mode` button has been added to the developer screen to make debugging easier.
+DebugView allows developers to get a live stream of events in real-time, with up to a 60 second delay when first starting. A `Firebase Debug Mode` toggle has been added to the developer screen to make debugging easier.
 
 ![Analytics DebugView](/img/firebaseImages/firebase-debugview.png)
 
 For developers building locally, follow the steps listed below to get started:
 
 iOS:
- - Make sure the `-FIRDebugEnabled` flag is enabled in your XCode > Product > Scheme > Edit Scheme, under the Test (Debug) scheme
- - Start the emulator or build to device
- - In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
- - Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
+
+- Make sure the `-FIRDebugEnabled` flag is enabled in your XCode > Product > Scheme > Edit Scheme, under the Test (Debug) scheme
+- Start the emulator or build to device
+- In the app, go to Profile > Settings > Developer and toggle `Firebase Debug Mode` on
+- Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
 
 Android:
- - Open Android Studio and run the emulator or build to device
- - In a terminal, execute the command `adb shell setprop debug.firebase.analytics.ap gov.va.mobileapp`
- - In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
- - Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
- - After debugging is complete, run the command `adb shell setprop debug.firebase.analytics.app .none.`
+
+- Open Android Studio and run the emulator or build to device
+- In a terminal, execute the command `adb shell setprop debug.firebase.analytics.app gov.va.mobileapp`
+- In the app, go to Profile > Settings > Developer and toggle `Firebase Debug Mode` on
+- Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
+- After debugging is complete, run the command `adb shell setprop debug.firebase.analytics.app .none.`
 
 For QA team members, DebugView does not work using a signed build. Either build locally using the steps above, or use the steps below, but be aware that the wait time is high and it doesn't always work due to the way events are batched and sent to the Dashboard:
 
 On either platform:
- - In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
- - Go to the Firebase Realtime dashboard
- - Click on the `All Users` button at the top left. A `Build Comparison` menu will pop up.
- - Set `Audience Name` to `Environment` and the `Dimension Values` to `Staging` if available. If not available, no staging events have been logged in the time period
- - Click `Apply` and any events in that time period that have been logged will be shown on the map and in the lists
+
+- In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
+- Go to the Firebase Realtime dashboard
+- Click on the `All Users` button at the top left. A `Build Comparison` menu will pop up.
+- Set `Audience Name` to `Environment` and the `Dimension Values` to `Staging` if available. If not available, no staging events have been logged in the time period
+- Click `Apply` and any events in that time period that have been logged will be shown on the map and in the lists
