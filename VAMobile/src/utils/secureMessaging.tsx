@@ -490,7 +490,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       dontAddNextString = false
       return
     }
-
+    let nonWhiteSpaceCheck = savedText.split(/\s/).filter((value) => value !== '').length > 0
     if (index !== 0 && index !== bodySplit.length - 1) {
       //phone number with spaces xxx xxx xxxx format
       const previousText = bodySplit[index - 1]
@@ -501,8 +501,9 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
         if (savedText.length > 3) {
           savedText = savedText.slice(0, savedText.length - 4)
         }
+        nonWhiteSpaceCheck = savedText.split(/\s/).filter((value) => value !== '').length > 0
         textReconstructedBody.push(
-          <TextView selectable={savedText.length > 0} variant="MobileBody">
+          <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
             {savedText}
           </TextView>,
         )
@@ -532,7 +533,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     if (emailMatch) {
       //matches <email address> only
       textReconstructedBody.push(
-        <TextView selectable={savedText.length > 0} variant="MobileBody">
+        <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
           {savedText}
         </TextView>,
       )
@@ -552,7 +553,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     } else if (mailToMatch) {
       // matches mailto:<email address>
       textReconstructedBody.push(
-        <TextView selectable={savedText.length > 0} variant="MobileBody">
+        <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
           {savedText}
         </TextView>,
       )
@@ -572,7 +573,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     } else if (phoneMatch) {
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
       textReconstructedBody.push(
-        <TextView selectable={savedText.length > 0} variant="MobileBody">
+        <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
           {savedText}
         </TextView>,
       )
@@ -592,7 +593,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
     } else if (urlMatch) {
       // matches any https, http url
       textReconstructedBody.push(
-        <TextView selectable={savedText.length > 0} variant="MobileBody">
+        <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
           {savedText}
         </TextView>,
       )
@@ -613,7 +614,7 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it
       // into a link - may need to update this if we need to include other domains greater than 3 digits)
       textReconstructedBody.push(
-        <TextView selectable={savedText.length > 0} variant="MobileBody">
+        <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
           {savedText}
         </TextView>,
       )
