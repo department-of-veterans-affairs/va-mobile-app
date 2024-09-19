@@ -60,6 +60,7 @@ A button draws attention to important actions with a large selectable surface.
     * Instead of disabling a button in the mobile app, always attempt to find an alternative solution such as:
         * Providing additional context surrounding a button that tells a user what to expect when a button is tapped.
         * Allowing a user to attempt to submit a form even if an error exists in an input field (and then presenting the errors to the user to fix).
+* For guidance on choosing between a Button or Link, see [additional documentation](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/).
 * For additional guidance, refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/button/#accessibility-considerations).
 
 ## Related
