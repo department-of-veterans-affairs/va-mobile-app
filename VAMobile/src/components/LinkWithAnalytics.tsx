@@ -66,6 +66,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
   if (featureEnabled('useOldLinkComponent')) {
     let linkType = ''
     if (props.type === 'attachment') {
+      // this should never happen since we're handling attachments differently with the flag enabled
       return <TextView>ERROR: Type "attachment" not supported with useOldLinkComponent enabled</TextView>
     } else if (props.type === 'call TTY') {
       linkType = 'callTTY'
@@ -73,21 +74,29 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
       linkType = props.type
     }
 
+    // create URL from appointment location
     const directionsURL = locationData ? FormDirectionsUrl(locationData) : ''
 
+    // hide icon when viewing a Secure Message with links in the body
+    const hideIcon = props.icon === 'no icon'
+
     return (
-      <ClickForActionLinkDeprecated
-        displayedText={props.text}
-        linkType={LinkTypeOptionsConstants[linkType as keyof typeof LinkTypeOptionsConstants]}
-        numberOrUrlLink={props.url || props.phoneNumber || props.TTYnumber || props.textNumber || directionsURL}
-        linkUrlIconType={LinkUrlIconType.Arrow}
-        a11yLabel={props.a11yLabel || props.text}
-        fireAnalytic={() => {
-          props.analytics?.onPress?.()
-          analyticsOnPress && analyticsOnPress()
-        }}
-        testID={props.testID}
-      />
+      <Box flexDirection={'row'} flexWrap="wrap" py={py} pr={pr}>
+        <ClickForActionLinkDeprecated
+          displayedText={props.text}
+          linkType={LinkTypeOptionsConstants[linkType as keyof typeof LinkTypeOptionsConstants]}
+          numberOrUrlLink={props.url || props.phoneNumber || props.TTYnumber || props.textNumber || directionsURL}
+          linkUrlIconType={LinkUrlIconType.Arrow}
+          a11yLabel={props.a11yLabel || props.text}
+          fireAnalytic={() => {
+            props.analytics?.onPress?.()
+            analyticsOnPress && analyticsOnPress()
+          }}
+          customOnPress={props.onPress}
+          hideIcon={hideIcon}
+          testID={props.testID}
+        />
+      </Box>
     )
   } else {
     return (

@@ -70,8 +70,16 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
+
   /** color bypass */
   colorOverride?: string
+
+  /** custom onPress */
+  customOnPress?: () => void
+
+  /** hide icon */
+  hideIcon?: boolean
+
   /** Optional TestID */
   testID?: string
 }
@@ -89,6 +97,8 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   a11yLabel,
   fireAnalytic,
   colorOverride,
+  customOnPress,
+  hideIcon = false,
   testID,
   ...props
 }) => {
@@ -109,6 +119,11 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   }
 
   const _onPress = async (): Promise<void> => {
+    if (customOnPress) {
+      customOnPress()
+      return
+    }
+
     if (fireAnalytic) {
       fireAnalytic()
     }
@@ -176,14 +191,16 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
 
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
-      <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon
-          name={getIconName()}
-          fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
-          fill2={colorOverride ? 'transparent' : ''}
-          width={25}
-          height={25}
-        />
+      <Box flexDirection={'row'} alignItems={'center'}>
+        {!hideIcon && (
+          <VAIcon
+            name={getIconName()}
+            fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
+            fill2={colorOverride ? 'transparent' : ''}
+            width={25}
+            height={25}
+          />
+        )}
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>
