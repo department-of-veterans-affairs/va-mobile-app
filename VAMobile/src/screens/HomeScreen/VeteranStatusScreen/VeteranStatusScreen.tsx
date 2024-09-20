@@ -99,7 +99,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VALogo testID="VeteranStatusCardVAIcon" />
+        <VALogo variant="dark" testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />

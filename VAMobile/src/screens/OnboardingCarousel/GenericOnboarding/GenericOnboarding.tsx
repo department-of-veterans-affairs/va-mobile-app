@@ -51,7 +51,7 @@ function GenericOnboarding({
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VALogo testID="VAIconOnboardingLogo" />
+            <VALogo variant="dark" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
