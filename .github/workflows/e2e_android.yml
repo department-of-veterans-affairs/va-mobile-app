@@ -316,13 +316,12 @@ jobs:
         id: find_if_ticket_already_exists
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
-          echo "$old_body"
           if [[ "$old_body" != "" ]]; then
             ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
             new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on Android: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
             echo "$new_body"
-            gh issue edit $ticket_number -b "$new_body"
             echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
+            gh issue edit $ticket_number -b "$new_body"
           else          
             echo "TICKET_EXISTS=" >> "$GITHUB_OUTPUT"
           fi
