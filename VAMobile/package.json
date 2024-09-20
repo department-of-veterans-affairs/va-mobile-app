@@ -37,7 +37,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-assets": "0.12.0",
+    "@department-of-veterans-affairs/mobile-assets": "0.13.0",
     "@department-of-veterans-affairs/mobile-component-library": "0.21.0",
     "@department-of-veterans-affairs/mobile-tokens": "0.16.0",
     "@expo/react-native-action-sheet": "^4.1.0",
