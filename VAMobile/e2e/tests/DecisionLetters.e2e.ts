@@ -16,7 +16,7 @@ export const DecisionLettersE2eIDConstants = {
   GET_CLAIMS_LETTER_BUTTON_ID: 'getClaimLettersTestID',
   DECISION_CLAIM_LETTER_1_ID: 'March 11, 2023 letter Notification Letter (e.g. VA 20-8993, VA 21-0290, PCGL)',
   DECISION_CLAIM_LETTER_2_ID: 'September 21, 2022 letter Decision Rating Letter',
-  CLAIMS_HISTORY_TEXT: 'Claims history1',
+  CLAIMS_HISTORY_TEXT: 'Claims history',
 }
 
 beforeAll(async () => {
