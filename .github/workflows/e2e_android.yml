@@ -326,8 +326,9 @@ jobs:
             new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on Android: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
             echo "$new_body"
             gh issue edit $ticket_number -b "$new_body"
+            echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
           else          
-            echo "TICKET_EXISTS=false" >> "$GITHUB_OUTPUT"
+            echo "TICKET_EXISTS=" >> "$GITHUB_OUTPUT"
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
