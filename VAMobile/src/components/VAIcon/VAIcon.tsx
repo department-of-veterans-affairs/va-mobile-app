@@ -69,7 +69,6 @@ import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
 import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 import RadioEmpty from './svgs/radio/RadioEmpty.svg'
 import RadioFilled from './svgs/radio/RadioFilled.svg'
-import Logo from './svgs/vaParentLogo/Logo.svg'
 
 export const VA_ICON_MAP = {
   Add,
@@ -105,7 +104,6 @@ export const VA_ICON_MAP = {
   Inbox,
   Info,
   Lock,
-  Logo,
   Minus,
   PaperClip,
   PaymentsSelected,

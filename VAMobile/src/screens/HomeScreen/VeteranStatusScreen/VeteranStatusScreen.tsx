@@ -19,7 +19,7 @@ import {
   LargePanel,
   MilitaryBranchLogo,
   TextView,
-  VAIcon,
+  VALogo,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -99,7 +99,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
+        <VALogo testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
