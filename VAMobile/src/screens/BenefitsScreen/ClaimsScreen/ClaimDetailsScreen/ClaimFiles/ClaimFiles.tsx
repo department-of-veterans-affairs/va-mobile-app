@@ -28,7 +28,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
   const events = attributes.eventsTimeline.filter(
     (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
   )
-  const asset: Asset = {
+  const dummyAsset: Asset = {
     fileName: 'E0656078-7D72-46C3-BBFC-06A66589AD8F.jpg',
     fileSize: 4589750,
     height: 3024,
@@ -36,7 +36,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
     uri: 'file:///Users/dylannienberg/Library/Developer/CoreSimulator/Devices/80D47114-FFE2-46D6-80A2-F6635FB7F909/data/Containers/Data/Application/8054AD29-3179-4EC5-A704-6F6BC6E85E20/tmp/E0656078-7D72-46C3-BBFC-06A66589AD8F.jpg',
     width: 4032,
   }
-  const [imagesList, setImagesList] = useState<Asset[]>([asset])
+  const [imagesList, setImagesList] = useState<Asset[]>([dummyAsset])
   const [progress, setProgress] = useState(new Animated.Value(0))
   const [isScene2Visible, setIsScene2Visible] = useState(false)
   const [isInProgress, setIsInProgress] = useState(false)
