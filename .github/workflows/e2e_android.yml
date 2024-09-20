@@ -252,8 +252,7 @@ jobs:
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled())
-## && github.event_name == 'schedule'
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
