@@ -15,23 +15,18 @@ export const VALogo: FC<VALogoProps> = ({ testID }) => {
     width: 254,
     height: 57,
   }
-  if (theme.mode === 'dark') {
-    return (
-      <Image
-        testID={testID}
-        style={logoProps}
-        source={require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')}
-      />
-    )
-  } else {
-    return (
-      <Image
-        testID={testID}
-        style={logoProps}
-        source={require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')}
-      />
-    )
-  }
+
+  return (
+    <Image
+      testID={testID}
+      style={logoProps}
+      source={
+        theme.mode === 'dark'
+          ? require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnDark.png')
+          : require('@department-of-veterans-affairs/mobile-assets/VALogo/VAOnLight.png')
+      }
+    />
+  )
 }
 
 export default VALogo
