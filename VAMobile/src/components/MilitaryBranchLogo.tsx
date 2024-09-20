@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { Image, ImageStyle, StyleProp } from 'react-native'
 
 import { BranchOfService, BranchesOfServiceConstants } from 'api/types'
+import { useTheme } from 'utils/hooks'
 
 export type MilitaryBranchLogoProps = {
   branch: BranchOfService
@@ -10,6 +11,8 @@ export type MilitaryBranchLogoProps = {
 }
 
 export const MilitaryBranchLogo: FC<MilitaryBranchLogoProps> = ({ branch, width, height }) => {
+  const theme = useTheme()
+
   const style: StyleProp<ImageStyle> = {
     width,
     height,
@@ -61,7 +64,11 @@ export const MilitaryBranchLogo: FC<MilitaryBranchLogoProps> = ({ branch, width,
         <Image
           testID="United States Space Force"
           style={style}
-          source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-space-force-logo.png')}
+          source={
+            theme.mode === 'dark'
+              ? require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-space-force-logo-on-dark.png')
+              : require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-space-force-logo-on-light.png')
+          }
         />
       )
     default:
