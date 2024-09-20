@@ -333,7 +333,6 @@ jobs:
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
-          update_existing: true
           search_existing: open
         env:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
