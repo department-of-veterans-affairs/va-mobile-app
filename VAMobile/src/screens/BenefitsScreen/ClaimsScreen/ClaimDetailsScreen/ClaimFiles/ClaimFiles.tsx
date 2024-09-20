@@ -1,9 +1,8 @@
 import React, { ReactElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Animated, Dimensions, Pressable, StyleSheet } from 'react-native'
+import { Animated, Dimensions, Image, Pressable, StyleSheet } from 'react-native'
 import { Asset } from 'react-native-image-picker'
 import { SharedElement, SharedElementNode, SharedElementTransition } from 'react-native-shared-element'
-import { Image } from 'react-native-svg'
 
 import { useIsFocused } from '@react-navigation/native'
 
@@ -42,15 +41,27 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
   const [isInProgress, setIsInProgress] = useState(false)
   const [scene2Ancestor, setScene2Ancestor] = useState<SharedElementNode | null>(null)
   const [scene2Node, setScene2Node] = useState<SharedElementNode | null>(null)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [assetImage, setAssetImage] = useState<Asset | undefined>(undefined)
-  const [assetIndex, setAssetIndex] = useState(0)
-
-  const onPressNavigate = (asset: Asset, index: number) => {
+  const [assetImage, setAssetImage] = useState<Asset | undefined>(dummyAsset)
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background.main,
+    },
+    scene: {
+      ...StyleSheet.absoluteFillObject,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    image: {
+      resizeMode: 'cover',
+      width: Dimensions.get('window').width,
+      height: 300,
+      borderRadius: 0,
+    },
+  })
+  const onPressNavigate = () => {
     setIsScene2Visible(true)
     setIsInProgress(true)
-    setAssetImage(asset)
-    setAssetIndex(index)
     Animated.timing(progress, {
       toValue: 1,
       duration: 1000,
@@ -68,13 +79,12 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
       setIsScene2Visible(false)
       setIsInProgress(false)
     })
-    setAssetImage(undefined)
   }
 
   const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
-    const calculatedWidth = Dimensions.get('window').width
+    const calculatedWidth = Dimensions.get('window').width / 3
 
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
@@ -88,7 +98,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
               image={asset}
               onDeleteCallback={() => {}}
               onPress={() => {
-                onPressNavigate(asset, index)
+                onPressNavigate()
               }}
               photoPosition={t(
                 imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto',
@@ -109,24 +119,6 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
       </Box>
     )
   }
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: theme.colors.background.main,
-    },
-    scene: {
-      ...StyleSheet.absoluteFillObject,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    image: {
-      resizeMode: 'cover',
-      width: Dimensions.get('window').width,
-      height: 300,
-      borderRadius: 0,
-    },
-  })
 
   const files = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = []
@@ -169,7 +161,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
   const filesList = files()
   if (isFocused && filesList.length > 0) {
     return (
-      <Box>
+      <Box height={isScene2Visible ? 450 : undefined}>
         <Box
           backgroundColor={'contentBox'}
           borderTopWidth={1}
@@ -195,7 +187,7 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
             <SharedElement style={styles.scene} onNode={setScene2Ancestor}>
               <SharedElement onNode={setScene2Node}>
                 <Pressable style={styles.container} onPress={onPressBack}>
-                  <Image style={styles.image} source={assetImage} />
+                  <Image style={styles.image} source={dummyAsset} />
                   <TextView
                     variant="MobileBody"
                     mx={theme.dimensions.gutter}
