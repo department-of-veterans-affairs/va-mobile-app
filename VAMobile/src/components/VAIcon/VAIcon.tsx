@@ -48,13 +48,6 @@ import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
 import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
 import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
-// Branch icons
-import AirForce from './svgs/dodBranch/AirForce.svg'
-import Army from './svgs/dodBranch/Army.svg'
-import CoastGuard from './svgs/dodBranch/CoastGuard.svg'
-import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
-import Navy from './svgs/dodBranch/Navy.svg'
-import SpaceForce from './svgs/dodBranch/SpaceForce.svg'
 // Links
 import Calendar from './svgs/links/Calendar.svg'
 import Chat from './svgs/links/Chat.svg'
@@ -80,8 +73,6 @@ import Logo from './svgs/vaParentLogo/Logo.svg'
 
 export const VA_ICON_MAP = {
   Add,
-  AirForce,
-  Army,
   BenefitsSelected,
   BenefitsUnselected,
   Building,
@@ -100,7 +91,6 @@ export const VA_ICON_MAP = {
   CircleCheckMark,
   CircleExternalLink,
   CirclePhone,
-  CoastGuard,
   Compose,
   Directions,
   Ellipsis,
@@ -116,9 +106,7 @@ export const VA_ICON_MAP = {
   Info,
   Lock,
   Logo,
-  MarineCorps,
   Minus,
-  Navy,
   PaperClip,
   PaymentsSelected,
   PaymentsUnselected,
@@ -133,7 +121,6 @@ export const VA_ICON_MAP = {
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
   Sort,
-  SpaceForce,
   Text,
   Trash,
   Truck,
