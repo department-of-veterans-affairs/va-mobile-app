@@ -21,7 +21,7 @@ function NoInboxMessages() {
           {t('secureMessaging.inbox.noMessages.title')}
         </TextView>
       </Box>
-      <Box accessible={true}>
+      <Box accessible={true} accessibilityRole={'text'}>
         <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.inbox.noMessages.body')}
         </TextView>
