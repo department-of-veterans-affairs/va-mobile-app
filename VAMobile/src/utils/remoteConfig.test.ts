@@ -33,6 +33,7 @@ const mockOverrides = {
   prescriptions: true,
   submitEvidenceExpansion: true,
   testFeature: false,
+  useOldLinkComponent: false,
   whatsNewUI: false,
 }
 
