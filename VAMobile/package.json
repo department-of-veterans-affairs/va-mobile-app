@@ -14,7 +14,7 @@
     "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
     "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-    "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios/VAMobile/Images.xcassets",
+    "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
