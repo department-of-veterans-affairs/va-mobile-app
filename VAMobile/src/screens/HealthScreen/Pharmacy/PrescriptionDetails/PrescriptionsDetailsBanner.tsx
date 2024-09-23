@@ -57,6 +57,7 @@ function PrescriptionsDetailsBanner() {
           phone={t('5418307563')}
           displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
           a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
+          variant={'base'}
         />
       </>
     )
