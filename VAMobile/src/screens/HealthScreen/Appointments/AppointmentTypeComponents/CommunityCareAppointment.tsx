@@ -9,6 +9,7 @@ import {
   AppointmentDetailsSubTypeConstants,
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import {
   AppointmentCalendarButton,
@@ -21,6 +22,7 @@ import {
   AppointmentReasonAndComment,
   AppointmentTypeOfCare,
   CommunityCarePendingLocation,
+  DEPRECATED_AppointmentCalendarButton,
 } from './SharedComponents'
 
 type CommunityCareAppointmentProps = {
@@ -50,12 +52,21 @@ function CommunityCareAppointment({
       <TextArea>
         <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
-        <AppointmentCalendarButton
-          appointmentID={appointmentID}
-          attributes={attributes}
-          subType={subType}
-          type={type}
-        />
+        {featureEnabled('useOldLinkComponent') ? (
+          <DEPRECATED_AppointmentCalendarButton
+            appointmentID={appointmentID}
+            attributes={attributes}
+            subType={subType}
+            type={type}
+          />
+        ) : (
+          <AppointmentCalendarButton
+            appointmentID={appointmentID}
+            attributes={attributes}
+            subType={subType}
+            type={type}
+          />
+        )}
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
         {isPending ? (
