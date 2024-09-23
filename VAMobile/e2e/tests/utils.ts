@@ -57,6 +57,9 @@ export const CommonE2eIdConstants = {
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
 }
 
 /** Log the automation into demo mode
