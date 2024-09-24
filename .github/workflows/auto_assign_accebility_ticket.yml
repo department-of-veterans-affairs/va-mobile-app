@@ -2,19 +2,17 @@ name: Auto-Assign Accessibility Tickets
 
 on:
   issues:
-    types:
-      - labeled
+    types: [labeled]
 
 jobs:
   auto-assign:
+    if: github.event.label.name == 'accessibility'
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
     steps:
-      - name: 'Checkout repo'
-        uses: actions/checkout@v3
-
-      - name: Assign Health team QA
-        if: github.event.label.name == 'accessibility'
-        run: |
-          gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
+    - name: Assign ticket to axe specialist
+      uses: actions-ecosystem/action-assign-issue@v1
+      with:
+        assignees: IsraelleHub
+        issue-number: ${{ github.event.issue.number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
