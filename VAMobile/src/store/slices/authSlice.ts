@@ -390,7 +390,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
-      api.setDeviceSecret(authResponse.device_secret)
+      authResponse.device_secret && api.setDeviceSecret(authResponse.device_secret)
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
@@ -416,6 +416,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   console.debug('refreshAccessToken: Refreshing access token')
   try {
     await clearCookies()
+    await CookieManager.clearAll()
 
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
@@ -711,6 +712,7 @@ export const sendLoginStartAnalytics =
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
   await clearCookies()
+  await CookieManager.clearAll()
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.

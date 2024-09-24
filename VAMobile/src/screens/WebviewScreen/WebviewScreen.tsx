@@ -129,16 +129,9 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
   useEffect(() => {
     const fetchSSOCookies = async () => {
-      const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
-      const cookiesArray = Object.values(cookies)
-      const hasSSOCookies = cookiesArray.some((cookie) => cookie.name === 'vagov_access_token')
-
-      if (hasSSOCookies) {
-        setLoading(false)
-        return
-      }
-
       try {
+        await CookieManager.clearAll()
+
         const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
           method: 'POST',
           headers: {
