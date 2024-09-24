@@ -21,20 +21,12 @@ export type DescBackButtonProps = {
   labelA11y?: string
   /** boolean to specify if we want accessibility to focus on the back button */
   focusOnButton?: boolean
-  /** optional testID */
-  backButtonTestID?: string
 }
 
 /**
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
-export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
-  onPress,
-  label,
-  labelA11y,
-  focusOnButton = true,
-  backButtonTestID,
-}) => {
+export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, labelA11y, focusOnButton = true }) => {
   const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -46,8 +38,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
       ref={focusRef}
       onPress={onPress}
       accessibilityRole="link"
-      accessibilityLabel={labelA11y ? labelA11y : label}
-      testID={backButtonTestID}>
+      accessibilityLabel={labelA11y ? labelA11y : label}>
       <Box
         display="flex"
         flexDirection="row"

@@ -102,7 +102,7 @@ export const Nametag = () => {
   return (
     <Box>
       {accessToMilitaryInfo && branch !== '' && (
-        <Pressable {...pressableProps} testID="veteranStatusButtonID">
+        <Pressable {...pressableProps}>
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
             {getBranchSeal()}
             <Box ml={theme.dimensions.buttonPadding} flex={1}>

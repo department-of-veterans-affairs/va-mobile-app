@@ -197,6 +197,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
   const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
+
   if (leftButton) {
     leftTextViewProps = {
       color: 'footerButton',
@@ -277,7 +278,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   label={leftButton.text}
                   onPress={leftButton.onPress}
                   focusOnButton={focus === 'Left'}
-                  backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>

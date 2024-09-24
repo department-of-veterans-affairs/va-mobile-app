@@ -42,7 +42,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
   const theme = useTheme()
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
-    const { inlineTextWithIcons, testId, detoxTestID, ...listItemObj } = item
+    const { inlineTextWithIcons, testId, ...listItemObj } = item
     let testIdToUse = testId ? testId : generateTestIDForInlineTextIconList(inlineTextWithIcons, t)
 
     // We want to display black 'Read' tag only for sent messages that have been seen by the recipients
@@ -74,15 +74,8 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
 
     // Append accessibility label for Sent messages 'READ' tag
     testIdToUse = `${testIdToUse} ${sentReadTagA11y}`.trim()
-    const detoxTestIDToUse = detoxTestID ? detoxTestID : testIdToUse
 
-    return {
-      ...listItemObj,
-      content,
-      testId: testIdToUse,
-      decorator: ButtonDecoratorType.None,
-      detoxTestID: detoxTestIDToUse,
-    }
+    return { ...listItemObj, content, testId: testIdToUse, decorator: ButtonDecoratorType.None }
   })
 
   return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
