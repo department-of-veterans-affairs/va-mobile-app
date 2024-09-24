@@ -78,7 +78,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(-1)
 
   const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
 
@@ -124,7 +124,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       if (claimPhaseExpansionFlag) {
         if (count > 0 && !claim.attributes.waiverSubmitted) {
           logAnalyticsEvent(Events.vama_claim_file_request(claimID))
-        } else if (submitEvidenceExpansionFlag && claim.attributes.open) {
+        } else if (submitEvidenceExpansionFlag && claim.attributes.open && count >= 0) {
           logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
         }
       }
