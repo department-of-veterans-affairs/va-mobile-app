@@ -21,6 +21,16 @@ To get access to either TestFlight or App Tester, follow the platform-specific i
 ### Charles Proxy
 We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing. We've got guides for [setting up Charles Proxy](https://docs.google.com/document/d/1nUJCIfGTap6RJK_E6xqiKF0OQ4yH-gmi/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true), and [how to mock response data](https://docs.google.com/document/d/10qeXwn55uGnx9wXj0FmKdLyh-dxwDNWj/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true) or [set exclusions](https://docs.google.com/document/d/1_obvBLHnTTNZGb5N1Rezq8duZhy-rZ1g/edit).
 
+### On demand build
+We create [on-demand builds](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml) of the pre-production mobile app using a github workflow for testing new frontend code.
+- Visiting the page linked above, tap on "Run Workflow" near the top righthand corner. Then fill out the workflow prompts:
+  - By default, the develop branch is selected in the "Use workflow from" field. Replace it with the branch you want to test.
+  - By default, the staging environment is selected in the "Environment" field. Very occasionally (such as user testing), you'd change it to production instead.
+  - Add a label to the "Notes" field that will help you identify your build in a list of all on-demand builds. Typically we'll include ticket ID, such as "9687 fix payment name"
+  - Tap "run workflow"
+- Typically it takes ~10-15 minutes for Android to build, and about 5 minutes longer than that for iOS to build.
+- If any build fails, attempt to re-run the failed builds at least once (iOS in particular can be a little flaky).
+
 ## Mobile team tools (as they relate to QA)
 ### 1Password
 The VAMobile and VA.gov vaults contain usernames and passwords for staging test users.
@@ -34,4 +44,5 @@ Most commonly used: [the shared team Zenhub board](https://app.zenhub.com/worksp
 ## How do I
 ### Log into the mobile app in a staging environment?
 - First, you need to get [TestFlight (iOS) or AppTester (Android)](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Tool%20Setup) set up on the device you'll use, which includes coordination with the mobile Engineering lead to get added to the list of approved testers.
-- If you're testing backend changes, it's best to use a current version of the daily develop builds. If you're testing frontend changes, you'll need to 
+- If you're testing backend changes, it's best to use a current version of the daily develop builds. If you're testing frontend changes, you'll need to follow the [on-demand build process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Resources#on-demand-build), above.
+- Any credentials that work to log into staging.va.gov will also work to log into the mobile app in the staging environment. The mobile team, by and large, does not have the ability to create staging users or specific staging data, so you will need to work with other VA teams to do any prep needed for testing.
