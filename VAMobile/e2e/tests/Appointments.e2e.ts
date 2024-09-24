@@ -57,7 +57,7 @@ describe('Appointments Screen', () => {
       await device.launchApp({ newInstance: false })
 
       await device.disableSynchronization()
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).tap()
+      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentVALocationPhoneNumber')
       await device.launchApp({ newInstance: false })
 
