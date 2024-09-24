@@ -31,3 +31,7 @@ Most commonly used: [writing a bug ticket with the new bug report template](http
 ### Zenhub
 Most commonly used: [the shared team Zenhub board](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/board?repos=292052392) and [the cumulative flow report to track ticket (or bug!) trends over several sprints](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/reports/cumulative?r=&p[]=With%20QA&p[]=Icebox&p[]=With%20QA%281.43.0%20until%202%2F14%29&p[]=Ready%20to%20Merge%20to%20develop&p[]=Closed&p[]=With%20QA%20%28pre-develop%29&p[]=With%20QA%20%28develop%29&p[]=Blocked&df=06-15-2021&dt=06-15-2023&dr=24m&labels[]=bug&notLabels[]=).
 
+## How do I
+### Log into the mobile app in a staging environment?
+- First, you need to get [TestFlight (iOS) or AppTester (Android)](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Tool%20Setup) set up on the device you'll use, which includes coordination with the mobile Engineering lead to get added to the list of approved testers.
+- If you're testing backend changes, it's best to use a current version of the daily develop builds. If you're testing frontend changes, you'll need to 
