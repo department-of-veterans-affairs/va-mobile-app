@@ -225,6 +225,7 @@ jest.mock('@react-native-firebase/analytics', () => {
 jest.mock('@react-native-firebase/crashlytics', () => () => ({
   recordError: jest.fn(),
   logEvent: jest.fn(),
+  setAttributes: jest.fn(),
   setUserProperties: jest.fn(),
   setUserId: jest.fn(),
   setCurrentScreen: jest.fn(),

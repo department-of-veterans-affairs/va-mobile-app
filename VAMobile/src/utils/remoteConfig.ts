@@ -32,6 +32,7 @@ export type FeatureToggleType =
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'testFeature'
+  | 'useOldLinkComponent'
   | 'whatsNewUI'
 
 type FeatureToggleValues = {
@@ -51,6 +52,7 @@ type FeatureToggleValues = {
   submitEvidenceExpansion: boolean
   sso: boolean
   testFeature: boolean
+  useOldLinkComponent: boolean
   whatsNewUI: boolean
 }
 
@@ -71,6 +73,7 @@ export const defaults: FeatureToggleValues = {
   submitEvidenceExpansion: false,
   sso: true,
   testFeature: false,
+  useOldLinkComponent: false,
   whatsNewUI: true,
 }
 
