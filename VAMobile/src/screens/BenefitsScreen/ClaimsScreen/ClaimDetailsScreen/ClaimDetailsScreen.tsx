@@ -122,7 +122,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   useEffect(() => {
     if (claimType === ClaimTypeConstants.ACTIVE) {
       if (claimPhaseExpansionFlag) {
-        if (count > 0 && attributes?.waiverSubmitted) {
+        if (count > 0 && !attributes?.waiverSubmitted) {
           logAnalyticsEvent(Events.vama_claim_file_request(claimID))
         } else if (submitEvidenceExpansionFlag && attributes?.open) {
           logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
