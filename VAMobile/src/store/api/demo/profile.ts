@@ -185,7 +185,7 @@ export const updateAddress = (store: DemoStore, address: AddressData): EditRespo
 
 /**
  * Function deletes the selected address in the demo store
- * @param address- AddressData object to update
+ * @param address- AddressData object to update?
  */
 export const deleteAddress = (store: DemoStore, params: Params): EditResponseData => {
   const type = getAddressType((params as unknown as AddressData).addressPou)
