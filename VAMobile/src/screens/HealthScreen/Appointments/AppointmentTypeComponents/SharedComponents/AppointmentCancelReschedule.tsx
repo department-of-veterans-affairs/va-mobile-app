@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ParamListBase } from '@react-navigation/native'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
@@ -23,9 +25,16 @@ import {
 } from 'utils/appointments'
 import { showSnackBar } from 'utils/common'
 import getEnv from 'utils/env'
-import { useAppDispatch, useDestructiveActionSheet, useDestructiveActionSheetProps, useTheme } from 'utils/hooks'
+import {
+  RouteNavigationFunction,
+  useAppDispatch,
+  useDestructiveActionSheet,
+  useDestructiveActionSheetProps,
+  useRouteNavigation,
+  useTheme,
+} from 'utils/hooks'
 
-const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { LINK_URL_SCHEDULE_APPOINTMENTS, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type AppointmentCancelRescheduleProps = {
   appointmentID: string
@@ -160,6 +169,7 @@ const phoneFacilitySchedulingLink = (
   location: AppointmentLocation | undefined,
   t: TFunction,
   theme: VATheme,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
 ) => {
   return (
     <Box>
@@ -181,8 +191,15 @@ const phoneFacilitySchedulingLink = (
       ) : undefined}
       {!useFacilityLocatorFallback && (
         <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_VA_SCHEDULING}
+          type="custom"
+          onPress={() => {
+            navigateTo('Webview', {
+              url: LINK_URL_SCHEDULE_APPOINTMENTS,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: t('webview.appointments.loading'),
+              useSSO: true,
+            })
+          }}
           text={t('appointments.vaSchedule')}
           a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
           testID="vaLinkApptsCancelTestID"
@@ -300,6 +317,7 @@ function AppointmentCancelReschedule({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
   const { location, cancelId } = attributes || ({} as AppointmentAttributes)
 
   const header = getHeader(subType, t)
@@ -347,11 +365,18 @@ function AppointmentCancelReschedule({
         {body}
       </TextView>
       {!isClaimExam ? (
-        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme)
+        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme, navigateTo)
       ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_VA_SCHEDULING}
+          type="custom"
+          onPress={() => {
+            navigateTo('Webview', {
+              url: LINK_URL_SCHEDULE_APPOINTMENTS,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: t('webview.appointments.loading'),
+              useSSO: true,
+            })
+          }}
           text={t('appointments.vaSchedule')}
           a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
         />
