@@ -120,14 +120,12 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     accessible: true,
     accessibilityRole: 'button',
     accessibilityHint: t('cancel.picker.a11yHint'),
-    testID: 'radioButtonCancelTestID',
   }
 
   const applyButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
     accessibilityHint: t('done.picker.a11yHint'),
-    testID: 'radioButtonApplyTestID',
   }
 
   return (

@@ -79,7 +79,7 @@ describe('Appointments Screen', () => {
   })
 
   it('should cancel an appointment and dismiss the dialog', async () => {
-    await element(by.text('Appointments')).tap()
+    await element(by.id('apptDetailsBackID')).tap()
     await waitFor(element(by.text('GUARINO, ANTHONY')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
@@ -99,7 +99,7 @@ describe('Appointments Screen', () => {
       .scroll(200, 'down')
     await element(by.text('GUARINO, ANTHONY')).tap()
     await expect(element(by.text('Canceled request for community care'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.id('apptDetailsBackID')).tap()
   })
 
   it('should tap on and show past appointments', async () => {

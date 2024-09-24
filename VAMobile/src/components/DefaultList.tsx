@@ -30,13 +30,12 @@ export type DefaultListProps = {
 const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel, selectable }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
-    const { textLines, testId, detoxTestID, ...listItemObj } = { ...item }
+    const { textLines, testId, ...listItemObj } = { ...item }
     const testIdToUse = testId ? testId : generateTestIDForTextList(textLines)
-    const detoxTestIDToUse = detoxTestID ? detoxTestID : testIdToUse
 
     const content = <TextLines listOfText={textLines} selectable={selectable} />
 
-    return { ...listItemObj, content, testId: testIdToUse, detoxTestID: detoxTestIDToUse }
+    return { ...listItemObj, content, testId: testIdToUse }
   })
 
   return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />

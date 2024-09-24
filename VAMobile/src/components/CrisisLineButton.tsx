@@ -33,7 +33,7 @@ const CrisisLineButton: FC = () => {
 
   return (
     <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
-      <Pressable {...pressableProps} testID="veteransCrisisLineID">
+      <Pressable {...pressableProps}>
         <TextView variant={'CrisisLineButton'} py={14}>
           {t('crisisLineButton.label')}
         </TextView>
