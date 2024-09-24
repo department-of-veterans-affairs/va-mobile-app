@@ -17,4 +17,4 @@ jobs:
       - name: Assign Health team QA
         if: github.event.label.name == 'accessibility'
         run: |
-          gh issue edit ${{ github.event.issue.number }} --add-assignee "brea11y"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
