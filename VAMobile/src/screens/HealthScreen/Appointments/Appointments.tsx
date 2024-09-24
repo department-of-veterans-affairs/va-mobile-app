@@ -111,7 +111,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
-      testID="appointmentsTestID">
+      testID="appointmentsTestID"
+      backLabelTestID="appointmentsBackTestID">
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (

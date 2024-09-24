@@ -278,6 +278,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   label={leftButton.text}
                   onPress={leftButton.onPress}
                   focusOnButton={focus === 'Left'}
+                  backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
