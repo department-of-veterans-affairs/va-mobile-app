@@ -64,7 +64,7 @@
     "react-content-loader": "^7.0.0",
     "react-i18next": "^14.1.2",
     "react-native": "0.75.2",
-    "react-native-blob-util": "^0.19.9",
+    "react-native-blob-util": "^0.19.11",
     "react-native-document-picker": "^8.2.2",
     "react-native-dotenv": "^3.4.11",
     "react-native-file-viewer": "^2.1.4",
