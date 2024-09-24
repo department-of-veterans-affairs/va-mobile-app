@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
-import { Linking, View } from 'react-native'
+import { View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
