@@ -120,16 +120,16 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   }, [claim, loadingClaim, claimError, claimID, attributes])
 
   useEffect(() => {
-    if (claimType === ClaimTypeConstants.ACTIVE) {
+    if (claimType === ClaimTypeConstants.ACTIVE && claim) {
       if (claimPhaseExpansionFlag) {
-        if (count > 0 && !attributes?.waiverSubmitted) {
+        if (count > 0 && !claim.attributes.waiverSubmitted) {
           logAnalyticsEvent(Events.vama_claim_file_request(claimID))
-        } else if (submitEvidenceExpansionFlag && attributes?.open) {
+        } else if (submitEvidenceExpansionFlag && claim.attributes.open) {
           logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
         }
       }
     }
-  }, [claimType, claimPhaseExpansionFlag, submitEvidenceExpansionFlag, count, attributes, claimID])
+  }, [claimType, claimPhaseExpansionFlag, submitEvidenceExpansionFlag, count, claim, claimID])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
