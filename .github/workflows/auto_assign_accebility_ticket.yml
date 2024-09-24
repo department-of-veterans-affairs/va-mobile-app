@@ -2,7 +2,8 @@ name: Auto-Assign Accessibility Tickets
 
 on:
   issues:
-    types: [labeled]
+    types:
+      - labeled
 
 jobs:
   auto-assign:
