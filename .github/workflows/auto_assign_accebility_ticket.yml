@@ -6,7 +6,7 @@ on:
       - labeled
   push:
     branches:
-          - chanel-9375-test-auto-assign-accessubility
+          - chanel-9375-test-auto-assign-accessibility
 
 
 jobs:
