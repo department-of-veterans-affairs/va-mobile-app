@@ -64,7 +64,11 @@ function PrescriptionHistoryNoPrescriptions() {
             <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
           </Box>
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
-          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8773270022'))}
+            phone={t('8773270022')}
+            variant={'base'}
+          />
         </AlertWithHaptics>
       </Box>
     </VAScrollView>
