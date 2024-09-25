@@ -70,8 +70,19 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
+
   /** color bypass */
   colorOverride?: string
+
+  /** custom onPress */
+  customOnPress?: () => void
+
+  /** hide icon */
+  hideIcon?: boolean
+
+  /** disable padding */
+  disablePadding?: boolean
+
   /** Optional TestID */
   testID?: string
 }
@@ -89,10 +100,16 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   a11yLabel,
   fireAnalytic,
   colorOverride,
+  customOnPress,
+  hideIcon = false,
+  disablePadding = false,
   testID,
   ...props
 }) => {
   const theme = useTheme()
+  const py = disablePadding ? 0 : theme.dimensions.buttonPadding
+  const pr = disablePadding ? 0 : theme.dimensions.gutter
+
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -109,6 +126,11 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   }
 
   const _onPress = async (): Promise<void> => {
+    if (customOnPress) {
+      customOnPress()
+      return
+    }
+
     if (fireAnalytic) {
       fireAnalytic()
     }
@@ -176,14 +198,18 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
 
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
-      <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon
-          name={getIconName()}
-          fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
-          fill2={colorOverride ? 'transparent' : ''}
-          width={25}
-          height={25}
-        />
+      <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
+        {!hideIcon && (
+          <Box pr={3}>
+            <VAIcon
+              name={getIconName()}
+              fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
+              fill2={colorOverride ? 'transparent' : ''}
+              width={25}
+              height={25}
+            />
+          </Box>
+        )}
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>
