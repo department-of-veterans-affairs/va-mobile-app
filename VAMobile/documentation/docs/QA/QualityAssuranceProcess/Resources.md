@@ -22,7 +22,7 @@ To get access to either TestFlight or App Tester, follow the platform-specific i
 We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing. We've got guides for [setting up Charles Proxy](https://docs.google.com/document/d/1nUJCIfGTap6RJK_E6xqiKF0OQ4yH-gmi/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true), and [how to mock response data](https://docs.google.com/document/d/10qeXwn55uGnx9wXj0FmKdLyh-dxwDNWj/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true) or [set exclusions](https://docs.google.com/document/d/1_obvBLHnTTNZGb5N1Rezq8duZhy-rZ1g/edit).
 
 ### On demand build
-We create [on-demand builds](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml) of the pre-production mobile app using a github workflow for testing new frontend code.
+We create [on-demand builds](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml) of the pre-production mobile app using a github workflow for testing new frontend code. You need to have write-access to the mobile app repo to kick off these builds.
 - Visiting the page linked above, tap on "Run Workflow" near the top righthand corner. Then fill out the workflow prompts:
   - By default, the develop branch is selected in the "Use workflow from" field. Replace it with the branch you want to test.
   - By default, the staging environment is selected in the "Environment" field. Very occasionally (such as user testing), you'd change it to production instead.
