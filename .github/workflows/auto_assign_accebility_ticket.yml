@@ -4,16 +4,20 @@ on:
   issues:
     types:
       - labeled
+  push:
+    branches:
+          - chanel-9375-test-auto-assign-accessubility
+
 
 jobs:
   auto-assign:
     if: github.event.label.name == 'accessibility'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
     - name: Assign ticket to axe specialist
-      uses: actions-ecosystem/action-assign-issue@v1
-      with:
-        assignees: IsraelleHub
-        issue-number: ${{ github.event.issue.number }}
+      run: |
+        gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
