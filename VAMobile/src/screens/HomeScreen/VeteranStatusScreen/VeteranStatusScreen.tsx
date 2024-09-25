@@ -18,11 +18,11 @@ import {
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
   TextView,
-  VAIcon,
+  VABranch,
+  VALogo,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { darkTheme } from 'styles/themes/colorSchemes'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
@@ -97,17 +97,17 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSAFIconTestID" name="vic-air-force-coat-of-arms.png" {...dimensions} />
       case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSArmyIconTestID" name="vic-army-symbol.png" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSCoastGuardTestID" name="vic-cg-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSMarineTestID" name="vic-usmc-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSNavyTestID" name="vic-navy-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.SpaceForce:
-        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" fill2={darkTheme.icon.ussf} {...dimensions} />
+        return <VABranch testID="VeteranStatusUSSFTestID" name="vic-space-force-logo-on-dark.png" {...dimensions} />
     }
   }
 
@@ -122,7 +122,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
+        <VALogo testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />

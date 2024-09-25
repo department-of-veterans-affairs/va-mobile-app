@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchesOfServiceConstants } from 'api/types'
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, TextView, VABranch } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -40,23 +42,26 @@ export const Nametag = () => {
     const dimensions = {
       width: 40,
       height: 40,
-      preventScaling: true,
     }
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSAFIconTestID" name="vic-air-force-coat-of-arms.png" {...dimensions} />
       case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="United States Army" name="Army" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSArmyIconTestID" name="vic-army-symbol.png" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSCoastGuardTestID" name="vic-cg-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSMarineTestID" name="vic-usmc-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
+        return <VABranch testID="VeteranStatusUSNavyTestID" name="vic-navy-emblem.png" {...dimensions} />
       case BranchesOfServiceConstants.SpaceForce:
         return (
-          <VAIcon testID="United States Space Force" name="SpaceForce" fill2={theme.colors.icon.ussf} {...dimensions} />
+          <VABranch
+            testID="VeteranStatusUSSFTestID"
+            name={theme.mode === 'dark' ? 'vic-space-force-logo-on-dark.png' : 'vic-space-force-logo-on-light.png'}
+            {...dimensions}
+          />
         )
     }
   }
@@ -118,14 +123,15 @@ export const Nametag = () => {
               )}
             </Box>
             {showVeteranStatus && (
-              <VAIcon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.linkRow}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                preventScaling={true}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-              />
+              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+                <Icon
+                  name={'ChevronRight'}
+                  fill={theme.colors.icon.linkRow}
+                  width={30}
+                  height={45}
+                  preventScaling={true}
+                />
+              </Box>
             )}
           </Box>
         </Pressable>
