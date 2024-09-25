@@ -197,7 +197,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
   const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
-
   if (leftButton) {
     leftTextViewProps = {
       color: 'footerButton',
