@@ -57,6 +57,10 @@ export const CommonE2eIdConstants = {
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
+  CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
+  CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
+  CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
 }
 
 /** Log the automation into demo mode
