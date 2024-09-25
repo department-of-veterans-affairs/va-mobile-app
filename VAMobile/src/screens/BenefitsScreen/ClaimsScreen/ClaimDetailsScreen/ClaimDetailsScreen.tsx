@@ -84,7 +84,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   useFocusEffect(
     useCallback(() => {
-      setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
+      if (attributes) {
+        setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
+      }
     }, [attributes]),
   ) //force a rerender due to react query updating data
 
