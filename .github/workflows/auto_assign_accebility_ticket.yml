@@ -13,7 +13,6 @@ jobs:
       issues: write
     steps:
     - name: Assign ticket to axe specialist
-      run: |
-        gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
+      run: gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
