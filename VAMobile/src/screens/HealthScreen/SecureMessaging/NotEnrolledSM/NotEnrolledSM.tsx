@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import { Box, LinkWithAnalytics, TextArea, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 function NotEnrolledSM() {
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_sm_notenrolled())
+  }, [])
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
