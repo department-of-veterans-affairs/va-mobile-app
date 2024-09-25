@@ -65,7 +65,6 @@ local.properties
 # Node
 node_modules
 *.log
-.nvm
 /bots/node_modules/
 
 # OS X
@@ -120,6 +119,8 @@ coverage
 #iOS build
 **/ios/output
 **/ios/vendor
+**/ios/Pods
+**/ios/main.jsbundle.map
 
 # Xcode
 #
@@ -178,3 +179,4 @@ buck-out/
 # Detox
 /VAMobile/artifacts
 /VAMobile/e2e/tests/__image_snapshots__
+/VAMobile/e2e/test_reports

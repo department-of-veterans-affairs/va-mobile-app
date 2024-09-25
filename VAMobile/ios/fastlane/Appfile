@@ -1,5 +1,5 @@
 app_identifier("gov.va.vamobileapp") # The bundle identifier of your app
-apple_id("tim.wright@adhocteam.us") # Your Apple email address
+apple_id("Donald.McCaughey@va.gov") # Your Apple email address
 
 
 # For more information about the Appfile, see:
