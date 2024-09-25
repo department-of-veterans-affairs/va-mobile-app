@@ -1080,6 +1080,11 @@ export const Events = {
       name: 'vama_sm_nonurgent',
     }
   },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
+    }
+  },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {
     return {
       name: 'vama_sm_open',

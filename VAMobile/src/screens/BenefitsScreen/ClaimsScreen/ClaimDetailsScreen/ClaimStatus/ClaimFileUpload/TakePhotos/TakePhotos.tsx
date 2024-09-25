@@ -84,6 +84,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
               url={LINK_URL_GO_TO_VA_GOV}
               text={t('goToVAGov')}
               a11yLabel={a11yLabelVA(t('goToVAGov'))}
+              variant={'base'}
             />
           </AlertWithHaptics>
         </Box>
