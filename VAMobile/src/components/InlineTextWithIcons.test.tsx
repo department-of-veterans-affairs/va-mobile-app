@@ -1,22 +1,30 @@
 import React from 'react'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { screen } from '@testing-library/react-native'
 
 import { Box, InlineTextWithIconsProps } from 'components'
 import { context, render } from 'testUtils'
+import { useTheme } from 'utils/hooks'
 
 import InlineTextWithIcons from './InlineTextWithIcons'
-import { VAIconProps } from './VAIcon'
+import { VA_ICON_MAP } from './VAIcon'
 
 context('InlineTextWithIcons', () => {
   beforeEach(() => {
+    const theme = useTheme()
     const testLine1 = {
       leftTextProps: {
         text: 'Test Email',
         variant: 'MobileBodyBold',
         textAlign: 'left',
       },
-      leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true, testID: 'Unread' } as VAIconProps,
+      leftIconProps: {
+        svg: VA_ICON_MAP.Unread,
+        width: 16,
+        height: 16,
+        fill: theme.colors.icon.unreadMessage,
+      } as IconProps,
     } as InlineTextWithIconsProps
     const testLine2 = {
       leftTextProps: {
@@ -33,14 +41,13 @@ context('InlineTextWithIcons', () => {
         textAlign: 'left',
         color: 'primary',
       },
-      leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
-      rightIconProps: {
-        name: 'ChevronRight',
+      leftIconProps: {
+        svg: VA_ICON_MAP.Unread,
         width: 16,
         height: 16,
-        fill: 'spinner',
-        testID: 'ChevronRight',
-      } as VAIconProps,
+        fill: theme.colors.icon.unreadMessage,
+      } as IconProps,
+      rightIconProps: { name: 'AttachFile', fill: theme.colors.icon.spinner } as IconProps,
     } as InlineTextWithIconsProps
 
     render(

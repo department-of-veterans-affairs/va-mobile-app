@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'
@@ -8,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
+import { VA_ICON_MAP } from './VAIcon'
 
 /**
  * Props for item in {@link listOfText}
@@ -92,7 +93,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
             accessible={true}
             accessibilityRole="text">
             <Box mr={20} mt={12}>
-              <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
+              <Icon svg={VA_ICON_MAP.Bullet} fill={color || theme.colors.text.bodyText} height={6} width={6} />
             </Box>
             <TextView {...textViewProps} accessibilityLabel={a11yLabel || text}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}

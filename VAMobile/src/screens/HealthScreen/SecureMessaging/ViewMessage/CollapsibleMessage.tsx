@@ -4,6 +4,8 @@ import { View, ViewStyle } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import {
@@ -163,7 +165,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
           {attachmentBoolean && (
             <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
-              <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
+              <Icon name={'AttachFile'} fill={theme.colors.icon.spinner} />
             </Box>
           )}
           {sentDate && sentDate.length > 1 ? (

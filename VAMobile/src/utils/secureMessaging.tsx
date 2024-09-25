@@ -3,6 +3,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
@@ -15,7 +16,7 @@ import {
   MessageListItemObj,
   PickerItem,
   TextView,
-  VAIconProps,
+  VA_ICON_MAP,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
@@ -58,12 +59,10 @@ export const getMessagesListItems = (
 
     const unreadIconProps =
       readReceipt !== READ && !isOutbound
-        ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps)
+        ? ({ svg: VA_ICON_MAP.Unread, width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as IconProps)
         : undefined
     const paperClipProps =
-      hasAttachments || attachment
-        ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps)
-        : undefined
+      hasAttachments || attachment ? ({ name: 'AttachFile', fill: theme.colors.icon.spinner } as IconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {

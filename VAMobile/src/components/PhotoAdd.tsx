@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -49,14 +51,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
   return (
     <Pressable {...pressableProps}>
       <Box {...boxProps}>
-        <VAIcon
-          name={'Add'}
-          width={32}
-          height={32}
-          fill={themeColor.icon.photoAdd}
-          fill2={themeColor.icon.transparent}
-          maxWidth={70}
-        />
+        <Icon name={'AddCircle'} width={40} height={40} fill={themeColor.icon.photoAdd} maxWidth={70} />
       </Box>
       <Box width={width} flexDirection="row">
         <TextView {...textProps}>{t('fileUpload.addPhoto')}</TextView>
