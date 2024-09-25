@@ -11,7 +11,7 @@ on:
 
 jobs:
   auto-assign:
-    if: github.event.label.name == 'accessibility'
+    
     runs-on: ubuntu-latest
     permissions:
       issues: write
