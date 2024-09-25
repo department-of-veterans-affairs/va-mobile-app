@@ -29,6 +29,7 @@ import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
+import SubmitMileageTravelPayScreen from './TravelPay'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -44,6 +45,9 @@ export type HealthStackParamList = WebviewStackParams & {
   AppointmentCancellationConfirmation: {
     cancelID: string
     appointmentID: string
+  }
+  SubmitTravelPayClaimScreen: {
+    appointmentDateTime?: string
   }
   Messages: undefined
   SecureMessaging: {
@@ -205,6 +209,12 @@ export const getHealthScreens = () => {
       name="SessionNotStarted"
       component={SessionNotStarted}
       options={LARGE_PANEL_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'SubmitTravelPayClaimScreen'}
+      name="SubmitTravelPayClaimScreen"
+      component={SubmitMileageTravelPayScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]
