@@ -60,6 +60,7 @@ function CernerAlertSM() {
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       testID: 'goToMyVAHealthTestID',
+      variant: 'base',
     }
 
     return (
