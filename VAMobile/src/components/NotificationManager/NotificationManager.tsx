@@ -99,7 +99,7 @@ const NotificationManager: FC = ({ children }) => {
 
       showAlert({
         title: 'This is what we received from the notification',
-        message: `Notification url: ${notification.payload.url}\nNotification identifier: ${notification.identifier}\nForeground Notification check:${foregroundNotifications.includes(notification.identifier)}\nLoggedIn boolean:${loggedIn}`,
+        message: `Notification url: ${notification.payload.url}\nNotification identifier: ${notification.identifier}\nForeground Notification check:${foregroundNotifications.includes(notification.identifier)}\nLoggedIn boolean:${loggedIn}\nNotification${notification}`,
         buttons: [
           {
             text: 'close',
