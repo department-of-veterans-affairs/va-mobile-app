@@ -1,18 +1,30 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, TextView } from 'components'
+import { Box, TextView, VAScrollView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useOrientation, useTheme } from 'utils/hooks'
 
+import { FileOnlineComponent, TravelPayHelp } from './components'
+
 function NotEligibleTypeScreen() {
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
   const theme = useTheme()
   const isPortrait = useOrientation()
 
   return (
-    <Box
-      mb={theme.dimensions.contentMarginBottom}
-      mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-      <TextView>We can't submit this type of claim</TextView>
-    </Box>
+    <VAScrollView>
+      <Box
+        mb={theme.dimensions.contentMarginBottom}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          {t('travelPay.cannotSubmitThisType')}
+        </TextView>
+        <FileOnlineComponent />
+        <TravelPayHelp />
+      </Box>
+    </VAScrollView>
   )
 }
 

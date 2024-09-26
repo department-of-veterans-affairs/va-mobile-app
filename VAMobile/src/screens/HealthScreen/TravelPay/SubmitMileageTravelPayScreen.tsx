@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, FullScreenSubtask } from 'components'
+import { Box, FullScreenSubtask, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { useRouteNavigation } from 'utils/hooks'
