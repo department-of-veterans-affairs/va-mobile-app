@@ -106,8 +106,14 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
   const [loading, setLoading] = useState(isSSOSession)
+  const [webviewLoadFailed, setWebviewLoadFailed] = useState(false)
 
   const onReloadPressed = (): void => {
+    // Set loading `true` to trigger SSO cookies API call if attempting to reload after initial WebView load failed
+    if (isSSOSession && webviewLoadFailed) {
+      setWebviewLoadFailed(false)
+      setLoading(true)
+    }
     webviewRef?.current.reload()
   }
 
@@ -156,8 +162,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       }
     }
 
-    isSSOSession && fetchSSOCookies()
-  }, [isSSOSession])
+    if (isSSOSession && loading) {
+      fetchSSOCookies()
+    }
+  }, [isSSOSession, loading])
 
   const backPressed = (): void => {
     webviewRef?.current.goBack()
@@ -219,6 +227,9 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         // onMessage is required to be present for injected javascript to work on iOS
         onMessage={(): void => {
           // no op
+        }}
+        onError={() => {
+          setWebviewLoadFailed(true)
         }}
         onNavigationStateChange={(navState): void => {
           setCanGoBack(navState.canGoBack)
