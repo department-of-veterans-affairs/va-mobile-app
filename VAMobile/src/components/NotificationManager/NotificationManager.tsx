@@ -9,6 +9,7 @@ import { Events } from 'constants/analytics'
 import { RootState } from 'store'
 import { AuthState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { useAlert } from 'utils/hooks'
 
 const foregroundNotifications: Array<string> = []
 
@@ -36,6 +37,8 @@ const NotificationManager: FC = ({ children }) => {
   const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
   const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
+
+  const showAlert = useAlert()
 
   useEffect(() => {
     const register = () => {
@@ -93,6 +96,16 @@ const NotificationManager: FC = ({ children }) => {
           setInitialUrl(notification.payload.url)
         }
       }
+
+      showAlert({
+        title: 'This is what we received from the notification',
+        message: `Notification url: ${notification.payload.url}\nNotification identifier: ${notification.identifier}\nForeground Notification check:${foregroundNotifications.includes(notification.identifier)}\nLoggedIn boolean:${loggedIn}`,
+        buttons: [
+          {
+            text: 'close',
+          },
+        ],
+      })
 
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
