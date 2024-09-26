@@ -17,7 +17,7 @@ import {
   BoxProps,
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
-  MilitaryBranchLogo,
+  MilitaryBranchEmblem,
   TextView,
   VALogo,
 } from 'components'
@@ -116,7 +116,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </TextView>
           {accessToMilitaryInfo && (
             <Box display="flex" flexDirection="row" flexWrap="wrap">
-              <MilitaryBranchLogo branch={branch} width={34} height={34} />
+              <MilitaryBranchEmblem branch={branch} width={34} height={34} />
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>

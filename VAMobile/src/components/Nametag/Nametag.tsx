@@ -5,7 +5,7 @@ import { Platform, Pressable, PressableProps } from 'react-native'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BackgroundVariant, Box, MilitaryBranchLogo, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -78,7 +78,7 @@ export const Nametag = () => {
       {accessToMilitaryInfo && branch !== '' && (
         <Pressable {...pressableProps}>
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            <MilitaryBranchLogo branch={branch} width={40} height={40} />
+            <MilitaryBranchEmblem branch={branch} width={40} height={40} />
             <Box ml={theme.dimensions.buttonPadding} flex={1}>
               <TextView variant={'VeteranStatusBranch'} pb={4}>
                 {branch}
