@@ -12,9 +12,6 @@ jobs:
     permissions:
       issues: write
     steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v3  
-      
     - name: Assign ticket to axe specialist
       run: gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
       env:
