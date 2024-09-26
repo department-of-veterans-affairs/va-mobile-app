@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { Dimensions } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
@@ -474,7 +475,7 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
+export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
   const bodySplit = body.split(/\s/).filter((value) => value !== '')
   const whiteSpace = body
@@ -599,15 +600,17 @@ export const getLinkifiedText = (body: string, t: TFunction): ReactNode => {
       )
       savedText = ''
       textReconstructedBody.push(
-        <LinkWithAnalytics
-          type="url"
-          url={text}
-          text={text}
-          icon="no icon"
-          disablePadding={true}
-          a11yLabel={text}
-          a11yHint={t('openInBrowser.a11yHint')}
-        />,
+        <Box minWidth={isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height}>
+          <LinkWithAnalytics
+            type="url"
+            url={text}
+            text={text}
+            icon="no icon"
+            disablePadding={true}
+            a11yLabel={text}
+            a11yHint={t('openInBrowser.a11yHint')}
+          />
+        </Box>,
       )
       savedText += whiteSpace.pop() || ''
     } else if (url2Match) {
