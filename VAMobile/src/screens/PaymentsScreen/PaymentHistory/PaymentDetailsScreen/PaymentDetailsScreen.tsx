@@ -23,7 +23,7 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 

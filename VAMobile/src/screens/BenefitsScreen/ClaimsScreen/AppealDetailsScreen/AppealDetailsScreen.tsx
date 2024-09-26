@@ -57,7 +57,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   useEffect(() => {
     if (appeal && !loadingAppeal && !appealError) {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [appeal, loadingAppeal, appealError])
 

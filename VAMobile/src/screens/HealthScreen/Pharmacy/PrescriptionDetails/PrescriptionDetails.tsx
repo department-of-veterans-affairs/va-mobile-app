@@ -60,7 +60,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   useFocusEffect(
     React.useCallback(() => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
