@@ -5,7 +5,7 @@ sidebar_position: 2
 
 # How to update the VA Mobile doc site 
 
-_If you are comfortable with maintaining and troubleshooting setup on their local machine, skip down to that section. If you're looking for a simpler option, use the codespaces workflow up top._
+_If you are comfortable with maintaining and troubleshooting setup on your local machine, feel free to skip down to the section with [instructions for editing the doc site locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20doc%20site/how%20to%20update#updating-the-site-from-your-local-machine). If you're looking for a simpler option, use the codespaces workflow here at the top._
 
 
 ## Updating the site using codespaces
@@ -74,93 +74,11 @@ Type a note about the changes you're making in the text box at the top of the so
 
 Finally, you'll tap the green "Sync" button (that has replaced the green commit button) to sync the changes from the codespace, to your branch in github. This can take a minute or longer.
 
+### 6. PR things
 
+Skip down to the shared documentation section about [how to create and merge a pull request with your changes](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20doc%20site/how%20to%20update#create-a-pull-request), and follow those instructions. 
 
-### 6. Publish your changes to the live doc site  
-
-To push your changes to the live Doc site, you first need to check your changes, and get those changes approved by someone else on the team. You can do this by publishing the changes & creating a pull request.  
-
-**Commit changes**  
-
-First, open GitHub Desktop. It will show all of the pages you changed in the Changes tab on the left. If you click on a file, you can see the set of changes for each file (called a diff). Green indicates a line was added. Red indicates the line was deleted.  
-
-Make sure only the boxes next to the pages you want to update are checked. At the bottom of that column, write a summary of the changes you made (in case someone needs to review the history and can easily tell what you were up to) and then click “Commit” to save the changes.  
-
-![github - commit changes](../../../static/img/updating-docsite/githubcommit.png "github - commit changes")
-
-GH Desktop should then show you a screen that says “No local changes” again. If you have more changes or more commits, go ahead and do those now. Once you have all the changes you want to make, you will need to publish your branch so that you can make a pull request.  
-
-**Publish branch**  
-
-In order to make a Pull Request and add your changes back onto the base branch, you will need to copy your local branch up onto the GitHub server. To do this, you just need to go to the GH Desktop app, and click either the Publish Branch tab at the top or the Publish Branch button in the Publish your branch area.  
-
-![github - publish branch](../../../static/img/updating-docsite/githubpublish.png "github - publish branch")
-
-The branch should get pushed up to the repository and you should then see an area to Create Pull Request.  
-
-
-![github - no local changes](../../../static/img/updating-docsite/githubnolocalchanges2.png "github - no local changes")
-
-
-
-**Create a pull request**  
-
-Click the Create Pull Request button. This should open a browser window that takes you to a Pull Request template in the repository (You can also open the docsite in Github in your browser: [https://github.com/department-of-veterans-affairs/va-mobile-app](https://github.com/department-of-veterans-affairs/va-mobile-app))  
-
-![github create PR](../../../static/img/updating-docsite/githubcreatepr.png "github create PR")
-
-
-Click “Compare & pull request.” You will see this:  
-
-
-![github - open PR](../../../static/img/updating-docsite/githubopenpr.png "github - open PR")
-
-Before you create the pull request, do the following things:  
-
-* Make sure the base is set to “develop” 
-* Github will automatically choose reviewers for you, but you can also choose two people to review your request.
-* Scroll down to compare the changes between branches.
-
-If all is well, click Click the green “Create pull request” button.  
-
-
-##### Your PR has been created!  
-
-Wait for it to be reviewed by two team members.  
-
-
-### 7. Deploying your branch to the doc site 
-After your pull request receives two approvals, click the green “merge pull request” button at the bottom of the pull request page in Github, followed by the “confirm merge” button in the next step.
-
-Your branch will then begin deploying to the doc site and will be live once the merge is complete.
-
-* To track the status of the build, click “Actions” in Github.
-    - Next, find and select "[Documentation] Deploy Site" in the left-hand panel.
-    - The build will have a yellow icon while the branch is deploying to the doc site and a green check icon once it is complete.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Get ready for those instructions by pulling up the mobile app repo home in your browser: [https://github.com/department-of-veterans-affairs/va-mobile-app](https://github.com/department-of-veterans-affairs/va-mobile-app).
 
 
 ## Updating the site from your local machine
@@ -286,7 +204,7 @@ The branch should get pushed up to the repository and you should then see an are
 
 
 
-**Create a pull request**  
+#### **Create a pull request**  
 
 Click the Create Pull Request button. This should open a browser window that takes you to a Pull Request template in the repository (You can also open the docsite in Github in your browser: [https://github.com/department-of-veterans-affairs/va-mobile-app](https://github.com/department-of-veterans-affairs/va-mobile-app))  
 
