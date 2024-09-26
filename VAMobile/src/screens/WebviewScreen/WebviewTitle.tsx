@@ -26,7 +26,7 @@ function WebviewTitle({ title }: WebviewTitleProps) {
       <Box mr={theme.dimensions.textIconMargin}>
         <Icon name={'Lock'} height={36} width={24} fill={theme.colors.text.webviewTitle} preventScaling={true} />
       </Box>
-      <TextView color="webviewTitle" allowFontScaling={false}>
+      <TextView variant="webviewTitle" color="webviewTitle" allowFontScaling={false}>
         {title}
       </TextView>
     </Box>
