@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
@@ -80,11 +80,18 @@ const NotificationManager: FC = ({ children }) => {
        * opens like deep linking, etc
        */
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
-      if (foregroundNotifications.includes(notification.identifier) && notification.payload.url) {
+      if (foregroundNotifications.includes(notification.identifier)) {
         setTappedForegroundNotification(true)
-        setInitialUrl(notification.payload.url)
-      } else if (notification.payload.url) {
-        setInitialUrl(notification.payload.url)
+      }
+
+      // Open deep link from the notification when present. If the user is
+      // not logged in, store the link so it can be opened after authentication.
+      if (notification.payload.url) {
+        if (loggedIn) {
+          Linking.openURL(notification.payload.url)
+        } else {
+          setInitialUrl(notification.payload.url)
+        }
       }
 
       console.debug('Notification opened by device user', notification)
