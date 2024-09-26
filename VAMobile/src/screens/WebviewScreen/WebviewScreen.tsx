@@ -8,11 +8,12 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
+import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import * as api from 'store/api'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
@@ -23,6 +24,7 @@ import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
 
 const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
+const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
 
 type ReloadButtonProps = {
   reloadPressed: () => void
@@ -155,6 +157,14 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
         const cookieHeaders = response.headers.get('set-cookie')
         cookieHeaders && (await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders))
+
+        const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
+        const cookiesArray = Object.values(cookies)
+        const hasSSOCookies = SSO_COOKIE_NAMES.every((cookieName) =>
+          cookiesArray.some((cookie) => cookie.name === cookieName),
+        )
+
+        logAnalyticsEvent(Events.vama_sso_cookie_received(hasSSOCookies))
       } catch (error) {
         logNonFatalErrorToFirebase(error, `Error fetching SSO cookies: ${error}`)
       } finally {
