@@ -26,8 +26,8 @@ export const CernerIdConstants = {
   CERNER_PANEL_MULTI_ALL_TEXT: 'Your care team uses My VA Health',
   CERNER_PANEL_MANAGE_MULTI_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
   CERNER_HEALTH_HELP_SUBTEXT_TEXT:
-    "Some VA health facilities use our My VA Health portal. Information from that portal isn't included here.",
-  CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your facility uses My VA Health',
+    "Some care teams use My VA Health. Information from that health portal isn't included here.",
+  CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your care team uses My VA Health',
 }
 
 beforeAll(async () => {
