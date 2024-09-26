@@ -78,13 +78,15 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(-1)
 
   const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
 
   useFocusEffect(
     useCallback(() => {
-      setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
+      if (attributes) {
+        setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
+      }
     }, [attributes]),
   ) //force a rerender due to react query updating data
 
@@ -118,6 +120,18 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       setScrollIsEnabled(false)
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
+
+  useEffect(() => {
+    if (claimType === ClaimTypeConstants.ACTIVE && claim) {
+      if (claimPhaseExpansionFlag) {
+        if (count > 0 && !claim.attributes.waiverSubmitted) {
+          logAnalyticsEvent(Events.vama_claim_file_request(claimID))
+        } else if (submitEvidenceExpansionFlag && claim.attributes.open && count >= 0) {
+          logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
+        }
+      }
+    }
+  }, [claimType, claimPhaseExpansionFlag, submitEvidenceExpansionFlag, count, claim, claimID])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
@@ -177,7 +191,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   }
 
   const submitEvidencePress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    logAnalyticsEvent(Events.vama_claim_submit_tap(claimID, attributes.claimType))
     navigateTo('SubmitEvidence', { claimID })
   }
 
