@@ -1,12 +1,14 @@
 import React, { FC, useState } from 'react'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 import { ColorVariant, TextArea } from './index'
 
 /**
@@ -52,19 +54,19 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({
     // flexShrink is necessary to keep textView from expanding too far and causing a gap between text contents and arrow icon
     // also keeps textView from pushing arrow beyond right margin when large text is enabled
     flexShrink: 1,
-    mr: 7,
+    mr: 1,
     borderBottomWidth: 2,
     borderBottomColor: 'photoAdd', // todo rename photoAdd border color to be more abstract (talk to design)
   }
 
   const getChevronIcon = (): React.ReactNode => {
-    const iconProps: VAIconProps = {
+    const iconProps: IconProps = {
       fill: theme.colors.icon.chevronCollapsible,
-      name: expanded ? 'ChevronUp' : 'ChevronDown',
-      width: 9,
-      height: 7,
+      name: expanded ? 'ExpandLess' : 'ExpandMore',
+      width: 20,
+      height: 20,
     }
-    return <VAIcon {...iconProps} />
+    return <Icon {...iconProps} />
   }
 
   const pressableProps: PressableProps = {
