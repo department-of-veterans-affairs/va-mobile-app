@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { List, ListItemObj, TextView } from 'components'
+import { Box, List, ListItemObj, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -11,11 +11,11 @@ function FileOnlineComponent() {
 
   const bullets: Array<ListItemObj> = [
     {
-      content: <TextView> {t('travelPay.youCanStillFile.bulletOne')}</TextView>,
+      content: <TextView variant="MobileBody">{t('travelPay.youCanStillFile.bulletOne')}</TextView>,
       a11yHintText: t('travelPay.youCanStillFile.bulletOne'),
     },
     {
-      content: <TextView> {t('travelPay.youCanStillFile.bulletTwo')}</TextView>,
+      content: <TextView variant="MobileBody">{t('travelPay.youCanStillFile.bulletTwo')}</TextView>,
       a11yHintText: t('travelPay.youCanStillFile.bulletTwo'),
     },
   ]
@@ -25,7 +25,9 @@ function FileOnlineComponent() {
       <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
         {t('travelPay.youCanStillFile')}
       </TextView>
-      <List items={bullets} />
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <List items={bullets} />
+      </Box>
     </>
   )
 }

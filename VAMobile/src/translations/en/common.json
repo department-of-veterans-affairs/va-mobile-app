@@ -1432,7 +1432,7 @@
   "travelPay.reviewText": "Confirm the information is correct before you submit your claim.",
   "travelPay.cannotSubmitThisType": "We can't file this type of claim in the app",
   "travelPay.referToPortal": "But you can file a claim using the Beneficiary Travel Self Service System (BTSSS) or VA Form 10-3542.",
-  "travelPay.youCanStillFile": "You can still file a claim within 30 days of this appointment thiese other ways:",
+  "travelPay.youCanStillFile": "You can still file a claim within 30 days of this appointment these other ways:",
   "travelPay.youCanStillFile.bulletOne": "Online 24/7 through the Beneficiary Travel Self Service System (BTSSS), or",
   "travelPay.youCanStillFile.bulletTwo": "VA Form 10-3542 by mail, fax, email, or in person.",
   "travelPay.helpTitle": "Need help?",

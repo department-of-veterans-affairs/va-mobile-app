@@ -11,6 +11,7 @@ import { useRouteNavigation } from 'utils/hooks'
 import { HealthStackParamList } from '../HealthStackScreens'
 import {
   AddressScreen,
+  ErrorScreen,
   MileageScreen,
   NotEligibleTypeScreen,
   ReviewClaimScreen,
@@ -35,6 +36,9 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   ReviewClaimScreen: undefined
   SubmitSuccessScreen: undefined
   NotEligibleTypeScreen: undefined
+  ErrorScreen: {
+    error: string | undefined
+  }
 }
 
 type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'>
@@ -44,8 +48,9 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const [screenListIndex, setScreenListIndex] = useState(0)
-  const [notEligibleBackIndex, setNotEligibleBackIndex] = useState(0)
+  const [screenListIndex, setScreenListIndex] = useState(2)
+  const [notEligibleBackIndex, setNotEligibleBackIndex] = useState(2)
+  const [error, setError] = useState<string | undefined>('This is a random error')
 
   const navigateToNextScreen = () => {
     const nextScreenIndex = screenListIndex + 1
@@ -54,13 +59,20 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   }
 
   const submitTravelClaim = () => {
-    navigateToNextScreen()
-    console.log('Submitted!')
+    if (error) {
+      // Error screen is always index 1
+      setScreenListIndex(1)
+      navigateTo('ErrorScreen', { error })
+    } else {
+      navigateToNextScreen()
+      console.log('Submitted!')
+    }
   }
 
   const navigateToNoScreen = () => {
     setNotEligibleBackIndex(screenListIndex)
-    setScreenListIndex(screenList.length - 1)
+    // Not eligiblt type screen is always index 0
+    setScreenListIndex(0)
     navigateTo('NotEligibleTypeScreen')
     console.log('not eligible!')
   }
@@ -74,6 +86,24 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   const TravelPayStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
   const screenList: Array<ScreenListObj> = [
+    {
+      name: 'NotEligibleTypeScreen',
+      backButtonOnPress: undefined,
+      leftButtonText: t('cancel'),
+      primaryButtonText: t('close'),
+      primaryButtonOnPress: notEligibleCloseOnPress,
+      secondaryButtonText: undefined,
+      secondaryButtonOnPress: undefined,
+    },
+    {
+      name: 'ErrorScreen',
+      backButtonOnPress: navigation.goBack,
+      leftButtonText: t('close'),
+      primaryButtonText: t('close'),
+      primaryButtonOnPress: navigation.goBack,
+      secondaryButtonText: undefined,
+      secondaryButtonOnPress: undefined,
+    },
     {
       name: 'MileageScreen',
       backButtonOnPress: undefined,
@@ -119,15 +149,6 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
       secondaryButtonText: undefined,
       secondaryButtonOnPress: undefined,
     },
-    {
-      name: 'NotEligibleTypeScreen',
-      backButtonOnPress: undefined,
-      leftButtonText: t('cancel'),
-      primaryButtonText: t('close'),
-      primaryButtonOnPress: notEligibleCloseOnPress,
-      secondaryButtonText: undefined,
-      secondaryButtonOnPress: undefined,
-    },
   ]
 
   return (
@@ -163,6 +184,7 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
             name="SubmitSuccessScreen"
             component={SubmitSuccessScreen}
           />
+          <TravelPayStack.Screen key={'ErrorScreen'} name="ErrorScreen" component={ErrorScreen} />
         </TravelPayStack.Navigator>
       </Box>
     </FullScreenSubtask>
