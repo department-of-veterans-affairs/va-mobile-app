@@ -26,3 +26,7 @@ All testing summaries include:
 The VA H&B app flagship team, and the experience teams who work with the mobile app platform team for QA, have a lot of variety in documentation: where they document feature information, what they document, different repos in which they work through tickets, etc. QA should work with the PM responsible to establish where to write/save a testing summary.
 
 Because there is no standard place to publish these summaries, there's also no single template (ex: github ticket template) to create them. Here's an [example summary](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/features/design-personalization/qa/findings.md) in the flagship product repo that can be used as a helpful starting point.
+
+## When is a testing summary written
+
+A testing summary (implicit in the name) is written [when testing is completed, but before the release of the software under test.](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others#testing-qa)
