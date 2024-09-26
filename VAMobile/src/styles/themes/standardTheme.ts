@@ -135,8 +135,8 @@ const fontSizes = {
     lineHeight: 21,
   },
   textWithIconButton: {
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 16,
+    lineHeight: 20,
   },
   UnreadMessagesTag: {
     fontSize: 20,
@@ -152,8 +152,8 @@ const fontSizes = {
     lineHeight: 30,
   },
   webviewTitle: {
-    fontSize: 12,
-    lineHeight: 12,
+    fontSize: 20,
+    lineHeight: 30,
   },
   veteranStatus: {
     fontSize: 16,
