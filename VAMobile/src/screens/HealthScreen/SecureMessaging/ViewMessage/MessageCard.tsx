@@ -34,7 +34,7 @@ function MessageCard({ message }: MessageCardProps) {
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const navigateTo = useRouteNavigation()
   const fileToGet = {} as SecureMessagingAttachment
-  const { isPending: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
+  const { isFetching: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
   })
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -79,7 +79,7 @@ function MessageCard({ message }: MessageCardProps) {
   }
 
   function getAttachment() {
-    if (attachmentFetchPending && !attachments?.length) {
+    if (attachmentFetchPending) {
       const loadingScrollViewStyle: ViewStyle = {
         backgroundColor: theme.colors.background.contentBox,
       }

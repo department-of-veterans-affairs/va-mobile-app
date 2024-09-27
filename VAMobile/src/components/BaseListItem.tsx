@@ -82,6 +82,9 @@ export type BaseListItemProps = {
 
   /** Optional min height */
   minHeight?: number
+
+  /** test id string for detox */
+  detoxTestID?: string
 }
 
 export const ButtonDecorator: FC<{
@@ -191,6 +194,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     claimsRequestNumber,
     fileUploaded,
     minHeight,
+    detoxTestID,
   } = props
   const theme = useTheme()
 
@@ -235,7 +239,6 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressIn: _onPressIn,
     onPressOut: _onPressOut,
     accessible: true,
-    accessibilityRole,
     disabled: decorator === ButtonDecoratorType.RadioDisabled,
   }
 
@@ -258,6 +261,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     ...a11yValueProp(a11yValue ? { text: a11yValue } : {}),
     accessibilityState: a11yState ? a11yState : {},
     accessibilityLabel: testId,
+    accessibilityRole: onPress ? accessibilityRole : 'text',
   }
 
   if (isSwitchRow && decoratorProps) {
@@ -289,7 +293,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...a11yProps} {...pressableProps} testID={testId}>
+      <Pressable {...a11yProps} {...pressableProps} testID={detoxTestID}>
         {generateItem()}
       </Pressable>
     )

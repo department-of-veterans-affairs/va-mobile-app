@@ -56,6 +56,8 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
 }
 
 /** Log the automation into demo mode

@@ -30,6 +30,7 @@ export type FeatureToggleType =
   | 'prescriptions'
   | 'submitEvidenceExpansion'
   | 'testFeature'
+  | 'useOldLinkComponent'
   | 'whatsNewUI'
 
 type FeatureToggleValues = {
@@ -47,6 +48,7 @@ type FeatureToggleValues = {
   prescriptions: boolean
   submitEvidenceExpansion: boolean
   testFeature: boolean
+  useOldLinkComponent: boolean
   whatsNewUI: boolean
 }
 
@@ -63,8 +65,9 @@ export const defaults: FeatureToggleValues = {
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
-  submitEvidenceExpansion: true,
+  submitEvidenceExpansion: false,
   testFeature: false,
+  useOldLinkComponent: false,
   whatsNewUI: true,
 }
 
