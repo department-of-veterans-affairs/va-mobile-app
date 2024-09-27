@@ -47,6 +47,8 @@ describe('Home Screen', () => {
 
   it(':android: should disable AF use case 3', async () => {
     await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
   })
 
   it('should show primary home page header content', async () => {
@@ -123,6 +125,10 @@ describe('Home Screen', () => {
 
   it('taps home then jumps to claims from claims button', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('homeScreenID'))
+      .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT))).toExist()
   })

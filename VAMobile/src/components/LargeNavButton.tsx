@@ -51,6 +51,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   a11yHint,
   onPress,
   showLoading,
+  testID,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -81,7 +82,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
       onPress={onPress}
       accessible={true}
       accessibilityRole={'link'}
-      testID={title}
+      testID={testID}
       accessibilityLabel={accessibilityLabel}
       {...a11yHintProp(a11yHint || '')}>
       <Box flexDirection="row">
