@@ -71,7 +71,9 @@ function AddressScreen({ navigation, route }: AddressScreenProps) {
               <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.referToPortal')}
               </TextView>
-              <AddressSummary addressData={addressData} />
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <AddressSummary addressData={addressData} />
+              </Box>
               <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.addressPOBox')}
               </TextView>
