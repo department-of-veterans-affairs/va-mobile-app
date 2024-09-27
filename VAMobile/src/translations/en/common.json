@@ -1454,6 +1454,8 @@
   "travelPay.helpTextTwo": "Or you can call your VA health facility's Beneficiary Travel contact.",
   "travelPay.phone": "855-574-8292",
   "travelPay.phone.a11yHint": "8555748292",
+  "travelPay.error.title": "We couldn't file your claim",
+  "travelPay.error.text": "We're sorry. Something went wrong on our end. We couldn't file your travel reimbursement claim right now.",
   "travelPay.success.title": "We're processing your claim",
   "travelPay.success.text": "Your travel reimbursement claim number is {{claimId}}",
   "travelPay.success.nextTitle": "What happens next?",
