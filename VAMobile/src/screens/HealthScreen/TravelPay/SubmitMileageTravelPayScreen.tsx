@@ -58,23 +58,27 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   const [error, setError] = useState<string | undefined>()
 
   useBeforeNavBackListener(navigation, (e) => {
-    e.preventDefault()
-    confirmAlert({
-      title: t('travelPay.cancelClaim.title'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('travelPay.cancelClaim.continue'),
-        },
-        {
-          text: t('travelPay.cancelClaim.cancel'),
-          onPress: () => {
-            navigation.dispatch(e.data.action)
+    if (screenList[screenListIndex].primaryButtonText === t('close')) {
+      return
+    } else {
+      e.preventDefault()
+      confirmAlert({
+        title: t('travelPay.cancelClaim.title'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('travelPay.cancelClaim.continue'),
           },
-        },
-      ],
-    })
+          {
+            text: t('travelPay.cancelClaim.cancel'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
+    }
   })
 
   const contactInformationQuery = useContactInformation()
