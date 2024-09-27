@@ -2,11 +2,13 @@ import React, { FC, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import IconWithText from 'components/IconWithText'
 import TextView from 'components/TextView'
-import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
 import { NAMESPACE } from 'constants/namespaces'
-import { VAIconColors, VATextColors } from 'styles/theme'
+import { VATextColors } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 
@@ -29,11 +31,9 @@ export type MenuItemActionsType = {
   /** adds a divider after the action*/
   addDivider: boolean
   /** name of the icon to show */
-  iconName?: keyof typeof VA_ICON_MAP
+  iconProps?: IconProps
   /** method to  */
   onPress?: () => void
-  /** color for the menu icon */
-  iconColor?: keyof VAIconColors
   /** color for the menu text */
   textColor?: keyof VATextColors
   /** action accessibility label */
@@ -100,7 +100,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   // gets the action passed down to the menu and creates the menu actions
   const getActionsForMenu = () => {
     return actions.map((item, index) => {
-      const { iconName, actionText, accessibilityLabel, iconColor, textColor } = item
+      const { iconProps, actionText, accessibilityLabel, textColor } = item
       const onPressMenu = () => {
         hideMenu()
 
@@ -121,9 +121,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
               viewStyle={menuStyle}
               underlayColor={currentTheme.colors.buttonBackground.overFlowMenuButton}
               accessibilityLabel={accessibilityLabel}>
-              {iconName && (
-                <VAIcon name={iconName} fill={iconColor ? iconColor : 'defaultMenuItem'} height={24} width={24} />
-              )}
+              {iconProps && <Icon {...iconProps} />}
               <TextView variant={'MobileBody'} ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>
