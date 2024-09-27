@@ -63,8 +63,8 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({
     const iconProps: IconProps = {
       fill: theme.colors.icon.chevronCollapsible,
       name: expanded ? 'ExpandLess' : 'ExpandMore',
-      width: 20,
-      height: 20,
+      width: 30,
+      height: 30,
     }
     return <Icon {...iconProps} />
   }
