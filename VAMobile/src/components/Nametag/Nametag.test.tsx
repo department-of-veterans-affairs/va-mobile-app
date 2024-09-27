@@ -51,7 +51,7 @@ context('Nametag', () => {
         mostRecentBranch: branch,
       }
       renderWithBranch(serviceHistoryMock)
-      expect(screen.getByTestId(branch)).toBeTruthy()
+      expect(screen.getByTestId(`${branch} Emblem`)).toBeTruthy()
       expect(screen.getByRole('link', { name: branch })).toBeTruthy()
       fireEvent.press(screen.getByRole('link', { name: branch }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
