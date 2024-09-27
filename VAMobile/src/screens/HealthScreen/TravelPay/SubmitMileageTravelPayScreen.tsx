@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, FullScreenSubtask, VAScrollView } from 'components'
+import { useContactInformation } from 'api/contactInformation'
+import { AddressData } from 'api/types'
+import { Box, FullScreenSubtask } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import { useRouteNavigation } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 
 import { HealthStackParamList } from '../HealthStackScreens'
 import {
@@ -24,7 +28,7 @@ type ScreenListObj = {
   backButtonOnPress: (() => void) | undefined
   leftButtonText: string
   primaryButtonOnPress: (() => void) | undefined
-  primaryButtonText: string
+  primaryButtonText: string | undefined
   secondaryButtonText: string | undefined
   secondaryButtonOnPress: (() => void) | undefined
 }
@@ -47,15 +51,53 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   const { appointmentDateTime } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const confirmAlert = useDestructiveActionSheet()
 
   const [screenListIndex, setScreenListIndex] = useState(2)
   const [notEligibleBackIndex, setNotEligibleBackIndex] = useState(2)
-  const [error, setError] = useState<string | undefined>('This is a random error')
+  const [error, setError] = useState<string | undefined>()
 
-  const navigateToNextScreen = () => {
+  useBeforeNavBackListener(navigation, (e) => {
+    e.preventDefault()
+    confirmAlert({
+      title: t('travelPay.cancelClaim.title'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('travelPay.cancelClaim.continue'),
+        },
+        {
+          text: t('travelPay.cancelClaim.cancel'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
+
+  const contactInformationQuery = useContactInformation()
+
+  const [retried, setRetried] = useState(false)
+
+  useEffect(() => {
+    if (contactInformationQuery.failureCount > 0) {
+      setRetried(true)
+    }
+
+    if (retried && !contactInformationQuery.isLoading) {
+      const retryStatus = contactInformationQuery.isError ? 'fail' : 'success'
+      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
+    }
+  }, [contactInformationQuery, retried])
+
+  const address: AddressData | undefined | null = contactInformationQuery.data?.residentialAddress
+
+  const navigateToNextScreen = (options = {}) => {
     const nextScreenIndex = screenListIndex + 1
     setScreenListIndex(nextScreenIndex)
-    navigateTo(screenList[nextScreenIndex].name)
+    navigateTo(screenList[nextScreenIndex].name, options)
   }
 
   const submitTravelClaim = () => {
@@ -126,9 +168,9 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
       name: 'AddressScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
-      primaryButtonText: t('yes'),
-      primaryButtonOnPress: navigateToNextScreen,
-      secondaryButtonText: t('no'),
+      primaryButtonText: contactInformationQuery.data && address ? t('yes') : t('cancel'),
+      primaryButtonOnPress: contactInformationQuery.data && address ? navigateToNextScreen : navigation.goBack,
+      secondaryButtonText: contactInformationQuery.data && address ? t('no') : undefined,
       secondaryButtonOnPress: navigateToNoScreen,
     },
     {
@@ -154,7 +196,7 @@ function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravel
   return (
     <FullScreenSubtask
       leftButtonText={screenList[screenListIndex].leftButtonText}
-      onLeftButtonPress={screenList[screenListIndex].backButtonOnPress}
+      onLeftButtonPress={navigation.goBack}
       leftButtonA11yLabel={screenList[screenListIndex].leftButtonText}
       leftButtonTestID={screenList[screenListIndex].leftButtonText}
       scrollViewRef={null}
