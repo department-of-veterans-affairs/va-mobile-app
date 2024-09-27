@@ -22,7 +22,6 @@ import ChevronRight from './svgs/ChevronRight.svg'
 import ChevronUp from './svgs/ChevronUp.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import Ellipsis from './svgs/Ellipsis.svg'
 import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
@@ -65,15 +64,6 @@ import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import Text from './svgs/links/Text.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 // Navigation
-import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
-import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
-import HealthSelected from './svgs/navIcon/HealthSelected.svg'
-import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
-import HomeSelected from './svgs/navIcon/HomeSelected.svg'
-import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
-import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
-import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
-import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 import RadioEmpty from './svgs/radio/RadioEmpty.svg'
 import RadioFilled from './svgs/radio/RadioFilled.svg'
 import Logo from './svgs/vaParentLogo/Logo.svg'
@@ -82,8 +72,6 @@ export const VA_ICON_MAP = {
   Add,
   AirForce,
   Army,
-  BenefitsSelected,
-  BenefitsUnselected,
   Building,
   Bullet,
   Calendar,
@@ -103,15 +91,10 @@ export const VA_ICON_MAP = {
   CoastGuard,
   Compose,
   Directions,
-  Ellipsis,
   ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
   Folder,
-  HealthSelected,
-  HealthUnselected,
-  HomeSelected,
-  HomeUnselected,
   Inbox,
   Info,
   Lock,
@@ -120,11 +103,8 @@ export const VA_ICON_MAP = {
   Minus,
   Navy,
   PaperClip,
-  PaymentsSelected,
-  PaymentsUnselected,
   Phone,
   PhoneTTY,
-  ProfileSelected,
   QuestionMark,
   RadioEmpty, // Also used for RadioDisabled content--same icon, different colors
   RadioFilled,

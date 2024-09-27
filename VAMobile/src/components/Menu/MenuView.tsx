@@ -2,9 +2,9 @@ import React, { FC, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
 
+import IconWithText from 'components/IconWithText'
 import TextView from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
-import VAIconWithText from 'components/VAIconWithText'
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
@@ -139,7 +139,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-        <VAIconWithText name="Ellipsis" label={t('more')} />
+        <IconWithText name="MoreHoriz" fill={currentTheme.colors.icon.active} label={t('more')} />
       </Pressable>
 
       <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>
