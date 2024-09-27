@@ -115,12 +115,12 @@ describe('Appointments Screen', () => {
   it('should show the same date field after cancelling', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     if (device.getPlatform() === 'android') {
-      await element(by.text('Past 3 months')).atIndex(0).tap()
+      await element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
       await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text('Past 3 months')).atIndex(0)).toExist()
+      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
       await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text('Past 3 months'))).toExist()
+      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
     }
   })
 
