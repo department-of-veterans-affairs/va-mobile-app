@@ -108,7 +108,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
-      testID="UpcomingApptDetailsTestID">
+      testID="UpcomingApptDetailsTestID"
+      backLabelTestID="apptDetailsBackID">
       {isLoading ? (
         <LoadingComponent
           text={

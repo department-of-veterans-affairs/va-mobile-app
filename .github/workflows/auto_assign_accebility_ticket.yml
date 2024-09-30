@@ -12,8 +12,8 @@ jobs:
     permissions:
       issues: write
     steps:
-    - name: Assign ticket to axe specialist
-      run: gh issue edit ${{ github.event.issue.number }} --add-assignee "IsraelleHub"
+    - name: Assign ticket to accessibility specialist
+      run: gh issue edit ${{ github.event.issue.number }} --add-assignee "brea11y"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_REPO: ${{ github.repository }}

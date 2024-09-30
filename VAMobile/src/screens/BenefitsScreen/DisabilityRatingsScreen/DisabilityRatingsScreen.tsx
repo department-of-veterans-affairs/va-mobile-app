@@ -190,7 +190,7 @@ function DisabilityRatingsScreen() {
 
   const getNeedHelpSection = () => {
     return (
-      <TextArea>
+      <TextArea testID="needHelpIDSection">
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
