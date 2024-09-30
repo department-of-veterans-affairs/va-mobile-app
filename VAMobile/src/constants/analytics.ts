@@ -328,6 +328,23 @@ export const Events = {
       },
     }
   },
+  vama_claim_submit_ev: (claim_id: string): Event => {
+    return {
+      name: 'vama_claim_submit_ev',
+      params: {
+        claim_id,
+      },
+    }
+  },
+  vama_claim_submit_tap: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_claim_submit_tap',
+      params: {
+        claim_id,
+        claim_type,
+      },
+    }
+  },
   vama_claim_upload_compl: (
     claim_id: string,
     claim_request_id: number | null,
@@ -1080,6 +1097,11 @@ export const Events = {
       name: 'vama_sm_nonurgent',
     }
   },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
+    }
+  },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {
     return {
       name: 'vama_sm_open',
@@ -1117,6 +1139,14 @@ export const Events = {
       name: 'vama_snackbar_null',
       params: {
         location,
+      },
+    }
+  },
+  vama_sso_cookie_received: (received: boolean): Event => {
+    return {
+      name: 'vama_sso_cookie_received',
+      params: {
+        received,
       },
     }
   },

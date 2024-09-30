@@ -32,8 +32,8 @@ describe('Disability Ratings', () => {
     await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID_3))).toExist()
     await expect(element(by.id(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_1_ID_4))).toExist()
     await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
-    await expect(element(by.text('Learn about VA disability ratings'))).toExist()
-    await expect(element(by.text('Need Help?'))).toExist()
+    await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
+    await expect(element(by.id('needHelpIDSection'))).toExist()
   })
 
   it('verify About VA disability ratings information', async () => {
@@ -48,12 +48,12 @@ describe('Disability Ratings', () => {
   it('verify links in the get help section', async () => {
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-827-1000')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
       await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
     }
     if (device.getPlatform() === 'android') {
-      await element(by.text('TTY: 711')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()

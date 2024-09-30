@@ -1,7 +1,6 @@
 import * as Keychain from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -415,9 +414,6 @@ export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
-    await clearCookies()
-    await CookieManager.clearAll()
-
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
     if (!tokenMatchesService) {
@@ -473,7 +469,6 @@ export const attemptIntializeAuthWithRefreshToken = async (
   refreshToken: string,
 ): Promise<void> => {
   try {
-    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
@@ -540,7 +535,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     }
 
     await clearCookies()
-    await CookieManager.clearAll()
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
@@ -712,7 +706,6 @@ export const sendLoginStartAnalytics =
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
   await clearCookies()
-  await CookieManager.clearAll()
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.

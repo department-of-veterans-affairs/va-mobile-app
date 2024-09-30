@@ -5,7 +5,7 @@ import { LinkProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
-import { AlertWithHaptics, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -35,24 +35,18 @@ function CernerAlertSM() {
     return <></>
   }
 
-  const hasMultipleFacilities = cernerFacilities.length > 1
-  const headerText = t('cernerAlertSM.header')
+  const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
+  const headerText = allCernerFacilities ? t('healthHelp.usesVAHealth') : t('cernerAlert.header.some')
+  const headerA11yLabel = allCernerFacilities
+    ? a11yLabelVA(t('healthHelp.usesVAHealth'))
+    : a11yLabelVA(t('cernerAlert.header.some'))
 
   function accordionContent() {
-    let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].name })
-    let thisFacility = t('cernerAlertSM.thisFacilityUses')
-    let thisFacilityA11y = a11yLabelVA(t('cernerAlertSM.thisFacilityUses'))
-    let bullets: VABulletListText[] = []
-
-    if (hasMultipleFacilities) {
-      intro = t('cernerAlertSM.sendingAMessageMultiple')
-      thisFacility = t('cernerAlertSM.theseFacilitiesUse')
-      thisFacilityA11y = a11yLabelVA(t('cernerAlertSM.theseFacilitiesUse'))
-      bullets = cernerFacilities.map((facility: Facility) => ({ text: facility.name }))
-    }
-
-    const outro = `${thisFacility} ${t('cernerAlertSM.youllNeedToGoThere')}`
-    const outroA11y = `${thisFacilityA11y} ${t('cernerAlertSM.youllNeedToGoThere')}`
+    const bullets: VABulletListText[] = cernerFacilities.map((facility: Facility) => ({
+      variant: 'MobileBody',
+      text: facility.name,
+      a11yLabel: a11yLabelVA(facility.name),
+    }))
 
     const linkProps: LinkProps = {
       type: 'url',
@@ -60,18 +54,31 @@ function CernerAlertSM() {
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       testID: 'goToMyVAHealthTestID',
+      variant: 'base',
     }
 
     return (
       <>
         <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-          {intro}
+          {t('cernerAlertSM.sendingAMessage')}
         </TextView>
-        {hasMultipleFacilities && <VABulletList listOfText={bullets} paragraphSpacing={true} />}
-        <TextView variant="MobileBody" accessibilityLabel={outroA11y} paragraphSpacing={true}>
-          {outro}
+        <VABulletList listOfText={bullets} paragraphSpacing={true} />
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('cernerAlertSM.youllNeedToGoThere'))}
+          mb={theme.dimensions.standardMarginBetween}>
+          {t('cernerAlertSM.youllNeedToGoThere')}
         </TextView>
-        <LinkWithAnalytics {...linkProps} />
+        <Box mb={allCernerFacilities ? undefined : theme.dimensions.standardMarginBetween}>
+          <LinkWithAnalytics {...linkProps} />
+        </Box>
+        {allCernerFacilities ? (
+          <></>
+        ) : (
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('cernerAlertSM.footer'))}>
+            {t('cernerAlertSM.footer')}
+          </TextView>
+        )}
       </>
     )
   }
@@ -82,6 +89,7 @@ function CernerAlertSM() {
       expandable={true}
       focusOnError={false}
       header={headerText}
+      headerA11yLabel={headerA11yLabel}
       analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
       {accordionContent()}
     </AlertWithHaptics>
