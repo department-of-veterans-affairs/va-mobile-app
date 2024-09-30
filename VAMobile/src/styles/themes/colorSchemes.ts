@@ -170,8 +170,6 @@ export const lightTheme = {
     activityFooter: DSColors.vadsColorBaseDark,
     categoryLandingError: DSColors.vadsColorSecondaryDark,
     categoryLandingWarning: DSColors.vadsColorBase,
-    cernerPanel: colors.base,
-    cernerFooter: DSColors.vadsColorBaseDark,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -394,8 +392,6 @@ export const darkTheme = {
     activityFooter: DSColors.vadsColorBaseLightest,
     categoryLandingError: DSColors.uswdsSystemColorRedVivid40,
     categoryLandingWarning: DSColors.vadsColorBaseLightest,
-    cernerPanel: DSColors.vadsColorBaseLightest,
-    cernerFooter: DSColors.vadsColorBaseLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

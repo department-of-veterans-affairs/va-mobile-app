@@ -3,14 +3,10 @@ import { ScrollView } from 'react-native'
 
 import { screen } from '@testing-library/react-native'
 
-import { context, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, render } from 'testUtils'
 
 import { claim } from '../../../claimData'
 import ClaimTimeline from './ClaimTimeline'
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimTimeline', () => {
   const { attributes, id } = claim

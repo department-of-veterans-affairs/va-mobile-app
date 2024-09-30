@@ -4,11 +4,9 @@ import { ScrollView } from 'react-native'
 import { ClaimAttributesData } from 'api/types'
 import { Box } from 'components'
 import theme from 'styles/themes/standardTheme'
-import { getUserPhase, isDisabilityCompensationClaim, needItemsFromVet } from 'utils/claims'
-import { featureEnabled } from 'utils/remoteConfig'
+import { isDisabilityCompensationClaim, needItemsFromVet } from 'utils/claims'
 
 import ClaimPhase from './ClaimPhase'
-import DEPRECATED_ClaimPhase from './DEPRECATED_ClaimPhase'
 
 export type ClaimTimelineProps = {
   /** attributes object from ClaimData */
@@ -26,7 +24,7 @@ function ClaimTimeline({ attributes, claimID, scrollIsEnabled, scrollViewRef }: 
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
 
-  const is8Steps = featureEnabled('claimPhaseExpansion') && isDisabilityCompensationClaim(attributes.claimTypeCode)
+  const is8Steps = isDisabilityCompensationClaim(attributes.claimTypeCode)
   const claimStepList = is8Steps ? [1, 2, 3, 4, 5, 6, 7, 8] : [1, 2, 3, 4, 5]
 
   return (
@@ -36,26 +34,16 @@ function ClaimTimeline({ attributes, claimID, scrollIsEnabled, scrollViewRef }: 
         borderTopWidth={theme.dimensions.borderWidth}
         mt={mt}
         mb={theme.dimensions.condensedMarginBetween}>
-        {claimStepList.map((phase) =>
-          featureEnabled('claimPhaseExpansion') ? (
-            <ClaimPhase
-              phase={phase}
-              attributes={attributes}
-              claimID={claimID}
-              scrollIsEnabled={scrollIsEnabled}
-              scrollViewRef={scrollViewRef}
-              key={phase}
-            />
-          ) : (
-            <DEPRECATED_ClaimPhase
-              phase={phase}
-              current={getUserPhase(attributes.phase)}
-              attributes={attributes}
-              claimID={claimID}
-              key={phase}
-            />
-          ),
-        )}
+        {claimStepList.map((phase) => (
+          <ClaimPhase
+            phase={phase}
+            attributes={attributes}
+            claimID={claimID}
+            scrollIsEnabled={scrollIsEnabled}
+            scrollViewRef={scrollViewRef}
+            key={phase}
+          />
+        ))}
       </Box>
     </Box>
   )
