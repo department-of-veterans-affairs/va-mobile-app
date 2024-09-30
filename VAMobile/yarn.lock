@@ -1478,10 +1478,10 @@
     react-native-toast-notifications "^3.4.0"
     styled-components "^6.1.12"
 
-"@department-of-veterans-affairs/mobile-tokens@0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.16.0.tgz#d2f19480a42f41a2c020b0dd0a29b88f8a11fa4d"
-  integrity sha512-Ek/ZyYxFfpGMz4WriUuRLcGLgSXbCyBLRGakgXyZ3DViX6RIymX3WX4EQT7a7m/YgP3IZ0Y4Aptxhqi+c12Vsg==
+"@department-of-veterans-affairs/mobile-tokens@0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.17.0.tgz#53e359228d85157471250493be11c2b75a488ccd"
+  integrity sha512-OFRoY8MniLUx/oM7tE8kaQtPiAuCz7xYnNCPBiyjxl/XXRKJIzPllZ5tR37Ie0Wjf2aXuPrX7I4hObwII1/jNg==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
