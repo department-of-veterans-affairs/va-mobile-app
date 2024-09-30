@@ -1,8 +1,10 @@
 import React from 'react'
 import { StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native'
 
-import { Box, BoxProps, VA_ICON_MAP } from 'components'
-import { VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
+
+import { Box, BoxProps } from 'components'
 import { VAIconColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -16,7 +18,7 @@ type ControlButtonProps = {
   /** If true the button cannot be pressed */
   disabled?: boolean | true
   /** Name of VAIcon to use */
-  icon: keyof typeof VA_ICON_MAP
+  icon: keyof typeof IconMap
   /** optional width */
   width?: number
   /** optional height */
@@ -47,8 +49,8 @@ function WebviewControlButton({
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
-  width = width || 17
-  height = height || 17
+  width = width || 24
+  height = height || 24
 
   const touchableOpacityProps: TouchableOpacityProps = {
     disabled,
@@ -72,7 +74,7 @@ function WebviewControlButton({
       testID={testID}
       {...a11yHintProp(a11yHint || '')}>
       <Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
-        <VAIcon name={icon} width={width} height={height} fill={fill} preventScaling={true} />
+        <Icon name={icon} width={width} height={height} fill={fill} preventScaling={true} />
       </Box>
     </TouchableOpacity>
   )

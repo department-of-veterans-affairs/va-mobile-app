@@ -55,12 +55,13 @@ export const CommonE2eIdConstants = {
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
   CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
   CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
   CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
 }
 
 /** Log the automation into demo mode
