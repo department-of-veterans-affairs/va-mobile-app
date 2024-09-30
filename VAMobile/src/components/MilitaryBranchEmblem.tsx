@@ -5,12 +5,17 @@ import { BranchOfService, BranchesOfServiceConstants } from 'api/types'
 import { useTheme } from 'utils/hooks'
 
 export type MilitaryBranchEmblemProps = {
+  /** Name of military branch emblem to display */
   branch: BranchOfService
+  /** Width of the emblem */
   width: number
+  /** Height of the emblem */
   height: number
+  /** Manually set which emblem variant to use when applicable. Defaults to setting based on theme */
+  variant?: 'light' | 'dark'
 }
 
-export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, width, height }) => {
+export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, width, height, variant }) => {
   const theme = useTheme()
 
   const style: StyleProp<ImageStyle> = {
@@ -65,7 +70,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
           testID="United States Space Force Emblem"
           style={style}
           source={
-            theme.mode === 'dark'
+            (variant || theme.mode) === 'dark'
               ? require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-space-force-logo-on-dark.png')
               : require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-space-force-logo-on-light.png')
           }
