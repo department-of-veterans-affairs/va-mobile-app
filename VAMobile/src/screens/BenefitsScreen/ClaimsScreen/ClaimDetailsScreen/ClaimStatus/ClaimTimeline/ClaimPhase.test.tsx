@@ -3,8 +3,7 @@ import { ScrollView } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, render } from 'testUtils'
 
 import { claim } from '../../../claimData'
 import ClaimPhase, { ClaimPhaseProps } from './ClaimPhase'
@@ -17,9 +16,6 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimPhase', () => {
   const initializeTestInstance = (phase: number, current: number, isDisabilityClaim: boolean) => {
