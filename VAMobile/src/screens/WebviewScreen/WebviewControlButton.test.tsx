@@ -14,7 +14,7 @@ context('WebviewControlButton', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    render(<WebviewControlButton onPress={onPressSpy} icon={'Redo'} />)
+    render(<WebviewControlButton onPress={onPressSpy} icon={'Refresh'} />)
   })
 
   it('initializes correctly', () => {
