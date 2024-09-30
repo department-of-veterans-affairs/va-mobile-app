@@ -164,7 +164,9 @@ describe('Home Screen', () => {
       .scroll(200, 'down')
     await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
-    const militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
+    const militaryBadge = await element(by.id('United States Coast Guard Emblem')).takeScreenshot(
+      'MilitaryServiceBadgeHome',
+    )
     checkImages(militaryBadge)
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_TITLE_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT))).toExist()
