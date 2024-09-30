@@ -19,7 +19,11 @@ Each week a backend engineer will be on-call. Their on-call hours are the same a
 3. If you believe a forward proxy is down or having trouble connecting to the service. Then contact the Operations team via DSVA Slack's [#vfs-platform-support](https://dsva.slack.com/archives/CBU0KDSB1) channel. To open a support ticket type `/support`. This will open a modal window with a form rather than posting a Slack message. For the 'I need help from' field select 'Operations Team'. Then add the details in the 'Summary of request' field. Additionally, if you are unsure of who to contact you can make a support request.
 4. Finally if the error is not from the API, a forward proxy connection to an upstream service, or an upstream service itself but rather an issue with infrastructure that we (and VSP/VFS) control then a SNOW ticket should be opened. Only a DSVA team member can do this. Reach out to a stakeholder and have them open a SNOW ticket for you.
 
-## Other Slack hannels to monitor
+## Handling New Issues
+
+The on-call engineer is responsible for monitoring the [mobile-new-issue-alerts channel](https://vagov.ddog-gov.com/monitors/213410), look into each new issue, and determining whether the issue is worth a ticket for further investigation or remediation. The engineer should add a comment to the issue in the channel with either a link to the investigation ticket or an explanation of why it's not worth a ticket. See [new issue monitor documentation](./DataDog.md#new-issues-monitor) for more information about new issues.
+
+## Other Slack channels to monitor
 
 There are other slack channels that the on-call enginner should pay attention to in case there are updates to maintenance windows and/or other urgent changes. For these channels, the on-call engineer should only need to pay attention to @here and @channel messages.
 

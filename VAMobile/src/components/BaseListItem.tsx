@@ -82,6 +82,9 @@ export type BaseListItemProps = {
 
   /** Optional min height */
   minHeight?: number
+
+  /** test id string for detox */
+  detoxTestID?: string
 }
 
 export const ButtonDecorator: FC<{
@@ -191,6 +194,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     claimsRequestNumber,
     fileUploaded,
     minHeight,
+    detoxTestID,
   } = props
   const theme = useTheme()
 
@@ -289,7 +293,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...a11yProps} {...pressableProps} testID={testId}>
+      <Pressable {...a11yProps} {...pressableProps} testID={detoxTestID}>
         {generateItem()}
       </Pressable>
     )
