@@ -48,7 +48,7 @@ function ReloadButton({ reloadPressed }: ReloadButtonProps) {
       <WebviewControlButton
         onPress={reloadPressed}
         disabled={false}
-        icon={'Redo'}
+        icon={'Refresh'}
         fill={colors.icon.webviewReload}
         testID={t('refresh')}
         a11yLabel={t('refresh')}
