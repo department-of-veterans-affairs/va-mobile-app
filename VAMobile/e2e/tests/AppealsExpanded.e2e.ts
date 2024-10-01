@@ -146,14 +146,14 @@ describe('AppealsExpanded', () => {
         value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID ||
         value === AppealsExpandedIdConstants.MULTIPLE_DECISION_APPEAL_ID
       ) {
-        await element(by.id('claimsHistoryID')).scrollTo('bottom')
-        await element(by.id('next-page')).tap()
-        await element(by.id('claimsHistoryID')).scrollTo('top')
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('bottom')
+        await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
       }
 
       await waitFor(element(by.id(value)))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(300, 'down')
 
       await element(by.id(value)).tap()
