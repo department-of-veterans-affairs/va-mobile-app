@@ -64,7 +64,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager, { useNotificationContext } from './components/NotificationManager'
+import NotificationManager from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -189,7 +189,6 @@ export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
     useSelector<RootState, AuthState>((state) => state.auth)
-  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -268,23 +267,17 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
-    console.debug('AuthGuard: initializing')
-    if (loggedIn && tappedForegroundNotification) {
-      console.debug('User tapped foreground notification. Skipping initializeAuth.')
-      setTappedForegroundNotification(false)
-    } else if (!loggedIn) {
-      dispatch(initializeAuth())
-      const listener = (event: { url: string }): void => {
-        if (event.url?.startsWith('vamobile://login-success?')) {
-          dispatch(handleTokenCallbackUrl(event.url))
-        }
-      }
-      const sub = Linking.addEventListener('url', listener)
-      return (): void => {
-        sub?.remove()
+    dispatch(initializeAuth())
+    const listener = (event: { url: string }): void => {
+      if (event.url?.startsWith('vamobile://login-success?')) {
+        dispatch(handleTokenCallbackUrl(event.url))
       }
     }
-  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
+    const sub = Linking.addEventListener('url', listener)
+    return (): void => {
+      sub?.remove()
+    }
+  }, [dispatch])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
