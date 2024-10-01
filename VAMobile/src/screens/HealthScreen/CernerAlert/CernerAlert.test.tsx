@@ -68,13 +68,36 @@ context('CernerAlert', () => {
   })
 
   it('When only cerner facilities', () => {
-    fireEvent.press(screen.getByLabelText('Your V-A health care team may be using the My V-A Health portal'))
-    expect(screen.getByLabelText('FacilityOne (Now using My V-A Health)')).toBeTruthy()
-    expect(screen.getByLabelText('FacilityTwo (Now using My V-A Health)')).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: 'Your care team uses My VA Health' }))
+    expect(screen.getByLabelText('Your care team uses My  V-A  Health')).toBeTruthy()
+    expect(
+      screen.getByLabelText("You'll need to use our My  V-A  Health portal to manage your care at these facilities:"),
+    ).toBeTruthy()
+    expect(
+      screen.getByText("You'll need to use our My VA Health portal to manage your care at these facilities:"),
+    ).toBeTruthy()
+    expect(screen.getByText('FacilityOne')).toBeTruthy()
+    expect(screen.getByText('FacilityTwo')).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
+    expect(Alert.alert).toBeCalled()
   })
 
   it('when some facilities are cerner and pressing the link', async () => {
-    fireEvent.press(screen.getByLabelText('Some of your V-A health care team may be using the My V-A Health portal'))
+    fireEvent.press(screen.getByRole('tab', { name: 'Some of your care team uses My VA Health' }))
+    expect(screen.getByLabelText('Some of your care team uses My  V-A  Health')).toBeTruthy()
+    expect(
+      screen.getByLabelText("You'll need to use our My  V-A  Health portal to manage your care at these facilities:"),
+    ).toBeTruthy()
+    expect(
+      screen.getByText("You'll need to use our My VA Health portal to manage your care at these facilities:"),
+    ).toBeTruthy()
+    expect(screen.getByText('FacilityOne')).toBeTruthy()
+    expect(
+      screen.getByLabelText('You can still use this app to manage your care at other  V-A  health facilities.'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText('You can still use this app to manage your care at other VA health facilities.'),
+    ).toBeTruthy()
     fireEvent.press(screen.getByLabelText('Go to My V-A Health'))
     expect(Alert.alert).toBeCalled()
   })

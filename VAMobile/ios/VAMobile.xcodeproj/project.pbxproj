@@ -32,6 +32,7 @@
 		7699B88040F8A987B510C191 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
+		B27EF35E2CA1E2B900260C8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B27EF35D2CA1E2B800260C8D /* assets */; };
 		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
 		EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */; };
@@ -59,7 +60,7 @@
 		063E6E51934F27E13811FC7D /* Pods-VAMobile.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.rc.xcconfig"; sourceTree = "<group>"; };
 		1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppUpdate.m; sourceTree = "<group>"; };
 		1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNInAppUpdate.swift; sourceTree = "<group>"; };
-		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; };
+		11892708DB9C49C4A3AB52A5 /* Bitter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Regular.ttf"; path = "../assets/fonts/Bitter/Bitter-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* VAMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VAMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VAMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = VAMobile/AppDelegate.mm; sourceTree = "<group>"; };
@@ -68,7 +69,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-VAMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = launch_icon.jpeg; path = ../assets/fonts/launch_icon.jpeg; sourceTree = "<group>"; };
+		2579582387BD4A9C937E3141 /* launch_icon.jpeg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = launch_icon.jpeg; path = ../assets/fonts/launch_icon.jpeg; sourceTree = "<group>"; };
 		3553357295992E19D8D2C691 /* Pods-VAMobile-VAMobileTests.qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.qa.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.qa.xcconfig"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-VAMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
@@ -96,6 +97,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Italic.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Italic.ttf"; sourceTree = "<group>"; };
 		9B813ABE0AE22DAE9FEB2530 /* Pods-VAMobile.qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.qa.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.qa.xcconfig"; sourceTree = "<group>"; };
+		B27EF35D2CA1E2B800260C8D /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Bold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf"; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B27EF35D2CA1E2B800260C8D /* assets */,
 				FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */,
 				4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
@@ -342,6 +345,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B27EF35E2CA1E2B900260C8D /* assets in Resources */,
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
 				FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
@@ -485,9 +489,15 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesSwift/Promises_Privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-blob-util/ReactNativeBlobUtilPrivacyInfo.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -499,9 +509,15 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleUtilities_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FBLPromises_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Promises_Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReactNativeBlobUtilPrivacyInfo.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,9 +552,15 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesSwift/Promises_Privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/RCTI18nStrings.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/react-native-blob-util/ReactNativeBlobUtilPrivacyInfo.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -550,9 +572,15 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleUtilities_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FBLPromises_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Promises_Privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SDWebImage.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReactNativeBlobUtilPrivacyInfo.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -825,6 +853,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -852,6 +881,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CXX = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -868,6 +898,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/swift",
@@ -989,6 +1021,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1016,6 +1049,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CXX = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -1032,6 +1066,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/swift",
@@ -1153,6 +1189,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1180,6 +1217,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CXX = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -1200,6 +1238,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/swift",
@@ -1218,6 +1258,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -1226,6 +1267,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1253,6 +1295,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CXX = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
@@ -1269,6 +1312,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD = "";
+				LDPLUSPLUS = "";
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SDKROOT)/usr/lib/swift",

@@ -208,7 +208,9 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       onLeftButtonPress={navigation.goBack}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      rightButtonDisabled={saveDisabled}>
+      rightButtonDisabled={saveDisabled}
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {savingEmail || deletingEmail ? (
         <LoadingComponent
           text={

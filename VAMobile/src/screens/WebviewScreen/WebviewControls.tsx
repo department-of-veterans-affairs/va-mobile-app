@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
@@ -55,21 +54,28 @@ function WebviewControls(props: WebviewControlsProps) {
           icon={'ChevronLeft'}
           onPress={props.onBackPressed}
           disabled={!props.canGoBack}
+          width={36}
+          height={36}
           a11yHint={t('back.a11yHint')}
-          {...testIdProps(t('back'))}
+          a11yLabel={t('back')}
+          testID={t('back')}
         />
         <WebviewControlButton
           icon={'ChevronRight'}
           onPress={props.onForwardPressed}
           disabled={!props.canGoForward}
+          width={36}
+          height={36}
           a11yHint={t('forward.a11yHint')}
-          {...testIdProps(t('forward'))}
+          a11yLabel={t('forward')}
+          testID={t('forward')}
         />
         <WebviewControlButton
-          icon={'ExternalLink'}
+          icon={'Launch'}
           onPress={props.onOpenPressed}
           a11yHint={t('openInBrowser.a11yHint')}
-          {...testIdProps(t('openInBrowser'))}
+          a11yLabel={t('openInBrowser')}
+          testID={t('openInBrowser')}
         />
       </Box>
     </StyledSafeAreaView>

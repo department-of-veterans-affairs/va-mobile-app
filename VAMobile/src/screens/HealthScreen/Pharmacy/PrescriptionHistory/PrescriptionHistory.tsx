@@ -367,7 +367,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       setFilterToUse(selectedFilter)
       setSortByToUse(selectedSortBy)
       setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter, selectedSortBy))
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter || 'all', selectedSortBy))
     },
     onCancel: () => {
       logAnalyticsEvent(Events.vama_rx_filter_cancel())
@@ -401,6 +401,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       url: LINK_URL_GO_TO_PATIENT_PORTAL,
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      variant: 'base',
     }
 
     return (
