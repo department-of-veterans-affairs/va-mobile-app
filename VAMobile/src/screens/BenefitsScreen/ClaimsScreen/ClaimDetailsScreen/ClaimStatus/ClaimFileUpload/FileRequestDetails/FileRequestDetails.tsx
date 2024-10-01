@@ -74,7 +74,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
       leftButtonText={t('back')}
       onLeftButtonPress={navigation.goBack}
       title={displayName || ''}
-      testID="fileRequestDetailsID">
+      testID="fileRequestDetailsID"
+      leftButtonTestID="fileRequestDetailsBackID">
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
