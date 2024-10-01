@@ -1,5 +1,8 @@
+import { QueryClient, QueryKey } from '@tanstack/react-query'
 import _ from 'underscore'
 
+import { errorKeys } from 'api/errors'
+import { ErrorData } from 'api/types'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
@@ -107,6 +110,8 @@ const call = async function <T>(
   method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
   endpoint: string,
   params: Params = {},
+  queryKey?: QueryKey,
+  queryClient?: QueryClient,
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
@@ -199,6 +204,14 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
+    const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+    if (data) {
+      _.forEach(data.overrideErrors, (error) => {
+        if (error.queryKey[0] === queryKey[0]) {
+          throw error.error
+        }
+      })
+    }
     // we are in demo and need to transform the request from the demo store
     return new Promise((resolve) => {
       setTimeout(async () => {
@@ -211,9 +224,11 @@ const call = async function <T>(
 export const get = async function <T>(
   endpoint: string,
   params: Params = {},
+  queryKey: QueryKey,
+  queryClient: QueryClient,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, undefined, abortSignal)
+  return call<T>('GET', endpoint, params, queryKey, queryClient, undefined, abortSignal)
 }
 
 export const post = async function <T>(
@@ -222,17 +237,17 @@ export const post = async function <T>(
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params, contentType, abortSignal)
+  return call<T>('POST', endpoint, params, undefined, undefined, contentType, abortSignal)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PUT', endpoint, params)
+  return call<T>('PUT', endpoint, params, undefined, undefined)
 }
 
 export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PATCH', endpoint, params)
+  return call<T>('PATCH', endpoint, params, undefined, undefined)
 }
 
 export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('DELETE', endpoint, params)
+  return call<T>('DELETE', endpoint, params, undefined, undefined)
 }

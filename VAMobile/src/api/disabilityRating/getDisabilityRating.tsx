@@ -1,10 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { DisabilityRatingData, ErrorData, RatingData } from 'api/types'
+import { DisabilityRatingData, RatingData } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
@@ -15,15 +13,12 @@ import { disabilityRatingKeys } from './queryKeys'
  * Fetch user disability rating
  */
 const getDisabilityRating = async (queryClient: QueryClient): Promise<RatingData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === disabilityRatingKeys.disabilityRating[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<DisabilityRatingData>('/v0/disability-rating')
+  const response = await get<DisabilityRatingData>(
+    '/v0/disability-rating',
+    undefined,
+    disabilityRatingKeys.disabilityRating,
+    queryClient,
+  )
 
   return response?.data.attributes
 }

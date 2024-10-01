@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'api/types'
+import { SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'api/types'
 import { get } from 'store/api'
 
 import { secureMessagingKeys } from './queryKeys'
@@ -13,15 +11,12 @@ import { secureMessagingKeys } from './queryKeys'
 const getMessageSignature = async (
   queryClient: QueryClient,
 ): Promise<SecureMessagingSignatureDataAttributes | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === secureMessagingKeys.signature[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<SecureMessagingSignatureData>('/v0/messaging/health/messages/signature')
+  const response = await get<SecureMessagingSignatureData>(
+    '/v0/messaging/health/messages/signature',
+    undefined,
+    secureMessagingKeys.signature,
+    queryClient,
+  )
   return response?.data.attributes
 }
 

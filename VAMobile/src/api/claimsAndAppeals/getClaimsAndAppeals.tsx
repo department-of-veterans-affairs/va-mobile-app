@@ -1,10 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload, ErrorData } from 'api/types'
+import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
@@ -28,20 +26,17 @@ const getClaimsAndAppeals = async (
   claimType: ClaimType,
   queryClient: QueryClient,
 ): Promise<ClaimsAndAppealsListPayload | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === claimsAndAppealsKeys.claimsAndAppeals[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
-    'page[number]': '1',
-    'page[size]': LARGE_PAGE_SIZE.toString(),
-    showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
-    useCache: 'false',
-  })
+  const response = await get<ClaimsAndAppealsListPayload>(
+    '/v0/claims-and-appeals-overview',
+    {
+      'page[number]': '1',
+      'page[size]': LARGE_PAGE_SIZE.toString(),
+      showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
+      useCache: 'false',
+    },
+    claimsAndAppealsKeys.claimsAndAppeals,
+    queryClient,
+  )
 
   if (response) {
     return {

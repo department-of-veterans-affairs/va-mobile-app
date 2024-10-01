@@ -2,8 +2,7 @@ import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
 import { sortBy } from 'underscore'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, LettersData, LettersList } from 'api/types'
+import { LettersData, LettersList } from 'api/types'
 import { get } from 'store/api'
 
 import { lettersKeys } from './queryKeys'
@@ -19,15 +18,7 @@ const sortByName = (letters?: LettersList): LettersList => {
  * Fetch user letters
  */
 const getLetters = async (queryClient: QueryClient): Promise<LettersList | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === lettersKeys.letters[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<LettersData>('/v0/letters')
+  const response = await get<LettersData>('/v0/letters', undefined, lettersKeys.letters, queryClient)
   if (response) {
     return sortByName(response.data.attributes.letters)
   }

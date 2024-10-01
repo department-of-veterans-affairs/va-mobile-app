@@ -1,10 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { ErrorData, PaymentsGetData } from 'api/types'
+import { PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -21,14 +19,6 @@ const getPayments = async (
   page: number,
   queryClient: QueryClient,
 ): Promise<PaymentsGetData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === paymentsKeys.payments[0]) {
-        throw error.error
-      }
-    })
-  }
   const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
   const params: Params =
@@ -40,7 +30,7 @@ const getPayments = async (
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
         }
       : {}
-  const response = await get<PaymentsGetData>('/v0/payment-history', params)
+  const response = await get<PaymentsGetData>('/v0/payment-history', params, paymentsKeys.payments, queryClient)
   if (response) {
     return {
       ...response,

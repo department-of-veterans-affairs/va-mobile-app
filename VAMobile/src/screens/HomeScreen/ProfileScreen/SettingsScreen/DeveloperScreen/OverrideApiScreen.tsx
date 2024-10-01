@@ -426,7 +426,6 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(decisionLettersKeys.decisionLetters, overrideErrors, setErrors, clearData)}
           </Box>
-          {IndividualQueryDisplay(decisionLettersKeys.downloadLetter, overrideErrors, setErrors, clearData)}
         </TextArea>
         <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
@@ -465,10 +464,9 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Letters
           </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(lettersKeys.beneficiaryData, overrideErrors, setErrors, clearData)}
           </Box>
-          {IndividualQueryDisplay(lettersKeys.downloadLetter, overrideErrors, setErrors, clearData)}
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(lettersKeys.letters, overrideErrors, setErrors, clearData)}
           </Box>
@@ -510,10 +508,9 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Secure Messaging
           </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(secureMessagingKeys.downloadFileAttachment, overrideErrors, setErrors, clearData)}
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            {IndividualQueryDisplay(secureMessagingKeys.folderMessages, overrideErrors, setErrors, clearData)}
           </Box>
-          {IndividualQueryDisplay(secureMessagingKeys.folderMessages, overrideErrors, setErrors, clearData)}
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(secureMessagingKeys.folders, overrideErrors, setErrors, clearData)}
           </Box>

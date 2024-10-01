@@ -1,9 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData } from 'api/types'
 import { GenderIdentityOptions, GenderIdentityOptionsPayload } from 'api/types/DemographicsData'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
@@ -16,15 +13,12 @@ import { demographicsKeys } from './queryKeys'
  * Fetch gender identity options
  */
 const getGenderIdentityOptions = async (queryClient: QueryClient): Promise<GenderIdentityOptions> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === demographicsKeys.genderIdentityOptions[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<GenderIdentityOptionsPayload>('/v0/user/gender_identity/edit')
+  const response = await get<GenderIdentityOptionsPayload>(
+    '/v0/user/gender_identity/edit',
+    undefined,
+    demographicsKeys.genderIdentityOptions,
+    queryClient,
+  )
   const responseOptions = response?.data.attributes.options || {}
 
   // TODO: Look into adding an option to the API function for disabling the X-Key-Inflection property.

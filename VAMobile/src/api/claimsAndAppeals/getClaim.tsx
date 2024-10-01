@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ClaimData, ClaimGetData, ErrorData } from 'api/types'
+import { ClaimData, ClaimGetData } from 'api/types'
 import { get } from 'store/api'
 
 import { claimsAndAppealsKeys } from './queryKeys'
@@ -15,15 +13,7 @@ const getClaim = async (
   queryClient: QueryClient,
   abortSignal?: AbortSignal,
 ): Promise<ClaimData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === claimsAndAppealsKeys.claim[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, abortSignal)
+  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, claimsAndAppealsKeys.claim, queryClient, abortSignal)
   return response?.data
 }
 

@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, SecureMessagingFolderMessagesGetData } from 'api/types'
+import { SecureMessagingFolderMessagesGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 
@@ -15,19 +13,16 @@ const getFolderMessages = (
   folderID: number,
   queryClient: QueryClient,
 ): Promise<SecureMessagingFolderMessagesGetData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === secureMessagingKeys.folderMessages[0]) {
-        throw error.error
-      }
-    })
-  }
-  return get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
-    page: '1',
-    per_page: LARGE_PAGE_SIZE.toString(),
-    useCache: 'false',
-  } as Params)
+  return get<SecureMessagingFolderMessagesGetData>(
+    `/v0/messaging/health/folders/${folderID}/messages`,
+    {
+      page: '1',
+      per_page: LARGE_PAGE_SIZE.toString(),
+      useCache: 'false',
+    } as Params,
+    secureMessagingKeys.folderMessages,
+    queryClient,
+  )
 }
 
 /**

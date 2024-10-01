@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, SecureMessagingThreadGetData } from 'api/types'
+import { SecureMessagingThreadGetData } from 'api/types'
 import { Params, get } from 'store/api'
 
 import { secureMessagingKeys } from './queryKeys'
@@ -15,19 +13,13 @@ const getThread = (
   excludeProvidedMessage: boolean,
   queryClient: QueryClient,
 ): Promise<SecureMessagingThreadGetData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === secureMessagingKeys.thread[0]) {
-        throw error.error
-      }
-    })
-  }
   return get<SecureMessagingThreadGetData>(
     `/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`,
     {
       useCache: 'false',
     } as Params,
+    secureMessagingKeys.thread,
+    queryClient,
   )
 }
 

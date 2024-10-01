@@ -3,8 +3,7 @@ import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { ErrorData, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
+import { LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { sortByDate } from 'utils/common'
@@ -17,15 +16,12 @@ import { lettersKeys } from './queryKeys'
  * Fetch user letter beneficiary data
  */
 const getLetterBeneficiaryData = async (queryClient: QueryClient): Promise<LetterBeneficiaryData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === lettersKeys.beneficiaryData[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
+  const response = await get<LetterBeneficiaryDataPayload>(
+    '/v0/letters/beneficiary',
+    undefined,
+    lettersKeys.beneficiaryData,
+    queryClient,
+  )
   if (response) {
     const attributes = response.data.attributes
     let mostRecentServices: Array<LetterMilitaryService> = [...(attributes?.militaryService || [])]

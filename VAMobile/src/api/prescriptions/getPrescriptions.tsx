@@ -1,10 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { ErrorData, PrescriptionsGetData } from 'api/types'
+import { PrescriptionsGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -16,20 +14,12 @@ import { prescriptionKeys } from './queryKeys'
  * Fetch user prescriptions
  */
 const getPrescriptions = (queryClient: QueryClient): Promise<PrescriptionsGetData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === prescriptionKeys.prescriptions[0]) {
-        throw error.error
-      }
-    })
-  }
   const params = {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'refill_status', // Parameters are snake case for the back end
   }
-  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params, prescriptionKeys.prescription, queryClient)
 }
 
 /**

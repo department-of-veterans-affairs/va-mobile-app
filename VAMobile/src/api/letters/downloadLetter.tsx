@@ -1,10 +1,9 @@
 import FileViewer from 'react-native-file-viewer'
 
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, LetterTypes, LettersDownloadParams } from 'api/types'
+import { LetterTypes, LettersDownloadParams } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import store from 'store'
 import { Params } from 'store/api'
@@ -24,16 +23,7 @@ const { API_ROOT } = getEnv()
 const downloadLetter = async (
   letterType: LetterTypes,
   lettersOption: LettersDownloadParams,
-  queryClient: QueryClient,
 ): Promise<boolean | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === lettersKeys.downloadLetter[0]) {
-        throw error.error
-      }
-    })
-  }
   const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
   const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, lettersOption as unknown as Params)
@@ -50,12 +40,10 @@ const downloadLetter = async (
  * Returns a query for a user letter
  */
 export const useDownloadLetter = (letterType: LetterTypes, lettersOption: LettersDownloadParams) => {
-  const queryClient = useQueryClient()
-
   return useQuery({
     enabled: false,
     queryKey: [lettersKeys.downloadLetter, letterType, lettersOption],
-    queryFn: () => downloadLetter(letterType, lettersOption, queryClient),
+    queryFn: () => downloadLetter(letterType, lettersOption),
     meta: {
       errorName: 'downloadLetter: Service error',
     },

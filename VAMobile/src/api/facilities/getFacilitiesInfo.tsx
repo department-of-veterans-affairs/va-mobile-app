@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData } from 'api/types'
 import { FacilitiesPayload, Facility } from 'api/types/FacilityData'
 import { get } from 'store/api'
 
@@ -13,15 +11,12 @@ import { facilitiesKeys } from './queryKeys'
  */
 
 const getFacilitiesInfo = async (queryClient: QueryClient): Promise<Array<Facility> | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === facilitiesKeys.facilities[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<FacilitiesPayload>('/v0/facilities-info')
+  const response = await get<FacilitiesPayload>(
+    '/v0/facilities-info',
+    undefined,
+    facilitiesKeys.facilities,
+    queryClient,
+  )
   return response?.data.attributes.facilities
 }
 

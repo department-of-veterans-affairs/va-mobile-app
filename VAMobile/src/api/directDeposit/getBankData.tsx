@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { DirectDepositData, ErrorData } from 'api/types'
+import { DirectDepositData } from 'api/types'
 import { get } from 'store/api'
 
 import { directDepositKeys } from './queryKeys'
@@ -11,15 +9,12 @@ import { directDepositKeys } from './queryKeys'
  * Fetch user direct deposit information
  */
 const getBankData = (queryClient: QueryClient): Promise<DirectDepositData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === directDepositKeys.directDeposit[0]) {
-        throw error.error
-      }
-    })
-  }
-  return get<DirectDepositData>('/v0/payment-information/benefits')
+  return get<DirectDepositData>(
+    '/v0/payment-information/benefits',
+    undefined,
+    directDepositKeys.directDeposit,
+    queryClient,
+  )
 }
 
 /**

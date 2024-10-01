@@ -1,9 +1,7 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, PersonalInformationData, PersonalInformationPayload } from 'api/types'
+import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -19,15 +17,12 @@ import { personalInformationKeys } from './queryKeys'
 export const getPersonalInformation = async (
   queryClient: QueryClient,
 ): Promise<PersonalInformationData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === personalInformationKeys.personalInformation[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<PersonalInformationPayload>('/v2/user')
+  const response = await get<PersonalInformationPayload>(
+    '/v2/user',
+    undefined,
+    personalInformationKeys.personalInformation,
+    queryClient,
+  )
   const personalInformation = response?.data.attributes
 
   if (personalInformation) {

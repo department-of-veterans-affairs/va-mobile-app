@@ -1,8 +1,7 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
+import { PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
@@ -16,15 +15,12 @@ const getTrackingInfo = async (
   id: string,
   queryClient: QueryClient,
 ): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === prescriptionKeys.trackingInfo[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
+  const response = await get<PrescriptionTrackingInfoGetData>(
+    `/v0/health/rx/prescriptions/${id}/tracking`,
+    undefined,
+    prescriptionKeys.trackingInfo,
+    queryClient,
+  )
   setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
   return response?.data
 }

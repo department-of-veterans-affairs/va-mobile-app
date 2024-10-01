@@ -1,9 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData } from 'api/types'
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -16,16 +13,12 @@ import { contactInformationKeys } from './queryKeys'
  * Fetch user contact information
  */
 const getContactInformation = async (queryClient: QueryClient): Promise<UserContactInformation | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === contactInformationKeys.contactInformation[0]) {
-        throw error.error
-      }
-    })
-  }
-
-  const response = await get<ContactInformationPayload>('/v0/user/contact-info')
+  const response = await get<ContactInformationPayload>(
+    '/v0/user/contact-info',
+    undefined,
+    contactInformationKeys.contactInformation,
+    queryClient,
+  )
   const contactInformation = response?.data.attributes
 
   if (contactInformation) {

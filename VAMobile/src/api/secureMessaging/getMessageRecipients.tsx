@@ -1,8 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
-import { errorKeys } from 'api/errors'
-import { ErrorData, SecureMessagingRecipientData, SecureMessagingRecipients } from 'api/types'
+import { SecureMessagingRecipientData, SecureMessagingRecipients } from 'api/types'
 import { get } from 'store/api'
 
 import { secureMessagingKeys } from './queryKeys'
@@ -13,15 +11,12 @@ import { secureMessagingKeys } from './queryKeys'
 const getMessageRecipients = async (
   queryClient: QueryClient,
 ): Promise<Array<SecureMessagingRecipientData> | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === secureMessagingKeys.recipients[0]) {
-        throw error.error
-      }
-    })
-  }
-  const response = await get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
+  const response = await get<SecureMessagingRecipients>(
+    '/v0/messaging/health/recipients',
+    undefined,
+    secureMessagingKeys.recipients,
+    queryClient,
+  )
   return response?.data.filter((recipient) => recipient.attributes.preferredTeam)
 }
 

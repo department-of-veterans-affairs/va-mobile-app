@@ -1,10 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { errorKeys } from 'api/errors'
-import { AppointmentsGetData, ErrorData } from 'api/types'
+import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
@@ -23,24 +21,20 @@ const getAppointments = (
   timeFrame: TimeFrameType,
   queryClient: QueryClient,
 ): Promise<AppointmentsGetData | undefined> => {
-  const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-  if (data) {
-    _.forEach(data.overrideErrors, (error) => {
-      if (error.queryKey[0] === appointmentsKeys.appointments[0]) {
-        throw error.error
-      }
-    })
-  }
-
-  return get<AppointmentsGetData>('/v0/appointments', {
-    startDate: startDate,
-    endDate: endDate,
-    'page[number]': '1',
-    'page[size]': LARGE_PAGE_SIZE.toString(),
-    sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
-    'included[]': 'pending',
-    useCache: 'false',
-  } as Params)
+  return get<AppointmentsGetData>(
+    '/v0/appointments',
+    {
+      startDate: startDate,
+      endDate: endDate,
+      'page[number]': '1',
+      'page[size]': LARGE_PAGE_SIZE.toString(),
+      sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
+      'included[]': 'pending',
+      useCache: 'false',
+    } as Params,
+    appointmentsKeys.appointments,
+    queryClient,
+  )
 }
 
 /**
