@@ -143,16 +143,17 @@ describe('AppealsExpanded', () => {
       if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
-        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
+        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID ||
+        value === AppealsExpandedIdConstants.MULTIPLE_DECISION_APPEAL_ID
       ) {
-        await element(by.id('claimsHistoryID')).scrollTo('bottom')
-        await element(by.id('next-page')).tap()
-        await element(by.id('claimsHistoryID')).scrollTo('top')
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('bottom')
+        await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
       }
 
       await waitFor(element(by.id(value)))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(300, 'down')
 
       await element(by.id(value)).tap()
@@ -187,37 +188,7 @@ describe('AppealsExpanded', () => {
 
     it('should close ' + key, async () => {
       i++
-      await element(by.text('Claims')).tap()
-      if (i % 6 === 0) {
-        await openBenefits()
-        await openClaims()
-        await openClaimsHistory()
-        if (i >= 4 && i <= 13) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 14 && i <= 23) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 24 && i <= 33) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 34) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        }
-      }
+      await element(by.id('appealsBackID')).tap()
     })
   }
 })
