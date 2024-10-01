@@ -16,7 +16,7 @@ import {
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
   HEALTH_CATEGORY_ID: 'healthCategoryTestID',
-  CERNER_NOTE_HEADING_TEXT: 'Your VA health care team may be using the My VA Health portal',
+  CERNER_NOTE_HEADING_TEXT: 'Your care team uses My VA Health',
   CERNER_NOTE_HEADING_ID: 'cernerAlertTestID',
   CERNER_NOTE_RECORDS_SHOW_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
   CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center',
