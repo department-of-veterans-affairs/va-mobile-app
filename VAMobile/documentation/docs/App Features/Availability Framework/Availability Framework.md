@@ -26,8 +26,6 @@ Firebase definitions: ![](../../../static/img/availabilityFramework/AF_in_Fireba
 
 [JSON documentation and the parameter setup](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20Availability%20Framework.md#json-disclaimer).
 
-https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20Availability%20Framework.md
-
 ## Developer Notes
 
 * If we run into an issue that requires ClaimsHistoryScreen to have an AF toggle, we will need to investigate doing the same for 'ClaimsHistory' for releases that happened in january if it's relevant to the scenario.
