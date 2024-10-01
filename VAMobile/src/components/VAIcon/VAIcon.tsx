@@ -16,10 +16,8 @@ import Building from './svgs/Building.svg'
 import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 // Chevrons
-import ChevronDown from './svgs/ChevronDown.svg'
 import ChevronLeft from './svgs/ChevronLeft.svg'
 import ChevronRight from './svgs/ChevronRight.svg'
-import ChevronUp from './svgs/ChevronUp.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
 import Ellipsis from './svgs/Ellipsis.svg'
@@ -93,10 +91,8 @@ export const VA_ICON_MAP = {
   CheckBoxFilled,
   CheckBoxIntermediate,
   CheckMark,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   CircleCheckMark,
   CircleExternalLink,
   CirclePhone,
