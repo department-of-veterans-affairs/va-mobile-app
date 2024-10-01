@@ -225,6 +225,8 @@ function PastAppointments({
           pickerOptions={pickerOptions}
           labelKey={'pastAppointments.selectADateRange'}
           testID="getDateRangeTestID"
+          confirmTestID="pastApptsDateRangeConfirmID"
+          cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
       {getGroupedAppointments(appointmentsToShow, theme, { t }, onPastAppointmentPress, true, pagination)}
