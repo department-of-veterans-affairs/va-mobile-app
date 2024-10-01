@@ -14,16 +14,12 @@ import { useAlert } from 'utils/hooks'
 const foregroundNotifications: Array<string> = []
 
 interface NotificationContextType {
-  tappedForegroundNotification: boolean
   initialUrl: string
-  setTappedForegroundNotification: Dispatch<SetStateAction<boolean>>
   setInitialUrl: Dispatch<SetStateAction<string>>
 }
 
 const NotificationContext = createContext<NotificationContextType>({
-  tappedForegroundNotification: false,
   initialUrl: '',
-  setTappedForegroundNotification: () => {},
   setInitialUrl: () => {},
 })
 
@@ -34,7 +30,6 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
-  const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
   const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
 
@@ -83,9 +78,6 @@ const NotificationManager: FC = ({ children }) => {
        * opens like deep linking, etc
        */
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
-      if (foregroundNotifications.includes(notification.identifier)) {
-        setTappedForegroundNotification(true)
-      }
 
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
@@ -139,8 +131,7 @@ const NotificationManager: FC = ({ children }) => {
 
   const s = { flex: 1 }
   return (
-    <NotificationContext.Provider
-      value={{ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }}>
+    <NotificationContext.Provider value={{ initialUrl, setInitialUrl }}>
       <View style={s}>{children}</View>
     </NotificationContext.Provider>
   )
