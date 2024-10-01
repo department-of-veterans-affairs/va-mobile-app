@@ -1,5 +1,4 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 import { sortBy } from 'underscore'
 
 import { LettersData, LettersList } from 'api/types'

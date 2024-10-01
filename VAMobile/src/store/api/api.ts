@@ -204,10 +204,10 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
-    const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+    const data = queryClient?.getQueryData(errorKeys.errorOverrides) as ErrorData
     if (data) {
       _.forEach(data.overrideErrors, (error) => {
-        if (error.queryKey[0] === queryKey[0]) {
+        if (queryKey && error.queryKey[0] === queryKey[0]) {
           throw error.error
         }
       })
@@ -224,8 +224,8 @@ const call = async function <T>(
 export const get = async function <T>(
   endpoint: string,
   params: Params = {},
-  queryKey: QueryKey,
-  queryClient: QueryClient,
+  queryKey?: QueryKey,
+  queryClient?: QueryClient,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
   return call<T>('GET', endpoint, params, queryKey, queryClient, undefined, abortSignal)

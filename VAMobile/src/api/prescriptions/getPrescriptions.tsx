@@ -19,7 +19,7 @@ const getPrescriptions = (queryClient: QueryClient): Promise<PrescriptionsGetDat
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'refill_status', // Parameters are snake case for the back end
   }
-  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params, prescriptionKeys.prescription, queryClient)
+  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params, prescriptionKeys.prescriptions, queryClient)
 }
 
 /**

@@ -1,5 +1,4 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
 import { PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'

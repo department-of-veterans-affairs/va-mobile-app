@@ -1,5 +1,4 @@
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
-import _ from 'lodash'
 
 import { FacilitiesPayload, Facility } from 'api/types/FacilityData'
 import { get } from 'store/api'

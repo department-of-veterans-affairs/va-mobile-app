@@ -1,7 +1,6 @@
 import FileViewer from 'react-native-file-viewer'
 
 import { useQuery } from '@tanstack/react-query'
-import _ from 'lodash'
 
 import { LetterTypes, LettersDownloadParams } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
