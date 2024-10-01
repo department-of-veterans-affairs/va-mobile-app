@@ -1,13 +1,12 @@
-
-import { QueryClient, QueryKey } from '@tanstack/react-query'
-import _ from 'underscore'
-
-import { errorKeys } from 'api/errors'
-import { ErrorData } from 'api/types'
 import { Platform } from 'react-native'
 
+import { QueryKey } from '@tanstack/react-query'
+import _ from 'underscore'
+
 import { deviceKeys } from 'api/device/queryKeys'
+import { errorKeys } from 'api/errors'
 import queryClient from 'api/queryClient'
+import { ErrorData } from 'api/types'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
@@ -123,7 +122,6 @@ const call = async function <T>(
   endpoint: string,
   params: Params = {},
   queryKey?: QueryKey,
-  queryClient?: QueryClient,
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
@@ -216,7 +214,7 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
-    const data = queryClient?.getQueryData(errorKeys.errorOverrides) as ErrorData
+    const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
     if (data) {
       _.forEach(data.overrideErrors, (error) => {
         if (queryKey && error.queryKey[0] === queryKey[0]) {
@@ -237,10 +235,9 @@ export const get = async function <T>(
   endpoint: string,
   params: Params = {},
   queryKey?: QueryKey,
-  queryClient?: QueryClient,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, queryKey, queryClient, undefined, abortSignal)
+  return call<T>('GET', endpoint, params, queryKey, undefined, abortSignal)
 }
 
 export const post = async function <T>(
@@ -249,17 +246,17 @@ export const post = async function <T>(
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params, undefined, undefined, contentType, abortSignal)
+  return call<T>('POST', endpoint, params, undefined, contentType, abortSignal)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PUT', endpoint, params, undefined, undefined)
+  return call<T>('PUT', endpoint, params, undefined)
 }
 
 export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PATCH', endpoint, params, undefined, undefined)
+  return call<T>('PATCH', endpoint, params, undefined)
 }
 
 export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('DELETE', endpoint, params, undefined, undefined)
+  return call<T>('DELETE', endpoint, params, undefined)
 }

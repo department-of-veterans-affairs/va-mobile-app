@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -22,10 +22,7 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
 /**
  * Fetch user ClaimsAndAppeals
  */
-const getClaimsAndAppeals = async (
-  claimType: ClaimType,
-  queryClient: QueryClient,
-): Promise<ClaimsAndAppealsListPayload | undefined> => {
+const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
   const response = await get<ClaimsAndAppealsListPayload>(
     '/v0/claims-and-appeals-overview',
     {
@@ -35,7 +32,6 @@ const getClaimsAndAppeals = async (
       useCache: 'false',
     },
     claimsAndAppealsKeys.claimsAndAppeals,
-    queryClient,
   )
 
   if (response) {
@@ -69,12 +65,12 @@ export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: 
         // claims will already be loaded if a user views the closed claims tab.
         queryClient.prefetchQuery({
           queryKey: closedClaimsAndAppealsQueryKey,
-          queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED, queryClient),
+          queryFn: () => getClaimsAndAppeals(ClaimTypeConstants.CLOSED),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
 
-      return getClaimsAndAppeals(claimType, queryClient)
+      return getClaimsAndAppeals(claimType)
     },
     meta: {
       errorName: 'getClaimsAndAppeals: Service error',

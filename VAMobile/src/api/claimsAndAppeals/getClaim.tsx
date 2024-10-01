@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { ClaimData, ClaimGetData } from 'api/types'
 import { get } from 'store/api'
@@ -8,12 +8,8 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Fetch user Claim
  */
-const getClaim = async (
-  id: string,
-  queryClient: QueryClient,
-  abortSignal?: AbortSignal,
-): Promise<ClaimData | undefined> => {
-  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, claimsAndAppealsKeys.claim, queryClient, abortSignal)
+const getClaim = async (id: string, abortSignal?: AbortSignal): Promise<ClaimData | undefined> => {
+  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, claimsAndAppealsKeys.claim, abortSignal)
   return response?.data
 }
 
@@ -21,12 +17,10 @@ const getClaim = async (
  * Returns a query for user Claim
  */
 export const useClaim = (id: string, abortSignal?: AbortSignal, options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient()
-
   return useQuery({
     ...options,
     queryKey: [claimsAndAppealsKeys.claim, id],
-    queryFn: () => getClaim(id, queryClient, abortSignal),
+    queryFn: () => getClaim(id, abortSignal),
     meta: {
       errorName: 'getClaim: Service error',
     },

@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'underscore'
 
 import { LettersData, LettersList } from 'api/types'
@@ -16,8 +16,8 @@ const sortByName = (letters?: LettersList): LettersList => {
 /**
  * Fetch user letters
  */
-const getLetters = async (queryClient: QueryClient): Promise<LettersList | undefined> => {
-  const response = await get<LettersData>('/v0/letters', undefined, lettersKeys.letters, queryClient)
+const getLetters = async (): Promise<LettersList | undefined> => {
+  const response = await get<LettersData>('/v0/letters', undefined, lettersKeys.letters)
   if (response) {
     return sortByName(response.data.attributes.letters)
   }
@@ -27,12 +27,10 @@ const getLetters = async (queryClient: QueryClient): Promise<LettersList | undef
  * Returns a query for user letters
  */
 export const useLetters = (options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient()
-
   return useQuery({
     ...options,
     queryKey: lettersKeys.letters,
-    queryFn: () => getLetters(queryClient),
+    queryFn: () => getLetters(),
     meta: {
       errorName: 'getLetters: Service error',
     },

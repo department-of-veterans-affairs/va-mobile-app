@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -19,7 +19,6 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  queryClient: QueryClient,
 ): Promise<AppointmentsGetData | undefined> => {
   return get<AppointmentsGetData>(
     '/v0/appointments',
@@ -33,7 +32,6 @@ const getAppointments = (
       useCache: 'false',
     } as Params,
     appointmentsKeys.appointments,
-    queryClient,
   )
 }
 
@@ -65,17 +63,12 @@ export const useAppointments = (
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
           queryFn: () =>
-            getAppointments(
-              pastRange.startDate,
-              pastRange.endDate,
-              TimeFrameTypeConstants.PAST_THREE_MONTHS,
-              queryClient,
-            ),
+            getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
 
-      return getAppointments(startDate, endDate, timeFrame, queryClient)
+      return getAppointments(startDate, endDate, timeFrame)
     },
     meta: {
       errorName: 'getAppointments: Service error',

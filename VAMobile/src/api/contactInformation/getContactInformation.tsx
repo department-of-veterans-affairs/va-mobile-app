@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
@@ -12,12 +12,11 @@ import { contactInformationKeys } from './queryKeys'
 /**
  * Fetch user contact information
  */
-const getContactInformation = async (queryClient: QueryClient): Promise<UserContactInformation | undefined> => {
+const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
   const response = await get<ContactInformationPayload>(
     '/v0/user/contact-info',
     undefined,
     contactInformationKeys.contactInformation,
-    queryClient,
   )
   const contactInformation = response?.data.attributes
 
@@ -35,7 +34,6 @@ const getContactInformation = async (queryClient: QueryClient): Promise<UserCont
  * Returns a query for user contact information
  */
 export const useContactInformation = (options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient()
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
@@ -43,7 +41,7 @@ export const useContactInformation = (options?: { enabled?: boolean }) => {
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: contactInformationKeys.contactInformation,
-    queryFn: () => getContactInformation(queryClient),
+    queryFn: () => getContactInformation(),
     meta: {
       errorName: 'getContactInfo: Service error',
     },

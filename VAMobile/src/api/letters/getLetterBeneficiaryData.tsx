@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -14,12 +14,11 @@ import { lettersKeys } from './queryKeys'
 /**
  * Fetch user letter beneficiary data
  */
-const getLetterBeneficiaryData = async (queryClient: QueryClient): Promise<LetterBeneficiaryData | undefined> => {
+const getLetterBeneficiaryData = async (): Promise<LetterBeneficiaryData | undefined> => {
   const response = await get<LetterBeneficiaryDataPayload>(
     '/v0/letters/beneficiary',
     undefined,
     lettersKeys.beneficiaryData,
-    queryClient,
   )
   if (response) {
     const attributes = response.data.attributes
@@ -48,13 +47,12 @@ export const useLetterBeneficiaryData = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.lettersAndDocuments && !lettersInDowntime && queryEnabled),
     queryKey: lettersKeys.beneficiaryData,
-    queryFn: () => getLetterBeneficiaryData(queryClient),
+    queryFn: () => getLetterBeneficiaryData(),
     meta: {
       errorName: 'getLetterBeneficiaryData: Service error',
     },

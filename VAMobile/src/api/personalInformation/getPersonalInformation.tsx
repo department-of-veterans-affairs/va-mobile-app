@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
@@ -14,14 +14,11 @@ import { personalInformationKeys } from './queryKeys'
 /**
  * Fetch user personal information
  */
-export const getPersonalInformation = async (
-  queryClient: QueryClient,
-): Promise<PersonalInformationData | undefined> => {
+export const getPersonalInformation = async (): Promise<PersonalInformationData | undefined> => {
   const response = await get<PersonalInformationPayload>(
     '/v2/user',
     undefined,
     personalInformationKeys.personalInformation,
-    queryClient,
   )
   const personalInformation = response?.data.attributes
 
@@ -48,13 +45,12 @@ export const getPersonalInformation = async (
 export const usePersonalInformation = (options?: { enabled?: boolean }) => {
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: personalInformationKeys.personalInformation,
-    queryFn: () => getPersonalInformation(queryClient),
+    queryFn: () => getPersonalInformation(),
     meta: {
       errorName: 'getPersonalInformation: Service error',
     },

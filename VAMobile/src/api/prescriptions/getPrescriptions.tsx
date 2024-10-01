@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -13,13 +13,13 @@ import { prescriptionKeys } from './queryKeys'
 /**
  * Fetch user prescriptions
  */
-const getPrescriptions = (queryClient: QueryClient): Promise<PrescriptionsGetData | undefined> => {
+const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
   const params = {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'refill_status', // Parameters are snake case for the back end
   }
-  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params, prescriptionKeys.prescriptions, queryClient)
+  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params, prescriptionKeys.prescriptions)
 }
 
 /**
@@ -29,13 +29,12 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: prescriptionKeys.prescriptions,
-    queryFn: () => getPrescriptions(queryClient),
+    queryFn: () => getPrescriptions(),
     meta: {
       errorName: 'getPrescriptions: Service error',
     },

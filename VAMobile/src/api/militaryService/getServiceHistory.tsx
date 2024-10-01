@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has, max } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -14,12 +14,11 @@ import { militaryServiceHistoryKeys } from './queryKeys'
 /**
  * Fetch user service history
  */
-const getServiceHistory = async (queryClient: QueryClient): Promise<ServiceHistoryAttributes | undefined> => {
+const getServiceHistory = async (): Promise<ServiceHistoryAttributes | undefined> => {
   const response = await get<MilitaryServiceHistoryData>(
     '/v0/military-service-history',
     undefined,
     militaryServiceHistoryKeys.serviceHistory,
-    queryClient,
   )
   const serviceHistoryAttributes = response?.data.attributes
   const serviceHistoryData = serviceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
@@ -41,13 +40,12 @@ export const useServiceHistory = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.militaryServiceHistory && !serviceHistoryInDowntime && queryEnabled),
     queryKey: militaryServiceHistoryKeys.serviceHistory,
-    queryFn: () => getServiceHistory(queryClient),
+    queryFn: () => getServiceHistory(),
     meta: {
       errorName: 'getServiceHistory: Service error',
     },

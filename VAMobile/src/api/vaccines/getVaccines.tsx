@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { VaccineListPayload } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
@@ -9,7 +9,7 @@ import { vaccineKeys } from './queryKeys'
 /**
  * Fetch user Vaccines
  */
-const getVaccines = (queryClient: QueryClient): Promise<VaccineListPayload | undefined> => {
+const getVaccines = (): Promise<VaccineListPayload | undefined> => {
   return get<VaccineListPayload>(
     '/v1/health/immunizations',
     {
@@ -19,7 +19,6 @@ const getVaccines = (queryClient: QueryClient): Promise<VaccineListPayload | und
       useCache: 'false',
     },
     vaccineKeys.vaccines,
-    queryClient,
   )
 }
 
@@ -27,11 +26,10 @@ const getVaccines = (queryClient: QueryClient): Promise<VaccineListPayload | und
  * Returns a query for user Vaccines
  */
 export const useVaccines = (options?: { enabled?: boolean }) => {
-  const queryClient = useQueryClient()
   return useQuery({
     ...options,
     queryKey: [vaccineKeys.vaccines],
-    queryFn: () => getVaccines(queryClient),
+    queryFn: () => getVaccines(),
     meta: {
       errorName: 'getVaccines: Service error',
     },

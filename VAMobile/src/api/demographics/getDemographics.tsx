@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { DemographicsPayload, UserDemographics } from 'api/types/DemographicsData'
@@ -11,13 +11,8 @@ import { demographicsKeys } from './queryKeys'
 /**
  * Fetch user demographics
  */
-const getDemographics = async (queryClient: QueryClient): Promise<UserDemographics | undefined> => {
-  const response = await get<DemographicsPayload>(
-    '/v0/user/demographics',
-    undefined,
-    demographicsKeys.demographics,
-    queryClient,
-  )
+const getDemographics = async (): Promise<UserDemographics | undefined> => {
+  const response = await get<DemographicsPayload>('/v0/user/demographics', undefined, demographicsKeys.demographics)
   return response?.data.attributes
 }
 
@@ -27,13 +22,12 @@ const getDemographics = async (queryClient: QueryClient): Promise<UserDemographi
 export const useDemographics = (options?: { enabled?: boolean }) => {
   const profileUpdateInDowntime = useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(!profileUpdateInDowntime && queryEnabled),
     queryKey: demographicsKeys.demographics,
-    queryFn: () => getDemographics(queryClient),
+    queryFn: () => getDemographics(),
     meta: {
       errorName: 'getDemographics: Service error',
     },

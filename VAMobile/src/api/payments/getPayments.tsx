@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -14,11 +14,7 @@ import { paymentsKeys } from './queryKeys'
 /**
  * Fetch user payments history
  */
-const getPayments = async (
-  year: string | undefined,
-  page: number,
-  queryClient: QueryClient,
-): Promise<PaymentsGetData | undefined> => {
+const getPayments = async (year: string | undefined, page: number): Promise<PaymentsGetData | undefined> => {
   const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
   const params: Params =
@@ -30,7 +26,7 @@ const getPayments = async (
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
         }
       : {}
-  const response = await get<PaymentsGetData>('/v0/payment-history', params, paymentsKeys.payments, queryClient)
+  const response = await get<PaymentsGetData>('/v0/payment-history', params, paymentsKeys.payments)
   if (response) {
     return {
       ...response,
@@ -46,13 +42,12 @@ export const usePayments = (year: string | undefined, page: number, options?: { 
   const { data: authorizedServices } = useAuthorizedServices()
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const queryClient = useQueryClient()
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.paymentHistory && !paymentsInDowntime && queryEnabled),
     queryKey: [paymentsKeys.payments, year, page],
-    queryFn: () => getPayments(year, page, queryClient),
+    queryFn: () => getPayments(year, page),
     meta: {
       errorName: 'getPayments: Service error',
     },
