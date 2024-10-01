@@ -70,13 +70,24 @@ context('CernerAlert', () => {
   })
 
   it('When only cerner facilities', () => {
-    fireEvent.press(screen.getByLabelText(a11yLabelVA(t('cernerAlert.header.all'))))
-    expect(screen.getByLabelText(`FacilityOne (${a11yLabelVA(t('cernerAlert.nowUsing'))})`)).toBeTruthy()
-    expect(screen.getByLabelText(`FacilityTwo (${a11yLabelVA(t('cernerAlert.nowUsing'))})`)).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: t('healthHelp.usesVAHealth') }))
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.usesVAHealth')))).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.goToPortal')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.goToPortal'))).toBeTruthy()
+    expect(screen.getByText('FacilityOne')).toBeTruthy()
+    expect(screen.getByText('FacilityTwo')).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: t('goToMyVAHealth') }))
+    expect(Alert.alert).toBeCalled()
   })
 
   it('when some facilities are cerner and pressing the link', async () => {
-    fireEvent.press(screen.getByLabelText(a11yLabelVA(t('cernerAlert.header.some'))))
+    fireEvent.press(screen.getByRole('tab', { name: t('cernerAlert.header.some') }))
+    expect(screen.getByLabelText(a11yLabelVA(t('cernerAlert.header.some')))).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.goToPortal')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.goToPortal'))).toBeTruthy()
+    expect(screen.getByText('FacilityOne')).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.canStillUse')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.canStillUse'))).toBeTruthy()
     fireEvent.press(screen.getByLabelText(a11yLabelVA(t('goToMyVAHealth'))))
     expect(Alert.alert).toBeCalled()
   })
