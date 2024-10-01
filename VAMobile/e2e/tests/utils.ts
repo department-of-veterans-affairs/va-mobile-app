@@ -63,9 +63,18 @@ export const CommonE2eIdConstants = {
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode(skipOnboarding = true) {
-  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
-    .toExist()
-    .withTimeout(60000)
+  try {
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(120000)
+  } catch (ex) {
+    await device.uninstallApp()
+    await device.installApp()
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(60000)
+  }
   try {
     await element(
       by.text(
