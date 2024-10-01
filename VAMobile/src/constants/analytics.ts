@@ -1199,6 +1199,15 @@ export const Events = {
       },
     }
   },
+  vama_webview_fail: (error: Error, webview: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error: JSON.stringify(error),
+        webview,
+      },
+    }
+  },
   vama_whatsnew_alert: (): Event => {
     return {
       name: 'vama_whatsnew_alert',
