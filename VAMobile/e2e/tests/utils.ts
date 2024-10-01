@@ -58,6 +58,7 @@ export const CommonE2eIdConstants = {
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
 }
 
 /** Log the automation into demo mode

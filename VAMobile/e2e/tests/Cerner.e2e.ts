@@ -16,6 +16,7 @@ import {
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
   HEALTH_CATEGORY_ID: 'healthCategoryTestID',
+  CERNER_NOTE_HEADING_TEXT: 'Your VA health care team may be using the My VA Health portal',
   CERNER_NOTE_HEADING_ID: 'cernerAlertTestID',
   CERNER_NOTE_RECORDS_SHOW_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
   CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center',
@@ -104,7 +105,7 @@ describe(':android: Cerner Notice', () => {
     await element(by.id(CernerIdConstants.CERNER_NOTE_HEADING_ID)).tap()
     await waitFor(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID)))
       .toBeVisible()
-      .whileElement(by.id('appointmentsTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_2_TEXT))).toExist()
@@ -120,8 +121,8 @@ describe(':android: Cerner Notice', () => {
   })
 
   it('should tap on the cerner notification and verify the alert closes', async () => {
-    await element(by.id('appointmentsTestID')).swipe('down')
-    await element(by.text('Your VA health care team may be using the My VA Health portal')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).swipe('down')
+    await element(by.text(CernerIdConstants.CERNER_NOTE_HEADING_TEXT)).tap()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).not.toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_2_TEXT))).not.toExist()
   })
