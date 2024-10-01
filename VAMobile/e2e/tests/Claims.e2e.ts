@@ -51,6 +51,19 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   CLAIMS_HISTORY_SCREEN_ID: 'claimsHistoryID',
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
+  CLAIMS_STATUS_ID: 'claimsStatusID',
+  CLAIMS_FILES_ID: 'claimsFilesID',
+  CLAIMS_WHY_COMBINE_LINK_ID: 'claimDetailsWhyWeCombineLinkID',
+  CLAIMS_WHY_COMBINE_ID: 'claimsWhyCombineID',
+  CLAIMS_WHY_COMBINE_CLOSE_ID: 'claimsWhyCombineCloseID',
+  FILE_REQUEST_DETAILS_BACK: 'fileRequestDetailsBackID',
+  FILE_REQUEST_DETAILS_PAGE: 'fileRequestPageTestID',
+  ASK_FOR_CLAIM_DECISION_PAGE: 'askForClaimDecisionPageTestID',
+  ASK_FOR_CLAIM_DECISION_BACK: 'askForClaimDecisionBackID',
+  FILE_REQUEST_BACK: 'fileRequestPageBackID',
+  CLAIMS_LEARN_WHAT_TO_DO: 'claimDetailsLearnWhatToDoIFDisagreeLinkID',
+  CLAIMS_DECISION_REVIEW_OPTIONS: 'ClaimsDecisionReviewOptionsTestID',
+  CLAIMS_LEARN_WHAT_TO_DO_BACK: 'claimsWhatToDoDisagreementCloseID',
 }
 
 beforeAll(async () => {
@@ -74,8 +87,8 @@ describe('Claims Screen', () => {
 
   it('Verify the claim status detail page (8-step claim)', async () => {
     await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_4_ID, ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)
-    await expect(element(by.id('claimsStatusID'))).toExist()
-    await expect(element(by.id('claimsFilesID'))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.CLAIMS_STATUS_ID))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_1_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_2_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_3_ID))).toExist()
@@ -90,8 +103,8 @@ describe('Claims Screen', () => {
 
   it('Verify the claim status detail page (5-step claim)', async () => {
     await scrollToIDThenTap(ClaimsE2eIdConstants.CLAIM_3_ID, ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)
-    await expect(element(by.id('claimsStatusID'))).toExist()
-    await expect(element(by.id('claimsFilesID'))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.CLAIMS_STATUS_ID))).toExist()
+    await expect(element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_1_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_3_ID))).toExist()
@@ -131,9 +144,9 @@ describe('Claims Screen', () => {
   })
 
   it('Verify VA sometimes combine claims information', async () => {
-    await element(by.id('claimDetailsWhyWeCombineLinkID')).tap()
-    await expect(element(by.id('claimsWhyCombineID'))).toExist()
-    await element(by.id('claimsWhyCombineCloseID')).tap()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_WHY_COMBINE_LINK_ID)).tap()
+    await expect(element(by.id(ClaimsE2eIdConstants.CLAIMS_WHY_COMBINE_ID))).toExist()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_WHY_COMBINE_CLOSE_ID)).tap()
   })
 
   it('open claim: verify that the need help? section information', async () => {
@@ -184,8 +197,8 @@ describe('Claims Screen', () => {
   })
 
   it('verify Review evaluation details', async () => {
-    await element(by.id('fileRequestDetailsBackID')).tap()
-    await element(by.id('fileRequestPageTestID')).scrollTo('bottom')
+    await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
+    await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_PAGE)).scrollTo('bottom')
     await element(by.id('Review evaluation details')).tap()
     await expect(element(by.text('Claim evaluation'))).toExist()
     await expect(
@@ -199,16 +212,16 @@ describe('Claims Screen', () => {
   })
 
   it('verify error is displayed when request claim evaluation isnt checked', async () => {
-    await element(by.id('askForClaimDecisionPageTestID')).scrollTo('bottom')
+    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_PAGE)).scrollTo('bottom')
     await element(by.id('Request claim evaluation')).tap()
     await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
   })
 
   it('should verify details of claim on step 1', async () => {
-    await element(by.id('askForClaimDecisionBackID')).tap()
-    await element(by.id('fileRequestPageBackID')).tap()
+    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_BACK)).tap()
+    await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BACK)).tap()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
-    await element(by.id('claimsHistoryID')).scrollTo('top')
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.id('Step 1 of 5. Claim received. Current step.'))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CURRENT_STEP_TEXT))).toExist()
@@ -381,14 +394,14 @@ describe('Claims Screen', () => {
 
   it('Verify what should I do if disagreement information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id('claimDetailsLearnWhatToDoIFDisagreeLinkID')).atIndex(0).tap()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_LEARN_WHAT_TO_DO)).atIndex(0).tap()
     await expect(element(by.text('What to do if you disagree with our decision')).atIndex(0)).toExist()
-    await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DECISION_REVIEW_OPTIONS)).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('DecisionReviewOptionsWebsite')
     await device.launchApp({ newInstance: false })
-    await element(by.id('claimsWhatToDoDisagreementCloseID')).tap()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_LEARN_WHAT_TO_DO_BACK)).tap()
   })
 
   it('closed claim: verify that the need help? section display information', async () => {
@@ -410,7 +423,7 @@ describe('Claims Screen', () => {
 
   it('verify files tab infomation', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
-    await element(by.id('claimsFilesID')).tap()
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
     await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
   })
 })
