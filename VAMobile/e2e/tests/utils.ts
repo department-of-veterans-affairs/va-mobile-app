@@ -62,6 +62,7 @@ export const CommonE2eIdConstants = {
   CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
