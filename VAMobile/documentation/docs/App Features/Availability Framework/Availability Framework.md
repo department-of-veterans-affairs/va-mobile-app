@@ -24,7 +24,9 @@ Here you'll see existing examples of previously enabled availability framework s
 
 Firebase definitions: ![](../../../static/img/availabilityFramework/AF_in_Firebase.png)
 
-[JSON documentation and the parameter setup](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process-%20Availability%20Framework.md#json-disclaimer).
+[JSON documentation and the parameter setup](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20Availability%20Framework.md#json-disclaimer).
+
+https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20Availability%20Framework.md
 
 ## Developer Notes
 
