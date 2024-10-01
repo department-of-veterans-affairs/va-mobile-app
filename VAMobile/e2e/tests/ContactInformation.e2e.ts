@@ -35,6 +35,9 @@ export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_BACK_ID: 'contactInfoBackTestID',
   VERIFY_YOUR_ADDRESS_ID: 'verifyYourAddressTestID',
   EMAIL_ADDRESS_EDIT_ID: 'emailAddressEditTestID',
+  CONTACT_INFO_CLOSE_ID: 'ContactInfoCloseTestID',
+  MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
+  HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
 }
 
 export async function updateAddress() {
@@ -390,7 +393,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
       .scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
     await element(by.text('FPO')).tap()
-    await element(by.id('militaryPostOfficeConfirmID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_PICKER_CONFIRM_ID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
     await element(by.text('Armed Forces Pacific (AP)')).tap()
     await element(by.id(ContactInfoE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
@@ -423,10 +426,10 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   it('verify how we use your contact information link', async () => {
-    await expect(element(by.id('howWeUseContactInfoLinkTestID'))).toExist()
-    await element(by.id('howWeUseContactInfoLinkTestID')).tap()
+    await expect(element(by.id(ContactInfoE2eIdConstants.HOW_WE_USE_CONTACT_INFO_LINK_ID))).toExist()
+    await element(by.id(ContactInfoE2eIdConstants.HOW_WE_USE_CONTACT_INFO_LINK_ID)).tap()
     await expect(element(by.text('How we use your contact information')).atIndex(0)).toExist()
-    await element(by.id('ContactInfoCloseTestID')).atIndex(0).tap()
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_CLOSE_ID)).atIndex(0).tap()
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
