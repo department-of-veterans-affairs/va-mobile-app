@@ -116,7 +116,13 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </TextView>
           {accessToMilitaryInfo && (
             <Box display="flex" flexDirection="row" flexWrap="wrap">
-              <MilitaryBranchEmblem branch={branch} width={34} height={34} variant="dark" />
+              <MilitaryBranchEmblem
+                testID="veteranStatusCardBranchEmblem"
+                branch={branch}
+                width={34}
+                height={34}
+                variant="dark"
+              />
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>

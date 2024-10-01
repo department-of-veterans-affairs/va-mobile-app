@@ -13,9 +13,11 @@ export type MilitaryBranchEmblemProps = {
   height: number
   /** Manually set which emblem variant to use when applicable. Defaults to setting based on theme */
   variant?: 'light' | 'dark'
+  /** Optional test ID for emblem */
+  testID?: string
 }
 
-export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, width, height, variant }) => {
+export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, width, height, variant, testID }) => {
   const theme = useTheme()
 
   const style: StyleProp<ImageStyle> = {
@@ -27,7 +29,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.AirForce:
       return (
         <Image
-          testID="United States Air Force Emblem"
+          testID={testID || 'United States Air Force Emblem'}
           style={style}
           source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-air-force-coat-of-arms.png')}
         />
@@ -35,7 +37,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.Army:
       return (
         <Image
-          testID="United States Army Emblem"
+          testID={testID || 'United States Army Emblem'}
           style={style}
           source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-army-symbol.png')}
         />
@@ -43,7 +45,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.CoastGuard:
       return (
         <Image
-          testID="United States Coast Guard Emblem"
+          testID={testID || 'United States Coast Guard Emblem'}
           style={style}
           source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-cg-emblem.png')}
         />
@@ -51,7 +53,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.MarineCorps:
       return (
         <Image
-          testID="United States Marine Corps Emblem"
+          testID={testID || 'United States Marine Corps Emblem'}
           style={style}
           source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-usmc-emblem.png')}
         />
@@ -59,7 +61,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.Navy:
       return (
         <Image
-          testID="United States Navy Emblem"
+          testID={testID || 'United States Navy Emblem'}
           style={style}
           source={require('@department-of-veterans-affairs/mobile-assets/serviceEmblems/vic-navy-emblem.png')}
         />
@@ -67,7 +69,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
     case BranchesOfServiceConstants.SpaceForce:
       return (
         <Image
-          testID="United States Space Force Emblem"
+          testID={testID || 'United States Space Force Emblem'}
           style={style}
           source={
             (variant || theme.mode) === 'dark'
