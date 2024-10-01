@@ -5,8 +5,7 @@ import { Platform, Pressable, PressableProps } from 'react-native'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants } from 'api/types'
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -35,31 +34,6 @@ export const Nametag = () => {
   const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
     (service) => service.honorableServiceIndicator === 'Y',
   )
-
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 40,
-      height: 40,
-      preventScaling: true,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="United States Army" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
-      case BranchesOfServiceConstants.SpaceForce:
-        return (
-          <VAIcon testID="United States Space Force" name="SpaceForce" fill2={theme.colors.icon.ussf} {...dimensions} />
-        )
-    }
-  }
 
   let accLabel
   if (!accessToMilitaryInfo) {
@@ -104,7 +78,7 @@ export const Nametag = () => {
       {accessToMilitaryInfo && branch !== '' && (
         <Pressable {...pressableProps} testID="veteranStatusButtonID">
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            {getBranchSeal()}
+            <MilitaryBranchEmblem branch={branch} width={40} height={40} />
             <Box ml={theme.dimensions.buttonPadding} flex={1}>
               <TextView variant={'VeteranStatusBranch'} pb={4}>
                 {branch}

@@ -13,8 +13,8 @@
     "clean": "yarn run clean:android && yarn run clean:ios",
     "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
-    "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
-    "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map",
+    "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
@@ -37,7 +37,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-assets": "0.12.0",
+    "@department-of-veterans-affairs/mobile-assets": "0.13.0",
     "@department-of-veterans-affairs/mobile-component-library": "0.21.0",
     "@department-of-veterans-affairs/mobile-tokens": "0.16.0",
     "@expo/react-native-action-sheet": "^4.1.0",
