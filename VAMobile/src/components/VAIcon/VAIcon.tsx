@@ -25,6 +25,7 @@ import Compose from './svgs/Compose.svg'
 import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
+import Folder from './svgs/Folder.svg'
 import Inbox from './svgs/Inbox.svg'
 import Info from './svgs/Info.svg'
 import Lock from './svgs/Lock.svg'
@@ -36,6 +37,7 @@ import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
 import Sort from './svgs/Sort.svg'
+import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
@@ -92,6 +94,7 @@ export const VA_ICON_MAP = {
   ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
+  Folder,
   Inbox,
   Info,
   Lock,
@@ -112,6 +115,7 @@ export const VA_ICON_MAP = {
   Sort,
   SpaceForce,
   Text,
+  Trash,
   Truck,
   Unread,
   UploadPhoto,
