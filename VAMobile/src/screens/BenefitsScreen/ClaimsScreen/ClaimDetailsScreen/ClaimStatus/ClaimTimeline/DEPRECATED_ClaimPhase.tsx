@@ -9,7 +9,6 @@ import { AccordionCollapsible, Box, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
@@ -85,8 +84,10 @@ function DEPRECATED_ClaimPhase({ phase, current, attributes, claimID }: ClaimPha
 
   const getPhaseExpandedContent = (): ReactNode => {
     return (
-      <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
-        <TextView variant={'MobileBody'}>{detailsText}</TextView>
+      <Box mt={condensedMarginBetween}>
+        <TextView accessibilityLabel={detailsA11yLabel} variant={'MobileBody'}>
+          {detailsText}
+        </TextView>
       </Box>
     )
   }
