@@ -34,7 +34,6 @@ function PrescriptionsDetailsBanner() {
       {
         text: t('prescription.details.banner.bullet3'),
         boldedText: ' ' + t('or'),
-        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + t('or'),
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
