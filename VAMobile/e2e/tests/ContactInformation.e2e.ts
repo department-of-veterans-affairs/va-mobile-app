@@ -29,6 +29,12 @@ export const ContactInfoE2eIdConstants = {
   REMOVE_REMOVE_TEXT: 'Remove',
   SAVE_TEXT: 'Save',
   DISMISS_TEXT: 'Dismiss',
+  EDIT_ADDRESS_ID: 'EditAddressTestID',
+  COUNTRY_PICKER_CONFIRM_ID: 'countryPickerConfirmID',
+  STATE_PICKER_CONFIRM_ID: 'statePickerConfirmID',
+  CONTACT_INFO_BACK_ID: 'contactInfoBackTestID',
+  VERIFY_YOUR_ADDRESS_ID: 'verifyYourAddressTestID',
+  EMAIL_ADDRESS_EDIT_ID: 'emailAddressEditTestID',
 }
 
 export async function updateAddress() {
@@ -42,7 +48,7 @@ export async function updateAddress() {
     .withTimeout(4000)
   await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
     .toBeVisible()
-    .whileElement(by.id('EditAddressTestID'))
+    .whileElement(by.id(ContactInfoE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
@@ -57,18 +63,18 @@ export async function fillHomeAddressFields() {
   await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
   await expect(element(by.text('United States'))).toExist()
   await element(by.text('United States')).tap()
-  await element(by.id('countryPickerConfirmID')).tap()
+  await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
     .toBeVisible()
-    .whileElement(by.id('EditAddressTestID'))
+    .whileElement(by.id(ContactInfoE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
   await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
   await element(by.text('Arizona')).tap()
-  await element(by.id('statePickerConfirmID')).tap()
+  await element(by.id(ContactInfoE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
-  await element(by.id('EditAddressTestID')).scrollTo('top')
+  await element(by.id(ContactInfoE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
 }
 
 export async function validateAddresses(addressID: string, addressType: string) {
@@ -91,7 +97,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify action sheet for cancel', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -109,7 +115,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it(addressType + ': verify contact info screen is displayed on delete', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(addressID))).toExist()
   })
@@ -134,8 +140,8 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
   it(addressType + ': verify your address screen is displayed on save', async () => {
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await expect(element(by.id('verifyYourAddressTestID'))).toExist()
-    await element(by.id('verifyYourAddressTestID')).tap()
+    await expect(element(by.id(ContactInfoE2eIdConstants.VERIFY_YOUR_ADDRESS_ID))).toExist()
+    await element(by.id(ContactInfoE2eIdConstants.VERIFY_YOUR_ADDRESS_ID)).tap()
     await expect(element(by.text("We can't confirm the address you entered with the U.S. Postal Service."))).toExist()
     await element(by.text('Verify your address')).tap()
   })
@@ -152,7 +158,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
   it(addressType + ': verify your address screen is displayed on save 2', async () => {
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
-    await expect(element(by.id('verifyYourAddressTestID'))).toExist()
+    await expect(element(by.id(ContactInfoE2eIdConstants.VERIFY_YOUR_ADDRESS_ID))).toExist()
   })
 
   it(addressType + ': verify contact info is displayed when saved', async () => {
@@ -208,10 +214,10 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify action sheet for cancel', async () => {
-    await waitFor(element(by.id('contactInfoBackTestID')))
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)))
       .toBeVisible()
       .withTimeout(4000)
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -225,7 +231,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   })
 
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
-    await element(by.id('contactInfoBackTestID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
@@ -344,19 +350,19 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
     await element(by.text('Andorra')).tap()
-    await element(by.id('countryPickerConfirmID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
     await expect(element(by.text('State (Required)'))).not.toExist()
     await expect(element(by.text('International post code (Required)'))).toExist()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('19-21 Carrer de na Maria Pla')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
     await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
       .toBeVisible()
-      .whileElement(by.id('EditAddressTestID'))
+      .whileElement(by.id(ContactInfoE2eIdConstants.EDIT_ADDRESS_ID))
       .scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Andorra la Vella')
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-    await element(by.id('stateTestID')).typeText('Andorra la Vella')
-    await element(by.id('stateTestID')).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).typeText('Andorra la Vella')
+    await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('AD500')
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
@@ -380,14 +386,14 @@ export async function verifyNonUSorMilitaryAddresses(addressID: string, addressT
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
     await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)))
       .toBeVisible()
-      .whileElement(by.id('EditAddressTestID'))
+      .whileElement(by.id(ContactInfoE2eIdConstants.EDIT_ADDRESS_ID))
       .scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
     await element(by.text('FPO')).tap()
     await element(by.id('militaryPostOfficeConfirmID')).tap()
     await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
     await element(by.text('Armed Forces Pacific (AP)')).tap()
-    await element(by.id('statePickerConfirmID')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('12345')
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
@@ -439,15 +445,15 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   it('email address: verify error handling', async () => {
-    await element(by.id('emailAddressEditTestID')).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).clearText()
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
     await expect(element(by.text('Check your email address'))).toExist()
   })
 
   it('should update the email address with a +', async () => {
-    await element(by.id('emailAddressEditTestID')).clearText()
-    await element(by.id('emailAddressEditTestID')).typeText('attended1+@gmail.com')
-    await element(by.id('emailAddressEditTestID')).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).typeText('attended1+@gmail.com')
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).tapReturnKey()
     await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
       .toBeVisible()
       .withTimeout(4000)
@@ -462,9 +468,9 @@ describe(':ios: Contact Info Screen', () => {
   it('should update the email address and remove the +', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
-    await element(by.id('emailAddressEditTestID')).clearText()
-    await element(by.id('emailAddressEditTestID')).typeText('attended1@gmail.com')
-    await element(by.id('emailAddressEditTestID')).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).typeText('attended1@gmail.com')
+    await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).tapReturnKey()
     await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)))
       .toBeVisible()
       .withTimeout(4000)
