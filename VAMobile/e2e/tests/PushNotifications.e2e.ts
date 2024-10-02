@@ -5,7 +5,7 @@ import { backButton, loginToDemoMode } from './utils'
 const PushNotificationsConstants = {
   HEALTH_SCREEN_TITLE: 'Health',
   MESSAGE_COMPOSE_BUTTON_TEXT: 'Start new message',
-  REVIEW_MESSAGE_SCREEN_TITLE: 'Review message',
+  REVIEW_MESSAGE_SCREEN_TITLE: 'Review message1',
 }
 
 const mockNotification = {
