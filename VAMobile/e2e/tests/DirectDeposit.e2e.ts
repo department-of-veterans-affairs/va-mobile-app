@@ -1,4 +1,5 @@
 import { by, device, element, expect, waitFor } from 'detox'
+import { Dir } from 'fs'
 import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants, loginToDemoMode, openDirectDeposit, openPayments } from './utils'
@@ -17,19 +18,24 @@ export const DirectDepositConstants = {
   CANCEL_CONFIRM_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   SAVE_ID: 'directDepositSaveID',
   BACK_ID: 'directDepositBackID',
+  DIRECT_DEPOSIT_EDIT_SCROLL_ID: 'DirectDepositEditAccount',
+  ACCOUNT_TYPE_CONFIRM_ID: 'accountTypeConfirmID',
+  DIRECT_DEPOSIT_EDIT_ACCOUNT_ID: 'accountType',
+  DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID: 'routingNumber',
+  DIRECT_DEPOSIT_PAGE_BACK_ID: 'directDepositPageBackID',
 }
 
-const scrollToThenTap = async (text: string) => {
-  try {
+const scrollToThenTap = async (text: string, id?: boolean) => {
+  if (id) {
     await waitFor(element(by.id(text)))
       .toBeVisible()
-      .whileElement(by.id('DirectDepositEditAccount'))
+      .whileElement(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(text)).tap()
-  } catch (ex) {
+  } else {
     await waitFor(element(by.text(text)))
       .toBeVisible()
-      .whileElement(by.id('DirectDepositEditAccount'))
+      .whileElement(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(text)).tap()
   }
@@ -52,22 +58,22 @@ describe('Direct Deposit Screen', () => {
 
   it('should check direct deposit error handling for null', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
-    await element(by.id('directDepositSaveID')).tap()
+    await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
     await expect(element(by.text('Check your direct deposit information'))).toExist()
     await expect(element(by.text('Enter a 9-digit routing number'))).toExist()
     await expect(element(by.text('Enter an account number'))).toExist()
     await expect(element(by.text('Select an account type'))).toExist()
     await expect(element(by.text('Select checkbox to confirm information'))).toExist()
-    await element(by.id('directDepositBackID')).tap()
+    await element(by.id(DirectDepositConstants.BACK_ID)).tap()
   })
 
   it('should check direct deposit error handling incorrect routing number', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
-    await element(by.id('accountType')).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ACCOUNT_ID)).tap()
     await element(by.text('Checking')).tap()
-    await element(by.id('accountTypeConfirmID')).tap()
-    await element(by.id('routingNumber')).typeText('1234567\n')
+    await element(by.id(DirectDepositConstants.ACCOUNT_TYPE_CONFIRM_ID)).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('1234567\n')
     await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
     await expect(element(by.text('Check your direct deposit information'))).toExist()
@@ -82,10 +88,10 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType')).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ACCOUNT_ID)).tap()
     await element(by.text('Checking')).tap()
-    await element(by.id('accountTypeConfirmID')).tap()
-    await element(by.id('routingNumber')).typeText('053100300\n')
+    await element(by.id(DirectDepositConstants.ACCOUNT_TYPE_CONFIRM_ID)).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('053100300\n')
     await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
 
@@ -103,10 +109,10 @@ describe('Direct Deposit Screen', () => {
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
     // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
-    await element(by.id('accountType')).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ACCOUNT_ID)).tap()
     await element(by.text('Savings')).tap()
-    await element(by.id('accountTypeConfirmID')).tap()
-    await element(by.id('routingNumber')).typeText('053100300\n')
+    await element(by.id(DirectDepositConstants.ACCOUNT_TYPE_CONFIRM_ID)).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('053100300\n')
     await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
 
@@ -122,7 +128,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
 
-    await element(by.id('routingNumber')).typeText('053100300\n')
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('053100300\n')
     await element(by.id(DirectDepositConstants.BACK_ID)).tap()
     await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
     await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
@@ -144,12 +150,12 @@ describe('Direct Deposit Screen', () => {
   it('should tap phone and TTY links', async () => {
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await scrollToThenTap(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)
+      await scrollToThenTap(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID, true)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositPhoneNumber')
       await device.launchApp({ newInstance: false })
 
-      await scrollToThenTap(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)
+      await scrollToThenTap(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID, true)
       await setTimeout(1000)
       await device.takeScreenshot('DirectDepositTTY')
       await device.enableSynchronization()
@@ -158,7 +164,7 @@ describe('Direct Deposit Screen', () => {
   })
 
   it('should navigate back to Payments screen', async () => {
-    await element(by.id('directDepositPageBackID')).tap()
+    await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_PAGE_BACK_ID)).tap()
     await expect(element(by.text(DirectDepositConstants.PAYMENTS_SCREEN_TITLE)).atIndex(0)).toExist()
   })
 })
