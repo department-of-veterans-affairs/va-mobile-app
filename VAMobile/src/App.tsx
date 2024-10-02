@@ -272,7 +272,7 @@ export function AuthGuard() {
     if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
-    } else if (!loggedIn) {
+    } else if (!loggedIn && !tappedForegroundNotification) {
       dispatch(initializeAuth())
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
