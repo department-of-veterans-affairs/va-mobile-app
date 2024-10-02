@@ -77,6 +77,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
               a11yLabel={a11yLabelID(callPhone || t('8006982411'))}
               displayedText={callPhone ? undefined : displayedTextPhoneNumber(t('8006982411'))}
               phone={callPhone ? callPhone : t('8006982411')}
+              variant={'base'}
             />
           </Box>
         </AlertWithHaptics>
