@@ -11,8 +11,7 @@ on:
   pull_request:
     paths:
       - 'VAMobile/src/**'
-    types:
-      - synchronize
+    types: synchronize
   workflow_dispatch:
     inputs:
       run_full_test:
