@@ -10,8 +10,8 @@ on:
         - 'dependabot/**'
   pull_request:
     types: synchronize
-# paths:
-#   - 'VAMobile/src/**'
+    paths:
+     - 'VAMobile/src/**'
   workflow_dispatch:
     inputs:
       run_full_test:

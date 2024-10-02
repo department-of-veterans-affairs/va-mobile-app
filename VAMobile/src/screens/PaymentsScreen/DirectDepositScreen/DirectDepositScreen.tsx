@@ -96,7 +96,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
-      testID="DirectDepositEditAccount"
+      testID="DirectDepositEditAccount1"
       backLabelTestID="directDepositPageBackID">
       {loading ? (
         <LoadingComponent text={t('directDeposit.loading')} />
