@@ -12,7 +12,7 @@ on:
     paths:
       - 'VAMobile/src/**'
     types:
-        - synchronize
+      - synchronize
   workflow_dispatch:
     inputs:
       run_full_test:
