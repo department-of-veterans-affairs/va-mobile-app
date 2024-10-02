@@ -30,7 +30,6 @@ context('ClaimDetailsScreen', () => {
     featureFlag: boolean = false,
     claim?: Partial<ClaimData>,
   ): void => {
-    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
     when(featureEnabled).calledWith('submitEvidenceExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
@@ -93,19 +92,7 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
-      await waitFor(() =>
-        expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy(),
-      )
-    })
-
-    it('should display the ClaimDetails component', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
-        ...claimData,
-      })
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-
-      await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('Step 1 of 8. Claim received. Complete.')).toBeTruthy())
     })
 
     it('should display the Files component', async () => {

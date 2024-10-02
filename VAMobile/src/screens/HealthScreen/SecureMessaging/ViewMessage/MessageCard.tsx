@@ -17,7 +17,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 
@@ -29,12 +29,13 @@ export type MessageCardProps = {
 function MessageCard({ message }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
+  const isPortrait = useOrientation()
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const navigateTo = useRouteNavigation()
   const fileToGet = {} as SecureMessagingAttachment
-  const { isPending: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
+  const { isFetching: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
   })
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -73,13 +74,13 @@ function MessageCard({ message }: MessageCardProps) {
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(fixSpecialCharacters(body), t)
+      return getLinkifiedText(fixSpecialCharacters(body), t, isPortrait)
     }
     return <></>
   }
 
   function getAttachment() {
-    if (attachmentFetchPending && !attachments?.length) {
+    if (attachmentFetchPending) {
       const loadingScrollViewStyle: ViewStyle = {
         backgroundColor: theme.colors.background.contentBox,
       }

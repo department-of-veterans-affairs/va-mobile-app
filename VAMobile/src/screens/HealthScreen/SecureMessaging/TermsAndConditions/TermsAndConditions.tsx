@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -16,19 +15,19 @@ function TermsAndConditions() {
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
-        <Box
-          {...testIdProps(t('termsAndConditions.title'))}
+        <TextView
+          variant="MobileBodyBold"
           accessibilityRole="header"
           accessible={true}
           mx={gutter}
           mb={standardMarginBetween}>
-          <TextView variant="MobileBodyBold">{t('termsAndConditions.title')}</TextView>
-        </Box>
+          {t('termsAndConditions.title')}
+        </TextView>
         <TextArea>
           <TextView
             variant="MobileBody"
             paragraphSpacing={true}
-            {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+            accessibilityLabel={t('termsAndConditions.toAccept.a11yLabel')}>
             {t('termsAndConditions.toAccept')}
           </TextView>
           <Box mb={theme.paragraphSpacing.spacing20FontSize}>

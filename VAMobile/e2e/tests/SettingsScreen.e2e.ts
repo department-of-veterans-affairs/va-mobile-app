@@ -9,9 +9,12 @@ export const SettingsE2eIdConstants = {
   MANAGE_ACCT_SCREEN_TEXT:
     'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
-  NOTIFICATIONS_SCREEN_TEXT: "Select which notifications you'd like to receive.",
+  NOTIFICATIONS_SCREEN_TEXT: "We'll send these notifications to your device.",
   NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment reminders',
   NOTIFICATIONS_MESSAGING_TEXT: 'New secure messages',
+  NOTIFICATIONS_SCREEN_SUBTEXT:
+    "Your privacy is important to us. We won't show any personal information in your notifications.",
+  NOTIFICATIONS_LINK_TEXT: 'Manage email and text notifications on VA.gov',
   SHARE_APP_ROW_TEXT: 'Share the app',
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -51,6 +54,8 @@ describe('Settings Screen', () => {
     await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_SCREEN_TEXT))).toExist()
     await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_APPOINTMENT_TEXT))).toExist()
     await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_MESSAGING_TEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_SCREEN_SUBTEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_LINK_TEXT))).toExist()
     await element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)).tap()
   })
 

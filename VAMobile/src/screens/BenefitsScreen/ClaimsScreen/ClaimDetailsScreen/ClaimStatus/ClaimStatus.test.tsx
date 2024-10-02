@@ -4,8 +4,7 @@ import { ScrollView } from 'react-native'
 import { screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, mockNavProps, render } from 'testUtils'
 
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
@@ -18,9 +17,6 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimStatus', () => {
   const defaultMaxEstDate = '2019-12-11'
@@ -40,14 +36,16 @@ context('ClaimStatus', () => {
   })
 
   it('Renders ClaimStatus', () => {
-    expect(screen.getByLabelText('Step 1. Claim received. Complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 2. Initial review. Complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 3. Evidence gathering. Current step. Step 1 through 2 complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 4. Evidence review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 5. Rating. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 6. Preparing decision letter. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 7. Final review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 8. Claim decided. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 1 of 8. Claim received. Complete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 2 of 8. Initial review. Complete.')).toBeTruthy()
+    expect(
+      screen.getByLabelText('Step 3 of 8. Evidence gathering. Current step. Step 1 through 2 complete.'),
+    ).toBeTruthy()
+    expect(screen.getByLabelText('Step 4 of 8. Evidence review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 5 of 8. Rating. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 6 of 8. Preparing decision letter. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 7 of 8. Final review. Incomplete.')).toBeTruthy()
+    expect(screen.getByLabelText('Step 8 of 8. Claim decided. Incomplete.')).toBeTruthy()
   })
 
   describe('when the claimType is CLOSED', () => {

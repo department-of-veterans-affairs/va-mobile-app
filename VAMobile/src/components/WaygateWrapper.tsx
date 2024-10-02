@@ -61,6 +61,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
             displayedText={displayedTextPhoneNumber(phoneNumber)}
             phone={phoneNumber}
             a11yLabel={a11yLabelID(phoneNumber)}
+            variant={'base'}
           />
         </AlertWithHaptics>
       </Box>

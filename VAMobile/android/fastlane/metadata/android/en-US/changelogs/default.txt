@@ -1,1 +1,1 @@
-We updated disability compensation claims. We explain the 8-step process for these claims and show what step your claim is on. Additionally, you can now manage your direct deposit information for Post-9/11 GI Bill benefits.
+We added general improvements and fixed a few bugs.
