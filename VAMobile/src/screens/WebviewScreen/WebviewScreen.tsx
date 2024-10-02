@@ -7,9 +7,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
+import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 
@@ -177,6 +179,11 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           setCanGoBack(navState.canGoBack)
           setCanGoForward(navState.canGoForward)
           setCurrentUrl(navState.url)
+        }}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent
+          logAnalyticsEvent(Events.vama_webview_fail(nativeEvent))
+          console.warn('WebView error: ', nativeEvent) //remove when done testing
         }}
         testID="Webview-web"
       />
