@@ -9,9 +9,9 @@ on:
     branches:
         - 'dependabot/**'
   pull_request:
-    paths:
-      - 'VAMobile/src/**'
     types: synchronize
+# paths:
+#   - 'VAMobile/src/**'
   workflow_dispatch:
     inputs:
       run_full_test:
