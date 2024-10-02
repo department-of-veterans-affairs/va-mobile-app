@@ -10,9 +10,7 @@ on:
         - 'dependabot/**'
   pull_request:
     paths:
-      - 'VAMobile/e2e/tests/**'
       - 'VAMobile/src/**'
-    types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
       run_full_test:
