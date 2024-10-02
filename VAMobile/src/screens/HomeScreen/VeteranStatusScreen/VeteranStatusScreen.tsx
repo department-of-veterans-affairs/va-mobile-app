@@ -9,7 +9,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
+import { BranchOfService, ServiceData, ServiceHistoryData } from 'api/types'
 import {
   BackgroundVariant,
   BorderColorVariant,
@@ -17,14 +17,12 @@ import {
   BoxProps,
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
+  MilitaryBranchEmblem,
   TextView,
-  VABranch,
-  VAIcon,
   VALogo,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { darkTheme } from 'styles/themes/colorSchemes'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
@@ -77,7 +75,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     )
   })
 
-  const branch = mostRecentBranch || ''
+  const branch = mostRecentBranch || ('' as BranchOfService)
 
   const boxProps: BoxProps = {
     minHeight: 81,
@@ -88,30 +86,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     borderTopWidth: theme.dimensions.borderWidth,
     borderColor: theme.colors.border.veteranStatus as BorderColorVariant,
     borderStyle: 'solid',
-  }
-
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 34,
-      height: 34,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VABranch testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VABranch testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VABranch testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VABranch testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VABranch testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
-      case BranchesOfServiceConstants.SpaceForce:
-        return (
-          <VABranch testID="VeteranStatusUSSFTestID" name="SpaceForce" color={darkTheme.icon.ussf} {...dimensions} />
-        )
-    }
   }
 
   return (
@@ -125,7 +99,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VALogo testID="VeteranStatusCardVAIcon" />
+        <VALogo variant="dark" testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
@@ -142,7 +116,13 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </TextView>
           {accessToMilitaryInfo && (
             <Box display="flex" flexDirection="row" flexWrap="wrap">
-              {getBranchSeal()}
+              <MilitaryBranchEmblem
+                testID="veteranStatusCardBranchEmblem"
+                branch={branch}
+                width={34}
+                height={34}
+                variant="dark"
+              />
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>

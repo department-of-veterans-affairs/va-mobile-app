@@ -18,7 +18,6 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
-  | 'claimPhaseExpansion'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
@@ -37,7 +36,6 @@ export type FeatureToggleType =
 type FeatureToggleValues = {
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
-  claimPhaseExpansion: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
@@ -57,7 +55,6 @@ type FeatureToggleValues = {
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   cernerTrueForDemo: false,
-  claimPhaseExpansion: true,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,

@@ -7,8 +7,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants } from 'api/types'
-import { BackgroundVariant, Box, TextView, VABranch, VAIcon } from 'components'
+import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView, VAIcon } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import colors from 'styles/themes/VAColors'
@@ -37,35 +36,6 @@ export const Nametag = () => {
   const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
     (service) => service.honorableServiceIndicator === 'Y',
   )
-
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 40,
-      height: 40,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VABranch testID="United States Air Force" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VABranch testID="United States Army" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VABranch testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VABranch testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VABranch testID="United States Navy" name="Navy" {...dimensions} />
-      case BranchesOfServiceConstants.SpaceForce:
-        return (
-          <VABranch
-            testID="United States Space Force"
-            name="SpaceForce"
-            color={theme.colors.icon.ussf}
-            {...dimensions}
-          />
-        )
-    }
-  }
 
   let accLabel
   if (!accessToMilitaryInfo) {
@@ -108,9 +78,9 @@ export const Nametag = () => {
   return (
     <Box>
       {accessToMilitaryInfo && branch !== '' && (
-        <Pressable {...pressableProps}>
+        <Pressable {...pressableProps} testID="veteranStatusButtonID">
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            {getBranchSeal()}
+            <MilitaryBranchEmblem branch={branch} width={40} height={40} />
             <Box ml={theme.dimensions.buttonPadding} flex={1}>
               <TextView variant={'VeteranStatusBranch'} pb={4}>
                 {branch}
