@@ -20,7 +20,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useIsScreenReaderEnabled, useOrientation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { getLinkifiedText } from 'utils/secureMessaging'
 
@@ -38,6 +38,7 @@ export type ThreadMessageProps = {
 function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
   const isFocused = useIsFocused()
+  const isPortrait = useOrientation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const { condensedMarginBetween } = theme.dimensions
@@ -104,7 +105,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(fixSpecialCharacters(body), t)
+      return getLinkifiedText(fixSpecialCharacters(body), t, isPortrait)
     }
     return <></>
   }

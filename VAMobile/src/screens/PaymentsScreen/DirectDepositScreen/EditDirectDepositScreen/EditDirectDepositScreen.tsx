@@ -253,7 +253,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
               <Box mb={standardMarginBetween}>
                 <AlertWithHaptics
                   variant="error"
-                  header={t('editDirectDeposit.pleaseCheckDDInfo')}
+                  description={t('editDirectDeposit.pleaseCheckDDInfo')}
                   focusOnError={onSaveClicked}
                   scrollViewRef={scrollViewRef}
                 />

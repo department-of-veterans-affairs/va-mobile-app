@@ -1,0 +1,19 @@
+name: Auto-Assign Accessibility Tickets
+
+on:
+  issues:
+    types:
+      - labeled
+
+jobs:
+  auto-assign:
+    if: github.event.label.name == 'accessibility'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+    - name: Assign ticket to accessibility specialist
+      run: gh issue edit ${{ github.event.issue.number }} --add-assignee "brea11y"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}

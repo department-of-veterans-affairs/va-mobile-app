@@ -1,10 +1,10 @@
 export const BranchesOfServiceConstants: {
-  AirForce: branchesOfService
-  Army: branchesOfService
-  CoastGuard: branchesOfService
-  MarineCorps: branchesOfService
-  Navy: branchesOfService
-  SpaceForce: branchesOfService
+  AirForce: BranchOfService
+  Army: BranchOfService
+  CoastGuard: BranchOfService
+  MarineCorps: BranchOfService
+  Navy: BranchOfService
+  SpaceForce: BranchOfService
 } = {
   AirForce: 'United States Air Force',
   Army: 'United States Army',
@@ -14,7 +14,7 @@ export const BranchesOfServiceConstants: {
   SpaceForce: 'United States Space Force',
 }
 
-type branchesOfService =
+export type BranchOfService =
   | 'United States Air Force'
   | 'United States Army'
   | 'United States Coast Guard'
@@ -26,7 +26,7 @@ type branchesOfService =
   | 'United States Space Force'
 
 export type ServiceData = {
-  branchOfService: branchesOfService
+  branchOfService: BranchOfService
   beginDate: string
   endDate: string
   formattedBeginDate: string
@@ -39,7 +39,7 @@ export type ServiceHistoryData = Array<ServiceData>
 
 export type ServiceHistoryAttributes = {
   serviceHistory: ServiceHistoryData
-  mostRecentBranch?: string
+  mostRecentBranch?: BranchOfService
 }
 
 export type MilitaryServiceHistoryData = {
