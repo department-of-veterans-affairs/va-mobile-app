@@ -10,8 +10,8 @@ on:
         - 'dependabot/**'
   pull_request:
     paths:
-      - 'e2e/tests/**'
-      - 'src/**'
+      - '**/e2e/tests/**'
+      - '**/src/**'
     types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
     inputs:
