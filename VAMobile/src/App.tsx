@@ -189,6 +189,7 @@ export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
     useSelector<RootState, AuthState>((state) => state.auth)
+  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -267,17 +268,23 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
-    dispatch(initializeAuth())
-    const listener = (event: { url: string }): void => {
-      if (event.url?.startsWith('vamobile://login-success?')) {
-        dispatch(handleTokenCallbackUrl(event.url))
+    console.debug('AuthGuard: initializing')
+    if (loggedIn && tappedForegroundNotification) {
+      console.debug('User tapped foreground notification. Skipping initializeAuth.')
+      setTappedForegroundNotification(false)
+    } else if (!loggedIn) {
+      dispatch(initializeAuth())
+      const listener = (event: { url: string }): void => {
+        if (event.url?.startsWith('vamobile://login-success?')) {
+          dispatch(handleTokenCallbackUrl(event.url))
+        }
+      }
+      const sub = Linking.addEventListener('url', listener)
+      return (): void => {
+        sub?.remove()
       }
     }
-    const sub = Linking.addEventListener('url', listener)
-    return (): void => {
-      sub?.remove()
-    }
-  }, [dispatch])
+  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
