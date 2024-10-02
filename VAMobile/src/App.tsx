@@ -269,7 +269,7 @@ export function AuthGuard() {
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
-    if (loggedIn && tappedForegroundNotification) {
+    if (tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
     } else if (!loggedIn && !tappedForegroundNotification) {
