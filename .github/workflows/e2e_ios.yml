@@ -8,11 +8,10 @@ on:
   push:
     branches:
         - 'dependabot/**'
-    paths:
-        - 'e2e/tests/**'
-        - 'src/**'
   pull_request:
-    types: [opened, ready_for_review, labeled, edited]
+    paths:
+      - 'e2e/tests/**'
+      - 'src/**'
   workflow_dispatch:
     inputs:
       run_full_test:
