@@ -11,6 +11,16 @@ const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
 const { DEMO_PASSWORD } = getEnv()
+const mockNotification = {
+  trigger: {
+    type: 'push',
+  },
+  title: 'New Secure Message',
+  body: 'Review your messages in the health care section of the VA app',
+  payload: {
+    url: 'vamobile://messages/2092809',
+  },
+}
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -69,7 +79,7 @@ export const CommonE2eIdConstants = {
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode(skipOnboarding = true) {
+export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
@@ -77,19 +87,20 @@ export async function loginToDemoMode(skipOnboarding = true) {
   } catch (ex) {
     await device.uninstallApp()
     await device.installApp()
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    if (pushNotifications) {
+      await device.launchApp({
+        delete: true,
+        permissions: { notifications: 'YES' },
+        newInstance: true,
+        userNotification: mockNotification,
+      })
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    }
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
       .toExist()
       .withTimeout(60000)
   }
-  try {
-    await element(
-      by.text(
-        "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-      ),
-    ).tap()
-    await element(by.text('Dismiss')).tap()
-  } catch (e) {}
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
