@@ -8,6 +8,9 @@ on:
   push:
     branches:
         - 'dependabot/**'
+    paths:
+        - 'e2e/tests/**'
+        - 'src/**'
   pull_request:
     types: [opened, ready_for_review, labeled, edited]
   workflow_dispatch:
@@ -64,9 +67,22 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
+  
+  get_filtered_files:
+    runs-on: macos-latest-xl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            workflows:
+              - 'e2e/tests/**'
+              - 'src/**'
 
   find_detox_tests_to_run:
-    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: get_filtered_files
+    if: (${{ needs.get_filtered_files.outputs.workflows == 'true' }}) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
