@@ -23,7 +23,7 @@ import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
 
-const { AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_SIS_TOKEN_REFRESH_URL } = getEnv()
+const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
 const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
 
 type ReloadButtonProps = {
@@ -138,6 +138,8 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   useEffect(() => {
     const fetchSSOCookies = async () => {
       try {
+        await CookieManager.clearAll()
+
         const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
           method: 'POST',
           headers: {
@@ -153,40 +155,13 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           }).toString(),
         })
 
-        const cookieHeader = response.headers.get('set-cookie')
+        const cookieHeaders = response.headers.get('set-cookie')
+        cookieHeaders && (await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeaders))
 
-        if (cookieHeader) {
-          await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeader)
-        } else {
-          // Refresh SSO cookies if no cookies were returned from original API request
-          const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
-          const cookiesArray = Object.values(cookies)
-          const ssoRefreshToken = cookiesArray.find((cookie) => cookie.name === 'vagov_refresh_token')?.value
-
-          if (ssoRefreshToken) {
-            const refreshCookieResponse = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: new URLSearchParams({
-                vagov_refresh_token: ssoRefreshToken,
-              }).toString(),
-            })
-
-            const refreshCookieHeader = refreshCookieResponse.headers.get('set-cookie')
-
-            if (refreshCookieHeader) {
-              await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, refreshCookieHeader)
-            }
-          }
-        }
-
-        // Log analytics for whether SSO cookies were set
-        const updatedCookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
-        const updatedCookiesArray = Object.values(updatedCookies)
+        const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
+        const cookiesArray = Object.values(cookies)
         const hasSSOCookies = SSO_COOKIE_NAMES.every((cookieName) =>
-          updatedCookiesArray.some((cookie) => cookie.name === cookieName),
+          cookiesArray.some((cookie) => cookie.name === cookieName),
         )
 
         logAnalyticsEvent(Events.vama_sso_cookie_received(hasSSOCookies))

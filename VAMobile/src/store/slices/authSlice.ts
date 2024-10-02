@@ -414,6 +414,8 @@ export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
+    await clearCookies()
+
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
     if (!tokenMatchesService) {
@@ -469,6 +471,7 @@ export const attemptIntializeAuthWithRefreshToken = async (
   refreshToken: string,
 ): Promise<void> => {
   try {
+    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
