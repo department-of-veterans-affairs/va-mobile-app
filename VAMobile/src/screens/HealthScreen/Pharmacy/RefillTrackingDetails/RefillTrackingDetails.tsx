@@ -128,7 +128,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
       const mainContent = (
         <>
-          <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('prescriptions.refillTracking.trackingNumber')}
+          </TextView>
           {trackingLink && trackingNumber ? (
             <LinkWithAnalytics
               type="url"
@@ -161,9 +163,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           {trackingInfo?.length > 1 ? (
             <Box mb={condensedMarginBetween}>
               <TextView
-                variant={
-                  'MobileBodyBold'
-                }>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+                variant="MobileBodyBold"
+                accessibilityRole="header">{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
             <></>
@@ -180,7 +181,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
     return (
       <>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.condensedMarginBetween}>
           {prescriptionName}
         </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>

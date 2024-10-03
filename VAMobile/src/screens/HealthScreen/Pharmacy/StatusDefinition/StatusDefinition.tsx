@@ -32,7 +32,9 @@ function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
   return (
     <LargePanel title={t('statusDefinition')} rightButtonText={t('close')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <TextView variant="MobileBodyBold">{display}</TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {display}
+        </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}
         </TextView>

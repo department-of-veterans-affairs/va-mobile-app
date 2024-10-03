@@ -491,6 +491,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
+              accessibilityRole="header"
               variant={'MobileBodyBold'}>
               {prescriptionListTitle()}
             </TextView>

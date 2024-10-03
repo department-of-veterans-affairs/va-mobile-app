@@ -220,7 +220,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}>
+              variant={'MobileBodyBold'}
+              accessibilityRole="header">
               {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
             </TextView>
           </Box>
