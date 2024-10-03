@@ -30,7 +30,7 @@ export type MenuItemActionsType = {
   actionText: string
   /** adds a divider after the action*/
   addDivider: boolean
-  /** name of the icon to show */
+  /** icon props to show */
   iconProps?: IconProps
   /** method to  */
   onPress?: () => void
