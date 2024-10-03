@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextView, VAIcon } from 'components'
+import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
