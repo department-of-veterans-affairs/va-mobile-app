@@ -8,7 +8,6 @@ import { useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
 
 /**
  * Props for item in {@link listOfText}

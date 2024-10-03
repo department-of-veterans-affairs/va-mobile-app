@@ -19,7 +19,6 @@ import ChevronLeft from './svgs/ChevronLeft.svg'
 import ChevronRight from './svgs/ChevronRight.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import Folder from './svgs/Folder.svg'
@@ -72,7 +71,6 @@ export const VA_ICON_MAP = {
   CirclePhone,
   Compose,
   Directions,
-  ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
   Folder,
