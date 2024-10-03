@@ -17,7 +17,7 @@ const sortByName = (letters?: LettersList): LettersList => {
  * Fetch user letters
  */
 const getLetters = async (): Promise<LettersList | undefined> => {
-  const response = await get<LettersData>('/v0/letters', undefined, lettersKeys.letters)
+  const response = await get<LettersData>('/v0/letters')
   if (response) {
     return sortByName(response.data.attributes.letters)
   }

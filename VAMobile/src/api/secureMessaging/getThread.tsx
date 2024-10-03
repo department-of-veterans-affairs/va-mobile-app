@@ -17,7 +17,6 @@ const getThread = (
     {
       useCache: 'false',
     } as Params,
-    secureMessagingKeys.thread,
   )
 }
 

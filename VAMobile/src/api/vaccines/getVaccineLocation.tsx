@@ -9,11 +9,7 @@ import { vaccineKeys } from './queryKeys'
  * Fetch user Vaccine Location
  */
 const getVaccineLocation = async (locationId: string): Promise<VaccineLocationPayload | undefined> => {
-  const response = await get<VaccineLocationPayload>(
-    `/v0/health/locations/${locationId}`,
-    undefined,
-    vaccineKeys.vaccineLocations,
-  )
+  const response = await get<VaccineLocationPayload>(`/v0/health/locations/${locationId}`)
   return response
 }
 

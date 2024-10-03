@@ -9,7 +9,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
  * Fetch user Appeal
  */
 const getAppeal = async (id: string, abortSignal: AbortSignal): Promise<AppealData | undefined> => {
-  const response = await get<AppealGetData>(`/v0/appeal/${id}`, {}, claimsAndAppealsKeys.appeal, abortSignal)
+  const response = await get<AppealGetData>(`/v0/appeal/${id}`, {}, abortSignal)
   return response?.data
 }
 

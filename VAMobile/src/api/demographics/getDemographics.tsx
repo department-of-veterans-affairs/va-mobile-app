@@ -12,7 +12,7 @@ import { demographicsKeys } from './queryKeys'
  * Fetch user demographics
  */
 const getDemographics = async (): Promise<UserDemographics | undefined> => {
-  const response = await get<DemographicsPayload>('/v0/user/demographics', undefined, demographicsKeys.demographics)
+  const response = await get<DemographicsPayload>('/v0/user/demographics')
   return response?.data.attributes
 }
 

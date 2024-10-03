@@ -14,11 +14,7 @@ import { authorizedServicesKeys } from './queryKeys'
  * Fetch user demographics
  */
 export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesData | undefined> => {
-  const response = await get<AuthorizedServicesPayload>(
-    '/v0/user/authorized-services',
-    undefined,
-    authorizedServicesKeys.authorizedServices,
-  )
+  const response = await get<AuthorizedServicesPayload>('/v0/user/authorized-services')
   return response?.data.attributes.authorizedServices
 }
 

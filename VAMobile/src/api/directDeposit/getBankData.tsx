@@ -9,7 +9,7 @@ import { directDepositKeys } from './queryKeys'
  * Fetch user direct deposit information
  */
 const getBankData = (): Promise<DirectDepositData | undefined> => {
-  return get<DirectDepositData>('/v0/payment-information/benefits', undefined, directDepositKeys.directDeposit)
+  return get<DirectDepositData>('/v0/payment-information/benefits')
 }
 
 /**

@@ -9,11 +9,7 @@ import { secureMessagingKeys } from './queryKeys'
  * Fetch user message based on message ID
  */
 const getMessage = (messageID: number): Promise<SecureMessagingMessageGetData | undefined> => {
-  return get<SecureMessagingMessageGetData>(
-    `/v0/messaging/health/messages/${messageID}`,
-    undefined,
-    secureMessagingKeys.message,
-  )
+  return get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
 }
 
 /**

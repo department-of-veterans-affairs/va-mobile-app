@@ -10,16 +10,12 @@ import { vaccineKeys } from './queryKeys'
  * Fetch user Vaccines
  */
 const getVaccines = (): Promise<VaccineListPayload | undefined> => {
-  return get<VaccineListPayload>(
-    '/v1/health/immunizations',
-    {
-      'page[number]': '1',
-      'page[size]': LARGE_PAGE_SIZE.toString(),
-      sort: 'date',
-      useCache: 'false',
-    },
-    vaccineKeys.vaccines,
-  )
+  return get<VaccineListPayload>('/v1/health/immunizations', {
+    'page[number]': '1',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
+    sort: 'date',
+    useCache: 'false',
+  })
 }
 
 /**

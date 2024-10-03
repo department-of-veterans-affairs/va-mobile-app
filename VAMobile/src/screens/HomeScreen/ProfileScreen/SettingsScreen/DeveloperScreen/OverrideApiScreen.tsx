@@ -4,27 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { QueryKey, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import _ from 'lodash'
 
-import { appointmentsKeys } from 'api/appointments'
-import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { contactInformationKeys } from 'api/contactInformation'
-import { decisionLettersKeys } from 'api/decisionLetters'
-import { demographicsKeys } from 'api/demographics/queryKeys'
-import { directDepositKeys } from 'api/directDeposit'
-import { disabilityRatingKeys } from 'api/disabilityRating'
 import { errorKeys } from 'api/errors'
-import { facilitiesKeys } from 'api/facilities/queryKeys'
-import { lettersKeys } from 'api/letters'
-import { militaryServiceHistoryKeys } from 'api/militaryService'
-import { paymentsKeys } from 'api/payments'
-import { personalInformationKeys } from 'api/personalInformation/queryKeys'
-import { prescriptionKeys } from 'api/prescriptions'
-import { secureMessagingKeys } from 'api/secureMessaging'
 import { ErrorData, errorOverride, errors } from 'api/types'
-import { vaccineKeys } from 'api/vaccines/queryKeys'
 import { Box, FeatureLandingTemplate, SelectorType, TextArea, TextView, VASelector, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -33,7 +17,7 @@ import { useTheme } from 'utils/hooks'
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
 const IndividualQueryDisplay = (
-  queryKey: QueryKey,
+  endpoint: string,
   overrideErrors: errors[],
   setErrors: React.Dispatch<React.SetStateAction<errors[]>>,
   clearErrors: boolean,
@@ -51,7 +35,7 @@ const IndividualQueryDisplay = (
 
   useEffect(() => {
     _.forEach(overrideErrors, (error) => {
-      if (error.queryKey[0] === queryKey[0]) {
+      if (error.endpoint === endpoint) {
         const errorDetails = error.error
         for (const key in errorDetails) {
           if (key === 'networkError') {
@@ -75,7 +59,7 @@ const IndividualQueryDisplay = (
         }
       }
     })
-  }, [overrideErrors, queryKey])
+  }, [overrideErrors, endpoint])
 
   useEffect(() => {
     if (clearErrors) {
@@ -87,7 +71,7 @@ const IndividualQueryDisplay = (
 
   return (
     <Box>
-      <TextView>{queryKey[0]}</TextView>
+      <TextView>{endpoint}</TextView>
       <VASelector
         selectorType={SelectorType.Checkbox}
         labelKey={t('overrideAPI.network')}
@@ -99,11 +83,11 @@ const IndividualQueryDisplay = (
           setRefreshable(false)
           setInitialOtherErrorCode('500')
           const newErrors = _.remove(overrideErrors, function (n) {
-            return n.queryKey[0] !== queryKey[0]
+            return n.endpoint !== endpoint
           })
           if (!networkSelected) {
             newErrors.push({
-              queryKey,
+              endpoint,
               error: { networkError: true },
             })
           }
@@ -121,7 +105,7 @@ const IndividualQueryDisplay = (
           setRefreshable(false)
           setInitialOtherErrorCode('500')
           const newErrors = _.remove(overrideErrors, function (n) {
-            return n.queryKey[0] !== queryKey[0]
+            return n.endpoint !== endpoint
           })
           if (!backEndSelected) {
             const backEndError: errorOverride = {
@@ -143,7 +127,7 @@ const IndividualQueryDisplay = (
               },
             }
             newErrors.push({
-              queryKey,
+              endpoint,
               error: backEndError,
             })
           }
@@ -158,10 +142,10 @@ const IndividualQueryDisplay = (
             inputType="none"
             onChange={(val) => {
               const otherErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] !== queryKey[0]
+                return n.endpoint !== endpoint
               })
               const backEndErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] === queryKey[0]
+                return n.endpoint === endpoint
               })[0]
 
               const backEndError = backEndErrors.error as errorOverride
@@ -173,7 +157,7 @@ const IndividualQueryDisplay = (
                 }
               }
               otherErrors.push({
-                queryKey,
+                endpoint,
                 error: backEndError,
               })
               setErrors(otherErrors)
@@ -185,10 +169,10 @@ const IndividualQueryDisplay = (
             inputType="none"
             onChange={(val) => {
               const otherErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] !== queryKey[0]
+                return n.endpoint !== endpoint
               })
               const backEndErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] === queryKey[0]
+                return n.endpoint === endpoint
               })[0]
 
               const backEndError = backEndErrors.error as errorOverride
@@ -200,7 +184,7 @@ const IndividualQueryDisplay = (
                 }
               }
               otherErrors.push({
-                queryKey,
+                endpoint,
                 error: backEndError,
               })
               setErrors(otherErrors)
@@ -212,10 +196,10 @@ const IndividualQueryDisplay = (
             inputType="phone"
             onChange={(val) => {
               const otherErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] !== queryKey[0]
+                return n.endpoint !== endpoint
               })
               const backEndErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] === queryKey[0]
+                return n.endpoint === endpoint
               })[0]
 
               const backEndError = backEndErrors.error as errorOverride
@@ -227,7 +211,7 @@ const IndividualQueryDisplay = (
                 }
               }
               otherErrors.push({
-                queryKey,
+                endpoint,
                 error: backEndError,
               })
               setErrors(otherErrors)
@@ -240,10 +224,10 @@ const IndividualQueryDisplay = (
             onSelectionChange={() => {
               setRefreshable(!refreshableSelected)
               const otherErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] !== queryKey[0]
+                return n.endpoint !== endpoint
               })
               const backEndErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] === queryKey[0]
+                return n.endpoint === endpoint
               })[0]
 
               const backEndError = backEndErrors.error as errorOverride
@@ -251,7 +235,7 @@ const IndividualQueryDisplay = (
                 backEndError.json.errors[0].refreshable = !refreshableSelected
               }
               otherErrors.push({
-                queryKey,
+                endpoint,
                 error: backEndError,
               })
               setErrors(otherErrors)
@@ -270,7 +254,7 @@ const IndividualQueryDisplay = (
           setOtherSelected(!otherSelected)
           setInitialOtherErrorCode('500')
           const newErrors = _.remove(overrideErrors, function (n) {
-            return n.queryKey[0] !== queryKey[0]
+            return n.endpoint !== endpoint
           })
           if (!otherSelected) {
             const backEndError: errorOverride = {
@@ -292,7 +276,7 @@ const IndividualQueryDisplay = (
               },
             }
             newErrors.push({
-              queryKey,
+              endpoint,
               error: backEndError,
             })
           }
@@ -307,10 +291,10 @@ const IndividualQueryDisplay = (
             inputType="phone"
             onChange={(val) => {
               const otherErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] !== queryKey[0]
+                return n.endpoint !== endpoint
               })
               const backEndErrors = _.remove(overrideErrors, function (n) {
-                return n.queryKey[0] === queryKey[0]
+                return n.endpoint === endpoint
               })[0]
 
               const backEndError = backEndErrors.error as errorOverride
@@ -321,7 +305,7 @@ const IndividualQueryDisplay = (
               }
 
               otherErrors.push({
-                queryKey,
+                endpoint,
                 error: backEndError,
               })
               setErrors(otherErrors)
@@ -383,7 +367,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
         </Box>
       }>
       <Box>
-        <TextArea>
+        {/* <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Appointments
           </TextView>
@@ -522,15 +506,15 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(secureMessagingKeys.thread, overrideErrors, setErrors, clearData)}
           </Box>
-        </TextArea>
+        </TextArea> */}
         <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Vaccines
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(vaccineKeys.vaccines, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v1/health/immunizations', overrideErrors, setErrors, clearData)}
           </Box>
-          {IndividualQueryDisplay(vaccineKeys.vaccineLocations, overrideErrors, setErrors, clearData)}
+          {/* {IndividualQueryDisplay(vaccineKeys.vaccineLocations, overrideErrors, setErrors, clearData)} */}
         </TextArea>
       </Box>
     </FeatureLandingTemplate>

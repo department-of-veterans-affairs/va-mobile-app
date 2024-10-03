@@ -10,15 +10,11 @@ import { secureMessagingKeys } from './queryKeys'
  * Fetch user folder messages
  */
 const getFolderMessages = (folderID: number): Promise<SecureMessagingFolderMessagesGetData | undefined> => {
-  return get<SecureMessagingFolderMessagesGetData>(
-    `/v0/messaging/health/folders/${folderID}/messages`,
-    {
-      page: '1',
-      per_page: LARGE_PAGE_SIZE.toString(),
-      useCache: 'false',
-    } as Params,
-    secureMessagingKeys.folderMessages,
-  )
+  return get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
+    page: '1',
+    per_page: LARGE_PAGE_SIZE.toString(),
+    useCache: 'false',
+  } as Params)
 }
 
 /**

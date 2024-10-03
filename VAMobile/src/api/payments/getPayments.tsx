@@ -26,7 +26,7 @@ const getPayments = async (year: string | undefined, page: number): Promise<Paym
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
         }
       : {}
-  const response = await get<PaymentsGetData>('/v0/payment-history', params, paymentsKeys.payments)
+  const response = await get<PaymentsGetData>('/v0/payment-history', params)
   if (response) {
     return {
       ...response,

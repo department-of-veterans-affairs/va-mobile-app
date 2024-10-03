@@ -23,16 +23,12 @@ const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<
  * Fetch user ClaimsAndAppeals
  */
 const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppealsListPayload | undefined> => {
-  const response = await get<ClaimsAndAppealsListPayload>(
-    '/v0/claims-and-appeals-overview',
-    {
-      'page[number]': '1',
-      'page[size]': LARGE_PAGE_SIZE.toString(),
-      showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
-      useCache: 'false',
-    },
-    claimsAndAppealsKeys.claimsAndAppeals,
-  )
+  const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
+    'page[number]': '1',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
+    showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
+    useCache: 'false',
+  })
 
   if (response) {
     return {

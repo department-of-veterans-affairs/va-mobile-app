@@ -13,11 +13,7 @@ import { demographicsKeys } from './queryKeys'
  * Fetch gender identity options
  */
 const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions> => {
-  const response = await get<GenderIdentityOptionsPayload>(
-    '/v0/user/gender_identity/edit',
-    undefined,
-    demographicsKeys.genderIdentityOptions,
-  )
+  const response = await get<GenderIdentityOptionsPayload>('/v0/user/gender_identity/edit')
   const responseOptions = response?.data.attributes.options || {}
 
   // TODO: Look into adding an option to the API function for disabling the X-Key-Inflection property.

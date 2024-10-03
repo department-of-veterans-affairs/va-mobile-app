@@ -9,11 +9,7 @@ import { secureMessagingKeys } from './queryKeys'
  * Fetch user message signature
  */
 const getMessageSignature = async (): Promise<SecureMessagingSignatureDataAttributes | undefined> => {
-  const response = await get<SecureMessagingSignatureData>(
-    '/v0/messaging/health/messages/signature',
-    undefined,
-    secureMessagingKeys.signature,
-  )
+  const response = await get<SecureMessagingSignatureData>('/v0/messaging/health/messages/signature')
   return response?.data.attributes
 }
 

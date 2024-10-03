@@ -15,11 +15,7 @@ import { personalInformationKeys } from './queryKeys'
  * Fetch user personal information
  */
 export const getPersonalInformation = async (): Promise<PersonalInformationData | undefined> => {
-  const response = await get<PersonalInformationPayload>(
-    '/v2/user',
-    undefined,
-    personalInformationKeys.personalInformation,
-  )
+  const response = await get<PersonalInformationPayload>('/v2/user')
   const personalInformation = response?.data.attributes
 
   if (personalInformation) {

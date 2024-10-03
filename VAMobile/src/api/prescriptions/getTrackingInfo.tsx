@@ -11,11 +11,7 @@ import { prescriptionKeys } from './queryKeys'
  * Fetch user prescription tracking information
  */
 const getTrackingInfo = async (id: string): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
-  const response = await get<PrescriptionTrackingInfoGetData>(
-    `/v0/health/rx/prescriptions/${id}/tracking`,
-    undefined,
-    prescriptionKeys.trackingInfo,
-  )
+  const response = await get<PrescriptionTrackingInfoGetData>(`/v0/health/rx/prescriptions/${id}/tracking`)
   setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
   return response?.data
 }

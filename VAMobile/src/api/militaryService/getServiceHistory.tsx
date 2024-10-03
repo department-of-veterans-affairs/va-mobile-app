@@ -15,11 +15,7 @@ import { militaryServiceHistoryKeys } from './queryKeys'
  * Fetch user service history
  */
 const getServiceHistory = async (): Promise<ServiceHistoryAttributes | undefined> => {
-  const response = await get<MilitaryServiceHistoryData>(
-    '/v0/military-service-history',
-    undefined,
-    militaryServiceHistoryKeys.serviceHistory,
-  )
+  const response = await get<MilitaryServiceHistoryData>('/v0/military-service-history')
   const serviceHistoryAttributes = response?.data.attributes
   const serviceHistoryData = serviceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const latestHistory = max(serviceHistoryData, (historyItem) => {

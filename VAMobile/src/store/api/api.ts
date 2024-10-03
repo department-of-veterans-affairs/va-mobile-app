@@ -1,6 +1,5 @@
 import { Platform } from 'react-native'
 
-import { QueryKey } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
@@ -121,7 +120,6 @@ const call = async function <T>(
   method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
   endpoint: string,
   params: Params = {},
-  queryKey?: QueryKey,
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
@@ -217,7 +215,7 @@ const call = async function <T>(
     const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
     if (data) {
       _.forEach(data.overrideErrors, (error) => {
-        if (queryKey && error.queryKey[0] === queryKey[0]) {
+        if (error.endpoint === endpoint) {
           throw error.error
         }
       })
@@ -234,10 +232,9 @@ const call = async function <T>(
 export const get = async function <T>(
   endpoint: string,
   params: Params = {},
-  queryKey?: QueryKey,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, queryKey, undefined, abortSignal)
+  return call<T>('GET', endpoint, params, undefined, abortSignal)
 }
 
 export const post = async function <T>(
@@ -246,17 +243,17 @@ export const post = async function <T>(
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params, undefined, contentType, abortSignal)
+  return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PUT', endpoint, params, undefined)
+  return call<T>('PUT', endpoint, params)
 }
 
 export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PATCH', endpoint, params, undefined)
+  return call<T>('PATCH', endpoint, params)
 }
 
 export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('DELETE', endpoint, params, undefined)
+  return call<T>('DELETE', endpoint, params)
 }

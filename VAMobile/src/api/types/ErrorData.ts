@@ -1,5 +1,3 @@
-import { QueryKey } from '@tanstack/react-query'
-
 import { ErrorMessage } from 'store/api'
 
 export type ErrorData = {
@@ -7,7 +5,7 @@ export type ErrorData = {
 }
 
 export type errors = {
-  queryKey: QueryKey
+  endpoint: string
   error: networkError | errorOverride
 }
 

@@ -20,19 +20,15 @@ const getAppointments = (
   endDate: string,
   timeFrame: TimeFrameType,
 ): Promise<AppointmentsGetData | undefined> => {
-  return get<AppointmentsGetData>(
-    '/v0/appointments',
-    {
-      startDate: startDate,
-      endDate: endDate,
-      'page[number]': '1',
-      'page[size]': LARGE_PAGE_SIZE.toString(),
-      sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
-      'included[]': 'pending',
-      useCache: 'false',
-    } as Params,
-    appointmentsKeys.appointments,
-  )
+  return get<AppointmentsGetData>('/v0/appointments', {
+    startDate: startDate,
+    endDate: endDate,
+    'page[number]': '1',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
+    sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
+    'included[]': 'pending',
+    useCache: 'false',
+  } as Params)
 }
 
 /**

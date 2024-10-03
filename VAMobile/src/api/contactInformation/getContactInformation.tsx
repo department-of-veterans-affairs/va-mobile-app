@@ -13,11 +13,7 @@ import { contactInformationKeys } from './queryKeys'
  * Fetch user contact information
  */
 const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
-  const response = await get<ContactInformationPayload>(
-    '/v0/user/contact-info',
-    undefined,
-    contactInformationKeys.contactInformation,
-  )
+  const response = await get<ContactInformationPayload>('/v0/user/contact-info')
   const contactInformation = response?.data.attributes
 
   if (contactInformation) {

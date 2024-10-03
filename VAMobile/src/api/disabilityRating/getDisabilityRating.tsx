@@ -13,11 +13,7 @@ import { disabilityRatingKeys } from './queryKeys'
  * Fetch user disability rating
  */
 const getDisabilityRating = async (): Promise<RatingData | undefined> => {
-  const response = await get<DisabilityRatingData>(
-    '/v0/disability-rating',
-    undefined,
-    disabilityRatingKeys.disabilityRating,
-  )
+  const response = await get<DisabilityRatingData>('/v0/disability-rating')
 
   return response?.data.attributes
 }

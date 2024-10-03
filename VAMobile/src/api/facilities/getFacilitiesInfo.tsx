@@ -10,7 +10,7 @@ import { facilitiesKeys } from './queryKeys'
  */
 
 const getFacilitiesInfo = async (): Promise<Array<Facility> | undefined> => {
-  const response = await get<FacilitiesPayload>('/v0/facilities-info', undefined, facilitiesKeys.facilities)
+  const response = await get<FacilitiesPayload>('/v0/facilities-info')
   return response?.data.attributes.facilities
 }
 

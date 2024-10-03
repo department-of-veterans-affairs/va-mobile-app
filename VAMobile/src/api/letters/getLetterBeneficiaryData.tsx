@@ -15,11 +15,7 @@ import { lettersKeys } from './queryKeys'
  * Fetch user letter beneficiary data
  */
 const getLetterBeneficiaryData = async (): Promise<LetterBeneficiaryData | undefined> => {
-  const response = await get<LetterBeneficiaryDataPayload>(
-    '/v0/letters/beneficiary',
-    undefined,
-    lettersKeys.beneficiaryData,
-  )
+  const response = await get<LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
   if (response) {
     const attributes = response.data.attributes
     let mostRecentServices: Array<LetterMilitaryService> = [...(attributes?.militaryService || [])]
