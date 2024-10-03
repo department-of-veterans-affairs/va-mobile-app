@@ -17,7 +17,6 @@ import { ReactComponent as Phone} from '@componentsDocs/VAIcon/svgs/Phone.svg';
 import { ReactComponent as QuestionMark} from '@componentsDocs/VAIcon/svgs/QuestionMark.svg';
 import { ReactComponent as Remove} from '@componentsDocs/VAIcon/svgs/Remove.svg';
 import { ReactComponent as Reply} from '@componentsDocs/VAIcon/svgs/Reply.svg';
-import { ReactComponent as Sort} from '@componentsDocs/VAIcon/svgs/Sort.svg';
 import { ReactComponent as Trash} from '@componentsDocs/VAIcon/svgs/Trash.svg';
 import { ReactComponent as Truck} from '@componentsDocs/VAIcon/svgs/Truck.svg';
 import { ReactComponent as Unread} from '@componentsDocs/VAIcon/svgs/Unread.svg';
@@ -51,7 +50,6 @@ Phone | <Phone  className="icons"/> | Phone.svg
 Question Mark | <QuestionMark  className="icons"/> | QuestionMark.svg
 Remove | <Remove  className="icons"/> | Remove.svg
 Reply | <Reply  className="icons"/> | Reply.svg
-Sort | <Sort className="icons" /> | Sort.svg
 Trash | <Trash  className="icons"/> | Trash.svg
 Truck | <Truck  className="icons"/> | Truck.svg
 Unread | <Unread  className="icons"/> | Unread.svg
