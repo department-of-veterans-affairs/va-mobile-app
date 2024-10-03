@@ -13,21 +13,6 @@ index f9c858b..94ea188 100644
  
  public abstract class NotificationManagerCompatFacade {
      public static NotificationManagerCompat from(@NonNull Context context) {
-diff --git a/node_modules/react-native-notifications/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java b/node_modules/react-native-notifications/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-index 94ea188..f9c858b 100644
---- a/node_modules/react-native-notifications/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-+++ b/node_modules/react-native-notifications/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-@@ -2,8 +2,8 @@
- package com.wix.reactnativenotifications;
- 
- import android.content.Context;
--import androidx.annotation.NonNull;
--import androidx.core.app.NotificationManagerCompat;
-+import android.support.annotation.NonNull;
-+import android.support.v4.app.NotificationManagerCompat;
- 
- public abstract class NotificationManagerCompatFacade {
-     public static NotificationManagerCompat from(@NonNull Context context) {
 diff --git a/node_modules/react-native-notifications/lib/android/app/src/reactNative59/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java b/node_modules/react-native-notifications/lib/android/app/src/reactNative59/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
 index f9c858b..94ea188 100644
 --- a/node_modules/react-native-notifications/lib/android/app/src/reactNative59/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
@@ -40,21 +25,6 @@ index f9c858b..94ea188 100644
 -import android.support.v4.app.NotificationManagerCompat;
 +import androidx.annotation.NonNull;
 +import androidx.core.app.NotificationManagerCompat;
- 
- public abstract class NotificationManagerCompatFacade {
-     public static NotificationManagerCompat from(@NonNull Context context) {
-diff --git a/node_modules/react-native-notifications/lib/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java b/node_modules/react-native-notifications/lib/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-index 94ea188..f9c858b 100644
---- a/node_modules/react-native-notifications/lib/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-+++ b/node_modules/react-native-notifications/lib/android/app/src/reactNative60/java/com/wix/reactnativenotifications/NotificationManagerCompatFacade.java
-@@ -2,8 +2,8 @@
- package com.wix.reactnativenotifications;
- 
- import android.content.Context;
--import androidx.annotation.NonNull;
--import androidx.core.app.NotificationManagerCompat;
-+import android.support.annotation.NonNull;
-+import android.support.v4.app.NotificationManagerCompat;
  
  public abstract class NotificationManagerCompatFacade {
      public static NotificationManagerCompat from(@NonNull Context context) {
