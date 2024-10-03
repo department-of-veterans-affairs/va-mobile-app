@@ -34,7 +34,7 @@ const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: 
 
   return (
     <Box
-      mx={theme.dimensions.condensedMarginBetween}
+      alignItems="center"
       mt={theme.dimensions.condensedMarginBetween}
       flexDirection="row"
       accessible={true}
