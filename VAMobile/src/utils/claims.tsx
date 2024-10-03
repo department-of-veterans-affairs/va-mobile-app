@@ -245,9 +245,9 @@ export const deletePhoto = (
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
   const indicatorDiameter = fs(30)
   return {
-    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    height: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    width: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 24 ? 24 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
