@@ -16,8 +16,6 @@ import {
   LoadingComponent,
   TextArea,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'

@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { ClaimAttributesData } from 'api/types'
-import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
+import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
