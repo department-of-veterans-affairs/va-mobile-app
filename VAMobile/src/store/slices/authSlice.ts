@@ -54,6 +54,7 @@ const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_co
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
+const KEYCHAIN_DEVICE_SECRET_KEY = 'vamobileDeviceSecret'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
 
@@ -143,6 +144,7 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
  */
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
   await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
@@ -329,6 +331,29 @@ const storeRefreshToken = async (
     })
 }
 
+const storeDeviceSecret = async (deviceSecret: string) => {
+  try {
+    const options: Keychain.Options = {
+      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+      accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+      authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+      securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+    }
+
+    await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+
+    const biometricsSupported = !!(await deviceSupportedBiometrics())
+    const biometricsPreferred = await isBiometricsPreferred()
+
+    if (biometricsSupported && biometricsPreferred) {
+      await Keychain.setInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, 'user', deviceSecret, options)
+      console.debug('Successfully set device secret')
+    }
+  } catch (error) {
+    console.debug('Failed to set device secret', error)
+  }
+}
+
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
@@ -389,7 +414,12 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
-      authResponse.device_secret && api.setDeviceSecret(authResponse.device_secret)
+
+      if (authResponse.device_secret) {
+        await storeDeviceSecret(authResponse.device_secret)
+        api.setDeviceSecret(authResponse.device_secret)
+      }
+
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
@@ -612,6 +642,10 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   }
   dispatch(dispatchStartAuthLogin(true))
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
+
+  // Set device secret for starting SSO sessions
+  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+  deviceSecret && api.setDeviceSecret(deviceSecret.password)
 }
 
 export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
@@ -652,6 +686,10 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
     return
   }
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
+
+  // Set device secret for starting SSO sessions
+  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+  deviceSecret && api.setDeviceSecret(deviceSecret.password)
 }
 
 export const handleTokenCallbackUrl =
