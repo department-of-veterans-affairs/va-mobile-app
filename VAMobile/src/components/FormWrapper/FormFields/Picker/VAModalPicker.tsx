@@ -11,7 +11,9 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { Events } from 'constants/analytics'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
@@ -191,8 +193,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
-          <Box mr={8} ml={16} my={16}>
-            <VAIcon name="Sort" fill="pickerIcon" width={16} height={16} />
+          <Box ml={16} my={8}>
+            <Icon name="UnfoldMore" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
           </Box>
         </Box>
       </Box>

@@ -34,7 +34,6 @@ import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
-import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
@@ -94,7 +93,6 @@ export const VA_ICON_MAP = {
   Remove,
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
-  Sort,
   Text,
   Trash,
   Truck,
