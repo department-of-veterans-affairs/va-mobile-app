@@ -58,6 +58,7 @@ local.properties
 /android/
 **/android/tmp
 **/android/app/src/main/assets/
+node_modules*.png
 
 # Android Build
 **/android/vendor

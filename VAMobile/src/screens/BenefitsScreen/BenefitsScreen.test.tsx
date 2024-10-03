@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
@@ -45,19 +46,23 @@ context('BenefitsScreen', () => {
   it('displays active claims count when veteran has active claims', () => {
     const activeClaimsCount = 3
     initializeTestInstance(activeClaimsCount)
-    expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: `${activeClaimsCount} active` })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('claims.title') })).toBeTruthy()
+    expect(
+      screen.getByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
+    ).toBeTruthy()
   })
 
   it('does not display active claims count when there are no active claims', () => {
     const activeClaimsCount = 0
     initializeTestInstance(activeClaimsCount)
-    expect(screen.queryByRole('link', { name: `${activeClaimsCount} active` })).toBeFalsy()
+    expect(
+      screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
+    ).toBeFalsy()
   })
 
   it('navigates to Claims history screen when claims button is pressed', () => {
     initializeTestInstance(3)
-    fireEvent.press(screen.getByRole('link', { name: 'Claims' }))
+    fireEvent.press(screen.getByRole('link', { name: t('claims.title') }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimsHistoryScreen')
   })
 
@@ -71,7 +76,9 @@ context('BenefitsScreen', () => {
     ]
 
     initializeTestInstance(activeClaimsCount, serviceErrors)
-    expect(screen.queryByRole('link', { name: `${activeClaimsCount} active` })).toBeFalsy()
+    expect(
+      screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
+    ).toBeFalsy()
   })
 
   it('displays warning message when there is a service error', () => {
@@ -84,11 +91,7 @@ context('BenefitsScreen', () => {
     ]
 
     initializeTestInstance(activeClaimsCount, serviceErrors)
-    expect(
-      screen.getByText(
-        "We can't get some of your information right now. Benefits activity may not be accurate. Check back later.",
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('benefits.activity.nonFatalError'))).toBeTruthy()
   })
 
   it('displays downtime message when claims or appeals is in downtime', () => {
@@ -107,9 +110,7 @@ context('BenefitsScreen', () => {
     }
 
     initializeTestInstance(activeClaimsCount, undefined, preloadedState)
-    expect(
-      screen.getByText("We're working on the mobile app. Benefits activity may not be accurate. Check back later."),
-    ).toBeTruthy()
+    expect(screen.getByText(t('benefits.activity.warning.downtime'))).toBeTruthy()
   })
 
   it('does not display active claims when claims or appeals is in downtime', () => {
@@ -128,7 +129,9 @@ context('BenefitsScreen', () => {
     }
 
     initializeTestInstance(activeClaimsCount, undefined, preloadedState)
-    expect(screen.queryByRole('link', { name: `${activeClaimsCount} active` })).toBeFalsy()
+    expect(
+      screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
+    ).toBeFalsy()
   })
 
   it('displays error message when the claims API call throws an error', async () => {
@@ -136,11 +139,7 @@ context('BenefitsScreen', () => {
       .calledWith('/v0/claims-and-appeals-overview', expect.anything())
       .mockRejectedValue('fail')
     initializeTestInstance()
-    await waitFor(() =>
-      expect(
-        screen.getByText("We can't get some of your information. Benefits activity may not be accurate."),
-      ).toBeTruthy(),
-    )
+    await waitFor(() => expect(screen.getByText(t('benefits.activity.error'))).toBeTruthy())
   })
 
   it('does not display active claims count when the claims API call throws an error', async () => {
@@ -148,23 +147,19 @@ context('BenefitsScreen', () => {
       .calledWith('/v0/claims-and-appeals-overview', expect.anything())
       .mockRejectedValue('fail')
     initializeTestInstance()
-    await waitFor(() =>
-      expect(
-        screen.getByText("We can't get some of your information. Benefits activity may not be accurate."),
-      ).toBeTruthy(),
-    )
-    await waitFor(() => expect(screen.queryByText('active')).toBeFalsy())
+    await waitFor(() => expect(screen.getByText(t('benefits.activity.error'))).toBeTruthy())
+    await waitFor(() => expect(screen.queryByText(t('active'))).toBeFalsy())
   })
 
   it("navigates to Letters screen when 'letters and document' button is pressed", () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'VA letters and documents' }))
+    fireEvent.press(screen.getByRole('link', { name: t('lettersAndDocs.title') }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('LettersOverview')
   })
 
   it('navigates to Disability rating screen when Disability rating button is pressed', () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'Disability rating' }))
+    fireEvent.press(screen.getByRole('link', { name: t('disabilityRating.title') }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('DisabilityRatings')
   })
 })
