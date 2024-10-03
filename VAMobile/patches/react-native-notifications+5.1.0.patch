@@ -27,7 +27,7 @@ index 90969b2..4c00e69 100644
              if (notification != null) {
                  notification.onOpened();
 diff --git a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
-index 5b7f15f..ecb3b19 100644
+index 5b7f15f..7b3ee7e 100644
 --- a/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
 +++ b/node_modules/react-native-notifications/lib/android/app/src/main/java/com/wix/reactnativenotifications/RNNotificationsPackage.java
 @@ -15,6 +15,7 @@ import com.wix.reactnativenotifications.core.AppLifecycleFacade;
@@ -44,11 +44,11 @@ index 5b7f15f..ecb3b19 100644
      public void onActivityStarted(Activity activity) {
 -        if (InitialNotificationHolder.getInstance().get() == null) {
 +        boolean isReactInitialized = false;
-++        if (AppLifecycleFacadeHolder.get() instanceof ReactAppLifecycleFacade) {
-++            isReactInitialized = AppLifecycleFacadeHolder.get().isReactInitialized();
-++        }
-++
-++        if (InitialNotificationHolder.getInstance().get() == null && !isReactInitialized) {
++        if (AppLifecycleFacadeHolder.get() instanceof ReactAppLifecycleFacade) {
++            isReactInitialized = AppLifecycleFacadeHolder.get().isReactInitialized();
++        }
++
++        if (InitialNotificationHolder.getInstance().get() == null && !isReactInitialized) {
              callOnOpenedIfNeed(activity);
          }
      }
