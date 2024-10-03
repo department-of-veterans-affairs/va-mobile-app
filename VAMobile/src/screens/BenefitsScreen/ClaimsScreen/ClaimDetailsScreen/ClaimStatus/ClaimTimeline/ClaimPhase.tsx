@@ -66,7 +66,6 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
             justifyContent={'center'}
             alignItems={'center'}
             backgroundColor="completedPhase"
-            borderWidth={2}
             borderRadius={indicatorDiameter > 30 ? 30 : indicatorDiameter}
             height={indicatorDiameter > 30 ? 30 : indicatorDiameter}
             width={indicatorDiameter > 30 ? 30 : indicatorDiameter}>

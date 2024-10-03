@@ -164,7 +164,6 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
             justifyContent={'center'}
             alignItems={'center'}
             backgroundColor={request.submitted ? 'completedPhase' : 'buttonDestructiveActive'}
-            borderWidth={2}
             borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
             height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
             width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>

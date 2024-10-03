@@ -193,7 +193,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
-          <Box ml={16} my={8}>
+          <Box ml={16} my={12}>
             <Icon name="UnfoldMore" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
           </Box>
         </Box>
