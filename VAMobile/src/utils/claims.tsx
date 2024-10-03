@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
@@ -264,7 +265,7 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
   if (useCheckMark) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" preventScaling={true} />
+        <Icon width={20} height={20} name={'Check'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {

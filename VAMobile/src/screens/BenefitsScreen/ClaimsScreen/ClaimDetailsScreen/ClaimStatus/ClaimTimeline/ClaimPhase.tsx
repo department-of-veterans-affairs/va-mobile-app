@@ -2,6 +2,8 @@ import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { ClaimAttributesData } from 'api/types'
 import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
@@ -9,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getUserPhase, isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useAutoScrollToElement, useTheme } from 'utils/hooks'
+import { useAutoScrollToElement, useFontScale, useTheme } from 'utils/hooks'
 
 /**
  * props for ClaimPhase components
@@ -34,6 +36,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
+  const fs = useFontScale()
   const { condensedMarginBetween, standardMarginBetween, tinyMarginBetween } = theme.dimensions
 
   const isDisabilityClaim = isDisabilityCompensationClaim(attributes.claimTypeCode)
@@ -46,6 +49,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
   const isIncompletePhase = phase > current
   const hasFileRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0
   const disableScroll = !scrollIsEnabled || (hasFileRequests && !attributes?.waiverSubmitted)
+  const indicatorDiameter = fs(30)
 
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current && !disableScroll) {
@@ -58,13 +62,16 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
     <Box flexDirection="column">
       <Box flexDirection="row" alignItems="center" mb={isCompletedPhase ? tinyMarginBetween : 0}>
         {isCompletedPhase && (
-          <VAIcon
-            name="CircleCheckMark"
-            fill={theme.colors.icon.success}
-            width={24}
-            height={24}
-            preventScaling={true}
-          />
+          <Box
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor="completedPhase"
+            borderWidth={2}
+            borderRadius={indicatorDiameter > 30 ? 30 : indicatorDiameter}
+            height={indicatorDiameter > 30 ? 30 : indicatorDiameter}
+            width={indicatorDiameter > 30 ? 30 : indicatorDiameter}>
+            <Icon width={18} height={18} name={'Check'} fill="#fff" preventScaling={true} />
+          </Box>
         )}
         <TextView
           variant="MobileBodyBold"
