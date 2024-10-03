@@ -2,10 +2,8 @@ import { ReactComponent as Add} from '@componentsDocs/VAIcon/svgs/Add.svg';
 import { ReactComponent as Building} from '@componentsDocs/VAIcon/svgs/Building.svg';
 import { ReactComponent as Bullet} from '@componentsDocs/VAIcon/svgs/Bullet.svg';
 import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/CheckMark.svg';
-import { ReactComponent as ChevronDown} from '@componentsDocs/VAIcon/svgs/ChevronDown.svg';
 import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
 import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
-import { ReactComponent as ChevronUp} from '@componentsDocs/VAIcon/svgs/ChevronUp.svg';
 import { ReactComponent as CircleCheckMark} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
 import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/Compose.svg';
 import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/Ellipsis.svg';
@@ -40,10 +38,8 @@ Building | <Building  className="icons"/> | Building.svg
 Bullet | <Bullet  className="icons"/> | Bullet.svg
 Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
 Check Mark in Circle | <CircleCheckMark  className="icons"/> | CircleCheckMark.svg
-Chevron Down | <ChevronDown  className="icons"/> | ChevronDown.svg
 Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
 Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
-Chevron Up | <ChevronUp  className="icons"/> | ChevronUp.svg
 Compose | <Compose  className="icons"/> | Compose.svg
 Ellipsis | <Ellipsis  className="icons"/> | Ellipsis.svg
 Exclamation Triangle | <ExclamationTriangle  className="icons"/> | ExclamationTriangle.svg

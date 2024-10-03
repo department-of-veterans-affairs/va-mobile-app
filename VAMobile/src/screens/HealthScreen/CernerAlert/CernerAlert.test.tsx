@@ -2,8 +2,10 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 
 import CernerAlert from './CernerAlert'
 
@@ -68,37 +70,25 @@ context('CernerAlert', () => {
   })
 
   it('When only cerner facilities', () => {
-    fireEvent.press(screen.getByRole('tab', { name: 'Your care team uses My VA Health' }))
-    expect(screen.getByLabelText('Your care team uses My  V-A  Health')).toBeTruthy()
-    expect(
-      screen.getByLabelText("You'll need to use our My  V-A  Health portal to manage your care at these facilities:"),
-    ).toBeTruthy()
-    expect(
-      screen.getByText("You'll need to use our My VA Health portal to manage your care at these facilities:"),
-    ).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: t('healthHelp.usesVAHealth') }))
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.usesVAHealth')))).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.goToPortal')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.goToPortal'))).toBeTruthy()
     expect(screen.getByText('FacilityOne')).toBeTruthy()
     expect(screen.getByText('FacilityTwo')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
+    fireEvent.press(screen.getByRole('link', { name: t('goToMyVAHealth') }))
     expect(Alert.alert).toBeCalled()
   })
 
   it('when some facilities are cerner and pressing the link', async () => {
-    fireEvent.press(screen.getByRole('tab', { name: 'Some of your care team uses My VA Health' }))
-    expect(screen.getByLabelText('Some of your care team uses My  V-A  Health')).toBeTruthy()
-    expect(
-      screen.getByLabelText("You'll need to use our My  V-A  Health portal to manage your care at these facilities:"),
-    ).toBeTruthy()
-    expect(
-      screen.getByText("You'll need to use our My VA Health portal to manage your care at these facilities:"),
-    ).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: t('cernerAlert.header.some') }))
+    expect(screen.getByLabelText(a11yLabelVA(t('cernerAlert.header.some')))).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.goToPortal')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.goToPortal'))).toBeTruthy()
     expect(screen.getByText('FacilityOne')).toBeTruthy()
-    expect(
-      screen.getByLabelText('You can still use this app to manage your care at other  V-A  health facilities.'),
-    ).toBeTruthy()
-    expect(
-      screen.getByText('You can still use this app to manage your care at other VA health facilities.'),
-    ).toBeTruthy()
-    fireEvent.press(screen.getByLabelText('Go to My V-A Health'))
+    expect(screen.getByLabelText(a11yLabelVA(t('healthHelp.canStillUse')))).toBeTruthy()
+    expect(screen.getByText(t('healthHelp.canStillUse'))).toBeTruthy()
+    fireEvent.press(screen.getByLabelText(a11yLabelVA(t('goToMyVAHealth'))))
     expect(Alert.alert).toBeCalled()
   })
 })
