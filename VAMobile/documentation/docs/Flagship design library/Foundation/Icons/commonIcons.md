@@ -1,6 +1,5 @@
 import { ReactComponent as Add} from '@componentsDocs/VAIcon/svgs/Add.svg';
 import { ReactComponent as Building} from '@componentsDocs/VAIcon/svgs/Building.svg';
-import { ReactComponent as Bullet} from '@componentsDocs/VAIcon/svgs/Bullet.svg';
 import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/CheckMark.svg';
 import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
 import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
@@ -18,7 +17,6 @@ import { ReactComponent as QuestionMark} from '@componentsDocs/VAIcon/svgs/Quest
 import { ReactComponent as Remove} from '@componentsDocs/VAIcon/svgs/Remove.svg';
 import { ReactComponent as Reply} from '@componentsDocs/VAIcon/svgs/Reply.svg';
 import { ReactComponent as Trash} from '@componentsDocs/VAIcon/svgs/Trash.svg';
-import { ReactComponent as Truck} from '@componentsDocs/VAIcon/svgs/Truck.svg';
 import { ReactComponent as Unread} from '@componentsDocs/VAIcon/svgs/Unread.svg';
 import { ReactComponent as VideoCamera} from '@componentsDocs/VAIcon/svgs/VideoCamera.svg';
 import IconsPathSection from '@site/src/components/IconsPathSection'
@@ -33,7 +31,6 @@ Name | Icon | File Location
 :---: | :---: | :---: 
 Add | <Add  className="icons"/> | Add.svg
 Building | <Building  className="icons"/> | Building.svg
-Bullet | <Bullet  className="icons"/> | Bullet.svg
 Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
 Check Mark in Circle | <CircleCheckMark  className="icons"/> | CircleCheckMark.svg
 Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
@@ -51,6 +48,5 @@ Question Mark | <QuestionMark  className="icons"/> | QuestionMark.svg
 Remove | <Remove  className="icons"/> | Remove.svg
 Reply | <Reply  className="icons"/> | Reply.svg
 Trash | <Trash  className="icons"/> | Trash.svg
-Truck | <Truck  className="icons"/> | Truck.svg
 Unread | <Unread  className="icons"/> | Unread.svg
 Video Camera | <VideoCamera  className="icons"/> | VideoCamera.svg

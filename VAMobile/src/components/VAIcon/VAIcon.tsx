@@ -13,7 +13,6 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 // See VAIcon function documentation below for guidance on adding new SVGs
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
-import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 // Chevrons
 import ChevronLeft from './svgs/ChevronLeft.svg'
@@ -35,7 +34,6 @@ import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
 import Trash from './svgs/Trash.svg'
-import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
@@ -60,7 +58,6 @@ import RadioFilled from './svgs/radio/RadioFilled.svg'
 export const VA_ICON_MAP = {
   Add,
   Building,
-  Bullet,
   Calendar,
   Chat,
   CheckBoxEmpty,
@@ -95,7 +92,6 @@ export const VA_ICON_MAP = {
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
   Text,
   Trash,
-  Truck,
   Unread,
   UploadPhoto,
   VideoCamera,
