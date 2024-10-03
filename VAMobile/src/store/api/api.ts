@@ -218,6 +218,16 @@ const call = async function <T>(
         if (error.endpoint === endpoint) {
           throw error.error
         }
+        if (endpoint.includes(error.endpoint)) {
+          throw error.error
+        }
+        if (
+          error.endpoint === '/v0/messaging/health/folders/${folderID}/messages' &&
+          endpoint.includes('/v0/messaging/health/folders/') &&
+          endpoint.includes('/messages')
+        ) {
+          throw error.error
+        }
       })
     }
     // we are in demo and need to transform the request from the demo store

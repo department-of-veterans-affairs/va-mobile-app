@@ -367,12 +367,12 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
         </Box>
       }>
       <Box>
-        {/* <TextArea>
+        <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Appointments
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(appointmentsKeys.appointments, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/appointments', overrideErrors, setErrors, clearData)}
           </Box>
         </TextArea>
         <TextArea>
@@ -380,7 +380,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
             Authorized Services
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(authorizedServicesKeys.authorizedServices, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/user/authorized-services', overrideErrors, setErrors, clearData)}
           </Box>
         </TextArea>
         <TextArea>
@@ -388,11 +388,11 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
             Claims and Appeals
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(claimsAndAppealsKeys.appeal, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/appeal/', overrideErrors, setErrors, clearData)}
           </Box>
-          {IndividualQueryDisplay(claimsAndAppealsKeys.claim, overrideErrors, setErrors, clearData)}
+          {IndividualQueryDisplay('/v0/claim/', overrideErrors, setErrors, clearData)}
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(claimsAndAppealsKeys.claimsAndAppeals, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/claims-and-appeals-overview', overrideErrors, setErrors, clearData)}
           </Box>
         </TextArea>
         <TextArea>
@@ -400,7 +400,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
             Contact Information
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(contactInformationKeys.contactInformation, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/user/contact-info', overrideErrors, setErrors, clearData)}
           </Box>
         </TextArea>
         <TextArea>
@@ -408,7 +408,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
             Decision Letters
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(decisionLettersKeys.decisionLetters, overrideErrors, setErrors, clearData)}
+            {IndividualQueryDisplay('/v0/claims/decision-letters', overrideErrors, setErrors, clearData)}
           </Box>
         </TextArea>
         <TextArea>
@@ -506,7 +506,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay(secureMessagingKeys.thread, overrideErrors, setErrors, clearData)}
           </Box>
-        </TextArea> */}
+        </TextArea>
         <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
             Vaccines
@@ -514,7 +514,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Box my={theme.dimensions.standardMarginBetween}>
             {IndividualQueryDisplay('/v1/health/immunizations', overrideErrors, setErrors, clearData)}
           </Box>
-          {/* {IndividualQueryDisplay(vaccineKeys.vaccineLocations, overrideErrors, setErrors, clearData)} */}
+          {IndividualQueryDisplay('/v0/health/locations/', overrideErrors, setErrors, clearData)}
         </TextArea>
       </Box>
     </FeatureLandingTemplate>
