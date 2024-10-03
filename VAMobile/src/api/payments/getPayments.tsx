@@ -42,7 +42,6 @@ export const usePayments = (year: string | undefined, page: number, options?: { 
   const { data: authorizedServices } = useAuthorizedServices()
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.paymentHistory && !paymentsInDowntime && queryEnabled),

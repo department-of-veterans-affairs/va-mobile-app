@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { sortBy } from 'underscore'
+import _ from 'underscore'
 
 import { LettersData, LettersList } from 'api/types'
 import { get } from 'store/api'
@@ -8,7 +8,7 @@ import { lettersKeys } from './queryKeys'
 
 const sortByName = (letters?: LettersList): LettersList => {
   const newLetters = letters || []
-  return sortBy(newLetters, (letter) => {
+  return _.sortBy(newLetters, (letter) => {
     return letter.name
   })
 }
