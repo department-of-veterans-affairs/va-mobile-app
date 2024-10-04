@@ -164,7 +164,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           cookiesArray.some((cookie) => cookie.name === cookieName),
         )
 
-        logAnalyticsEvent(Events.vama_sso_cookie_received(hasSSOCookies))
+        logAnalyticsEvent(Events.vama_sso_cookie_received(hasSSOCookies, url))
       } catch (error) {
         logNonFatalErrorToFirebase(error, `Error fetching SSO cookies: ${error}`)
       } finally {
