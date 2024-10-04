@@ -9,7 +9,9 @@ on:
     branches:
         - 'dependabot/**'
   pull_request:
-    types: [opened, ready_for_review, labeled, edited]
+    types: synchronize
+    paths:
+      - 'VAMobile/src/**'
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -66,7 +68,7 @@ jobs:
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
-    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
@@ -190,11 +192,11 @@ jobs:
         id: run_e2e_tests
         run: |
           if [[ "${{needs.output_detox_tests_to_run.outputs.output2}}" == "" ]]; then
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
             echo "NAV_AF_TEST_RUN=" >> "$GITHUB_OUTPUT"
           else
             echo "NAV_AF_TEST_RUN=true" >> "$GITHUB_OUTPUT"
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
           fi
         continue-on-error: true
 
@@ -204,9 +206,9 @@ jobs:
         run: |
           yarn jest:clear;
           if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
-            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+            yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
           else
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
           fi
 
       - name: Upload e2e-junit

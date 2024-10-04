@@ -33,7 +33,6 @@ import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { updateDemoMode } from './demoSlice'
-import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -610,16 +609,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
-export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
-  const { loggedIn } = getState().auth
-  const { tappedForegroundNotification } = getState().notifications
-
-  if (loggedIn && tappedForegroundNotification) {
-    console.debug('User tapped foreground notification. Skipping initializeAuth.')
-    dispatch(dispatchResetTappedForegroundNotification())
-    return
-  }
-
+export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()
