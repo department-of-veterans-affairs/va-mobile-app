@@ -465,6 +465,14 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
         </TextArea>
         <TextArea>
           <TextView accessibilityRole="header" variant="MobileBodyBold">
+            Notifications
+          </TextView>
+          <Box my={theme.dimensions.standardMarginBetween}>
+            {IndividualQueryDisplay(`/v0/push/prefs/`, overrideErrors, setErrors, clearData)}
+          </Box>
+        </TextArea>
+        <TextArea>
+          <TextView accessibilityRole="header" variant="MobileBodyBold">
             Payments
           </TextView>
           <Box my={theme.dimensions.standardMarginBetween}>
