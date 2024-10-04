@@ -19,6 +19,8 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -66,6 +68,10 @@ export const CommonE2eIdConstants = {
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
+  VETERANS_CRISIS_LINE_CALL_ID: 'veteransCrisiLineCallNumberID',
+  VETERANS_CRISIS_LINE_TTY_ID: 'veteransCrisisLineHearingLossNumberTestID',
+  VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
+  VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
 }
 
 /** Log the automation into demo mode
