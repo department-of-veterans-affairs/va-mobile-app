@@ -336,7 +336,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
-  it('new message: verify talk to the veterans crisis line now', async () => {
+  it(':ios: new message: verify talk to the veterans crisis line now', async () => {
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
