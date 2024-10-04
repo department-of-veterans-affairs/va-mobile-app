@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import {
   Box,
   ButtonDecoratorType,
@@ -25,7 +26,6 @@ import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
@@ -107,9 +107,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
+  const [deviceToken, setDeviceToken] = useState<string>('')
+  getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
   Object.keys(tokenInfo).forEach((key) => {
