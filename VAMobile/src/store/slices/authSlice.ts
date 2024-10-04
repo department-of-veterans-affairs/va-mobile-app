@@ -331,6 +331,9 @@ const storeRefreshToken = async (
     })
 }
 
+/**
+ * Stores SSO device secret in keychain/keystore
+ */
 const storeDeviceSecret = async (deviceSecret: string) => {
   try {
     const options: Keychain.Options = {
@@ -352,6 +355,14 @@ const storeDeviceSecret = async (deviceSecret: string) => {
   } catch (error) {
     logNonFatalErrorToFirebase(error, `storeDeviceSecret: Failed to store SSO device secret`)
   }
+}
+
+/**
+ * Loads device secret from keychain/keystore for starting SSO sessions
+ */
+const loadDeviceSecret = async () => {
+  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+  deviceSecret && api.setDeviceSecret(deviceSecret.password)
 }
 
 /**
@@ -642,10 +653,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   }
   dispatch(dispatchStartAuthLogin(true))
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
-
-  // Set device secret for starting SSO sessions
-  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
-  deviceSecret && api.setDeviceSecret(deviceSecret.password)
+  await loadDeviceSecret()
 }
 
 export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
@@ -686,10 +694,7 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
     return
   }
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
-
-  // Set device secret for starting SSO sessions
-  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
-  deviceSecret && api.setDeviceSecret(deviceSecret.password)
+  await loadDeviceSecret()
 }
 
 export const handleTokenCallbackUrl =
