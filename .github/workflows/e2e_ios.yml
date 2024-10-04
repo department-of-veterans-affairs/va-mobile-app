@@ -9,7 +9,9 @@ on:
     branches:
         - 'dependabot/**'
   pull_request:
-    types: [opened, ready_for_review, labeled, edited]
+    types: synchronize
+    paths:
+      - 'VAMobile/src/**'
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -66,7 +68,7 @@ jobs:
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
-    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
