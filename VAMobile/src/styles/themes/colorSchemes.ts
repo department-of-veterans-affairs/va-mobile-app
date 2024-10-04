@@ -49,6 +49,7 @@ export const lightTheme = {
     linkRow: DSColors.vadsColorGrayWarmLight,
     skeletonLoader: DSColors.vadsColorBaseLighter,
     skeletonLoaderSecondary: DSColors.vadsColorBaseLightest,
+    bullet: colors.grayDark,
   },
   border: {
     aboutYou: DSColors.vadsColorGrayWarmLight,
@@ -273,6 +274,7 @@ export const darkTheme = {
     linkRow: colors.darkmodeGrayWarmDark,
     skeletonLoader: DSColors.vadsColorGrayMedium,
     skeletonLoaderSecondary: DSColors.vadsColorBaseLight,
+    bullet: colors.grayLighter,
   },
   border: {
     aboutYou: colors.darkmodeBorder,

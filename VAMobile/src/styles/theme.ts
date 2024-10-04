@@ -216,6 +216,7 @@ export type VABackgroundColors = {
   linkRow: string
   skeletonLoader: string
   skeletonLoaderSecondary: string
+  bullet: string
 }
 
 export type VABorderColors = {
