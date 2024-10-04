@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -15,7 +17,7 @@ import { RootState } from 'store'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { loginStart } from 'utils/auth'
+import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
@@ -65,15 +67,29 @@ function LoginScreen() {
     }
   }
 
+  async function setFirstTimeLogin() {
+    await AsyncStorage.setItem(FIRST_TIME_LOGIN, 'true')
+  }
+  async function setNewSession() {
+    await AsyncStorage.setItem(NEW_SESSION, 'true')
+  }
+
   const onLoginInit = demoMode
     ? () => {
+        setNewSession()
         loginStart(true, queryClient)
       }
     : userAuthSettings?.firstTimeLogin
       ? () => {
+          setFirstTimeLogin()
+          setNewSession()
+
           navigateTo('LoaGate')
         }
-      : startAuth
+      : () => {
+          setNewSession()
+          startAuth()
+        }
 
   return (
     <VAScrollView testID="Login-page" contentContainerStyle={mainViewStyle} removeInsets={true}>
