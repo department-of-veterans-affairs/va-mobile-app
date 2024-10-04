@@ -350,7 +350,7 @@ const storeDeviceSecret = async (deviceSecret: string) => {
       console.debug('Successfully set device secret')
     }
   } catch (error) {
-    console.debug('Failed to set device secret', error)
+    logNonFatalErrorToFirebase(error, `storeDeviceSecret: Failed to store SSO device secret`)
   }
 }
 
