@@ -56,6 +56,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const scrollViewRef = useRef<ScrollView>(null)
   const navigateTo = useRouteNavigation()
+  const controlIDs = ['claimsStatusID', 'claimsFilesID']
   const controlLabels = [t('claimDetails.status'), t('files')]
   const [selectedTab, setSelectedTab] = useState(0)
 
@@ -276,7 +277,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagreeLink')}
-            testID={t('claimDetails.learnWhatToDoIfDisagreeLink')}
+            testID="claimDetailsLearnWhatToDoIFDisagreeLinkID"
             onPress={whatShouldOnPress}
           />
         </Box>
@@ -288,7 +289,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <LinkWithAnalytics
           type="custom"
           text={t('claimDetails.whyWeCombineLink')}
-          testID={t('claimDetails.whyWeCombineLink')}
+          testID="claimDetailsWhyWeCombineLinkID"
           onPress={whyWeCombineOnPress}
         />
       </Box>
@@ -301,7 +302,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
-      testID="ClaimDetailsScreen">
+      testID="ClaimDetailsScreen"
+      backLabelTestID="claimsDetailsBackTestID">
       {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
       ) : claimError ? (
@@ -326,6 +328,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={a11yHints}
+                testIDs={controlIDs}
               />
             </Box>
           </Box>

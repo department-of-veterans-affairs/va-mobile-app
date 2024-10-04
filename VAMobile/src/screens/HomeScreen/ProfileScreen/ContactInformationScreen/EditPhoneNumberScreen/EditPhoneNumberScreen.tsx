@@ -259,7 +259,9 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={isLoading ? '' : t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}>
+      onRightButtonPress={() => setOnSaveClicked(true)}
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : (

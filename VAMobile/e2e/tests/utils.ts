@@ -56,8 +56,16 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
+  CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
+  CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
+  CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
+  GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
+  NEXT_PAGE_ID: 'next-page',
 }
 
 /** Log the automation into demo mode
@@ -487,7 +495,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (
