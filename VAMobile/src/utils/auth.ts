@@ -18,9 +18,7 @@ import {
 } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
-import store, { AppDispatch } from 'store'
 import * as api from 'store/api'
-import { dispatchResetTappedForegroundNotification } from 'store/slices'
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
@@ -319,19 +317,7 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (
-  dispatch: AppDispatch,
-  queryClient: QueryClient,
-  refreshAccessToken: () => void,
-) => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  const { tappedForegroundNotification } = store.getState().notifications
-
-  if (userSettings?.loggedIn && tappedForegroundNotification) {
-    dispatch(dispatchResetTappedForegroundNotification())
-    return
-  }
-
+export const initializeAuth = async (queryClient: QueryClient, refreshAccessToken: () => void) => {
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {

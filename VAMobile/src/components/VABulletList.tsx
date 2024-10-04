@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
 import { useTheme } from 'utils/hooks'
 
@@ -51,7 +50,7 @@ export type VABulletListProps = {
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) => {
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
 
@@ -72,7 +71,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) =
   }
 
   return (
-    <Box mb={paragraphSpacing ? theme.paragraphSpacing.spacing20FontSize : undefined}>
+    <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined}>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
         const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
 
@@ -95,7 +94,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) =
             <Box mr={20} mt={12}>
               <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
             </Box>
-            <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
+            <TextView {...textViewProps} accessibilityLabel={a11yLabel || text}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}
               {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}

@@ -66,7 +66,8 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 * When linking Veterans to VA.gov, be sure to include VA.gov in the link text. For example, instead of saying “Learn more about benefits,” it’s better to say “Learn more about benefits on VA.gov”.
 
 ## Accessibility considerations
-* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/link/#accessibility-considerations)
+* For guidance on choosing between a Button or Link, see [additional documentation](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/).
+* For additional guidance, refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/link/#accessibility-considerations)
 
 ## Related
 * [Link - VA Design System](https://design.va.gov/components/link/)

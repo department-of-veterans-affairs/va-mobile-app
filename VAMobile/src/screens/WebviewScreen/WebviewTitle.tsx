@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { Box, BoxProps, TextView, VAIcon } from 'components'
-import { testIdProps } from 'utils/accessibility'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 
@@ -21,9 +22,9 @@ function WebviewTitle({ title }: WebviewTitleProps) {
   }
 
   return (
-    <Box {...testIdProps(title)} {...titleBoxProps}>
+    <Box accessibilityLabel={title} {...titleBoxProps}>
       <Box mr={theme.dimensions.textIconMargin}>
-        <VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.text.webviewTitle} preventScaling={true} />
+        <Icon name={'Lock'} height={36} width={24} fill={theme.colors.text.webviewTitle} preventScaling={true} />
       </Box>
       <TextView color="webviewTitle" allowFontScaling={false}>
         {title}

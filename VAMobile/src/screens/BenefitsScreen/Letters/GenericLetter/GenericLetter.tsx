@@ -7,11 +7,17 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
 import { LetterTypeConstants, LettersDownloadParams } from 'api/types'
-import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import {
+  AlertWithHaptics,
+  BasicError,
+  Box,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextArea,
+  TextView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
@@ -51,9 +57,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <Box mb={theme.dimensions.contentMarginBottom}>
       {letterType === LetterTypeConstants.serviceVerification && (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox border="informational">
-            <TextView variant="MobileBody">{t('letters.serviceVerificationLetter.informational')}</TextView>
-          </AlertBox>
+          <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
         </Box>
       )}
       <TextArea>
@@ -61,7 +65,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
           {header}
         </TextView>
         <TextView
-          {...testIdProps(descriptionA11yLabel || description)}
+          accessibilityLabel={descriptionA11yLabel}
           variant="MobileBody"
           mt={theme.dimensions.standardMarginBetween}
           paragraphSpacing={true}>
@@ -80,8 +84,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
     <FeatureLandingTemplate
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
-      title={t('letters.details.title')}
-      {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
+      title={t('letters.details.title')}>
       {downloading ? (
         <LoadingComponent text={t('letters.loading')} />
       ) : letterDownloadError ? (

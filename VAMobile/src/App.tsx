@@ -49,7 +49,7 @@ import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInfo
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import store, { RootState } from 'store'
 import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
-import { AnalyticsState, NotificationsState } from 'store/slices'
+import { AnalyticsState } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -70,7 +70,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager from './components/NotificationManager'
+import NotificationManager, { useNotificationContext } from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -199,6 +199,7 @@ export function AuthGuard() {
   setRefreshAccessToken(refreshAccessToken)
   setFileSystemRefreshAccessToken(refreshAccessToken)
   const { data: userAuthSettings, isLoading: initializing } = useAuthSettings()
+  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -288,31 +289,43 @@ export function AuthGuard() {
           console.error(error)
           logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
           if (error.status) {
-            await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+            await logAnalyticsEvent(Events.vama_login_token_refresh(error))
           }
         }
         await finishInitialize(false, queryClient)
       },
     }
     console.debug('AuthGuard: initializing')
-    initializeAuth(dispatch, queryClient, () => {
-      refreshAccessToken(getAccessToken() || '', mutateOptions)
-    })
+    if (userAuthSettings?.loggedIn && tappedForegroundNotification) {
+      console.debug('User tapped foreground notification. Skipping initializeAuth.')
+      setTappedForegroundNotification(false)
+    } else if (!userAuthSettings?.loggedIn) {
+      initializeAuth(queryClient, () => {
+        refreshAccessToken(getAccessToken() || '', mutateOptions)
+      })
 
-    const listener = (event: { url: string }): void => {
-      if (event.url?.startsWith('vamobile://login-success?')) {
-        const params = {
-          url: event.url,
-          queryClient: queryClient,
+      const listener = (event: { url: string }): void => {
+        if (event.url?.startsWith('vamobile://login-success?')) {
+          const params = {
+            url: event.url,
+            queryClient: queryClient,
+          }
+          handleTokenCallbackUrl(params)
         }
-        handleTokenCallbackUrl(params)
+      }
+      const sub = Linking.addEventListener('url', listener)
+      return (): void => {
+        sub?.remove()
       }
     }
-    const sub = Linking.addEventListener('url', listener)
-    return (): void => {
-      sub?.remove()
-    }
-  }, [dispatch, handleTokenCallbackUrl, refreshAccessToken, postLoggedIn])
+  }, [
+    userAuthSettings?.loggedIn,
+    tappedForegroundNotification,
+    setTappedForegroundNotification,
+    refreshAccessToken,
+    handleTokenCallbackUrl,
+    postLoggedIn,
+  ])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -430,8 +443,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
-
+  const { initialUrl } = useNotificationContext()
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()

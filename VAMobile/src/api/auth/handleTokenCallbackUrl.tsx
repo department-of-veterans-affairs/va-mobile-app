@@ -53,9 +53,8 @@ export const useHandleTokenCallbackUrl = () => {
     onError: async (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: Auth Service Error`)
-        await logAnalyticsEvent(Events.vama_exchange_failed())
         if (error.status) {
-          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
+          await logAnalyticsEvent(Events.vama_login_token_fetch(error))
         }
         loginFinish(true, queryClient)
       }

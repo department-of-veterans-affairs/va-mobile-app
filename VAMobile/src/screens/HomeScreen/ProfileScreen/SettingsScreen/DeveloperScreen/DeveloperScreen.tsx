@@ -11,14 +11,24 @@ import { pick } from 'underscore'
 
 import { useAuthSettings, useLogout } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
+import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
+import {
+  Box,
+  ButtonDecoratorType,
+  FeatureLandingTemplate,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+  VATextInput,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { debugResetFirstTimeLogin } from 'utils/auth'
+import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -28,7 +38,7 @@ import {
   overrideLocalVersion,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -43,6 +53,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const resetFirstTimeLoginAlert = useAlert()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
@@ -101,9 +112,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
+  const [deviceToken, setDeviceToken] = useState<string>('')
+  getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
   Object.keys(tokenInfo).forEach((key) => {
@@ -114,16 +126,49 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const envVars = getEnv()
 
   const onResetFirstTimeLogin = (): void => {
-    debugResetFirstTimeLogin(logout, queryClient)
+    resetFirstTimeLoginAlert({
+      title: t('areYouSure'),
+      message: 'This will clear all session activity and redirect you back to the login screen.',
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+        {
+          text: t('reset'),
+          onPress: () => {
+            console.debug('Resetting first time login flag')
+            debugResetFirstTimeLogin(logout, queryClient)
+          },
+        },
+      ],
+    })
   }
 
-  const resetInAppReview = (): void => {
-    resetReviewActionCount()
+  const resetInAppReview = async () => {
+    try {
+      await resetReviewActionCount()
+      showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
+    } catch {
+      showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
+    }
   }
 
-  const onClickFirebaseDebugMode = (): void => {
-    dispatch(toggleFirebaseDebugMode())
-  }
+  const firebaseList: Array<SimpleListItemObj> = [
+    {
+      text: 'Firebase debug mode',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: firebaseDebugMode,
+      },
+      onPress: () => dispatch(toggleFirebaseDebugMode()),
+    },
+    {
+      text: 'Remote Config',
+      decorator: ButtonDecoratorType.Navigation,
+      onPress: () => navigateTo('RemoteConfig'),
+      testId: 'Remote Config',
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -131,6 +176,13 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
+      <TextView
+        variant={'MobileBodyBold'}
+        accessibilityRole={'header'}
+        mx={theme.dimensions.gutter}
+        mb={theme.dimensions.standardMarginBetween}>
+        Reset options
+      </TextView>
       <Box>
         <TextArea>
           <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
@@ -142,21 +194,18 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         </TextArea>
       </Box>
       <Box>
-        <TextArea>
-          <Button
-            onPress={onClickFirebaseDebugMode}
-            label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
-          />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
-          <Button onPress={() => navigateTo('RemoteConfig')} label={'Remote Config'} />
-        </TextArea>
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Firebase
+        </TextView>
+        <SimpleList items={firebaseList} />
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Auth Tokens
           </TextView>
         </TextArea>
@@ -174,7 +223,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       })}
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Authorized Services
           </TextView>
         </TextArea>
@@ -195,7 +244,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Environment Variables
           </TextView>
         </TextArea>
@@ -215,7 +264,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Encouraged Update and What's New Versions
           </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
@@ -273,7 +322,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             Push Notifications
           </TextView>
         </TextArea>

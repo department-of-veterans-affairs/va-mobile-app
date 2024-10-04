@@ -74,6 +74,10 @@ export type VAModalPickerProps = {
   showModalByDefault?: boolean
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional TestID for cancel button */
+  cancelTestID?: string
+  /** Option TestID for apply button */
+  confirmTestID?: string
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -94,6 +98,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   confirmBtnText,
   testID,
   showModalByDefault,
+  cancelTestID,
+  confirmTestID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -173,7 +179,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
-    accessibilityRole: 'spinbutton',
+    accessibilityRole: 'button',
   }
 
   const renderSelectionBox = (): ReactElement => {
@@ -286,7 +292,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel} {...cancelButtonProps}>
+              <Pressable onPress={onCancel} {...cancelButtonProps} testID={cancelTestID}>
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
@@ -294,7 +300,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                   {getTranslation(labelKey || '', t)}
                 </TextView>
               </Box>
-              <Pressable onPress={onConfirm} {...confirmButtonProps}>
+              <Pressable onPress={onConfirm} {...confirmButtonProps} testID={confirmTestID}>
                 <TextView {...commonButtonProps}>{confirmLabel}</TextView>
               </Pressable>
             </Box>

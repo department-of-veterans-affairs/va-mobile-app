@@ -3,9 +3,9 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { ClaimEventData, LetterTypes } from 'api/types'
+import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
@@ -57,6 +57,7 @@ export type BenefitsStackParamList = {
   }
   FileRequest: {
     claimID: string
+    claim: ClaimData | undefined
   }
   FileRequestDetails: {
     claimID: string
@@ -67,24 +68,27 @@ export type BenefitsStackParamList = {
   }
   TakePhotos: {
     claimID: string
-    request: ClaimEventData
+    request?: ClaimEventData
     focusOnSnackbar?: boolean
   }
   SelectFile: {
     claimID: string
-    request: ClaimEventData
+    request?: ClaimEventData
     focusOnSnackbar?: boolean
+  }
+  SubmitEvidence: {
+    claimID: string
   }
   UploadOrAddPhotos: {
     claimID: string
-    request: ClaimEventData
     firstImageResponse: ImagePickerResponse
+    request?: ClaimEventData
   }
   UploadFile: {
     claimID: string
-    request: ClaimEventData
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
+    request?: ClaimEventData
   }
 }
 
@@ -108,31 +112,31 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       key={'AskForClaimDecision'}
       name="AskForClaimDecision"
       component={AskForClaimDecision}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'TakePhotos'}
       name="TakePhotos"
       component={TakePhotos}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'SelectFile'}
       name="SelectFile"
       component={SelectFile}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'UploadOrAddPhotos'}
       name="UploadOrAddPhotos"
       component={UploadOrAddPhotos}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'UploadFile'}
       name="UploadFile"
       component={UploadFile}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={{ headerShown: false }}
     />,
   ]
 }

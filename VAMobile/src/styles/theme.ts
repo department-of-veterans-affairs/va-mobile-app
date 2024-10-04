@@ -15,7 +15,10 @@ export type VAButtonBackgroundColors = {
   brandedPrimaryActive: string
   overFlowMenuButton: string
   activityButton: string
+  activityButtonActive: string
   announcementBanner: string
+  crisisLine: string
+  crisisLineActive: string
 }
 
 export type VAButtonBorderColors = {
@@ -82,8 +85,6 @@ export type VATextColors = {
   activityFooter: string
   categoryLandingError: string
   categoryLandingWarning: string
-  cernerPanel: string
-  cernerFooter: string
 }
 
 export type VAIconColors = {
@@ -169,10 +170,6 @@ export type VATypographyThemeVariants = {
   VeteranStatusBranch: string
   VeteranStatusProof: string
   webviewTitle: string
-  cernerPanelSubtext: string
-  cernerPanelHeader: string
-  cernerPanelFacility: string
-  cernerFooterText: string
   MobileFooterLink: string
 }
 
@@ -188,7 +185,6 @@ export type VABackgroundColors = {
   headerDropShadow: string
   shadow: string
   profileBanner: string
-  ctaButton: string
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
@@ -346,8 +342,6 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
-    cernerPanelSubtext: VAFontSizes
-    cernerPanelHeader: VAFontSizes
     FooterText: VAFontSizes
   }
   mode: ColorSchemeTypes

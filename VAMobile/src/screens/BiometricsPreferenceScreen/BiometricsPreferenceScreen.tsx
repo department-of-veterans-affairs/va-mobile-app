@@ -45,10 +45,9 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
     <VAScrollView>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
-          variant="BitterBoldHeading"
+          variant="BitterHeading"
           accessibilityRole="header"
-          accessibilityLabel={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}
-          testID={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}>
+          accessibilityLabel={t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel })}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
         <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>

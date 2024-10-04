@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -51,12 +51,13 @@ function PrescriptionsDetailsBanner() {
           {t('prescription.details.banner.body2')}
         </TextView>
         <Box>
-          <VABulletList listOfText={bullets} />
+          <VABulletList listOfText={bullets} paragraphSpacing={true} />
         </Box>
         <ClickToCallPhoneNumber
           phone={t('5418307563')}
           displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
           a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
+          variant={'base'}
         />
       </>
     )
@@ -65,13 +66,14 @@ function PrescriptionsDetailsBanner() {
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
-        <CollapsibleAlert
-          border="warning"
-          headerText={t('prescription.details.banner.title')}
-          body={getContent()}
-          a11yLabel={t('prescription.details.banner.title')}
-          onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
-        />
+        <AlertWithHaptics
+          variant="warning"
+          expandable={true}
+          focusOnError={false}
+          header={t('prescription.details.banner.title')}
+          analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
+          {getContent()}
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )

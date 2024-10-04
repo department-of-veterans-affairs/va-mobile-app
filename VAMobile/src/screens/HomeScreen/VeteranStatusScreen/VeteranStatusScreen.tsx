@@ -9,7 +9,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
+import { BranchOfService, ServiceData, ServiceHistoryData } from 'api/types'
 import {
   BackgroundVariant,
   BorderColorVariant,
@@ -17,13 +17,14 @@ import {
   BoxProps,
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
+  MilitaryBranchEmblem,
   TextView,
-  VAIcon,
+  VALogo,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { darkTheme } from 'styles/themes/colorSchemes'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -31,7 +32,7 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
-function VeteranStatusScreen({}: VeteranStatusScreenProps) {
+function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
@@ -47,6 +48,10 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const combinedPercentText = ratingIsDefined
     ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
     : undefined
+
+  useBeforeNavBackListener(navigation, () => {
+    registerReviewEvent()
+  })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -70,7 +75,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     )
   })
 
-  const branch = mostRecentBranch || ''
+  const branch = mostRecentBranch || ('' as BranchOfService)
 
   const boxProps: BoxProps = {
     minHeight: 81,
@@ -81,29 +86,6 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     borderTopWidth: theme.dimensions.borderWidth,
     borderColor: theme.colors.border.veteranStatus as BorderColorVariant,
     borderStyle: 'solid',
-  }
-
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 34,
-      height: 34,
-      preventScaling: true,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
-      case BranchesOfServiceConstants.SpaceForce:
-        return <VAIcon testID="VeteranStatusUSSFTestID" name="SpaceForce" fill2={darkTheme.icon.ussf} {...dimensions} />
-    }
   }
 
   return (
@@ -117,7 +99,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
+        <VALogo variant="dark" testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
@@ -134,7 +116,13 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           </TextView>
           {accessToMilitaryInfo && (
             <Box display="flex" flexDirection="row" flexWrap="wrap">
-              {getBranchSeal()}
+              <MilitaryBranchEmblem
+                testID="veteranStatusCardBranchEmblem"
+                branch={branch}
+                width={34}
+                height={34}
+                variant="dark"
+              />
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>

@@ -1,6 +1,10 @@
+import { Platform } from 'react-native'
+
 import { MutateOptions, UseMutateFunction } from '@tanstack/react-query'
 import _ from 'underscore'
 
+import { deviceKeys } from 'api/device/queryKeys'
+import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -17,6 +21,10 @@ let _RefreshAccessToken: UseMutateFunction<Response, Error, string, void> | unde
 
 const DEMO_MODE_DELAY = 300
 const METHODS_THAT_ALLOW_PARAMS = ['GET']
+// @ts-expect-error
+const DEVICE_MODEL = Platform.OS === 'ios' ? 'iPhone' : Platform.constants.Model
+// @ts-expect-error
+const OS_VERSION = Platform.OS === 'ios' ? `iOS ${Platform.Version}` : `Android ${Platform.constants.Release}`
 
 export const setlogout = (logout: UseMutateFunction<Response, Error, void, void>) => {
   _logout = logout
@@ -74,6 +82,9 @@ const doRequest = async function (
       'X-Key-Inflection': 'camel',
       'Source-App-Name': 'va-health-benefits-app',
       'Authentication-Method': 'SIS',
+      'Device-Model': DEVICE_MODEL,
+      'OS-Version': OS_VERSION,
+      'App-Version': queryClient.getQueryData(deviceKeys.appVersion) || '',
     },
     ...({ signal: abortSignal } || {}),
   }
@@ -186,6 +197,15 @@ const call = async function <T>(
       }
 
       throw { status: response.status, endpoint, text, json }
+    }
+
+    // Guard against responses that can't be parsed as JSON
+    if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
+      if (endpoint === '/v0/user/logged-in') {
+        return
+      } else {
+        logAnalyticsEvent(Events.vama_9385_api_cType(endpoint, response.headers.get('Content-Type') || ''))
+      }
     }
 
     // No errors found, return the response

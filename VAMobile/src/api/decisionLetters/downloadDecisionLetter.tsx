@@ -6,6 +6,7 @@ import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { decisionLettersKeys } from './queryKeys'
 
@@ -21,7 +22,7 @@ const downloadDecisionLetter = async (id: string): Promise<boolean | undefined> 
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
     : await downloadFile('GET', decisionLettersEndpoint, 'decision_letter.pdf', undefined, 3)
   if (filePath) {
-    await FileViewer.open(filePath)
+    await FileViewer.open(filePath, { onDismiss: () => registerReviewEvent() })
     return true
   }
 }

@@ -8,12 +8,8 @@ import { ClaimType } from 'constants/claims'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -36,6 +32,10 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         dateFiled: '2020-10-01',
         updatedAt: '2020-10-05',
         displayTitle: 'Compensation',
+        phase: 3,
+        claimTypeCode: '',
+        documentsNeeded: true,
+        developmentLetterSent: false,
       },
     },
     {
@@ -48,6 +48,22 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         dateFiled: '2020-12-22',
         updatedAt: '2020-12-28',
         displayTitle: 'Insurance on docket appeal',
+      },
+    },
+    {
+      id: '3',
+      type: 'claim',
+      attributes: {
+        subtype: 'Dependency',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-04',
+        updatedAt: '2020-11-18',
+        displayTitle: 'Dependency',
+        phase: 6,
+        claimTypeCode: '010LCOMP',
+        documentsNeeded: false,
+        developmentLetterSent: false,
       },
     },
   ],
@@ -104,8 +120,18 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() => expect(screen.getByText('Insurance on docket appeal')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
 
+      await waitFor(() => expect(screen.getByText('Dependency')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Received October 04, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Step 6 of 8: Preparing decision letter')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Moved to this step on November 18, 2020')).toBeTruthy())
+
       await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('More information needed')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText('Step 3 of 5: Evidence gathering, review, and decision')).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText('Moved to this step on October 05, 2020')).toBeTruthy())
 
       initializeTestInstance('CLOSED')
       await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
@@ -125,8 +151,8 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('button', {
-            name: 'Compensation Received October 01, 2020',
+          screen.getByRole('link', {
+            name: 'Compensation More information needed Received October 01, 2020 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on October 05, 2020',
           }),
         ),
       )
@@ -148,8 +174,8 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('button', {
-            name: 'Insurance on docket appeal Received December 22, 2020',
+          screen.getByRole('link', {
+            name: 'Insurance on docket appeal Received December 22, 2020 Moved to this step on December 28, 2020',
           }),
         ),
       )

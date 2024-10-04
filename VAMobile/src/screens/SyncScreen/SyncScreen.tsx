@@ -23,7 +23,6 @@ import { RootState } from 'store'
 import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
-import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { completeSync, loginFinish } from 'utils/auth'
@@ -60,18 +59,18 @@ function SyncScreen({}: SyncScreenProps) {
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
     {
-      enabled: loggedIn && downtimeWindowsFetched,
+      enabled: !loggingOut && loggedIn && downtimeWindowsFetched,
     },
   )
-  useClaimsAndAppeals('ACTIVE', { enabled: loggedIn && downtimeWindowsFetched })
-  useFolders({ enabled: loggedIn && downtimeWindowsFetched })
-  usePrescriptions({ enabled: loggedIn && downtimeWindowsFetched })
-  useFacilitiesInfo({ enabled: loggedIn })
+  useClaimsAndAppeals('ACTIVE', { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useFolders({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useFacilitiesInfo({ enabled: !loggingOut && loggedIn })
 
   // Prefetch data for `About you` section
-  useServiceHistory({ enabled: loggedIn && downtimeWindowsFetched })
-  useDisabilityRating({ enabled: loggedIn && downtimeWindowsFetched })
-  useLetterBeneficiaryData({ enabled: loggedIn && downtimeWindowsFetched })
+  useServiceHistory({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useDisabilityRating({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  useLetterBeneficiaryData({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -103,7 +102,7 @@ function SyncScreen({}: SyncScreenProps) {
   }, [loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, queryClient, ENVIRONMENT])
 
   return (
-    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+    <VAScrollView contentContainerStyle={splashStyles} removeInsets={true}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}

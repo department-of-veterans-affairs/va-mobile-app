@@ -6,6 +6,15 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
+  vama_9385_api_cType: (endpoint: string, contentType: string): Event => {
+    return {
+      name: 'vama_9385_api_cType',
+      params: {
+        endpoint: endpoint,
+        contentType: contentType,
+      },
+    }
+  },
   vama_accordion_click: (section: string, isOpened: boolean): Event => {
     return {
       name: 'vama_accordion_click',
@@ -123,6 +132,16 @@ export const Events = {
       name: 'vama_cerner_alert_exp',
     }
   },
+  vama_be_af_refresh: (): Event => {
+    return {
+      name: 'vama_be_af_refresh',
+    }
+  },
+  vama_be_af_shown: (): Event => {
+    return {
+      name: 'vama_be_af_shown',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -140,6 +159,7 @@ export const Events = {
     step_expanded: boolean,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_current_step: number,
   ): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -150,6 +170,7 @@ export const Events = {
         step_expanded,
         claim_step_change,
         claim_submitted_date,
+        claim_current_step,
       },
     }
   },
@@ -159,6 +180,8 @@ export const Events = {
     claim_step: number,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_type_code: string,
+    is_disability_comp_claim: boolean,
   ): Event => {
     return {
       name: 'vama_claim_details_open',
@@ -168,6 +191,8 @@ export const Events = {
         claim_step,
         claim_step_change,
         claim_submitted_date,
+        claim_type_code,
+        is_disability_comp_claim,
       },
     }
   },
@@ -300,6 +325,23 @@ export const Events = {
         claim_type,
         claim_step,
         claim_submitted_date,
+      },
+    }
+  },
+  vama_claim_submit_ev: (claim_id: string): Event => {
+    return {
+      name: 'vama_claim_submit_ev',
+      params: {
+        claim_id,
+      },
+    }
+  },
+  vama_claim_submit_tap: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_claim_submit_tap',
+      params: {
+        claim_id,
+        claim_type,
       },
     }
   },
@@ -567,11 +609,6 @@ export const Events = {
       },
     }
   },
-  vama_exchange_failed: (): Event => {
-    return {
-      name: 'vama_exchange_failed',
-    }
-  },
   vama_fail: (): Event => {
     return {
       name: 'vama_fail',
@@ -745,11 +782,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_fetch: (status_code: number): Event => {
+  vama_login_token_fetch: (error: Error): Event => {
     return {
       name: 'vama_login_token_fetch',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -761,11 +798,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_refresh: (status_code: number): Event => {
+  vama_login_token_refresh: (error: Error): Event => {
     return {
       name: 'vama_login_token_refresh',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -843,6 +880,11 @@ export const Events = {
       params: {
         status,
       },
+    }
+  },
+  vama_review_prompt: (): Event => {
+    return {
+      name: 'vama_review_prompt',
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
@@ -1053,6 +1095,11 @@ export const Events = {
   vama_sm_nonurgent: (): Event => {
     return {
       name: 'vama_sm_nonurgent',
+    }
+  },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
     }
   },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {

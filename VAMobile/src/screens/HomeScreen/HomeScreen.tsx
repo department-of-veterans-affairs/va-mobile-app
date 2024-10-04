@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
@@ -55,7 +55,7 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -75,64 +75,23 @@ const MemoizedLoadingComponent = React.memo(LoadingComponent)
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-
-  const {
-    data: ratingData,
-    isLoading: loadingDisabilityRating,
-    isFetched: disabilityRatingFetched,
-  } = useDisabilityRating()
-  const {
-    data: militaryServiceHistoryAttributes,
-    isLoading: loadingServiceHistory,
-    isFetched: serviceHistoryFetched,
-  } = useServiceHistory()
-  const { data: facilitiesInfo } = useFacilitiesInfo()
-  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-  const {
-    data: prescriptionData,
-    isError: prescriptionsError,
-    isFetched: rxPrefetch,
-    isFetching: loadingPrescriptions,
-  } = usePrescriptions({
-    enabled: isFocused,
-  })
-  const {
-    data: claimsData,
-    isError: claimsAndAppealsError,
-    isFetched: claimsPrefetch,
-    isFetching: loadingClaimsAndAppeals,
-  } = useClaimsAndAppeals('ACTIVE', {
-    enabled: isFocused,
-  })
-  const activeClaimsCount = claimsData?.meta.activeClaimsCount
-  const claimsError = claimsAndAppealsError || !!claimsData?.meta.errors?.length
-  const {
-    data: foldersData,
-    isError: inboxError,
-    isFetched: smPrefetch,
-    isFetching: loadingInbox,
-  } = useFolders({
-    enabled: isFocused,
-  })
+  const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const disabilityRatingInDowntime = useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
+  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const {
-    data: apptsData,
-    isError: appointmentsError,
-    isFetched: apptsPrefetch,
-    isFetching: loadingAppointments,
-  } = useAppointments(
+  const appointmentsQuery = useAppointments(
     upcomingAppointmentDateRange.startDate,
     upcomingAppointmentDateRange.endDate,
     TimeFrameTypeConstants.UPCOMING,
@@ -140,78 +99,72 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: isFocused,
     },
   )
-  const upcomingAppointmentsCount = apptsData?.meta?.upcomingAppointmentsCount
-  const upcomingDaysLimit = apptsData?.meta?.upcomingDaysLimit
+  const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
+  const foldersQuery = useFolders({ enabled: isFocused })
+  const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
+  const facilitiesQuery = useFacilitiesInfo()
+  const cernerFacilities = facilitiesQuery.data?.filter((facility) => facility.cerner) || []
 
-  const {
-    data: letterBeneficiaryData,
-    isLoading: loadingLetterBeneficiaryData,
-    isFetched: letterBeneficiaryFetched,
-  } = useLetterBeneficiaryData()
+  const disabilityRatingQuery = useDisabilityRating()
+  const serviceHistoryQuery = useServiceHistory()
+  const letterBeneficiaryQuery = useLetterBeneficiaryData()
+  const personalInformationQuery = usePersonalInformation()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const disRating = !!ratingData?.combinedDisabilityRating
-  const monthlyPay = !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount
-  const unreadMessageCount = foldersData?.inboxUnreadCount
-  const { data: personalInfoData } = usePersonalInformation({ enabled: false })
 
   useEffect(() => {
-    if (apptsPrefetch && apptsData?.meta) {
+    if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
+      logAnalyticsEvent(Events.vama_hs_appts_count(appointmentsQuery.data.meta.upcomingAppointmentsCount))
     }
-  }, [apptsData, apptsPrefetch, loginTimestamp])
+  }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
-    if (smPrefetch && foldersData) {
-      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
+    if (foldersQuery.isFetched && foldersQuery.data) {
+      const inboxFolder = foldersQuery.data.data.find(
+        (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
+      )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
       if (inboxFolder) {
         logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
       }
     }
-  }, [smPrefetch, foldersData, loginTimestamp])
+  }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
+    if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
       logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
+      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionsQuery.data.meta.prescriptionStatusCount.isRefillable))
     }
-  }, [rxPrefetch, prescriptionData, loginTimestamp])
+  }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
+    if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
+      logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppealsQuery.data?.meta.activeClaimsCount))
     }
-  }, [claimsPrefetch, claimsData, loginTimestamp])
+  }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
   useEffect(() => {
-    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
+    if (
+      appointmentsQuery.isFetched &&
+      claimsAndAppealsQuery.isFetched &&
+      prescriptionsQuery.isFetched &&
+      foldersQuery.isFetched
+    ) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
-  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
+  }, [
+    appointmentsQuery.isFetched,
+    claimsAndAppealsQuery.isFetched,
+    prescriptionsQuery.isFetched,
+    foldersQuery.isFetched,
+    loginTimestamp,
+  ])
 
   useEffect(() => {
-    const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInfoData?.id}`
-    const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-
-    const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-      try {
-        serviceHistory.forEach((service) => {
-          if (service.honorableServiceIndicator === 'Y') {
-            logAnalyticsEvent(Events.vama_vet_status_yStatus())
-          } else if (service.honorableServiceIndicator === 'N') {
-            logAnalyticsEvent(Events.vama_vet_status_nStatus())
-          } else if (service.honorableServiceIndicator === 'Z') {
-            logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
-          }
-        })
-        await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
-      } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-      }
-    }
+    const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInformationQuery?.data?.id}`
+    const serviceHistory = serviceHistoryQuery?.data?.serviceHistory || ([] as ServiceHistoryData)
 
     const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
       if (!serviceIndicators) {
@@ -221,21 +174,108 @@ export function HomeScreen({}: HomeScreenProps) {
       try {
         const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
         if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
-          setServiceIndicators(serviceIndicators)
+          serviceHistory.forEach((service) => {
+            if (service.honorableServiceIndicator === 'Y') {
+              logAnalyticsEvent(Events.vama_vet_status_yStatus())
+            } else if (service.honorableServiceIndicator === 'N') {
+              logAnalyticsEvent(Events.vama_vet_status_nStatus())
+            } else if (service.honorableServiceIndicator === 'Z') {
+              logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
+            }
+          })
+          AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
         }
       } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+        logNonFatalErrorToFirebase(err, 'checkServiceIndicators: AsyncStorage error')
       }
     }
 
     if (serviceHistory) {
-      let serviceIndicators = ''
-      serviceHistory.forEach((service) => {
-        serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
-      })
+      const serviceIndicators = serviceHistory.map((service) => service.honorableServiceIndicator).join('')
       checkServiceIndicators(serviceIndicators)
     }
-  }, [militaryServiceHistoryAttributes?.serviceHistory, personalInfoData?.id])
+  }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
+
+  const activityFeatureInDowntime = !!(
+    (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
+    (authorizedServicesQuery.data?.appeals && appealsInDowntime) ||
+    (authorizedServicesQuery.data?.claims && claimsInDowntime) ||
+    (authorizedServicesQuery.data?.prescriptions && rxInDowntime) ||
+    (authorizedServicesQuery.data?.secureMessaging && smInDowntime)
+  )
+
+  const activityFeatureActive = !!(
+    (authorizedServicesQuery.data?.appointments && !appointmentsInDowntime) ||
+    (authorizedServicesQuery.data?.appeals && !appealsInDowntime) ||
+    (authorizedServicesQuery.data?.claims && !claimsInDowntime) ||
+    (authorizedServicesQuery.data?.prescriptions && !rxInDowntime) ||
+    (authorizedServicesQuery.data?.secureMessaging && !smInDowntime)
+  )
+
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const activityNotFetched =
+    activityFeatureActive &&
+    !appointmentsQuery.isFetched &&
+    !claimsAndAppealsQuery.isFetched &&
+    !foldersQuery.isFetched &&
+    !prescriptionsQuery.isFetched
+
+  const loadingActivity =
+    activityNotFetched ||
+    appointmentsQuery.isFetching ||
+    claimsAndAppealsQuery.isFetching ||
+    foldersQuery.isFetching ||
+    prescriptionsQuery.isFetching
+
+  const hasActivity =
+    !!appointmentsQuery.data?.meta?.upcomingAppointmentsCount ||
+    !!claimsAndAppealsQuery.data?.meta.activeClaimsCount ||
+    !!foldersQuery.data?.inboxUnreadCount ||
+    !!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable
+
+  const claimsError = claimsAndAppealsQuery.isError || !!claimsAndAppealsQuery.data?.meta.errors?.length
+  const hasActivityError = !!(
+    appointmentsQuery.isError ||
+    claimsError ||
+    foldersQuery.isError ||
+    prescriptionsQuery.isError
+  )
+
+  const aboutYouFeatureActive = !!(
+    (authorizedServicesQuery.data?.militaryServiceHistory && !serviceHistoryInDowntime) ||
+    (authorizedServicesQuery.data?.disabilityRating && !disabilityRatingInDowntime) ||
+    (authorizedServicesQuery.data?.lettersAndDocuments && !lettersInDowntime)
+  )
+
+  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
+  const aboutYouNotFetched =
+    aboutYouFeatureActive &&
+    !serviceHistoryQuery.isFetched &&
+    !disabilityRatingQuery.isFetched &&
+    !letterBeneficiaryQuery.isFetched
+
+  const loadingAboutYou =
+    aboutYouNotFetched ||
+    serviceHistoryQuery.isLoading ||
+    disabilityRatingQuery.isLoading ||
+    letterBeneficiaryQuery.isLoading
+
+  const hasAboutYouInfo =
+    !!disabilityRatingQuery.data?.combinedDisabilityRating ||
+    !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
+    !!serviceHistoryQuery.data?.mostRecentBranch
+
+  const aboutYouFeatureInDowntime = !!(
+    (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
+    (authorizedServicesQuery.data?.disabilityRating && disabilityRatingInDowntime) ||
+    (authorizedServicesQuery.data?.lettersAndDocuments && lettersInDowntime)
+  )
+
+  const hasAboutYouError = !!(
+    disabilityRatingQuery.isError ||
+    letterBeneficiaryQuery.isError ||
+    serviceHistoryQuery.isError
+  )
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
@@ -246,29 +286,14 @@ export function HomeScreen({}: HomeScreenProps) {
     })
   }
 
-  const profileIconProps: VAIconProps = {
-    name: 'ProfileSelected',
-  }
-
-  const onProfile = () => {
-    navigateTo('Profile')
-  }
-
   const headerButton: HeaderButton = {
     label: t('profile.title'),
     accessibilityRole: 'link',
-    icon: profileIconProps,
-    onPress: onProfile,
+    icon: {
+      name: 'ProfileSelected',
+    } as VAIconProps,
+    onPress: () => navigateTo('Profile'),
   }
-
-  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
-  const aboutYouNotFetched = !serviceHistoryFetched && !disabilityRatingFetched && !letterBeneficiaryFetched
-  const loadingAboutYou =
-    aboutYouNotFetched || loadingServiceHistory || loadingDisabilityRating || loadingLetterBeneficiaryData
-  const hasAboutYouInfo =
-    !!ratingData?.combinedDisabilityRating ||
-    !!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount ||
-    !!militaryServiceHistoryAttributes?.mostRecentBranch
 
   const boxProps: BoxProps = {
     style: {
@@ -286,25 +311,6 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
-  const activityNotFetched = !apptsPrefetch && !claimsPrefetch && !smPrefetch && !rxPrefetch
-  const activityLoading =
-    activityNotFetched || loadingAppointments || loadingClaimsAndAppeals || loadingInbox || loadingPrescriptions
-
-  const featureInDowntime = !!(
-    (userAuthorizedServices?.appointments && appointmentsInDowntime) ||
-    (userAuthorizedServices?.appeals && appealsInDowntime) ||
-    (userAuthorizedServices?.claims && claimsInDowntime) ||
-    (userAuthorizedServices?.prescriptions && rxInDowntime) ||
-    (userAuthorizedServices?.secureMessaging && smInDowntime)
-  )
-  const hasActivity =
-    !!upcomingAppointmentsCount ||
-    !!activeClaimsCount ||
-    !!prescriptionData?.meta.prescriptionStatusCount.isRefillable ||
-    !!unreadMessageCount
-  const hasActivityError = !!(appointmentsError || claimsError || inboxError || prescriptionsError)
-
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
@@ -317,7 +323,7 @@ export function HomeScreen({}: HomeScreenProps) {
             accessibilityRole="header">
             {t('activity')}
           </TextView>
-          {activityLoading ? (
+          {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
                 spinnerWidth={24}
@@ -329,65 +335,70 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : !hasActivity && !hasActivityError ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
-              <Box
-                flexDirection="row"
-                alignItems="center"
-                accessible={true}
-                accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                <VAIcon
-                  name={'CircleCheckMark'}
-                  fill={Colors.vadsColorSuccessDark}
-                  fill2={theme.colors.icon.transparent}
-                />
-                <TextView
-                  importantForAccessibility={'no'}
-                  ml={theme.dimensions.condensedMarginBetween}
-                  variant="HomeScreen">
-                  {t('noActivity')}
-                </TextView>
-              </Box>
+              {activityFeatureInDowntime ? (
+                <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+              ) : (
+                <Box
+                  flexDirection="row"
+                  alignItems="center"
+                  accessible={true}
+                  accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
+                  <VAIcon
+                    name={'CircleCheckMark'}
+                    fill={DSColors.vadsColorSuccessDark}
+                    fill2={theme.colors.icon.transparent}
+                  />
+                  <TextView
+                    importantForAccessibility={'no'}
+                    ml={theme.dimensions.condensedMarginBetween}
+                    variant="HomeScreen">
+                    {t('noActivity')}
+                  </TextView>
+                </Box>
+              )}
             </Box>
           ) : (
-            <>
-              <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
-                {!!upcomingAppointmentsCount && !!upcomingDaysLimit && (
+            <Box gap={theme.dimensions.condensedMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+              {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
+                !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
                   <ActivityButton
                     title={t('appointments')}
                     subText={t('appointments.activityButton.subText', {
-                      count: upcomingAppointmentsCount,
-                      dayCount: upcomingDaysLimit,
+                      count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
+                      dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
                     })}
                     deepLink={'appointments'}
                   />
                 )}
-                {!claimsError && !!activeClaimsCount && (
-                  <ActivityButton
-                    title={t('claims.title')}
-                    subText={t('claims.activityButton.subText', { count: activeClaimsCount })}
-                    deepLink={'claims'}
-                  />
-                )}
-                {!!unreadMessageCount && (
-                  <ActivityButton
-                    title={`${t('messages')}`}
-                    subText={t('secureMessaging.activityButton.subText', { count: unreadMessageCount })}
-                    deepLink={'messages'}
-                  />
-                )}
-                {!!prescriptionData?.meta.prescriptionStatusCount.isRefillable && (
-                  <ActivityButton
-                    title={t('prescription.title')}
-                    subText={t('prescriptions.activityButton.subText', {
-                      count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-                    })}
-                    deepLink={'prescriptions'}
-                  />
-                )}
-                {(hasActivityError || featureInDowntime) && (
-                  <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
-                )}
-              </Box>
-            </>
+              {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
+                <ActivityButton
+                  title={t('claims.title')}
+                  subText={t('claims.activityButton.subText', {
+                    count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                  })}
+                  deepLink={'claims'}
+                />
+              )}
+              {!!foldersQuery.data?.inboxUnreadCount && (
+                <ActivityButton
+                  title={`${t('messages')}`}
+                  subText={t('secureMessaging.activityButton.subText', { count: foldersQuery.data.inboxUnreadCount })}
+                  deepLink={'messages'}
+                />
+              )}
+              {!!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable && (
+                <ActivityButton
+                  title={t('prescription.title')}
+                  subText={t('prescriptions.activityButton.subText', {
+                    count: prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable,
+                  })}
+                  deepLink={'prescriptions'}
+                />
+              )}
+              {(hasActivityError || activityFeatureInDowntime) && (
+                <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
+              )}
+            </Box>
           )}
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
@@ -419,7 +430,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasAboutYouInfo ? (
+          ) : !hasAboutYouInfo && !hasAboutYouError ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
@@ -427,13 +438,17 @@ export function HomeScreen({}: HomeScreenProps) {
             <Box>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
-                {disRating && (
+                {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
-                    pb={monthlyPay ? 0 : theme.dimensions.standardMarginBetween}
+                    pb={
+                      letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount
+                        ? 0
+                        : theme.dimensions.standardMarginBetween
+                    }
                     pl={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
+                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
                       variant={'VeteranStatusBranch'}>
                       {t('disabilityRating.title')}
                     </TextView>
@@ -442,27 +457,30 @@ export function HomeScreen({}: HomeScreenProps) {
                       importantForAccessibility={'no'}
                       variant={
                         'NametagNumber'
-                      }>{`${t('disabilityRatingDetails.percentage', { rate: ratingData.combinedDisabilityRating })}`}</TextView>
+                      }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
                     <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
                       {t('disabilityRating.serviceConnected')}
                     </TextView>
                   </Box>
                 )}
-                {monthlyPay && disRating && (
+                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount &&
+                  !!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                    <Box
+                      mx={theme.dimensions.standardMarginBetween}
+                      my={theme.dimensions.condensedMarginBetween}
+                      borderBottomWidth={1}
+                      borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+                    />
+                  )}
+                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount && (
                   <Box
-                    mx={theme.dimensions.standardMarginBetween}
-                    my={theme.dimensions.condensedMarginBetween}
-                    borderBottomWidth={1}
-                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                  />
-                )}
-                {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
-                  <Box
-                    pt={disRating ? 0 : theme.dimensions.standardMarginBetween}
+                    pt={
+                      disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
+                    }
                     pl={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}
                       variant={'VeteranStatusBranch'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
@@ -471,10 +489,13 @@ export function HomeScreen({}: HomeScreenProps) {
                       importantForAccessibility={'no'}
                       variant={
                         'NametagNumber'
-                      }>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                      }>{`$${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}</TextView>
                   </Box>
                 )}
               </Box>
+              {(hasAboutYouError || aboutYouFeatureInDowntime) && (
+                <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={hasAboutYouError} />
+              )}
             </Box>
           )}
         </Box>

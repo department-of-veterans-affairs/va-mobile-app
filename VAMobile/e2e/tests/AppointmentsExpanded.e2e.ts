@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
 
 export const Appointmentse2eConstants = {
   GET_DIRECTIONS_ID: 'directionsTestID',
@@ -310,8 +310,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify confirmed CC appt', async () => {
     if (pastAppointment) {
-      await resetInAppReview()
-      await openHealth()
+      await element(by.text('Health')).atIndex(0).tap()
       await openAppointments()
       await waitFor(element(by.text('Upcoming')))
         .toExist()
@@ -431,17 +430,8 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - Onsite appt', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
-      await waitFor(element(by.text(CommonE2eIdConstants.UPCOMING_APPT_BUTTON_TEXT)))
-        .toExist()
-        .withTimeout(10000)
-    } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -532,17 +522,8 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Home appt', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
-      await waitFor(element(by.text('Upcoming')))
-        .toExist()
-        .withTimeout(10000)
-    } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
     if (pastAppointment) {
       await element(by.text('Past')).tap()
     }
@@ -648,8 +629,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -741,8 +721,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -840,8 +819,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -942,8 +920,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -1042,6 +1019,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()

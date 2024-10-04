@@ -65,21 +65,29 @@ context('CernerAlertSM', () => {
     initializeTestInstance()
   })
 
-  describe('with multiple cerner facilities', () => {
+  describe('with all cerner facilities', () => {
     it('should show all facility names', () => {
-      fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
+      fireEvent.press(screen.getByRole('tab', { name: 'Your care team uses My VA Health' }))
+      expect(screen.getByLabelText('Your care team uses My  V-A  Health')).toBeTruthy()
+      expect(screen.getByText('Sending a message to a care team at these facilities:')).toBeTruthy()
       expect(screen.getByText('FacilityOne')).toBeTruthy()
       expect(screen.getByText('FacilityTwo')).toBeTruthy()
+      expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message")).toBeTruthy()
+      expect(screen.getByText("You'll need to use our My VA Health portal to send your message")).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
+      expect(Alert.alert).toBeCalled()
     })
   })
 
   it('should only show cerner facilities, not other facilities and should call mockExternalLinkSpy when link is selected', () => {
-    expect(screen.getByRole('tab', { name: "Make sure you're in the right health portal" })).toBeTruthy()
-    fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
-    expect(screen.getByText('Sending a message to a care team at FacilityOne?')).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: 'Some of your care team uses My VA Health' }))
+    expect(screen.getByLabelText('Some of your care team uses My  V-A  Health')).toBeTruthy()
+    expect(screen.getByText('Sending a message to a care team at these facilities:')).toBeTruthy()
+    expect(screen.getByText('FacilityOne')).toBeTruthy()
     expect(screen.queryByText('FacilityTwo')).toBeFalsy()
-
-    fireEvent.press(screen.getByText('Go to My VA Health'))
+    expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message")).toBeTruthy()
+    expect(screen.getByText("You'll need to use our My VA Health portal to send your message")).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
     expect(Alert.alert).toBeCalled()
   })
 })

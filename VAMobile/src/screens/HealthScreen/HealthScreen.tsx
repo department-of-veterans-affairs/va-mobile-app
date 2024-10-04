@@ -159,9 +159,14 @@ export function HealthScreen({}: HealthScreenProps) {
       </Box>
       {cernerExist && (
         <Box mx={theme.dimensions.buttonPadding}>
-          <TextView variant="cernerFooterText">{t('healthHelp.info')}</TextView>
+          <TextView variant="TableFooterLabel" accessibilityLabel={a11yLabelVA(t('healthHelp.info'))}>
+            {t('healthHelp.info')}
+          </TextView>
           <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
-            <TextView variant="MobileFooterLink" paragraphSpacing={true}>
+            <TextView
+              variant="MobileFooterLink"
+              accessibilityLabel={a11yLabelVA(t('healthHelp.checkFacility'))}
+              paragraphSpacing={true}>
               {t('healthHelp.checkFacility')}
             </TextView>
           </Pressable>

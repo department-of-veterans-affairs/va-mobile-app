@@ -11,7 +11,7 @@ When emergency custom error content is needed the backend will create a feature 
 Characteristics of the response:
 
 - `title`: custom string provided by content to fill the bold title portion of the frontend error component
-- `body`: custom string provided by content to fill the body of the error component. The frontend is prepared to respect `\n` for new lines in this string.
+- `body`: custom string provided by content to fill the body of the error component. The frontend is prepared to respect `\\n` for new lines in this string, as well as apostrophes.
 - `status`: will always be 418
 - `source`: upstream system associated with the endpoint
 - `telephone`: sting providing a custom phone number 

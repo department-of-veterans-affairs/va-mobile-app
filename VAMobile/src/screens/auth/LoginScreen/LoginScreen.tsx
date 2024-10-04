@@ -7,13 +7,13 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthSettings } from 'api/auth'
-import { AlertBox, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
+import { AlertWithHaptics, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
-import { testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { loginStart } from 'utils/auth'
 import getEnv from 'utils/env'
@@ -76,7 +76,7 @@ function LoginScreen() {
       : startAuth
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
+    <VAScrollView testID="Login-page" contentContainerStyle={mainViewStyle} removeInsets={true}>
       <StatusBar
         translucent
         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
@@ -84,7 +84,7 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineButton />
-      {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
+      {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}
@@ -97,14 +97,22 @@ function LoginScreen() {
           justifyContent={'center'}
           onTouchEnd={tapForDemo}
           my={theme.dimensions.standardMarginBetween}
-          testID="va-icon">
+          testID="va-icon"
+          accessible={true}
+          accessibilityRole="image"
+          accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
         </Box>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <Button onPress={onLoginInit} label={t('signin')} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={70}>
-          <Button onPress={onFacilityLocator} label={t('findLocation.title')} buttonType={ButtonVariants.Secondary} />
+          <Button
+            onPress={onFacilityLocator}
+            label={t('findLocation.title')}
+            a11yLabel={a11yLabelVA(t('findLocation.title'))}
+            buttonType={ButtonVariants.Secondary}
+          />
         </Box>
         <AppVersionAndBuild textColor={'appVersionAndBuild'} />
       </Box>
