@@ -36,8 +36,6 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
-  /** Optional TestID for the header button */
-  headerButtonTestID?: string
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -53,7 +51,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   children,
   footerContent,
   scrollViewProps,
-  headerButtonTestID,
   testID,
 }) => {
   const insets = useSafeAreaInsets()
@@ -86,7 +83,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           a11yLabel: headerButton.labelA11y,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
-          testID: headerButton.headerButtonTestID,
+          testID: headerButton.testID,
         }
       : undefined,
   }

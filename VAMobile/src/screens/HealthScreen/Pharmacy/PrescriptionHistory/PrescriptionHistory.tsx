@@ -528,7 +528,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_rx_help())
       navigateTo('PrescriptionHelp')
     },
-    headerButtonTestID: 'prescriptionsHelpID',
+    testID: 'prescriptionsHelpID',
   }
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
