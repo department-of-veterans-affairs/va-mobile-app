@@ -337,9 +337,6 @@ const storeRefreshToken = async (
 const storeDeviceSecret = async (deviceSecret: string) => {
   try {
     const options: Keychain.Options = {
-      // accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-      // accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
-      // authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
     }
 
