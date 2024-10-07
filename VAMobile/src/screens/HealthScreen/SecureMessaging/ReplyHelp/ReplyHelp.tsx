@@ -42,7 +42,6 @@ function ReplyHelp() {
             {
               boldedTextPrefix: t('secureMessaging.replyHelp.ifYoureInCrisis'),
               text: t('secureMessaging.replyHelp.connectWithOur'),
-              a11yLabel: t('secureMessaging.replyHelp.ifYoureInCrisis') + t('secureMessaging.replyHelp.connectWithOur'),
             },
           ]}
           paragraphSpacing={true}
@@ -56,7 +55,6 @@ function ReplyHelp() {
               {
                 boldedTextPrefix: t('secureMessaging.replyHelp.ifYouThink'),
                 text: t('secureMessaging.replyHelp.call911OrGoTo'),
-                a11yLabel: t('secureMessaging.replyHelp.ifYouThink') + t('secureMessaging.replyHelp.call911OrGoTo'),
               },
             ]}
             paragraphSpacing={true}
