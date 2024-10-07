@@ -64,6 +64,7 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
@@ -76,6 +77,7 @@ export const CommonE2eIdConstants = {
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
+  PREVIOUS_PAGE_ID: 'previous-page',
 }
 
 /** Log the automation into demo mode
