@@ -34,6 +34,7 @@ context('RefillRequestSummary', () => {
       ] as RefillRequestSummaryItems)
 
       expect(screen.getByRole('heading', { name: t('prescriptions.refillRequestSummary.success') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescriptions.refillRequestSummary') })).toBeTruthy()
       expect(
         screen.getByLabelText('ALLOPURINOL 100MG TAB. Prescription number 3 6 3 6 6 9 1. Request submitted'),
       ).toBeTruthy()
