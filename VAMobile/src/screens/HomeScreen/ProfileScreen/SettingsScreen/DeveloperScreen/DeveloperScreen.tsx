@@ -22,6 +22,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
+import * as api from 'store/api'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
@@ -46,7 +47,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
-    (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
+    (pick({ ...authCredentials, device_secret: api.getDeviceSecret() }, [
+      'access_token',
+      'refresh_token',
+      'id_token',
+      'device_secret',
+    ]) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
