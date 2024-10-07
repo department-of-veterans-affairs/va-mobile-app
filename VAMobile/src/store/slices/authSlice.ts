@@ -345,10 +345,10 @@ const storeDeviceSecret = async (deviceSecret: string) => {
     const biometricsSupported = !!(await deviceSupportedBiometrics())
     const biometricsPreferred = await isBiometricsPreferred()
 
-    if (biometricsSupported && biometricsPreferred) {
-      await Keychain.setInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, 'user', deviceSecret, options)
-      console.debug('Successfully set device secret')
-    }
+    // if (biometricsSupported && biometricsPreferred) {
+    await Keychain.setInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, 'user', deviceSecret, options)
+    console.debug('Successfully set device secret')
+    // }
   } catch (error) {
     logNonFatalErrorToFirebase(error, `storeDeviceSecret: Failed to store SSO device secret`)
   }
