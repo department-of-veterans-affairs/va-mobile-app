@@ -10,6 +10,18 @@ export const LoginE2eIdConstants = {
 
 describe('Login Screen', () => {
   it('should show login page content', async () => {
+    try {
+      await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+        .toExist()
+        .withTimeout(120000)
+    } catch (ex) {
+      await device.uninstallApp()
+      await device.installApp()
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+      await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+        .toExist()
+        .withTimeout(60000)
+    }
     await waitFor(element(by.id(LoginE2eIdConstants.LOGIN_PAGE_ID)))
       .toExist()
       .withTimeout(60000)

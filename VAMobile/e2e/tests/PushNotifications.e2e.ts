@@ -27,7 +27,7 @@ describe(':ios: Push Notifications', () => {
       newInstance: true,
       userNotification: mockNotification,
     })
-    await loginToDemoMode()
+    await loginToDemoMode(true, true)
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE)))
       .toExist()
       .withTimeout(8000)
