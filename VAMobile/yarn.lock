@@ -9319,10 +9319,10 @@ react-native-keychain@^8.2.0:
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.2.0.tgz#aea82df37aacbb04f8b567a8e0e6d7292025610a"
   integrity sha512-SkRtd9McIl1Ss2XSWNLorG+KMEbgeVqX+gV+t3u1EAAqT8q2/OpRmRbxpneT2vnb/dMhiU7g6K/pf3nxLUXRvA==
 
-react-native-localize@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.1.0.tgz#1b322c05af21fd3d78d44e9b747d872ab5155b10"
-  integrity sha512-A7Rrxl8vuAr5FAqtMFrM5ELLdmszohK6FoHL6qlgxx4HScyOnadoZksbvKHbn+zV5nE8kud2Z4kJM10cN120Zg==
+react-native-localize@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.2.1.tgz#ce83bfbbceab1216048b2a6529d9151297c8f97f"
+  integrity sha512-XZsK9+V98XygBkutaPVxTIrwV48wXKk4AQfbjUOmrrsGCqa8WzWsBuEafwWVCMOEQ5coQt0SfM3XKT0Qg7DFXw==
 
 react-native-notifications@^5.1.0:
   version "5.1.0"
