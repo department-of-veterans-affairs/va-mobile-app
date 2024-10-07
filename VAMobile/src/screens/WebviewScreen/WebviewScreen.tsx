@@ -12,6 +12,7 @@ import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import * as api from 'store/api'
+import { loadDeviceSecret } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -138,6 +139,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   useEffect(() => {
     const fetchSSOCookies = async () => {
       try {
+        if (!api.getDeviceSecret()) {
+          await loadDeviceSecret()
+        }
+
         await CookieManager.clearAll()
 
         const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {

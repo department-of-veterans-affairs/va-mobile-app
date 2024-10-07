@@ -360,7 +360,7 @@ const storeDeviceSecret = async (deviceSecret: string) => {
 /**
  * Loads device secret from keychain/keystore for starting SSO sessions
  */
-const loadDeviceSecret = async () => {
+export const loadDeviceSecret = async () => {
   const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
   deviceSecret && api.setDeviceSecret(deviceSecret.password)
 }
