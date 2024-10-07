@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
@@ -92,14 +94,15 @@ export const Nametag = () => {
               )}
             </Box>
             {showVeteranStatus && (
-              <VAIcon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.linkRow}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                preventScaling={true}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-              />
+              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+                <Icon
+                  name={'ChevronRight'}
+                  fill={theme.colors.icon.linkRow}
+                  width={theme.dimensions.chevronListItemWidth}
+                  height={theme.dimensions.chevronListItemHeight}
+                  preventScaling={true}
+                />
+              </Box>
             )}
           </Box>
         </Pressable>

@@ -10,7 +10,7 @@ import { DateTime } from 'luxon'
 import { contains, isEmpty, map } from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
-import { TextLineWithIconProps } from 'components'
+import { TextLineWithIconProps, VA_ICON_MAP } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
 import { Events } from 'constants/analytics'
@@ -64,10 +64,10 @@ export const generateTestIDForInlineTextIconList = (
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.svg === VA_ICON_MAP.Unread) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.leftTextProps.text)
