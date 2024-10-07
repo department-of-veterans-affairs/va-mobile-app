@@ -92,7 +92,7 @@
     "@babel/plugin-proposal-private-methods": "^7.18.6",
     "@babel/plugin-transform-runtime": "^7.24.7",
     "@babel/preset-env": "^7.24.8",
-    "@babel/preset-typescript": "^7.24.7",
+    "@babel/preset-typescript": "^7.25.7",
     "@babel/runtime": "^7.24.8",
     "@department-of-veterans-affairs/eslint-config-mobile": "0.15.0",
     "@react-native/babel-preset": "0.75.3",
