@@ -76,6 +76,7 @@ export const CommonE2eIdConstants = {
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
+  PREVIOUS_PAGE_ID: 'previous-page',
 }
 
 /** Log the automation into demo mode
