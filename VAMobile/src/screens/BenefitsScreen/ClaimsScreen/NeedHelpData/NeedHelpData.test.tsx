@@ -1,11 +1,25 @@
 import React from 'react'
-import { Alert, Linking } from 'react-native'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import getEnv from 'utils/env'
 
 import NeedHelpData from './NeedHelpData'
+
+const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
+
+const mockNavigationSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 context('NeedHelpData', () => {
   const initializeTestInstance = (isAppeal?: boolean) => {
@@ -38,7 +52,12 @@ context('NeedHelpData', () => {
     it('should launch external link on click of the url', () => {
       initializeTestInstance(true)
       fireEvent.press(screen.getByRole('link', { name: 'Go to VA.gov' }))
-      expect(Alert.alert).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+        url: LINK_URL_CLAIM_APPEAL_STATUS,
+        displayTitle: 'va.gov',
+        loadingMessage: t('webview.claims.loading'),
+        useSSO: true,
+      })
     })
   })
 })
