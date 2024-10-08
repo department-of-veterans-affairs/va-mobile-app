@@ -21,8 +21,6 @@ Help() {
   echo "5. Creates a new release branch with the correct name and pushes it up to the origin"
   echo
   echo "Syntax: ./release_branch.sh [-h] [--bypass-date-check]"
-  echo "Options:"
-  echo "-h     Print this help."
   echo "--bypass-date-check   Bypass the date check."
 }
 
@@ -39,7 +37,6 @@ increment_version() {
   if [ "$2" -lt 1 ]; then array[1]=0; fi
   echo $(local IFS=$delimiter ; echo "${array[*]}")
 }
-
 
 #### Process the options
 bypass_date_check=false  # Initialize variable
@@ -65,6 +62,7 @@ do
 done
 
 # First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days) unless the --bypass-date-check flag is passed
+#if [[ "$bypass_date_check" == true ]] || [[ $[$((($(gdate +%s)-$(gdate +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]] #Used to test locally on mac
 if [[ "$bypass_date_check" == true ]] || [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
