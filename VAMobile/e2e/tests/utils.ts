@@ -29,6 +29,8 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -283,7 +285,7 @@ export async function checkImages(screenshotPath) {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {

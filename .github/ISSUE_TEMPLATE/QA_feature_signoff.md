@@ -15,7 +15,7 @@ _'Relevant for this epic?' column to include Y or N, and explanation if a N_
 | -- | -- | -- |
 | Standards | Test plan was peer reviewed |  |
 | Standards | All tickets found during testing have been prioritized | |
-| Standards | Feature testing summary written and reviewed with feature team ([example](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/features/design-personalization/qa/findings.md)) | |  
+| Standards | [Feature testing summary](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Testing%20Summary) written and reviewed with feature team | |  
 | Testing | ACs met on all implementation tickets | |
 | Testing | Accessibility testing per accessibility design annotations | |
 | Testing | [API errors](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=8943) handled well | |
