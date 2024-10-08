@@ -17,7 +17,11 @@ function PaymentMissing({}: PaymentMissingScreenProps) {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
+    <LargePanel
+      title={t('paymentsHelp.title')}
+      rightButtonText={t('close')}
+      rightButtonTestID="paymentsMissingCloseID"
+      testID="paymentsMissingPanelID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifIAmMissingPayemt')}

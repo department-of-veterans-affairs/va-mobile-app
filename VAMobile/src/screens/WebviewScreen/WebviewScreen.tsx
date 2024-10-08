@@ -3,18 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { Linking, StatusBar, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 
-import CookieManager from '@react-native-cookies/cookies'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
-import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import * as api from 'store/api'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import getEnv from 'utils/env'
+import { fetchSSOCookies } from 'utils/auth'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -22,9 +18,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
-
-const { AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_SIS_TOKEN_REFRESH_URL } = getEnv()
-const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
 
 type ReloadButtonProps = {
   reloadPressed: () => void
@@ -107,14 +100,14 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
-  const [loading, setLoading] = useState(isSSOSession)
+  const [fetchingSSOCookies, setFetchingSSOCookies] = useState(isSSOSession)
   const [webviewLoadFailed, setWebviewLoadFailed] = useState(false)
 
   const onReloadPressed = (): void => {
-    // Set loading `true` to trigger SSO cookies API call if attempting to reload after initial WebView load failed
+    // Fetch SSO cookies when attempting to reload after initial WebView load failed
     if (isSSOSession && webviewLoadFailed) {
       setWebviewLoadFailed(false)
-      setLoading(true)
+      setFetchingSSOCookies(true)
     }
     webviewRef?.current.reload()
   }
@@ -136,71 +129,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   })
 
   useEffect(() => {
-    const fetchSSOCookies = async () => {
-      try {
-        const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-            subject_token: api.getAccessToken() || '',
-            subject_token_type: 'urn:ietf:params:oauth:token-type:access_token',
-            actor_token: api.getDeviceSecret() || '',
-            actor_token_type: 'urn:x-oath:params:oauth:token-type:device-secret',
-            client_id: 'vaweb',
-          }).toString(),
-        })
-
-        const cookieHeader = response.headers.get('set-cookie')
-
-        if (cookieHeader) {
-          await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, cookieHeader)
-        } else {
-          // Refresh SSO cookies if no cookies were returned from original API request
-          const cookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
-          const cookiesArray = Object.values(cookies)
-          const ssoRefreshToken = cookiesArray.find((cookie) => cookie.name === 'vagov_refresh_token')?.value
-
-          if (ssoRefreshToken) {
-            const refreshCookieResponse = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: new URLSearchParams({
-                vagov_refresh_token: ssoRefreshToken,
-              }).toString(),
-            })
-
-            const refreshCookieHeader = refreshCookieResponse.headers.get('set-cookie')
-
-            if (refreshCookieHeader) {
-              await CookieManager.setFromResponse(AUTH_SIS_TOKEN_EXCHANGE_URL, refreshCookieHeader)
-            }
-          }
-        }
-
-        // Log analytics for whether SSO cookies were set
-        const updatedCookies = await CookieManager.get(AUTH_SIS_TOKEN_EXCHANGE_URL)
-        const updatedCookiesArray = Object.values(updatedCookies)
-        const hasSSOCookies = SSO_COOKIE_NAMES.every((cookieName) =>
-          updatedCookiesArray.some((cookie) => cookie.name === cookieName),
-        )
-
-        logAnalyticsEvent(Events.vama_sso_cookie_received(hasSSOCookies))
-      } catch (error) {
-        logNonFatalErrorToFirebase(error, `Error fetching SSO cookies: ${error}`)
-      } finally {
-        setLoading(false)
-      }
+    if (fetchingSSOCookies) {
+      fetchSSOCookies().finally(() => setFetchingSSOCookies(false))
     }
-
-    if (isSSOSession && loading) {
-      fetchSSOCookies()
-    }
-  }, [isSSOSession, loading])
+  }, [fetchingSSOCookies])
 
   const backPressed = (): void => {
     webviewRef?.current.goBack()
@@ -243,7 +175,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     bottom: 0,
   }
 
-  return loading ? (
+  return fetchingSSOCookies ? (
     <WebviewLoading loadingMessage={loadingMessage} />
   ) : (
     <Box {...mainViewBoxProps} testID="Webview-page">

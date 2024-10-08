@@ -90,7 +90,8 @@ function CernerAlertSM() {
       focusOnError={false}
       header={headerText}
       headerA11yLabel={headerA11yLabel}
-      analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}>
+      analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}
+      testID="cernerAlertTestID">
       {accordionContent()}
     </AlertWithHaptics>
   )

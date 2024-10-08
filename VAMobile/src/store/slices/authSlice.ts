@@ -25,6 +25,7 @@ import {
   LoginServiceTypeConstants,
 } from 'store/api/types'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { KEYCHAIN_DEVICE_SECRET_KEY, storeDeviceSecret } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
@@ -33,7 +34,6 @@ import { clearCookies } from 'utils/rnAuthSesson'
 
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { updateDemoMode } from './demoSlice'
-import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -143,6 +143,7 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
  */
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
   await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
@@ -389,7 +390,11 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
-      authResponse.device_secret && api.setDeviceSecret(authResponse.device_secret)
+
+      if (authResponse.device_secret) {
+        await storeDeviceSecret(authResponse.device_secret)
+      }
+
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
@@ -414,6 +419,8 @@ export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
+    await clearCookies()
+
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
     if (!tokenMatchesService) {
@@ -469,6 +476,7 @@ export const attemptIntializeAuthWithRefreshToken = async (
   refreshToken: string,
 ): Promise<void> => {
   try {
+    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
@@ -538,9 +546,10 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
+      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
       const queryString = new URLSearchParams({
         refresh_token: refreshToken ?? '',
-        device_secret: api.getDeviceSecret() ?? '',
+        device_secret: deviceSecret ? deviceSecret.password : '',
       }).toString()
 
       const response = await fetch(AUTH_SIS_REVOKE_URL, {
@@ -611,16 +620,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
-export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
-  const { loggedIn } = getState().auth
-  const { tappedForegroundNotification } = getState().notifications
-
-  if (loggedIn && tappedForegroundNotification) {
-    console.debug('User tapped foreground notification. Skipping initializeAuth.')
-    dispatch(dispatchResetTappedForegroundNotification())
-    return
-  }
-
+export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
   const pType = await getAuthLoginPromptType()

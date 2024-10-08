@@ -37,6 +37,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
+  const controlIDs = ['claimsHistoryActiveID', 'claimsHistoryClosedID']
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(0)
   const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
@@ -129,7 +130,8 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID"
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      backLabelTestID="claimsHistoryBackTestID">
       {!claimsNotInDowntime && !appealsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
@@ -157,6 +159,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={accessibilityHints}
+                testIDs={controlIDs}
               />
             </Box>
           )}

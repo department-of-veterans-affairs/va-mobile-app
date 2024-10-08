@@ -16,7 +16,6 @@ const { API_ROOT } = getEnv()
 
 let _token: string | undefined
 let _refresh_token: string | undefined
-let _device_secret: string | undefined
 let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
 let _store: ReduxToolkitStore | undefined
@@ -42,14 +41,6 @@ export const setRefreshToken = (token?: string): void => {
 
 export const getRefreshToken = (): string | undefined => {
   return _refresh_token
-}
-
-export const setDeviceSecret = (secret?: string): void => {
-  _device_secret = secret
-}
-
-export const getDeviceSecret = (): string | undefined => {
-  return _device_secret
 }
 
 export const setDemoMode = (demoMode: boolean): void => {

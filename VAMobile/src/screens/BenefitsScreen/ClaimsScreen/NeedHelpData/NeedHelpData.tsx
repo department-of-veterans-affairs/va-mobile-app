@@ -43,6 +43,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
             text={t('goToVAGov')}
             a11yLabel={a11yLabelVA(t('goToVAGov'))}
             a11yHint={t('appealDetails.goToVAGovA11yHint')}
+            testID="goToVAGovID"
           />
         </Box>
       </Box>
