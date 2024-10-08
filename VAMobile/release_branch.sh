@@ -14,7 +14,7 @@ Help() {
   echo "Release branch automation script"
   echo
   echo "This script does the following:"
-  echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from develop"
+  echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from develop). unless the --bypass-date-check flag is passed"
   echo "2. Checks out the main branch, then pulls the latest tag."
   echo "3. Increments the latest tag by the minor version to get the next release version number"
   echo "4. Checks out and pulls latest develop branch"
@@ -40,15 +40,29 @@ increment_version() {
 
 #### Process the options
 
-while getopts h option
-  do case "${option}" in
-    h) Help; exit ;;
-    *) echo "Invalid option -${option}"; exit ;;
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+    -h|--help)
+      Help
+      exit 0
+      ;;
+    --bypass-date-check)
+      bypass_date_check=true
+      shift # past argument
+      ;;
+    *)
+      echo "Invalid option: $1"
+      exit 1
+      ;;
   esac
 done
 
-# First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days)
-if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
+# First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days) unless the --bypass-date-check flag is passed
+#if $bypass_date_check || [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
+if [[ $bypass_date_check ]] || [[ $(( ( $(date +%s) - $(date -d "2021-08-04" +%s) ) / (3600*24) % 14 )) == 0 ]]
 then
 
   echo "Checking out and pulling latest from main branch"
@@ -68,16 +82,16 @@ then
   git checkout develop &&
   git pull origin develop &&
 
-  echo "Creating and pushing new release branch 'release/$next' to origin"
+  echo "Creating and pushing new release branch 'chanelTest/release/$next' to origin"
   git checkout -b release/"$next" &&
-  git push -u origin release/"$next"
+  #git push -u origin release/"$next"
 
-  echo "Successfully created and pushed new release branch 'release/$next' to origin"
+  echo "Successfully created and pushed new release branch 'chanelTest/release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
   TAG="RC-$next-$(date +%m%d%y-%H%M)"
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
-  git push origin "$TAG"
+  #git push origin "$TAG"
 
   echo "Successfully tagged for Release Candidate builds: $TAG"
   echo "Exit"
