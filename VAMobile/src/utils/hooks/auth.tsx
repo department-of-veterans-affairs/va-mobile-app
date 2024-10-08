@@ -1,19 +1,11 @@
-import { useSelector } from 'react-redux'
+import { useQueryClient } from '@tanstack/react-query'
 
-import { RootState } from 'store'
-import {
-  AuthState,
-  cancelWebLogin,
-  handleTokenCallbackUrl,
-  sendLoginFailedAnalytics,
-  sendLoginStartAnalytics,
-} from 'store/slices/authSlice'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { useAuthSettings, useHandleTokenCallbackUrl } from 'api/auth'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { startAuthSession } from 'utils/rnAuthSesson'
-
-import { useAppDispatch } from '.'
 
 /**
  * Launches the native auth implementation and navigates to VA.gov login. For iOS,
@@ -22,26 +14,30 @@ import { useAppDispatch } from '.'
  * @returns Promise<void>
  */
 export const useStartAuth = (): (() => Promise<void>) => {
-  const dispatch = useAppDispatch()
-  const { codeChallenge } = useSelector<RootState, AuthState>((state) => state.auth)
-
+  const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
+  const queryClient = useQueryClient()
+  const authSettingsQuery = useAuthSettings()
   const startAuth = async () => {
-    dispatch(sendLoginStartAnalytics(false))
+    await logAnalyticsEvent(Events.vama_login_start(true, false))
     const iOS = isIOS()
     try {
-      const callbackUrl = await startAuthSession(codeChallenge || '')
+      const callbackUrl = await startAuthSession(authSettingsQuery.data?.codeChallenge || '')
+      const params = {
+        url: callbackUrl,
+        queryClient: queryClient,
+      }
       if (iOS) {
-        dispatch(handleTokenCallbackUrl(callbackUrl))
+        await handleTokenCallbackUrl(params)
       }
     } catch (e) {
       // For iOS, code "000" comes back from the RCT bridge if the user cancelled the log in
       // all other errors are code '001'
       if (isErrorObject(e)) {
         if (iOS && e.code === '000') {
-          dispatch(cancelWebLogin())
+          await logAnalyticsEvent(Events.vama_login_closed(true))
         } else {
           logNonFatalErrorToFirebase(e, `${iOS ? 'iOS' : 'Android'} Login Error`)
-          dispatch(sendLoginFailedAnalytics(e))
+          await logAnalyticsEvent(Events.vama_login_fail(e, true))
         }
       }
     }
