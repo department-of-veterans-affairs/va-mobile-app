@@ -61,8 +61,7 @@ do
 done
 
 # First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days) unless the --bypass-date-check flag is passed
-#if $bypass_date_check || [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
-if [[ $bypass_date_check ]] || [[ $(( ( $(date +%s) - $(date -d "2021-08-04" +%s) ) / (3600*24) % 14 )) == 0 ]]
+if $bypass_date_check || [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
   echo "Checking out and pulling latest from main branch"
