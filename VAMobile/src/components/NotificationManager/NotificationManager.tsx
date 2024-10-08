@@ -1,21 +1,30 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
 
+import { useRegisterDevice } from 'api/notifications'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
 import { AuthState } from 'store/slices'
-import {
-  dispatchSetInitialUrl,
-  dispatchSetTappedForegroundNotification,
-  registerDevice,
-} from 'store/slices/notificationSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch } from 'utils/hooks'
 
 const foregroundNotifications: Array<string> = []
+
+interface NotificationContextType {
+  tappedForegroundNotification: boolean
+  initialUrl: string
+  setTappedForegroundNotification: Dispatch<SetStateAction<boolean>>
+  setInitialUrl: Dispatch<SetStateAction<string>>
+}
+
+const NotificationContext = createContext<NotificationContextType>({
+  tappedForegroundNotification: false,
+  initialUrl: '',
+  setTappedForegroundNotification: () => {},
+  setInitialUrl: () => {},
+})
 
 /**
  * notification manager component to handle all push logic
@@ -23,26 +32,38 @@ const foregroundNotifications: Array<string> = []
 const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
-  const dispatch = useAppDispatch()
+  const { mutate: registerDevice } = useRegisterDevice()
+  const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
+  const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
+
   useEffect(() => {
     const register = () => {
-      Notifications.events().registerRemoteNotificationsRegistered((event) => {
-        console.debug('Device Token Received', event.deviceToken)
-        dispatch(registerDevice(event.deviceToken, undefined, personalInformation?.id))
+      const registeredNotifications = Notifications.events().registerRemoteNotificationsRegistered((event) => {
+        const registerParams = {
+          deviceToken: event.deviceToken,
+          userID: personalInformation?.id,
+        }
+        registerDevice(registerParams)
       })
-      Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
-        //TODO: Log this error in crashlytics?
-        console.error(event)
-        dispatch(registerDevice())
+      const failedNotifications = Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
+        const registerParams = {
+          deviceToken: undefined,
+          userID: undefined,
+        }
+        registerDevice(registerParams)
+      })
+      Notifications.events().registerRemoteNotificationsRegistrationDenied(() => {
+        registeredNotifications.remove()
+        failedNotifications.remove()
       })
       Notifications.registerRemoteNotifications()
     }
 
-    if (loggedIn) {
+    if (loggedIn && personalInformation?.id) {
       register()
     }
-  }, [dispatch, loggedIn, personalInformation?.id])
+  }, [loggedIn, personalInformation?.id, registerDevice])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
@@ -60,18 +81,18 @@ const NotificationManager: FC = ({ children }) => {
        */
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
       if (foregroundNotifications.includes(notification.identifier)) {
-        dispatch(dispatchSetTappedForegroundNotification())
+        setTappedForegroundNotification(true)
       }
-
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
       if (notification.payload.url) {
         if (loggedIn) {
           Linking.openURL(notification.payload.url)
         } else {
-          dispatch(dispatchSetInitialUrl(notification.payload.url))
+          setInitialUrl(notification.payload.url)
         }
       }
+
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
@@ -91,7 +112,7 @@ const NotificationManager: FC = ({ children }) => {
         console.debug('Initial notification was:', notification || 'N/A')
 
         if (notification?.payload.url) {
-          dispatch(dispatchSetInitialUrl(notification.payload.url))
+          setInitialUrl(notification.payload.url)
         }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
@@ -103,7 +124,14 @@ const NotificationManager: FC = ({ children }) => {
   }
 
   const s = { flex: 1 }
-  return <View style={s}>{children}</View>
+  return (
+    <NotificationContext.Provider
+      value={{ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }}>
+      <View style={s}>{children}</View>
+    </NotificationContext.Provider>
+  )
 }
+
+export const useNotificationContext = () => useContext(NotificationContext)
 
 export default NotificationManager
