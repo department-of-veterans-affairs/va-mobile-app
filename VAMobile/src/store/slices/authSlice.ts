@@ -25,6 +25,7 @@ import {
   LoginServiceTypeConstants,
 } from 'store/api/types'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { KEYCHAIN_DEVICE_SECRET_KEY, storeDeviceSecret } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
@@ -54,7 +55,6 @@ const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_co
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
-const KEYCHAIN_DEVICE_SECRET_KEY = 'vamobileDeviceSecret'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const authNonFatalErrorString = 'Auth Service Error'
 
@@ -332,37 +332,6 @@ const storeRefreshToken = async (
 }
 
 /**
- * Stores SSO device secret in keychain/keystore
- */
-const storeDeviceSecret = async (deviceSecret: string) => {
-  try {
-    const options: Keychain.Options = {
-      securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
-    }
-
-    await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
-
-    const biometricsSupported = !!(await deviceSupportedBiometrics())
-    const biometricsPreferred = await isBiometricsPreferred()
-
-    // if (biometricsSupported && biometricsPreferred) {
-    await Keychain.setInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY, 'user', deviceSecret, options)
-    console.debug('Successfully set device secret')
-    // }
-  } catch (error) {
-    logNonFatalErrorToFirebase(error, `storeDeviceSecret: Failed to store SSO device secret`)
-  }
-}
-
-/**
- * Loads device secret from keychain/keystore for starting SSO sessions
- */
-export const loadDeviceSecret = async () => {
-  const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
-  deviceSecret && api.setDeviceSecret(deviceSecret.password)
-}
-
-/**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
@@ -425,7 +394,6 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
 
       if (authResponse.device_secret) {
         await storeDeviceSecret(authResponse.device_secret)
-        api.setDeviceSecret(authResponse.device_secret)
       }
 
       return authResponse
@@ -579,9 +547,10 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
+      const deviceSecret = await Keychain.getInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
       const queryString = new URLSearchParams({
         refresh_token: refreshToken ?? '',
-        device_secret: api.getDeviceSecret() ?? '',
+        device_secret: deviceSecret ? deviceSecret.password : '',
       }).toString()
 
       const response = await fetch(AUTH_SIS_REVOKE_URL, {
@@ -650,7 +619,6 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   }
   dispatch(dispatchStartAuthLogin(true))
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
-  await loadDeviceSecret()
 }
 
 export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
@@ -691,7 +659,6 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
     return
   }
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
-  await loadDeviceSecret()
 }
 
 export const handleTokenCallbackUrl =

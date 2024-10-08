@@ -1142,12 +1142,11 @@ export const Events = {
       },
     }
   },
-  vama_sso_cookie_received: (received: boolean, url: string): Event => {
+  vama_sso_cookie_received: (received: boolean): Event => {
     return {
       name: 'vama_sso_cookie_received',
       params: {
         received,
-        url,
       },
     }
   },
