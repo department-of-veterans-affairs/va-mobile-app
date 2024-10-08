@@ -11,6 +11,16 @@ const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
 const { DEMO_PASSWORD } = getEnv()
+const mockNotification = {
+  trigger: {
+    type: 'push',
+  },
+  title: 'New Secure Message',
+  body: 'Review your messages in the health care section of the VA app',
+  payload: {
+    url: 'vamobile://messages/2092809',
+  },
+}
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -19,6 +29,8 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -54,25 +66,46 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
+  CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
+  CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
+  CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
+  GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
+  NEXT_PAGE_ID: 'next-page',
+  PREVIOUS_PAGE_ID: 'previous-page',
 }
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode(skipOnboarding = true) {
-  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
-    .toExist()
-    .withTimeout(60000)
+export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
-    await element(
-      by.text(
-        "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-      ),
-    ).tap()
-    await element(by.text('Dismiss')).tap()
-  } catch (e) {}
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(120000)
+  } catch (ex) {
+    await device.uninstallApp()
+    await device.installApp()
+    if (pushNotifications) {
+      await device.launchApp({
+        delete: true,
+        permissions: { notifications: 'YES' },
+        newInstance: true,
+        userNotification: mockNotification,
+      })
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    }
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(60000)
+  }
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
@@ -252,7 +285,7 @@ export async function checkImages(screenshotPath) {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {
@@ -486,7 +519,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (

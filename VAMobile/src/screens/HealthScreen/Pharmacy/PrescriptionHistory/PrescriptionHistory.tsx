@@ -401,6 +401,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       url: LINK_URL_GO_TO_PATIENT_PORTAL,
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      variant: 'base',
     }
 
     return (
@@ -431,6 +432,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button
+          testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
           onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
         />

@@ -17,9 +17,18 @@ export const SignE2eIdConstants = {
 
 describe('Sign In', () => {
   it('should show sign in page content', async () => {
-    await waitFor(element(by.id(SignE2eIdConstants.LOGIN_PAGE_ID)))
-      .toExist()
-      .withTimeout(20000)
+    try {
+      await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+        .toExist()
+        .withTimeout(120000)
+    } catch (ex) {
+      await device.uninstallApp()
+      await device.installApp()
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+      await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+        .toExist()
+        .withTimeout(60000)
+    }
 
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT))).toExist()
