@@ -39,7 +39,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_VA_NOTIFICATIONS } = getEnv()
@@ -49,6 +49,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
@@ -194,8 +195,15 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
           </TextView>
           <Box mx={gutter}>
             <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_VA_NOTIFICATIONS}
+              type="custom"
+              onPress={() => {
+                navigateTo('Webview', {
+                  url: LINK_URL_VA_NOTIFICATIONS,
+                  displayTitle: t('webview.vagov'),
+                  loadingMessage: t('webview.notifications.loading'),
+                  useSSO: true,
+                })
+              }}
               text={t('notifications.settings.link.text')}
               a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
             />
