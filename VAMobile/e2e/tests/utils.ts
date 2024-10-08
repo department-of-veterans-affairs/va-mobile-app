@@ -66,6 +66,7 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
@@ -288,7 +289,7 @@ export async function checkImages(screenshotPath) {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {
