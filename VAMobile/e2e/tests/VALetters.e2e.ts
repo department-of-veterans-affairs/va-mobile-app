@@ -74,7 +74,7 @@ beforeAll(async () => {
 
 describe('VA Letters', () => {
   it('should match design', async () => {
-    await expect(element(by.id(LettersConstants.MAILING_ADDRESS))).toExist()
+    await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
   it('should tap address and open edit screen', async () => {
