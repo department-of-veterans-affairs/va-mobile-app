@@ -110,7 +110,7 @@ jobs:
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_TKDicksom: $TKDickson
+          SLACK_TKDickson: $TKDickson
           SLACK_kellylein: $kellylein
           SLACK_dumathane: $dumathane
           SLACK_timwright12: $timwright12
