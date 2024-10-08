@@ -62,9 +62,15 @@ export const MessagesE2eIdConstants = {
 }
 
 const tapItems = async (items: string, type: string) => {
-  if (type === 'url' || type === 'map' || type === 'email') {
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-  }
+  // if (type === 'url' || type === 'map' || type === 'email') {
+  //   if (items != 'https://www.va.gov/') {
+  //     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+  //   }
+  // }
+  await waitFor(element(by.text(items)))
+    .toBeVisible()
+    .whileElement(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID))
+    .scroll(50, 'down')
   await device.disableSynchronization()
   await element(by.text(items)).tap()
   if (type === 'url' || type === 'map') {
@@ -143,6 +149,7 @@ describe('Messages Screen', () => {
     await tapItems('+18006982411', 'phone')
     await tapItems('1-800-698-2411.', 'phone')
   })
+
   //Currently broken on iOS.  Will be fixed with ticket 7679
   it(':android: verify url links open', async () => {
     await tapItems('https://www.va.gov/', 'url')

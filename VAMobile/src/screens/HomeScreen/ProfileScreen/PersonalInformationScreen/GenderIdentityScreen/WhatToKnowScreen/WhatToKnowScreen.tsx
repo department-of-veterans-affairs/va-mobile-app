@@ -33,33 +33,21 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.whoCanAccess'),
                 text: t('personalInformation.genderIdentity.whatToKnow.privacy'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.whoCanAccess') +
-                  t('personalInformation.genderIdentity.whatToKnow.privacy'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
               },
             ]}
           />

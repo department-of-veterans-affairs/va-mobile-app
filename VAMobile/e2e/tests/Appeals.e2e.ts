@@ -95,6 +95,7 @@ describe('Appeals', () => {
     await device.launchApp({ newInstance: false })
     await device.disableSynchronization()
     await element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)).tap()
+    await setTimeout(2000)
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')

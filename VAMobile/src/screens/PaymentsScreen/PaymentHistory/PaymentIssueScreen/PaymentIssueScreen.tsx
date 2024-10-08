@@ -16,7 +16,11 @@ function PaymentIssue({}: PaymentIssueScreenProps) {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
+    <LargePanel
+      title={t('paymentsHelp.title')}
+      rightButtonText={t('close')}
+      rightButtonTestID="paymentIssuesCloseID"
+      testID="paymentsIssuesPanelID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifMyPaymentDoesNotLookRight')}
