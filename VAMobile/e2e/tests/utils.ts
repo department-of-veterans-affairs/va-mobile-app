@@ -11,6 +11,16 @@ const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
 const { DEMO_PASSWORD } = getEnv()
+const mockNotification = {
+  trigger: {
+    type: 'push',
+  },
+  title: 'New Secure Message',
+  body: 'Review your messages in the health care section of the VA app',
+  payload: {
+    url: 'vamobile://messages/2092809',
+  },
+}
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -66,22 +76,33 @@ export const CommonE2eIdConstants = {
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
+  PREVIOUS_PAGE_ID: 'previous-page',
 }
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode(skipOnboarding = true) {
-  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
-    .toExist()
-    .withTimeout(60000)
+export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
-    await element(
-      by.text(
-        "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-      ),
-    ).tap()
-    await element(by.text('Dismiss')).tap()
-  } catch (e) {}
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(120000)
+  } catch (ex) {
+    await device.uninstallApp()
+    await device.installApp()
+    if (pushNotifications) {
+      await device.launchApp({
+        delete: true,
+        permissions: { notifications: 'YES' },
+        newInstance: true,
+        userNotification: mockNotification,
+      })
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    }
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(60000)
+  }
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
