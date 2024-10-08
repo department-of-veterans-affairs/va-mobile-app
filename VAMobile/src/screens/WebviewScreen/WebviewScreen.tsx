@@ -183,7 +183,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         onError={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent
           logAnalyticsEvent(Events.vama_webview_fail(nativeEvent))
-          console.warn('WebView error: ', nativeEvent) //remove when done testing
         }}
         testID="Webview-web"
       />
