@@ -93,7 +93,7 @@ jobs:
         id: map_slack_ids
         run: |
           declare -A GITHUB_TO_SLACK_MAP
-          GITHUB_TO_SLACK_MAP["DJUltraTom"]="U02BBL9L0CU"
+          GITHUB_TO_SLACK_MAP["TKDickson"]="U02PJLJ0H6H"
           GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
           GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
           GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
@@ -110,7 +110,7 @@ jobs:
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_DJUltraTom: $DJUltraTom
+          SLACK_TKDicksom: $TKDickson
           SLACK_kellylein: $kellylein
           SLACK_dumathane: $dumathane
           SLACK_timwright12: $timwright12
@@ -132,7 +132,7 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-          - *Release Testing:* <@${SLACK_DJUltraTom}>\n\
+          - *Release Testing:* <@${SLACK_TKDickson}>\n\
           - *Release Manager:* <@${SLACK_kellylein}>\n\
           - *Release Ticket Validation:* <@${SLACK_dumathane}>\n\
           - *Engineering:* <@${SLACK_dumathane}>, <@${SLACK_timwright12}>\n\
