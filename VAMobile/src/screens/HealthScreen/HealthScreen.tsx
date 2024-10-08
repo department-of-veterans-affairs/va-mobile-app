@@ -172,7 +172,7 @@ export function HealthScreen({}: HealthScreenProps) {
           </Pressable>
         </Box>
       )}
-      {enrolledInVAHealthCare && (
+      {!enrolledInVAHealthCare && (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <AnnouncementBanner
             title={t('applyForHealthCare')}
