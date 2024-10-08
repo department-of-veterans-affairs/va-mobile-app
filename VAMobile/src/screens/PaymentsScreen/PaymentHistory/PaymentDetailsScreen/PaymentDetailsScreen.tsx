@@ -45,7 +45,8 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
     <FeatureLandingTemplate
       backLabel={t('history.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('paymentDetails.title')}>
+      title={t('paymentDetails.title')}
+      backLabelTestID="paymentDetailsBackID">
       <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>

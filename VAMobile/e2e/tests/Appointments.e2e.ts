@@ -43,7 +43,7 @@ describe('Appointments Screen', () => {
   it('should tap and open the appointment details links', async () => {
     await waitFor(element(by.text('Vilanisi Reddy')))
       .toBeVisible()
-      .whileElement(by.id('appointmentsTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text('Vilanisi Reddy')).tap()
     if (device.getPlatform() === 'android') {
@@ -82,7 +82,7 @@ describe('Appointments Screen', () => {
     await element(by.id('apptDetailsBackID')).tap()
     await waitFor(element(by.text('GUARINO, ANTHONY')))
       .toBeVisible()
-      .whileElement(by.id('appointmentsTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text('GUARINO, ANTHONY')).tap()
     await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
@@ -95,7 +95,7 @@ describe('Appointments Screen', () => {
   it('verify the appointment details after cancel', async () => {
     await waitFor(element(by.text('GUARINO, ANTHONY')))
       .toBeVisible()
-      .whileElement(by.id('appointmentsTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text('GUARINO, ANTHONY')).tap()
     await expect(element(by.text('Canceled request for community care'))).toExist()
@@ -103,7 +103,7 @@ describe('Appointments Screen', () => {
   })
 
   it('should tap on and show past appointments', async () => {
-    await element(by.id('appointmentsTestID')).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.id('apptsPastID')).tap()
     if (device.getPlatform() === 'android') {
       await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()

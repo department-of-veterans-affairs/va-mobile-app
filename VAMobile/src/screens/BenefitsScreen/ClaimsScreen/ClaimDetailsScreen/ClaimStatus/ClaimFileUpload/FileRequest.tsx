@@ -113,7 +113,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       title={t('fileRequest.title')}
-      testID="fileRequestPageTestID">
+      testID="fileRequestPageTestID"
+      leftButtonTestID="fileRequestPageBackID">
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
