@@ -32,6 +32,9 @@ A system to help you write, design, and build digital services on the VA Mobile 
 ### Navigation
 - [Segmented control](/va-mobile-app/design/Components/Navigation/Secondary/SegmentedControl)
 
+### Selection and input
+- [Checkbox](/va-mobile-app/design/Components/Selection%20and%20input/Checkbox)
+
 -----
 
 ## Design system team
