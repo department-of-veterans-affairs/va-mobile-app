@@ -25,7 +25,7 @@ While QA does a lot of our work towards the end of a ticket's lifecycle (testing
 | **Involvement** | **How to pull us in** | **Artifacts QA delivers** |
 | --- | --- | --- |
 | High-level review or feature planning | Included on meeting requests, tagged in Slack/invited to relevant channels | n/a |
-| Manual testing | Engineering implentation tickets assigned to appropriate QA Engineer, after passing PR review | Per-ticket: Completed ticket will include planned & completed testing (comment, or TestRail link, as appropriate). Per-feature: QA Testing Summary. |
+| Manual testing | Engineering implentation tickets assigned to appropriate QA Engineer, after passing PR review | Per-ticket: Completed ticket will include planned & completed testing (comment, or TestRail link, as appropriate). Per-feature: [Testing Summary](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Testing%20Summary). |
 | Automated testing | Engineering detox script addition/updates assigned to appropriate QA Engineer, after passing PR review | PRs or tickets will include QA review |
 
 NB: During testing, towards the end of QA review, the UX team does UX review (visual, interaction, and content review). For details, reference [the UX team documentation on the UX QA process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/designing-ui#qa).
