@@ -18,7 +18,9 @@ function AccountSecurity({ navigation }: AccountSecurityProps) {
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('accountSecurity')}>
+      title={t('accountSecurity')}
+      testID="accountSecurityScreenID"
+      backLabelTestID="backToSettingsScreenID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

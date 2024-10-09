@@ -160,6 +160,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
+      backLabelTestID="backToSettingsScreenID"
       title={t('notifications.title')}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
@@ -198,6 +199,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               url={LINK_URL_VA_NOTIFICATIONS}
               text={t('notifications.settings.link.text')}
               a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
+              testID="noficationSettingsLinkID"
             />
           </Box>
         </Box>

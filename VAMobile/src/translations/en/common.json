@@ -1456,6 +1456,7 @@
   "veteranStatus.uniformedServices.A11yLabel": "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any V-A benefits.",
   "veteranStatus.uploadPhoto": "Upload photo",
   "video": "Video",
+  "webview.appointments.loading": "Loading appointments page...",
   "webview.vagov": "va.gov",
   "webview.valocation.loading": "Loading VA location finder...",
   "whatsNew.dismissMessage": "Dismiss this message",
