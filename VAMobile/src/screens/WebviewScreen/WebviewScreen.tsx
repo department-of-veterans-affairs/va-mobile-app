@@ -182,6 +182,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         }}
         onError={(syntheticEvent) => {
           const { nativeEvent } = syntheticEvent
+          nativeEvent.url = currentUrl
           logAnalyticsEvent(Events.vama_webview_fail(nativeEvent))
         }}
         testID="Webview-web"
