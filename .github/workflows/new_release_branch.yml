@@ -11,17 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       environment_name: ${{ steps.check-environment.outputs.env_name }}
-      manual_trigger: ${{ steps.check-environment.outputs.is_manual }}
     steps:
       - name: Check environment
         id: check-environment
         run: |
           if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
             echo ::set-output name=env_name::'manual-release'
-            echo ::set-output name=is_manual::'true'
           else
             echo ::set-output name=env_name::''
-            echo ::set-output name=is_manual::'false'
           fi
   cut_release_branch:
     name: Cut Release Branch
@@ -45,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
         run: |
-          if [[ "${{ needs.get-workflow-environment.outputs.manual_trigger }}" == "true" ]]; then
+          if [[ "${{ needs.get-workflow-environment.outputs.environment_name }}" == "manual-release" ]]; then
             ./release_branch.sh --bypass-date-check
           else
             ./release_branch.sh
