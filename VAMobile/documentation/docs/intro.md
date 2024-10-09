@@ -21,7 +21,7 @@ Below, you'll find some high level steps you need to get started with the app as
 2. Start the design process
 3. Get designs approved by VA Mobile product owners
 4. Request a [test plan](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=QA_Test_Plan.md) from Mobile QA
-5. Start feature implementation.
+5. Start feature implementation
 
 If you have an engineer who needs to build in the VA Health and Benefits mobile app (and they are already onboarded into the VA organization), you can fill out a [mobile engineering onboarding request](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=onboarding-request-engineering.yml).
 
