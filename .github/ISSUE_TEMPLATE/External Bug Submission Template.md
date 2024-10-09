@@ -3,7 +3,7 @@ name: External Bug Report Template
 about: This bug template should be used by external parties (non-VA / non-mobile) when submitting concerns
 title: BUG - [iOS/Android/All] - [Short description]
 labels: bug,qa, external-submission
-assignees: DJUltraTom
+assignees: TKDickson
 ---
 ## Summary of the bug 
 General overview of what happened and where it happened. 
