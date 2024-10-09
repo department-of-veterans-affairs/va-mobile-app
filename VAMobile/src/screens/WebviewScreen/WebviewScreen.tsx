@@ -12,8 +12,10 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { fetchSSOCookies } from 'utils/auth'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
@@ -80,6 +82,8 @@ export type WebviewStackParams = {
     displayTitle: string
     /** Text to appear with a lock icon in the header */
     loadingMessage?: string
+    /** Use SSO to authenticate webview */
+    useSSO?: boolean
   }
 }
 
@@ -89,16 +93,24 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
+  const { url, displayTitle, loadingMessage, useSSO } = route.params
+  const isSSOSession = featureEnabled('sso') && useSSO
+
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
-
-  const { url, displayTitle, loadingMessage } = route.params
+  const [fetchingSSOCookies, setFetchingSSOCookies] = useState(isSSOSession)
+  const [webviewLoadFailed, setWebviewLoadFailed] = useState(false)
 
   const onReloadPressed = (): void => {
+    // Fetch SSO cookies when attempting to reload after initial WebView load failed
+    if (isSSOSession && webviewLoadFailed) {
+      setWebviewLoadFailed(false)
+      setFetchingSSOCookies(true)
+    }
     webviewRef?.current.reload()
   }
 
@@ -118,6 +130,12 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     })
   })
 
+  useEffect(() => {
+    if (fetchingSSOCookies) {
+      fetchSSOCookies().finally(() => setFetchingSSOCookies(false))
+    }
+  }, [fetchingSSOCookies])
+
   const backPressed = (): void => {
     webviewRef?.current.goBack()
   }
@@ -135,6 +153,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   const INJECTED_JAVASCRIPT = `(function() {
+    localStorage.setItem('hasSession', true);
     document.getElementsByClassName("header")[0].style.display='none';
   	document.getElementsByClassName("va-nav-breadcrumbs")[0].style.display='none';
   	document.getElementsByClassName("footer")[0].style.display='none';
@@ -158,7 +177,9 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     bottom: 0,
   }
 
-  return (
+  return fetchingSSOCookies ? (
+    <WebviewLoading loadingMessage={loadingMessage} />
+  ) : (
     <Box {...mainViewBoxProps} testID="Webview-page">
       <StatusBar
         translucent
@@ -170,10 +191,14 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}
         source={{ uri: url }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
+        sharedCookiesEnabled={true}
         ref={webviewRef}
         // onMessage is required to be present for injected javascript to work on iOS
         onMessage={(): void => {
           // no op
+        }}
+        onError={() => {
+          setWebviewLoadFailed(true)
         }}
         onNavigationStateChange={(navState): void => {
           setCanGoBack(navState.canGoBack)

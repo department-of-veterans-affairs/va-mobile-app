@@ -8,6 +8,7 @@ export const VaccinesE2eIdConstants = {
   VACCINE_3_ID: 'FLU vaccine May 10, 2018',
   VACCINE_5_ID: 'PneumoPPV vaccine April 28, 2016',
   VACCINE_6_ID: 'FLU vaccine April 28, 2016',
+  VACCINE_DETAILS_BACK_ID: 'vaccinesDetailsBackID',
 }
 
 beforeAll(async () => {
@@ -54,7 +55,7 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
   it('verify no disclaimer is displayed when all fields are populated', async () => {
@@ -67,12 +68,12 @@ describe('Vaccine Records Screen', () => {
         ),
       ),
     ).not.toExist()
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
   it('verify no manufacturer for non COVID-19 record', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 })
