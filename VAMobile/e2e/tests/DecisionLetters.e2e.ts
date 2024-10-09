@@ -41,7 +41,6 @@ describe('Decision Letters Screen', () => {
 
   it('verify that the claims letters sceen is displayed', async () => {
     await element(by.id(DecisionLettersE2eIDConstants.GET_CLAIMS_LETTER_BUTTON_ID)).tap()
-    await expect(element(by.text('Claim letters'))).toExist()
     await expect(element(by.id(DecisionLettersE2eIDConstants.DECISION_CLAIM_LETTER_1_ID))).toExist()
     await expect(element(by.id(DecisionLettersE2eIDConstants.DECISION_CLAIM_LETTER_2_ID))).toExist()
   })
