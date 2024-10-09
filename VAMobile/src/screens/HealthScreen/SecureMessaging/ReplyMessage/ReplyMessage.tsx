@@ -258,27 +258,29 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           navigateTo('SecureMessaging', { activeTab: 0 })
         },
         onError: () => {
-          if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
-            if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
-              setReplyTriageError(true)
-            } else {
-              showSnackBar(
-                snackbarSentMessages.errorMsg,
-                dispatch,
-                // passing messageDataRef to ensure we have the latest messageData
-                () =>
-                  sendMessage(
-                    {
-                      messageData: messageDataRef.current,
-                      uploads: attachmentsList,
-                      replyToID: message.messageId,
-                    },
-                    mutateOptions,
-                  ),
-                false,
-                true,
-              )
-            }
+          if (
+            sendMessageError &&
+            isErrorObject(sendMessageErrorDetails) &&
+            hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
+          ) {
+            setReplyTriageError(true)
+          } else {
+            showSnackBar(
+              snackbarSentMessages.errorMsg,
+              dispatch,
+              // passing messageDataRef to ensure we have the latest messageData
+              () =>
+                sendMessage(
+                  {
+                    messageData: messageDataRef.current,
+                    uploads: attachmentsList,
+                    replyToID: message.messageId,
+                  },
+                  mutateOptions,
+                ),
+              false,
+              true,
+            )
           }
         },
       }
