@@ -50,7 +50,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     : undefined
 
   useBeforeNavBackListener(navigation, () => {
-    registerReviewEvent()
+    registerReviewEvent(true)
   })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {

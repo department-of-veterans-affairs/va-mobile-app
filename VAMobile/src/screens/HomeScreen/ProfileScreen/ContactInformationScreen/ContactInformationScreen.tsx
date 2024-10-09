@@ -155,7 +155,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
   if (!reviewEventRegistered) {
     console.debug('REVIEW EVENT REGISTERED')
-    registerReviewEvent()
+    registerReviewEvent(true)
     setReviewEventRegistered(true)
   }
 

@@ -72,7 +72,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [trueAppointment, pendingAppointment, attributes])
 

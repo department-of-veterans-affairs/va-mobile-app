@@ -151,7 +151,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [threadFetched])
 
