@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { PrescriptionAttributeData, RefillStatusConstants } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -43,14 +44,13 @@ context('PrescriptionDetails', () => {
   describe('when showing prescription details data', () => {
     it('should show prescription fields', () => {
       initializeTestInstance()
-      expect(screen.getByText('Instructions')).toBeTruthy()
-      expect(screen.getByText('Refills left')).toBeTruthy()
-      expect(screen.getByText('Fill date')).toBeTruthy()
-      expect(screen.getByText('Quantity')).toBeTruthy()
-      expect(screen.getByText('Expires on')).toBeTruthy()
-      expect(screen.getByText('Ordered on')).toBeTruthy()
-      expect(screen.getByText('VA facility')).toBeTruthy()
-
+      expect(screen.getByRole('header', { name: t('prescription.details.instructionsHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.refillLeftHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('fillDate') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.quantityHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.expiresOnHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.orderedOnHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.vaFacilityHeader') })).toBeTruthy()
       expect(screen.getByRole('link', { name: '(217) 636-6712' })).toBeTruthy()
       expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
@@ -68,15 +68,16 @@ context('PrescriptionDetails', () => {
         facilityName: '',
         prescriptionNumber: '',
       })
-      expect(screen.getByText('Rx #: None noted')).toBeTruthy()
-      expect(screen.getByText('Instructions')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'SOMATROPIN 5MG INJ (VI)' })).toBeTruthy()
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} None noted`)).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.instructionsHeader') })).toBeTruthy()
       expect(screen.getAllByText('None noted')).toBeTruthy()
-      expect(screen.getByText('Refills left')).toBeTruthy()
-      expect(screen.getByText('Fill date')).toBeTruthy()
-      expect(screen.getByText('Quantity')).toBeTruthy()
-      expect(screen.getByText('Expires on')).toBeTruthy()
-      expect(screen.getByText('Ordered on')).toBeTruthy()
-      expect(screen.getByText('VA facility')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.refillLeftHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('fillDate') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.quantityHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.expiresOnHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.orderedOnHeader') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescription.details.vaFacilityHeader') })).toBeTruthy()
     })
   })
 
@@ -86,14 +87,14 @@ context('PrescriptionDetails', () => {
         initializeTestInstance({
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
-        expect(screen.getByRole('button', { name: 'Go to My VA Health' })).toBeTruthy()
+        expect(screen.getByRole('button', { name: t('goToMyVAHealth') })).toBeTruthy()
       })
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
       it('should not display FooterButton', () => {
         initializeTestInstance()
-        expect(screen.queryByRole('button', { name: 'Go to My VA Health' })).toBeFalsy()
+        expect(screen.queryByRole('button', { name: t('goToMyVAHealth') })).toBeFalsy()
       })
     })
   })
@@ -104,14 +105,14 @@ context('PrescriptionDetails', () => {
         initializeTestInstance({
           isRefillable: true,
         })
-        expect(screen.getByRole('button', { name: 'Request refill' })).toBeTruthy()
+        expect(screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeTruthy()
       })
     })
 
     describe('when isRefillable is false', () => {
       it('should not display FooterButton', () => {
         initializeTestInstance()
-        expect(screen.queryByRole('button', { name: 'Request refill' })).toBeFalsy()
+        expect(screen.queryByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle') })).toBeFalsy()
       })
     })
   })
@@ -123,14 +124,14 @@ context('PrescriptionDetails', () => {
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
 
-        expect(screen.getByText("We can't refill this prescription in the app")).toBeTruthy()
+        expect(screen.getByText(t('prescription.details.banner.title'))).toBeTruthy()
       })
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
     it('should not display the PrescriptionsDetailsBanner', () => {
       initializeTestInstance()
-      expect(screen.queryByText("We can't refill this prescription in the app")).toBeFalsy()
+      expect(screen.queryByText(t('prescription.details.banner.title'))).toBeFalsy()
     })
   })
 })
