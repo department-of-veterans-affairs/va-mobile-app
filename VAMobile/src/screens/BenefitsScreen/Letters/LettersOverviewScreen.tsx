@@ -61,6 +61,7 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
               onPress={() => navigateTo('LettersList')}
               label={t('letters.overview.viewLetters')}
               a11yHint={t('letters.overview.viewLetters.hint')}
+              testID="lettersOverviewViewLettersButtonID"
             />
           </Box>
         </>

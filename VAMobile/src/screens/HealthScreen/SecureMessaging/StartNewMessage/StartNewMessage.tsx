@@ -228,6 +228,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'to field',
+        confirmTestID: 'messagePickerConfirmID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
@@ -241,6 +242,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'picker',
+        confirmTestID: 'messagePickerConfirmID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
@@ -273,6 +275,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
