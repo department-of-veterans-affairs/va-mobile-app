@@ -111,6 +111,9 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -172,6 +175,9 @@ context('CommunityCareAppointment', () => {
           "Takes you to the V-A facility locator page. This page will open in your device's browser",
         ),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
     })
   })
 
@@ -333,6 +339,9 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -396,6 +405,9 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
     })
   })
 
