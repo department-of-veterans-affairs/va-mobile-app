@@ -134,7 +134,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     body: message,
     subject,
   } as SecureMessagingFormData
-  // Must pass ref to snackbar callback, otherwise messageData will be stale
+  // Ref for use in snackbar callbacks to ensure we have the latest messageData
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
   messageDataRef.current = messageData
 
@@ -334,21 +334,19 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           navigateTo('SecureMessaging', { activeTab: 0 })
         },
         onError: () => {
-          if (
-            sendMessageError &&
-            isErrorObject(sendMessageErrorDetails) &&
-            hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
-          ) {
-            setReplyTriageError(true)
-          } else {
-            showSnackBar(
-              snackbarSentMessages.errorMsg,
-              dispatch,
-              // passing messageDataRef to ensure we have the latest messageData
-              () => sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions),
-              false,
-              true,
-            )
+          if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
+            if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
+              setReplyTriageError(true)
+            } else {
+              showSnackBar(
+                snackbarSentMessages.errorMsg,
+                dispatch,
+                // passing messageDataRef to ensure we have the latest messageData
+                () => sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions),
+                false,
+                true,
+              )
+            }
           }
         },
       }
