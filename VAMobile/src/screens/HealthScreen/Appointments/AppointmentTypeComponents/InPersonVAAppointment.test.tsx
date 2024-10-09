@@ -115,6 +115,9 @@ context('InPersonVAAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(
         screen.getByText('You can cancel this appointment in the app. But if you need to reschedule, call us.'),
@@ -175,6 +178,9 @@ context('InPersonVAAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
@@ -348,6 +354,9 @@ context('InPersonVAAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
@@ -413,6 +422,9 @@ context('InPersonVAAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: 'Prepare for your appointment' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Find a full list of things to bring to your appointment' })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
