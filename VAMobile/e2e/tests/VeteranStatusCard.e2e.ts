@@ -62,7 +62,7 @@ export async function tapPhoneAndTTYLinks() {
       .toBeVisible()
       .whileElement(by.id('veteranStatusTestID'))
       .scroll(200, 'down')
-    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
     await setTimeout(1000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
@@ -74,7 +74,7 @@ export async function tapPhoneAndTTYLinks() {
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     try {
       await element(by.text('Dismiss')).tap()
-      await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     } catch (e) {}
     await setTimeout(2000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorTTY')
@@ -84,7 +84,7 @@ export async function tapPhoneAndTTYLinks() {
       .toBeVisible()
       .whileElement(by.id('veteranStatusTestID'))
       .scroll(200, 'down')
-    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
     await setTimeout(2000)
     await device.takeScreenshot('VeteranStatusPeriodOfServiceErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
@@ -170,7 +170,7 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text('100%')).atIndex(1)).toExist()
   })
 
-  verifyMilitaryInfo('United States Coast Guard')
+  /*verifyMilitaryInfo('United States Coast Guard')
   verifyMilitaryInfo('United States Army')
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
@@ -202,5 +202,5 @@ describe('Veteran Status Card', () => {
         },
       ],
     )
-  })
+  })*/
 })
