@@ -6,10 +6,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StackActions, useNavigation } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { VAIconProps } from 'components/VAIcon'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
@@ -44,7 +44,7 @@ export type FullScreenSubtaskProps = {
   /** Optional TestID for right button */
   rightButtonTestID?: string
   /** icon for title bar right button(must have right button text to display) */
-  rightVAIconProps?: VAIconProps
+  rightVAIconProps?: IconProps
   /** ref for the VAScrollView component that contains the content */
   scrollViewRef?: Ref<ScrollView>
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */

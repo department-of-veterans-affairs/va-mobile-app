@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 
-import { Box, ColorVariant, TextView, TextViewProps, VAIcon, VAIconProps } from 'components'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
-export type VAIconWithTextProps = VAIconProps & {
+import { Box, ColorVariant, TextView, TextViewProps } from 'components'
+
+export type IconWithTextProps = IconProps & {
   /** label to display below icon */
   label: string
   /** label color variant. default is textWithIconButton  */
@@ -14,15 +16,15 @@ export type VAIconWithTextProps = VAIconProps & {
 /**
  * Display icon with text label underneath
  *
- * @returns VAIconWithText component
+ * @returns IconWithText component
  */
-const VAIconWithText: FC<VAIconWithTextProps> = ({ label, labelColor, labelA11y, ...vaIconProps }) => {
-  const iconProps: VAIconProps = {
-    ...vaIconProps,
-    fill: vaIconProps.fill || 'link',
-    height: vaIconProps.height || 24,
-    width: vaIconProps.width || 24,
-    preventScaling: vaIconProps.preventScaling ?? true,
+const IconWithText: FC<IconWithTextProps> = ({ label, labelColor, labelA11y, ...iconProps }) => {
+  const props: IconProps = {
+    ...iconProps,
+    fill: iconProps.fill || 'link',
+    height: iconProps.height || 24,
+    width: iconProps.width || 24,
+    preventScaling: iconProps.preventScaling ?? true,
   }
 
   const textProps: TextViewProps = {
@@ -35,10 +37,10 @@ const VAIconWithText: FC<VAIconWithTextProps> = ({ label, labelColor, labelA11y,
 
   return (
     <Box alignItems="center">
-      <VAIcon {...iconProps} />
+      <Icon {...props} />
       <TextView {...textProps}>{label}</TextView>
     </Box>
   )
 }
 
-export default VAIconWithText
+export default IconWithText
