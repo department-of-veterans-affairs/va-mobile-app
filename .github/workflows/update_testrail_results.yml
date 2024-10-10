@@ -108,7 +108,7 @@ jobs:
           test2=$(echo $test | jq --compact-output '[group_by(.title, .status_id)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           echo "$test2"
           arrayTest=()
-          for i in "${$test2[@]}"; do
+          for i in "$test2"; do
             echo "$i"
             echo "${i[0]}" 
           done
