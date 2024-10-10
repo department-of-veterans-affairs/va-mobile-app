@@ -24,7 +24,6 @@ Help() {
   echo "--bypass-date-check   Bypass the date check."
 }
 
-
 ### Increments the part of the string
 ## $1: version itself
 ## $2: number of part: 0 – major, 1 – minor, 2 – patch
@@ -83,16 +82,16 @@ then
   git checkout develop &&
   git pull origin develop &&
 
-  echo "Creating and pushing new release branch 'chanelTest/release/$next' to origin"
+  echo "Creating and pushing new release branch 'release/$next' to origin"
   git checkout -b release/"$next" &&
-  #git push -u origin release/"$next"
+  git push -u origin release/"$next"
 
-  echo "Successfully created and pushed new release branch 'chanelTest/release/$next' to origin"
+  echo "Successfully created and pushed new release branch 'release/$next' to origin"
 
   echo "Tag branch for Release Candidate build"
   TAG="RC-$next-$(date +%m%d%y-%H%M)"
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
-  #git push origin "$TAG"
+  git push origin "$TAG"
 
   echo "Successfully tagged for Release Candidate builds: $TAG"
   echo "Exit"
