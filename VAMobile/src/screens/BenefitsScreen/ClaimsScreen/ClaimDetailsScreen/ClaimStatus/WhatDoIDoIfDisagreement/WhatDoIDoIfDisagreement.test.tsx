@@ -14,7 +14,7 @@ context('WhatDoIDoIfDisagreement', () => {
   })
 
   it('Renders WhatDoIDoIfDisagreement', () => {
-    expect(screen.getByText('Learn what to do if you disagree with our decision')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'What to do if you disagree with our decision' })).toBeTruthy()
     expect(
       screen.getByText(
         'If you disagree with our decision, you can ask for a decision review. You have 3 decision review options to choose from.',

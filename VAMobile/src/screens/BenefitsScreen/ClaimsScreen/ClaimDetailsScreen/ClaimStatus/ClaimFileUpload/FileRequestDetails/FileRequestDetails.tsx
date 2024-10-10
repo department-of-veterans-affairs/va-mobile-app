@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, ChildTemplate, TextArea, TextView } from 'components'
+import { Box, BoxProps, FullScreenSubtask, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -70,11 +70,12 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <ChildTemplate
-      backLabel={t('request.backLabel')}
-      backLabelOnPress={navigation.goBack}
+    <FullScreenSubtask
+      leftButtonText={t('back')}
+      onLeftButtonPress={navigation.goBack}
       title={displayName || ''}
-      testID="fileRequestDetailsID">
+      testID="fileRequestDetailsID"
+      leftButtonTestID="fileRequestDetailsBackID">
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -132,7 +133,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           </Box>
         </Box>
       )}
-    </ChildTemplate>
+    </FullScreenSubtask>
   )
 }
 

@@ -3,8 +3,7 @@ import { View, ViewStyle } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
-import { testIdProps } from 'utils/accessibility'
+import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VALogo, VAScrollView } from 'components'
 import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
@@ -52,7 +51,7 @@ function GenericOnboarding({
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
+            <VALogo variant="dark" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
@@ -62,7 +61,7 @@ function GenericOnboarding({
         </Box>
         {text && (
           <TextView
-            {...testIdProps(textA11yLabel || text)}
+            accessibilityLabel={textA11yLabel}
             variant="MobileBody"
             color="primaryContrast"
             mt={theme.dimensions.standardMarginBetween}>

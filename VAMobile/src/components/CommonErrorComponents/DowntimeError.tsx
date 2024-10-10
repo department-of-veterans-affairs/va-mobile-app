@@ -62,6 +62,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
             displayedText={displayedTextPhoneNumber(t('8006982411'))}
             phone={t('8006982411')}
             a11yLabel={a11yLabelID(t('8006982411'))}
+            variant={'base'}
           />
         </AlertWithHaptics>
       </Box>

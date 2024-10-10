@@ -264,7 +264,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <Box mr={8}>
               <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
             </Box>
-            <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+            <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
               {t('prescription.history.tracking')}
             </TextView>
           </Box>
@@ -367,7 +367,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       setFilterToUse(selectedFilter)
       setSortByToUse(selectedSortBy)
       setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter, selectedSortBy))
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter || 'all', selectedSortBy))
     },
     onCancel: () => {
       logAnalyticsEvent(Events.vama_rx_filter_cancel())
@@ -401,6 +401,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       url: LINK_URL_GO_TO_PATIENT_PORTAL,
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      variant: 'base',
+      testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
     return (
@@ -414,7 +416,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
           analytics={{
             onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
-          }}>
+          }}
+          testID="prescriptionRefillWarningTestID">
           <TextView
             mt={theme.dimensions.standardMarginBetween}
             paragraphSpacing={true}
@@ -431,6 +434,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button
+          testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
           onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
         />
@@ -524,6 +528,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_rx_help())
       navigateTo('PrescriptionHelp')
     },
+    testID: 'prescriptionsHelpID',
   }
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.

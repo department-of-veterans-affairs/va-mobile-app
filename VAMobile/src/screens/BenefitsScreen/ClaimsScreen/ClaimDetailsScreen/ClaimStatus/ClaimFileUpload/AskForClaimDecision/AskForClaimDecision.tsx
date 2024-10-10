@@ -135,10 +135,11 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   return (
     <FullScreenSubtask
-      leftButtonText={t('cancel')}
+      leftButtonText={t('back')}
       onLeftButtonPress={onCancelPress}
       title={t('askForClaimDecision.pageTitle')}
-      testID="askForClaimDecisionPageTestID">
+      testID="askForClaimDecisionPageTestID"
+      leftButtonTestID="askForClaimDecisionBackID">
       {loadingSubmitClaimDecision || loadingClaim ? (
         <LoadingComponent
           text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}

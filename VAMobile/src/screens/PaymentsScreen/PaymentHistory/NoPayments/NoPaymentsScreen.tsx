@@ -32,7 +32,11 @@ function NoPaymentsScreen() {
           accessibilityLabel={t('payments.noPayments.body.2.a11yLabel')}>
           {t('payments.noPayments.body.2')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
+        <ClickToCallPhoneNumber
+          phone={t('8008271000')}
+          displayedText={displayedTextPhoneNumber(t('8008271000'))}
+          variant={'base'}
+        />
       </AlertWithHaptics>
     </VAScrollView>
   )

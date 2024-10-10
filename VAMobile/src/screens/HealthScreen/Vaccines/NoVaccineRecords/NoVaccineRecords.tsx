@@ -19,7 +19,11 @@ function NoVaccineRecords() {
         <TextView paragraphSpacing={true} variant="MobileBody">
           {t('noVaccineRecords.alert.text.2')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8006982411')} displayedText={displayedTextPhoneNumber(t('8006982411'))} />
+        <ClickToCallPhoneNumber
+          phone={t('8006982411')}
+          displayedText={displayedTextPhoneNumber(t('8006982411'))}
+          variant={'base'}
+        />
       </AlertWithHaptics>
     </VAScrollView>
   )
