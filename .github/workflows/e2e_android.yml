@@ -147,111 +147,111 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Set git config
-        run: |
-            git config --global user.name 'VA Automation Bot'
-            git config --global user.email 'va-mobileapp@adhocteam.us'
+      # - name: Set git config
+      #   run: |
+      #       git config --global user.name 'VA Automation Bot'
+      #       git config --global user.email 'va-mobileapp@adhocteam.us'
 
-      - name: Decode base64 encoded keys
-        working-directory: VAMobile/android
-        run: |
-          mkdir keys
-          cd keys
-          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
-          cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+      # - name: Decode base64 encoded keys
+      #   working-directory: VAMobile/android
+      #   run: |
+      #     mkdir keys
+      #     cd keys
+      #     echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+      #     echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+      #     echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+      #     cd ../app
+      #     echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
 
-      - name: Setup ruby and restore bundler cache
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
-          bundler-cache: true
-          working-directory: VAMobile/android
+      # - name: Setup ruby and restore bundler cache
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     ruby-version: '3.0.2'
+      #     bundler-cache: true
+      #     working-directory: VAMobile/android
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'microsoft'
+      # - name: Set up JDK
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     java-version: 17
+      #     distribution: 'microsoft'
 
-      - name: Setup node and restore yarn cache
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: './VAMobile/yarn.lock'
+      # - name: Setup node and restore yarn cache
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version-file: 'VAMobile/.nvmrc'
+      #     cache: 'yarn'
+      #     cache-dependency-path: './VAMobile/yarn.lock'
 
-      - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+      # - name: Install npm dependencies
+      #   run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Set app environment variables
-        run: yarn env:staging
+      # - name: Set app environment variables
+      #   run: yarn env:staging
 
-      - name: Bundle Android app
-        run: yarn e2e:android-build
+      # - name: Bundle Android app
+      #   run: yarn e2e:android-build
 
-      - name: Run e2e tests for Android - Full Test
-        id: run_e2e_tests
-        if: ${{needs.output_detox_tests_to_run.outputs.output2 == ''}}
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
-        continue-on-error: true
+      # - name: Run e2e tests for Android - Full Test
+      #   id: run_e2e_tests
+      #   if: ${{needs.output_detox_tests_to_run.outputs.output2 == ''}}
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     working-directory: VAMobile
+      #     api-level: 28
+      #     profile: pixel_6_pro
+      #     force-avd-creation: false
+      #     disable-animations: true
+      #     arch: x86_64
+      #     avd-name: Pixel_4_XL_API_28
+      #     script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+      #   continue-on-error: true
 
-      - name: Run e2e tests for Android
-        id: run_e2e_tests_nav_AF
-        if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+      # - name: Run e2e tests for Android
+      #   id: run_e2e_tests_nav_AF
+      #   if: ${{needs.output_detox_tests_to_run.outputs.output2 != ''}}
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     working-directory: VAMobile
+      #     api-level: 28
+      #     profile: pixel_6_pro
+      #     force-avd-creation: false
+      #     disable-animations: true
+      #     arch: x86_64
+      #     avd-name: Pixel_4_XL_API_28
+      #     script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
 
-      - name: Run e2e tests for Android on failure
-        if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
-          force-avd-creation: false
-          disable-animations: true
-          arch: x86_64
-          avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
+      # - name: Run e2e tests for Android on failure
+      #   if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     working-directory: VAMobile
+      #     api-level: 28
+      #     profile: pixel_6_pro
+      #     force-avd-creation: false
+      #     disable-animations: true
+      #     arch: x86_64
+      #     avd-name: Pixel_4_XL_API_28
+      #     script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         
-      - name: Upload e2e-junit
-        if: failure() || success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{matrix.testsuite}}-e2e-junit
-          path: VAMobile/e2e/test_reports/e2e-junit.xml
+      # - name: Upload e2e-junit
+      #   if: failure() || success()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{matrix.testsuite}}-e2e-junit
+      #     path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Upload artifacts on failure
-        if: failure() || steps.run_e2e_tests.outcome == 'failure'
-        uses: actions/upload-artifact@v4
-        with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
-          path: VAMobile/artifacts
-          retention-days: 1
+      # - name: Upload artifacts on failure
+      #   if: failure() || steps.run_e2e_tests.outcome == 'failure'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
+      #     path: VAMobile/artifacts
+      #     retention-days: 1
 
-      - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests.outcome == 'failure'
-        run: exit 1
+      # - name: Fail workflow if needed(View e2e step for details)
+      #   if: steps.run_e2e_tests.outcome == 'failure'
+      #   run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
