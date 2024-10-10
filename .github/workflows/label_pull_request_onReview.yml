@@ -17,7 +17,7 @@ jobs:
 
       - name: Remove old labels and add FE-Changes Requested
         run: |
-          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Changes Requested"
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-With QA" --add-label "FE-Changes Requested"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -29,9 +29,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Remove old labels and add FE-Needs Review
+      - name: Remove old labels
         run: |
-          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Changes Requested" --add-label "FE-Needs Review"
+          gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Changes Requested"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -59,10 +59,10 @@ jobs:
               if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has QA approval and one other'
-                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review,FE-With QA" --add-label "FE-Ready to Merge"
+                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-With QA" --add-label "FE-Ready to Merge"
               else 
                 echo 'This PR requires QA approval'
-                gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-Needs Review" --add-label "FE-With QA"
+                gh pr edit ${{ github.event.pull_request.number }}  --add-label "FE-With QA"
               fi
           else
             echo 'This PR requires 2 approvals, including one QA approval'
