@@ -365,7 +365,7 @@
   "biometricsPreference.bodyText.faceID": "Face ID lets you use just your face to sign in.",
   "biometricsPreference.bodyText.faceRecognition": "Face recognition lets you use just your face to sign in.",
   "biometricsPreference.bodyText.fingerPrint": "Fingerprint lets you use just your fingerprint to sign in.",
-  "biometricsPreference.bodyText.iris": "Iris lets us recognize a video image of your eyes to sign you in to this app.",
+  "biometricsPreference.bodyText.iris": "Iris lets you use just your eye to sign in.",
   "biometricsPreference.bodyText.touchID": "Touch ID lets you use just your fingerprint to sign in.",
   "biometricsPreference.doYouWantToAllow": "Use {{biometricsText}} for easier sign in",
   "biometricsPreference.saving": "Saving your biometrics preferences...",
