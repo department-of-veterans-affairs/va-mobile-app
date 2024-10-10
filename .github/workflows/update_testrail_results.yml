@@ -100,4 +100,13 @@ jobs:
             --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
             --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
             -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
-
+      - name: Get Test Runs
+        run: |
+          testNames=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '.tests[] | .title |= sub("(]).*$"; "]" | .title)
+          idNames=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '.tests[] | .id)
+          echo "$testNames"
+          echo "$idNames"
