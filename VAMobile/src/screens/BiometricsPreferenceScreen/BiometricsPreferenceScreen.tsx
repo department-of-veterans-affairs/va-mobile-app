@@ -37,7 +37,7 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   return (
     <VAScrollView>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView variant="BitterHeading" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
         <TextView
