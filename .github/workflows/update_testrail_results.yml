@@ -111,7 +111,7 @@ jobs:
           echo "$test3"
           resp=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            -d '{"include_all": false, "case_ids": [1269601, 1269600, 1269602, 1269606, 1269603, 1269604]}' \
+            -d '{"include_all": false, "case_ids": [152159, 51652]}' \
             "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" )
 # testNames=$(curl -X GET -H 'Content-Type: application/json' \
 #   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
