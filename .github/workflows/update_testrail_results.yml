@@ -110,7 +110,7 @@ jobs:
           test=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}")
-          test4=$(echo "$test" | jq --arg testRailIDs '[1269601,1269600,1269602,1269606,1269603,1269604]' --compact-output '.tests | map(select(.id == $testRailIDs[])) | map(.title)')
+          test4=$(echo "$test" | jq --argjson testRailIDs '[1269601,1269600,1269602,1269606,1269603,1269604]' --compact-output '.tests | map(select(.id == $testRailIDs[])) | map(.title)')
           echo "$test4"
           resp=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
