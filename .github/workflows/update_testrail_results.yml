@@ -111,8 +111,8 @@ jobs:
           echo "$test3"
           resp=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            -d '{"include_all": false, "case_ids": [152159, 51652]}' \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" )
+            -d '{"include_all": false, "case_ids": '$(echo  $test2 | jq --compact-output '[.[] | .[2]]')'}' \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/R6007" )
 # testNames=$(curl -X GET -H 'Content-Type: application/json' \
 #   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
 #   "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '.tests[] | .title |= sub("(]).*$"; "]") | .title')
