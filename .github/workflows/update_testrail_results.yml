@@ -104,7 +104,7 @@ jobs:
         run: |
           test=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '[group_by(.title, .status_id)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '[.tests | group_by(.title, .status_id)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           test2=$(echo $test | jq --compact-output '[.[] | .[0]]')
           echo "$test2"
           test3=$(echo $test | jq --compact-output '[.[] | .[3]]')
