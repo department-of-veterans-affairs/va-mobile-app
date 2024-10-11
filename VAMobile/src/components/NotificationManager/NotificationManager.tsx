@@ -30,7 +30,7 @@ const NotificationContext = createContext<NotificationContextType>({
  * notification manager component to handle all push logic
  */
 const NotificationManager: FC = ({ children }) => {
-  const { loggedIn, firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { loggedIn, firstTimeLogin, requestNotifications } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
   const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
@@ -57,7 +57,7 @@ const NotificationManager: FC = ({ children }) => {
         registeredNotifications.remove()
         failedNotifications.remove()
       })
-      if (firstTimeLogin === false) {
+      if (firstTimeLogin === false && requestNotifications === true) {
         Notifications.registerRemoteNotifications()
       }
     }
@@ -65,7 +65,7 @@ const NotificationManager: FC = ({ children }) => {
     if (loggedIn && personalInformation?.id) {
       register()
     }
-  }, [loggedIn, firstTimeLogin, personalInformation?.id, registerDevice])
+  }, [loggedIn, firstTimeLogin, requestNotifications, personalInformation?.id, registerDevice])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
