@@ -105,15 +105,10 @@ jobs:
           test=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
-          test2=$(echo $test | jq --compact-output 'group_by(.title, .status_id)[] | [.[0].title, .[0].status_id, map(.id)[]]')
+          test2=$(echo $test | jq --compact-output '[group_by(.title, .status_id)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          test3=$(echo $test2 | jq --compact-output '[.[] | .[2]]')
           echo "$test2"
-          arrayTest=()
-          for i in "$test2"; do
-            echo "$test2[$i]"
-            test3=$test2[$i]
-            echo "$test3[0]"
-          done
-          echo "$arrayTest"
+          echo "$test3"
 # testNames=$(curl -X GET -H 'Content-Type: application/json' \
 #   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
 #   "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '.tests[] | .title |= sub("(]).*$"; "]") | .title')
