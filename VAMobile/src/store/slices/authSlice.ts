@@ -185,6 +185,7 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
 
   const isFirstLogin = !firstLoginCompletedVal
+  console.log('isFirstLogin: ', isFirstLogin)
 
   // On the first sign in, clear any stored credentials from previous installs
   if (isFirstLogin) {
@@ -194,6 +195,7 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
 }
 
 export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
+  console.log('IS_TEST: ', IS_TEST)
   if (IS_TEST) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetNotificationsPreferenceScreen(false))
@@ -204,7 +206,7 @@ export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (
   console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
 
   const shouldShowScreen = !setNotificationsPreferenceScreenVal
-
+  console.log('shouldShowScreen: ', shouldShowScreen)
   dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
 }
 
@@ -660,6 +662,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
+  await dispatch(checkRequestNotificationsPreferenceScreen())
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
