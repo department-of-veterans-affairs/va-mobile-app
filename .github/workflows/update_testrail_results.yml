@@ -115,7 +115,7 @@ jobs:
           echo "$test4"
           resp4=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            -d '{"suite_id": 92, "include_all": false, "name": "test"}' \
+            -d '{"suite_id": 92, "include_all": false, "name": "test", "case_ids": [8533]}' \
             "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29" )
 # testNames=$(curl -X GET -H 'Content-Type: application/json' \
 #   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
