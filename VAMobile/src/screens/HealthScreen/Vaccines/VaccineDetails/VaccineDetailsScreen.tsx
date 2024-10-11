@@ -72,7 +72,8 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
       backLabel={t('vaVaccines')}
       backLabelA11y={a11yLabelVA(t('vaVaccines'))}
       backLabelOnPress={navigation.goBack}
-      title={t('details')}>
+      title={t('details')}
+      backLabelTestID="vaccinesDetailsBackID">
       {detailsLoading ? (
         <LoadingComponent text={t('vaccines.details.loading')} />
       ) : (

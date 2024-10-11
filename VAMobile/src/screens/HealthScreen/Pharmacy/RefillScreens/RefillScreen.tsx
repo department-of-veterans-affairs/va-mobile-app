@@ -175,6 +175,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       onLeftButtonPress={navigation.goBack}
       title={t('refillRequest')}
       primaryContentButtonText={hidePrimaryButton ? '' : primaryButtonText}
+      primaryButtonTestID="requestRefillsButtonID"
       scrollViewRef={scrollViewRef}
       onPrimaryContentButtonPress={() => {
         if (selectedPrescriptionsCount === 0) {

@@ -76,7 +76,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
@@ -198,7 +198,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     <FullScreenSubtask
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
-      testID="refillTrackingDetailsTestID">
+      testID="refillTrackingDetailsTestID"
+      rightButtonTestID="prescriptionsBackTestID">
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingTrackingInfo ? (

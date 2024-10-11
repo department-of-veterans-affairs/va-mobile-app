@@ -60,7 +60,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   useFocusEffect(
     React.useCallback(() => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
@@ -122,6 +122,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
         <Button
           label={t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 })}
           onPress={requestRefillButtonPress}
+          testID="requestRefillsButtonID"
         />
       </Box>
     )
@@ -143,7 +144,8 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     <ChildTemplate
       backLabel={t('prescription.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('prescriptionDetails')}>
+      title={t('prescriptionDetails')}
+      backLabelTestID="prescriptionsDetailsBackTestID">
       {loadingHistory ? (
         <LoadingComponent text={t('prescription.details.loading')} />
       ) : (
