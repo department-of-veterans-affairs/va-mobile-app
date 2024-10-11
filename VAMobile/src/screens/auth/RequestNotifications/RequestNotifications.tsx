@@ -8,11 +8,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  completeRequestNotifications,
-  setRequestNotifications,
-  setTurnOffNotificationsPreferenceScreen,
-} from 'store/slices'
+import { completeRequestNotifications, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -24,13 +20,13 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
 
   const onSkip = (): void => {
     completeRequestNotifications()
-    dispatch(setTurnOffNotificationsPreferenceScreen(false))
+    dispatch(setNotificationsPreferenceScreen(false))
   }
 
   const onUseNotifications = (): void => {
     completeRequestNotifications()
     dispatch(setRequestNotifications(true))
-    dispatch(setTurnOffNotificationsPreferenceScreen(false))
+    dispatch(setNotificationsPreferenceScreen(false))
   }
 
   return (

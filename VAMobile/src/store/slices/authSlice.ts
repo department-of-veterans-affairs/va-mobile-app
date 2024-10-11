@@ -129,7 +129,7 @@ export const setDisplayBiometricsPreferenceScreen =
     dispatch(dispatchSetDisplayBiometricsPreferenceScreen(value))
   }
 
-export const setTurnOffNotificationsPreferenceScreen =
+export const setNotificationsPreferenceScreen =
   (value: boolean): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchSetNotificationsPreferenceScreen(value))
@@ -152,7 +152,7 @@ export const completeSync = (): AppThunk => async (dispatch) => {
  * Sets the flag used to determine if this is the first time a user has logged into the app
  */
 export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
-  await AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+  await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
   dispatch(dispatchSetFirstLogin(false))
 }
 
