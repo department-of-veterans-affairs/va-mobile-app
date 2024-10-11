@@ -17,13 +17,13 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
 
   const onSkip = (): void => {
     console.log('onSkip')
-    completeRequestNotifications()
+    dispatch(completeRequestNotifications())
     dispatch(setNotificationsPreferenceScreen(false))
   }
 
   const onUseNotifications = (): void => {
     console.log('onUse')
-    completeRequestNotifications()
+    dispatch(completeRequestNotifications())
     dispatch(setRequestNotifications(true))
     dispatch(setNotificationsPreferenceScreen(false))
   }

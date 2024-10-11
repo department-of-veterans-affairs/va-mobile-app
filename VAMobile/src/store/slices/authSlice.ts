@@ -158,6 +158,7 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const completeRequestNotifications = (): AppThunk => async () => {
   await AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
+  console.log('set Async For Notifications')
 }
 
 /**
@@ -781,6 +782,7 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -816,6 +818,7 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
