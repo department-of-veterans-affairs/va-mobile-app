@@ -1,8 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
