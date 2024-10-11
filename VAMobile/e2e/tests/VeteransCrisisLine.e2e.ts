@@ -10,17 +10,18 @@ export const VCLConstants = {
   SUBHEADING_TEXT: 'We’re here anytime, day or night – 24/7',
   MESSAGE_TEXT:
     "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
-  PHONE_LINK_TEXT: 'Call 988 and select 1',
-  TEXT_MESSAGE_LINK_TEXT: 'Text 838255',
-  CHAT_LINK_TEXT: 'Start a confidential chat',
-  TTY_LINK_TEXT: 'TTY: 800-799-4889',
+  PHONE_LINK_ID: 'veteransCrisisLineCallID',
+  TEXT_MESSAGE_LINK_ID: 'veteransCrisisLineTextNumberTestID',
+  CHAT_LINK_ID: 'veteransCrisisLineConfidentialChatTestID',
+  TTY_LINK_ID: 'veteransCrisisLineHearingLossNumberTestID',
   MORE_RESOURCES_TEXT: 'Get more resources',
-  VCL_SITE_LINK_TEXT: 'VeteransCrisisLine.net',
+  VCL_SITE_LINK_ID: 'veteransCrisisLineGetMoreResourcesTestID',
+  BACK_ID: 'veteranCrisisLineBackID',
 }
 
 const tapAndTakeScreenshot = async (text: string, screenshotName: string) => {
   await device.disableSynchronization()
-  await element(by.text(text)).tap()
+  await element(by.id(text)).tap()
   await setTimeout(5000)
   await device.takeScreenshot(screenshotName)
   await device.launchApp({ newInstance: false })
@@ -42,19 +43,19 @@ describe('Veterans Crisis Line', () => {
 
   if (device.getPlatform() === 'android') {
     it('should open phone link', async () => {
-      await tapAndTakeScreenshot(VCLConstants.PHONE_LINK_TEXT, 'CrisisLinePhone')
+      await tapAndTakeScreenshot(VCLConstants.PHONE_LINK_ID, 'CrisisLinePhone')
     })
     it('should open TTY link', async () => {
-      await tapAndTakeScreenshot(VCLConstants.TTY_LINK_TEXT, 'CrisisLineTTY')
+      await tapAndTakeScreenshot(VCLConstants.TTY_LINK_ID, 'CrisisLineTTY')
     })
   }
 
   it('should open text message link', async () => {
-    await tapAndTakeScreenshot(VCLConstants.TEXT_MESSAGE_LINK_TEXT, 'CrisisLineTextMessage')
+    await tapAndTakeScreenshot(VCLConstants.TEXT_MESSAGE_LINK_ID, 'CrisisLineTextMessage')
   })
 
   it('should open chat link', async () => {
-    await element(by.text(VCLConstants.CHAT_LINK_TEXT)).tap()
+    await element(by.id(VCLConstants.CHAT_LINK_ID)).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('CrisisLineChat')
@@ -62,7 +63,7 @@ describe('Veterans Crisis Line', () => {
   })
 
   it('should open website link', async () => {
-    await element(by.text(VCLConstants.VCL_SITE_LINK_TEXT)).tap()
+    await element(by.id(VCLConstants.VCL_SITE_LINK_ID)).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('VCLWebsite')
@@ -70,7 +71,7 @@ describe('Veterans Crisis Line', () => {
   })
 
   it('should close panel', async () => {
-    await element(by.text('Done')).tap()
+    await element(by.id(VCLConstants.BACK_ID)).tap()
     await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
 })
