@@ -110,12 +110,12 @@ jobs:
           test=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}")
-          echo '$getFirstTestIDNewName'
-          test4=$(echo "$test" | jq --argjson testRailIDs '[1269601,1269600,1269602,1269606,1269603,1269604]' --compact-output '.tests | map(select(.id == $testRailIDs[])) | map(.title)')
+          echo "$getFirstTestIDNewName"
+          test4=$(echo "$test" | jq --argjson testRailIDs "$getFirstTestIDNewName" --compact-output '.tests | map(select(.id == $testRailIDs[])) | map(.title)')
           echo "$test4"
           resp=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=43942,43204,50476,43841,50590,41019,43203,50469,43838,41020,43198,43969,37314,43985,40805,37362,43839,50470,50471,43199,43837,50477&limit=300")
           echo "$resp"
           test4=$(echo $resp | jq --argjson testRailNames "$test4" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')
           echo "$test4"
