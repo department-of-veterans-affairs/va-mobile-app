@@ -158,7 +158,6 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const completeRequestNotifications = (): AppThunk => async () => {
   await AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
-  console.log('set Async For Notifications')
 }
 
 /**
@@ -186,7 +185,6 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
   console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
 
   const isFirstLogin = !firstLoginCompletedVal
-  console.log('isFirstLogin: ', isFirstLogin)
 
   // On the first sign in, clear any stored credentials from previous installs
   if (isFirstLogin) {
@@ -196,7 +194,6 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
 }
 
 export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
-  console.log('IS_TEST: ', IS_TEST)
   if (IS_TEST) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetNotificationsPreferenceScreen(false))
@@ -207,7 +204,6 @@ export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (
   console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
 
   const shouldShowScreen = !setNotificationsPreferenceScreenVal
-  console.log('shouldShowScreen: ', shouldShowScreen)
   dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
 }
 

@@ -16,13 +16,11 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onSkip = (): void => {
-    console.log('onSkip')
     dispatch(completeRequestNotifications())
     dispatch(setNotificationsPreferenceScreen(false))
   }
 
   const onUseNotifications = (): void => {
-    console.log('onUse')
     dispatch(completeRequestNotifications())
     dispatch(setRequestNotifications(true))
     dispatch(setNotificationsPreferenceScreen(false))

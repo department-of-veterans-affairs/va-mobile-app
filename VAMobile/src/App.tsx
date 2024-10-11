@@ -328,8 +328,6 @@ export function AuthGuard() {
     logCampaignAnalytics()
   }, [])
 
-  console.log('firstTimeLogin: ', firstTimeLogin)
-  console.log('requestNotificationsPreferenceScreen: ', requestNotificationsPreferenceScreen)
   let content
   if (initializing || loadingRemoteConfig) {
     content = (
@@ -360,7 +358,6 @@ export function AuthGuard() {
   } else if (firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
   } else if (!firstTimeLogin && loggedIn && requestNotificationsPreferenceScreen) {
-    console.log('going To Request Notifications Screen')
     content = (
       <Stack.Navigator>
         <Stack.Screen
