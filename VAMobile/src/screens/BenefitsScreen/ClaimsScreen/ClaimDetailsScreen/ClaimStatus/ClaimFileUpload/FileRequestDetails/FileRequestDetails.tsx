@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -6,24 +6,31 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, FullScreenSubtask, TextArea, TextView } from 'components'
+import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
+import { FileRequestStackParams, SubtaskContext } from '../FileRequestSubtask'
+
+type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
 
 function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { claimID, request } = route.params
+  const { request } = route.params
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(SubtaskContext)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
+
+  useEffect(() => {
+    setLeftButtonText(t('back'))
+    setOnLeftButtonPress(() => navigation.goBack)
+  }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t])
 
   const hasUploaded = hasUploadedOrReceived(request)
   const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
@@ -70,12 +77,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('back')}
-      onLeftButtonPress={navigation.goBack}
-      title={displayName || ''}
-      testID="fileRequestDetailsID"
-      leftButtonTestID="fileRequestDetailsBackID">
+    <VAScrollView>
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -133,7 +135,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           </Box>
         </Box>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

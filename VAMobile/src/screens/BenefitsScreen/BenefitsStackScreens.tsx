@@ -55,13 +55,9 @@ export type BenefitsStackParamList = {
   AppealDetailsScreen: {
     appealID: string
   }
-  FileRequest: {
+  FileRequestSubtask: {
     claimID: string
     claim: ClaimData | undefined
-  }
-  FileRequestDetails: {
-    claimID: string
-    request: ClaimEventData
   }
   AskForClaimDecision: {
     claimID: string

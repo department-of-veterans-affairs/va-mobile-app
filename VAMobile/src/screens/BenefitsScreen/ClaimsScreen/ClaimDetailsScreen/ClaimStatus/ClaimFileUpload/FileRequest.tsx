@@ -1,7 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
@@ -11,29 +9,28 @@ import { ClaimEventData } from 'api/types'
 import {
   Box,
   ErrorComponent,
-  FullScreenSubtask,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
   TextArea,
   TextView,
+  VAScrollView,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
+import { SubtaskContext } from './FileRequestSubtask'
 
-function FileRequest({ navigation, route }: FileRequestProps) {
+function FileRequest() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim } = route.params
+  const { claimID, claim } = useContext(SubtaskContext)
   const {
     data: claimFallBack,
     error: claimError,
@@ -54,7 +51,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      navigateTo('FileRequestDetails', { claimID, request })
+      navigateTo('FileRequestDetails', { request })
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -109,12 +106,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={navigation.goBack}
-      title={t('fileRequest.title')}
-      testID="fileRequestPageTestID"
-      leftButtonTestID="fileRequestPageBackID">
+    <VAScrollView>
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
@@ -162,7 +154,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           </Box>
         </Box>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

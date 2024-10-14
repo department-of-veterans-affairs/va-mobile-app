@@ -181,7 +181,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID, claim })
+    navigateTo('FileRequestSubtask', { claimID, claim })
   }
 
   const submitEvidencePress = () => {

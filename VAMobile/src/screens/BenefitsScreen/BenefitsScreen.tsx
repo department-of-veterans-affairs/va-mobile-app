@@ -13,8 +13,6 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS } from 'co
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
-import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
@@ -26,6 +24,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
+import FileRequestSubtask from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import SubmitEvidence from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
@@ -148,16 +147,15 @@ function BenefitsStackScreen() {
         component={DisabilityRatingsScreen}
         options={{ headerShown: false }}
       />
-      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={FULLSCREEN_SUBTASK_OPTIONS} />
+      <BenefitsScreenStack.Screen
+        name="FileRequestSubtask"
+        component={FileRequestSubtask}
+        options={FULLSCREEN_SUBTASK_OPTIONS}
+      />
       <BenefitsScreenStack.Screen
         name="SubmitEvidence"
         component={SubmitEvidence}
         options={FULLSCREEN_SUBTASK_OPTIONS}
-      />
-      <BenefitsScreenStack.Screen
-        name="FileRequestDetails"
-        component={FileRequestDetails}
-        options={{ headerShown: false }}
       />
       <BenefitsScreenStack.Screen
         name="GenericLetter"
