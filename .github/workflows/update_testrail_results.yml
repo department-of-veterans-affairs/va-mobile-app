@@ -128,12 +128,12 @@ jobs:
               echo "$getTestNames"
               getStatuses=$(echo $y | jq '.[1] | any(. == 1)')
               echo "$(echo $y | jq '.[1] | any(. == 5)')"
-              if [[ "$(echo $y | jq '.[1] | any(. == 5)')" == "true" ]]; then
+              if [[ $(echo $y | jq '.[1] | any(. == 5)') ]]; then
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
-              elif [[ "$(echo $y | jq '.[1] | any(. == 4)')" == "true" ]]; then
+              elif [[ $(echo $y | jq '.[1] | any(. == 4)') ]]; then
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 1}' \
