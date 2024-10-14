@@ -108,14 +108,6 @@ jobs:
           getFailedTestCaseNames=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}&status_id=5")
-          getFailedTestCaseNewNames=$(curl -X GET -H 'Content-Type: application/json' \
-            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}&status_id=5" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]") | .title] | unique')
-          getRetestTestCases=$(curl -X GET -H 'Content-Type: application/json' \
-            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}&status_id=4" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]") | .title] | unique')
-          getRetestUniqueTestCases=$(echo jq --null-input '$getRetestTestCases - $getFailedTestCaseNewNames')
-          echo $getRetestUniqueTestCases
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
           getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
@@ -129,6 +121,10 @@ jobs:
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           for i in $(echo $getTestCases | jq -r '.tests[].id'); do
+            for y in $(echo $getTestCaseNewName | jq -r 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]'); do
+              echo "$y"
+              echo "$test"
+            done
             updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
               -d '{"status_id": 1}' \
@@ -162,3 +158,5 @@ jobs:
 #     -d '{"status_id": 1}' \
 #     "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
 # done
+
+#[.tests | group_by(.title)[] | [.[0].title, [map(.status_id)[]]]]
