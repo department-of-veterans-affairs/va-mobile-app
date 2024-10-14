@@ -126,10 +126,10 @@ jobs:
             echo "$testID"
             testName=$(echo $i | jq -r '.title')
             echo "$testName"
-            echo "$getTestNames"
             for y in "${getTestStatusByTitle[@]}"; do
               echo "$y"
               getTestNames=$(echo $y | jq '.[0]')
+              echo "$getTestNames"
               if [[ "$testName" == "$getTestNames" ]]; then
                 isFailedStatus=$(echo $y | jq '.[1] | any(. == 5)')
                 echo "Failed: $isFailedStatus"
@@ -138,7 +138,6 @@ jobs:
                 isPassedStatus=$(echo $y | jq '.[1] | any(. == 1)')
                 echo "Passed: $isPassedStatus"
               fi
-              echo "$getTestNames"
               if [[ "$isFailedStatus" == "true" ]]; then
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
