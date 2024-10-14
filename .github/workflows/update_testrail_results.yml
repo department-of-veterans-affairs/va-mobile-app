@@ -112,11 +112,20 @@ jobs:
           resp=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
-          test4=$(echo $resp | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')
           resp4=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             -d '{"suite_id": 92, "include_all": false, "name": "test", "case_ids": '$(echo $resp | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
             "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/6010")
+          getTestRunNewName=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-ouptut '[.tests[] | .id]')
+          for ((i=0; i<getTestRunNewName.length; i++)); do
+            echo "$i"
+            resp5=$(curl -X POST -H 'Content-Type: application/json' \
+              -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+              -d '{"status_id": 1}' \
+              "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+          done
 #   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
 #   "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{steps.run-id-selection.outputs.TEST_RUN_ID}}" | jq --compact-output '.tests[] | .title |= sub("(]).*$"; "]") | .title')
 # idNames=$(curl -X GET -H 'Content-Type: application/json' \
