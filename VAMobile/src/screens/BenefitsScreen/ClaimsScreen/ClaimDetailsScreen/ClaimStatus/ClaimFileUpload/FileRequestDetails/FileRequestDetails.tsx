@@ -76,7 +76,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { claimID, request })
+    navigateTo('TakePhotos', { request })
   }
 
   return (

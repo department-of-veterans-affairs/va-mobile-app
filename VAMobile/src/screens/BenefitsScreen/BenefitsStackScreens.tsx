@@ -8,7 +8,6 @@ import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
-import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
@@ -41,7 +40,6 @@ export type BenefitsStackParamList = {
   ClaimDetailsScreen: {
     claimID: string
     claimType: ClaimType
-    focusOnSnackbar?: boolean
   }
   ClaimsHistoryScreen: undefined
   ClaimLettersScreen: undefined
@@ -60,10 +58,6 @@ export type BenefitsStackParamList = {
   }
   AskForClaimDecision: {
     claimID: string
-  }
-  TakePhotos: {
-    claimID: string
-    request?: ClaimEventData
   }
   SubmitEvidence: {
     claimID: string
@@ -101,12 +95,6 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       key={'AskForClaimDecision'}
       name="AskForClaimDecision"
       component={AskForClaimDecision}
-      options={{ headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'TakePhotos'}
-      name="TakePhotos"
-      component={TakePhotos}
       options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen

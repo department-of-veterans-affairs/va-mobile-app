@@ -11,6 +11,7 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import FileRequest from './FileRequest'
 import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
 import SelectFile from './SelectFile/SelectFile'
+import TakePhotos from './TakePhotos/TakePhotos'
 
 export type FileRequestStackParams = {
   FileRequest: undefined
@@ -18,6 +19,9 @@ export type FileRequestStackParams = {
     request: ClaimEventData
   }
   SelectFile: {
+    request: ClaimEventData
+  }
+  TakePhotos: {
     request: ClaimEventData
   }
 }
@@ -69,6 +73,7 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
             <FileRequestStack.Screen name="FileRequest" component={FileRequest} />
             <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} />
             <FileRequestStack.Screen name="SelectFile" component={SelectFile} />
+            <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} />
           </FileRequestStack.Navigator>
         </FileRequestContext.Provider>
       </Box>

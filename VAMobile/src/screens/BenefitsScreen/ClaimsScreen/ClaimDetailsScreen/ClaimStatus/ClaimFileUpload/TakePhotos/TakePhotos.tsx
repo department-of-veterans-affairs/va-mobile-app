@@ -1,34 +1,36 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
+import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
+
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
-type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
+type TakePhotosProps = StackScreenProps<FileRequestStackParams, 'TakePhotos'>
 
 function TakePhotos({ navigation, route }: TakePhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { claimID, request } = route.params
+  const { request } = route.params
+  const { claimID, setOnLeftButtonPress } = useContext(FileRequestContext)
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
@@ -39,6 +41,23 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   })
 
+  useFocusEffect(
+    useCallback(() => {
+      const onCancel = () => {
+        logAnalyticsEvent(
+          Events.vama_evidence_cancel_1(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'photo',
+          ),
+        )
+        navigation.goBack()
+      }
+      setOnLeftButtonPress(() => onCancel)
+    }, [claimID, navigation, request?.trackedItemId, request?.type, setOnLeftButtonPress]),
+  )
+
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
@@ -47,25 +66,8 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   }
 
-  const onCancel = () => {
-    logAnalyticsEvent(
-      Events.vama_evidence_cancel_1(
-        claimID,
-        request?.trackedItemId || null,
-        request?.type || 'Submit Evidence',
-        'photo',
-      ),
-    )
-    navigation.goBack()
-  }
-
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('back')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectPhotos')}
-      testID="takePhotosTestID">
+    <VAScrollView scrollViewRef={scrollViewRef} testID="takePhotosTestID">
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -139,7 +141,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           testID={t('fileUpload.takePhotos')}
         />
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
