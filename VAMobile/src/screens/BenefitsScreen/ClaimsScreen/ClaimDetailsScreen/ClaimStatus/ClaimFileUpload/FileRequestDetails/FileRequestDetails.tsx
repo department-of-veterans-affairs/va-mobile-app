@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFocusEffect } from '@react-navigation/native'
@@ -28,10 +28,12 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
 
-  useFocusEffect(() => {
-    setLeftButtonText(t('back'))
-    setOnLeftButtonPress(() => navigation.goBack)
-  })
+  useFocusEffect(
+    useCallback(() => {
+      setLeftButtonText(t('back'))
+      setOnLeftButtonPress(() => navigation.goBack)
+    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+  )
 
   const hasUploaded = hasUploadedOrReceived(request)
   const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'

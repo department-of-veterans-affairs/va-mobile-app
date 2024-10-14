@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
@@ -40,20 +40,22 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     }
   })
 
-  useFocusEffect(() => {
-    const onCancel = () => {
-      logAnalyticsEvent(
-        Events.vama_evidence_cancel_1(
-          claimID,
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'file',
-        ),
-      )
-      navigation.goBack()
-    }
-    setOnLeftButtonPress(() => onCancel)
-  })
+  useFocusEffect(
+    useCallback(() => {
+      const onCancel = () => {
+        logAnalyticsEvent(
+          Events.vama_evidence_cancel_1(
+            claimID,
+            request?.trackedItemId || null,
+            request?.type || 'Submit Evidence',
+            'file',
+          ),
+        )
+        navigation.goBack()
+      }
+      setOnLeftButtonPress(() => onCancel)
+    }, [claimID, navigation, request?.trackedItemId, request?.type, setOnLeftButtonPress]),
+  )
 
   const onFileFolder = async (): Promise<void> => {
     const {
