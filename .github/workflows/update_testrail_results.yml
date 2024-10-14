@@ -123,11 +123,14 @@ jobs:
           echo "test"
           for i in "${getTestRunNewName[@]}"; do
             echo "${i}"
-            echo "test2"
-            resp5=$(curl -X POST -H 'Content-Type: application/json' \
-              -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-              -d '{"status_id": 1}' \
-              "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"${i}"")
+            for y in "${i[@]}"; do
+              echo "${y}"
+              echo "test2"
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 1}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"${y}"")
+            done
           done
 
 #OLD CODE BUT WORKINGISH
