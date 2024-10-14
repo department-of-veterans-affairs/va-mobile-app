@@ -120,14 +120,15 @@ jobs:
           getTestCases=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
-          for i in $(echo $getTestCases | jq -r '.tests'); do
+          getTestCaseTitlesAndIds=$(echo $getTestCases | jq -r '.tests[] | [.title, .id]')
+          for i in "${getTestCaseTitlesAndIds[@]}"; do
             echo "$i"
             echo "$test"
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
             echo "$test2"
-            testID=$(echo $i | jq '.id')
+            testID=$(echo $i | jq '.[1]')
             echo "$testID"
-            testName=$(echo $i | jq '.title')
+            testName=$(echo $i | jq '.[0]')
             echo "$testName"
             for y in "${getTestStatusByTitle[@]}"; do
               echo "$y"
