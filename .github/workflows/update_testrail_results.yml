@@ -126,7 +126,7 @@ jobs:
               echo "$y"
               getTestNames=$(echo $y | jq '.[0]')
               echo "$getTestNames"
-              if [[ "$(echo $y | jq .[1] | if any(. == 5)')" == "true" ]]; then
+              if [[ "$(echo $y | jq .[1] | any(. == 5)')" == "true" ]]; then
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
