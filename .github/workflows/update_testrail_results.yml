@@ -126,7 +126,7 @@ jobs:
               echo "$y"
               getTestNames=$(echo $y | jq '.[0]')
               echo "$getTestNames"
-              getStatuses=$(echo $y | jq '.[1] any(. == 1)')
+              getStatuses=$(echo $y | jq '.[1] | any(. == 1)')
               echo "$getStatuses"
             done
             updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
