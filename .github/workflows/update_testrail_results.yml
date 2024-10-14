@@ -137,7 +137,7 @@ jobs:
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 1}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
-              else [[ "$(echo $y | jq '.[1] | any(. == 1)')" == "true" ]]; then
+              else
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 1}' \
