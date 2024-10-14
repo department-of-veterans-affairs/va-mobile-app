@@ -24,13 +24,13 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { SubtaskContext } from './FileRequestSubtask'
+import { FileRequestContext } from './FileRequestSubtask'
 
 function FileRequest() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim } = useContext(SubtaskContext)
+  const { claimID, claim } = useContext(FileRequestContext)
   const {
     data: claimFallBack,
     error: claimError,

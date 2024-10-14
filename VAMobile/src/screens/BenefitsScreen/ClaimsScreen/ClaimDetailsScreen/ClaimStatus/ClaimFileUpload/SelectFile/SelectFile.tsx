@@ -1,25 +1,27 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
+import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
+
 const { IS_TEST } = getEnv()
 
-type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
+type SelectFilesProps = StackScreenProps<FileRequestStackParams, 'SelectFile'>
 
 function SelectFile({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -28,13 +30,29 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { claimID, request } = route.params
+  const { request } = route.params
+  const { claimID, setOnLeftButtonPress } = useContext(FileRequestContext)
   const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
     if (isActionSheetVisible) {
       e.preventDefault()
     }
+  })
+
+  useFocusEffect(() => {
+    const onCancel = () => {
+      logAnalyticsEvent(
+        Events.vama_evidence_cancel_1(
+          claimID,
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'file',
+        ),
+      )
+      navigation.goBack()
+    }
+    setOnLeftButtonPress(() => onCancel)
   })
 
   const onFileFolder = async (): Promise<void> => {
@@ -103,24 +121,8 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   // Because the select a file button has the same accessibility label as the file upload screen it causes query issues in android
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
-  const onCancel = () => {
-    logAnalyticsEvent(
-      Events.vama_evidence_cancel_1(
-        claimID,
-        request?.trackedItemId || null,
-        request?.type || 'Submit Evidence',
-        'file',
-      ),
-    )
-    navigation.goBack()
-  }
-
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('back')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectFiles')}>
+    <VAScrollView>
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -159,7 +161,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

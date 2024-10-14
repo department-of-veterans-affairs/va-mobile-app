@@ -10,22 +10,26 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 
 import FileRequest from './FileRequest'
 import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
+import SelectFile from './SelectFile/SelectFile'
 
 export type FileRequestStackParams = {
   FileRequest: undefined
   FileRequestDetails: {
     request: ClaimEventData
   }
+  SelectFile: {
+    request: ClaimEventData
+  }
 }
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
 
-type SubtaskContextValue = {
+type FileRequestContextValue = {
   claimID: string
   claim: ClaimData | undefined
   setLeftButtonText: React.Dispatch<React.SetStateAction<string>>
   setOnLeftButtonPress: React.Dispatch<React.SetStateAction<() => void>>
 }
-export const SubtaskContext = createContext<SubtaskContextValue>({} as SubtaskContextValue)
+export const FileRequestContext = createContext<FileRequestContextValue>({} as FileRequestContextValue)
 
 type FileRequestSubtaskProps = StackScreenProps<BenefitsStackParamList, 'FileRequestSubtask'>
 
@@ -37,14 +41,14 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
   const [onLeftButtonPress, setOnLeftButtonPress] = useState(() => navigation.goBack)
 
   const navigationState = navigation.getState()
-  const nestedRouteIsFocused = !!navigationState.routes[navigationState.index]?.state?.index
+  const initialRouteIsFocused = !navigationState.routes[navigationState.index]?.state?.index
 
   useEffect(() => {
-    if (!nestedRouteIsFocused) {
+    if (initialRouteIsFocused) {
       setLeftButtonText(t('cancel'))
       setOnLeftButtonPress(() => navigation.goBack)
     }
-  }, [navigation.goBack, nestedRouteIsFocused, t])
+  }, [initialRouteIsFocused, navigation.goBack, t])
 
   return (
     <FullScreenSubtask
@@ -54,7 +58,7 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
       testID="fileRequestPageTestID"
       leftButtonTestID="fileRequestPageBackID">
       <Box flex={1} backgroundColor="main">
-        <SubtaskContext.Provider value={{ claimID, claim, setLeftButtonText, setOnLeftButtonPress }}>
+        <FileRequestContext.Provider value={{ claimID, claim, setLeftButtonText, setOnLeftButtonPress }}>
           <FileRequestStack.Navigator
             initialRouteName="FileRequest"
             screenOptions={{
@@ -64,8 +68,9 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
             }}>
             <FileRequestStack.Screen name="FileRequest" component={FileRequest} />
             <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} />
+            <FileRequestStack.Screen name="SelectFile" component={SelectFile} />
           </FileRequestStack.Navigator>
-        </SubtaskContext.Provider>
+        </FileRequestContext.Provider>
       </Box>
     </FullScreenSubtask>
   )

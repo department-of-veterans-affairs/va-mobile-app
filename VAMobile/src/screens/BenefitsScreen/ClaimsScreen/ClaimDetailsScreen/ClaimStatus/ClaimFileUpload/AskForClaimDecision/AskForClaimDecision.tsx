@@ -56,7 +56,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType })
     }
   }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 

@@ -1,6 +1,7 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
@@ -14,7 +15,7 @@ import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { FileRequestStackParams, SubtaskContext } from '../FileRequestSubtask'
+import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
 
 type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
 
@@ -23,14 +24,14 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
-  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(SubtaskContext)
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
 
-  useEffect(() => {
+  useFocusEffect(() => {
     setLeftButtonText(t('back'))
     setOnLeftButtonPress(() => navigation.goBack)
-  }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t])
+  })
 
   const hasUploaded = hasUploadedOrReceived(request)
   const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
@@ -68,7 +69,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })
+    navigateTo('SelectFile', { request })
   }
 
   const onPhotoPress = () => {

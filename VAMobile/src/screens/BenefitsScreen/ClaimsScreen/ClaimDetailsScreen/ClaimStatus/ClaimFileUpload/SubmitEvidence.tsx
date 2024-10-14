@@ -22,7 +22,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'file'))
-    navigateTo('SelectFile', { claimID })
+    navigateTo('SelectFile')
   }
 
   const onPhotoPress = () => {
