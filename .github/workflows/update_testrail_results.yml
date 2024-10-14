@@ -120,7 +120,7 @@ jobs:
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           echo "$getTestRunNewName"
-          for i in $(echo $getTestRunNewName | jq -r '.tests | map(.id)'); do
+          for i in $(echo $getTestRunNewName | jq -r '.tests[].id'); do
             echo "$i"
             echo "test2"
             resp5=$(curl -X POST -H 'Content-Type: application/json' \
