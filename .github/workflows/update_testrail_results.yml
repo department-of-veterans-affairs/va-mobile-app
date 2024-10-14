@@ -121,9 +121,13 @@ jobs:
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           for i in $(echo $getTestCases | jq -r '.tests[].id'); do
-            getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c '[group_by(.title)[] | [.[0].title, [map(.status_id)[]]]]')
+            getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
             for y in "${getTestStatusByTitle[@]}"; do
               echo "$y"
+              getTestNames=$(echo $y | jq '.[0]')
+              echo "$getTestNames"
+              getStatuses=$(echo $y | jq '.[1] any(. == 1)')
+              echo "$getStatuses"
             done
             updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
