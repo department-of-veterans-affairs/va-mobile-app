@@ -4,8 +4,7 @@ import { ScrollView } from 'react-native'
 import { screen } from '@testing-library/react-native'
 
 import { ClaimType } from 'constants/claims'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import { context, mockNavProps, render } from 'testUtils'
 
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
@@ -18,9 +17,6 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 context('ClaimStatus', () => {
   const defaultMaxEstDate = '2019-12-11'

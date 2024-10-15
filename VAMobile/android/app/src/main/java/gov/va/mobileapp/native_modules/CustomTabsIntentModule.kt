@@ -47,6 +47,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                     appendQueryParameter("code_challenge", codeChallenge)
                                     appendQueryParameter("application", "vamobile")
                                     appendQueryParameter("oauth", "true")
+                                    appendQueryParameter("scope", "device_sso")
                                 }
                             }
                             .build()

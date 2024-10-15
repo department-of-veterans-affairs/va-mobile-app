@@ -163,14 +163,6 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
-  cernerPanelSubtext: {
-    fontSize: 20,
-    lineHeight: 25,
-  },
-  cernerPanelHeader: {
-    fontSize: 19,
-    lineHeight: 22,
-  },
   FooterText: {
     fontSize: 14,
     lineHeight: 22,
@@ -261,10 +253,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     VeteranStatusProof: buildFont('SourceSansPro-Regular', fontSizes.veteranStatus, scheme.text.veteranStatusProof),
     webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
-    cernerPanelHeader: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelHeader, scheme.text.cernerPanel),
-    cernerPanelSubtext: buildFont('SourceSansPro-Regular', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
-    cernerPanelFacility: buildFont('SourceSansPro-Bold', fontSizes.cernerPanelSubtext, scheme.text.cernerPanel),
-    cernerFooterText: buildFont('SourceSansPro-Regular', fontSizes.FooterText, scheme.text.cernerFooter),
     MobileFooterLink: buildFont('SourceSansPro-Regular', fontSizes.FooterText, scheme.text.link, true),
   }
 }
@@ -331,8 +319,6 @@ let theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
-    cernerPanelSubtext: fontSizes.cernerPanelSubtext,
-    cernerPanelHeader: fontSizes.cernerPanelHeader,
     FooterText: fontSizes.FooterText,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',

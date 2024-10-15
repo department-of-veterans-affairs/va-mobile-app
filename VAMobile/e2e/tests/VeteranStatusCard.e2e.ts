@@ -49,7 +49,7 @@ export async function validateVeteranStatusDesign() {
     element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT)).atIndex(0),
   ).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT))).toExist()
-  const veteranStatusCardBranchIcon = await element(by.id('VeteranStatusUSCoastGuardTestID')).takeScreenshot(
+  const veteranStatusCardBranchIcon = await element(by.id('veteranStatusCardBranchEmblem')).takeScreenshot(
     'veteranStatusCardBranchIcon',
   )
   checkImages(veteranStatusCardBranchIcon)

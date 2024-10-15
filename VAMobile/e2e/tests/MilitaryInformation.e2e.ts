@@ -28,11 +28,11 @@ export async function verifyMilitaryInfo(militaryBranch: string) {
       ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
       militaryBranch,
     )
-    let tempPath = await element(by.id(militaryBranch)).takeScreenshot(militaryBranch + 'ImageTestHome')
+    let tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestHome')
     checkImages(tempPath)
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
-    tempPath = await element(by.id(militaryBranch)).takeScreenshot(militaryBranch + 'ImageTestProfile')
+    tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestProfile')
     checkImages(tempPath)
     await expect(element(by.text(militaryBranch))).toExist()
     await openMilitaryInformation()
