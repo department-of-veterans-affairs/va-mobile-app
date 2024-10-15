@@ -122,11 +122,21 @@ jobs:
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           for i in $(echo $getTestCases | jq -r '.tests[].id'); do
             echo "i = $i"
-            echo "$test"
+            echo "test"
+            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" --compact-ouput '.tests | map(select(.id == $testIDs)) | map(.title)' )
+            echo "$getTestName"
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -r '.[].title')
             for y in "${getTestStatusByTitle[@]}"; do
               echo "$y"
-              echo "$test1"
+              echo "test1"
+              if [[ "$getTestName" == "$y" ]]; then
+                echo "test3"
+                getTestStatus=$echo($getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
+                echo "$getTestStatus"
+              fi
+              echo "test4"
+              getTestStatus=$echo($getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
+              echo "$getTestStatus"
             done
           done
 
