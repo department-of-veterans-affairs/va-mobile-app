@@ -122,6 +122,7 @@ jobs:
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           getTestCaseTitlesAndIds=$(echo $getTestCases | jq -c '.tests[] | [.title, .id]')
           for i in "${getTestCaseTitlesAndIds[@]}"; do
+            echo "i = $i"
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
             testID=$(echo $i | jq '.[1]')
             testName=$(echo $i | jq '.[0]')
@@ -129,29 +130,29 @@ jobs:
               getTestNames=$(echo $y | jq '.[0]')
               echo "New test name: $getTestNames"
               echo "Old test name: $testName"
-              if [[ "$testName" == "$getTestNames" ]]; then
+              if [[ $(echo $i | jq '.[0]') == $(echo $y | jq '.[0]') ]]; then
                 isFailedStatus=$(echo $y | jq '.[1] | any(. == 5)')
                 echo "Failed: $isFailedStatus"
                 isRetestStatus=$(echo $y | jq '.[1] | any(. == 4)')
                 echo "Retest: $isRetestStatus"
                 isPassedStatus=$(echo $y | jq '.[1] | any(. == 1)')
                 echo "Passed: $isPassedStatus"
-              fi
-              if [[ "$isFailedStatus" == "true" ]]; then
-                updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
-              elif [[ "$isRetestStatus" != "true" ]]; then
-                updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d '{"status_id": 4}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
-              else
-                updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d '{"status_id": 1}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+                if [[ "$isFailedStatus" == "true" ]]; then
+                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                    -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
+                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+                elif [[ "$isRetestStatus" != "true" ]]; then
+                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                    -d '{"status_id": 4}' \
+                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+                else
+                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                    -d '{"status_id": 1}' \
+                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+                fi
               fi
             done
           done
