@@ -124,7 +124,7 @@ jobs:
             getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" -r '.tests | map(select(.id == $testIDs)) | .[0].title')
             
             getFailedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 5)) | map(.title)')
-            isTestFailed=$(echo $getFailedTests | jq 'any(. == "$getTestName")')
+            isTestFailed=$(echo $getFailedTests | jq 'any(. == "'"$getTestName"'")')
             getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             echo "$getTestName"
             echo "$getRetestTests"
@@ -133,7 +133,7 @@ jobs:
             if [[ "$isTestFailed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                -d '{"status_id": 5}' \
+                -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
             elif [[ "$isTestRetest" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
