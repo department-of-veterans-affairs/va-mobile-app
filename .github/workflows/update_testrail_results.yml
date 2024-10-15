@@ -129,14 +129,13 @@ jobs:
             for y in "${getTestStatusByTitle[@]}"; do
               echo "$y"
               echo "test1"
+              getTestStatus2=$(echo $getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
+              echo "$getTestStatus2"
               if [[ "$getTestName" == "$y" ]]; then
                 echo "test3"
                 getTestStatus=$(echo $getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
                 echo "$getTestStatus"
               fi
-              echo "test4"
-              getTestStatus=$(echo $getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
-              echo "$getTestStatus"
             done
           done
 
