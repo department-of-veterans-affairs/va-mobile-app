@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { StackScreenProps, TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 
@@ -12,6 +13,7 @@ import FileRequest from './FileRequest'
 import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
 import SelectFile from './SelectFile/SelectFile'
 import TakePhotos from './TakePhotos/TakePhotos'
+import UploadOrAddPhotos from './TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 
 export type FileRequestStackParams = {
   FileRequest: undefined
@@ -23,6 +25,10 @@ export type FileRequestStackParams = {
   }
   TakePhotos: {
     request: ClaimEventData
+  }
+  UploadOrAddPhotos: {
+    firstImageResponse: ImagePickerResponse
+    request?: ClaimEventData
   }
 }
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
@@ -74,6 +80,7 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
             <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} />
             <FileRequestStack.Screen name="SelectFile" component={SelectFile} />
             <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} />
+            <FileRequestStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} />
           </FileRequestStack.Navigator>
         </FileRequestContext.Provider>
       </Box>

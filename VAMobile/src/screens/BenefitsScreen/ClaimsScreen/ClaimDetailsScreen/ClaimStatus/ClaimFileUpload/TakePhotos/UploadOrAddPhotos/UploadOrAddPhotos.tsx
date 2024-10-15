@@ -1,9 +1,9 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, ScrollView } from 'react-native'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { StackActions } from '@react-navigation/native'
+import { StackActions, useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -21,14 +21,13 @@ import {
   PhotoAdd,
   PhotoPreview,
   TextView,
+  VAScrollView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
@@ -44,13 +43,16 @@ import {
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
-type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
+import { FileRequestContext, FileRequestStackParams } from '../../FileRequestSubtask'
+
+type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
 
 function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { claimID, request: originalRequest, firstImageResponse } = route.params
+  const { request: originalRequest, firstImageResponse } = route.params
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
@@ -92,20 +94,28 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         {
           text: t('fileUpload.continueUpload'),
         },
-
         {
           text: t('fileUpload.cancelUpload'),
-          onPress: () => {
-            if (request) {
-              navigateTo('FileRequestDetails', { claimID, request })
-            } else {
-              navigateTo('SubmitEvidence', { claimID })
-            }
-          },
+          onPress: () => navigation.dispatch(e.data.action),
         },
       ],
     })
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      setLeftButtonText(t('back'))
+      setOnLeftButtonPress(() => () => navigation.dispatch(StackActions.pop(2)))
+      logAnalyticsEvent(
+        Events.vama_evidence_cancel_2(
+          claimID,
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'photo',
+        ),
+      )
+    }, [claimID, navigation, request?.trackedItemId, request?.type, setLeftButtonText, setOnLeftButtonPress, t]),
+  )
 
   useEffect(() => {
     if (filesUploadedSuccess) {
@@ -346,21 +356,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   }
 
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
-      title={t('fileUpload.uploadPhotos')}
-      onLeftButtonPress={() => {
-        logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(
-            claimID,
-            request?.trackedItemId || null,
-            request?.type || 'Submit Evidence',
-            'photo',
-          ),
-        )
-        navigation.dispatch(StackActions.pop(2))
-      }}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
@@ -442,7 +438,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           </Box>
         </>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
