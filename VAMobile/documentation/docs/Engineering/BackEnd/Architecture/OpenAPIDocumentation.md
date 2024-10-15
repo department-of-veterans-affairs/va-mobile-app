@@ -20,7 +20,7 @@ Schema tests are also only as good as the schema they're testing against. Schema
 
 ## Best Practices
 
-- use models and serializers to lock down the schema (TBD: link to upcoming model and serializer docs)
+- use [models and serializers](./ModelsAndSerializers.md) to lock down the schema
 - use all VCR cassettes available to ensure broad test coverage
 - only validate the schema once per unique case. In other words, if you need to run several tests with the same data setup and you expect the same response each time, there's no need to validate the schema each time.
 - use `nullable: true` when you know an attribute may be null. This should also be reflected in the model.
