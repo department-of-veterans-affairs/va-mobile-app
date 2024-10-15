@@ -201,7 +201,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           setWebviewLoadFailed(true)
           const { nativeEvent } = syntheticEvent
           nativeEvent.url = currentUrl
-          logAnalyticsEvent(Events.vama_webview_fail(nativeEvent))
+          logAnalyticsEvent(Events.vama_webview_fail(JSON.stringify(nativeEvent)))
         }}
         onNavigationStateChange={(navState): void => {
           setCanGoBack(navState.canGoBack)

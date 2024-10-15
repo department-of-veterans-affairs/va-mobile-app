@@ -1,5 +1,3 @@
-import { WebViewError } from 'react-native-webview/lib/WebViewTypes'
-
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
@@ -1209,11 +1207,11 @@ export const Events = {
       },
     }
   },
-  vama_webview_fail: (error: WebViewError): Event => {
+  vama_webview_fail: (error: string): Event => {
     return {
       name: 'vama_webview_fail',
       params: {
-        error: JSON.stringify(error),
+        error,
       },
     }
   },
