@@ -84,6 +84,9 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
   PREVIOUS_PAGE_ID: 'previous-page',
+  CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
+  CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
+  CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
 }
 
 /** Log the automation into demo mode
