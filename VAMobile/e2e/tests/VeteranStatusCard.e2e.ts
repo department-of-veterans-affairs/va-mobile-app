@@ -170,7 +170,7 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text('100%')).atIndex(1)).toExist()
   })
 
-  /*verifyMilitaryInfo('United States Coast Guard')
+  verifyMilitaryInfo('United States Coast Guard')
   verifyMilitaryInfo('United States Army')
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
@@ -202,5 +202,5 @@ describe('Veteran Status Card', () => {
         },
       ],
     )
-  })*/
+  })
 })
