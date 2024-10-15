@@ -1,5 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useFocusEffect } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
@@ -24,13 +27,15 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { FileRequestContext } from './FileRequestSubtask'
+import { FileRequestContext, FileRequestStackParams } from './FileRequestSubtask'
 
-function FileRequest() {
+type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
+
+function FileRequest({ navigation }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim } = useContext(FileRequestContext)
+  const { claimID, claim, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const {
     data: claimFallBack,
     error: claimError,
@@ -41,6 +46,13 @@ function FileRequest() {
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
+
+  useFocusEffect(
+    useCallback(() => {
+      setLeftButtonText(t('cancel'))
+      setOnLeftButtonPress(() => navigation.goBack)
+    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+  )
 
   const count = numberOfItemsNeedingAttentionFromVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],

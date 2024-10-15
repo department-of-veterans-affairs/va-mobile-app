@@ -58,7 +58,7 @@ export type BenefitsStackParamList = {
   AskForClaimDecision: {
     claimID: string
   }
-  SubmitEvidence: {
+  SubmitEvidenceSubtask: {
     claimID: string
   }
   UploadFile: {

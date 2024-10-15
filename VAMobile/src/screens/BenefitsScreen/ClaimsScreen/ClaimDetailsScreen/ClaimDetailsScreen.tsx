@@ -186,7 +186,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const submitEvidencePress = () => {
     logAnalyticsEvent(Events.vama_claim_submit_tap(claimID, attributes.claimType))
-    navigateTo('SubmitEvidence', { claimID })
+    navigateTo('SubmitEvidenceSubtask', { claimID })
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {

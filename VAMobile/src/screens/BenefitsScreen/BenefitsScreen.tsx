@@ -25,7 +25,7 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import FileRequestSubtask from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
-import SubmitEvidence from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
+import SubmitEvidenceSubtask from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -148,13 +148,13 @@ function BenefitsStackScreen() {
         options={{ headerShown: false }}
       />
       <BenefitsScreenStack.Screen
-        name="FileRequestSubtask"
-        component={FileRequestSubtask}
+        name="SubmitEvidenceSubtask"
+        component={SubmitEvidenceSubtask}
         options={FULLSCREEN_SUBTASK_OPTIONS}
       />
       <BenefitsScreenStack.Screen
-        name="SubmitEvidence"
-        component={SubmitEvidence}
+        name="FileRequestSubtask"
+        component={FileRequestSubtask}
         options={FULLSCREEN_SUBTASK_OPTIONS}
       />
       <BenefitsScreenStack.Screen

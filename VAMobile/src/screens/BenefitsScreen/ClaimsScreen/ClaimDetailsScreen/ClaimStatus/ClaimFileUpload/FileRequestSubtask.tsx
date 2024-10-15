@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
@@ -33,6 +33,20 @@ export type FileRequestStackParams = {
 }
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
 
+// Shared with SubmitEvidenceSubtask
+export const fileRequestSharedScreens = [
+  <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} key="FileRequestDetails" />,
+  <FileRequestStack.Screen name="SelectFile" component={SelectFile} key="SelectFile" />,
+  <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} key="TakePhotos" />,
+  <FileRequestStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} key="UploadOrAddPhotos" />,
+]
+
+export const fileRequestScreenOptions = {
+  headerShown: false,
+  detachPreviousScreen: true,
+  ...TransitionPresets.SlideFromRightIOS,
+}
+
 type FileRequestContextValue = {
   claimID: string
   claim: ClaimData | undefined
@@ -50,16 +64,6 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
   const [leftButtonText, setLeftButtonText] = useState(t('cancel'))
   const [onLeftButtonPress, setOnLeftButtonPress] = useState(() => navigation.goBack)
 
-  const navigationState = navigation.getState()
-  const initialRouteIsFocused = !navigationState.routes[navigationState.index]?.state?.index
-
-  useEffect(() => {
-    if (initialRouteIsFocused) {
-      setLeftButtonText(t('cancel'))
-      setOnLeftButtonPress(() => navigation.goBack)
-    }
-  }, [initialRouteIsFocused, navigation.goBack, t])
-
   return (
     <FullScreenSubtask
       leftButtonText={leftButtonText}
@@ -69,18 +73,9 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
       leftButtonTestID="fileRequestPageBackID">
       <Box flex={1} backgroundColor="main">
         <FileRequestContext.Provider value={{ claimID, claim, setLeftButtonText, setOnLeftButtonPress }}>
-          <FileRequestStack.Navigator
-            initialRouteName="FileRequest"
-            screenOptions={{
-              headerShown: false,
-              detachPreviousScreen: true,
-              ...TransitionPresets.SlideFromRightIOS,
-            }}>
+          <FileRequestStack.Navigator initialRouteName="FileRequest" screenOptions={fileRequestScreenOptions}>
             <FileRequestStack.Screen name="FileRequest" component={FileRequest} />
-            <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} />
-            <FileRequestStack.Screen name="SelectFile" component={SelectFile} />
-            <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} />
-            <FileRequestStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} />
+            {fileRequestSharedScreens}
           </FileRequestStack.Navigator>
         </FileRequestContext.Provider>
       </Box>

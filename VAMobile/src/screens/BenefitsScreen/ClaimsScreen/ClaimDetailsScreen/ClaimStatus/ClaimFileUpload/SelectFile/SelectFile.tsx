@@ -30,8 +30,8 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { request } = route.params
-  const { claimID, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { request } = route.params || {}
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
@@ -53,8 +53,9 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         )
         navigation.goBack()
       }
+      setLeftButtonText(t('back'))
       setOnLeftButtonPress(() => onCancel)
-    }, [claimID, navigation, request?.trackedItemId, request?.type, setOnLeftButtonPress]),
+    }, [claimID, navigation, request?.trackedItemId, request?.type, setLeftButtonText, setOnLeftButtonPress, t]),
   )
 
   const onFileFolder = async (): Promise<void> => {

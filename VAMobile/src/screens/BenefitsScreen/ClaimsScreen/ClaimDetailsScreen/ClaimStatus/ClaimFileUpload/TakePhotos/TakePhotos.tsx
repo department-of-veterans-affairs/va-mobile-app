@@ -29,8 +29,8 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request } = route.params
-  const { claimID, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { request } = route.params || {}
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
@@ -54,8 +54,9 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         )
         navigation.goBack()
       }
+      setLeftButtonText(t('back'))
       setOnLeftButtonPress(() => onCancel)
-    }, [claimID, navigation, request?.trackedItemId, request?.type, setOnLeftButtonPress]),
+    }, [claimID, navigation, request?.trackedItemId, request?.type, setLeftButtonText, setOnLeftButtonPress, t]),
   )
 
   const callbackIfUri = (response: ImagePickerResponse): void => {

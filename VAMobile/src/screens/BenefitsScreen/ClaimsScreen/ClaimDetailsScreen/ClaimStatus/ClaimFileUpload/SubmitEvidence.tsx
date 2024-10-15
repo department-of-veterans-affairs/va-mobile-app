@@ -1,24 +1,34 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, FullScreenSubtask, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type SubmitEvidenceProps = StackScreenProps<BenefitsStackParamList, 'SubmitEvidence'>
+import { FileRequestContext } from './FileRequestSubtask'
+import { SubmitEvidenceStackParams } from './SubmitEvidenceSubtask'
 
-function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
+type SubmitEvidenceProps = StackScreenProps<SubmitEvidenceStackParams, 'SubmitEvidence'>
+
+function SubmitEvidence({ navigation }: SubmitEvidenceProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID } = route.params
+  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+
+  useFocusEffect(
+    useCallback(() => {
+      setLeftButtonText(t('cancel'))
+      setOnLeftButtonPress(() => navigation.goBack)
+    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+  )
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'file'))
@@ -27,14 +37,11 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'photo'))
-    navigateTo('TakePhotos', { claimID })
+    navigateTo('TakePhotos')
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      title={t('claimDetails.submitEvidence')}
-      onLeftButtonPress={navigation.goBack}>
+    <VAScrollView>
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -62,7 +69,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
           />
         </Box>
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
