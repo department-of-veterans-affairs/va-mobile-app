@@ -125,7 +125,7 @@ jobs:
             
             getFailedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 5)) | map(.title)')
             isTestFailed=$(echo $getFailedTests | jq 'any(. == "$getTestName")')
-            getRetestTests==$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
+            getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             echo "$getRetestTests"
             isTestRetest=$(echo $getFailedTests | jq 'any(. == "$getTestName")')
             echo "Retest: $isTestRetest"
