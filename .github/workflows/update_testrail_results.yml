@@ -123,7 +123,7 @@ jobs:
           for i in $(echo $getTestCases | jq -r '.tests[].id'); do
             echo "i = $i"
             echo "test"
-            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" --compact-ouput '.tests | map(select(.id == $testIDs)) | map(.title)' )
+            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" --compact-output '.tests | map(select(.id == $testIDs)) | map(.title)')
             echo "$getTestName"
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -r '.[].title')
             for y in "${getTestStatusByTitle[@]}"; do
@@ -135,6 +135,8 @@ jobs:
                 echo "test3"
                 getTestStatus=$(echo $getTestCaseNewName | jq --argjson testRailNames "$y" --compact-output 'map(select(.title == $testRailNames)) | map(.status_id)')')
                 echo "$getTestStatus"
+              else
+                echo "test4"
               fi
             done
           done
