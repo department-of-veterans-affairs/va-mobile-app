@@ -121,14 +121,14 @@ jobs:
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           for i in $(echo $getTestCases | jq -r '.tests[].id'); do
-            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" --compact-output '.tests | map(select(.id == $testIDs)) | .[0].title')
+            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" -r '.tests | map(select(.id == $testIDs)) | .[0].title')
             
             getFailedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 5)) | map(.title)')
             isTestFailed=$(echo $getFailedTests | jq 'any(. == "$getTestName")')
             getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             echo "$getTestName"
             echo "$getRetestTests"
-            isTestRetest=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
+            isTestRetest=$(echo $getRetestTests | jq 'any(. == "$getTestName")')
             echo "Retest: $isTestRetest"
             if [[ "$isTestFailed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
