@@ -126,7 +126,7 @@ jobs:
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
             testID=$i.sub(".*$(,)"; "")
             echo "$testID"
-            testName=$i.sub("(,).*$"; ""))
+            testName=$i.sub("(,).*$"; "")
             echo "$testNames"
             for y in "${getTestStatusByTitle[@]}"; do
               getTestNames=$(echo $y | jq '.[0]')
