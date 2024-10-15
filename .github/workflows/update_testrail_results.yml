@@ -121,11 +121,13 @@ jobs:
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           getTestCaseTitlesAndIds=$(echo $getTestCases | jq -c '.tests[] | [.title, .id] | join(",")')
-          for i in "${getTestCaseTitlesAndIds[@]}"; do
+          for i in $(echo $getTestRunNewName | jq -r '.tests[].id'); do
             echo "i = $i"
-            testID= "$i" | sed "s/.*,//"
-            echo "$testID"
-            echo "test"
+            echo "$test"
+            getTestStatusByTitle=$(echo $getTestCaseNewName | jq -r '.[].title')
+            for y in "${getTestStatusByTitle[@]}"; do
+              echo "$y"
+              echo "$test1"
           done
 
 #Fully working minus status's
