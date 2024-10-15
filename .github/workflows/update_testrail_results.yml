@@ -123,40 +123,9 @@ jobs:
           getTestCaseTitlesAndIds=$(echo $getTestCases | jq -r '.tests[] | [.title, .id] | join(",")')
           for i in "${getTestCaseTitlesAndIds[@]}"; do
             echo "i = $i"
-            getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
-            testID="$i".sub(".*$(,)"; "")
+            testID= "$i" | sed "s/.*,//"
             echo "$testID"
-            testName="$i".sub("(,).*$"; "")
-            echo "$testNames"
-            for y in "${getTestStatusByTitle[@]}"; do
-              getTestNames=$(echo $y | jq '.[0]')
-              echo "New test name: $getTestNames"
-              echo "Old test name: $testName"
-              if [[ $(echo $i | jq '.[0]') == $(echo $y | jq '.[0]') ]]; then
-                isFailedStatus=$(echo $y | jq '.[1] | any(. == 5)')
-                echo "Failed: $isFailedStatus"
-                isRetestStatus=$(echo $y | jq '.[1] | any(. == 4)')
-                echo "Retest: $isRetestStatus"
-                isPassedStatus=$(echo $y | jq '.[1] | any(. == 1)')
-                echo "Passed: $isPassedStatus"
-                if [[ "$isFailedStatus" == "true" ]]; then
-                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                    -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
-                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
-                elif [[ "$isRetestStatus" != "true" ]]; then
-                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                    -d '{"status_id": 4}' \
-                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
-                else
-                  updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
-                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                    -d '{"status_id": 1}' \
-                    "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
-                fi
-              fi
-            done
+            echo "test"
           done
 
 #Fully working minus status's
@@ -205,3 +174,38 @@ jobs:
 #   -d '{"status_id": 1}' \
 #   "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
 # fi
+
+
+# testID="$i".sub(".*$(,)"; "")
+# echo "$testID"
+# testName="$i".sub("(,).*$"; "")
+# echo "$testNames"
+# for y in "${getTestStatusByTitle[@]}"; do
+#   getTestNames=$(echo $y | jq '.[0]')
+#   echo "New test name: $getTestNames"
+#   echo "Old test name: $testName"
+#   if [[ $(echo $i | jq '.[0]') == $(echo $y | jq '.[0]') ]]; then
+#     isFailedStatus=$(echo $y | jq '.[1] | any(. == 5)')
+#     echo "Failed: $isFailedStatus"
+#     isRetestStatus=$(echo $y | jq '.[1] | any(. == 4)')
+#     echo "Retest: $isRetestStatus"
+#     isPassedStatus=$(echo $y | jq '.[1] | any(. == 1)')
+#     echo "Passed: $isPassedStatus"
+#     if [[ "$isFailedStatus" == "true" ]]; then
+#       updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+#         -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+#         -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
+#         "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+#     elif [[ "$isRetestStatus" != "true" ]]; then
+#       updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+#         -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+#         -d '{"status_id": 4}' \
+#         "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+#     else
+#       updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
+#         -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+#         -d '{"status_id": 1}' \
+#         "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
+#     fi
+#   fi
+# done
