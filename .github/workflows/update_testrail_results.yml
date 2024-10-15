@@ -122,18 +122,13 @@ jobs:
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6010")
           getTestCaseTitlesAndIds=$(echo $getTestCases | jq -c '.tests[] | [.title, .id]')
           for i in "${getTestCaseTitlesAndIds[@]}"; do
-            echo "$i"
-            echo "$test"
             getTestStatusByTitle=$(echo $getTestCaseNewName | jq -c 'group_by(.title)[] | [.[0].title, [map(.status_id)[]]]')
-            echo "$test2"
             testID=$(echo $i | jq '.[1]')
-            echo "$testID"
             testName=$(echo $i | jq '.[0]')
-            echo "$testName"
             for y in "${getTestStatusByTitle[@]}"; do
-              echo "$y"
               getTestNames=$(echo $y | jq '.[0]')
-              echo "$getTestNames"
+              echo "New test name: $getTestNames"
+              echo "Old test name: $testName"
               if [[ "$testName" == "$getTestNames" ]]; then
                 isFailedStatus=$(echo $y | jq '.[1] | any(. == 5)')
                 echo "Failed: $isFailedStatus"
@@ -146,17 +141,17 @@ jobs:
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 5, "comment": "$getFailedTestCaseNames"}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
               elif [[ "$isRetestStatus" != "true" ]]; then
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 4}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
               else
                 updateStatus=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"status_id": 1}' \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$testID"")
               fi
             done
           done
