@@ -51,7 +51,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [appointment, pendingAppointment, attributes])
 
