@@ -128,7 +128,7 @@ jobs:
             getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             echo "$getTestName"
             echo "$getRetestTests"
-            isTestRetest=$(echo $(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)') | jq 'any(. == "$(echo $getTestCases | jq --argjson testIDs "$i" --compact-output '.tests | map(select(.id == $testIDs)) | .[0].title')")
+            isTestRetest=$(echo $getRetestTests | jq 'any(. == "Sign In [android]")')
             echo "Retest: $isTestRetest"
             if [[ "$isTestFailed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
