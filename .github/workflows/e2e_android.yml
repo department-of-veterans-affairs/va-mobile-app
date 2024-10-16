@@ -415,6 +415,8 @@ jobs:
             isTestFailed=$(echo $getFailedTests | jq 'any(. == "'"$getTestName"'")')
             getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             isTestRetest=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
+            getPassedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 1)) | map(.title)')
+            isTestPassed=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
             if [[ "$isTestFailed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
@@ -425,10 +427,10 @@ jobs:
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 -d '{"status_id": 4}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
-            else
+            elif [[ "$isTestPassed" == "true"" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                -d '{"status_id": 1}' \
+                -d '{"status_id": 5}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
             fi
           done
