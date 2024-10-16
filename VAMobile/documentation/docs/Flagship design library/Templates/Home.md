@@ -104,6 +104,3 @@ The Home screen uses the [Category screen template](https://department-of-vetera
 * [Figma file: Home screen 2.0 Shipped File](https://www.figma.com/design/ddMWiCQCfmUKFhMcYG9fYv/Home-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&node-id=1410-20598&t=a610026nBu9afD1A-1) (includes happy path as well as design for loading states, errors, and alternate statuses)
 * Mural: [Home screen 2.0 Appearance logic for error handling and edge cases](https://app.mural.co/t/adhoccorporateworkspace2583/m/adhoccorporateworkspace2583/1704381519703/cd6d78c5824a5fb0cc8b26597f0ad271072df8f2?wid=0-1705962128474)
 
-
-### Design Principles
-TBD (discussion of the role of surface and elevation in the home screen’s design)
