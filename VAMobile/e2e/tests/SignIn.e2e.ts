@@ -12,7 +12,7 @@ export const SignE2eIdConstants = {
   LOA_GATE_READ_MORE_P1:
     'We’ll verify your identity through a secure process from ID.me or Login.gov. This trusted partner provides the strongest identity verification system available.',
   LOA_GATE_READ_MORE_P2: 'To complete the process on your smartphone, you’ll need these items:',
-  CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in1',
+  CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
 
 describe('Sign In', () => {
