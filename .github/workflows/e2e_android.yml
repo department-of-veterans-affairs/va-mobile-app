@@ -384,7 +384,7 @@ jobs:
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=$i")
             echo "$getTestCaseNewName"
             echo $(jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]' <<< "$getTestCaseNewName") >> input.json
-            if [[ $(jq '._links.next == null' <<< "$resp") == 'true' ]];
+            if [[ $(jq '._links.next == null' <<< "$getTestCaseNewName") == 'true' ]];
             then
               break
             fi
