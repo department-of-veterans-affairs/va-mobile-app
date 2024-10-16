@@ -27,16 +27,15 @@ function SubmitEvidenceSubtask({ navigation, route }: SubmitEvidenceSubtaskProps
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { claimID } = route.params
 
+  const [title, setTitle] = useState(t('claimDetails.submitEvidence'))
   const [leftButtonText, setLeftButtonText] = useState(t('cancel'))
   const [onLeftButtonPress, setOnLeftButtonPress] = useState(() => navigation.goBack)
 
   return (
-    <FullScreenSubtask
-      leftButtonText={leftButtonText}
-      title={t('claimDetails.submitEvidence')}
-      onLeftButtonPress={onLeftButtonPress}>
+    <FullScreenSubtask leftButtonText={leftButtonText} title={title} onLeftButtonPress={onLeftButtonPress}>
       <Box flex={1} backgroundColor="main">
-        <FileRequestContext.Provider value={{ claimID, claim: undefined, setLeftButtonText, setOnLeftButtonPress }}>
+        <FileRequestContext.Provider
+          value={{ claimID, claim: undefined, setTitle, setLeftButtonText, setOnLeftButtonPress }}>
           <SubmitEvidenceStack.Navigator initialRouteName="SubmitEvidence" screenOptions={fileRequestScreenOptions}>
             <SubmitEvidenceStack.Screen name="SubmitEvidence" component={SubmitEvidence} />
             {fileRequestSharedScreens}

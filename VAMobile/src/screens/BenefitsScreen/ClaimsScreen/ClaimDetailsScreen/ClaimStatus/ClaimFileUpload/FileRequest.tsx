@@ -35,7 +35,7 @@ function FileRequest({ navigation }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, claim, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const {
     data: claimFallBack,
     error: claimError,
@@ -49,9 +49,10 @@ function FileRequest({ navigation }: FileRequestProps) {
 
   useFocusEffect(
     useCallback(() => {
+      setTitle(t('fileRequest.title'))
       setLeftButtonText(t('cancel'))
       setOnLeftButtonPress(() => navigation.goBack)
-    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
   )
 
   const count = numberOfItemsNeedingAttentionFromVet(

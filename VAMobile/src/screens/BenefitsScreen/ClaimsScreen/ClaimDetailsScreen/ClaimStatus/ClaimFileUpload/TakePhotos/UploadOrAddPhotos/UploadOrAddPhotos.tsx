@@ -52,7 +52,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
-  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
@@ -104,6 +104,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useFocusEffect(
     useCallback(() => {
+      setTitle(t('fileUpload.uploadPhotos'))
       setLeftButtonText(t('back'))
       setOnLeftButtonPress(() => () => navigation.dispatch(StackActions.pop(2)))
       logAnalyticsEvent(
@@ -114,7 +115,16 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           'photo',
         ),
       )
-    }, [claimID, navigation, request?.trackedItemId, request?.type, setLeftButtonText, setOnLeftButtonPress, t]),
+    }, [
+      claimID,
+      navigation,
+      request?.trackedItemId,
+      request?.type,
+      setLeftButtonText,
+      setOnLeftButtonPress,
+      setTitle,
+      t,
+    ]),
   )
 
   useEffect(() => {

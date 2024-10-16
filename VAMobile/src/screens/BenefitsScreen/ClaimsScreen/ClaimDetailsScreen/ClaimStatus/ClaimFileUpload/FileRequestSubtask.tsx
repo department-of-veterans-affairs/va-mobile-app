@@ -50,6 +50,7 @@ export const fileRequestScreenOptions = {
 type FileRequestContextValue = {
   claimID: string
   claim: ClaimData | undefined
+  setTitle: React.Dispatch<React.SetStateAction<string>>
   setLeftButtonText: React.Dispatch<React.SetStateAction<string>>
   setOnLeftButtonPress: React.Dispatch<React.SetStateAction<() => void>>
 }
@@ -61,6 +62,7 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { claimID, claim } = route.params
 
+  const [title, setTitle] = useState(t('fileRequest.title'))
   const [leftButtonText, setLeftButtonText] = useState(t('cancel'))
   const [onLeftButtonPress, setOnLeftButtonPress] = useState(() => navigation.goBack)
 
@@ -68,11 +70,11 @@ function FileRequestSubtask({ navigation, route }: FileRequestSubtaskProps) {
     <FullScreenSubtask
       leftButtonText={leftButtonText}
       onLeftButtonPress={onLeftButtonPress}
-      title={t('fileRequest.title')}
+      title={title}
       testID="fileRequestPageTestID"
       leftButtonTestID="fileRequestPageBackID">
       <Box flex={1} backgroundColor="main">
-        <FileRequestContext.Provider value={{ claimID, claim, setLeftButtonText, setOnLeftButtonPress }}>
+        <FileRequestContext.Provider value={{ claimID, claim, setTitle, setLeftButtonText, setOnLeftButtonPress }}>
           <FileRequestStack.Navigator initialRouteName="FileRequest" screenOptions={fileRequestScreenOptions}>
             <FileRequestStack.Screen name="FileRequest" component={FileRequest} />
             {fileRequestSharedScreens}

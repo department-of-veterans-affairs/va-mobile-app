@@ -24,15 +24,16 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
-  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
 
   useFocusEffect(
     useCallback(() => {
+      setTitle(displayName || '')
       setLeftButtonText(t('back'))
       setOnLeftButtonPress(() => navigation.goBack)
-    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+    }, [displayName, navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
   )
 
   const hasUploaded = hasUploadedOrReceived(request)

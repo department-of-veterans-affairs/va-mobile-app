@@ -21,13 +21,14 @@ function SubmitEvidence({ navigation }: SubmitEvidenceProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
 
   useFocusEffect(
     useCallback(() => {
+      setTitle(t('claimDetails.submitEvidence'))
       setLeftButtonText(t('cancel'))
       setOnLeftButtonPress(() => navigation.goBack)
-    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, t]),
+    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
   )
 
   const onFilePress = () => {
