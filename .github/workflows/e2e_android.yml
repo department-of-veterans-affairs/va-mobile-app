@@ -377,21 +377,18 @@ jobs:
         uses: actions/checkout@v3
       - name: update-test-names
         run: |
-          getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
-            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
-          for ((i=250; ; i+=250)); do
+          for ((i=0; ; i+=250)); do
             echo "i = $i"
-            getTestCaseNewName1=$(curl -X GET -H 'Content-Type: application/json' \
+            getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=$i" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
             if [[ "$getTestCaseNewName1" != "[]" ]]; then
-              getTestCaseNewName=$(echo jq '$getTestCaseNewName + $getTestCaseNewName1')
-              echo "$getTestCaseNewName"
+              echo $(jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]' <<< "$getTestCaseNewName") >> input.json
             else
               break
             fi
           done
+          getTestCaseNewName=$(echo jq --compact-output -s 'add' input.json)
           echo "$getTestCaseNewName"
           getFailedTestCaseNames=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
