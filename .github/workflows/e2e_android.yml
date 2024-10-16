@@ -379,17 +379,26 @@ jobs:
         run: |
           getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]") | .title] | unique')
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
+          getTestCaseNewName1=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=250" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
+          getTestCaseNewName= $getTestCaseNewName + $getTestCaseNewName1
+          echo "$getTestCaseNewName"
           getFailedTestCaseNames=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}&status_id=5" | jq --compact-output '.tests | map(.title)')
           echo "$getFailedTestCaseNames"
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          echo "$groupTestCasesByTitle"
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          echo "$getFirstTestNewName"
           getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
           updateRunWithNewCases=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getTestCaseNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
+            -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
             "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}")
           getTestCases=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
