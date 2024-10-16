@@ -427,7 +427,7 @@ jobs:
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 -d '{"status_id": 4}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
-            elif [[ "$isTestPassed" == "true"" ]]; then
+            elif [[ "$isTestPassed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 -d '{"status_id": 5}' \
