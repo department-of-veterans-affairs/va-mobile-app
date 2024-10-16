@@ -314,7 +314,6 @@ jobs:
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
-        if: steps.inform_slack.outputs.TEST_FAILURE != ''
         id: find_if_ticket_already_exists
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
@@ -331,7 +330,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make a ticket on failure (if needed)
-        if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+        if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
