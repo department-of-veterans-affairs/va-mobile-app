@@ -388,6 +388,8 @@ jobs:
             if [[ "$getTestCaseNewName1" != "[]" ]]; then
               getTestCaseNewName=$(echo jq '$getTestCaseNewName + $getTestCaseNewName1')
               echo "$getTestCaseNewName"
+            else
+              break
             fi
           done
           echo "$getTestCaseNewName"
