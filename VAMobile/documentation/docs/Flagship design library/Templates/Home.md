@@ -106,5 +106,4 @@ The Home screen uses the [Category screen template](https://department-of-vetera
 
 
 ### Design Principles
-
 TBD (discussion of the role of surface and elevation in the home screen’s design)
