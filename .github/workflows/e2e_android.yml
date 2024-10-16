@@ -254,7 +254,7 @@ jobs:
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
-    if: (!cancelled())
+    if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: macos-latest-xl
     steps:
@@ -267,26 +267,26 @@ jobs:
         with:
             path: VAMobile/e2e/test_reports
 
-      # - name: Inform Slack
-      #   id: inform_slack
-      #   shell: bash
-      #   run: |
-      #     if grep -rq "<failure>" .; then
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #         -H 'Content-type: application/json' \
-      #         --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-      #         https://slack.com/api/chat.postMessage|
-      #         jq -r '.ts')
-      #       echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
-      #       echo "TEST_FAILURE=true" >> "$GITHUB_OUTPUT"
-      #     else
-      #       ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #       -H 'Content-type: application/json' \
-      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-      #       https://slack.com/api/chat.postMessage|
-      #       jq -r '.ts')
-      #     fi
+      - name: Inform Slack
+        id: inform_slack
+        shell: bash
+        run: |
+          if grep -rq "<failure>" .; then
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+              -H 'Content-type: application/json' \
+              --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+              https://slack.com/api/chat.postMessage|
+              jq -r '.ts')
+            echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            echo "TEST_FAILURE=true" >> "$GITHUB_OUTPUT"
+          else
+            ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          fi
 
       - name: Find failing tests
         id: failing_tests
@@ -314,6 +314,7 @@ jobs:
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
+        if: steps.inform_slack.outputs.TEST_FAILURE != ''
         id: find_if_ticket_already_exists
         run: |
           old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
@@ -330,7 +331,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Make a ticket on failure (if needed)
-        if: steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+        if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
