@@ -383,7 +383,7 @@ jobs:
           getTestCaseNewName1=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=250" | jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]')
-          getTestCaseNewName= [$getTestCaseNewName,$getTestCaseNewName1] | add
+          getTestCaseNewName=$(echo jq | '$getTestCaseNewName[] + $getTestCaseNewName1[]')
           echo "$getTestCaseNewName"
           getFailedTestCaseNames=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
