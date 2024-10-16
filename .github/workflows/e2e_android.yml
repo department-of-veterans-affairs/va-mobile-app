@@ -416,7 +416,7 @@ jobs:
             getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
             isTestRetest=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
             getPassedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 1)) | map(.title)')
-            isTestPassed=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
+            isTestPassed=$(echo $getPassedTests | jq 'any(. == "'"$getTestName"'")')
             if [[ "$isTestFailed" == "true" ]]; then
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
