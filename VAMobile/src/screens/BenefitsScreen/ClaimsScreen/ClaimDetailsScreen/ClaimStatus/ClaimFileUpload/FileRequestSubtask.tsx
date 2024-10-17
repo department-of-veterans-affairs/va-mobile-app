@@ -7,6 +7,7 @@ import { ClaimData, ClaimEventData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
+import AskForClaimDecision from './AskForClaimDecision/AskForClaimDecision'
 import FileRequest from './FileRequest'
 import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
 import SelectFile from './SelectFile/SelectFile'
@@ -14,6 +15,9 @@ import TakePhotos from './TakePhotos/TakePhotos'
 import UploadOrAddPhotos from './TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 
 export type FileRequestStackParams = {
+  AskForClaimDecision: {
+    claimID: string
+  }
   FileRequest: {
     claimID: string
     claim: ClaimData | undefined
@@ -39,6 +43,7 @@ export type FileRequestStackParams = {
 const FileRequestStack = createStackNavigator<FileRequestStackParams>()
 
 export const fileRequestSharedScreens = [
+  <FileRequestStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} key="AskForClaimDecision" />,
   <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} key="FileRequestDetails" />,
   <FileRequestStack.Screen name="SelectFile" component={SelectFile} key="SelectFile" />,
   <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} key="TakePhotos" />,

@@ -6,7 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
-import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
@@ -55,9 +54,6 @@ export type BenefitsStackParamList = {
     claimID: string
     claim: ClaimData | undefined
   }
-  AskForClaimDecision: {
-    claimID: string
-  }
   SubmitEvidenceSubtask: {
     claimID: string
   }
@@ -84,12 +80,6 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       name="WhatDoIDoIfDisagreement"
       component={WhatDoIDoIfDisagreement}
       options={LARGE_PANEL_OPTIONS}
-    />,
-    <BenefitsStack.Screen
-      key={'AskForClaimDecision'}
-      name="AskForClaimDecision"
-      component={AskForClaimDecision}
-      options={{ headerShown: false }}
     />,
     <BenefitsStack.Screen
       key={'UploadFile'}

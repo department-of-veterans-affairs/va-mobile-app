@@ -12,16 +12,16 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
-  FullScreenSubtask,
   LoadingComponent,
   TextArea,
   TextView,
   VABulletList,
+  VAScrollView,
 } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -29,7 +29,9 @@ import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 
-type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
+type AskForClaimDecisionProps = StackScreenProps<FileRequestStackParams, 'AskForClaimDecision'>
 
 function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const theme = useTheme()
@@ -53,6 +55,14 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
+
+  useSubtaskProps({
+    title: t('askForClaimDecision.pageTitle'),
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => onCancelPress(),
+    testID: 'askForClaimDecisionPageTestID',
+    leftButtonTestID: 'askForClaimDecisionBackID',
+  })
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
@@ -134,12 +144,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   ]
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('back')}
-      onLeftButtonPress={onCancelPress}
-      title={t('askForClaimDecision.pageTitle')}
-      testID="askForClaimDecisionPageTestID"
-      leftButtonTestID="askForClaimDecisionBackID">
+    <VAScrollView>
       {loadingSubmitClaimDecision || loadingClaim ? (
         <LoadingComponent
           text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
@@ -181,7 +186,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
           </Box>
         </Box>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
