@@ -65,6 +65,9 @@ jobs:
         with:
           json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+      - name: Get file difference by file name
+        id: changed_files_file_name_not_json
+        uses: tj-actions/changed-files@v41
       - name: Get testing matrix array
         id: testing_matrix
         run: |
@@ -156,8 +159,9 @@ jobs:
           "VeteransCrisisLine", "VeteranStatusCard")))')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
-          new_name=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq -r 'split( "\\" ) | join( "" )')
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/src | jq --compact-output '.[] | select(contains($new_name[]))')
-          echo "$e2eNames"
+          for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/src | jq --compact-output '.[] | select(contains($file))')
+            echo "$e2eNames"
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
