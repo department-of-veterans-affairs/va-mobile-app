@@ -86,7 +86,7 @@ jobs:
             select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
             select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
             select(contains(["VeteransCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
-            select(contains(["VeteranStatusScreen"])) += ["VeteranStatusCard"]
+            select(contains(["VeteranStatusScreen"])) += ["VeteranStatusCard"] |
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
             select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
@@ -148,7 +148,6 @@ jobs:
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique ')
-
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
           test_matrix=$(echo $test_matrix | jq --compact-output 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
