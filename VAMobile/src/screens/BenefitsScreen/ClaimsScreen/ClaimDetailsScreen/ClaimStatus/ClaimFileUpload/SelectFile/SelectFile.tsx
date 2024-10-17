@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -122,7 +122,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <VAScrollView>
+    <>
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -161,7 +161,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
       </Box>
-    </VAScrollView>
+    </>
   )
 }
 
