@@ -5,15 +5,14 @@ sidebar_position: 4
 
 The Home screen is the initial/default screen of the VA Health & Benefits mobile app. It sits at the top level of the hierarchical navigation (as a peer to the Health, Benefits and Payments category screens) and displays a personalized summary of a Veteran's current tasks and interactions with features in the VA mobile app. It also contains the primary entry point for the Veteran's Profile information (including App Settings).
 
-<iframe width="500" height="800" alt="image of VA mobile app Home screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2Fcdp7Be4UdYesq9fXeqaOgt%2FNavigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile%3Fm%3Dauto%26node-id%3D7733-11182%26t%3DGsZrpZDn1qDXDTr0-1" allowfullscreen></iframe>
+<iframe width="500" height="800" title="image of VA mobile app Home screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2Fcdp7Be4UdYesq9fXeqaOgt%2FNavigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile%3Fm%3Dauto%26node-id%3D7733-11182%26t%3DGsZrpZDn1qDXDTr0-1" allowfullscreen></iframe>  
+
 
 ## Anatomy:
 
 The VA mobile app’s personalized home screen combines content that is variable, fixed, personalized, and evergreen to deliver an experience that surfaces value to Veterans and supports understanding of the app’s capabilities, regardless of what a Veteran’s interactions are with the VA. To do this in a way that's predictable and performant, the Home screen displays a mix of content types within predetermined locations (zones).
 
 Having a mix of content, arranged into intentional zones, ensures that users:
-
-
 
 * Always see elements that help demonstrate the current & future value of the app
 * Always see "personalized" information even if they don't have any active tasks at a given moment (users don’t experience an empty home screen in the absence of tasks)
@@ -26,7 +25,7 @@ Having a mix of content, arranged into intentional zones, ensures that users:
 
 The VA Mobile app Home screen zones ensure that the most impactful content items are getting the proper placement in the screen's hierarchy while also handling a variety of user contexts and technical situations. 
 
-<img src="/workspaces/va-mobile-app/VAMobile/documentation/static/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app">
+<img src="/workspaces/va-mobile-app/VAMobile/documentation/static/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app" />
 
 
 #### Zone 1: Mission-critical app info
@@ -47,7 +46,6 @@ Information is appropriate for inclusion on the home screen within the mission-c
 * **What it is:** An alphabetical list of feature modules giving Veterans an overview of what VA is doing for them—includes any critical “in-flight” tasks or actions that may need attention. Each module contains personalized information briefly summarizing that activity and provides a secondary entry point into the app feature.
     * **Module appearance logic:** Variable. Modules appear while that feature’s activity is still considered “in flight” or when there is a user action to take. Each feature has different periods of time/circumstances that determine how long they are visible on the home screen (ex: the Claims module stays until the claim closes, the Secure Message stays until any new messages have been viewed).
     * **Module anatomy**
-[image of module]
         * **Title:** Feature name
         * **Description text:** Indicates # of items with an in-flight status; terms used vary by feature; provides just enough information to accurately indicate what is happening/is needed. 
 * **What lives in this zone:**
@@ -75,7 +73,7 @@ A feature is appropriate for inclusion as an Activity module on the home screen 
     * Disability rating & monthly payment (MVP)
 * **Guidelines for module inclusion:**
 Information is appropriate for inclusion on the home screen within About you when it:
-    * <span style="text-decoration:underline;">Is</span> or <span style="text-decoration:underline;">provides access to</span> information relating to who the individual Veterans *is within VA* as opposed to relating to a specific activity or task
+    * **Is** or **provides access** to information relating to who the individual Veterans *is within VA* as opposed to relating to a specific activity or task
     *  Contains high-level data about the individual Veteran that changes infrequently
 
 
@@ -103,4 +101,7 @@ The Home screen uses the [Category screen template](https://department-of-vetera
 ### Resources
 * [Figma file: Home screen 2.0 Shipped File](https://www.figma.com/design/ddMWiCQCfmUKFhMcYG9fYv/Home-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&node-id=1410-20598&t=a610026nBu9afD1A-1) (includes happy path as well as design for loading states, errors, and alternate statuses)
 * Mural: [Home screen 2.0 Appearance logic for error handling and edge cases](https://app.mural.co/t/adhoccorporateworkspace2583/m/adhoccorporateworkspace2583/1704381519703/cd6d78c5824a5fb0cc8b26597f0ad271072df8f2?wid=0-1705962128474)
+
+### Design Principles
+TBD (discussion of the role of surface and elevation in the home screen’s design)
 
