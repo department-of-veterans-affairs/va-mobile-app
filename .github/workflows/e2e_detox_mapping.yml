@@ -163,7 +163,7 @@ jobs:
             echo "$file"
             fileName="${s##*/}"
             echo "$fileName"
-            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src/e2e/tests)
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests)
             echo "$e2eNames"
           done
         env:
