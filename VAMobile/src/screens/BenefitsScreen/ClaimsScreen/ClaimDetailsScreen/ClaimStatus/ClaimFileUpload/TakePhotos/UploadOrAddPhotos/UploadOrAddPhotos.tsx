@@ -1,9 +1,9 @@
-import React, { ReactElement, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Dimensions, ScrollView } from 'react-native'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { StackActions, useFocusEffect } from '@react-navigation/native'
+import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -24,6 +24,7 @@ import {
   VAScrollView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
@@ -43,7 +44,7 @@ import {
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
-import { FileRequestContext, FileRequestStackParams } from '../../FileRequestSubtask'
+import { FileRequestStackParams } from '../../FileRequestSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
 
@@ -51,8 +52,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request: originalRequest, firstImageResponse } = route.params
-  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, request: originalRequest, firstImageResponse } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
@@ -102,11 +102,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     })
   })
 
-  useFocusEffect(
-    useCallback(() => {
-      setTitle(t('fileUpload.uploadPhotos'))
-      setLeftButtonText(t('back'))
-      setOnLeftButtonPress(() => () => navigation.dispatch(StackActions.pop(2)))
+  useSubtaskProps({
+    title: t('fileUpload.uploadPhotos'),
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => {
       logAnalyticsEvent(
         Events.vama_evidence_cancel_2(
           claimID,
@@ -115,17 +114,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           'photo',
         ),
       )
-    }, [
-      claimID,
-      navigation,
-      request?.trackedItemId,
-      request?.type,
-      setLeftButtonText,
-      setOnLeftButtonPress,
-      setTitle,
-      t,
-    ]),
-  )
+      navigation.dispatch(StackActions.pop(2))
+    },
+  })
 
   useEffect(() => {
     if (filesUploadedSuccess) {

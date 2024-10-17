@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -17,7 +17,7 @@ import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
-import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
+import { FileRequestStackParams } from '../FileRequestSubtask'
 
 const { IS_TEST } = getEnv()
 
@@ -30,8 +30,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { request } = route.params || {}
-  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, request } = route.params || {}
   const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
@@ -40,33 +39,21 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     }
   })
 
-  useFocusEffect(
-    useCallback(() => {
-      const onCancel = () => {
-        logAnalyticsEvent(
-          Events.vama_evidence_cancel_1(
-            claimID,
-            request?.trackedItemId || null,
-            request?.type || 'Submit Evidence',
-            'file',
-          ),
-        )
-        navigation.goBack()
-      }
-      setTitle(t('fileUpload.selectFiles'))
-      setLeftButtonText(t('back'))
-      setOnLeftButtonPress(() => onCancel)
-    }, [
-      claimID,
-      navigation,
-      request?.trackedItemId,
-      request?.type,
-      setLeftButtonText,
-      setOnLeftButtonPress,
-      setTitle,
-      t,
-    ]),
-  )
+  useSubtaskProps({
+    title: t('fileUpload.selectFiles'),
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => {
+      logAnalyticsEvent(
+        Events.vama_evidence_cancel_1(
+          claimID,
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'file',
+        ),
+      )
+      navigation.goBack()
+    },
+  })
 
   const onFileFolder = async (): Promise<void> => {
     const {

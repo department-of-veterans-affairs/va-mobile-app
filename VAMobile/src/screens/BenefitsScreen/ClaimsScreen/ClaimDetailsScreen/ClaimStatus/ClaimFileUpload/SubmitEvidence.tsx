@@ -1,44 +1,41 @@
-import React, { useCallback, useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { FileRequestContext } from './FileRequestSubtask'
 import { SubmitEvidenceStackParams } from './SubmitEvidenceSubtask'
 
 type SubmitEvidenceProps = StackScreenProps<SubmitEvidenceStackParams, 'SubmitEvidence'>
 
-function SubmitEvidence({ navigation }: SubmitEvidenceProps) {
+function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID } = route.params
 
-  useFocusEffect(
-    useCallback(() => {
-      setTitle(t('claimDetails.submitEvidence'))
-      setLeftButtonText(t('cancel'))
-      setOnLeftButtonPress(() => navigation.goBack)
-    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
-  )
+  useSubtaskProps({
+    title: t('claimDetails.submitEvidence'),
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => navigation.goBack(),
+  })
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'file'))
-    navigateTo('SelectFile')
+    navigateTo('SelectFile', { claimID })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'photo'))
-    navigateTo('TakePhotos')
+    navigateTo('TakePhotos', { claimID })
   }
 
   return (

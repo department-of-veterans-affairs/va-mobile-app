@@ -1,14 +1,14 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -18,7 +18,7 @@ import { onAddPhotos } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
-import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
+import { FileRequestStackParams } from '../FileRequestSubtask'
 
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
@@ -29,8 +29,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request } = route.params || {}
-  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, request } = route.params
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
@@ -41,39 +40,27 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     }
   })
 
-  useFocusEffect(
-    useCallback(() => {
-      const onCancel = () => {
-        logAnalyticsEvent(
-          Events.vama_evidence_cancel_1(
-            claimID,
-            request?.trackedItemId || null,
-            request?.type || 'Submit Evidence',
-            'photo',
-          ),
-        )
-        navigation.goBack()
-      }
-      setTitle(t('fileUpload.selectPhotos'))
-      setLeftButtonText(t('back'))
-      setOnLeftButtonPress(() => onCancel)
-    }, [
-      claimID,
-      navigation,
-      request?.trackedItemId,
-      request?.type,
-      setLeftButtonText,
-      setOnLeftButtonPress,
-      setTitle,
-      t,
-    ]),
-  )
+  useSubtaskProps({
+    title: t('fileUpload.selectPhotos'),
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => {
+      logAnalyticsEvent(
+        Events.vama_evidence_cancel_1(
+          claimID,
+          request?.trackedItemId || null,
+          request?.type || 'Submit Evidence',
+          'photo',
+        ),
+      )
+      navigation.goBack()
+    },
+  })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })
+      navigateTo('UploadOrAddPhotos', { claimID, request, firstImageResponse: response })
     }
   }
 

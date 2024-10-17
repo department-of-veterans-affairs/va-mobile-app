@@ -1,7 +1,6 @@
-import React, { useCallback, useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -19,6 +18,7 @@ import {
   TextView,
   VAScrollView,
 } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -27,15 +27,15 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { FileRequestContext, FileRequestStackParams } from './FileRequestSubtask'
+import { FileRequestStackParams } from './FileRequestSubtask'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
-function FileRequest({ navigation }: FileRequestProps) {
+function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID, claim, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, claim } = route.params
   const {
     data: claimFallBack,
     error: claimError,
@@ -47,13 +47,11 @@ function FileRequest({ navigation }: FileRequestProps) {
   )
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
-  useFocusEffect(
-    useCallback(() => {
-      setTitle(t('fileRequest.title'))
-      setLeftButtonText(t('cancel'))
-      setOnLeftButtonPress(() => navigation.goBack)
-    }, [navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
-  )
+  useSubtaskProps({
+    title: t('fileRequest.title'),
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => navigation.goBack(),
+  })
 
   const count = numberOfItemsNeedingAttentionFromVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
@@ -64,7 +62,7 @@ function FileRequest({ navigation }: FileRequestProps) {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      navigateTo('FileRequestDetails', { request })
+      navigateTo('FileRequestDetails', { claimID, request })
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {

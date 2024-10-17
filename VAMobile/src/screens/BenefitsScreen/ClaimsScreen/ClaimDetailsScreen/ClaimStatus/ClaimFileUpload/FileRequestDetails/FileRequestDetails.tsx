@@ -1,13 +1,13 @@
-import React, { useCallback, useContext } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
 import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -15,7 +15,7 @@ import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { FileRequestContext, FileRequestStackParams } from '../FileRequestSubtask'
+import { FileRequestStackParams } from '../FileRequestSubtask'
 
 type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
 
@@ -23,18 +23,15 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { request } = route.params
-  const { claimID, setTitle, setLeftButtonText, setOnLeftButtonPress } = useContext(FileRequestContext)
+  const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
 
-  useFocusEffect(
-    useCallback(() => {
-      setTitle(displayName || '')
-      setLeftButtonText(t('back'))
-      setOnLeftButtonPress(() => navigation.goBack)
-    }, [displayName, navigation.goBack, setLeftButtonText, setOnLeftButtonPress, setTitle, t]),
-  )
+  useSubtaskProps({
+    title: displayName || '',
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => navigation.goBack(),
+  })
 
   const hasUploaded = hasUploadedOrReceived(request)
   const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
@@ -72,12 +69,12 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { request })
+    navigateTo('SelectFile', { claimID, request })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { request })
+    navigateTo('TakePhotos', { claimID, request })
   }
 
   return (
