@@ -50,7 +50,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     : undefined
 
   useBeforeNavBackListener(navigation, () => {
-    registerReviewEvent()
+    registerReviewEvent(true)
   })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
@@ -94,7 +94,8 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       rightButtonText={t('close')}
       dividerMarginBypass={true}
       removeInsets={true}
-      testID="veteranStatusTestID">
+      testID="veteranStatusTestID"
+      rightButtonTestID="veteranStatusCloseID">
       <Box
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"

@@ -1207,6 +1207,14 @@ export const Events = {
       },
     }
   },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
+      },
+    }
+  },
   vama_whatsnew_alert: (): Event => {
     return {
       name: 'vama_whatsnew_alert',

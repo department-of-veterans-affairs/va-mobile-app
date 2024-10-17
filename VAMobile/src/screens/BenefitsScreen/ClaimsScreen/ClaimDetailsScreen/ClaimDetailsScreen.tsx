@@ -99,7 +99,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
-      registerReviewEvent()
+      registerReviewEvent(true)
       logAnalyticsEvent(
         Events.vama_claim_details_open(
           claimID,

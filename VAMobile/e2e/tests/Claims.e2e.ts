@@ -368,7 +368,7 @@ describe('Claims Screen', () => {
   })
 
   it('should tap on the closed tab', async () => {
-    await element(by.id('claimsHistoryClosedID')).tap()
+    await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_CLOSED_TAB_ID)).tap()
   })
 
   it('verify the status details page of closed claim with decision letter', async () => {

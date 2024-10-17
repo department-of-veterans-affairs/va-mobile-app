@@ -57,7 +57,7 @@ function DisabilityRatingsScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 

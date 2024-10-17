@@ -340,6 +340,7 @@ jobs:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
           OS: "Android"
           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
     
   matrix-send_test_results_to_testrail:
