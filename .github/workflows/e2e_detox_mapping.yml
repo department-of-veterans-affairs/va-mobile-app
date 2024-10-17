@@ -68,32 +68,32 @@ jobs:
         id: testing_matrix
         run: |
           resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
-            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
-            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
+            jq 'select(contains(["LoginScreen"])) += ["LoginScreen"] | 
+            select(contains(["AppealDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
-            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
-            select(contains(["ClaimsLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
+            select(contains(["ClaimDetailsScreen"]) or contains(["ClaimLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["ClaimLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"]) or contains(["letters"])) += ["VALetters"] |
             select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
-            select(contains(["Cerner"]) or contains(["Facilities"])) += ["Cerner"] |
+            select(contains(["CernerAlert"]) or contains(["Facilities"])) += ["Cerner"] |
             select(contains(["Pharmacy"]) or contains(["prescriptions"])) += ["Prescriptions"] |
             select(contains(["SecureMessaging"]) or contains(["secureMessaging"])) += ["Messages"] |
             select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
             select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
             select(contains(["MilitaryInformationScreen"]) or contains(["militaryService"]) or contains(["Nametag"])) += ["MilitaryInformation", "VeteranStatusCard"] |
-            select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
+            select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
             select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
-            select(contains(["VeteranCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["VeteransCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["VeteranStatusScreen"])) += ["VeteranStatusCard"]
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
             select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
             select(contains(["SplashScreen"])) += ["Onboarding", "LoginScreen"] |
-            select(contains(["Auth"])) += ["SignIn"] |
+            select(contains(["auth"])) += ["SignIn"] |
             select(contains(["authorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "VALetters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "VALetters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["Types"]) or contains(["VAImage"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique')
