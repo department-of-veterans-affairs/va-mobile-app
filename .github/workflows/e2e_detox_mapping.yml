@@ -68,7 +68,8 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/src | jq --compact-output '.[] | map(select(.name == ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}[])) | map(.contents)')
+          echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}
+          e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/src | jq --compact-output '.[] | select(.name == ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}))')
           echo "$e2eNames"
           resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
             jq 'select(contains(["LoginScreen"])) += ["LoginScreen"] | 
@@ -159,3 +160,5 @@ jobs:
           "VeteransCrisisLine", "VeteranStatusCard")))')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
