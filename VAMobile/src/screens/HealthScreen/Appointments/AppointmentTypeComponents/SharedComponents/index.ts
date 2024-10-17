@@ -10,6 +10,8 @@ export { default as AppointmentDetailsModality } from './AppointmentDetailsModal
 export * from './AppointmentDetailsModality'
 export { default as AppointmentJoinSessionPrepareForVideo } from './AppointmentJoinSessionPrepareForVideo'
 export * from './AppointmentJoinSessionPrepareForVideo'
+export { default as AppointmentMedicationWording } from './AppointmentMedicationWording'
+export * from './AppointmentMedicationWording'
 export { default as AppointmentLocation } from './AppointmentLocation'
 export * from './AppointmentLocation'
 export { default as AppointmentPersonalContactInfo } from './AppointmentPersonalContactInfo'

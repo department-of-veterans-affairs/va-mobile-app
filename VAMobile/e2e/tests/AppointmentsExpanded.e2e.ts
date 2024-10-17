@@ -6,6 +6,37 @@ export const Appointmentse2eConstants = {
   GET_DIRECTIONS_ID: 'directionsTestID',
 }
 
+const checkMedicationWording = async ({
+  appointmentType,
+  appointmentStatus,
+  pastAppointment,
+}: {
+  appointmentType: string
+  appointmentStatus: string
+  pastAppointment: boolean
+}) => {
+  if (
+    appointmentType === 'Phone' ||
+    appointmentType === 'CC' ||
+    appointmentType === 'Onsite' ||
+    appointmentType === 'VA'
+  ) {
+    if (
+      appointmentStatus === 'Canceled' ||
+      (!pastAppointment && (appointmentStatus === 'Upcoming' || appointmentStatus === 'Confirmed'))
+    ) {
+      await expect(element(by.text('Prepare for your appointment'))).toExist()
+      await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+    } else {
+      await expect(element(by.text('Prepare for your appointment'))).not.toExist()
+      await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+    }
+  } else {
+    await expect(element(by.text('Prepare for your appointment'))).not.toExist()
+    await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+  }
+}
+
 const checkUpcomingApptDetails = async (
   appointmentType: string,
   appointmentStatus: string,
@@ -255,6 +286,7 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id('CallTTYTestID')).atIndex(1)).toExist()
     }
   }
+  await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
 
   await element(by.text('Appointments')).tap()
 }
