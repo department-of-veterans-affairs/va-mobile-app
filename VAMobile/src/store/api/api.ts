@@ -3,7 +3,9 @@ import { Platform } from 'react-native'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
+import { errorKeys } from 'api/errors'
 import queryClient from 'api/queryClient'
+import { ErrorData } from 'api/types'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
@@ -210,6 +212,24 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
+    const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
+    if (data) {
+      _.forEach(data.overrideErrors, (error) => {
+        if (error.endpoint === endpoint) {
+          throw error.error
+        }
+        if (endpoint.includes(error.endpoint)) {
+          throw error.error
+        }
+        if (
+          error.endpoint === '/v0/messaging/health/folders/${folderID}/messages' &&
+          endpoint.includes('/v0/messaging/health/folders/') &&
+          endpoint.includes('/messages')
+        ) {
+          throw error.error
+        }
+      })
+    }
     // we are in demo and need to transform the request from the demo store
     return new Promise((resolve) => {
       setTimeout(async () => {
