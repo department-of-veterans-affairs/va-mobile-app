@@ -46,7 +46,7 @@ function DetailsTextSections({
   ) => {
     return (
       <>
-        <TextView accessibilityLabel={headerLabel} variant="MobileBodyBold">
+        <TextView accessibilityLabel={headerLabel} accessibilityRole="header" variant="MobileBodyBold">
           {headerText}
         </TextView>
         <TextView accessibilityLabel={valueLabel} variant="MobileBody">

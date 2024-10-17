@@ -185,7 +185,9 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
     return (
       <Box {...borderProps}>
-        <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
+        <TextView variant="HelperTextBold" accessibilityRole="header">
+          {t('prescriptions.refillRequestSummary.whatsNext')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView
             variant="MobileBody"
