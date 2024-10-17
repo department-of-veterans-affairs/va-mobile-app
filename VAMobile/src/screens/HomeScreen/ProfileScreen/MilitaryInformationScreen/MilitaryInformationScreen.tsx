@@ -78,7 +78,8 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
     <FeatureLandingTemplate
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('militaryInformation.title')}>
+      title={t('militaryInformation.title')}
+      backLabelTestID="backToProfileID">
       {!mhNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (
@@ -109,7 +110,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
               type="custom"
               text={t('militaryInformation.incorrectServiceInfo')}
               onPress={onIncorrectService}
-              testID={t('militaryInformation.incorrectServiceInfo')}
+              testID="militaryServiceIncorrectLinkID"
             />
           </Box>
         </>

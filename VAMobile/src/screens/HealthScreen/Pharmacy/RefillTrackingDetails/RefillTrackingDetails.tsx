@@ -76,7 +76,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
