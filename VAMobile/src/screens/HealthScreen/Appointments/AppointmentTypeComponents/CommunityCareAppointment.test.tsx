@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import {
   AppointmentAttributes,
@@ -109,6 +110,9 @@ context('CommunityCareAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
     })
@@ -164,6 +168,9 @@ context('CommunityCareAppointment', () => {
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call your provider.')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Find your VA location' })).toBeTruthy()
       expect(screen.getByLabelText('Find your  V-A  location')).toBeTruthy()
@@ -319,6 +326,9 @@ context('CommunityCareAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
@@ -393,6 +403,9 @@ context('CommunityCareAppointment', () => {
           'If you need to reschedule this appointment, call your provider or schedule a new appointment on  V-A .gov .',
         ),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
       expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
       expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
