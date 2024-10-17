@@ -22,7 +22,11 @@ on:
       test_OS_name:
         type: string
         default: ''
-  
+    outputs:
+      test_run_id_number:
+        description: "The id number for the test run"
+        value: ${{ jobs.send_test_results_to_testrail.outputs.output1 }}
+
 defaults:
   run:
     working-directory: VAMobile
@@ -30,6 +34,8 @@ defaults:
 jobs:
   send_test_results_to_testrail:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.run-id-selection.outputs.TEST_RUN_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -100,4 +106,3 @@ jobs:
             --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
             --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
             -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
-
