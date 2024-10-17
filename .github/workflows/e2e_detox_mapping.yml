@@ -156,7 +156,7 @@ jobs:
           "VeteransCrisisLine", "VeteranStatusCard")))')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
-          new_name=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} jq -r 'split( "\\" ) | join( "" )')
+          new_name=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq -r 'split( "\\" ) | join( "" )')
           e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/src | jq --compact-output '.[] | select(contains($new_name[]))')
           echo "$e2eNames"
         env:
