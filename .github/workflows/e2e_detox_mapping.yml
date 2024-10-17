@@ -162,8 +162,12 @@ jobs:
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
             echo "$file"
             fileName="${s##*/}"
-            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '(.[] | select(.name == "$fileName"))')
+            echo "$fileName"
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src/e2e/tests')
             echo "$e2eNames"
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '(.[] | select(.name == "$fileName"))')
+# echo "$e2eNames"
