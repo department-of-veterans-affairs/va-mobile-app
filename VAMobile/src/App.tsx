@@ -45,7 +45,7 @@ import {
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
-import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotifications'
+import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'

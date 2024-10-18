@@ -10,20 +10,23 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
-function BiometricsPreferenceScreen({}: SyncScreenProps) {
+function RequestNotificationsScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onSkip = (): void => {
+    //This sets the async storage to not display this screen again
     dispatch(completeRequestNotifications())
+    //This sets the state variable for the session
     dispatch(setNotificationsPreferenceScreen(false))
   }
 
   const onUseNotifications = (): void => {
     dispatch(completeRequestNotifications())
-    dispatch(setRequestNotifications(true))
     dispatch(setNotificationsPreferenceScreen(false))
+    //This actually triggers the notification manager code to request via OS.
+    dispatch(setRequestNotifications(true))
   }
 
   return (
@@ -50,4 +53,4 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   )
 }
 
-export default BiometricsPreferenceScreen
+export default RequestNotificationsScreen
