@@ -40,6 +40,15 @@ on:
     workflows: ['[Release] New Release Issue']
     types: 
       - in_progress
+  workflow_call:
+    secrets:
+      TEST_RAIL_USER:
+        description: "TestRail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "TestRail api key"
+        required: true
+    
 
 concurrency:
   group: ios-detox-${{ github.ref }}
@@ -321,7 +330,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
 
-  matrix-send_test_results_to_testrail:
+  matrix_send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
     needs: [matrix-e2e-ios, output_detox_tests_to_run]
     strategy:
@@ -337,3 +346,64 @@ jobs:
       test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "iOS"
     secrets: inherit
+
+  update-test-names:
+    if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
+    needs: [matrix-e2e-ios, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: update-test-names
+        run: |
+          for ((i=0; ; i+=250)); do
+            echo "i = $i"
+            getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=$i")
+            echo $(jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]' <<< "$getTestCaseNewName") >> input.json
+            if [[ $(jq '._links.next == null' <<< "$getTestCaseNewName") == 'true' ]];
+            then
+              break
+            fi
+          done
+          getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
+                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
+          updateRunWithNewCases=$(curl -X POST -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}")
+          getTestCases=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}")
+          for i in $(echo $getTestCases | jq -r '.tests[].id'); do
+            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" -r '.tests | map(select(.id == $testIDs)) | .[0].title')
+            
+            getFailedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 5)) | map(.title)')
+            isTestFailed=$(echo $getFailedTests | jq 'any(. == "'"$getTestName"'")')
+            getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
+            isTestRetest=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
+            getPassedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 1)) | map(.title)')
+            isTestPassed=$(echo $getPassedTests | jq 'any(. == "'"$getTestName"'")')
+            if [[ "$isTestFailed" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 5}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            elif [[ "$isTestRetest" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 4}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            elif [[ "$isTestPassed" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 1}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            fi
+          done
