@@ -2,7 +2,7 @@
 
 ## OpenAPI Creation and Artifact Generation
 
-We document our API endpoints using [OpenAPI3](https://swagger.io/specification/). The documentation is recorded in a group of yaml files, which are converted to [HTML](VAMobile/documentation/docs/Engineering/BackEnd/API/index.md) and JSON via the `modules/mobile/docs/generate_static_docs.sh` script. Developers must run that script each time they change the yaml to ensure that our documentation is up to date.
+We document our API endpoints using [OpenAPI3](https://swagger.io/specification/). The documentation is recorded in a group of yaml files, which are converted to [HTML](../API/index.md) and JSON via the `modules/mobile/docs/generate_static_docs.sh` script. Developers must run that script each time they change the yaml to ensure that our documentation is up to date.
 
 ## Setup
 
