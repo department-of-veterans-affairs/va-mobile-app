@@ -76,6 +76,18 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
             />
           </>
         )
+      case AppointmentDetailsTypeConstants.ClaimExam:
+        return (
+          <>
+            <VABulletList
+              listOfText={[
+                t('appointmentsTab.medicationWording.claimExam.bulet1'),
+                t('appointmentsTab.medicationWording.claimExam.bulet2'),
+              ]}
+            />
+            {webViewLink}
+          </>
+        )
       default:
         return null
     }
