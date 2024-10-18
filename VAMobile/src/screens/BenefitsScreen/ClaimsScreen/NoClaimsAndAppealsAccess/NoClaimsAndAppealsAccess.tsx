@@ -7,8 +7,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-let detoxTestsToRun = ['Claims', 'Appeals']
-
 function NoClaimsAndAppealsAccess() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
