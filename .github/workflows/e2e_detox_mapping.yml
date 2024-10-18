@@ -75,11 +75,10 @@ jobs:
             e2eNames=$(gh api -H "Accept: application/vnd.github+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code | jq --compact-output '.content |  gsub("[\\n\\t]"; "") | @base64d')
             filesSplit=$(echo $e2eNames | jq --compact-output 'split("\n"; null) | .[]')
             IFS=$'\n' array=( $e2eNames )
-            echo "$array"
             firstInstance=true
             for i in "${array[@]}"; do
               echo "$i"
-              if [[ $i == *"detoxTestsToRun"* ]]; then
+              if [[ "$i" == *"detoxTestsToRun"* ]]; then
                 test=$(echo $i | grep -o -P '(?<=\[).*(?=\])')
                 echo "$test"
                 if [[ "$firstInstance" == "true" ]]; then
