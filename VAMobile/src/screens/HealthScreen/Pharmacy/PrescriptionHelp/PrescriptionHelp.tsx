@@ -45,7 +45,9 @@ function PrescriptionHelp({}: PrescriptionHelpProps) {
       rightButtonText={t('close')}
       rightButtonTestID="prescriptionsBackTestID">
       <Box mx={gutter} mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('prescription.help.header')}
+        </TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('prescription.help.listHeader')}
         </TextView>
