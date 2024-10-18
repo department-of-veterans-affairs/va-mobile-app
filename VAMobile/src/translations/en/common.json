@@ -319,6 +319,8 @@
   "appointmentsTab.medicationWording.whatToBringLink": "Find a full list of things to bring to your appointment",
   "appointmentsTab.medicationWording.bullet2": "Get your device ready to join.",
   "appointmentsTab.medicationWording.howToSetUpDevice": "How to set up your device",
+  "appointmentsTab.medicationWording.claimExam.bulet1": "You don’t need to bring anything to your exam.",
+  "appointmentsTab.medicationWording.claimExam.bulet2": "If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.",
   "areYouSure": "Are you sure?",
   "askForClaimDecision.alertBtnTitle": "Request evaluation",
   "askForClaimDecision.alertTitle": "Request claim evaluation?",

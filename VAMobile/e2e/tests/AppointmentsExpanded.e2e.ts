@@ -22,7 +22,8 @@ const checkMedicationWording = async ({
     appointmentType === 'VA' ||
     appointmentType === 'ATLAS' ||
     appointmentType === 'GFE' ||
-    appointmentType === 'Home'
+    appointmentType === 'Home' ||
+    appointmentType === 'Claim'
   ) {
     if (
       appointmentStatus === 'Canceled' ||
@@ -44,6 +45,26 @@ const checkMedicationWording = async ({
       } else {
         await expect(element(by.text('Get your device ready to join.'))).not.toExist()
         await expect(element(by.id('prepareForVideoVisitTestID'))).not.toExist()
+      }
+
+      if (appointmentType === 'Claim') {
+        await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
+        await expect(
+          element(
+            by.text(
+              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
+            ),
+          ),
+        ).toExist()
+      } else {
+        await expect(element(by.text('You don’t need to bring anything to your exam.'))).not.toExist()
+        await expect(
+          element(
+            by.text(
+              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
+            ),
+          ),
+        ).not.toExist()
       }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
