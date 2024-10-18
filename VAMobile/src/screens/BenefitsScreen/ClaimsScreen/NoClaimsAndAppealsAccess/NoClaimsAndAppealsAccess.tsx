@@ -23,7 +23,7 @@ function NoClaimsAndAppealsAccess() {
           accessibilityLabel={a11yLabelVA(t('claimsAndAppeals.noClaimsAndAppealsAccess.body'))}>
           {t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271001')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
+        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
       </TextArea>
     </VAScrollView>
   )
