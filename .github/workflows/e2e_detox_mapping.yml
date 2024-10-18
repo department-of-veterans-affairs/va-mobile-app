@@ -78,8 +78,9 @@ jobs:
             filesSplit=$(echo $e2eNames | jq --compact-output 'split("\n"; null)')
             echo "$filesSplit"
             firstInstance=true
-            IFS=read -r -a array <<< "$e2eNames"
-            for i in "${array[@]}"; do
+            read -a array <<< "$e2eNames"
+            echo "$array"
+            for i in "${filesSplit[@]}"; do
               echo "$i"
               if [[ $i == *"detoxTestsToRun"* ]]; then
                 test="$i" | grep -o -P '(?<=\[).*(?=\])'
