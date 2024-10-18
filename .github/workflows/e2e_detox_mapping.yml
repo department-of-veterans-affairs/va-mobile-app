@@ -161,13 +161,11 @@ jobs:
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
             echo "$file"
-            e2eNames=$(gh api -H "Accept: application/vnd.github.text+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file})
-            echo "$e2eNames"
+            e2eNames=$(gh api -H "Accept: application/vnd.github.raw+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file})
+            echo "${e2eNames[0]}"
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '(.[] | select(.name == "$fileName"))')
 # echo "$e2eNames"
-# test= "$e2eNames" | sed "s/\]*$//"
-# echo "$test"
