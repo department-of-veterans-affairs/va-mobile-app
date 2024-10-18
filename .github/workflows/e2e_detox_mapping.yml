@@ -161,10 +161,12 @@ jobs:
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
             echo "$file"
-            fileName="${s##*/}"
-            echo "$fileName"
-            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests)
+            e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '.[] | select(.path == "$file")')
             echo "$e2eNames"
+            if [[ "$e2eNames" != "" ]]; then
+              download_url=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '.[] | select(.path == "$file") | .content')
+              echo "$download_url"
+            fi
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
