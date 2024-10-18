@@ -164,7 +164,7 @@ jobs:
             e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '.[] | select(.path == "$file")')
             echo "$e2eNames"
             if [[ "$e2eNames" != "" ]]; then
-              download_url=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '.[] | select(.path == "$file") | .content')
+              download_url=$(gh api -H "Accept: application/vnd.github.json" repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src/${file} | jq --compact-output '.[] | .content')
               echo "$download_url"
             fi
           done
