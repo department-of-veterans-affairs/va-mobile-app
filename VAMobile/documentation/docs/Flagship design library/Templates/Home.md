@@ -25,7 +25,7 @@ Having a mix of content, arranged into intentional zones, ensures that users:
 
 The VA Mobile app Home screen zones ensure that the most impactful content items are getting the proper placement in the screen's hierarchy while also handling a variety of user contexts and technical situations. 
 
-<img src="/workspaces/va-mobile-app/VAMobile/documentation/static/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app" />
+<img src="/va-mobile-app/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app" />
 
 
 #### Zone 1: Mission-critical app info
@@ -37,8 +37,8 @@ The VA Mobile app Home screen zones ensure that the most impactful content items
     * [What’s new](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/App%20Features/WhatsNew/) (MVP)
 * **Guidelines for future module inclusion:**
 Information is appropriate for inclusion on the home screen within the mission-critical app info section when it:
-    * Conveys information that’s necessary for the app to function properly
-    * Conveys information about important changes within the app
+  * Conveys information that’s necessary for the app to function properly
+  * Conveys information about important changes within the app
 
 
 #### Zone 2: Activity 
@@ -60,8 +60,8 @@ Information is appropriate for inclusion on the home screen within the mission-c
     * Travel pay *(future)*
 * **Guidelines for module inclusion:**
 A feature is appropriate for inclusion as an Activity module on the home screen when it:
-    * Has an “in-flight” status (ex: an open Claim, an upcoming Appointment)
-    * Has an action that is available for the user to take (ex: a refillable Prescription, an unread Message)
+  * Has an “in-flight” status (ex: an open Claim, an upcoming Appointment)
+  * Has an action that is available for the user to take (ex: a refillable Prescription, an unread Message)
 
 
 #### Zone 3: About you:
@@ -73,8 +73,8 @@ A feature is appropriate for inclusion as an Activity module on the home screen 
     * Disability rating & monthly payment (MVP)
 * **Guidelines for module inclusion:**
 Information is appropriate for inclusion on the home screen within About you when it:
-    * **Is** or **provides access** to information relating to who the individual Veterans *is within VA* as opposed to relating to a specific activity or task
-    *  Contains high-level data about the individual Veteran that changes infrequently
+  * **Is** or **provides access** to information relating to who the individual Veterans *is within VA* as opposed to relating to a specific activity or task
+  *  Contains high-level data about the individual Veteran that changes infrequently
 
 
 #### Zone 4: VA resources:
@@ -90,8 +90,8 @@ Information is appropriate for inclusion on the home screen within About you whe
         * Banner announcements should be of interest to all Veterans, and timely.
 * **Guidelines for module inclusion:** 
 Information is appropriate for inclusion on the home screen within the VA resources section when it:
-    * Is a tool or information that is relevant to a general audience, and
-    * It does not fit within the Benefits, Health or Payment categories.
+  * Is a tool or information that is relevant to a general audience, and
+  * It does not fit within the Benefits, Health or Payment categories.
 
 
 ### Screen Template
