@@ -5,7 +5,7 @@ sidebar_position: 4
 
 The Home screen is the initial/default screen of the VA Health & Benefits mobile app. It sits at the top level of the hierarchical navigation (as a peer to the Health, Benefits and Payments category screens) and displays a personalized summary of a Veteran's current tasks and interactions with features in the VA mobile app. It also contains the primary entry point for the Veteran's Profile information (including App Settings).
 
-<iframe width="500" height="800" alt="image of VA mobile app Home screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2Fcdp7Be4UdYesq9fXeqaOgt%2FNavigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile%3Fm%3Dauto%26node-id%3D7733-11182%26t%3DGsZrpZDn1qDXDTr0-1" allowfullscreen></iframe>  
+<iframe width="500" height="800" title="image of VA mobile app Home screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2Fcdp7Be4UdYesq9fXeqaOgt%2FNavigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile%3Fm%3Dauto%26node-id%3D7733-11182%26t%3DGsZrpZDn1qDXDTr0-1" allowfullscreen></iframe>  
 
 
 ## Anatomy:
