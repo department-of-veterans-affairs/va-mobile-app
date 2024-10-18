@@ -148,6 +148,7 @@ jobs:
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique ')
+            
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
           test_matrix=$(echo $test_matrix | jq --compact-output 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
