@@ -7,6 +7,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
+const detoxTestsToRun = ['Claims', 'Appeals'] // eslint-disable-line @typescript-eslint/no-unused-vars
+
 function NoClaimsAndAppealsAccess() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -23,7 +25,7 @@ function NoClaimsAndAppealsAccess() {
           accessibilityLabel={a11yLabelVA(t('claimsAndAppeals.noClaimsAndAppealsAccess.body'))}>
           {t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
+        <ClickToCallPhoneNumber phone={t('8008271001')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
       </TextArea>
     </VAScrollView>
   )
