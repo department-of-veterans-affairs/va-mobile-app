@@ -85,7 +85,7 @@ Information is appropriate for inclusion on the home screen within About you whe
     * Contact us (MVP)
     * Find a VA Location (MVP)
     * Banner space for VA announcements (MVP)
-        * Banner appearance is <span style="text-decoration:underline;">optional—use when needed</span>. 
+        * Banner appearance is optional—use when needed. 
         * Display one banner at a time.
         * Banner announcements should be of interest to all Veterans, and timely.
 * **Guidelines for module inclusion:** 
