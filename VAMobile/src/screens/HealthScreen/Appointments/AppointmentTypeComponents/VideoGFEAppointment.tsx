@@ -13,6 +13,7 @@ import {
   AppointmentDateAndTime,
   AppointmentDetailsModality,
   AppointmentLocation,
+  AppointmentMedicationWording,
   AppointmentPersonalContactInfo,
   AppointmentPreferredModality,
   AppointmentProvider,
@@ -62,6 +63,7 @@ function VideoGFEAppointment({
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
         <AppointmentLocation attributes={attributes} subType={subType} type={type} />
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
+        <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}

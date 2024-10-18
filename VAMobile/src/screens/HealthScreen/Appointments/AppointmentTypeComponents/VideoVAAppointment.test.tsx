@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import {
   AppointmentAttributes,
@@ -116,6 +117,9 @@ context('VideoVAAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
     })
@@ -172,6 +176,9 @@ context('VideoVAAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
@@ -345,6 +352,9 @@ context('VideoVAAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
@@ -410,6 +420,9 @@ context('VideoVAAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
