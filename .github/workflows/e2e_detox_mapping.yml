@@ -84,7 +84,7 @@ jobs:
                 test=$(echo $i | grep -o -P '(?<=\[).*(?=\])')
                 echo "$test"
                 if [[ "$firstInstance" == "true" ]]; then
-                  test1 = [${test}]
+                  test1=[${test}]
                   firstInstance=false
                 else
                   test1=$(echo $test1 | jq '. += [${test}]' | unique)
