@@ -49,7 +49,7 @@ context('BiometricsPreferenceScreen', () => {
     expect(
       screen.getByRole('header', {
         name: t('biometricsPreference.doYouWantToAllow', {
-          biometricsText: getSupportedBiometricText(BIOMETRY_TYPE.TOUCH_ID || '', t),
+          biometricsText: t('biometric.touchID'),
         }),
       }),
     ).toBeTruthy()
@@ -59,7 +59,7 @@ context('BiometricsPreferenceScreen', () => {
     expect(
       screen.getByRole('header', {
         name: t('biometricsPreference.doYouWantToAllow', {
-          biometricsText: getSupportedBiometricText(BIOMETRY_TYPE.FACE_ID || '', t),
+          biometricsText: t('biometric.faceID'),
         }),
       }),
     ).toBeTruthy()
@@ -69,7 +69,7 @@ context('BiometricsPreferenceScreen', () => {
     expect(
       screen.getByRole('header', {
         name: t('biometricsPreference.doYouWantToAllow', {
-          biometricsText: getSupportedBiometricText(BIOMETRY_TYPE.FACE || '', t),
+          biometricsText: t('biometric.faceRecognition'),
         }),
       }),
     ).toBeTruthy()
@@ -79,7 +79,7 @@ context('BiometricsPreferenceScreen', () => {
     expect(
       screen.getByRole('header', {
         name: t('biometricsPreference.doYouWantToAllow', {
-          biometricsText: getSupportedBiometricText(BIOMETRY_TYPE.FINGERPRINT || '', t),
+          biometricsText: t('biometric.fingerPrint'),
         }),
       }),
     ).toBeTruthy()
@@ -89,7 +89,7 @@ context('BiometricsPreferenceScreen', () => {
     expect(
       screen.getByRole('header', {
         name: t('biometricsPreference.doYouWantToAllow', {
-          biometricsText: getSupportedBiometricText(BIOMETRY_TYPE.IRIS || '', t),
+          biometricsText: t('biometric.iris'),
         }),
       }),
     ).toBeTruthy()
