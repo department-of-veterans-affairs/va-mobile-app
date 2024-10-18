@@ -48,6 +48,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.ref }}
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
@@ -64,36 +65,39 @@ jobs:
         with:
           json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+      - name: Get file difference by file name
+        id: changed_files_file_name_not_json
+        uses: tj-actions/changed-files@v41
       - name: Get testing matrix array
         id: testing_matrix
         run: |
           resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
-            jq 'select(contains(["Login"])) += ["LoginScreen"] | 
-            select(contains(["AppealsDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
+            jq 'select(contains(["LoginScreen"])) += ["LoginScreen"] | 
+            select(contains(["AppealDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
             select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
-            select(contains(["ClaimsDetailsScreen"]) or contains(["ClaimsLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
-            select(contains(["ClaimsLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
+            select(contains(["ClaimDetailsScreen"]) or contains(["ClaimLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
+            select(contains(["ClaimLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
             select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
             select(contains(["Letters"]) or contains(["letters"])) += ["VALetters"] |
             select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
-            select(contains(["Cerner"]) or contains(["Facilities"])) += ["Cerner"] |
+            select(contains(["CernerAlert"]) or contains(["Facilities"])) += ["Cerner"] |
             select(contains(["Pharmacy"]) or contains(["prescriptions"])) += ["Prescriptions"] |
             select(contains(["SecureMessaging"]) or contains(["secureMessaging"])) += ["Messages"] |
             select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
             select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
             select(contains(["MilitaryInformationScreen"]) or contains(["militaryService"]) or contains(["Nametag"])) += ["MilitaryInformation", "VeteranStatusCard"] |
-            select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
+            select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
             select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
-            select(contains(["VeteranCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["VeteransCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
+            select(contains(["VeteranStatusScreen"])) += ["VeteranStatusCard"] |
             select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
             select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
             select(contains(["SplashScreen"])) += ["Onboarding", "LoginScreen"] |
-            select(contains(["Auth"])) += ["SignIn"] |
+            select(contains(["auth"])) += ["SignIn"] |
             select(contains(["authorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "VALetters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "VALetters"] |
             select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
             select(contains(["Types"]) or contains(["VAImage"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique')
@@ -147,7 +151,6 @@ jobs:
               or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique ')
-
           test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
           echo "$test_matrix"
           test_matrix=$(echo $test_matrix | jq --compact-output 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
@@ -156,3 +159,28 @@ jobs:
           "VeteransCrisisLine", "VeteranStatusCard")))')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
+          for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
+            echo "$file"
+            e2eNames=$(gh api -H "Accept: application/vnd.github+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file} | jq '.content |  gsub("[\\n\\t]"; "") | @base64d')
+            echo "$e2eNames"
+            filesSplit=$(echo $e2eNames | jq --compact-output 'split("\n"; null)')
+            firstInstance=true
+            for i in ${fileSplit[@]} do
+              echo "$i"
+              if [[ $i == *"detoxTestsToRun"* ]]; then
+                test="$i" | grep -o -P '(?<=\[).*(?=\])'
+                echo "$test"
+                if [[ "$firstInstance" == "true" ]]; then
+                  test1 = [${test}]
+                  firstInstance=false
+                else
+                  test1=$(echo $test1 | jq '. += [${test}]' | unique)
+                fi
+              fi
+              echo "$test1"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '(.[] | select(.name == "$fileName"))')
+# echo "$e2eNames"
