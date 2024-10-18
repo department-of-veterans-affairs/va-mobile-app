@@ -90,6 +90,7 @@ jobs:
                 fi
               fi
               echo "$test1"
+            done
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
