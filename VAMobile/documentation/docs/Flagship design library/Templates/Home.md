@@ -25,7 +25,7 @@ Having a mix of content, arranged into intentional zones, ensures that users:
 
 The VA Mobile app Home screen zones ensure that the most impactful content items are getting the proper placement in the screen's hierarchy while also handling a variety of user contexts and technical situations. 
 
-<img src="https://department-of-veterans-affairs.github.io/va-mobile-app/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app" />
+<img src="/va-mobile-app/img/home/vamobile-home-zones.png" width="700" alt="Diagram of home screen zones for VA mobile app" />
 
 
 #### Zone 1: Mission-critical app info
