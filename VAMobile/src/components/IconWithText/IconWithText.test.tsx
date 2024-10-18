@@ -4,11 +4,11 @@ import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
-import VAIconWithText from './VAIconWithText'
+import IconWithText from './IconWithText'
 
 context('VAIconWithText', () => {
   beforeEach(() => {
-    render(<VAIconWithText name="HomeSelected" label="Home" labelA11y="A11y label" testID="HomeSelected" />)
+    render(<IconWithText name="Home" label="Home" labelA11y="A11y label" testID="HomeSelected" />)
   })
 
   it('renders label, a11yLabel, and icon', () => {
