@@ -65,7 +65,7 @@ jobs:
             if [[ "$getDetoxTestsToRunLine" != "" ]]; then
               getInitialTests=$(echo $getDetoxTestsToRunLine | sed -e 's/.*= \(.*\) \/.*/\1/')
               if [[ "$firstInstance" == "true" ]]; then
-                getTests=${getInitialTests}
+                getTests="${getInitialTests}"
                 echo "Initial Test: $getTests"
                 firstInstance=false
               else
