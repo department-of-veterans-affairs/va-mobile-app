@@ -52,19 +52,6 @@ jobs:
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
-      - name: Get file difference by directory
-        id: changed_files_dir
-        uses: tj-actions/changed-files@v41
-        with:
-          dir_names: true
-          json: true
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
-      - name: Get file difference by file name
-        id: changed_files_file_name
-        uses: tj-actions/changed-files@v41
-        with:
-          json: true
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get file difference by file name
         id: changed_files_file_name_not_json
         uses: tj-actions/changed-files@v41
@@ -81,7 +68,7 @@ jobs:
                 getTests=${getInitialTests}
                 firstInstance=false
               else
-                getTests=$(echo $getTests | jq '. += ${test}' | unique)
+                getTests=$(echo $getTests | jq '. += $getInitialTests' | unique)
                 echo "$getTests"
               fi
             fi
