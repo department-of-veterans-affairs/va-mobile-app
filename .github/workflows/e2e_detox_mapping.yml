@@ -74,7 +74,7 @@ jobs:
                 else
                   echo "Tests: $getTests"
                   echo "$getInitialTests"
-                  getTests=$(echo $getTests | jq --argjson initialTests "$getInitialTests" --compact-output '. += $initialTests' | unique)
+                  getTests=$(echo $getTests | jq --argjson initialTests "$getInitialTests" --compact-output '. += $initialTests | unique')
                 fi
               fi
             fi
