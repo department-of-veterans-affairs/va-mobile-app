@@ -30,6 +30,8 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
+const detoxTestsToRun = ['DisabilityRatings'] // eslint-disable-line @typescript-eslint/no-unused-vars
+
 function DisabilityRatingsScreen() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

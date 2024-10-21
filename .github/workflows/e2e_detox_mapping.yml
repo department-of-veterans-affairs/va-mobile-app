@@ -74,17 +74,16 @@ jobs:
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
             e2eNames=$(gh api -H "Accept: application/vnd.github+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code | jq --compact-output '.content |  gsub("[\\n\\t]"; "") | @base64d')
             getDetoxTestsToRunLine=$(echo $e2eNames | sed -e 's/.*detoxTestsToRun\(.*\)eslint.*/\1/')
-            echo "$getDetoxTestsToRunLine"
             firstInstance=true
             if [[ "$getDetoxTestsToRunLine" != "" ]]; then
-                getInitialTests=$(echo $getDetoxTestsToRunLine | sed -e 's/.*= \(.*\) \/.*/\1/')
-                echo "$getInitialTests"
-                if [[ "$firstInstance" == "true" ]]; then
-                    getTests=${getInitialTests}
-                    firstInstance=false
-                else
-                    getTests=$(echo $getTests | jq '. += ${test}' | unique)
-                fi
+              getInitialTests=$(echo $getDetoxTestsToRunLine | sed -e 's/.*= \(.*\) \/.*/\1/')
+              if [[ "$firstInstance" == "true" ]]; then
+                getTests=${getInitialTests}
+                firstInstance=false
+              else
+                getTests=$(echo $getTests | jq '. += ${test}' | unique)
+                echo "$getTests"
+              fi
             fi
           done
           echo "TESTING_MATRIX=$getTests" >> $GITHUB_OUTPUT
