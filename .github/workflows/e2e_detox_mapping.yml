@@ -64,14 +64,14 @@ jobs:
             getDetoxTestsToRunLine=$(echo $e2eNames | sed -e 's/.*detoxTestsToRun\(.*\)eslint.*/\1/')
             if [[ "$getDetoxTestsToRunLine" != "" ]]; then
               getInitialTests=$(echo $getDetoxTestsToRunLine | sed -e 's/.*= \(.*\) \/.*/\1/')
-              echo "$getInitialTests"
               if [[ "$firstInstance" == "true" ]]; then
                 getTests=${getInitialTests}
+                echo "Initial Test: $getTests"
                 firstInstance=false
               else
-                echo "$getTests"
+                echo "Tests: $getTests"
+                echo "$getInitialTests"
                 getTests=$(echo $getTests | jq '. += $getInitialTests' | unique)
-                echo "$getTests"
               fi
             fi
           done
