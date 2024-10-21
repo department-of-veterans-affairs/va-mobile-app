@@ -71,6 +71,8 @@ jobs:
   start_run:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: 'Add RC run in testrail'
         id: add_run
         run: |
