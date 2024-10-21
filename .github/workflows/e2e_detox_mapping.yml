@@ -86,6 +86,7 @@ jobs:
                 test1=$(echo $test1 | jq '. += [${test}]' | unique)
               fi
             fi
+          done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
