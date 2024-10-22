@@ -1,12 +1,17 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeRequestNotifications, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
+import { setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
+
+const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
+const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
 
 export type SyncScreenProps = Record<string, unknown>
 
@@ -17,13 +22,13 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
 
   const onSkip = (): void => {
     //This sets the async storage to not display this screen again
-    dispatch(completeRequestNotifications())
+    AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
     //This sets the state variable for the session
     dispatch(setNotificationsPreferenceScreen(false))
   }
 
   const onUseNotifications = (): void => {
-    dispatch(completeRequestNotifications())
+    AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
     dispatch(setNotificationsPreferenceScreen(false))
     //This actually triggers the notification manager code to request via OS.
     dispatch(setRequestNotifications(true))

@@ -53,7 +53,6 @@ const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
-const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
@@ -154,10 +153,6 @@ export const completeSync = (): AppThunk => async (dispatch) => {
 export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
   dispatch(dispatchSetFirstLogin(false))
-}
-
-export const completeRequestNotifications = (): AppThunk => async () => {
-  await AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
 }
 
 /**
