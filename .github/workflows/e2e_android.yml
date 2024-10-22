@@ -101,6 +101,7 @@ jobs:
           getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | [.[$random]]')
           echo "$getID"
           echo $(jq --argjson id $getID '. += $id' input.json)
+          echo $(jq --compact-output -s 'add' input.json)
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"suite_id": 92,"include_all": false,"name": "Test","case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
