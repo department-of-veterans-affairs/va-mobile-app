@@ -3,9 +3,7 @@ import { Platform } from 'react-native'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
-import { errorKeys } from 'api/errors'
 import queryClient from 'api/queryClient'
-import { ErrorData } from 'api/types'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
@@ -212,9 +210,9 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
-    const data = queryClient.getQueryData(errorKeys.errorOverrides) as ErrorData
-    if (data) {
-      _.forEach(data.overrideErrors, (error) => {
+    const overrideErrors = _store?.getState().demo.overrideErrors
+    if (overrideErrors) {
+      _.forEach(overrideErrors, (error) => {
         if (error.endpoint === endpoint) {
           throw error.error
         }

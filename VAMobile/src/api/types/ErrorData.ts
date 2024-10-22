@@ -1,9 +1,5 @@
 import { ErrorMessage } from 'store/api'
 
-export type ErrorData = {
-  overrideErrors: Array<errors>
-}
-
 export type errors = {
   endpoint: string
   error: networkError | errorOverride
