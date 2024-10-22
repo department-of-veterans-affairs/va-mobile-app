@@ -11,6 +11,8 @@ export type IconWithTextProps = IconProps & {
   labelColor?: ColorVariant
   /** optional a11y label  */
   labelA11y?: string
+  /** optional margin between text and icon */
+  mt?: number
 }
 
 /**
@@ -18,7 +20,7 @@ export type IconWithTextProps = IconProps & {
  *
  * @returns IconWithText component
  */
-const IconWithText: FC<IconWithTextProps> = ({ label, labelColor, labelA11y, ...iconProps }) => {
+const IconWithText: FC<IconWithTextProps> = ({ label, labelColor, labelA11y, mt, ...iconProps }) => {
   const props: IconProps = {
     ...iconProps,
     fill: iconProps.fill || 'link',
@@ -29,7 +31,7 @@ const IconWithText: FC<IconWithTextProps> = ({ label, labelColor, labelA11y, ...
 
   const textProps: TextViewProps = {
     variant: 'textWithIconButton',
-    mt: 3, // 6px total combined with line height
+    mt: mt || 3, // 6px total combined with line height
     color: labelColor || 'textWithIconButton',
     accessibilityLabel: labelA11y,
     allowFontScaling: false,

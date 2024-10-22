@@ -9,11 +9,10 @@ import Mock = jest.Mock
 
 context('AccordionCollapsible', () => {
   let onPressSpy: Mock
-  const initializeTestInstance = (hideArrow = false, expandedInitialValue = false) => {
+  const initializeTestInstance = (expandedInitialValue = false) => {
     onPressSpy = jest.fn(() => {})
     render(
       <AccordionCollapsible
-        hideArrow={hideArrow}
         header={<TextView>HEADER</TextView>}
         expandedContent={<TextView>EXPANDED</TextView>}
         collapsedContent={<TextView>COLLAPSED</TextView>}
@@ -43,13 +42,8 @@ context('AccordionCollapsible', () => {
       expect(onPressSpy).toBeCalled()
     })
 
-    it('when hideArrow set to true, cannot find tab to press', () => {
+    it('when expandedInitialValue is true it should show Expanded and not Collapsed content on load', () => {
       initializeTestInstance(true)
-      expect(screen.queryByRole('tab')).toBeFalsy()
-    })
-
-    it('when expandedIntiailValue is true it should show Expanded and not Collapsed content on load', () => {
-      initializeTestInstance(false, true)
       expect(screen.getByRole('tab', { name: 'HEADER' })).toBeTruthy()
       expect(screen.queryByText('COLLAPSED')).toBeFalsy()
       expect(screen.getByText('EXPANDED')).toBeTruthy()

@@ -22,8 +22,6 @@ export type AccordionCollapsibleProps = {
   a11yHint?: string
   /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
-  /** if true hides the accordion arrow and only displays header & collapsed content */
-  hideArrow?: boolean
   /** custom on press call if more action is needed when expanding/collapsing the accordion */
   customOnPress?: (expandedValue?: boolean) => void
   /** sets the initial value of expanded if an accordion should already be expanded on render */
@@ -41,7 +39,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   header,
   expandedContent,
   collapsedContent,
-  hideArrow,
   testID,
   customOnPress,
   expandedInitialValue,
@@ -78,11 +75,9 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     const data = (
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
-        {!hideArrow && (
-          <Box alignItems="flex-end">
-            <Icon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={30} height={30} />
-          </Box>
-        )}
+        <Box alignItems="flex-end">
+          <Icon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={30} height={30} />
+        </Box>
       </Box>
     )
 
@@ -91,14 +86,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
           accessibilityLabel: testID,
         }
       : {}
-
-    if (hideArrow) {
-      return (
-        <Box {...labelProps} accessible={true}>
-          {data}
-        </Box>
-      )
-    }
 
     return (
       <Pressable {...pressableProps} {...labelProps} ref={headerRef}>

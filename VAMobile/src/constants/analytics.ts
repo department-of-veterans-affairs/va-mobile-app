@@ -1142,6 +1142,14 @@ export const Events = {
       },
     }
   },
+  vama_sso_cookie_received: (received: boolean): Event => {
+    return {
+      name: 'vama_sso_cookie_received',
+      params: {
+        received,
+      },
+    }
+  },
   vama_toggle: (toggle_name: string, status: boolean, screen_name: string): Event => {
     return {
       name: 'vama_toggle',
@@ -1196,6 +1204,14 @@ export const Events = {
       name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
+      },
+    }
+  },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
       },
     }
   },
