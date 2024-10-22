@@ -83,6 +83,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           a11yLabel: headerButton.labelA11y,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
+          testID: headerButton.testID,
         }
       : undefined,
   }

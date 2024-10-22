@@ -1,7 +1,7 @@
 name: Onboarding Request (Engineering)
 description: Fill out this form to request initiation of engineering onboarding for 
 title: "Onboarding: [name]"
-labels: [ onboarding ]
+labels: [ user-onboarding ]
 assignees: timwright12
 body:
 - type: markdown

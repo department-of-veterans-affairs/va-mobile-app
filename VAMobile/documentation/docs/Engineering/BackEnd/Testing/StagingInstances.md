@@ -27,7 +27,6 @@ You'll see "TERMINAL" as a tab. From here, you have access to the console. You c
 
 You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create a SIS user session:
 
-
 ```ruby
 irb(main):001:0> token = SignIn::AccessTokenJwtDecoder.new(access_token_jwt: 'crazylongsistoken').perform(with_validation: true)
 irb(main):001:0> user = User.find(token.user_uuid)

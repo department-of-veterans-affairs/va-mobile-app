@@ -86,7 +86,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
   if (!reviewEventRegistered) {
-    registerReviewEvent()
+    registerReviewEvent(true)
     setReviewEventRegistered(true)
   }
 

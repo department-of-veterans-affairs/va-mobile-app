@@ -50,7 +50,7 @@ To generate a user session, see section [User Token](StagingInstances.md##User-T
 
 ## User Token
 
-Currently, we only use SIS for authentication.
+Currently, there are two authentication options, IAM and SIS. IAM authentication isn't working for RIs or staging right now for unknown reasons that may not be fixed because IAM is being deprecated for SIS, which is why the instructions in the next section (User Sessions) don't work right now on RIs.
 
 We lack the ability to log in via SIS on RIs due to limitations the SIS team is working on. We expect this to be fixed at some point, but in the meantime it means we have to use staging to help us spoof the sign-in process with the instructions below:
 
