@@ -89,16 +89,17 @@ jobs:
             fi
           done
           test=$(echo jq --compact-output -s 'add' input.json)
-          echo "" >> input.json
           resp=$(curl -X GET -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                     "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=3239")
           length=$(echo $resp | jq '.cases | map(select(.custom_release_candidate_test_case == true )) | map(.id) | length')
           randomNumber=$(((RANDOM % ${length}) + 1))
           getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | [.[$random]]')
-          echo $(jq --argjson id $getID '. += $id' <<< "$test") >> input.json
+          newArray=$(echo $test | jq --argjson id $getID '. += $id')
           echo $(jq --compact-output -s 'add' input.json)
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d '{"suite_id": 92,"include_all": false,"name": "Test","case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
+                  -d '{"suite_id": 92,"include_all": false,"name": "Test","case_ids": '${newArray}'}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
+# echo $(jq --argjson id $getID '. += $id' <<< "$test") >> input.json
+# echo $(jq --compact-output -s 'add' input.json)
