@@ -110,9 +110,14 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             fill: isFocused ? theme.colors.icon.active : theme.colors.icon.inactive,
             label: routeName,
             labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
+            height: 24,
+            width: 24,
           }
           switch (routeName) {
             case 'Home':
+              iconProps.height = 28
+              iconProps.width = 28
+              iconProps.mt = -1
               iconProps.name = isFocused ? 'Home' : 'HomeOutlined'
               break
             case 'Health':

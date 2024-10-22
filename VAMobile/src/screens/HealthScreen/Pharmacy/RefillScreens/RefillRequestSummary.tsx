@@ -193,7 +193,9 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
     return (
       <Box {...borderProps}>
-        <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
+        <TextView variant="HelperTextBold" accessibilityRole="header">
+          {t('prescriptions.refillRequestSummary.whatsNext')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView
             variant="MobileBody"
@@ -223,7 +225,8 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
         onLeftButtonPress={() => {
           onNavToHistory()
         }}
-        title={t('refillRequest')}>
+        title={t('refillRequest')}
+        leftButtonTestID="prescriptionsBackTestID">
         {showLoadingScreenRequestRefillsRetry ? (
           <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
         ) : (

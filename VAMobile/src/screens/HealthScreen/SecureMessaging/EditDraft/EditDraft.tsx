@@ -447,6 +447,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
@@ -665,7 +666,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       menuViewActions={isLoading ? undefined : menuViewActions}
       showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
-      testID="editDraftTestID">
+      testID="editDraftTestID"
+      rightButtonTestID="editDraftMoreID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

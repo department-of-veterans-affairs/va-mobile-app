@@ -17,6 +17,7 @@ import {
   AppointmentDateAndTime,
   AppointmentDetailsModality,
   AppointmentLocation,
+  AppointmentMedicationWording,
   AppointmentPersonalContactInfo,
   AppointmentProvider,
   AppointmentReasonAndComment,
@@ -75,6 +76,7 @@ function CommunityCareAppointment({
           <AppointmentLocation attributes={attributes} subType={subType} type={type} />
         )}
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
+        <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}

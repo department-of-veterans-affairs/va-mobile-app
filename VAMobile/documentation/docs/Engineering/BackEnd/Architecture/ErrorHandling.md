@@ -12,7 +12,7 @@ The vets-api mobile endpoints generally follow the following pattern:
 - the controller then uses [service objects](#outbound-request-service-objects) to communicate with other servers in the vets-api ecosystem. those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally differ.
 - the external service processes that request and responds or times out
 - the service object processes the response.
-- when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are rescued by [ExceptionHandling](#exception-handling) and responds with error details to the client.
+- when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are rescued by [ExceptionHandling](#exception-handling) and responds with error details to the client. (Note: this is only true if the service configuration uses the Faraday plug `faraday.use Faraday::Response::RaiseError`. Most services that make requests for data do use this plug.)
 - when the request is successful (status is < 400), any additional business logic will be applied by the service object. This often includes parsing and converting the data to models.
 - the data is then returned to the controller.
 - the controller then performs any additional modifications that are necessary, serializes the data, and returns it to the client with an appropriate status code.

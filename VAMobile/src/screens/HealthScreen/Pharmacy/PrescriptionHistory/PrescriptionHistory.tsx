@@ -264,7 +264,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <Box mr={8}>
               <Icon name={'LocalShipping'} fill={theme.colors.icon.link} height={18} width={18} />
             </Box>
-            <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+            <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
               {t('prescription.history.tracking')}
             </TextView>
           </Box>
@@ -402,6 +402,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       variant: 'base',
+      testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
     return (
@@ -415,7 +416,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
           analytics={{
             onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
-          }}>
+          }}
+          testID="prescriptionRefillWarningTestID">
           <TextView
             mt={theme.dimensions.standardMarginBetween}
             paragraphSpacing={true}
@@ -432,6 +434,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button
+          testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
           onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
         />
@@ -491,6 +494,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
+              accessibilityRole="header"
               variant={'MobileBodyBold'}>
               {prescriptionListTitle()}
             </TextView>
@@ -525,6 +529,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_rx_help())
       navigateTo('PrescriptionHelp')
     },
+    testID: 'prescriptionsHelpID',
   }
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
