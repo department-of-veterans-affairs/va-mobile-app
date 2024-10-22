@@ -99,4 +99,9 @@ jobs:
           randomNumber=$(((RANDOM % ${length}) + 1))
           echo "$randomNumber"
           getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | .[$random]')
-          echo $(jq --argjson id $getID -s '. + $id' input.json)
+          echo $(jq --argjson id $getID '. + [$id]' input.json)
+          response=$(curl -X POST -H 'Content-Type: application/json' \
+                    -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                  -d '{"suite_id": 92,"include_all": false,"name": "Test","case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
+          echo ${response}
