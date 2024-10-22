@@ -2,6 +2,7 @@ name: '[Release] New Release Issue'
 
 on:
   create:
+
 jobs:
   release_ticket:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
