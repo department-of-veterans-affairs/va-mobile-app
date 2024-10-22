@@ -77,7 +77,6 @@ jobs:
         id: add_run
         run: |
           echo "" >> input.json
-          testRailAccessabilityCases=(12810 37313 100980 100981)
           for ((i=0; ; i+=250)); do
             echo "i = $i"
             resp=$(curl -X GET -H 'Content-Type: application/json' \
@@ -98,9 +97,8 @@ jobs:
           randomNumber=$(((RANDOM % ${length}) + 1))
           getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | [.[$random]]')
           echo $(jq --argjson id $getID '. += $id' <<< "$test") >> input.json
-          $(echo jq --compact-output -s 'add' input.json)
+          echo $(jq --compact-output -s 'add' input.json)
           response=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"suite_id": 92,"include_all": false,"name": "Test","case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
-          echo ${response}
