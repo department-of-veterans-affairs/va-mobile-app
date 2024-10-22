@@ -3,8 +3,9 @@ title: Authentication Diagrams
 ---
 
 ### Username and Password Authorization Flow
+![Username and Password Authorization Flow](../../../../static/img/backend/username-and-password-authorization-flow.png)
 
-```mermaid
+```
 sequenceDiagram
     participant User
     participant App
@@ -16,8 +17,9 @@ sequenceDiagram
 ```
 
 ### Biometrics Flow for Username and Password Initial Login
+![Biometrics Flow for Username and Password Initial Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-initial-login.png)
 
-```mermaid
+```
 sequenceDiagram
     participant User
     participant Keychain
@@ -33,8 +35,8 @@ sequenceDiagram
 ```
 
 ### Biometrics Flow for Username and Password Subsequent Login
-
-```mermaid
+![Biometrics Flow for Username and Password Subsequent Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-subsequent-login.png)
+```
 sequenceDiagram
     participant User
     participant Keychain
@@ -52,8 +54,8 @@ sequenceDiagram
 ```
 
 ### VA: Health and Benefits Biometrics Initial Login
-
-```mermaid
+![Health and Benefits Biometrics Initial Login](../../../../static/img/backend/health-and-benefits-biometrics-initial-login.png)
+```
 sequenceDiagram
     participant User
     participant Secure App Storage
@@ -79,8 +81,8 @@ sequenceDiagram
 ```
 
 ### VA: Health and Benefits Biometrics Subsequent Login
-
-```mermaid
+![Health and Benefits Biometrics Subsequent Login](../../../../static/img/backend/health-and-benefits-biometrics-subsequent-login.png)
+```
 sequenceDiagram
     participant User
     participant Secure App Storage
@@ -96,3 +98,5 @@ sequenceDiagram
     SIS-->>App: Here you go, one new token.
     App-->>User: Display Auth Result
 ```
+
+In order to regenerate these graphs, add 'mermaid' to the end of the \`\`\` at the beginning of each codeblock
