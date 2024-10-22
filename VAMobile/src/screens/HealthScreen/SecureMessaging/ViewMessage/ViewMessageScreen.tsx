@@ -152,7 +152,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [threadFetched])
 
@@ -369,6 +369,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             logAnalyticsEvent(Events.vama_sm_move())
             setShowModalPicker(true)
           },
+          testID: 'pickerMoveMessageID',
         }
 
   return (
@@ -377,7 +378,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('reviewMessage')}
       headerButton={headerButton}
-      testID="viewMessageTestID">
+      testID="viewMessageTestID"
+      backLabelTestID="backToMessagesID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
@@ -405,6 +407,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmBtnText={'pickerLaunchBtn'}
               key={newCurrentFolderID}
               showModalByDefault={true}
+              cancelTestID="pickerMoveMessageCancelID"
+              confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
           {replyExpired && (
@@ -413,6 +417,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 variant="warning"
                 header={t('secureMessaging.reply.youCanNoLonger')}
                 description={t('secureMessaging.reply.olderThan45Days')}
+                testID="secureMessagingOlderThan45DaysAlertID"
               />
             </Box>
           )}

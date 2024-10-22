@@ -22,6 +22,7 @@ function VeteransCrisisLineNumbers() {
         text={t('veteransCrisisLine.crisisCallNumberDisplayed')}
         a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
         analyticsOnPress={analyticsFunction}
+        testID="veteransCrisisLineCallID"
       />
       <LinkWithAnalytics
         type="text"
