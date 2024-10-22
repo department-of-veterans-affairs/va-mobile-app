@@ -25,13 +25,8 @@ You'll see "TERMINAL" as a tab. From here, you have access to the console. You c
 
 ### User Sign In
 
-You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session (deprecated):
+You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create a SIS user session:
 
-```ruby
-irb(main):001:0> user = IAMSSOeOAuth::SessionManager.new('EESBp0xiLD6p1g86q4g1').find_or_create_user
-```
-
-or an SIS user session:
 
 ```ruby
 irb(main):001:0> token = SignIn::AccessTokenJwtDecoder.new(access_token_jwt: 'crazylongsistoken').perform(with_validation: true)
