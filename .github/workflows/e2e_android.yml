@@ -88,7 +88,7 @@ jobs:
             resp=$(curl -X GET -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                     "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&offset=$i")
-            echo $(jq --argjson id $getID --compact-output '.cases | map(select(.custom_release_candidate_test_case == true and (.section_id != 3239 or .id == $id)) | map(.id)' <<< "$resp") >> input.json
+            echo $(jq --argjson id $getID --compact-output '.cases | map(select(.custom_release_candidate_test_case == true and (.section_id != 3239 or .id == $id)))) | map(.id)' <<< "$resp") >> input.json
             if [[ $(jq '._links.next == null' <<< "$resp") == 'true' ]];
             then
               break
