@@ -98,5 +98,5 @@ jobs:
           echo "$length"
           randomNumber=$(((RANDOM % ${length}) + 1))
           echo "$randomNumber"
-          getID=$(jq --argjson random $randomNumber --compact-output '.cases | map(.id) | .[$random]')
+          getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | .[$random]')
           echo $(jq --argjson id $getID -s '. + $id' input.json)
