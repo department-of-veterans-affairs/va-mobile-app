@@ -310,6 +310,9 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
+      if (authResponse.device_secret) {
+        await storeDeviceSecret(authResponse.device_secret)
+      }
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
@@ -407,7 +410,7 @@ export const fetchSSOCookies = async () => {
 /**
  * Stores SSO device secret in keychain/keystore
  */
-export const storeDeviceSecret = async (deviceSecret: string) => {
+const storeDeviceSecret = async (deviceSecret: string) => {
   try {
     const options: Keychain.Options = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
