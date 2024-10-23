@@ -65,9 +65,10 @@ jobs:
           echo "$resp"
           length=$(echo $resp | jq '.cases | map(select(.custom_release_candidate_test_case == true )) | map(.id) | length')
           echo "$length"
+          releaseCandidateIDS=$(echo $resp | jq --compact-output '.cases | map(select(.custom_release_candidate_test_case == true )) | map(.id)')
           randomNumber=$(((RANDOM % ${length})))
           echo "$randomNumber"
-          getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.cases | map(.id) | .[$random]')
+          getID=$(echo $resp | jq --argjson random $randomNumber --compact-output '.[$random]')
           echo "$getID"
           for ((i=0; ; i+=250)); do
             echo "i = $i"
