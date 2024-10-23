@@ -2,9 +2,11 @@
 title: Authentication Diagrams
 ---
 
-```mermaid
+### Username and Password Authorization Flow
+![Username and Password Authorization Flow](../../../../static/img/backend/username-and-password-authorization-flow.png)
+
+```
 sequenceDiagram
-    title: Username and Password Authorization Flow
     participant User
     participant App
     participant Server
@@ -14,9 +16,11 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-```mermaid
+### Biometrics Flow for Username and Password Initial Login
+![Biometrics Flow for Username and Password Initial Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-initial-login.png)
+
+```
 sequenceDiagram
-    title: Biometrics Flow for Username and Password Initial Login
     participant User
     participant Keychain
     participant App
@@ -30,9 +34,10 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-```mermaid
+### Biometrics Flow for Username and Password Subsequent Login
+![Biometrics Flow for Username and Password Subsequent Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-subsequent-login.png)
+```
 sequenceDiagram
-    title: Biometrics Flow for Username and Password Subsequent Login
     participant User
     participant Keychain
     participant App
@@ -48,25 +53,26 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-```mermaid
+### VA: Health and Benefits Biometrics Initial Login
+![Health and Benefits Biometrics Initial Login](../../../../static/img/backend/health-and-benefits-biometrics-initial-login.png)
+```
 sequenceDiagram
-    title: VA: Health and Benefits Biometrics Initial Login
     participant User
     participant Secure App Storage
     participant App
-    participant IAM
+    participant SIS
     participant Identity Provider
     User->>App: Tap Login button
-    App->>IAM: Start the sign in process
-    IAM->>User: Which Identity Provider do you want?
-    User-->>IAM: This one please.
-    IAM-->>Identity Provider: Please authenticate this person at IAL2/AAL2/LOA3
+    App->>SIS: Start the sign in process
+    SIS->>User: Which Identity Provider do you want?
+    User-->>SIS: This one please.
+    SIS-->>Identity Provider: Please authenticate this person at IAL2/AAL2/LOA3
     Identity Provider->>User: Please send your username and password
     User-->>Identity Provider: Here they are
-    Identity Provider-->>IAM: It's them, I'm sure of it
-    IAM-->>App: Here is a code to get your tokens
-    App->>IAM: Please create a token and session for me
-    IAM-->>App: Done and done! Here is the token
+    Identity Provider-->>SIS: It's them, I'm sure of it
+    SIS-->>App: Here is a code to get your tokens
+    App->>SIS: Please create a token and session for me
+    SIS-->>App: Done and done! Here is the token
     App->>User: Do you want to use biometrics to log in?
     User-->>App: Yes please!
     App->>Secure App Storage: Please hang on to this for us and lock it with biometrics
@@ -74,20 +80,23 @@ sequenceDiagram
     App-->>User: Display Auth Result
 ```
 
-```mermaid
+### VA: Health and Benefits Biometrics Subsequent Login
+![Health and Benefits Biometrics Subsequent Login](../../../../static/img/backend/health-and-benefits-biometrics-subsequent-login.png)
+```
 sequenceDiagram
-    title: VA: Health and Benefits Biometrics Subsequent Login
     participant User
     participant Secure App Storage
     participant App
-    participant IAM
+    participant SIS
     App->>Secure App Storage: Is there a stored token?
     Secure App Storage-->>App: Yes there is
     App->>User: Can I please have your biometrics?
     User-->>App: Here you go!
     App->>Secure App Storage: Here are the biometrics, can you send the token to me?
     Secure App Storage-->>App: Here it is!
-    App->>IAM: Can I get a refreshed token, please? Here is the old one.
-    IAM-->>App: Here you go, one new token.
+    App->>SIS: Can I get a refreshed token, please? Here is the old one.
+    SIS-->>App: Here you go, one new token.
     App-->>User: Display Auth Result
 ```
+
+In order to regenerate these graphs, add 'mermaid' to the end of the \`\`\` at the beginning of each codeblock
