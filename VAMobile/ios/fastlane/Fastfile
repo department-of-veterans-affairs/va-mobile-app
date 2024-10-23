@@ -109,7 +109,7 @@ platform :ios do
         slack_release_success(version.version_string, "iOS")
       end
     rescue => e
-      slack_release_error(version, e)
+      slack_release_error(version, "iOS", e)
     end
   end
 
