@@ -5,6 +5,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
@@ -32,7 +33,6 @@ import {
   PaginationProps,
   TextView,
   VAIcon,
-  VAIconProps,
 } from 'components'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
@@ -517,9 +517,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
   }
 
-  const helpIconProps: VAIconProps = {
-    name: 'QuestionMark',
-    fill2: theme.colors.icon.transparent,
+  const helpIconProps: IconProps = {
+    name: 'HelpOutline',
+    fill: theme.colors.icon.active,
   }
 
   const headerButton = {

@@ -16,8 +16,7 @@ import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { themeFn } from 'utils/theme'
 
 import Box from './Box'
-import { VA_ICON_MAP } from './VAIcon'
-import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
+import IconWithText, { IconWithTextProps } from './IconWithText'
 
 type TabBarRoute = {
   key: string
@@ -106,11 +105,32 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             accessible: true,
           }
 
-          const iconProps: VAIconWithTextProps = {
-            name: `${routeName}${isFocused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
-            fill: isFocused ? 'active' : 'inactive',
+          const iconProps: IconWithTextProps = {
+            name: 'Home',
+            fill: isFocused ? theme.colors.icon.active : theme.colors.icon.inactive,
             label: routeName,
             labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
+            height: 24,
+            width: 24,
+          }
+          switch (routeName) {
+            case 'Home':
+              iconProps.height = 28
+              iconProps.width = 28
+              iconProps.mt = -1
+              iconProps.name = isFocused ? 'Home' : 'HomeOutlined'
+              break
+            case 'Health':
+              iconProps.name = isFocused ? 'MedicalServices' : 'MedicalServicesOutlined'
+              break
+            case 'Benefits':
+              iconProps.name = isFocused ? 'Description' : 'DescriptionOutlined'
+              break
+            case 'Payments':
+              iconProps.name = isFocused ? 'RequestQuote' : 'RequestQuoteOutlined'
+              break
+            default:
+              iconProps.name = 'Home'
           }
 
           return (
@@ -121,7 +141,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIconWithText {...iconProps} />
+                  <IconWithText {...iconProps} />
                 </Box>
               </Box>
             </TouchableWithoutFeedback>
