@@ -55,35 +55,16 @@ jobs:
       - name: Get file difference by file name
         id: changed_files_file_name_not_json
         uses: tj-actions/changed-files@v41
+        with:
+          dir_names: true
       - name: Get testing matrix array
         id: testing_matrix
         run: |
           firstInstance=true
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
-            if [[ "$file" != ".github/workflows/e2e_detox_mapping.yml" ]]; then
-              e2eNames=$(gh api -H "Accept: application/vnd.github+json" repos/department-of-veterans-affairs/va-mobile-app/contents/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code | jq --compact-output '.content |  gsub("[\\n\\t]"; "") | @base64d')
-              echo "Names: $e2eNames"
-              getDetoxTestsToRunLine=$(echo $e2eNames | sed -e 's/.*detoxTestsToRun\(.*\)eslint.*/\1/')
-              echo "DetoxTestLine: $getDetoxTestsToRunLine"
-              if [[ "$getDetoxTestsToRunLine" != "" ]]; then
-                getInitialTests=$(echo $getDetoxTestsToRunLine | sed -e 's/.*= \(.*\) \/.*/\1/' | sed "s/'/\"/g")
-                if [[ "$firstInstance" == "true" ]]; then
-                  getTests="${getInitialTests}"
-                  echo "Initial Test: $getTests"
-                  firstInstance=false
-                else
-                  echo "Tests: $getTests"
-                  echo "$getInitialTests"
-                  getTests=$(echo $getTests | jq --argjson initialTests "$getInitialTests" --compact-output '. += $initialTests | unique')
-                fi
-              fi
-            fi
+            echo "$file"
           done
           echo "TESTING_MATRIX=$getTests" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
-
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/src | jq --compact-output '(.[] | select(.name == "$fileName"))')
-# echo "$e2eNames"
