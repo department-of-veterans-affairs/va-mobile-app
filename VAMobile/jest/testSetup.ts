@@ -202,6 +202,14 @@ jest.mock('react-native-file-viewer', () => {
   }
 })
 
+jest.mock('@react-native-cookies/cookies', () => {
+  return {
+    clearAll: jest.fn(),
+    get: jest.fn(),
+    setFromResponse: jest.fn(),
+  }
+})
+
 jest.mock('@react-native-firebase/analytics', () => {
   return jest.fn(() => {
     return {

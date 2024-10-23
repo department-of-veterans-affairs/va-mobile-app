@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -39,7 +40,7 @@ import {
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
 import { useAlert, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { resetReviewActionCount } from 'utils/inAppReviews'
+import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
@@ -59,6 +60,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
+  const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
   const queryClient = useQueryClient()
   const { mutate: logout } = useLogout()
@@ -105,6 +107,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       componentMounted.current = false
     }
   }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
+    }, []),
+  )
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
@@ -147,6 +155,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const resetInAppReview = async () => {
     try {
       await resetReviewActionCount()
+      getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
       showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
     } catch {
       showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
@@ -191,6 +200,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box>
         <TextArea>
           <Button onPress={resetInAppReview} label={'Reset in-app review actions'} />
+          <Box mt={theme.dimensions.condensedMarginBetween} flexDirection="row" alignItems="flex-end">
+            <TextView variant={'MobileBody'}>In-App Review Count:</TextView>
+            <TextView ml={theme.dimensions.standardMarginBetween}>
+              {reviewCount ? parseInt(reviewCount, 10) : 0}
+            </TextView>
+          </Box>
         </TextArea>
       </Box>
       <Box>

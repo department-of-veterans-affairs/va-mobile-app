@@ -29,6 +29,8 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -64,6 +66,7 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
@@ -76,6 +79,14 @@ export const CommonE2eIdConstants = {
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
   NEXT_PAGE_ID: 'next-page',
+  VETERANS_CRISIS_LINE_CALL_ID: 'veteransCrisisLineCallID',
+  VETERANS_CRISIS_LINE_TTY_ID: 'veteransCrisisLineHearingLossNumberTestID',
+  VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
+  VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
+  PREVIOUS_PAGE_ID: 'previous-page',
+  CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
+  CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
+  CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
 }
 
 /** Log the automation into demo mode
@@ -281,7 +292,7 @@ export async function checkImages(screenshotPath) {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {

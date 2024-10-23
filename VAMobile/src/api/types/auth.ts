@@ -24,6 +24,7 @@ export const LoginServiceTypeConstants: {
 export type AuthCredentialData = {
   access_token?: string
   refresh_token?: string
+  device_secret?: string
   accessTokenExpirationDate?: string
   token_type?: string
   id_token?: string
