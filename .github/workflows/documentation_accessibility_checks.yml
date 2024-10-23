@@ -18,15 +18,17 @@ jobs:
         run: npm cache clean --force
       - name: Install Axe CLI globally
         run: npm install -g @axe-core/cli@latest
-      - name: Update npm
+      - name: Update npm 
         run: npm install -g npm@latest
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
-      - name: Install ChromeDriver
-        run: npm install -g chromedriver@126.0.0
+      - name: Install ChromeDriver using browser-driver-manager
+        run: |
+          npm install -g browser-driver-manager
+          npx browser-driver-manager install chrome
       - name: Test build
         working-directory: VAMobile
         run: |
