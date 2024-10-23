@@ -25,7 +25,7 @@ jobs:
           node-version-file: 'VAMobile/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/yarn.lock 
-      - name: Install Chrome and ChromeDriver using browser-driver-manager
+      - name: Install latest version of chromeDriver
         run: npm install -g chromedriver@latest
       - name: Test build
         working-directory: VAMobile
