@@ -34,7 +34,6 @@ function PrescriptionsDetailsBanner() {
       {
         text: t('prescription.details.banner.bullet3'),
         boldedText: ' ' + t('or'),
-        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + t('or'),
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
@@ -57,6 +56,7 @@ function PrescriptionsDetailsBanner() {
           phone={t('5418307563')}
           displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
           a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
+          variant={'base'}
         />
       </>
     )

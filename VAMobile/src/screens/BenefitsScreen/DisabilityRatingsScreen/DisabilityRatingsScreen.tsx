@@ -57,7 +57,7 @@ function DisabilityRatingsScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
@@ -98,7 +98,8 @@ function DisabilityRatingsScreen() {
         backgroundColor={'list'}
         borderStyle="solid"
         borderColor="primary"
-        accessible={true}>
+        accessible={true}
+        accessibilityRole={'text'}>
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.buttonPadding} flexDirection="column" accessible={false}>
           {percentageText && (
             <TextView variant={'MobileBodyBold'} testID={percentageText} accessible={false}>
@@ -189,7 +190,7 @@ function DisabilityRatingsScreen() {
 
   const getNeedHelpSection = () => {
     return (
-      <TextArea>
+      <TextArea testID="needHelpIDSection">
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}

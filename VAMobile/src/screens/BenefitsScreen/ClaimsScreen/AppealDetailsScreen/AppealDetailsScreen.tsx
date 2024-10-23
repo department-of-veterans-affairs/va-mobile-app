@@ -30,6 +30,8 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
+  const segmentedControlTestIDs = ['appealStatus', 'appealIssues']
+
   const [selectedTab, setSelectedTab] = useState(0)
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
@@ -57,7 +59,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   useEffect(() => {
     if (appeal && !loadingAppeal && !appealError) {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [appeal, loadingAppeal, appealError])
 
@@ -111,7 +113,8 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       backLabel={t('claims.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appealDetails.title')}
-      testID="appealsDetailsTestID">
+      testID="appealsDetailsTestID"
+      backLabelTestID="appealsBackID">
       {loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />
       ) : appealError ? (
@@ -136,6 +139,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={segmentedControlA11yHints}
+                testIDs={segmentedControlTestIDs}
               />
             </Box>
           </Box>

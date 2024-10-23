@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'
-import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
 import { useTheme } from 'utils/hooks'
 
@@ -95,7 +94,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
             <Box mr={20} mt={12}>
               <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
             </Box>
-            <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
+            <TextView {...textViewProps} accessibilityLabel={a11yLabel}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}
               {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}

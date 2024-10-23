@@ -1,7 +1,7 @@
 name: Onboarding Request (Engineering)
 description: Fill out this form to request initiation of engineering onboarding for 
 title: "Onboarding: [name]"
-labels: [ onboarding ]
+labels: [ user-onboarding ]
 assignees: timwright12
 body:
 - type: markdown
@@ -106,3 +106,4 @@ body:
     - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/Detox%20Best%20Practices)
     - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Releases/release-process)
     - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+    - label: Information about [accessing Demo Mode](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Mobile%20Demo%20Mode)

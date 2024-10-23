@@ -11,6 +11,16 @@ const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
 const { DEMO_PASSWORD } = getEnv()
+const mockNotification = {
+  trigger: {
+    type: 'push',
+  },
+  title: 'New Secure Message',
+  body: 'Review your messages in the health care section of the VA app',
+  payload: {
+    url: 'vamobile://messages/2092809',
+  },
+}
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -19,6 +29,8 @@ export const CommonE2eIdConstants = {
   SIGN_IN_BTN_ID: 'Sign in',
   SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
+  VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
+  VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
@@ -54,25 +66,53 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   PRESCRIPTION_REFILL_BUTTON_TEXT: 'Start refill request',
+  PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   HOME_ACTIVITY_HEADER_TEXT: 'Activity',
-  CLAIM_PHASE_TOGGLE_TEXT: 'claimPhaseExpansion',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
+  CONTACT_INFO_SAVE_ID: 'contactInfoSaveTestID',
+  CONTACT_INFO_SUGGESTED_ADDRESS_ID: 'suggestedAddressTestID',
+  CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
+  CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
+  CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
+  CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
+  APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
+  GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
+  NEXT_PAGE_ID: 'next-page',
+  VETERANS_CRISIS_LINE_CALL_ID: 'veteransCrisisLineCallID',
+  VETERANS_CRISIS_LINE_TTY_ID: 'veteransCrisisLineHearingLossNumberTestID',
+  VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
+  VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
+  PREVIOUS_PAGE_ID: 'previous-page',
+  CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
+  CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
+  CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
 }
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode(skipOnboarding = true) {
-  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
-    .toExist()
-    .withTimeout(60000)
+export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
-    await element(
-      by.text(
-        "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-      ),
-    ).tap()
-    await element(by.text('Dismiss')).tap()
-  } catch (e) {}
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(120000)
+  } catch (ex) {
+    await device.uninstallApp()
+    await device.installApp()
+    if (pushNotifications) {
+      await device.launchApp({
+        delete: true,
+        permissions: { notifications: 'YES' },
+        newInstance: true,
+        userNotification: mockNotification,
+      })
+    } else {
+      await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    }
+    await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+      .toExist()
+      .withTimeout(60000)
+  }
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
@@ -245,23 +285,6 @@ export async function checkImages(screenshotPath) {
   })
 }
 
-/*This function resets the in-app review counter then relaunches app, so the review pop-up doesn't break tests
- *
- * @param matchString - string of the text or id to match
- * @param findbyText - boolean to search by testID or Text
- * @param cancelPopUp - boolean to either cancel the popUp or leave the app
- */
-export async function resetInAppReview() {
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
-  await openProfile()
-  await openSettings()
-  await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.RESET_INAPP_REVIEW_BUTTON_TEXT)).tap()
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
-}
-
 /**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
@@ -269,7 +292,7 @@ export async function resetInAppReview() {
  * And can have a more specific & readable name for each function
  */
 export async function openVeteransCrisisLine() {
-  await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
 }
 
 export async function openProfile() {
@@ -364,23 +387,8 @@ export async function backButton(backButtonName: string) {
 }
 
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
-  if (
-    (AFFeature === 'WG_WhatDoIDoIfDisagreement' ||
-      AFFeature === 'WG_HowDoIUpdate' ||
-      AFFeature === 'WG_PreferredName' ||
-      AFFeature === 'WG_HowWillYou' ||
-      AFFeature === 'WG_GenderIdentity' ||
-      AFFeature === 'WG_WhatToKnow' ||
-      AFFeature === 'WG_EditAddress' ||
-      AFFeature === 'WG_EditPhoneNumber' ||
-      AFFeature === 'WG_EditEmail') &&
-    AFUseCase === 'DenyAccess'
-  ) {
-    await resetInAppReview()
-  } else {
-    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await loginToDemoMode()
-  }
+  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -389,6 +397,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
   await element(by.text('Remote Config')).tap()
+  if (AFUseCase === 'DenyAccess') {
+    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('remoteConfigTestID'))
+      .scroll(600, 'down')
+    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
+  }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
@@ -432,9 +447,17 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  await device.launchApp({ newInstance: true })
-  if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-    await loginToDemoMode()
+  if (AFUseCase === 'DenyAccess') {
+    await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
+      .toBeVisible()
+      .whileElement(by.id('remoteConfigTestID'))
+      .scroll(600, 'up')
+    await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
+    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+      await loginToDemoMode()
+    }
+  } else {
+    await element(by.text('Home')).tap()
   }
 }
 
@@ -460,13 +483,16 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
+
+  await element(by.text('Home')).tap()
+
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
     await expect(element(by.text('AF Heading Test'))).not.toExist()
     await expect(element(by.text('AF Body Test'))).not.toExist()
   }
+  await device.uninstallApp()
+  await device.installApp()
 }
 
 const navigateToFeature = async (featureNavigationArray) => {
@@ -500,7 +526,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (
@@ -518,7 +544,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       } else {
         await element(by.text('Request Refill ')).tap()
       }
-    } else if (featureNavigationArray[j] === 'Contact us') {
+    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Proof of Veteran status') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
@@ -549,23 +575,39 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
   if (AFUseCase === 'DenyAccess') {
-    await element(by.text('OK')).tap()
+    try {
+      await element(by.text('OK')).tap()
+    } catch (ex) {
+      await element(by.text('OK')).atIndex(0).tap()
+    }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      try {
+        await element(by.text('800-698-2411')).atIndex(0).tap()
+      } catch (ex) {
+        await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
       await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      try {
+        await element(by.text('TTY: 711')).atIndex(0).tap()
+      } catch (ex) {
+        await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
+
     if (AFUseCaseUpgrade) {
-      await expect(element(by.text('Update now'))).toExist()
+      try {
+        await expect(element(by.text('Update now'))).toExist()
+      } catch (ex) {
+        await expect(element(by.text('Update now')).atIndex(1)).toExist()
+      }
     }
   }
 

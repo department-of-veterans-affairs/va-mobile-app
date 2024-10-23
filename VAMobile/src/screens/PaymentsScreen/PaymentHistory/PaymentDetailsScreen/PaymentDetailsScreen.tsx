@@ -23,7 +23,7 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }, []),
   )
 
@@ -45,7 +45,8 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
     <FeatureLandingTemplate
       backLabel={t('history.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('paymentDetails.title')}>
+      title={t('paymentDetails.title')}
+      backLabelTestID="paymentDetailsBackID">
       <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -54,13 +55,13 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
           <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
             <TextView variant="MobileBodyBold">{paymentType}</TextView>
           </Box>
-          <TextView variant="MobileBodyBold" selectable={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={true}>
             {t('paymentDetails.amount')}
           </TextView>
           <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
             {amount}
           </TextView>
-          <TextView variant="MobileBodyBold" selectable={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={true}>
             {t('paymentDetails.method')}
           </TextView>
           <TextView variant="MobileBody" selectable={true}>
@@ -68,13 +69,15 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
           </TextView>
           {isDirectDeposit && (
             <>
-              <TextView variant="MobileBodyBold" mt={standardMarginBetween}>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween}>
                 {t('paymentDetails.bank')}
               </TextView>
               <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
                 {bank || placeHolder}
               </TextView>
-              <TextView variant="MobileBodyBold">{t('paymentDetails.account')}</TextView>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {t('paymentDetails.account')}
+              </TextView>
               <TextView variant="MobileBody" selectable={true}>
                 {hasAcccountInfo ? account : placeHolder}
               </TextView>

@@ -8,12 +8,8 @@ import { ClaimType } from 'constants/claims'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(true)
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -155,7 +151,7 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('menuitem', {
+          screen.getByRole('link', {
             name: 'Compensation More information needed Received October 01, 2020 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on October 05, 2020',
           }),
         ),
@@ -178,7 +174,7 @@ context('ClaimsAndAppealsListView', () => {
         .mockResolvedValue(mockPayload)
       await waitFor(() =>
         fireEvent.press(
-          screen.getByRole('menuitem', {
+          screen.getByRole('link', {
             name: 'Insurance on docket appeal Received December 22, 2020 Moved to this step on December 28, 2020',
           }),
         ),

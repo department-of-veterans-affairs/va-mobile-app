@@ -5,7 +5,7 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
+import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
@@ -83,66 +83,6 @@ export const getUserPhase = (phase: number): number => {
     return 3
   }
   return phase - 3
-}
-
-/** gets the correct date from each item in an event timeline */
-const getItemDate = (item: ClaimEventData): string => {
-  if (item.receivedDate) {
-    return item.receivedDate
-  } else if (item.documents && item.documents.length) {
-    return item.documents[item.documents.length - 1].uploadDate
-  } else if (item.type === 'other_documents_list' && item.uploadDate) {
-    return item.uploadDate
-  }
-
-  return item.date ? item.date : ''
-}
-
-/** checks to see if this is an event that kicks off a phase that is tracked or if it falls in the middle phases
- * that we roll into phase 3
- */
-const isEventOrPrimaryPhase = (event: ClaimEventData): boolean => {
-  if (event.type === 'phase_entered' && event.phase) {
-    return event.phase <= 3 || event.phase >= 7
-  }
-
-  return !!getItemDate(event)
-}
-
-/** takse a string that is in the event timeline as 'phase2' and returns a number to represent the phase */
-const getPhaseNumber = (phase: string): number => {
-  return parseInt(phase.replace('phase', ''), 10)
-}
-
-/** groups claim events by phase */
-export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData => {
-  const phases: { [key: string]: ClaimEventData[] } = {}
-  let activity: ClaimEventData[] = []
-  const phaseEvents = events
-    .map((event) => {
-      if (event.type.startsWith('phase')) {
-        return {
-          type: 'phase_entered',
-          phase: getPhaseNumber(event.type) + 1,
-          date: event.date,
-        } as ClaimEventData
-      }
-      return event
-    })
-    .filter(isEventOrPrimaryPhase)
-  phaseEvents.forEach((event) => {
-    if (event.type.startsWith('phase') && event.phase) {
-      activity.push(event)
-      phases[`${getUserPhase(event.phase)}`] = activity
-      activity = []
-    } else {
-      activity.push(event)
-    }
-  })
-  if (activity.length > 0) {
-    phases[1] = activity
-  }
-  return phases
 }
 
 /**
@@ -231,7 +171,7 @@ export const onAddPhotos = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
   claimID: string,
-  request: ClaimEventData,
+  request?: ClaimEventData,
   setIsActionSheetVisible?: (isVisible: boolean) => void,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
@@ -246,7 +186,14 @@ export const onAddPhotos = (
       setIsActionSheetVisible && setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
-          logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
+          logAnalyticsEvent(
+            Events.vama_evidence_cont_1(
+              claimID,
+              request?.trackedItemId || null,
+              request?.type || 'Submit Evidence',
+              'camera',
+            ),
+          )
           launchCamera(
             { mediaType: 'photo', quality: 0.9, includeBase64: true, presentationStyle: 'fullScreen' },
             (response: ImagePickerResponse): void => {
@@ -256,7 +203,12 @@ export const onAddPhotos = (
           break
         case 1:
           logAnalyticsEvent(
-            Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'gallery'),
+            Events.vama_evidence_cont_1(
+              claimID,
+              request?.trackedItemId || null,
+              request?.type || 'Submit Evidence',
+              'gallery',
+            ),
           )
           launchImageLibrary(
             { selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true },
