@@ -19,7 +19,10 @@ const checkMedicationWording = async ({
     appointmentType === 'Phone' ||
     appointmentType === 'CC' ||
     appointmentType === 'Onsite' ||
-    appointmentType === 'VA'
+    appointmentType === 'VA' ||
+    appointmentType === 'ATLAS' ||
+    appointmentType === 'GFE' ||
+    appointmentType === 'Home'
   ) {
     if (
       appointmentStatus === 'Canceled' ||
@@ -27,6 +30,21 @@ const checkMedicationWording = async ({
     ) {
       await expect(element(by.text('Prepare for your appointment'))).toExist()
       await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+
+      if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
+        await expect(element(by.text('Get your device ready to join.'))).toExist()
+        await expect(element(by.id('prepareForVideoVisitTestID'))).toExist()
+        await waitFor(element(by.id('prepareForVideoVisitTestID')))
+          .toBeVisible()
+          .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
+          .scroll(300, 'down')
+        await element(by.id('prepareForVideoVisitTestID')).tap()
+        await expect(element(by.text('Appointments help'))).toExist()
+        await element(by.text('Close')).tap()
+      } else {
+        await expect(element(by.text('Get your device ready to join.'))).not.toExist()
+        await expect(element(by.id('prepareForVideoVisitTestID'))).not.toExist()
+      }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
       await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
@@ -564,10 +582,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     if (!pastAppointment) {
       await expect(element(by.text('Video appointment')))
       await expect(element(by.text('You can join 30 minutes before your appointment time.'))).toExist()
-      await expect(element(by.id('prepareForVideoVisitTestID'))).toExist()
-      await element(by.id('prepareForVideoVisitTestID')).tap()
-      await expect(element(by.text('Appointments help'))).toExist()
-      await element(by.text('Close')).tap()
     } else {
       await expect(element(by.text('Past video appointment')))
     }
