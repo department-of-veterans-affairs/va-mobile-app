@@ -39,8 +39,8 @@ context('ClosedClaimStatusDetails', () => {
 
   it('renders list of claimed items', () => {
     renderWithProps()
-    expect(screen.getByLabelText('Hearing Loss (Increase)')).toBeTruthy()
-    expect(screen.getByLabelText('Ankle strain (related to: PTSD - Combat POW) (New)')).toBeTruthy()
-    expect(screen.getByLabelText('Diabetes mellitus2 (Secondary)')).toBeTruthy()
+    expect(screen.getByText('Hearing Loss (Increase)')).toBeTruthy()
+    expect(screen.getByText('Ankle strain (related to: PTSD - Combat POW) (New)')).toBeTruthy()
+    expect(screen.getByText('Diabetes mellitus2 (Secondary)')).toBeTruthy()
   })
 })

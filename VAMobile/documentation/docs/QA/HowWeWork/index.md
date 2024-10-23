@@ -11,11 +11,11 @@ We typically provide that information by signing off that we've tested the softw
 
 Good software testing happens with the keen awareness that it is impossible to "find all the bugs" (limitations in time, resources, tooling, and knowledge; not to mention inevitable changes in data, processes, software, and systems our software integrates with). Therefore, a highly-functional QA team knows when to stop vs continue working on a given task. On our team:
 
-We stop preparing for testing activities when:
+### We stop preparing for testing activities when:
 * we are sufficiently aware of how our software and interacting systems can break and what kinds of problems are the most important to find, and
 * we have what we need (tools, data prep, etc) to be able to look for those problems.
 
-We stop testing when:
+### We stop testing when:
 * we've examined the product commensurate to the risk it contains,
 * we've met our testing standards, and
 * we've expressed our testing plan and results, along with quality assessments, clearly.

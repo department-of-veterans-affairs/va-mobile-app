@@ -18,13 +18,21 @@ export type FormAttachmentsProps = {
   buttonLabel?: string
   /**button onPress */
   buttonPress?: () => void
+  /** optional TestID */
+  testID?: string
   /** list of current attachments */
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
 }
 
 /** A common component for form attachments, displays Attachments heading with helper link,
  * already attached items with remove option, and an optional large button. */
-const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel, buttonPress, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({
+  removeOnPress,
+  buttonLabel,
+  buttonPress,
+  testID,
+  attachmentsList,
+}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
@@ -58,6 +66,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
             label={t('remove')}
             a11yHint={t('remove.a11yHint', { content: fileName })}
             buttonType={ButtonVariants.Destructive}
+            testID={testID}
           />
         </Box>
       )
@@ -80,6 +89,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
           onPress={buttonPress}
           buttonType={ButtonVariants.Secondary}
           a11yLabel={buttonLabel}
+          testID={testID}
         />
       )}
     </Box>
