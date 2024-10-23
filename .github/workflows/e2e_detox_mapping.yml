@@ -57,12 +57,14 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           dir_names: true
+          base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get testing matrix array
         id: testing_matrix
         run: |
           firstInstance=true
           for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
-            echo "$file"
+            directoryContent=$(gh api repos/department-of-veterans-affairs/va-mobile-app/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code)
+            echo "$directoryContent"
           done
           echo "TESTING_MATRIX=$getTests" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
