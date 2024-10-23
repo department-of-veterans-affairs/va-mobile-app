@@ -202,8 +202,6 @@ const call = async function <T>(
     if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
       if (endpoint === '/v0/user/logged-in') {
         return
-      } else {
-        logAnalyticsEvent(Events.vama_9385_api_cType(endpoint, response.headers.get('Content-Type') || ''))
       }
     }
 
