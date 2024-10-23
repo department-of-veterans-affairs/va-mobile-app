@@ -1,6 +1,5 @@
 ---
 title: Debugging Tools 
-sidebar_position: 4
 ---
 
 # Debugging Instructions 
