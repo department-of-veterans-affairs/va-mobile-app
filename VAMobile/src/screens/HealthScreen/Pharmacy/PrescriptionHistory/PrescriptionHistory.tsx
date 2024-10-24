@@ -216,7 +216,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       const detailsPressableProps: PressableProps = {
         onPress: () => prescriptionDetailsClicked(prescription),
         accessible: true,
-        accessibilityRole: 'button',
+        accessibilityRole: 'link',
         accessibilityLabel: t('prescription.history.getDetails'),
       }
 
