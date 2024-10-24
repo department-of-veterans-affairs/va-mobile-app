@@ -136,7 +136,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   return (
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
-      <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
+      <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={t('more')} accessibilityRole={'link'}>
         <IconWithText name="MoreHoriz" fill={currentTheme.colors.icon.active} label={t('more')} />
       </Pressable>
 
