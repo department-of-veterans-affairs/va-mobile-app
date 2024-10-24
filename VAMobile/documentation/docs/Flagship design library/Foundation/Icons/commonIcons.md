@@ -6,7 +6,6 @@ import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/Chevro
 import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
 import { ReactComponent as CircleCheckMark} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
 import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/Compose.svg';
-import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/Ellipsis.svg';
 import { ReactComponent as ExclamationTriangle} from '@componentsDocs/VAIcon/svgs/ExclamationTriangle.svg';
 import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/ExternalLink.svg';
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/Folder.svg';
@@ -41,7 +40,6 @@ Check Mark in Circle | <CircleCheckMark  className="icons"/> | CircleCheckMark.s
 Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
 Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
 Compose | <Compose  className="icons"/> | Compose.svg
-Ellipsis | <Ellipsis  className="icons"/> | Ellipsis.svg
 Exclamation Triangle | <ExclamationTriangle  className="icons"/> | ExclamationTriangle.svg
 External Link | <ExternalLink  className="icons"/> | ExternalLink.svg
 Folder | <Folder  className="icons"/> | Folder.svg

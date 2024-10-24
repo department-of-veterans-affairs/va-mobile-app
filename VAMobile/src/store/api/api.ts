@@ -187,11 +187,7 @@ const call = async function <T>(
 
     // Guard against responses that can't be parsed as JSON
     if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
-      if (endpoint === '/v0/user/logged-in') {
-        return
-      } else {
-        logAnalyticsEvent(Events.vama_9385_api_cType(endpoint, response.headers.get('Content-Type') || ''))
-      }
+      return
     }
 
     // No errors found, return the response
