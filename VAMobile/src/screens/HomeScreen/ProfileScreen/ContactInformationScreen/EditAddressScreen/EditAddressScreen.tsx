@@ -154,15 +154,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [showAddressValidation, setShowAddressValidation] = useState(false)
 
-  const abortController = new AbortController()
-  const abortSignal = abortController.signal
-
   useBeforeNavBackListener(navigation, (e) => {
-    // If address is being validated when exiting screen, abort API call
-    if (validatingAddress) {
-      abortController.abort()
-    }
-
     if (!formChanged() && !showAddressValidation) {
       return
     }
@@ -275,7 +267,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
 
     const save = () => {
       validateAddress(
-        { addressData, abortSignal },
+        { addressData },
         {
           onSuccess: (data) => {
             if (data?.confirmedSuggestedAddresses) {

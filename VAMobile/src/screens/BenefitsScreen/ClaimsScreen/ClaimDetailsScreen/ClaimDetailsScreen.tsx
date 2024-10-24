@@ -62,14 +62,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const { claimID, claimType } = route.params
   const queryClient = useQueryClient()
-  const abortController = new AbortController()
-  const abortSignal = abortController.signal
   const {
     data: claim,
     isFetching: loadingClaim,
     error: claimError,
     refetch: refetchClaim,
-  } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
@@ -93,7 +91,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     // if claim is still loading cancel it
     if (loadingClaim) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
-      abortController.abort()
     }
   })
 
