@@ -367,7 +367,6 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             text: details[4],
             linkToRedirect: LINK_URL_DECISION_REVIEWS,
             variant: 'MobileBodyLink',
-            a11yRole: 'link',
           },
         ]
         return (
