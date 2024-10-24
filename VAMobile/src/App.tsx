@@ -45,6 +45,7 @@ import {
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
@@ -97,6 +98,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditDirectDeposit: {
     displayTitle: string
   }
+  InAppFeedback: { task: string }
   Tabs: undefined
 }
 
@@ -438,6 +440,7 @@ export function AuthedApp() {
           component={EditDirectDepositScreen}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
+        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

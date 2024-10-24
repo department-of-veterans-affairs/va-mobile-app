@@ -50,7 +50,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
 
   return (
     <LargePanel
-      title={t('inAppRecruitment.giveFeedback')}
+      title={t('inAppRecruitment.userResearch')}
       rightButtonText={t('close')}
       rightButtonTestID="backToSettingsScreenID">
       <Box

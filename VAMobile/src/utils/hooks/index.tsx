@@ -257,6 +257,28 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
   }
 }
 
+export function askToGiveFeedback(): (task: string) => void {
+  const navigateTo = useRouteNavigation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
+  return (task: string) => {
+    const onOKPress = () => {
+      navigateTo('InAppFeedback', { task })
+    }
+
+    const onCancelPress = () => {}
+
+    Alert.alert(t('inAppFeedback.popup.title'), t('inAppFeedback.popup.body'), [
+      {
+        text: t('inAppFeedback.popup.notNow'),
+        style: 'cancel',
+        onPress: onCancelPress,
+      },
+      { text: t('inAppFeedback.popup.accept'), onPress: onOKPress, style: 'default' },
+    ])
+  }
+}
+
 export type useDestructiveActionSheetButtonProps = {
   /** text of button */
   text: string
