@@ -17,7 +17,7 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
-const apiGroupings = [
+const APIGroupings = [
   {
     name: 'Appointments',
     endpoints: [
@@ -534,7 +534,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Button label="Clear API Errors" onPress={clearErrors} />
         </Box>
       }>
-      <Box>{ApiGroupingDisplay(apiGroupings, temporaryErrors, setErrors, clearData)}</Box>
+      <Box>{ApiGroupingDisplay(APIGroupings, temporaryErrors, setErrors, clearData)}</Box>
     </FeatureLandingTemplate>
   )
 }
