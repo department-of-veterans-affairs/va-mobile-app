@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { AccessibilityRole } from 'react-native'
 
 import _ from 'underscore'
 
@@ -34,6 +35,9 @@ export type VABulletListText = {
 
   /** optional accessibility label for text */
   a11yLabel?: string
+
+  /** optional accessibility role for text */
+  a11yRole?: AccessibilityRole
 }
 
 /**
@@ -73,7 +77,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
   return (
     <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined}>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
-        const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
+        const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel, a11yRole } = textItem
 
         const textViewProps: TextViewProps = {
           variant: variant || 'MobileBody',
@@ -81,6 +85,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
           flexWrap: 'wrap',
           flex: 1,
+          accessibilityRole: a11yRole || undefined,
         }
 
         return (

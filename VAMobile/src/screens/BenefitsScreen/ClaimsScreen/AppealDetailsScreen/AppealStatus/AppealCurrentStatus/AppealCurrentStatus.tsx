@@ -367,6 +367,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             text: details[4],
             linkToRedirect: LINK_URL_DECISION_REVIEWS,
             variant: 'MobileBodyLink',
+            a11yRole: 'link',
           },
         ]
         return (
@@ -388,7 +389,10 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+            <TextView
+              mt={marginTop}
+              onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}
+              accessibilityRole="link">
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
@@ -401,12 +405,18 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+            <TextView
+              mt={marginTop}
+              onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}
+              accessibilityRole="link">
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
             </TextView>
-            <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+            <TextView
+              variant="MobileBodyLink"
+              onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}
+              accessibilityRole="link">
               {details[4]}
               <TextView variant="MobileBody">.</TextView>
             </TextView>
