@@ -53,16 +53,16 @@ context('RadioGroupModal', () => {
   })
 
   it('renders options with roles and a11yLabels', () => {
-    expect(screen.getByRole('link', { name: 'Option One' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Option One' })).toBeTruthy()
     expect(screen.getByLabelText('Option One option 1 of 2')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Option Two' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Option Two' })).toBeTruthy()
     expect(screen.getByLabelText('Option Two option 2 of 2')).toBeTruthy()
   })
 
   it('calls onSetOption when option is pressed', () => {
-    fireEvent.press(screen.getByRole('link', { name: 'Option One' }))
+    fireEvent.press(screen.getByRole('radio', { name: 'Option One' }))
     expect(onSetSpy).toHaveBeenCalledWith('option-one')
-    fireEvent.press(screen.getByRole('link', { name: 'Option Two' }))
+    fireEvent.press(screen.getByRole('radio', { name: 'Option Two' }))
     expect(onSetSpy).toHaveBeenCalledWith('option-two')
   })
 })

@@ -60,7 +60,7 @@ context('AppealDetailsScreen', () => {
         ...appealData,
         type: 'appeal',
       })
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Status' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Status' })))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Up to date as of ' + dateTime)).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
@@ -126,7 +126,7 @@ context('AppealDetailsScreen', () => {
         ...appealData,
         type: 'appeal',
       })
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Issues' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Issues' })))
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: 'Currently on appeal' })).toBeTruthy())
