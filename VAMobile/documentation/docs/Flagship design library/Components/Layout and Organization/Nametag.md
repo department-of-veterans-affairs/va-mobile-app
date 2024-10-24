@@ -7,10 +7,10 @@ The Nametag provides an official identity to an authenticated user's experience 
 ## Examples
 
 ### Default
-<iframe width="100%" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7819-12286&mode=design&t=XkYEw6lPmNkmrNt0-4" allowfullscreen></iframe>
+<iframe width="100%" height="450" title="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7819-12286&mode=design&t=XkYEw6lPmNkmrNt0-4" allowfullscreen></iframe>
 
 ### Variations
-<iframe width="100%" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7819-12292&mode=design&t=XkYEw6lPmNkmrNt0-4" allowfullscreen></iframe>
+<iframe width="100%" height="450" title="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7819-12292&mode=design&t=XkYEw6lPmNkmrNt0-4" allowfullscreen></iframe>
 
 
 ## Usage

@@ -8,7 +8,7 @@ sidebar_position: 1
 
 [Monthly overview dashboard](https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c)
 
-<iframe width="1200" height="900" src="https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c" frameborder="0" allowfullscreen></iframe>
+<iframe width="1200" height="900" title="Flagship monthly overview dashboard" src="https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c" frameborder="0" allowfullscreen></iframe>
 
 ## Feature specific boards
 
