@@ -30,10 +30,6 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
-      device_specific:
-        description: 'Is your testRail run iOS only? (only check if adding results to testRail)'
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -343,7 +339,6 @@ jobs:
     with: 
       test_names: "${{matrix.testsuite}}"
       testRail_name: ${{ inputs.testRail_name }}
-      test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "iOS"
     secrets: inherit
 
