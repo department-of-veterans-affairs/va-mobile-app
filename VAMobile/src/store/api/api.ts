@@ -70,7 +70,6 @@ const doRequest = async function (
   endpoint: string,
   params: Params = {},
   contentType: ContentTypes = contentTypes.applicationJson,
-  abortSignal?: AbortSignal,
 ): Promise<Response> {
   const fetchObj: RequestInit = {
     method,
@@ -84,7 +83,6 @@ const doRequest = async function (
       'OS-Version': OS_VERSION,
       'App-Version': queryClient.getQueryData(deviceKeys.appVersion) || '',
     },
-    ...({ signal: abortSignal } || {}),
   }
 
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
@@ -119,20 +117,14 @@ const call = async function <T>(
   endpoint: string,
   params: Params = {},
   contentType?: ContentTypes,
-  abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
   if (!_demoMode) {
     let response
     let responseBody
 
     try {
-      response = await doRequest(method, endpoint, params, contentType, abortSignal)
+      response = await doRequest(method, endpoint, params, contentType)
     } catch (networkError) {
-      // networkError coming back as `AbortError` means abortController.abort() was called
-      // @ts-ignore
-      if (networkError?.name === 'AbortError') {
-        return
-      }
       throw { networkError: true }
     }
 
@@ -157,13 +149,8 @@ const call = async function <T>(
       if (didRefresh) {
         console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
         try {
-          response = await doRequest(method, endpoint, params, contentType, abortSignal)
+          response = await doRequest(method, endpoint, params, contentType)
         } catch (networkError) {
-          // networkError coming back as `AbortError` means abortController.abort() was called
-          // @ts-ignore
-          if (networkError?.name === 'AbortError') {
-            return
-          }
           throw { networkError: true }
         }
       } else {
@@ -219,21 +206,16 @@ const call = async function <T>(
   }
 }
 
-export const get = async function <T>(
-  endpoint: string,
-  params: Params = {},
-  abortSignal?: AbortSignal,
-): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, undefined, abortSignal)
+export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+  return call<T>('GET', endpoint, params, undefined)
 }
 
 export const post = async function <T>(
   endpoint: string,
   params: Params = {},
   contentType?: ContentTypes,
-  abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params, contentType, abortSignal)
+  return call<T>('POST', endpoint, params, contentType)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
