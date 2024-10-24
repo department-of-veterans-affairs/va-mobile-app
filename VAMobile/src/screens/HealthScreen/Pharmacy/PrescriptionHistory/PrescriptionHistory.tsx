@@ -5,7 +5,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
@@ -262,7 +262,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         const bottomContent = (
           <Box {...bottomContentProps}>
             <Box mr={8}>
-              <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
+              <Icon name={'LocalShipping'} fill={theme.colors.icon.link} height={18} width={18} />
             </Box>
             <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
               {t('prescription.history.tracking')}

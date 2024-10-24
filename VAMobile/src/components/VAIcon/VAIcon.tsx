@@ -13,14 +13,12 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 // See VAIcon function documentation below for guidance on adding new SVGs
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
-import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 // Chevrons
 import ChevronLeft from './svgs/ChevronLeft.svg'
 import ChevronRight from './svgs/ChevronRight.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import Folder from './svgs/Folder.svg'
@@ -34,9 +32,7 @@ import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
-import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
-import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
@@ -61,7 +57,6 @@ import RadioFilled from './svgs/radio/RadioFilled.svg'
 export const VA_ICON_MAP = {
   Add,
   Building,
-  Bullet,
   Calendar,
   Chat,
   CheckBoxEmpty,
@@ -76,7 +71,6 @@ export const VA_ICON_MAP = {
   CirclePhone,
   Compose,
   Directions,
-  ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
   Folder,
@@ -94,10 +88,8 @@ export const VA_ICON_MAP = {
   Remove,
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
-  Sort,
   Text,
   Trash,
-  Truck,
   Unread,
   UploadPhoto,
   VideoCamera,
