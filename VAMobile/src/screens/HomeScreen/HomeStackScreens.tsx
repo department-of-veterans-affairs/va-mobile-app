@@ -40,6 +40,7 @@ export type HomeStackParamList = WebviewStackParams & {
   PersonalInformation: undefined
   PreferredName: undefined
   ContactInformation: undefined
+  OverrideAPI: undefined
   RemoteConfig: undefined
   Settings: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }

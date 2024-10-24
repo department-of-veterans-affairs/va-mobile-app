@@ -7,10 +7,12 @@ import { initDemoStore } from '../api/demo/store'
 
 export type DemoState = {
   demoMode: boolean
+  overrideErrors: Array<api.APIError>
 }
 
 export const initialDemoState: DemoState = {
   demoMode: false,
+  overrideErrors: [],
 }
 
 /**
@@ -26,6 +28,18 @@ export const updateDemoMode =
     if (!loginOut) {
       await initDemoStore()
     }
+    if (!demoMode) {
+      dispatch(dispatchUpdateErrors([]))
+    }
+  }
+
+/**
+ * sets the error overrides for demo mode
+ */
+export const updateErrorOverrides =
+  (errorOverrides: Array<api.APIError>): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchUpdateErrors(errorOverrides))
   }
 
 /**
@@ -38,8 +52,11 @@ const demoSlice = createSlice({
     dispatchUpdateDemoMode: (state, action: PayloadAction<boolean>) => {
       state.demoMode = action.payload
     },
+    dispatchUpdateErrors: (state, action: PayloadAction<Array<api.APIError>>) => {
+      state.overrideErrors = action.payload
+    },
   },
 })
 
-const { dispatchUpdateDemoMode } = demoSlice.actions
+const { dispatchUpdateDemoMode, dispatchUpdateErrors } = demoSlice.actions
 export default demoSlice.reducer
