@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { errors } from 'api/types'
 import { AppThunk } from 'store'
 import * as api from 'store/api'
 
@@ -8,7 +7,7 @@ import { initDemoStore } from '../api/demo/store'
 
 export type DemoState = {
   demoMode: boolean
-  overrideErrors: Array<errors>
+  overrideErrors: Array<api.APIError>
 }
 
 export const initialDemoState: DemoState = {
@@ -38,7 +37,7 @@ export const updateDemoMode =
  * sets the error overrides for demo mode
  */
 export const updateErrorOverrides =
-  (errorOverrides: Array<errors>): AppThunk =>
+  (errorOverrides: Array<api.APIError>): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchUpdateErrors(errorOverrides))
   }
@@ -53,7 +52,7 @@ const demoSlice = createSlice({
     dispatchUpdateDemoMode: (state, action: PayloadAction<boolean>) => {
       state.demoMode = action.payload
     },
-    dispatchUpdateErrors: (state, action: PayloadAction<Array<errors>>) => {
+    dispatchUpdateErrors: (state, action: PayloadAction<Array<api.APIError>>) => {
       state.overrideErrors = action.payload
     },
   },

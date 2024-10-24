@@ -5,28 +5,232 @@ import { useSelector } from 'react-redux'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { TFunction } from 'i18next'
 import _ from 'lodash'
 
-import { errorOverride, errors } from 'api/types'
 import { Box, FeatureLandingTemplate, SelectorType, TextArea, TextView, VASelector, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
+import { APIError } from 'store/api'
 import { DemoState, updateErrorOverrides } from 'store/slices/demoSlice'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
+const apiGroupings = [
+  {
+    name: 'Appointments',
+    endpoints: [
+      {
+        endpoint: '/v0/appointments',
+      },
+    ],
+  },
+  {
+    name: 'Authorized Services',
+    endpoints: [
+      {
+        endpoint: '/v0/user/authorized-services',
+      },
+    ],
+  },
+  {
+    name: 'Claims and Appeals',
+    endpoints: [
+      {
+        endpoint: '/v0/appeal/',
+      },
+      {
+        endpoint: '/v0/claim/',
+      },
+      {
+        endpoint: '/v0/claims-and-appeals-overview',
+      },
+    ],
+  },
+  {
+    name: 'Contact Information',
+    endpoints: [
+      {
+        endpoint: '/v0/user/contact-info',
+      },
+    ],
+  },
+  {
+    name: 'Decision Letters',
+    endpoints: [
+      {
+        endpoint: '/v0/claims/decision-letters',
+      },
+    ],
+  },
+  {
+    name: 'Demographics',
+    endpoints: [
+      {
+        endpoint: '/v0/user/demographics',
+      },
+      {
+        endpoint: '/v0/user/gender_identity/edit',
+      },
+    ],
+  },
+  {
+    name: 'Direct Deposit',
+    endpoints: [
+      {
+        endpoint: '/v0/payment-information/benefits',
+      },
+    ],
+  },
+  {
+    name: 'Disability Rating',
+    endpoints: [
+      {
+        endpoint: '/v0/disability-rating',
+      },
+    ],
+  },
+  {
+    name: 'Facilities',
+    endpoints: [
+      {
+        endpoint: '/v0/facilities-info',
+      },
+    ],
+  },
+  {
+    name: 'Letters',
+    endpoints: [
+      {
+        endpoint: '/v0/letters/beneficiary',
+      },
+      {
+        endpoint: '/v0/letters',
+      },
+    ],
+  },
+  {
+    name: 'Military Service',
+    endpoints: [
+      {
+        endpoint: '/v0/military-service-history',
+      },
+    ],
+  },
+  {
+    name: 'Notifications',
+    endpoints: [
+      {
+        endpoint: '/v0/push/prefs/',
+      },
+    ],
+  },
+  {
+    name: 'Payments',
+    endpoints: [
+      {
+        endpoint: '/v0/payment-history',
+      },
+    ],
+  },
+  {
+    name: 'Personal Information',
+    endpoints: [
+      {
+        endpoint: '/v2/user',
+      },
+    ],
+  },
+  {
+    name: 'Prescriptions',
+    endpoints: [
+      {
+        endpoint: '/v0/health/rx/prescriptions',
+      },
+      {
+        endpoint: '/tracking',
+      },
+    ],
+  },
+  {
+    name: 'Secure Messaging',
+    endpoints: [
+      {
+        endpoint: '/v0/messaging/health/folders/${folderID}/messages',
+      },
+      {
+        endpoint: '/v0/messaging/health/folders',
+      },
+      {
+        endpoint: '/v0/messaging/health/messages/',
+      },
+      {
+        endpoint: '/v0/messaging/health/messages/recipients',
+      },
+      {
+        endpoint: '/v0/messaging/health/messages/signature',
+      },
+      {
+        endpoint: '/thread',
+      },
+    ],
+  },
+  {
+    name: 'Vaccines',
+    endpoints: [
+      {
+        endpoint: '/v1/health/immunizations',
+      },
+      {
+        endpoint: '/v0/health/locations/',
+      },
+    ],
+  },
+]
+
+const ApiGroupingDisplay = (
+  apiGroupings: {
+    name: string
+    endpoints: {
+      endpoint: string
+    }[]
+  }[],
+  overrideErrors: APIError[],
+  setErrors: React.Dispatch<React.SetStateAction<APIError[]>>,
+  clearErrors: boolean,
+) => {
+  const theme = useTheme()
+  const groupings = apiGroupings.map((group) => {
+    const individualQueries = group.endpoints.map((endpoint, idx) => {
+      return (
+        <Box
+          mt={theme.dimensions.standardMarginBetween}
+          mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
+          {IndividualQueryDisplay(endpoint.endpoint, overrideErrors, setErrors, clearErrors)}
+        </Box>
+      )
+    })
+    return (
+      <TextArea>
+        <TextView accessibilityRole="header" variant="MobileBodyBold">
+          {group.name}
+        </TextView>
+        {individualQueries}
+      </TextArea>
+    )
+  })
+  return <Box>{groupings}</Box>
+}
+
 const IndividualQueryDisplay = (
   endpoint: string,
-  overrideErrors: errors[],
-  setErrors: React.Dispatch<React.SetStateAction<errors[]>>,
+  overrideErrors: APIError[],
+  setErrors: React.Dispatch<React.SetStateAction<APIError[]>>,
   clearErrors: boolean,
-  t: TFunction,
-  theme: VATheme,
 ) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const [networkSelected, setNetworkSelected] = useState(false)
   const [backEndSelected, setBackEndSelected] = useState(false)
   const [otherSelected, setOtherSelected] = useState(false)
@@ -39,26 +243,20 @@ const IndividualQueryDisplay = (
   useEffect(() => {
     _.forEach(overrideErrors, (error) => {
       if (error.endpoint === endpoint) {
-        const errorDetails = error.error
-        for (const key in errorDetails) {
-          if (key === 'networkError') {
-            setNetworkSelected(true)
-          } else if (key === 'status') {
-            const errorDict = errorDetails as errorOverride
-            if (errorDict.status === 418) {
-              if (errorDict.json) {
-                setBackEndSelected(true)
-                const errorDetailsDict = errorDict.json.errors[0]
-                setRefreshable(errorDetailsDict?.refreshable || false)
-                setInitialBETitle(errorDetailsDict.title)
-                setInitialBEBody(errorDetailsDict.body || '')
-                setInitialBEPhone(errorDetailsDict.telephone || '')
-              }
-            } else {
-              setOtherSelected(true)
-              setInitialOtherErrorCode(errorDict.status.toString())
-            }
+        if (error.networkError) {
+          setNetworkSelected(true)
+        } else if (error.status === 418) {
+          if (error.json) {
+            setBackEndSelected(true)
+            const errorDetailsDict = error.json.errors[0]
+            setRefreshable(errorDetailsDict?.refreshable || false)
+            setInitialBETitle(errorDetailsDict.title)
+            setInitialBEBody(errorDetailsDict.body || '')
+            setInitialBEPhone(errorDetailsDict.telephone || '')
           }
+        } else {
+          setOtherSelected(true)
+          setInitialOtherErrorCode(error.status?.toString() || '500')
         }
       }
     })
@@ -91,7 +289,7 @@ const IndividualQueryDisplay = (
           if (!networkSelected) {
             newErrors.push({
               endpoint,
-              error: { networkError: true },
+              networkError: true,
             })
           }
           setErrors(newErrors)
@@ -111,9 +309,9 @@ const IndividualQueryDisplay = (
             return n.endpoint !== endpoint
           })
           if (!backEndSelected) {
-            const backEndError: errorOverride = {
+            newErrors.push({
+              endpoint,
               status: 418,
-              endpoint: '',
               text: '',
               json: {
                 errors: [
@@ -128,10 +326,6 @@ const IndividualQueryDisplay = (
                   },
                 ],
               },
-            }
-            newErrors.push({
-              endpoint,
-              error: backEndError,
             })
           }
           setErrors(newErrors)
@@ -147,11 +341,10 @@ const IndividualQueryDisplay = (
               const otherErrors = _.remove(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndErrors = _.remove(overrideErrors, function (n) {
+              const backEndError = _.remove(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
-              const backEndError = backEndErrors.error as errorOverride
               if (backEndError.json) {
                 if (val.length >= 1) {
                   backEndError.json.errors[0].title = val
@@ -159,10 +352,7 @@ const IndividualQueryDisplay = (
                   backEndError.json.errors[0].title = ''
                 }
               }
-              otherErrors.push({
-                endpoint,
-                error: backEndError,
-              })
+              otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
           />
@@ -174,11 +364,10 @@ const IndividualQueryDisplay = (
               const otherErrors = _.remove(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndErrors = _.remove(overrideErrors, function (n) {
+              const backEndError = _.remove(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
-              const backEndError = backEndErrors.error as errorOverride
               if (backEndError.json) {
                 if (val.length >= 1) {
                   backEndError.json.errors[0].body = val
@@ -186,10 +375,7 @@ const IndividualQueryDisplay = (
                   backEndError.json.errors[0].body = ''
                 }
               }
-              otherErrors.push({
-                endpoint,
-                error: backEndError,
-              })
+              otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
           />
@@ -201,11 +387,10 @@ const IndividualQueryDisplay = (
               const otherErrors = _.remove(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndErrors = _.remove(overrideErrors, function (n) {
+              const backEndError = _.remove(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
-              const backEndError = backEndErrors.error as errorOverride
               if (backEndError.json) {
                 if (val.length >= 1) {
                   backEndError.json.errors[0].telephone = val
@@ -213,10 +398,7 @@ const IndividualQueryDisplay = (
                   backEndError.json.errors[0].telephone = ''
                 }
               }
-              otherErrors.push({
-                endpoint,
-                error: backEndError,
-              })
+              otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
           />
@@ -229,18 +411,14 @@ const IndividualQueryDisplay = (
               const otherErrors = _.remove(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndErrors = _.remove(overrideErrors, function (n) {
+              const backEndError = _.remove(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
-              const backEndError = backEndErrors.error as errorOverride
               if (backEndError.json) {
                 backEndError.json.errors[0].refreshable = !refreshableSelected
               }
-              otherErrors.push({
-                endpoint,
-                error: backEndError,
-              })
+              otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
           />
@@ -260,9 +438,9 @@ const IndividualQueryDisplay = (
             return n.endpoint !== endpoint
           })
           if (!otherSelected) {
-            const backEndError: errorOverride = {
+            newErrors.push({
+              endpoint,
               status: 500,
-              endpoint: '',
               text: '',
               json: {
                 errors: [
@@ -277,10 +455,6 @@ const IndividualQueryDisplay = (
                   },
                 ],
               },
-            }
-            newErrors.push({
-              endpoint,
-              error: backEndError,
             })
           }
           setErrors(newErrors)
@@ -296,21 +470,17 @@ const IndividualQueryDisplay = (
               const otherErrors = _.remove(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndErrors = _.remove(overrideErrors, function (n) {
+              const backEndError = _.remove(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
-              const backEndError = backEndErrors.error as errorOverride
               if (val.length >= 1) {
                 backEndError.status = parseInt(val, 10)
               } else {
                 backEndError.status = 0
               }
 
-              otherErrors.push({
-                endpoint,
-                error: backEndError,
-              })
+              otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
           />
@@ -326,7 +496,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
   const dispatch = useAppDispatch()
   const { overrideErrors } = useSelector<RootState, DemoState>((state) => state.demo)
   const [clearData, setClearData] = useState(false)
-  const [temporaryErrors, setErrors] = useState<Array<errors>>([])
+  const [temporaryErrors, setErrors] = useState<Array<APIError>>([])
 
   useEffect(() => {
     setErrors(overrideErrors)
@@ -364,186 +534,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Button label="Clear API Errors" onPress={clearErrors} />
         </Box>
       }>
-      <Box>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Appointments
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/appointments', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Authorized Services
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/user/authorized-services', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Claims and Appeals
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/appeal/', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay('/v0/claim/', temporaryErrors, setErrors, clearData, t, theme)}
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/claims-and-appeals-overview', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Contact Information
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/user/contact-info', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Decision Letters
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/claims/decision-letters', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Demographics
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/user/demographics', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay('/v0/user/gender_identity/edit', temporaryErrors, setErrors, clearData, t, theme)}
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Direct Deposit
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(
-              '/v0/payment-information/benefits',
-              temporaryErrors,
-              setErrors,
-              clearData,
-              t,
-              theme,
-            )}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Disability Rating
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/disability-rating', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Facilities
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/facilities-info', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Letters
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/letters/beneficiary', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/letters', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Military Service
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/military-service-history', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Notifications
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(`/v0/push/prefs/`, temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Payments
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/payment-history', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Personal Information
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v2/user', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Prescriptions
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/health/rx/prescriptions', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay('/tracking', temporaryErrors, setErrors, clearData, t, theme)}
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Secure Messaging
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay(
-              '/v0/messaging/health/folders/${folderID}/messages',
-              temporaryErrors,
-              setErrors,
-              clearData,
-              t,
-              theme,
-            )}
-          </Box>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/messaging/health/folders', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay('/v0/messaging/health/messages/', temporaryErrors, setErrors, clearData, t, theme)}
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v0/messaging/health/recipients', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay(
-            '/v0/messaging/health/messages/signature',
-            temporaryErrors,
-            setErrors,
-            clearData,
-            t,
-            theme,
-          )}
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/thread', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-        </TextArea>
-        <TextArea>
-          <TextView accessibilityRole="header" variant="MobileBodyBold">
-            Vaccines
-          </TextView>
-          <Box my={theme.dimensions.standardMarginBetween}>
-            {IndividualQueryDisplay('/v1/health/immunizations', temporaryErrors, setErrors, clearData, t, theme)}
-          </Box>
-          {IndividualQueryDisplay('/v0/health/locations/', temporaryErrors, setErrors, clearData, t, theme)}
-        </TextArea>
-      </Box>
+      <Box>{ApiGroupingDisplay(apiGroupings, temporaryErrors, setErrors, clearData)}</Box>
     </FeatureLandingTemplate>
   )
 }
