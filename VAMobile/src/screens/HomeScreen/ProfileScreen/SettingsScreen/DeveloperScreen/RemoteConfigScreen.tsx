@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { forEach } from 'underscore'
 
+import { useLogout } from 'api/auth'
 import {
   AccordionCollapsible,
   Box,
@@ -20,7 +21,6 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { logout } from 'store/slices/authSlice'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
@@ -39,6 +39,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   const currentWaygateConfig = getWaygateToggles()
   const [waygateToggles] = useState({ ...currentWaygateConfig })
   const isFocused = useIsFocused()
+  const { mutate: logout } = useLogout()
 
   useEffect(() => {
     isFocused && setWaygateDebugConfig(waygateToggles)
@@ -140,7 +141,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
                   showSnackBar('No values changed', dispatch, undefined, true, true, true)
                   return
                 }
-                dispatch(logout())
+                logout()
                 setDebugConfig(toggles)
               }}
               label={'Apply Overrides'}
