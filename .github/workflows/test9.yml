@@ -1,0 +1,138 @@
+
+# test build
+
+name: '[test] testing'
+
+on:
+  push:
+    branches:
+        - chanel-6808-create-system-for-updating-names-on-release-tickets
+
+jobs:
+
+  release_ticket:
+    runs-on: ubuntu-latest
+    outputs:
+      ticketNumber: ${{steps.create-issue.outputs.number}}
+      versionNumber: ${{env.VERSION}}
+      releaseDate: ${{env.RELEASE_DATE}}
+      qaDueDate: ${{env.QA_DUE_DATE}}
+      prodDueDate: ${{env.PROD_DUE_DATE}}
+      vaDueDate: ${{env.VA_DUE_DATE}}
+    steps:
+      - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - uses: actions/checkout@v3
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: gh auth login --with-token < token.txt
+      - run: |
+          sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
+          sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
+          header='| Issue | Title | Notes |
+          |-------|-------|-------|
+          '
+          table="${header}${sev1}${sev2}"
+          echo 'TABLE<<EOF' >> $GITHUB_ENV
+          echo "${table}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      # Fetch GitHub Group Members
+      - name: Fetch GitHub Group Members
+        run: |
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-admin/members --jq '.[].login')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
+          ASSIGNEES=${ASSIGNEES%,}
+          echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
+      # Create Release Ticket with auto-assigned members
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/release_ticket.md
+        env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
+          assignees: ${{ env.ASSIGNEES }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create-issue
+  start_slack_thread:
+    name: Start Slack thread
+    needs: release_ticket
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app-automation-test-channel
+      message: '*Release v2.37 Coordination :thread:* build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). See  <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+  release_coordination:
+    name: release coordination
+    if: ${{ success() }}
+    needs: [start_slack_thread, release_ticket]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["DJUltraTom"]="U02BBL9L0CU"
+          GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
+          GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
+          GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
+          GITHUB_TO_SLACK_MAP["ala-yna"]="UQC180926"
+          GITHUB_TO_SLACK_MAP["ajsarkar28"]="U05BNQLJ9UZ"
+          GITHUB_TO_SLACK_MAP["rachelhanster"]="U047Q1LKDFY"
+          GITHUB_TO_SLACK_MAP["DonMcCaugheyUSDS"]="U06PCD1R0EL"
+          GITHUB_TO_SLACK_MAP["IsraelleHub"]="U06N7M2QSUA"
+          GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
+          # Example: Convert mapping to environment variables
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
+      - name: Notify Slack for release coordination
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          SLACK_DJUltraTom: $DJUltraTom
+          SLACK_kellylein: $kellylein
+          SLACK_dumathane: $dumathane
+          SLACK_timwright12: $timwright12
+          SLACK_ala-yna: $ala-yna
+          SLACK_ajsarkar28: $ajsarkar28
+          SLACK_rachelhanster: $rachelhanster
+          SLACK_DonMcCaugheyUSDS: $DonMcCaugheyUSDS
+          SLACK_IsraelleHub: $IsraelleHub
+          SLACK_rtwel: $rtwel
+        run: |
+          SLACK_MESSAGE=$(cat <<EOF
+          {
+            "channel": "va-mobile-app-automation-test-channel",
+            "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9368|9368>\n\
+          *Release Report:* Github Report Link to be provided\n\
+          *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
+          *Approval Timing:*\n\
+          - *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\
+          - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n\
+          - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
+          - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
+          *Contacts:*\n\
+          - *Release Testing:* <@${SLACK_IsraelleHub}>\n\
+          - *Release Manager:* <@${SLACK_IsraelleHub}>\n\
+          - *Release Ticket Validation:* <@${SLACK_IsraelleHub}>\n\
+          - *Engineering:* <@${SLACK_IsraelleHub}>, <@${SLACK_IsraelleHub}>\n\
+          - *Mobile Product Approvers:* H&B and Global - <@${SLACK_IsraelleHub}> Global - <@${SLACK_IsraelleHub}>\n\
+          - *VA PO for awareness:* <@${SLACK_IsraelleHub}> CC: <@${SLACK_IsraelleHub}>, <@${SLACK_IsraelleHub}>.",
+            "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
+            "unfurl_links": false,
+            "unfurl_media": false
+          }
+          EOF
+          )
+          echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d @- \
+               https://slack.com/api/chat.postMessage
