@@ -447,11 +447,8 @@ describe('EditAddressScreen', () => {
         zipCode: '96278',
       }
 
-      const abortController = new AbortController()
-      const abortSignal = abortController.signal
-
       when(post as jest.Mock)
-        .calledWith('/v0/user/addresses/validate', newAddress, undefined, abortSignal)
+        .calledWith('/v0/user/addresses/validate', newAddress, undefined)
         .mockResolvedValue({
           data: [
             {
@@ -488,7 +485,7 @@ describe('EditAddressScreen', () => {
 
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       await waitFor(() =>
-        expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', newAddress, undefined, abortSignal),
+        expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', newAddress, undefined),
       )
       await waitFor(() => expect(screen.getByText('Verify your address')).toBeTruthy())
     })
@@ -555,9 +552,6 @@ describe('EditAddressScreen', () => {
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        const abortController = new AbortController()
-        const abortSignal = abortController.signal
-
         await waitFor(() =>
           expect(post).toBeCalledWith(
             '/v0/user/addresses/validate',
@@ -576,7 +570,6 @@ describe('EditAddressScreen', () => {
               province: 'Ontario',
             },
             undefined,
-            abortSignal,
           ),
         )
       })
@@ -603,9 +596,6 @@ describe('EditAddressScreen', () => {
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        const abortController = new AbortController()
-        const abortSignal = abortController.signal
-
         await waitFor(() =>
           expect(post).toBeCalledWith(
             '/v0/user/addresses/validate',
@@ -624,7 +614,6 @@ describe('EditAddressScreen', () => {
               internationalPostalCode: '',
             },
             undefined,
-            abortSignal,
           ),
         )
       })
@@ -650,9 +639,6 @@ describe('EditAddressScreen', () => {
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        const abortController = new AbortController()
-        const abortSignal = abortController.signal
-
         await waitFor(() =>
           expect(post).toBeCalledWith(
             '/v0/user/addresses/validate',
@@ -671,7 +657,6 @@ describe('EditAddressScreen', () => {
               zipCode: '96278',
             },
             undefined,
-            abortSignal,
           ),
         )
       })
