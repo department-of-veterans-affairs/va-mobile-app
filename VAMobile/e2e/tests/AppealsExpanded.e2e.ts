@@ -3,8 +3,7 @@ Description:
 Detox script that tests for all appeal status types and verifies that the appeal appears in the claim list and that the appeal details page opens when clicked.
 As a note: most of the current status wording is checked in our unit tests so there this test does not check that.
 When to update:
-This script should be updated whenever a new appeal status types is created, if anything appeal wise is changed in 
-src/store/api/demo/mocks/claims.json or if any new content changes are made to appeals. 
+This script should be updated whenever a new appeal status types is created, if anything appeal wise is changed in src/store/api/demo/mocks/claims.json or if any new content changes are made to appeals. 
 */
 import { by, device, element, expect, waitFor } from 'detox'
 
