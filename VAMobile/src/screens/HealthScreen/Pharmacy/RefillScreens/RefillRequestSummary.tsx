@@ -129,6 +129,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
         width: 20,
         height: 20,
         fill: theme.colors.icon.pagination,
+        preventScaling: true,
       }
 
       const boxProps: BoxProps = {
