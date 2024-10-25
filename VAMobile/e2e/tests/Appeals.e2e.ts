@@ -1,3 +1,10 @@
+/*
+Description:
+Detox script that follows the Appeals test case found in testRail (VA Mobile App > RC Regression Test > Manual > Benefits Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in appeals details or if anything appeal wise is changed in 
+src/store/api/demo/mocks/claims.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
