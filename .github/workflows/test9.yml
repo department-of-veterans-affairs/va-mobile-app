@@ -28,20 +28,12 @@ jobs:
       - uses: actions/checkout@v3
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
-      - run: |
-          sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-          header='| Issue | Title | Notes |
-          |-------|-------|-------|
-          '
-          table="${header}${sev1}${sev2}"
-          echo 'TABLE<<EOF' >> $GITHUB_ENV
-          echo "${table}" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+      - run: gh --version
+
       # Fetch GitHub Group Members
       - name: Fetch GitHub Group Members
         run: |
-          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-admin/members --jq '.[].login')
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq '.[].login')
           ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
           ASSIGNEES=${ASSIGNEES%,}
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
