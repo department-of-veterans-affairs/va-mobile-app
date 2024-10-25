@@ -4,7 +4,9 @@ import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import { useIsFocused } from '@react-navigation/native'
 
-import { Box, TextView, VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
@@ -32,22 +34,13 @@ const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: 
 
   return (
     <Box
-      mx={theme.dimensions.condensedMarginBetween}
+      alignItems="center"
       mt={theme.dimensions.condensedMarginBetween}
       flexDirection="row"
       accessible={true}
       accessibilityRole={'text'}
       accessibilityLabel={`${t('errorIcon')} ${text}`}>
-      <VAIcon
-        accessible={false}
-        importantForAccessibility="no"
-        width={24}
-        height={24}
-        preventScaling={true}
-        name="ExclamationCircle"
-        fill="categoryLandingAlert"
-        mt={3}
-      />
+      <Icon width={30} height={30} preventScaling={true} name="Error" fill={theme.colors.icon.categoryLandingAlert} />
       <TextView
         accessible={false}
         importantForAccessibility="no"
