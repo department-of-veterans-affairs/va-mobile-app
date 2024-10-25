@@ -273,6 +273,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
       authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+      storage: Keychain.STORAGE_TYPE.AES,
     }
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
@@ -289,6 +290,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+      storage: Keychain.STORAGE_TYPE.AES,
     }
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
