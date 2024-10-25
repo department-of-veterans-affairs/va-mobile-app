@@ -32,7 +32,16 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - uses: JasonEtco/create-an-issue@v2
+      # Fetch GitHub Group Members
+      - name: Fetch GitHub Group Members
+        run: |
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-admin/members --jq '.[].login')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
+          ASSIGNEES=${ASSIGNEES%,}
+          echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
+      # Create Release Ticket with auto-assigned members
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
         env:
@@ -42,6 +51,7 @@ jobs:
           vaDueDate: ${{env.VA_DUE_DATE}}
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
+          assignees: ${{ env.ASSIGNEES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
   create_testrail_milestone:
