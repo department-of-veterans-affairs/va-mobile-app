@@ -167,6 +167,7 @@ describe('AppealsExpanded', () => {
       const appealInfo = expectedInformation[i]
       await expect(element(by.text('Appeal for ' + appealInfo[0]))).toExist()
       await expect(element(by.text(appealInfo[1]))).toExist()
+      //This if statement tests the wording in the review past events dropdown.  If appealInfo[2] is true but appealInfo[3] is undefined then the wording matches what we are checking for in appealInfo[1]. Otherwise the wording matches what is given in appealInfo[3].
       if (appealInfo[2] !== undefined && appealInfo[2] === 'true') {
         await element(by.text('Review past events')).tap()
         if (appealInfo[3] === undefined) {
