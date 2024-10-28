@@ -114,20 +114,6 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
   })
 
-  it('verify message NEWER than 45 days information', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
-    await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
-    await expect(element(by.text('RATANA, NARIN '))).toExist()
-  })
-
-  it('verify the message just opened is displayed as read', async () => {
-    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
-    await expect(element(by.text('Inbox (2)'))).toExist()
-  })
-
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
@@ -136,6 +122,14 @@ describe('Messages Screen', () => {
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
+  })
+
+  it('verify message NEWER than 45 days information', async () => {
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
+    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
+    await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
+    await expect(element(by.text('RATANA, NARIN '))).toExist()
   })
 
   it(':android: verify phone links open', async () => {
@@ -175,6 +169,12 @@ describe('Messages Screen', () => {
     }
   })
 
+  it('verify the message just opened is displayed as read', async () => {
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
+    await expect(element(by.text('Inbox (2)'))).toExist()
+  })
+
   it('verify medication message details', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
@@ -183,7 +183,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify COVID message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
     await expect(element(by.text('COVID: Your requested info'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
