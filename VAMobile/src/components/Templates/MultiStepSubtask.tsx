@@ -6,7 +6,7 @@ import { TransitionPresets, createStackNavigator } from '@react-navigation/stack
 import { FullScreenSubtask, FullScreenSubtaskProps } from 'components'
 
 /**
- * Hook allowing child screens to set props on this parent template
+ * Hook allowing child screens to set props on parent template
  * @param props - Props to set on FullScreenSubtask
  */
 export const useSubtaskProps = (props: FullScreenSubtaskProps) => {

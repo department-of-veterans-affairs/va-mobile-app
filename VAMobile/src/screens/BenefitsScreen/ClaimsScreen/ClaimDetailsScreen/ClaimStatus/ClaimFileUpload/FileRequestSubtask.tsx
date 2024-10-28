@@ -5,12 +5,13 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { ClaimData, ClaimEventData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 import AskForClaimDecision from './AskForClaimDecision/AskForClaimDecision'
 import FileRequest from './FileRequest'
 import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
 import SelectFile from './SelectFile/SelectFile'
+import UploadFile from './SelectFile/UploadFile/UploadFile'
 import TakePhotos from './TakePhotos/TakePhotos'
 import UploadOrAddPhotos from './TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 
@@ -34,6 +35,12 @@ export type FileRequestStackParams = {
     claimID: string
     request: ClaimEventData
   }
+  UploadFile: {
+    claimID: string
+    fileUploaded: DocumentPickerResponse
+    imageUploaded: ImagePickerResponse
+    request?: ClaimEventData
+  }
   UploadOrAddPhotos: {
     claimID: string
     firstImageResponse: ImagePickerResponse
@@ -47,6 +54,7 @@ export const fileRequestSharedScreens = [
   <FileRequestStack.Screen name="FileRequestDetails" component={FileRequestDetails} key="FileRequestDetails" />,
   <FileRequestStack.Screen name="SelectFile" component={SelectFile} key="SelectFile" />,
   <FileRequestStack.Screen name="TakePhotos" component={TakePhotos} key="TakePhotos" />,
+  <FileRequestStack.Screen name="UploadFile" component={UploadFile} key="UploadFile" />,
   <FileRequestStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} key="UploadOrAddPhotos" />,
 ]
 

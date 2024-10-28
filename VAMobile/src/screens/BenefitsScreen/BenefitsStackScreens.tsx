@@ -57,12 +57,6 @@ export type BenefitsStackParamList = {
   SubmitEvidenceSubtask: {
     claimID: string
   }
-  UploadFile: {
-    claimID: string
-    fileUploaded: DocumentPickerResponse
-    imageUploaded: ImagePickerResponse
-    request?: ClaimEventData
-  }
 }
 
 const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
@@ -80,12 +74,6 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       name="WhatDoIDoIfDisagreement"
       component={WhatDoIDoIfDisagreement}
       options={LARGE_PANEL_OPTIONS}
-    />,
-    <BenefitsStack.Screen
-      key={'UploadFile'}
-      name="UploadFile"
-      component={UploadFile}
-      options={{ headerShown: false }}
     />,
   ]
 }
