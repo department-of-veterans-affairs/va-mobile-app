@@ -117,6 +117,9 @@ jobs:
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                 echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+                e2eNamesNumber = $(echo ${{ inputs.tests_to_run}} | jq 'length')
+                echo "$e2eNamesNumber"
+                echo "numberOfTests=$e2eNamesNumber" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
               fi
