@@ -363,7 +363,7 @@ jobs:
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      number_test_names: ${{ needs. matrix-e2e-android.outputs.output1 }}
+      number_test_names: ${{ needs.matrix-e2e-android.outputs.output1 }}
       testRail_name: ${{ inputs.testRail_name }}
       test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"
