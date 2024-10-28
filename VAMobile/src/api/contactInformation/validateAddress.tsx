@@ -18,6 +18,7 @@ import { saveAddress } from './saveAddress'
 
 type ValidateAddressParameters = {
   addressData: AddressData
+  abortSignal?: AbortSignal
 }
 
 /**
@@ -25,11 +26,13 @@ type ValidateAddressParameters = {
  */
 export const validateAddress = async ({
   addressData,
+  abortSignal,
 }: ValidateAddressParameters): Promise<ValidateAddressData | undefined> => {
   const response = await post<AddressValidationData>(
     '/v0/user/addresses/validate',
     addressData as unknown as APIParams,
     undefined,
+    abortSignal,
   )
 
   const suggestedAddresses = getSuggestedAddresses(response)
