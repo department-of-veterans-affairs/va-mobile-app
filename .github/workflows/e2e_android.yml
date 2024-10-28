@@ -108,7 +108,7 @@ jobs:
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "$e2eNames"
-              e2eNamesNumber = $(echo $e2eNames | jq 'length')
+              e2eNamesNumber=$(echo $e2eNames | jq 'length')
               echo "$e2eNamesNumber"
               echo "numberOfTests=$e2eNamesNumber" >> "$GITHUB_OUTPUT"
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
@@ -117,7 +117,8 @@ jobs:
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                 echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-                e2eNamesNumber = $(echo ${{ inputs.tests_to_run}} | jq 'length')
+                echo "${{ inputs.tests_to_run}}"
+                e2eNamesNumber=$(echo "${{ inputs.tests_to_run}}" | jq 'length')
                 echo "$e2eNamesNumber"
                 echo "numberOfTests=$e2eNamesNumber" >> "$GITHUB_OUTPUT"
               else
