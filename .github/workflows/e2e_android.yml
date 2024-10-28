@@ -248,7 +248,7 @@ jobs:
         if: failure() || success()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-junit-${{matrix.testsuite}}
+          name: e2e-junit-${{strategy.job-index}}
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Get number of jobs
