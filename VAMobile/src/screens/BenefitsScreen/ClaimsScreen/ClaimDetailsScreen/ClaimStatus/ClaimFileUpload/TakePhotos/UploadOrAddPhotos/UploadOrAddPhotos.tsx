@@ -104,18 +104,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useSubtaskProps({
     title: t('fileUpload.uploadPhotos'),
-    leftButtonText: t('back'),
-    onLeftButtonPress: () => {
-      logAnalyticsEvent(
-        Events.vama_evidence_cancel_2(
-          claimID,
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'photo',
-        ),
-      )
-      navigation.dispatch(StackActions.pop(2))
-    },
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => onCancel(),
+    scrollViewRef: scrollViewRef,
   })
 
   useEffect(() => {
@@ -354,6 +345,18 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       }
     })
     setTotalBytesUsed(bytesUsed)
+  }
+
+  const onCancel = () => {
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_2(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+      ),
+    )
+    navigation.dispatch(StackActions.pop(2))
   }
 
   return (

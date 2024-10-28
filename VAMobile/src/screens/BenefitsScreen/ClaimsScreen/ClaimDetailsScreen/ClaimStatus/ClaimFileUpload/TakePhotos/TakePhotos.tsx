@@ -43,17 +43,9 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   useSubtaskProps({
     title: t('fileUpload.selectPhotos'),
     leftButtonText: t('back'),
-    onLeftButtonPress: () => {
-      logAnalyticsEvent(
-        Events.vama_evidence_cancel_1(
-          claimID,
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'photo',
-        ),
-      )
-      navigation.goBack()
-    },
+    onLeftButtonPress: () => onCancel(),
+    scrollViewRef: scrollViewRef,
+    testID: 'takePhotosTestID',
   })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
@@ -62,6 +54,18 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     } else {
       navigateTo('UploadOrAddPhotos', { claimID, request, firstImageResponse: response })
     }
+  }
+
+  const onCancel = () => {
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_1(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+      ),
+    )
+    navigation.goBack()
   }
 
   return (

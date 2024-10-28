@@ -42,17 +42,8 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   useSubtaskProps({
     title: t('fileUpload.selectFiles'),
     leftButtonText: t('back'),
-    onLeftButtonPress: () => {
-      logAnalyticsEvent(
-        Events.vama_evidence_cancel_1(
-          claimID,
-          request?.trackedItemId || null,
-          request?.type || 'Submit Evidence',
-          'file',
-        ),
-      )
-      navigation.goBack()
-    },
+    onLeftButtonPress: () => onCancel(),
+    scrollViewRef: scrollViewRef,
   })
 
   const onFileFolder = async (): Promise<void> => {
@@ -120,6 +111,18 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
 
   // Because the select a file button has the same accessibility label as the file upload screen it causes query issues in android
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
+
+  const onCancel = () => {
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_1(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'file',
+      ),
+    )
+    navigation.goBack()
+  }
 
   return (
     <VAScrollView>

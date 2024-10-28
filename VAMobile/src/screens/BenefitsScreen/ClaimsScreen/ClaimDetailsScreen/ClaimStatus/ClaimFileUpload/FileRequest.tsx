@@ -51,6 +51,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     title: t('fileRequest.title'),
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => navigation.goBack(),
+    testID: 'fileRequestPageTestID',
+    leftButtonTestID: 'fileRequestPageBackID',
   })
 
   const count = numberOfItemsNeedingAttentionFromVet(

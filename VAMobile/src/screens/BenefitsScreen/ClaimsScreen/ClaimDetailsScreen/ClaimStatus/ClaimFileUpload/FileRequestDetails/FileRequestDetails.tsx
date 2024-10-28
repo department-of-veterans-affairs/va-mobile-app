@@ -31,6 +31,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     title: displayName || '',
     leftButtonText: t('back'),
     onLeftButtonPress: () => navigation.goBack(),
+    testID: 'fileRequestDetailsID',
+    leftButtonTestID: 'fileRequestDetailsBackID',
   })
 
   const hasUploaded = hasUploadedOrReceived(request)
