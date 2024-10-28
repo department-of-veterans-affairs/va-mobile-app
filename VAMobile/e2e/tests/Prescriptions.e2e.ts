@@ -1,9 +1,14 @@
+/*
+Description:
+Detox script that follows the prescriptions test case found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in prescriptions or if anything is changed in src/store/api/demo/mocks/prescriptions.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  changeMockData,
   checkImages,
   loginToDemoMode,
   openHealth,
@@ -63,6 +68,13 @@ beforeAll(async () => {
   await openPrescriptions()
 })
 
+/*
+Validates and tests the sort prescription options
+param name: String name of the sort option
+param first Prescription: String name of the first prescription that appears in the list once the sort option is selected
+param last Prescription: String name of the last prescription that appears in the list once the sort option is selected
+param first Instance: Boolean value that tells the test to scroll to the top so the filter and sort button is displayed
+*/
 export async function validateSort(
   name: string,
   firstPrescription: string,
@@ -117,6 +129,12 @@ export async function validateSort(
   })
 }
 
+/*
+Validates and tests the filter prescription options
+param name: String name of the filter option
+param quantity: Number of prescriptions expected for a specific filter option
+param helperText: Optional string name of the helper text for the filter option
+*/
 export async function validateFilter(name: string, quantity: number, helperText?: string) {
   const filterDescription =
     name === 'Pending' ? 'Pending refills' : name === 'Tracking' ? 'Refills with tracking' : `${name} prescriptions`
