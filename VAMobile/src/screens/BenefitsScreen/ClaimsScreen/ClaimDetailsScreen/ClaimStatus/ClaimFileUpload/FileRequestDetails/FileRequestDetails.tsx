@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, TextArea, TextView } from 'components'
+import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -78,7 +78,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <>
+    <VAScrollView>
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -136,7 +136,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           </Box>
         </Box>
       )}
-    </>
+    </VAScrollView>
   )
 }
 

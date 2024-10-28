@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -39,7 +39,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
   }
 
   return (
-    <>
+    <VAScrollView>
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -67,7 +67,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
           />
         </Box>
       </Box>
-    </>
+    </VAScrollView>
   )
 }
 

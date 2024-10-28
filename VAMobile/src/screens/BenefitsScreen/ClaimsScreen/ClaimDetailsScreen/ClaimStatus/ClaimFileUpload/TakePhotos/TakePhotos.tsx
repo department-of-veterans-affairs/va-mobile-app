@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
@@ -65,7 +65,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   }
 
   return (
-    <>
+    <VAScrollView>
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -139,7 +139,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           testID={t('fileUpload.takePhotos')}
         />
       </Box>
-    </>
+    </VAScrollView>
   )
 }
 

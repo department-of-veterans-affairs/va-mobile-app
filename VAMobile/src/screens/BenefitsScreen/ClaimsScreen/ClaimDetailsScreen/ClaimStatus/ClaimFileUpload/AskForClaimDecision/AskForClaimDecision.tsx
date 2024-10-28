@@ -16,6 +16,7 @@ import {
   TextArea,
   TextView,
   VABulletList,
+  VAScrollView,
 } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
@@ -143,7 +144,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   ]
 
   return (
-    <>
+    <VAScrollView>
       {loadingSubmitClaimDecision || loadingClaim ? (
         <LoadingComponent
           text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
@@ -185,7 +186,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
           </Box>
         </Box>
       )}
-    </>
+    </VAScrollView>
   )
 }
 

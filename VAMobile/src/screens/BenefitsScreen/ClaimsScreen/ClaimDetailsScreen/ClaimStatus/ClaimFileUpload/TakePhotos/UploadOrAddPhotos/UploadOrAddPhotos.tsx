@@ -21,6 +21,7 @@ import {
   PhotoAdd,
   PhotoPreview,
   TextView,
+  VAScrollView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
@@ -356,7 +357,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   }
 
   return (
-    <>
+    <VAScrollView>
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
@@ -438,7 +439,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           </Box>
         </>
       )}
-    </>
+    </VAScrollView>
   )
 }
 

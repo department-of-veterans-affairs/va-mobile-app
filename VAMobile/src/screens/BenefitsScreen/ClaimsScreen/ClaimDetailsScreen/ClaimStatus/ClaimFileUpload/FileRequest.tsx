@@ -8,7 +8,16 @@ import { map } from 'underscore'
 
 import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
-import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import {
+  Box,
+  ErrorComponent,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+  VAScrollView,
+} from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -108,7 +117,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   }
 
   return (
-    <>
+    <VAScrollView>
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
@@ -156,7 +165,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           </Box>
         </Box>
       )}
-    </>
+    </VAScrollView>
   )
 }
 
