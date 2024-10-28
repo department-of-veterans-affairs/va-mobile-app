@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
@@ -15,15 +16,13 @@ import {
   LoadingComponent,
   TextArea,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useFontScale, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
@@ -43,7 +42,8 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
-
+  const fs = useFontScale()
+  const indicatorDiameter = fs(30)
   const { mutate: requestRefill, isPending: showLoadingScreenRequestRefillsRetry } = useRequestRefills()
 
   const onNavToHistory = () => {
@@ -124,11 +124,12 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
-      const vaIconProps: VAIconProps = {
-        name: request.submitted ? 'CircleCheckMark' : 'Remove',
+      const iconProps: IconProps = {
+        name: request.submitted ? 'Check' : 'Close',
         width: 20,
         height: 20,
-        fill: request.submitted ? theme.colors.icon.success : theme.colors.icon.error,
+        fill: theme.colors.icon.pagination,
+        preventScaling: true,
       }
 
       const boxProps: BoxProps = {
@@ -160,7 +161,15 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
               {rxNumber}
             </TextView>
           </Box>
-          <VAIcon {...vaIconProps} />
+          <Box
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor={request.submitted ? 'completedPhase' : 'buttonDestructiveActive'}
+            borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>
+            <Icon {...iconProps} />
+          </Box>
         </Box>
       )
     })
@@ -185,7 +194,9 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
     return (
       <Box {...borderProps}>
-        <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
+        <TextView variant="HelperTextBold" accessibilityRole="header">
+          {t('prescriptions.refillRequestSummary.whatsNext')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView
             variant="MobileBody"

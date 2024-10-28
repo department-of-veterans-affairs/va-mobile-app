@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -346,8 +347,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     }
   }
 
-  const moveIconProps: VAIconProps = {
+  const moveIconProps: IconProps = {
     name: 'Folder',
+    fill: theme.colors.icon.active,
   }
 
   // If error is caused by an individual message, we want the error alert to be
