@@ -16,6 +16,7 @@ export const MessagesE2eIdConstants = {
   MESSAGE_2_ID: 'Unread: Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
   MESSAGE_2_READ_ID: 'Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
+  MESSAGE_3_READ_ID: 'Sarah Kotagal, Md August 26, 2024 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
   MESSAGE_5_ID: 'Vija A. Ravi, Md July 21, 2024 General: Summary of visit',
   MESSAGE_6_ID: 'Ratana, Narin  July 21, 2024 Test: Preparing for your visit',
@@ -190,7 +191,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify general message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
