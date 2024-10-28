@@ -12,6 +12,7 @@ on:
     inputs:
       number_test_names:
         type: number
+        default: 0
       testRail_name:
         type: string
         default: ''
