@@ -125,9 +125,7 @@ describe('Messages Screen', () => {
 
   it('verify the message just opened is displayed as read', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
-    await expect(
-      element(by.id('Diana Persson, Md October 26, 2024 Has attachment COVID: Prepping for your visit')),
-    ).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID))).toExist()
     await expect(element(by.text('Inbox (2)'))).toExist()
   })
 
@@ -178,13 +176,13 @@ describe('Messages Screen', () => {
 
   it('verify medication message details', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
-    await element(by.id('Martha Kaplan, Md October 26, 2024 Medication: Naproxen side effects')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify COVID message details', async () => {
-    await element(by.id('Diana Persson, Md October 26, 2024 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
     await expect(element(by.text('COVID: Your requested info'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
@@ -447,13 +445,11 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.FOLDERS_ID))).toExist()
-    await expect(
-      element(by.id('Diana Persson, Md October 26, 2024 Has attachment COVID: Prepping for your visit')),
-    ).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID))).toExist()
   })
 
   it('verify the attachment is on message with attachment', async () => {
-    await element(by.id('Diana Persson, Md October 26, 2024 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
     await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
   })
 
