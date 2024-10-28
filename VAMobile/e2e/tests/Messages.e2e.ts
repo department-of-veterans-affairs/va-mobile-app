@@ -125,6 +125,8 @@ describe('Messages Screen', () => {
   })
 
   it('verify message NEWER than 45 days information', async () => {
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
@@ -169,14 +171,13 @@ describe('Messages Screen', () => {
     }
   })
 
-  it('verify the message just opened is displayed as read', async () => {
+  it('verify the messages just opened are displayed as read', async () => {
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
-    await expect(element(by.text('Inbox (2)'))).toExist()
+    await expect(element(by.text('Inbox (1)'))).toExist()
   })
 
   it('verify medication message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
