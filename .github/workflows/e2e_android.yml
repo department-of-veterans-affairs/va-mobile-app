@@ -95,6 +95,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+      output3: ${{ steps.matrix_value.outputs.numberOfTests}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -106,6 +107,10 @@ jobs:
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]]; then
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+              echo "$e2eNames"
+              e2eNamesNumber = $(echo $e2eNames | jq 'length')
+              echo "$e2eNamesNumber"
+              echo "numberOfTests=$e2eNamesNumber" >> "$GITHUB_OUTPUT"
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
@@ -247,7 +252,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: e2e-junit-${{matrix.testsuite}}
-          path: VAMobile/e2e/test_reports/e2e-junit-${{matrix.testsuite}}.xml
+          path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
         if: failure() || steps.run_e2e_tests.outcome == 'failure'
@@ -353,16 +358,11 @@ jobs:
     
   matrix_send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs: [matrix-e2e-android, output_detox_tests_to_run]
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
+    needs: [matrix-e2e-android, output_detox_tests_to_run]    
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: "${{matrix.testsuite}}"
+      number_test_names: ${{ needs.output_detox_tests_to_run.outputs.output3 }}
       testRail_name: ${{ inputs.testRail_name }}
       test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"

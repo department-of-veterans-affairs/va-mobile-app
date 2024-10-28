@@ -10,8 +10,8 @@ on:
         description: "TestRail api key"
         required: true
     inputs:
-      test_names:
-        type: string
+      number_test_names:
+        type: number
         default: ''
       testRail_name:
         type: string
@@ -94,15 +94,30 @@ jobs:
           python-version: '3.x'
       - name: TestRail CLI upload results
         if: always()
-        run: |      
+        run: |
           pip install trcli
-          trcli -y \
-            -h https://dsvavsp.testrail.io/ \
-            --project "VA Mobile App" \
-            --project-id 29 \
-            -u ${{secrets.TEST_RAIL_USER}} \
-            -k ${{secrets.TEST_RAIL_KEY}} \
-            parse_junit \
-            --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
-            --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
-            -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit-SignIn.xml"
+          for ((i=0; i<${{inputs.number_test_names}}; i+=1)); do
+            if [[ "$i" == "0" ]]; then
+              trcli -y \
+                -h https://dsvavsp.testrail.io/ \
+                --project "VA Mobile App" \
+                --project-id 29 \
+                -u ${{secrets.TEST_RAIL_USER}} \
+                -k ${{secrets.TEST_RAIL_KEY}} \
+                parse_junit \
+                --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+                --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+                -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
+            else
+              trcli -y \
+                -h https://dsvavsp.testrail.io/ \
+                --project "VA Mobile App" \
+                --project-id 29 \
+                -u ${{secrets.TEST_RAIL_USER}} \
+                -k ${{secrets.TEST_RAIL_KEY}} \
+                parse_junit \
+                --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+                --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+                -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit$i.xml"
+            fi             
+          done
