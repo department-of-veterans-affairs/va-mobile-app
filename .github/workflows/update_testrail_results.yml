@@ -96,8 +96,7 @@ jobs:
         if: always()
         run: |
           pip install trcli
-          for ((i=0; i<${{inputs.number_test_names}}; i+=1)); do
-            if [[ "$i" == "0" ]]; then
+          for dir in "/home/runner/work/va-mobile-app/va-mobile-app"; do
               trcli -y \
                 -h https://dsvavsp.testrail.io/ \
                 --project "VA Mobile App" \
@@ -107,17 +106,5 @@ jobs:
                 parse_junit \
                 --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
                 --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
-                -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit-0/e2e-junit.xml"
-            else
-              trcli -y \
-                -h https://dsvavsp.testrail.io/ \
-                --project "VA Mobile App" \
-                --project-id 29 \
-                -u ${{secrets.TEST_RAIL_USER}} \
-                -k ${{secrets.TEST_RAIL_KEY}} \
-                parse_junit \
-                --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
-                --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
-                -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit-$i/e2e-junit.xml"
-            fi             
+                -f "/home/runner/work/va-mobile-app/va-mobile-app/$dir/e2e-junit.xml"            
           done
