@@ -25,16 +25,8 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-
       - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
-      
       - run: gh auth login --with-token < token.txt
-      - run: gh --version
-      - run: gh auth status
-      - run: gh issue list -L 1  # List a single issue to verify permissions
-      - run: gh api user  # Check user authentication and permissions
-      
-
       # Fetch GitHub Group Members
       - name: Fetch GitHub Group Members
         run: |
@@ -55,7 +47,7 @@ jobs:
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
           assignees: ${{ env.ASSIGNEES }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT}}
         id: create-issue
   start_slack_thread:
     name: Start Slack thread
