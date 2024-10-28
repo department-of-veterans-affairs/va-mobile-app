@@ -25,7 +25,9 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+
+      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
+      
       - run: gh auth login --with-token < token.txt
       - run: gh --version
       - run: gh auth status
