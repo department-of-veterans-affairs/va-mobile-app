@@ -9,7 +9,7 @@ import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
@@ -24,8 +24,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import FileRequestSubtask from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
-import SubmitEvidenceSubtask from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -146,16 +144,6 @@ function BenefitsStackScreen() {
         name="DisabilityRatings"
         component={DisabilityRatingsScreen}
         options={{ headerShown: false }}
-      />
-      <BenefitsScreenStack.Screen
-        name="SubmitEvidenceSubtask"
-        component={SubmitEvidenceSubtask}
-        options={FULLSCREEN_SUBTASK_OPTIONS}
-      />
-      <BenefitsScreenStack.Screen
-        name="FileRequestSubtask"
-        component={FileRequestSubtask}
-        options={FULLSCREEN_SUBTASK_OPTIONS}
       />
       <BenefitsScreenStack.Screen
         name="GenericLetter"

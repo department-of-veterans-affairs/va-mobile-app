@@ -1,12 +1,10 @@
 import React, { ReactNode } from 'react'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
+import { LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
-import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 import { ScreenIDTypes } from 'store/api/types'
@@ -49,13 +47,6 @@ export type BenefitsStackParamList = {
   }
   AppealDetailsScreen: {
     appealID: string
-  }
-  FileRequestSubtask: {
-    claimID: string
-    claim: ClaimData | undefined
-  }
-  SubmitEvidenceSubtask: {
-    claimID: string
   }
 }
 

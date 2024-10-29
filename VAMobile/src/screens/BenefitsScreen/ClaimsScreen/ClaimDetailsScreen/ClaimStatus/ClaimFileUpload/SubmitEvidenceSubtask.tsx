@@ -2,8 +2,9 @@ import React from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { RootNavStackParamList } from 'App'
+
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 import { FileRequestStackParams, fileRequestSharedScreens } from './FileRequestSubtask'
 import SubmitEvidence from './SubmitEvidence'
@@ -15,7 +16,7 @@ export type SubmitEvidenceStackParams = FileRequestStackParams & {
 }
 const SubmitEvidenceStack = createStackNavigator<SubmitEvidenceStackParams>()
 
-type SubmitEvidenceSubtaskProps = StackScreenProps<BenefitsStackParamList, 'SubmitEvidenceSubtask'>
+type SubmitEvidenceSubtaskProps = StackScreenProps<RootNavStackParamList, 'SubmitEvidenceSubtask'>
 
 function SubmitEvidenceSubtask({ route }: SubmitEvidenceSubtaskProps) {
   const { claimID } = route.params

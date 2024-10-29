@@ -3,9 +3,11 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { RootNavStackParamList } from 'App'
+
 import { ClaimData, ClaimEventData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 import AskForClaimDecision from './AskForClaimDecision/AskForClaimDecision'
 import FileRequest from './FileRequest'
@@ -58,7 +60,7 @@ export const fileRequestSharedScreens = [
   <FileRequestStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} key="UploadOrAddPhotos" />,
 ]
 
-type FileRequestSubtaskProps = StackScreenProps<BenefitsStackParamList, 'FileRequestSubtask'>
+type FileRequestSubtaskProps = StackScreenProps<RootNavStackParamList, 'FileRequestSubtask'>
 
 function FileRequestSubtask({ route }: FileRequestSubtaskProps) {
   const { claimID, claim } = route.params
