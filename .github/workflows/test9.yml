@@ -31,7 +31,7 @@ jobs:
       - name: Fetch GitHub Group Members
         run: |
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/
-          members --jq '.[].login' -H "Authorization: token ${{ secrets.GH_ACTIONS_PAT }}"))
+          members --jq '.[].login' -H "Authorization: token ${{ secrets.GH_ACTIONS_PAT }}")
           echo "Team Members: $TEAM_MEMBERS"
           ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ','| tr -d ' ')
           ASSIGNEES=${ASSIGNEES%,}
