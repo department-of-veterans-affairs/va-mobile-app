@@ -13,15 +13,12 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 // See VAIcon function documentation below for guidance on adding new SVGs
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
-import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 // Chevrons
 import ChevronLeft from './svgs/ChevronLeft.svg'
 import ChevronRight from './svgs/ChevronRight.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import Ellipsis from './svgs/Ellipsis.svg'
-import ExclamationCircle from './svgs/ExclamationCircle.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import Folder from './svgs/Folder.svg'
@@ -35,9 +32,7 @@ import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
-import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
-import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
@@ -56,24 +51,12 @@ import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import Text from './svgs/links/Text.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 // Navigation
-import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
-import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
-import HealthSelected from './svgs/navIcon/HealthSelected.svg'
-import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
-import HomeSelected from './svgs/navIcon/HomeSelected.svg'
-import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
-import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
-import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
-import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 import RadioEmpty from './svgs/radio/RadioEmpty.svg'
 import RadioFilled from './svgs/radio/RadioFilled.svg'
 
 export const VA_ICON_MAP = {
   Add,
-  BenefitsSelected,
-  BenefitsUnselected,
   Building,
-  Bullet,
   Calendar,
   Chat,
   CheckBoxEmpty,
@@ -88,25 +71,16 @@ export const VA_ICON_MAP = {
   CirclePhone,
   Compose,
   Directions,
-  Ellipsis,
-  ExclamationCircle,
   ExclamationTriangle,
   ExternalLink,
   Folder,
-  HealthSelected,
-  HealthUnselected,
-  HomeSelected,
-  HomeUnselected,
   Inbox,
   Info,
   Lock,
   Minus,
   PaperClip,
-  PaymentsSelected,
-  PaymentsUnselected,
   Phone,
   PhoneTTY,
-  ProfileSelected,
   QuestionMark,
   RadioEmpty, // Also used for RadioDisabled content--same icon, different colors
   RadioFilled,
@@ -114,10 +88,8 @@ export const VA_ICON_MAP = {
   Remove,
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
-  Sort,
   Text,
   Trash,
-  Truck,
   Unread,
   UploadPhoto,
   VideoCamera,
