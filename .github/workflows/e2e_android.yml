@@ -145,8 +145,6 @@ jobs:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
     runs-on: macos-latest-xl
     needs: [start_slack_thread, output_detox_tests_to_run]
-    outputs:
-      output1: ${{ steps.find_number_of_tests.outputs.numberOfTests}}
     strategy:
       fail-fast: false
       matrix:
@@ -248,12 +246,8 @@ jobs:
         if: failure() || success()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-junit-${{strategy.job-index}}
+          name: e2e-junit-${{matrix.testsuite}}
           path: VAMobile/e2e/test_reports/e2e-junit.xml
-
-      - name: Get number of jobs
-        id: find_number_of_tests
-        run: echo "numberOfTests=${{ strategy.job-total}}" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifacts on failure
         if: failure() || steps.run_e2e_tests.outcome == 'failure'
@@ -363,7 +357,6 @@ jobs:
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      number_test_names: ${{ fromJson(needs.matrix-e2e-android.outputs.output1) }}
       testRail_name: ${{ inputs.testRail_name }}
       test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"
