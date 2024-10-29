@@ -17,184 +17,91 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
-const APIGroupings = [
+const APIGroupings: {
+  name: string
+  endpoints: string[]
+}[] = [
   {
     name: 'Appointments',
-    endpoints: [
-      {
-        endpoint: '/v0/appointments',
-      },
-    ],
+    endpoints: ['/v0/appointments'],
   },
   {
     name: 'Authorized Services',
-    endpoints: [
-      {
-        endpoint: '/v0/user/authorized-services',
-      },
-    ],
+    endpoints: ['/v0/user/authorized-services'],
   },
   {
     name: 'Claims and Appeals',
-    endpoints: [
-      {
-        endpoint: '/v0/appeal/',
-      },
-      {
-        endpoint: '/v0/claim/',
-      },
-      {
-        endpoint: '/v0/claims-and-appeals-overview',
-      },
-    ],
+    endpoints: ['/v0/appeal/', '/v0/claim/', '/v0/claims-and-appeals-overview'],
   },
   {
     name: 'Contact Information',
-    endpoints: [
-      {
-        endpoint: '/v0/user/contact-info',
-      },
-    ],
+    endpoints: ['/v0/user/contact-info'],
   },
   {
     name: 'Decision Letters',
-    endpoints: [
-      {
-        endpoint: '/v0/claims/decision-letters',
-      },
-    ],
+    endpoints: ['/v0/claims/decision-letters'],
   },
   {
     name: 'Demographics',
-    endpoints: [
-      {
-        endpoint: '/v0/user/demographics',
-      },
-      {
-        endpoint: '/v0/user/gender_identity/edit',
-      },
-    ],
+    endpoints: ['/v0/user/demographics', '/v0/user/gender_identity/edit'],
   },
   {
     name: 'Direct Deposit',
-    endpoints: [
-      {
-        endpoint: '/v0/payment-information/benefits',
-      },
-    ],
+    endpoints: ['/v0/payment-information/benefits'],
   },
   {
     name: 'Disability Rating',
-    endpoints: [
-      {
-        endpoint: '/v0/disability-rating',
-      },
-    ],
+    endpoints: ['/v0/disability-rating'],
   },
   {
     name: 'Facilities',
-    endpoints: [
-      {
-        endpoint: '/v0/facilities-info',
-      },
-    ],
+    endpoints: ['/v0/facilities-info'],
   },
   {
     name: 'Letters',
-    endpoints: [
-      {
-        endpoint: '/v0/letters/beneficiary',
-      },
-      {
-        endpoint: '/v0/letters',
-      },
-    ],
+    endpoints: ['/v0/letters/beneficiary', '/v0/letters'],
   },
   {
     name: 'Military Service',
-    endpoints: [
-      {
-        endpoint: '/v0/military-service-history',
-      },
-    ],
+    endpoints: ['/v0/military-service-history'],
   },
   {
     name: 'Notifications',
-    endpoints: [
-      {
-        endpoint: '/v0/push/prefs/',
-      },
-    ],
+    endpoints: ['/v0/push/prefs/'],
   },
   {
     name: 'Payments',
-    endpoints: [
-      {
-        endpoint: '/v0/payment-history',
-      },
-    ],
+    endpoints: ['/v0/payment-history'],
   },
   {
     name: 'Personal Information',
-    endpoints: [
-      {
-        endpoint: '/v2/user',
-      },
-    ],
+    endpoints: ['/v2/user'],
   },
   {
     name: 'Prescriptions',
-    endpoints: [
-      {
-        endpoint: '/v0/health/rx/prescriptions',
-      },
-      {
-        endpoint: '/tracking',
-      },
-    ],
+    endpoints: ['/v0/health/rx/prescriptions', '/tracking'],
   },
   {
     name: 'Secure Messaging',
     endpoints: [
-      {
-        endpoint: '/v0/messaging/health/folders/${folderID}/messages',
-      },
-      {
-        endpoint: '/v0/messaging/health/folders',
-      },
-      {
-        endpoint: '/v0/messaging/health/messages/',
-      },
-      {
-        endpoint: '/v0/messaging/health/messages/recipients',
-      },
-      {
-        endpoint: '/v0/messaging/health/messages/signature',
-      },
-      {
-        endpoint: '/thread',
-      },
+      '/v0/messaging/health/folders/${folderID}/messages',
+      '/v0/messaging/health/folders',
+      '/v0/messaging/health/messages/',
+      '/v0/messaging/health/messages/recipients',
+      '/v0/messaging/health/messages/signature',
+      '/thread',
     ],
   },
   {
     name: 'Vaccines',
-    endpoints: [
-      {
-        endpoint: '/v1/health/immunizations',
-      },
-      {
-        endpoint: '/v0/health/locations/',
-      },
-    ],
+    endpoints: ['/v1/health/immunizations', '/v0/health/locations/'],
   },
 ]
 
 const ApiGroupingDisplay = (
   apiGroupings: {
     name: string
-    endpoints: {
-      endpoint: string
-    }[]
+    endpoints: string[]
   }[],
   overrideErrors: APIError[],
   setErrors: React.Dispatch<React.SetStateAction<APIError[]>>,
@@ -207,7 +114,7 @@ const ApiGroupingDisplay = (
         <Box
           mt={theme.dimensions.standardMarginBetween}
           mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
-          {IndividualQueryDisplay(endpoint.endpoint, overrideErrors, setErrors, clearErrors)}
+          {IndividualQueryDisplay(endpoint, overrideErrors, setErrors, clearErrors)}
         </Box>
       )
     })
