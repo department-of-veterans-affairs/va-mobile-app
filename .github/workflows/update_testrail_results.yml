@@ -96,7 +96,7 @@ jobs:
         if: always()
         run: |
           pip install trcli
-          for dir in /home/runner/work/va-mobile-app/va-mobile-app/*/; do
+          for dir in /home/runner/work/va-mobile-app/va-mobile-app/e2e-junit-*/; do
               echo "$dir"
               trcli -y \
                 -h https://dsvavsp.testrail.io/ \
