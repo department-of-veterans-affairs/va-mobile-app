@@ -98,38 +98,6 @@ const APIGroupings: {
   },
 ]
 
-const ApiGroupingDisplay = (
-  apiGroupings: {
-    name: string
-    endpoints: string[]
-  }[],
-  overrideErrors: APIError[],
-  setErrors: React.Dispatch<React.SetStateAction<APIError[]>>,
-  clearErrors: boolean,
-) => {
-  const theme = useTheme()
-  const groupings = apiGroupings.map((group) => {
-    const individualQueries = group.endpoints.map((endpoint, idx) => {
-      return (
-        <Box
-          mt={theme.dimensions.standardMarginBetween}
-          mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
-          {IndividualQueryDisplay(endpoint, overrideErrors, setErrors, clearErrors)}
-        </Box>
-      )
-    })
-    return (
-      <TextArea>
-        <TextView accessibilityRole="header" variant="MobileBodyBold">
-          {group.name}
-        </TextView>
-        {individualQueries}
-      </TextArea>
-    )
-  })
-  return <Box>{groupings}</Box>
-}
-
 const IndividualQueryDisplay = (
   endpoint: string,
   overrideErrors: APIError[],
@@ -424,6 +392,26 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
     setClearData(true)
   }
 
+  const groupings = APIGroupings.map((group) => {
+    const individualQueries = group.endpoints.map((endpoint, idx) => {
+      return (
+        <Box
+          mt={theme.dimensions.standardMarginBetween}
+          mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
+          {IndividualQueryDisplay(endpoint, overrideErrors, setErrors, clearData)}
+        </Box>
+      )
+    })
+    return (
+      <TextArea>
+        <TextView accessibilityRole="header" variant="MobileBodyBold">
+          {group.name}
+        </TextView>
+        {individualQueries}
+      </TextArea>
+    )
+  })
+
   return (
     <FeatureLandingTemplate
       backLabel={t('debug.title')}
@@ -441,7 +429,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           <Button label="Clear API Errors" onPress={clearErrors} />
         </Box>
       }>
-      <Box>{ApiGroupingDisplay(APIGroupings, temporaryErrors, setErrors, clearData)}</Box>
+      <Box>{groupings}</Box>
     </FeatureLandingTemplate>
   )
 }
