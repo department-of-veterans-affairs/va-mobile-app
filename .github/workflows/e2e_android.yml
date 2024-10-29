@@ -30,10 +30,6 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
-      device_specific:
-        description: 'Is your testRail run Android only? (only check if adding results to testRail)'
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -358,7 +354,6 @@ jobs:
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
       testRail_name: ${{ inputs.testRail_name }}
-      test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"
     secrets: inherit
   
