@@ -119,7 +119,8 @@ function FolderMessages({ route }: FolderMessagesProps) {
         navigateTo('SecureMessaging', { activeTab: 1 })
       }}
       title={title}
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      backLabelTestID="foldersBackToMessagesID">
       {loadingFolderMessages ? (
         <LoadingComponent text={t('secureMessaging.messages.loading')} />
       ) : folderMessagesError ? (

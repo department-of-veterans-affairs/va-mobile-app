@@ -175,6 +175,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       onLeftButtonPress={navigation.goBack}
       title={t('refillRequest')}
       primaryContentButtonText={hidePrimaryButton ? '' : primaryButtonText}
+      primaryButtonTestID="requestRefillsButtonID"
       scrollViewRef={scrollViewRef}
       onPrimaryContentButtonPress={() => {
         if (selectedPrescriptionsCount === 0) {
@@ -220,7 +221,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}>
+              variant={'MobileBodyBold'}
+              accessibilityRole="header">
               {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
             </TextView>
           </Box>
