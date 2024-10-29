@@ -483,12 +483,17 @@ context('authAction SIS', () => {
         },
         body: `refresh_token=${testRefreshToken}`,
       })
-
+      const expectedOpts = expect.objectContaining({
+        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+        authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+        storage: Keychain.STORAGE_TYPE.AES,
+      })
       console.debug(testRefreshToken)
       console.debug(tokenPayload)
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPayload)
       console.debug(testRefreshToken)
-      expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', nonce, expect.anything())
+      expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', nonce, expectedOpts)
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('@store_creds_bio', 'BIOMETRIC')
 
       const state = store.getState().auth
