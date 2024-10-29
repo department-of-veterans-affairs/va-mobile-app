@@ -32,7 +32,7 @@ jobs:
         run: |
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq '.[].login')
           echo "Team Members: $TEAM_MEMBERS"
-          ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ','| tr -d ' ')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
           ASSIGNEES=${ASSIGNEES%,}
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
       - name: Debug - Output Team Members
@@ -42,7 +42,7 @@ jobs:
       - name: Update Release Ticket Template with Assignees
         run: |
           # Update the assignees line in the template file with the fetched team members
-          sed -i "s/^assignees:.*$/assignees: $ASSIGNEES/" .github/ISSUE_TEMPLATE/update_release_issue.md
+          sed -i "s/^assignees:.*$/assignees: $TEAM_MEMBERS/" .github/ISSUE_TEMPLATE/update_release_issue.md
 
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
