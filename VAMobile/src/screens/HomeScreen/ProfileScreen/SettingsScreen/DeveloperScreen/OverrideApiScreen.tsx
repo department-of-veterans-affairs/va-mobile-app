@@ -12,7 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { APIError } from 'store/api'
-import { DemoState, updateErrorOverrides } from 'store/slices/demoSlice'
+import { DemoState, dispatchUpdateErrors } from 'store/slices/demoSlice'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
@@ -505,12 +505,12 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
   useEffect(() => {
     if (clearData) {
       setClearData(false)
-      dispatch(updateErrorOverrides([]))
+      dispatch(dispatchUpdateErrors([]))
     }
   }, [clearData, dispatch])
 
   const saveErrors = () => {
-    dispatch(updateErrorOverrides(temporaryErrors))
+    dispatch(dispatchUpdateErrors(temporaryErrors))
   }
 
   const clearErrors = () => {

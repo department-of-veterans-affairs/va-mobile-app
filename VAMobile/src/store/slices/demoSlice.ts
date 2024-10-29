@@ -34,15 +34,6 @@ export const updateDemoMode =
   }
 
 /**
- * sets the error overrides for demo mode
- */
-export const updateErrorOverrides =
-  (errorOverrides: Array<api.APIError>): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchUpdateErrors(errorOverrides))
-  }
-
-/**
  * Redux slice that will create the actions and reducers
  */
 const demoSlice = createSlice({
@@ -58,5 +49,5 @@ const demoSlice = createSlice({
   },
 })
 
-const { dispatchUpdateDemoMode, dispatchUpdateErrors } = demoSlice.actions
+export const { dispatchUpdateDemoMode, dispatchUpdateErrors } = demoSlice.actions
 export default demoSlice.reducer
