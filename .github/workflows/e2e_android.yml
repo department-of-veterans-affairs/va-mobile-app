@@ -375,7 +375,7 @@ jobs:
         run: |
           getTest=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_test/43942")
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_case/43942")
           echo "$getTest"
         
 
