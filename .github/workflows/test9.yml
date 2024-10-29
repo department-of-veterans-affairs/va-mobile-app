@@ -49,6 +49,12 @@ jobs:
         with:
           filename: .github/ISSUE_TEMPLATE/update_release_issue.md
         env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{ env.QA_DUE_DATE }}
+          prodDueDate: ${{ env.PROD_DUE_DATE }}
+          vaDueDate: ${{ env.VA_DUE_DATE }}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
 
