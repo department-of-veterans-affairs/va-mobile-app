@@ -365,7 +365,7 @@ jobs:
   
   update-test-names:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    #needs: [matrix-e2e-android, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
+    needs: [matrix-e2e-android, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:
