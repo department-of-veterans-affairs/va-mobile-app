@@ -373,11 +373,26 @@ jobs:
         uses: actions/checkout@v3
       - name: update-test-names
         run: |
+          for ((i=0; ; i+=250)); do
+            echo "i = $i"
+            getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/6171&offset=$i")
+            echo $(jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]' <<< "$getTestCaseNewName") >> input.json
+            if [[ $(jq '._links.next == null' <<< "$getTestCaseNewName") == 'true' ]];
+            then
+              break
+            fi
+          done
           getTest=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            "https://dsvavsp.testrail.io//index.php?/api/v2/get_case/43942")
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=9683" | jq .cases[])
           echo "$getTest"
-        
+          for y in ${{ inputs.tests_to_run}}; do
+            echo "$y"
+          done
+          getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
+          getTestTitles=$(echo $getTestCaseNewName | jq --compact output '.title')
 
 # for ((i=0; ; i+=250)); do
 #   echo "i = $i"
