@@ -64,7 +64,7 @@ Typography generally follows [VA.gov’s guidance](https://design.va.gov/foundat
 </tr>
 </table> -->
 
-<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D3859%253A7737%26t%3DLWuS4oyNuplsuZBa-1" allowfullscreen></iframe>
+<iframe width="550" height="500" title="Flagship library typography" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D3859%253A7737%26t%3DLWuS4oyNuplsuZBa-1" allowfullscreen></iframe>
 
 ## Front-end
 To support the common usage of colors for each font style, defaults colors have been set for each type of font under `src/styles/themes/standardTheme.ts`(See `buildTypography` function). Colors for each font style are based on the [Design Tokens - Design Library](https://www.figma.com/file/bGO6g5cCvWycrNjoK66PXc/%F0%9F%93%90-DesignTokens1.0---Library---VAMobile?node-id=115%3A157&t=RpifEcByzqSp4on7-1) file.
