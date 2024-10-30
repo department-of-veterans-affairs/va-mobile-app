@@ -398,7 +398,10 @@ jobs:
             if [[ "$missingCases" == "[]" ]]; then
               echo "Missing cases: $removeBracket"
               missingCasesWithOS="$removeBracket [android]"
-              echo $(jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)) | .title' <<< "$getTest") >> input.json
+              echo "$missingCasesWithOS"
+              test=$(echo $getTest| jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)))
+              echo "$test"
+              echo $(jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase))' <<< "$getTest") >> input.json
             fi
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
