@@ -38,6 +38,7 @@ export const lightTheme = {
     linkRow: colors.vadsColorGrayWarmLight,
     skeletonLoader: colors.vadsColorBaseLighter,
     skeletonLoaderSecondary: colors.vadsColorBaseLightest,
+    bullet: colors.vadsColorBaseDarker,
   },
   border: {
     aboutYou: colors.vadsColorGrayWarmLight,
@@ -176,6 +177,7 @@ export const darkTheme = {
     linkRow: colors.uswdsSystemColorGray80,
     skeletonLoader: colors.vadsColorGrayMedium,
     skeletonLoaderSecondary: colors.vadsColorBaseLight,
+    bullet: colors.uswdsSystemColorGray10,
   },
   border: {
     aboutYou: colors.uswdsSystemColorGray60,
