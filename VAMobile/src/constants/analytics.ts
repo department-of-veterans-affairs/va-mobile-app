@@ -293,6 +293,11 @@ export const Events = {
       },
     }
   },
+  vama_claim_file_view: (): Event => {
+    return {
+      name: 'vama_claim_file_view',
+    }
+  },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_review',
