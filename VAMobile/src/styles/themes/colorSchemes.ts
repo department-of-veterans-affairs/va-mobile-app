@@ -132,6 +132,8 @@ export const lightTheme = {
     overFlowMenuButton: colors.vadsColorPrimaryAltLightest,
     activityButton: colors.vadsColorPrimaryDarker,
     announcementBanner: colors.vadsColorWhite,
+    crisisLine: colors.uswdsSystemColorRedVivid60,
+    crisisLineActive: colors.vadsColorActionSurfaceDestructiveActiveOnLight,
   },
   control: {
     switchOnTrack: colors.vadsColorPrimary,
@@ -271,6 +273,8 @@ export const darkTheme = {
     overFlowMenuButton: colors.uswdsSystemColorGray60,
     activityButton: colors.uswdsSystemColorBlueVivid30,
     announcementBanner: colors.uswdsSystemColorGray80,
+    crisisLine: colors.uswdsSystemColorRedVivid40,
+    crisisLineActive: colors.vadsColorActionSurfaceDestructiveActiveOnDark,
   },
   control: {
     switchOnTrack: colors.uswdsSystemColorBlueVivid30,
