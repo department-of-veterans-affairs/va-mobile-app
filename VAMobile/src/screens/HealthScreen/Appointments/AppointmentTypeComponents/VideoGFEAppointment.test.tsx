@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import {
   AppointmentAttributes,
@@ -98,6 +99,12 @@ context('VideoGFEAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.default.body'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.bullet2'))).toBeTruthy()
+      expect(screen.getByTestId('prepareForVideoVisitTestID')).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(
         screen.getByText('If you need to reschedule or cancel this appointment, call the scheduling facility.'),
@@ -140,6 +147,12 @@ context('VideoGFEAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.default.body'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.bullet2'))).toBeTruthy()
+      expect(screen.getByTestId('prepareForVideoVisitTestID')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(
@@ -269,6 +282,12 @@ context('VideoGFEAppointment', () => {
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.default.body'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.bullet2'))).toBeTruthy()
+      expect(screen.getByTestId('prepareForVideoVisitTestID')).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByText(
@@ -319,6 +338,12 @@ context('VideoGFEAppointment', () => {
       expect(
         screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.default.body'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.bullet2'))).toBeTruthy()
+      expect(screen.getByTestId('prepareForVideoVisitTestID')).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
