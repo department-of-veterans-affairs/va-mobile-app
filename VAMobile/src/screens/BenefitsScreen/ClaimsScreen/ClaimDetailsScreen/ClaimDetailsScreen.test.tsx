@@ -69,6 +69,11 @@ context('ClaimDetailsScreen', () => {
           ...claimData,
         },
       })
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/efolder/documents`, {})
+      .mockResolvedValue({
+        data: [],
+      })
   })
 
   describe('when loadingClaim is set to true', () => {
