@@ -32,7 +32,6 @@ jobs:
         run: |
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq '.[].login')
           ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
-          ASSIGNEES=${ASSIGNEES%,}
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
           echo "Formatted Assignees: $ASSIGNEES"
       - name: Debug - Output Team Members
