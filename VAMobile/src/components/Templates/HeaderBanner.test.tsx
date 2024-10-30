@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { VAIconProps } from 'components/VAIcon'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import { context, fireEvent, render, screen } from 'testUtils'
 
 import HeaderBanner, { HeaderLeftButtonProps, HeaderRightButtonProps, HeaderStaticTitleProps } from './HeaderBanner'
@@ -14,7 +15,7 @@ context('HeaderBanner', () => {
     onLeftTitleButtonPress?: () => void,
     rightButtonText?: string,
     onRightTitleButtonPress?: () => void,
-    rightVAIconProps?: VAIconProps,
+    rightIconProps?: IconProps,
   ): void => {
     let leftButton: HeaderLeftButtonProps | undefined
     if (leftButtonText && onLeftTitleButtonPress) {
@@ -23,8 +24,8 @@ context('HeaderBanner', () => {
     const title: HeaderStaticTitleProps | undefined = titleText ? { type: 'Static', title: titleText } : undefined
     let rightButton: HeaderRightButtonProps | undefined
     if (rightButtonText && onRightTitleButtonPress) {
-      if (rightVAIconProps) {
-        rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
+      if (rightIconProps) {
+        rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress, icon: rightIconProps }
       } else {
         rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress }
       }

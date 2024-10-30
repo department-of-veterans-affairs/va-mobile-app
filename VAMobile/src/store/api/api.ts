@@ -216,12 +216,8 @@ const call = async function <T>(
   }
 }
 
-export const get = async function <T>(
-  endpoint: string,
-  params: Params = {},
-  abortSignal?: AbortSignal,
-): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, undefined, abortSignal)
+export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+  return call<T>('GET', endpoint, params, undefined)
 }
 
 export const post = async function <T>(
@@ -233,8 +229,12 @@ export const post = async function <T>(
   return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 
-export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PUT', endpoint, params)
+export const put = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
+  return call<T>('PUT', endpoint, params, undefined, abortSignal)
 }
 
 export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
