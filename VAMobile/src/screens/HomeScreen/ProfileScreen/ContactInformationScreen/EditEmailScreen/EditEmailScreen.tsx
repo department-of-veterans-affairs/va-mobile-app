@@ -8,7 +8,15 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 
 import { useContactInformation, useDeleteEmail, useSaveEmail } from 'api/contactInformation'
 import { SaveEmailData } from 'api/types'
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  FullScreenSubtask,
+  LoadingComponent,
+} from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -200,7 +208,9 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       onLeftButtonPress={navigation.goBack}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      rightButtonDisabled={saveDisabled}>
+      rightButtonDisabled={saveDisabled}
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {savingEmail || deletingEmail ? (
         <LoadingComponent
           text={
@@ -220,11 +230,11 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
           )}
           {formContainsError && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox
-                scrollViewRef={scrollViewRef}
-                title={t('editEmail.alertError')}
-                border="error"
+              <AlertWithHaptics
+                variant="error"
+                header={t('editEmail.alertError')}
                 focusOnError={onSaveClicked}
+                scrollViewRef={scrollViewRef}
               />
             </Box>
           )}

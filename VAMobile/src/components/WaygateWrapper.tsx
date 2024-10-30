@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useNavigationState } from '@react-navigation/native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -48,23 +46,24 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox
-          border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
-          title={waygate.errorMsgTitle}
-          titleA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
-          text={text}
-          textA11yLabel={a11yLabelVA(text || '')}
+        <AlertWithHaptics
+          variant={waygate.type === 'DenyContent' ? 'error' : 'warning'}
+          header={waygate.errorMsgTitle}
+          headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
+          description={text}
+          descriptionA11yLabel={a11yLabelVA(text || '')}
+          primaryButton={
+            waygate.appUpdateButton === true ? { label: t('updateNow'), onPress: onUpdateButtonPress } : undefined
+          }
           focusOnError={false}
-          testId="AFUseCase2TestID">
-          <Box my={theme.dimensions.standardMarginBetween}>
-            <ClickToCallPhoneNumber
-              displayedText={displayedTextPhoneNumber(phoneNumber)}
-              phone={phoneNumber}
-              a11yLabel={a11yLabelID(phoneNumber)}
-            />
-          </Box>
-          {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
-        </AlertBox>
+          testID="AFUseCase2TestID">
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(phoneNumber)}
+            phone={phoneNumber}
+            a11yLabel={a11yLabelID(phoneNumber)}
+            variant={'base'}
+          />
+        </AlertWithHaptics>
       </Box>
     )
   }

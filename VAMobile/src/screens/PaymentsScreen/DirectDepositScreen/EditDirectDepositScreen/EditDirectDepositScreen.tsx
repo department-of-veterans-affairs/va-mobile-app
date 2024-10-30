@@ -9,7 +9,7 @@ import { RootNavStackParamList } from 'App'
 import { checkIfRoutingNumberIsInvalid, useUpdateBankInfo } from 'api/directDeposit'
 import { AccountTypes, PaymentAccountData } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   CollapsibleView,
   FieldType,
@@ -216,6 +216,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'accountType',
+        confirmTestID: 'accountTypeConfirmID',
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
     },
@@ -241,29 +242,31 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         leftButtonText={t('cancel')}
         rightButtonText={saving ? '' : t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
-        title={saving ? '' : displayTitle}>
+        title={saving ? '' : displayTitle}
+        leftButtonTestID="directDepositBackID"
+        rightButtonTestID="directDepositSaveID">
         {saving ? (
           <LoadingComponent text={t('directDeposit.savingInformation')} />
         ) : (
           <Box mb={contentMarginBottom}>
             {formContainsError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox
-                  scrollViewRef={scrollViewRef}
-                  title={t('editDirectDeposit.pleaseCheckDDInfo')}
-                  border="error"
+                <AlertWithHaptics
+                  variant="error"
+                  description={t('editDirectDeposit.pleaseCheckDDInfo')}
                   focusOnError={onSaveClicked}
+                  scrollViewRef={scrollViewRef}
                 />
               </Box>
             )}
             {invalidRoutingNumberError && (
               <Box mb={standardMarginBetween}>
-                <AlertBox
-                  scrollViewRef={scrollViewRef}
-                  title={t('editDirectDeposit.error')}
-                  text={t('editDirectDeposit.errorInvalidRoutingNumber')}
-                  border="error"
+                <AlertWithHaptics
+                  variant="error"
+                  header={t('editDirectDeposit.error')}
+                  description={t('editDirectDeposit.errorInvalidRoutingNumber')}
                   focusOnError={onSaveClicked}
+                  scrollViewRef={scrollViewRef}
                 />
               </Box>
             )}
@@ -271,7 +274,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
               <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
             </Box>
             <Box mt={condensedMarginBetween}>
-              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')} testID="directDepositFindTheseNumbersID">
                 <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
               </CollapsibleView>
             </Box>

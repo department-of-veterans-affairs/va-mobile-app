@@ -46,7 +46,7 @@ function DetailsTextSections({
   ) => {
     return (
       <>
-        <TextView accessibilityLabel={headerLabel} variant="MobileBodyBold">
+        <TextView accessibilityLabel={headerLabel} accessibilityRole="header" variant="MobileBodyBold">
           {headerText}
         </TextView>
         <TextView accessibilityLabel={valueLabel} variant="MobileBody">
@@ -73,11 +73,11 @@ function DetailsTextSections({
       borderTopColor={'prescriptionDivider'}
       pt={standardMarginBetween}>
       <Box {...containerProps}>
-        <Box accessible={hasRightText ? true : false}>
+        <Box accessible={hasRightText ? true : false} accessibilityRole={'text'}>
           {getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}
         </Box>
         {hasRightText && (
-          <Box alignItems="flex-end" accessible={true}>
+          <Box alignItems="flex-end" accessible={true} accessibilityRole={'text'}>
             {getTextElements(rightSectionTitle, rightSectionValue, rightSectionTitleLabel, rightSectionValueLabel)}
           </Box>
         )}

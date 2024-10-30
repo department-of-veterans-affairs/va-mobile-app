@@ -4,26 +4,25 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
 import {
-  AlertBox,
-  AlertBoxProps,
+  AlertWithHaptics,
+  AlertWithHapticsProps,
   Box,
   BoxProps,
   LoadingComponent,
   TextArea,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useFontScale, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
@@ -43,7 +42,8 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
-
+  const fs = useFontScale()
+  const indicatorDiameter = fs(30)
   const { mutate: requestRefill, isPending: showLoadingScreenRequestRefillsRetry } = useRequestRefills()
 
   const onNavToHistory = () => {
@@ -80,42 +80,37 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   })
 
   const renderAlert = (): ReactElement => {
-    let alertBoxProps: AlertBoxProps
+    let alertBoxProps: AlertWithHapticsProps
     switch (status) {
       case REQUEST_STATUS.SUCCESS:
         alertBoxProps = {
-          border: 'success',
-          title: t('prescriptions.refillRequestSummary.success'),
+          variant: 'success',
+          header: t('prescriptions.refillRequestSummary.success'),
         }
         break
       case REQUEST_STATUS.MIX:
       case REQUEST_STATUS.FAILED:
       default:
         alertBoxProps = {
-          border: 'error',
-          title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
-          text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          variant: 'error',
+          header: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
+          description: t('prescriptions.refillRequestSummary.tryAgain'),
+          descriptionA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
+          primaryButton: {
+            label: t('tryAgain'),
+            onPress: () => {
+              requestRefill(requestFailed)
+              const prescriptionIds = requestFailed.map((prescription) => prescription.id)
+              logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
+            },
+            a11yHint: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
+          },
         }
         break
     }
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <AlertBox {...alertBoxProps}>
-          {status !== REQUEST_STATUS.SUCCESS && (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <Button
-                onPress={() => {
-                  requestRefill(requestFailed)
-                  const prescriptionIds = requestFailed.map((prescription) => prescription.id)
-                  logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
-                }}
-                label={t('tryAgain')}
-                a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
-              />
-            </Box>
-          )}
-        </AlertBox>
+        <AlertWithHaptics {...alertBoxProps} />
       </Box>
     )
   }
@@ -129,11 +124,12 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
-      const vaIconProps: VAIconProps = {
-        name: request.submitted ? 'CircleCheckMark' : 'Remove',
+      const iconProps: IconProps = {
+        name: request.submitted ? 'Check' : 'Close',
         width: 20,
         height: 20,
-        fill: request.submitted ? theme.colors.icon.success : theme.colors.icon.error,
+        fill: theme.colors.icon.pagination,
+        preventScaling: true,
       }
 
       const boxProps: BoxProps = {
@@ -165,7 +161,15 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
               {rxNumber}
             </TextView>
           </Box>
-          <VAIcon {...vaIconProps} />
+          <Box
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor={request.submitted ? 'completedPhase' : 'buttonDestructiveActive'}
+            borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>
+            <Icon {...iconProps} />
+          </Box>
         </Box>
       )
     })
@@ -175,7 +179,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
     return (
       <>
         <Box>
-          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('prescriptions.refillRequestSummary')}
           </TextView>
         </Box>
@@ -190,7 +194,9 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
     return (
       <Box {...borderProps}>
-        <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
+        <TextView variant="HelperTextBold" accessibilityRole="header">
+          {t('prescriptions.refillRequestSummary.whatsNext')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView
             variant="MobileBody"
@@ -220,7 +226,8 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
         onLeftButtonPress={() => {
           onNavToHistory()
         }}
-        title={t('refillRequest')}>
+        title={t('refillRequest')}
+        leftButtonTestID="prescriptionsBackTestID">
         {showLoadingScreenRequestRefillsRetry ? (
           <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
         ) : (

@@ -1,7 +1,7 @@
 name: Onboarding Request (Engineering)
 description: Fill out this form to request initiation of engineering onboarding for 
 title: "Onboarding: [name]"
-labels: [ onboarding ]
+labels: [ user-onboarding ]
 assignees: timwright12
 body:
 - type: markdown
@@ -33,6 +33,31 @@ body:
     label: VA Email Address
     description: Onboarding requires a VA email address to access developer systems
     placeholder: 'Alex.Smith1@va.gov'
+  validations:
+    required: true
+
+- type: input
+  id: teamname
+  attributes:
+    label: Which team is this person on?
+    description: Exposing the primary team name helps us sort access requests
+  validations:
+    required: true
+
+- type: input
+  id: vaoctopo
+  attributes:
+    label: Who is the OCTO Product Owner for this person's team? 
+    description: Add a PO helps us triage requests, and know who the main point of contact is.
+  validations:
+    required: true
+
+- type: input
+  id: slackchannel
+  attributes:
+    label: What is the main Slack channel for this person's team primary team?
+    description: Slack channels help when we need to contact the rest of the team or easily check in.
+    placeholder: '#va-mobile-app'
   validations:
     required: true
 
@@ -81,3 +106,4 @@ body:
     - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/Detox%20Best%20Practices)
     - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Releases/release-process)
     - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+    - label: Information about [accessing Demo Mode](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Mobile%20Demo%20Mode)

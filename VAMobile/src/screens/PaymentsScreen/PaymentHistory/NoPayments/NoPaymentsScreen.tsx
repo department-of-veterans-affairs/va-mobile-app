@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AlertBox, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { AlertWithHaptics, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -13,21 +13,17 @@ function NoPaymentsScreen() {
 
   return (
     <VAScrollView>
-      <AlertBox border="informational">
-        <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('payments.noPayments.title'))}>
-          {t('payments.noPayments.title')}
-        </TextView>
-        <TextView
-          variant="MobileBody"
-          mt={theme.dimensions.standardMarginBetween}
-          paragraphSpacing={true}
-          accessibilityLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
-          {t('payments.noPayments.body.1')}
-        </TextView>
+      <AlertWithHaptics
+        variant="info"
+        header={t('payments.noPayments.title')}
+        headerA11yLabel={a11yLabelVA(t('payments.noPayments.title'))}
+        description={t('payments.noPayments.body.1')}
+        descriptionA11yLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}
-          accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}>
+          accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}
+          mt={theme.dimensions.contentMarginTop}>
           {t('payments.missingOrNoPayments.body.1')}
         </TextView>
         <TextView
@@ -36,8 +32,12 @@ function NoPaymentsScreen() {
           accessibilityLabel={t('payments.noPayments.body.2.a11yLabel')}>
           {t('payments.noPayments.body.2')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
-      </AlertBox>
+        <ClickToCallPhoneNumber
+          phone={t('8008271000')}
+          displayedText={displayedTextPhoneNumber(t('8008271000'))}
+          variant={'base'}
+        />
+      </AlertWithHaptics>
     </VAScrollView>
   )
 }

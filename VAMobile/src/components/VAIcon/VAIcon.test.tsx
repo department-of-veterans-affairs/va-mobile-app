@@ -19,7 +19,7 @@ jest.mock('../../utils/hooks', () => {
 context('VAIconTests', () => {
   describe('optional parameters', () => {
     it('should get passed to svg component', () => {
-      render(<VAIcon name={'HomeSelected'} testID={'myId'} height={1} width={2} />)
+      render(<VAIcon name={'Chat'} testID={'myId'} height={1} width={2} />)
 
       expect(screen.getByTestId('myId')).toBeTruthy()
     })

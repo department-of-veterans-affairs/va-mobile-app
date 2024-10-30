@@ -8,7 +8,8 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
@@ -37,8 +38,6 @@ import {
   LoadingComponent,
   Nametag,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -264,6 +263,18 @@ export function HomeScreen({}: HomeScreenProps) {
     !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
     !!serviceHistoryQuery.data?.mostRecentBranch
 
+  const aboutYouFeatureInDowntime = !!(
+    (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
+    (authorizedServicesQuery.data?.disabilityRating && disabilityRatingInDowntime) ||
+    (authorizedServicesQuery.data?.lettersAndDocuments && lettersInDowntime)
+  )
+
+  const hasAboutYouError = !!(
+    disabilityRatingQuery.isError ||
+    letterBeneficiaryQuery.isError ||
+    serviceHistoryQuery.isError
+  )
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -277,8 +288,9 @@ export function HomeScreen({}: HomeScreenProps) {
     label: t('profile.title'),
     accessibilityRole: 'link',
     icon: {
-      name: 'ProfileSelected',
-    } as VAIconProps,
+      name: 'AccountCircle',
+      fill: theme.colors.icon.active,
+    } as IconProps,
     onPress: () => navigateTo('Profile'),
   }
 
@@ -330,7 +342,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   alignItems="center"
                   accessible={true}
                   accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                  <VAIcon name={'CircleCheckMark'} fill={colors.vadsColorSuccessDark} fill2={'transparent'} />
+                  <Icon name={'CheckCircle'} fill={DSColors.vadsColorSuccessDark} width={30} height={30} />
                   <TextView
                     importantForAccessibility={'no'}
                     ml={theme.dimensions.condensedMarginBetween}
@@ -413,7 +425,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 spinnerColor={theme.colors.icon.inlineSpinner}
               />
             </Box>
-          ) : !hasAboutYouInfo ? (
+          ) : !hasAboutYouInfo && !hasAboutYouError ? (
             <Box mx={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.noInformation')} />
             </Box>
@@ -476,6 +488,9 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
               </Box>
+              {(hasAboutYouError || aboutYouFeatureInDowntime) && (
+                <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={hasAboutYouError} />
+              )}
             </Box>
           )}
         </Box>

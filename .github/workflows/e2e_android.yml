@@ -9,7 +9,9 @@ on:
     branches:
         - 'dependabot/**'
   pull_request:
-    types: [opened, ready_for_review, labeled, edited]
+    types: synchronize
+    paths:
+      - 'VAMobile/src/**'
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -28,16 +30,20 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
-      device_specific:
-        description: 'Is your testRail run Android only? (only check if adding results to testRail)'
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
     workflows: ['[Release] New Release Issue']
     types: 
       - in_progress
+  workflow_call:
+    secrets:
+      TEST_RAIL_USER:
+        description: "TestRail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "TestRail api key"
+        required: true
 
 concurrency:
   group: android-detox-${{ github.ref }}
@@ -76,7 +82,7 @@ jobs:
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
-    if: ((github.event.label.name == 'FE-Needs Review' && github.event.pull_request.draft == false) || (github.event.label.name == 'FE-Changes Requested')) || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
@@ -202,7 +208,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         continue-on-error: true
 
       - name: Run e2e tests for Android
@@ -217,9 +223,9 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
 
-      - name: Run e2e tests for Android
+      - name: Run e2e tests for Android on failure
         if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -230,7 +236,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         
       - name: Upload e2e-junit
         if: failure() || success()
@@ -243,14 +249,15 @@ jobs:
         if: failure() || steps.run_e2e_tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
           path: VAMobile/artifacts
+          retention-days: 1
 
       - name: Fail workflow if needed(View e2e step for details)
         if: steps.run_e2e_tests.outcome == 'failure'
         run: exit 1
   
-  output-slack-results:
+  output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: macos-latest-xl
@@ -258,11 +265,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+
       - name: Download results
         uses: actions/download-artifact@v4
         with:
             path: VAMobile/e2e/test_reports
+
       - name: Inform Slack
+        id: inform_slack
         shell: bash
         run: |
           if grep -rq "<failure>" .; then
@@ -273,6 +283,7 @@ jobs:
               https://slack.com/api/chat.postMessage|
               jq -r '.ts')
             echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+            echo "TEST_FAILURE=true" >> "$GITHUB_OUTPUT"
           else
             ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -280,8 +291,63 @@ jobs:
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
           fi
+
+      - name: Find failing tests
+        id: failing_tests
+        shell: bash
+        run: |
+          if grep -rq "<failure>" .; then
+            failing_tests_list=$(grep -rl "<failure>")
+            failing_tests=""
+            for i in ${failing_tests_list[@]}; do
+              remove_before=${i%.ts*}
+              remove_after=${remove_before#*test_reports/}
+              echo "$remove_after"
+              if [ -z "${failing_tests}" ]; then
+                failing_tests=$(echo $failing_tests"$remove_after")
+              else
+                failing_tests=$(echo $failing_tests", ""$remove_after")
+              fi
+            done
+            echo "FAILING_TEST=$failing_tests" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Github CLI Authentication
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+          gh auth login --with-token < token.txt
+
+      - name: Update a ticket on failure (if needed)
+        if: steps.inform_slack.outputs.TEST_FAILURE != ''
+        id: find_if_ticket_already_exists
+        run: |
+          old_body=$(gh issue list --json body --jq '.[] | .body' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
+          if [[ "$old_body" != "" ]]; then
+            ticket_number=$(gh issue list --json number --jq '.[] | .number' --state open --search "Bug - Detox - Fix Overnight Failures in:title")
+            new_body=$(echo "$old_body"$'\n'"- "${{ env.DATE_OF_ISSUE}}" on Android: "${{steps.failing_tests.outputs.FAILING_TEST}}) 
+            echo "$new_body"
+            echo "TICKET_EXISTS=true" >> "$GITHUB_OUTPUT"
+            gh issue edit $ticket_number -b "$new_body"
+          else          
+            echo "TICKET_EXISTS=" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Make a ticket on failure (if needed)
+        if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
+          search_existing: open
+        env:
+          dateOfIssue: ${{ env.DATE_OF_ISSUE }}
+          OS: "Android"
+          issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create-issue
     
-  matrix-send_test_results_to_testrail:
+  matrix_send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
     needs: [matrix-e2e-android, output_detox_tests_to_run]
     strategy:
@@ -294,6 +360,66 @@ jobs:
     with: 
       test_names: "${{matrix.testsuite}}"
       testRail_name: ${{ inputs.testRail_name }}
-      test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"
     secrets: inherit
+  
+  update-test-names:
+    if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
+    needs: [matrix-e2e-android, output_detox_tests_to_run, matrix_send_test_results_to_testrail]
+    continue-on-error: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: update-test-names
+        run: |
+          for ((i=0; ; i+=250)); do
+            echo "i = $i"
+            getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{ needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number }}&offset=$i")
+            echo $(jq --compact-output '[.tests[] | .title |= sub("(]).*$"; "]")]' <<< "$getTestCaseNewName") >> input.json
+            if [[ $(jq '._links.next == null' <<< "$getTestCaseNewName") == 'true' ]];
+            then
+              break
+            fi
+          done
+          getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
+                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
+          updateRunWithNewCases=$(curl -X POST -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/update_run/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}")
+          getTestCases=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_tests/${{needs.matrix_send_test_results_to_testrail.outputs.test_run_id_number}}")
+          for i in $(echo $getTestCases | jq -r '.tests[].id'); do
+            getTestName=$(echo $getTestCases | jq --argjson testIDs "$i" -r '.tests | map(select(.id == $testIDs)) | .[0].title')
+            
+            getFailedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 5)) | map(.title)')
+            isTestFailed=$(echo $getFailedTests | jq 'any(. == "'"$getTestName"'")')
+            getRetestTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 4)) | map(.title)')
+            isTestRetest=$(echo $getRetestTests | jq 'any(. == "'"$getTestName"'")')
+            getPassedTests=$(echo $getTestCaseNewName | jq --compact-output 'map(select(.status_id == 1)) | map(.title)')
+            isTestPassed=$(echo $getPassedTests | jq 'any(. == "'"$getTestName"'")')
+            if [[ "$isTestFailed" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 5}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            elif [[ "$isTestRetest" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 4}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            elif [[ "$isTestPassed" == "true" ]]; then
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 1}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            fi
+          done

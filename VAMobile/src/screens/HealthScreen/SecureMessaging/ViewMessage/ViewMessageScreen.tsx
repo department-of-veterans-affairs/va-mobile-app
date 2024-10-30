@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -22,7 +23,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ChildTemplate,
   ErrorComponent,
@@ -44,6 +45,7 @@ import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -150,6 +152,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
+      registerReviewEvent(true)
     }
   }, [threadFetched])
 
@@ -344,8 +347,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     }
   }
 
-  const moveIconProps: VAIconProps = {
+  const moveIconProps: IconProps = {
     name: 'Folder',
+    fill: theme.colors.icon.active,
   }
 
   // If error is caused by an individual message, we want the error alert to be
@@ -365,6 +369,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             logAnalyticsEvent(Events.vama_sm_move())
             setShowModalPicker(true)
           },
+          testID: 'pickerMoveMessageID',
         }
 
   return (
@@ -373,7 +378,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('reviewMessage')}
       headerButton={headerButton}
-      testID="viewMessageTestID">
+      testID="viewMessageTestID"
+      backLabelTestID="backToMessagesID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
@@ -401,15 +407,18 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmBtnText={'pickerLaunchBtn'}
               key={newCurrentFolderID}
               showModalByDefault={true}
+              cancelTestID="pickerMoveMessageCancelID"
+              confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
           {replyExpired && (
             <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-                  {t('secureMessaging.reply.olderThan45Days')}
-                </TextView>
-              </AlertBox>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.youCanNoLonger')}
+                description={t('secureMessaging.reply.olderThan45Days')}
+                testID="secureMessagingOlderThan45DaysAlertID"
+              />
             </Box>
           )}
           <MessageCard message={message} />

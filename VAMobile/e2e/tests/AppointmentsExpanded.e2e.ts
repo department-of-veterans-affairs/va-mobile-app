@@ -1,9 +1,58 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, resetInAppReview } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
 
 export const Appointmentse2eConstants = {
   GET_DIRECTIONS_ID: 'directionsTestID',
+}
+
+const checkMedicationWording = async ({
+  appointmentType,
+  appointmentStatus,
+  pastAppointment,
+}: {
+  appointmentType: string
+  appointmentStatus: string
+  pastAppointment: boolean
+}) => {
+  if (
+    appointmentType === 'Phone' ||
+    appointmentType === 'CC' ||
+    appointmentType === 'Onsite' ||
+    appointmentType === 'VA' ||
+    appointmentType === 'ATLAS' ||
+    appointmentType === 'GFE' ||
+    appointmentType === 'Home'
+  ) {
+    if (
+      appointmentStatus === 'Canceled' ||
+      (!pastAppointment && (appointmentStatus === 'Upcoming' || appointmentStatus === 'Confirmed'))
+    ) {
+      await expect(element(by.text('Prepare for your appointment'))).toExist()
+      await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+
+      if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
+        await expect(element(by.text('Get your device ready to join.'))).toExist()
+        await expect(element(by.id('prepareForVideoVisitTestID'))).toExist()
+        await waitFor(element(by.id('prepareForVideoVisitTestID')))
+          .toBeVisible()
+          .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
+          .scroll(300, 'down')
+        await element(by.id('prepareForVideoVisitTestID')).tap()
+        await expect(element(by.text('Appointments help'))).toExist()
+        await element(by.text('Close')).tap()
+      } else {
+        await expect(element(by.text('Get your device ready to join.'))).not.toExist()
+        await expect(element(by.id('prepareForVideoVisitTestID'))).not.toExist()
+      }
+    } else {
+      await expect(element(by.text('Prepare for your appointment'))).not.toExist()
+      await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+    }
+  } else {
+    await expect(element(by.text('Prepare for your appointment'))).not.toExist()
+    await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+  }
 }
 
 const checkUpcomingApptDetails = async (
@@ -255,6 +304,7 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id('CallTTYTestID')).atIndex(1)).toExist()
     }
   }
+  await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
 
   await element(by.text('Appointments')).tap()
 }
@@ -310,8 +360,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify confirmed CC appt', async () => {
     if (pastAppointment) {
-      await resetInAppReview()
-      await openHealth()
+      await element(by.text('Health')).atIndex(0).tap()
       await openAppointments()
       await waitFor(element(by.text('Upcoming')))
         .toExist()
@@ -431,17 +480,8 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending VA video connect - Onsite appt', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
-      await waitFor(element(by.text(CommonE2eIdConstants.UPCOMING_APPT_BUTTON_TEXT)))
-        .toExist()
-        .withTimeout(10000)
-    } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
     if (pastAppointment) {
       await element(by.text('Past')).tap()
       if (device.getPlatform() === 'android') {
@@ -532,17 +572,8 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Home appt', async () => {
-    if (device.getPlatform() === 'ios') {
-      await resetInAppReview()
-      await openHealth()
-      await openAppointments()
-      await waitFor(element(by.text('Upcoming')))
-        .toExist()
-        .withTimeout(10000)
-    } else {
-      await element(by.text('Health')).atIndex(0).tap()
-      await openAppointments()
-    }
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
     if (pastAppointment) {
       await element(by.text('Past')).tap()
     }
@@ -551,10 +582,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     if (!pastAppointment) {
       await expect(element(by.text('Video appointment')))
       await expect(element(by.text('You can join 30 minutes before your appointment time.'))).toExist()
-      await expect(element(by.id('prepareForVideoVisitTestID'))).toExist()
-      await element(by.id('prepareForVideoVisitTestID')).tap()
-      await expect(element(by.text('Appointments help'))).toExist()
-      await element(by.text('Close')).tap()
     } else {
       await expect(element(by.text('Past video appointment')))
     }
@@ -648,8 +675,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -741,8 +767,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -840,8 +865,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -942,8 +966,7 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
-    await resetInAppReview()
-    await openHealth()
+    await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
     if (!pastAppointment) {
       await waitFor(element(by.text('Upcoming')))
@@ -1042,6 +1065,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()

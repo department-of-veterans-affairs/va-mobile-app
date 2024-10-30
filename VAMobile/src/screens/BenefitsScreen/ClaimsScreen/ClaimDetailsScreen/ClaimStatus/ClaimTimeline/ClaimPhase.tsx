@@ -2,14 +2,16 @@ import React, { RefObject, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { ClaimAttributesData } from 'api/types'
-import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView, VAIcon } from 'components'
+import { AccordionCollapsible, Box, LabelTag, LabelTagTypeConstants, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getUserPhase, isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useAutoScrollToElement, useTheme } from 'utils/hooks'
+import { useAutoScrollToElement, useFontScale, useTheme } from 'utils/hooks'
 
 /**
  * props for ClaimPhase components
@@ -21,6 +23,8 @@ export type ClaimPhaseProps = {
   attributes: ClaimAttributesData
   /** given claims ID */
   claimID: string
+  /** enable autoScroll */
+  scrollIsEnabled: boolean
   /** ref to parent scrollView, used for auto scroll */
   scrollViewRef: RefObject<ScrollView>
 }
@@ -28,10 +32,11 @@ export type ClaimPhaseProps = {
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhaseProps) {
+function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [scrollRef, viewRef, scrollToCurrentPhase] = useAutoScrollToElement()
   const theme = useTheme()
+  const fs = useFontScale()
   const { condensedMarginBetween, standardMarginBetween, tinyMarginBetween } = theme.dimensions
 
   const isDisabilityClaim = isDisabilityCompensationClaim(attributes.claimTypeCode)
@@ -42,8 +47,9 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
   const isCompletedPhase = phase < current
   const isCurrentPhase = phase === current
   const isIncompletePhase = phase > current
-  const disableScroll =
-    numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0 && !attributes?.waiverSubmitted
+  const hasFileRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline || []) > 0
+  const disableScroll = !scrollIsEnabled || (hasFileRequests && !attributes?.waiverSubmitted)
+  const indicatorDiameter = fs(30)
 
   useEffect(() => {
     if (phase > 1 && isCurrentPhase && scrollViewRef?.current && !disableScroll) {
@@ -56,13 +62,15 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     <Box flexDirection="column">
       <Box flexDirection="row" alignItems="center" mb={isCompletedPhase ? tinyMarginBetween : 0}>
         {isCompletedPhase && (
-          <VAIcon
-            name="CircleCheckMark"
-            fill={theme.colors.icon.success}
-            width={24}
-            height={24}
-            preventScaling={true}
-          />
+          <Box
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor="completedPhase"
+            borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>
+            <Icon width={20} height={20} name={'Check'} fill="#fff" preventScaling={true} />
+          </Box>
         )}
         <TextView
           variant="MobileBodyBold"
@@ -84,6 +92,8 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     </TextView>
   )
 
+  const stepNumberA11y = t('stepXofY', { current: phase, total: isDisabilityClaim ? 8 : 5 })
+
   let currentStatusA11y = ''
   if (isIncompletePhase) {
     currentStatusA11y = t('incomplete')
@@ -100,7 +110,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollViewRef }: ClaimPhasePro
     completedStepsA11y = t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: current - 1 })
   }
 
-  let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${heading}. ${currentStatusA11y}.`
+  let testID = `${stepNumberA11y}. ${heading}. ${currentStatusA11y}.`
   if (completedStepsA11y) {
     testID += ` ${completedStepsA11y}.`
   }

@@ -11,6 +11,14 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'android',
+  constants: {
+    Model: 'Google Pixel 8 Pro',
+    Release: '15',
+  },
+}))
+
 context('api', () => {
   it('should handle GET requests', async () => {
     const responseBlob = new Blob([JSON.stringify({ foo: 'test' }, null, 2)])
@@ -99,7 +107,26 @@ context('api', () => {
     const responseBlob = new Blob(['Success'])
     const response = new Response(responseBlob, { status: 200, headers: { 'Content-Type': 'text/html' } })
     fetch.mockResolvedValue(response)
-    const result = await get<Types.UserData>('/foo')
+    const result = await post('/v0/user/logged-in')
     expect(result).toEqual(undefined)
+  })
+
+  it('includes device information in request header', () => {
+    fetch.mockResolvedValue({ status: 204, json: () => Promise.reject({ foo: 'test' }) })
+    get('/foo')
+    expect(fetch).toHaveBeenCalledWith('https://test-api/foo', {
+      credentials: 'include',
+      headers: {
+        'App-Version': '',
+        'Authentication-Method': 'SIS',
+        'Device-Model': 'Google Pixel 8 Pro',
+        'OS-Version': 'Android 15',
+        'Source-App-Name': 'va-health-benefits-app',
+        'X-Key-Inflection': 'camel',
+        authorization: 'Bearer undefined',
+      },
+      method: 'GET',
+      signal: undefined,
+    })
   })
 })

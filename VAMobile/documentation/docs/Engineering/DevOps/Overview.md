@@ -20,7 +20,7 @@ Once the release is approved, the build system will create and upload production
 Regular QA builds are distributed every weekday. These builds are based on the most current commit on the develop branch in order to provide QA with the most up-to-date versions as possible and can be augmented with the other types of builds. 
 
 ### On Demand Builds
-In addition to our automatically scheduled builds, we also have the ability to create QA or UAT builds at any time from any branch, also known as On Demand builds.  The [On Demand Build Workflow](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml), which can also be found on the left hand sidebar in [GitHub Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions), allows us to specify a branch and an environment to create a build from.
+In addition to our automatically scheduled builds, we also have the ability to create QA or UAT builds at any time from any branch, also known as On Demand builds.  The [On Demand Build Workflow](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml), which can also be found on the left hand sidebar in [GitHub Actions](https://github.com/department-of-veterans-affairs/va-mobile-app/actions), allows us to specify a branch and an environment to create a build from ([steps listed out in QA documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Resources#on-demand-build)).
 
 ### On Demand Build Script
 

@@ -123,6 +123,16 @@ export const Events = {
       name: 'vama_cerner_alert_exp',
     }
   },
+  vama_be_af_refresh: (): Event => {
+    return {
+      name: 'vama_be_af_refresh',
+    }
+  },
+  vama_be_af_shown: (): Event => {
+    return {
+      name: 'vama_be_af_shown',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -161,6 +171,8 @@ export const Events = {
     claim_step: number,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_type_code: string,
+    is_disability_comp_claim: boolean,
   ): Event => {
     return {
       name: 'vama_claim_details_open',
@@ -170,6 +182,8 @@ export const Events = {
         claim_step,
         claim_step_change,
         claim_submitted_date,
+        claim_type_code,
+        is_disability_comp_claim,
       },
     }
   },
@@ -302,6 +316,23 @@ export const Events = {
         claim_type,
         claim_step,
         claim_submitted_date,
+      },
+    }
+  },
+  vama_claim_submit_ev: (claim_id: string): Event => {
+    return {
+      name: 'vama_claim_submit_ev',
+      params: {
+        claim_id,
+      },
+    }
+  },
+  vama_claim_submit_tap: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_claim_submit_tap',
+      params: {
+        claim_id,
+        claim_type,
       },
     }
   },
@@ -1057,6 +1088,11 @@ export const Events = {
       name: 'vama_sm_nonurgent',
     }
   },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
+    }
+  },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {
     return {
       name: 'vama_sm_open',
@@ -1094,6 +1130,14 @@ export const Events = {
       name: 'vama_snackbar_null',
       params: {
         location,
+      },
+    }
+  },
+  vama_sso_cookie_received: (received: boolean): Event => {
+    return {
+      name: 'vama_sso_cookie_received',
+      params: {
+        received,
       },
     }
   },
@@ -1151,6 +1195,14 @@ export const Events = {
       name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
+      },
+    }
+  },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
       },
     }
   },

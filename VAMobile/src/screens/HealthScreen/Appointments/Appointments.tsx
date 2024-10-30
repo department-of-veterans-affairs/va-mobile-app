@@ -9,7 +9,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -34,6 +34,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const theme = useTheme()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
+  const controlIDs = ['apptsUpcomingID', 'apptsPastID']
   const [selectedTab, setSelectedTab] = useState(0)
   const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
@@ -86,13 +87,13 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     if (serviceError) {
       return (
         <Box mb={theme.dimensions.condensedMarginBetween}>
-          <AlertBox
+          <AlertWithHaptics
+            variant="error"
+            header={t('appointments.appointmentsStatusSomeUnavailable')}
+            headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            description={t('appointments.troubleLoadingSomeAppointments')}
+            descriptionA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
             scrollViewRef={scrollViewRef}
-            title={t('appointments.appointmentsStatusSomeUnavailable')}
-            text={t('appointments.troubleLoadingSomeAppointments')}
-            border="error"
-            titleA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
-            textA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
           />
         </Box>
       )
@@ -111,7 +112,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
-      testID="appointmentsTestID">
+      testID="appointmentsTestID"
+      backLabelTestID="appointmentsBackTestID">
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
@@ -136,6 +138,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
               onChange={onTabChange}
               selected={selectedTab}
               a11yHints={a11yHints}
+              testIDs={controlIDs}
             />
           </Box>
           {serviceErrorAlert()}

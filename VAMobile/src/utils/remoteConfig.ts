@@ -18,50 +18,59 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
-  | 'claimPhaseExpansion'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
   | 'inAppRecruitment'
+  | 'inAppReview'
   | 'inAppUpdates'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
+  | 'submitEvidenceExpansion'
+  | 'sso'
   | 'testFeature'
+  | 'useOldLinkComponent'
   | 'whatsNewUI'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
-  claimPhaseExpansion: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
   inAppRecruitment: boolean
+  inAppReview: boolean
   inAppUpdates: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
+  submitEvidenceExpansion: boolean
+  sso: boolean
   testFeature: boolean
+  useOldLinkComponent: boolean
   whatsNewUI: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   cernerTrueForDemo: false,
-  claimPhaseExpansion: true,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
   inAppRecruitment: false,
+  inAppReview: true,
   inAppUpdates: true,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
+  submitEvidenceExpansion: false,
+  sso: false,
   testFeature: false,
+  useOldLinkComponent: false,
   whatsNewUI: true,
 }
 

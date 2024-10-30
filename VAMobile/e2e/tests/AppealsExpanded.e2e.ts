@@ -1,3 +1,10 @@
+/*
+Description:
+Detox script that tests for all appeal status types and verifies that the appeal appears in the claim list and that the appeal details page opens when clicked.
+As a note: most of the current status wording is checked in our unit tests so there this test does not check that.
+When to update:
+This script should be updated whenever a new appeal status types is created, if anything appeal wise is changed in src/store/api/demo/mocks/claims.json or if any new content changes are made to appeals. 
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 
 import {
@@ -6,7 +13,7 @@ import {
   openBenefits,
   openClaims,
   openClaimsHistory,
-  resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 let i = 0
@@ -24,7 +31,7 @@ export const AppealsExpandedIdConstants = {
   HLR_DECISION_APPEAL_ID:
     'Higher level review decision appeal Received July 12, 2008 Moved to this step on December 21, 2011',
   HLR_RECIEVED_APPEAL_ID:
-    'Higher level review recieved appeal Received July 11, 2008 Moved to this step on December 20, 2011',
+    'Higher level review received appeal Received July 11, 2008 Moved to this step on December 20, 2011',
   SC_RECIEVED_APPEAL_ID:
     'Supplemental claim received appeal Received July 10, 2008 Moved to this step on December 19, 2011',
   BVA_DECISION_EFFECTUATION_APPEAL_ID:
@@ -129,6 +136,7 @@ const expectedInformation = [
 ]
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -142,22 +150,24 @@ describe('AppealsExpanded', () => {
       if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
-        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID
+        value === AppealsExpandedIdConstants.DISABILITY_COMPENSATION_APPEAL_1_ID ||
+        value === AppealsExpandedIdConstants.MULTIPLE_DECISION_APPEAL_ID
       ) {
-        await element(by.id('claimsHistoryID')).scrollTo('bottom')
-        await element(by.id('next-page')).tap()
-        await element(by.id('claimsHistoryID')).scrollTo('top')
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('bottom')
+        await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+        await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
       }
 
       await waitFor(element(by.id(value)))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(300, 'down')
 
       await element(by.id(value)).tap()
       const appealInfo = expectedInformation[i]
       await expect(element(by.text('Appeal for ' + appealInfo[0]))).toExist()
       await expect(element(by.text(appealInfo[1]))).toExist()
+      //This if statement tests the wording in the review past events dropdown.  If appealInfo[2] is true but appealInfo[3] is undefined then the wording matches what we are checking for in appealInfo[1]. Otherwise the wording matches what is given in appealInfo[3].
       if (appealInfo[2] !== undefined && appealInfo[2] === 'true') {
         await element(by.text('Review past events')).tap()
         if (appealInfo[3] === undefined) {
@@ -186,38 +196,7 @@ describe('AppealsExpanded', () => {
 
     it('should close ' + key, async () => {
       i++
-      await element(by.text('Claims')).tap()
-      if (i % 6 === 0) {
-        await resetInAppReview()
-        await openBenefits()
-        await openClaims()
-        await openClaimsHistory()
-        if (i >= 4 && i <= 13) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 14 && i <= 23) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 24 && i <= 33) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        } else if (i >= 34) {
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-          await element(by.id('claimsHistoryID')).scrollTo('bottom')
-          await element(by.id('next-page')).tap()
-        }
-      }
+      await element(by.id('appealsBackID')).tap()
     })
   }
 })

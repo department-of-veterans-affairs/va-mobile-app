@@ -9,7 +9,15 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  FullScreenSubtask,
+  LoadingComponent,
+} from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -251,7 +259,9 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={isLoading ? '' : t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}>
+      onRightButtonPress={() => setOnSaveClicked(true)}
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : (
@@ -265,14 +275,14 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
+          <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <AlertBox
-                scrollViewRef={scrollViewRef}
-                title={t('editPhoneNumber.checkPhoneNumber')}
-                border="error"
+              <AlertWithHaptics
+                variant="error"
+                header={t('editPhoneNumber.checkPhoneNumber')}
                 focusOnError={onSaveClicked}
+                scrollViewRef={scrollViewRef}
               />
             </Box>
           )}

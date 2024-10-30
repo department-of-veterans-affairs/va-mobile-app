@@ -9,7 +9,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import { AlertBox, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
+import { AlertWithHaptics, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -175,15 +175,22 @@ function Attachments({ navigation, route }: AttachmentsProps) {
       scrollViewRef={scrollViewRef}
       title={t('secureMessaging.startNewMessage.attachments.title')}
       leftButtonText={t('cancel')}
+      leftButtonTestID="attachmentsCancelID"
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={
         displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')
       }
+      primaryButtonTestID="messagesSelectAFileID"
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />
+            <AlertWithHaptics
+              variant="error"
+              description={error}
+              descriptionA11yLabel={errorA11y}
+              scrollViewRef={scrollViewRef}
+            />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">

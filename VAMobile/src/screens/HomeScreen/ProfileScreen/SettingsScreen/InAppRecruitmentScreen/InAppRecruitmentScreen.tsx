@@ -49,7 +49,10 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
   }
 
   return (
-    <LargePanel title={t('inAppRecruitment.giveFeedback')} rightButtonText={t('close')}>
+    <LargePanel
+      title={t('inAppRecruitment.giveFeedback')}
+      rightButtonText={t('close')}
+      rightButtonTestID="backToSettingsScreenID">
       <Box
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
@@ -75,7 +78,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
           ]}
           paragraphSpacing={true}
         />
-        <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
+        <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} testID="goToQuestionnaireID" />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics
             type="url"

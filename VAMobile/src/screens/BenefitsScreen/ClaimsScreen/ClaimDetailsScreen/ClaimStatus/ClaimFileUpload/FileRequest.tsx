@@ -10,8 +10,8 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import {
   Box,
-  ChildTemplate,
   ErrorComponent,
+  FullScreenSubtask,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
@@ -33,12 +33,21 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID } = route.params
-  const { data: claim, error: claimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
-  const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
+  const { claimID, claim } = route.params
+  const {
+    data: claimFallBack,
+    error: claimError,
+    refetch: refetchClaim,
+    isFetching: loadingClaim,
+  } = useClaim(claimID, { enabled: !claim })
+  const requests = currentRequestsForVet(
+    claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
+  )
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
-  const count = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
+  const count = numberOfItemsNeedingAttentionFromVet(
+    claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
+  )
 
   const getRequests = (): Array<SimpleListItemObj> => {
     let requestNumber = 1
@@ -86,16 +95,26 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const viewEvaluationDetailsPress = () => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
+    } else if (claimFallBack) {
+      logAnalyticsEvent(
+        Events.vama_claim_eval(
+          claimFallBack.id,
+          claimFallBack.attributes.claimType,
+          claimFallBack.attributes.phase,
+          count,
+        ),
+      )
     }
     navigateTo('AskForClaimDecision', { claimID })
   }
 
   return (
-    <ChildTemplate
-      backLabel={t('claim.backLabel')}
-      backLabelOnPress={navigation.goBack}
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={navigation.goBack}
       title={t('fileRequest.title')}
-      testID="fileRequestPageTestID">
+      testID="fileRequestPageTestID"
+      leftButtonTestID="fileRequestPageBackID">
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
@@ -143,7 +162,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           </Box>
         </Box>
       )}
-    </ChildTemplate>
+    </FullScreenSubtask>
   )
 }
 

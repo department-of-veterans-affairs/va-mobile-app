@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { Pressable, ViewStyle } from 'react-native'
+import { Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, TextView, VAIcon } from 'components'
+import { TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
@@ -15,15 +15,15 @@ type LinkRowProps = {
 const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowProps) => {
   const theme = useTheme()
 
-  const pressableStyle: ViewStyle = {
+  const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     borderRadius: 8,
     padding: theme.dimensions.buttonPadding,
-    backgroundColor: theme.colors.background.linkRow as BackgroundVariant,
+    backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.background.linkRow,
     marginBottom: theme.dimensions.condensedMarginBetween,
     flexDirection: 'row',
     alignItems: 'center',
     paddingRight: theme.dimensions.linkRowChevronPaddingRight,
-  }
+  })
 
   return (
     <Pressable style={pressableStyle} onPress={onPress} accessible={true} accessibilityRole={'link'}>

@@ -81,6 +81,8 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
     testID: 'selectAYearTestID',
+    cancelTestID: 'selectAYearCancelTestID',
+    confirmTestID: 'selectAYearConfirmTestID',
   }
 
   const getPaymentsData = (): ReactNode => {
@@ -123,7 +125,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('payments')}
+      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
       testID="paymentHistoryTestID">

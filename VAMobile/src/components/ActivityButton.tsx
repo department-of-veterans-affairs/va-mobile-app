@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
-import { Linking, Platform, Pressable, ViewStyle } from 'react-native'
+import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { BackgroundVariant, Box, BoxProps, TextView, VAIcon } from 'components'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
+import { Box, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -20,29 +22,24 @@ interface ActivityButtonProps {
 const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: ActivityButtonProps) => {
   const theme = useTheme()
 
-  const boxProps: BoxProps = {
-    borderRadius: 8,
-    py: theme.dimensions.cardPadding,
-    px: theme.dimensions.buttonPadding,
-    backgroundColor: theme.colors.buttonBackground.activityButton as BackgroundVariant,
-    style: {
-      shadowColor: 'black',
-      ...Platform.select({
-        ios: {
-          shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.4,
-          shadowRadius: 8,
-        },
-        android: {
-          elevation: 8,
-        },
-      }),
-    },
-  }
-
-  const pressableStyles: ViewStyle = {
+  const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     flexDirection: 'row',
-  }
+    borderRadius: 8,
+    backgroundColor: pressed
+      ? theme.colors.buttonBackground.activityButtonActive
+      : theme.colors.buttonBackground.activityButton,
+    shadowColor: colors.vadsColorBlack,
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  })
 
   const onActivityPress = () => {
     let useCaseOneString = ''
@@ -61,41 +58,36 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
   }
 
   return (
-    <Box {...boxProps}>
-      <Pressable
-        style={pressableStyles}
-        onPress={onActivityPress}
-        accessible={true}
-        accessibilityRole={'link'}
-        accessibilityLabel={title}
-        accessibilityValue={{ text: subText }}
-        testID={title}>
-        <Box flex={1}>
-          <Box
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
-            <TextView variant="ActivityButtonHeader">{title}</TextView>
-          </Box>
-          {!!subText && (
-            <Box flexDirection={'row'} alignItems="center">
-              <Box flex={1}>
-                <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
-              </Box>
-              <VAIcon
-                width={24}
-                height={24}
-                name="RightArrowInCircle"
-                fill={theme.colors.icon.activityButton}
-                fill2={'transparent'}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-                preventScaling={true}
-              />
-            </Box>
-          )}
+    <Pressable
+      style={pressableStyle}
+      onPress={onActivityPress}
+      accessible={true}
+      accessibilityRole={'link'}
+      accessibilityLabel={title}
+      accessibilityValue={{ text: subText }}
+      testID={title}>
+      <Box flex={1} my={theme.dimensions.cardPadding} mx={theme.dimensions.buttonPadding}>
+        <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme.dimensions.standardMarginBetween : undefined}>
+          <TextView variant="ActivityButtonHeader">{title}</TextView>
         </Box>
-      </Pressable>
-    </Box>
+        {!!subText && (
+          <Box flexDirection={'row'} alignItems="center">
+            <Box flex={1}>
+              <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
+            </Box>
+            <VAIcon
+              width={24}
+              height={24}
+              name="RightArrowInCircle"
+              fill={theme.colors.icon.activityButton}
+              fill2={'transparent'}
+              ml={theme.dimensions.listItemDecoratorMarginLeft}
+              preventScaling={true}
+            />
+          </Box>
+        )}
+      </Box>
+    </Pressable>
   )
 }
 

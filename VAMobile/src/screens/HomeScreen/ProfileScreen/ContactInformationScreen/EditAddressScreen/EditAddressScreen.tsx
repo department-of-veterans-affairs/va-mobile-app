@@ -11,7 +11,7 @@ import { useContactInformation } from 'api/contactInformation'
 import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   FieldType,
   FormFieldType,
@@ -361,6 +361,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           labelKey: 'editAddress.militaryPostOffices',
           isRequiredField: true,
           testID: 'militaryPostOfficeTestID',
+          confirmTestID: 'militaryPostOfficeConfirmID',
         },
         fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
@@ -395,6 +396,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           includeBlankPlaceholder: true,
           isRequiredField: true,
           testID: 'stateTestID',
+          confirmTestID: 'statePickerConfirmID',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -408,6 +410,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         value: state,
         onChange: setState,
         testID: 'stateTestID',
+        confirmTestID: 'statePickerConfirmID',
       },
     }
   }
@@ -469,6 +472,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         isRequiredField: true,
         disabled: checkboxSelected,
         testID: 'countryPickerTestID',
+        confirmTestID: 'countryPickerConfirmID',
       },
       fieldErrorMessage: t('editAddress.countryFieldError'),
       hideField: checkboxSelected,
@@ -563,7 +567,9 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
       onLeftButtonPress={onCancel}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      testID="EditAddressTestID">
+      testID="EditAddressTestID"
+      leftButtonTestID="contactInfoBackTestID"
+      rightButtonTestID="contactInfoSaveTestID">
       {loadingCheck ? (
         <LoadingComponent
           text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')}
@@ -591,11 +597,11 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           )}
           {formContainsError && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox
-                title={t('editAddress.alertError')}
-                border="error"
-                scrollViewRef={scrollViewRef}
+              <AlertWithHaptics
+                variant="error"
+                header={t('editAddress.alertError')}
                 focusOnError={onSaveClicked}
+                scrollViewRef={scrollViewRef}
               />
             </Box>
           )}

@@ -93,10 +93,11 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('payments')}
+      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
-      testID="DirectDepositEditAccount">
+      testID="DirectDepositEditAccount"
+      backLabelTestID="directDepositPageBackID">
       {loading ? (
         <LoadingComponent text={t('directDeposit.loading')} />
       ) : hasError ? (
@@ -116,7 +117,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
             </TextView>
           </Box>
           <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
-          <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true}>
+          <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true} accessibilityRole={'text'}>
             <TextView>
               <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
               <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>

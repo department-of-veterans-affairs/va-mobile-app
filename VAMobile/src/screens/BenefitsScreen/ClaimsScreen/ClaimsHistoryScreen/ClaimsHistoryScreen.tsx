@@ -9,7 +9,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
@@ -22,7 +22,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import DEPRECATED_ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/DEPRECATED_ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
@@ -38,6 +37,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
+  const controlIDs = ['claimsHistoryActiveID', 'claimsHistoryClosedID']
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(0)
   const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
@@ -109,7 +109,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} border="error" />
+          <AlertWithHaptics variant="error" header={alertTitle} description={alertText} />
         </Box>
       )
     }
@@ -130,7 +130,8 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID"
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      backLabelTestID="claimsHistoryBackTestID">
       {!claimsNotInDowntime && !appealsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
@@ -158,17 +159,14 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={accessibilityHints}
+                testIDs={controlIDs}
               />
             </Box>
           )}
           {serviceErrorAlert()}
           {!claimsAndAppealsServiceErrors && (
             <Box flex={1}>
-              {featureEnabled('claimPhaseExpansion') ? (
-                <ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
-              ) : (
-                <DEPRECATED_ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
-              )}
+              <ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
             </Box>
           )}
         </Box>
