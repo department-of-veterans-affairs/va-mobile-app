@@ -37,7 +37,7 @@ context('FeatureLandingAndChildTemplate', () => {
   })
 
   it('should render a header button and onPress if passed in', () => {
-    initializeTestInstance({ label: 'test', icon: { name: 'HomeSelected' }, onPress: onPressSpy })
+    initializeTestInstance({ label: 'test', icon: { name: 'HomeOutlined' }, onPress: onPressSpy })
     fireEvent.press(screen.getByRole('button', { name: 'test' }))
     expect(onPressSpy).toHaveBeenCalled()
   })
