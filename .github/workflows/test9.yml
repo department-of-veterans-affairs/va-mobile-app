@@ -42,19 +42,13 @@ jobs:
       - name: Update Release Ticket Template with Assignees
         run: |
           # Update the assignees line in the template file with the fetched team members
-          sed -i "s/^assignees:.*$/assignees: $TEAM_MEMBERS/" .github/ISSUE_TEMPLATE/update_release_issue.md
+          sed -i "s/^assignees:.*$/assignees: $$ASSIGNEES/" .github/ISSUE_TEMPLATE/update_release_issue.md
 
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/update_release_issue.md
         env:
-          versionNumber: ${{ env.VERSION }}
-          qaDueDate: ${{ env.QA_DUE_DATE }}
-          prodDueDate: ${{ env.PROD_DUE_DATE }}
-          vaDueDate: ${{ env.VA_DUE_DATE }}
-          releaseDate: ${{ env.RELEASE_DATE }}
-          issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
 
