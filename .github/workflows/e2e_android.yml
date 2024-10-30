@@ -399,7 +399,7 @@ jobs:
               echo "Missing cases: $removeBracket"
               missingCasesWithOS="$removeBracket [android]"
               echo "$missingCasesWithOS"
-              test=$(echo $getTest| jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)))
+              test=$(echo $getTest| jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase))')
               echo "$test"
               echo $(jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase))' <<< "$getTest") >> input.json
             fi
