@@ -397,11 +397,11 @@ jobs:
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
             echo "$removeBracket"
-            missingCases=$(echo $getFirstTestNewName | jq --argjson testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
+            missingCases=$(echo $getFirstTestNewName | jq --args testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
             if [[ "$missingCases" == "[]" ]]; then
               echo "Missing cases: $missingCases"
               missingCasesWithOS="$missingCases [android]"
-              echo $(jq --argjson getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)) | .title' <<< "$getTest") >> input.json
+              echo $(jq --args getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)) | .title' <<< "$getTest") >> input.json
             fi
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
