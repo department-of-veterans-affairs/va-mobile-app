@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
+import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
@@ -35,12 +36,17 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
+const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
 
 const { LINK_URL_VA_NOTIFICATIONS } = getEnv()
 
@@ -49,6 +55,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
@@ -72,6 +79,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { data: personalInformation } = usePersonalInformation()
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
+  const { requestNotifications } = useSelector<RootState, AuthState>((state) => state.auth)
+
+  const onUseNotifications = (): void => {
+    AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
+    dispatch(setNotificationsPreferenceScreen(false))
+    //This actually triggers the notification manager code to request via OS.
+    dispatch(setRequestNotifications(true))
+  }
 
   const openSettings = () => {
     queryClient.invalidateQueries({
@@ -79,6 +94,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
     })
     Linking.openSettings()
   }
+
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
     Alert.alert(t('leavingApp.title'), t('leavingApp.body.settings'), [
@@ -91,39 +107,49 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   }
 
   const fetchPreferences = async () => {
-    const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-    const deviceToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
+    if (requestNotifications) {
+      const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+      const deviceToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
 
-    if (endpoint_sid && deviceToken) {
-      refetchPushPreferences()
-    } else {
-      Notifications.events().registerRemoteNotificationsRegistered((event) => {
-        const registerParams = {
-          deviceToken: event.deviceToken,
-          userID: personalInformation?.id,
-        }
-        const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
-          {
+      if (endpoint_sid && deviceToken) {
+        refetchPushPreferences()
+      } else {
+        Notifications.events().registerRemoteNotificationsRegistered((event) => {
+          const registerParams = {
+            deviceToken: event.deviceToken,
+            userID: personalInformation?.id,
+          }
+          const mutateOptions: MutateOptions<
+            PushRegistrationResponse | undefined,
+            Error,
+            RegisterDeviceParams,
+            unknown
+          > = {
             onSettled: () => {
               refetchPushPreferences()
             },
           }
-        registerDevice(registerParams, mutateOptions)
-      })
-      Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
-        const registerParams = {
-          deviceToken: undefined,
-          userID: undefined,
-        }
-        const mutateOptions: MutateOptions<PushRegistrationResponse | undefined, Error, RegisterDeviceParams, unknown> =
-          {
+          registerDevice(registerParams, mutateOptions)
+        })
+        Notifications.events().registerRemoteNotificationsRegistrationFailed(() => {
+          const registerParams = {
+            deviceToken: undefined,
+            userID: undefined,
+          }
+          const mutateOptions: MutateOptions<
+            PushRegistrationResponse | undefined,
+            Error,
+            RegisterDeviceParams,
+            unknown
+          > = {
             onSettled: () => {
               refetchPushPreferences()
             },
           }
-        registerDevice(registerParams, mutateOptions)
-      })
-      Notifications.registerRemoteNotifications()
+          registerDevice(registerParams, mutateOptions)
+        })
+        Notifications.registerRemoteNotifications()
+      }
     }
   }
 
@@ -173,7 +199,16 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
         />
       ) : (
         <Box mb={contentMarginBottom}>
-          {systemNotificationData?.systemNotificationsOn ? (
+          {!requestNotifications ? (
+            <AlertWithHaptics
+              variant="info"
+              description={t('requestNotifications.getNotified')}
+              primaryButton={{
+                label: t('requestNotifications.turnOn'),
+                onPress: onUseNotifications,
+              }}
+            />
+          ) : systemNotificationData?.systemNotificationsOn ? (
             <>
               <TextView variant={'MobileBody'} mx={gutter}>
                 {t('notifications.settings.personalize.text.systemNotificationsOn')}
