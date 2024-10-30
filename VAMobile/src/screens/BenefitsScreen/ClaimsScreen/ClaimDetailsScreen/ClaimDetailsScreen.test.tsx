@@ -40,6 +40,10 @@ context('ClaimDetailsScreen', () => {
             ...claim,
           },
         },
+        {
+          queryKey: [claimsAndAppealsKeys.eFolderDocs],
+          data: [],
+        },
       ]
     }
 
