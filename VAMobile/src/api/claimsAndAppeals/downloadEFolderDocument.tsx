@@ -3,7 +3,6 @@ import FileViewer from 'react-native-file-viewer'
 import { useQuery } from '@tanstack/react-query'
 
 import store from 'store'
-import { Params } from 'store/api'
 import { DEMO_MODE_LETTER_ENDPOINT } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
