@@ -6,7 +6,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
+import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
@@ -245,9 +245,9 @@ export const deletePhoto = (
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
   const indicatorDiameter = fs(30)
   return {
-    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    height: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    width: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 24 ? 24 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',

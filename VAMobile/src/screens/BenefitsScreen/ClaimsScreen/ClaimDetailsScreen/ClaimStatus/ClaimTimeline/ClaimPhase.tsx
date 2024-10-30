@@ -66,10 +66,9 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
             justifyContent={'center'}
             alignItems={'center'}
             backgroundColor="completedPhase"
-            borderWidth={2}
-            borderRadius={indicatorDiameter > 35 ? 35 : indicatorDiameter}
-            height={indicatorDiameter > 35 ? 35 : indicatorDiameter}
-            width={indicatorDiameter > 35 ? 35 : indicatorDiameter}>
+            borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
+            width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>
             <Icon width={20} height={20} name={'Check'} fill="#fff" preventScaling={true} />
           </Box>
         )}

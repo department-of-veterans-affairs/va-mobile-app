@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, ButtonVariants, Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { useRequestRefills } from 'api/prescriptions'
 import { PrescriptionsList, RefillStatusConstants } from 'api/types'
@@ -124,11 +124,12 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
-      const vaIconProps: IconProps = {
+      const iconProps: IconProps = {
         name: request.submitted ? 'Check' : 'Close',
         width: 20,
         height: 20,
-        fill: '#fff',
+        fill: theme.colors.icon.pagination,
+        preventScaling: true,
       }
 
       const boxProps: BoxProps = {
@@ -164,11 +165,10 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
             justifyContent={'center'}
             alignItems={'center'}
             backgroundColor={request.submitted ? 'completedPhase' : 'buttonDestructiveActive'}
-            borderWidth={2}
             borderRadius={indicatorDiameter > 24 ? 24 : indicatorDiameter}
             height={indicatorDiameter > 24 ? 24 : indicatorDiameter}
             width={indicatorDiameter > 24 ? 24 : indicatorDiameter}>
-            <Icon {...vaIconProps} />
+            <Icon {...iconProps} />
           </Box>
         </Box>
       )

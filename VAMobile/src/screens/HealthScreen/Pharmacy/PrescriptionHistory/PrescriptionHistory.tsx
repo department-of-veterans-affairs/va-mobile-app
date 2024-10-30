@@ -262,7 +262,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         const bottomContent = (
           <Box {...bottomContentProps}>
             <Box mr={8}>
-              <Icon name={'Local'} fill={theme.colors.icon.link} height={18} width={18} />
+              <Icon name={'LocalShipping'} fill={theme.colors.icon.link} height={18} width={18} />
             </Box>
             <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
               {t('prescription.history.tracking')}
