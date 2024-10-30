@@ -387,13 +387,22 @@ jobs:
           getTest=$(curl -X GET -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=9683" | jq .cases[])
-          echo "$getTest"
-          for y in ${{ inputs.tests_to_run}}; do
-            echo "$y"
-          done
+          echo "Automated test cases: $getTest"
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
-          getTestTitles=$(echo $getTestCaseNewName | jq --compact output '.title')
-
+          echo "testCasesFromFile: $getTestCaseNewName"
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          echo "TestCasesFirstName: $getFirstTestNewName"
+          for y in ${{ inputs.tests_to_run}}; do
+            removeBracket=$(echo $y | tr -d '[')
+            removeBracket=$(echo $removeBracket | tr -d ']')
+            echo "$removeBracket"
+            echo "$test"
+            missingCases=$(echo $getFirstTestNewName | jq --argjson testsTypedIn "$removeBracket" --compact-output 'index($removeBracket)') 
+            if [[ "$missingCases" == "null" ]]; then
+              echo "$missingCases"
+            fi
+          done
 # for ((i=0; ; i+=250)); do
 #   echo "i = $i"
 #   getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
