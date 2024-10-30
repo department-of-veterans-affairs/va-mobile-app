@@ -33,7 +33,7 @@ jobs:
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq '.[].login')
           echo "Team Members: $TEAM_MEMBERS"
           ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
-          ASSIGNEES="[${ASSIGNEES%,}]"
+          ASSIGNEES=${ASSIGNEES%,}
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
       - name: Debug - Output Team Members
         run: |
@@ -44,18 +44,18 @@ jobs:
           # Update the assignees line in the template file with the fetched team members
           sed -i "s/^assignees:.*$/assignees: $$ASSIGNEES/" .github/ISSUE_TEMPLATE/update_release_issue.md
 
+      # Create Release Ticket with auto-assigned members
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/update_release_issue.md
         env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
+          assignees: ${{ env.ASSIGNEES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
-
-      - name: Verify Assignees on Ticket
-        run: |
-          # Output the ticket number and check if the assignees were applied correctly
-          TICKET_NUM=${{ steps.create-issue.outputs.number }}
-          gh issue view $TICKET_NUM --json assignees --jq '.assignees'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
