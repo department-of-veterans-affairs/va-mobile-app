@@ -1,3 +1,4 @@
+export * from './downloadEFolderDocument'
 export * from './getAppeal'
 export * from './getClaim'
 export * from './getClaimsAndAppeals'
