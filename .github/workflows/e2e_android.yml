@@ -403,7 +403,7 @@ jobs:
               test=$(echo $getTest| jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase))')
               echo "$test"
               echo "" >> input.json
-              test2=$(echo $getTestCaseNewName | jq --argjson testToAdd $test '. += [$testToAdd]')
+              test2=$(echo $getTestCaseNewName | jq --argjson testToAdd "$test" '. += [$testToAdd]')
               echo $test2 >> input.json
             fi
           done
