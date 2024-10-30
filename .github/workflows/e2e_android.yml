@@ -401,7 +401,7 @@ jobs:
             if [[ "$missingCases" == "[]" ]]; then
               echo "Missing cases: $missingCases"
               missingCasesWithOS="$missingCases [android]"
-              echo $(jq --argjson getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)) | .title' <<< "$getTest" >> input.json
+              echo $(jq --argjson getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase)) | .title' <<< "$getTest") >> input.json
             fi
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
