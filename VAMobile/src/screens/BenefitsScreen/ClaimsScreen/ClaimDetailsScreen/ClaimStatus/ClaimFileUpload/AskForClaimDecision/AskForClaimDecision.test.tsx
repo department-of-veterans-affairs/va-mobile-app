@@ -19,7 +19,7 @@ jest.mock('utils/hooks', () => {
 })
 
 when(api.get as jest.Mock)
-  .calledWith(`/v0/claim/600156928/request-decision`, {}, expect.anything())
+  .calledWith(`/v0/claim/600156928/request-decision`, {})
   .mockResolvedValue({})
 
 context('AskForClaimDecision', () => {
@@ -53,7 +53,7 @@ context('AskForClaimDecision', () => {
 
   it('should initialize', async () => {
     when(api.get as jest.Mock)
-      .calledWith(`/v0/claim/600156928`, {}, undefined)
+      .calledWith(`/v0/claim/600156928`, {})
       .mockResolvedValue({
         data: {
           ...claim,
@@ -95,7 +95,7 @@ context('AskForClaimDecision', () => {
   describe('when submitted decision is false or there is an erroror check box is not checked', () => {
     it('should not call navigation go back and display a field error when not checked', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .calledWith(`/v0/claim/600156928`, {})
         .mockResolvedValue({
           data: {
             ...claim,
@@ -131,7 +131,7 @@ context('AskForClaimDecision', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .calledWith(`/v0/claim/600156928`, {})
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())

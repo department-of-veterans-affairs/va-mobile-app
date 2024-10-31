@@ -40,4 +40,4 @@ This will open the WebView screen with an SSO session, allowing the user to acce
 
 ## API documentation
 
-For more information on API usage for SSO, view the [Device SSO Token Exchange](<https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/identity/Products/Sign-In%20Service/Engineering%20Docs/Authentication%20Types/Client%20Auth%20(User)/auth_flows/device_sso_token_exchange.md>) documentation.
+For more information on API usage for SSO, view the [Device SSO Token Exchange](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/identity/Products/Sign-In%20Service/Engineering%20Docs/Authentication%20Types/Client%20Auth%20(User)/auth_flows/device_sso_token_exchange.md) documentation.

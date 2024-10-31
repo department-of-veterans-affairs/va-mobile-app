@@ -15,7 +15,7 @@ The VA follows the USWDS spacing tokens and adds additional semantic tokens for 
 
 ### Primitive
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-spacing--docs#primitive)
-<iframe width="800" height="1200" alt="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?node-id=1606-1663&t=PljikYyjG5LVlwDo-4" allowfullscreen></iframe>
+<iframe width="800" height="1200" title="Image of design tokens in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens-Library---Design-System---VA-Mobile?node-id=1606-1663&t=PljikYyjG5LVlwDo-4" allowfullscreen></iframe>
 
 ## How to use spacing tokens
 
