@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { StackNavigationOptions } from '@react-navigation/stack'
 
-import { BackButton } from 'components'
+import { DescriptiveBackButton } from 'components'
 import HeaderTitle from 'components/HeaderTitle'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { getHeaderStyles } from 'styles/common'
@@ -17,11 +17,12 @@ import { useTheme } from 'utils/hooks'
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
+  const defaultOnPress: () => void = () => {}
 
   headerStyles = {
     ...headerStyles,
     headerLeft: (props): ReactNode => (
-      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} />
+      <DescriptiveBackButton onPress={props.onPress || defaultOnPress} label={BackButtonLabelConstants.back} />
     ),
     headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
