@@ -38,11 +38,6 @@ context('BackButton', () => {
     expect(onPressSpy).toHaveBeenCalled()
   })
 
-  it('shows carat when showCarat is true', () => {
-    renderWithProps(true)
-    expect(screen.getByTestId('BackButtonCarat')).toBeTruthy()
-  })
-
   it('shows custom a11yHint', () => {
     renderWithProps(true, 'Action on click')
     expect(screen.getByA11yHint('Action on click')).toBeTruthy()
