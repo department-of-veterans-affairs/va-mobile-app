@@ -394,6 +394,7 @@ jobs:
           for y in ${{ inputs.tests_to_run}}; do
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
+            removeBracket=$(echo $removeBracket | tr -d ',')
             echo "$removeBracket"
             missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
             if [[ "$missingCases" == "[]" ]]; then
