@@ -19,6 +19,7 @@ import {
   VAScrollView,
 } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -48,7 +49,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
   useSubtaskProps({
-    title: t('fileRequest.title'),
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => navigation.goBack(),
     testID: 'fileRequestPageTestID',
@@ -130,6 +130,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
         />
       ) : (
         <Box mb={contentMarginBottom}>
+          <SubtaskTitle title={t('fileRequest.title')} />
+
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"
