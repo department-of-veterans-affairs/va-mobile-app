@@ -8,7 +8,7 @@ export const LoginE2eIdConstants = {
   LOGIN_APP_VERSION_ID: 'AppVersionTestID',
 }
 
-describe('Login Screen', () => {
+describe('LoginScreen', () => {
   it('should show login page content', async () => {
     try {
       await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))

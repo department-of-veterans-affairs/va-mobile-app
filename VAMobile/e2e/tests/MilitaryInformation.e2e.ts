@@ -49,7 +49,7 @@ export async function verifyMilitaryInfo(militaryBranch: string) {
   })
 }
 
-describe('Military Info Screen', () => {
+describe('MilitaryInformation', () => {
   verifyMilitaryInfo('United States Coast Guard')
   verifyMilitaryInfo('United States Army')
   verifyMilitaryInfo('United States Air Force')

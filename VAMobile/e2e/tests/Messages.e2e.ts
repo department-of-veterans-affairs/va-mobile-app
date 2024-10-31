@@ -95,7 +95,7 @@ beforeAll(async () => {
   await openMessages()
 })
 
-describe('Messages Screen', () => {
+describe('Messages', () => {
   it('should match the messages page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()

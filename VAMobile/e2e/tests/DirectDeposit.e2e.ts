@@ -47,7 +47,7 @@ beforeAll(async () => {
   await openDirectDeposit()
 })
 
-describe('Direct Deposit Screen', () => {
+describe('DirectDeposit', () => {
   it('should match design', async () => {
     await expect(element(by.text(DirectDepositConstants.SCREEN_TITLE))).toExist()
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()

@@ -131,13 +131,13 @@ const AFNavigationForIndividual = [
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
   ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
   // [
-    // 'Claims.e2e',
-    // 'WG_SubmitEvidence',
-    // 'Benefits',
-    // 'Claims',
-    // 'Claims history',
-    // 'Received December 05, 2021',
-    // 'Submit evidence',
+  // 'Claims.e2e',
+  // 'WG_SubmitEvidence',
+  // 'Benefits',
+  // 'Claims',
+  // 'Claims history',
+  // 'Received December 05, 2021',
+  // 'Submit evidence',
   // ],
   ['Appeals.e2e', 'WG_AppealDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received July 17, 2008'],
   [
@@ -178,7 +178,7 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 }
 
-describe('Availability Framework', () => {
+describe('AvailabilityFramework', () => {
   if (AFValue !== undefined) {
     let AFNeeded = false
     for (let x = 0; x < AFNavigationForIndividual.length; x++) {

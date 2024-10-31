@@ -17,7 +17,7 @@ beforeAll(async () => {
   await openProfile()
 })
 
-describe('Profile Screen', () => {
+describe('ProfileScreen', () => {
   it('should show profile list content', async () => {
     await waitFor(element(by.text(ProfileE2eIdConstants.PROFILE_TEXT)))
       .toExist()

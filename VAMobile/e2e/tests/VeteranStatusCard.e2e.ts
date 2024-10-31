@@ -117,7 +117,7 @@ export async function verifyMilitaryInfo(militaryBranch) {
     await expect(element(by.text(militaryBranch))).toExist()
   })
 }
-describe('Veteran Status Card', () => {
+describe('VeteranStatusCard', () => {
   it('should match design in the home screen', async () => {
     await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
       .toBeVisible()

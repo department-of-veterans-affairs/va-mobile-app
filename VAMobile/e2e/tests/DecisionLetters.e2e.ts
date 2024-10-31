@@ -29,7 +29,7 @@ beforeAll(async () => {
   await openClaimsHistory()
 })
 
-describe('Decision Letters Screen', () => {
+describe('DecisionLetters', () => {
   it('should tap on the closed tab', async () => {
     await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_CLOSED_TAB_ID)).tap()
   })

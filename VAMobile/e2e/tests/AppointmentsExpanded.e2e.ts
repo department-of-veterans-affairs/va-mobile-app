@@ -1074,7 +1074,7 @@ beforeAll(async () => {
     .withTimeout(10000)
 })
 
-describe(':ios: Appointments Screen Expansion', () => {
+describe(':ios: AppointmentsExpanded', () => {
   apppointmentVerification()
   apppointmentVerification(true)
 })

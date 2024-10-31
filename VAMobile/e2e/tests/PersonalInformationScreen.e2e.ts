@@ -97,7 +97,7 @@ beforeAll(async () => {
   await openPersonalInformation()
 })
 
-describe('Personal Info Screen', () => {
+describe('PersonalInformationScreen', () => {
   it('should match design', async () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
