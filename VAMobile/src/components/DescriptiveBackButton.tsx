@@ -3,11 +3,12 @@ import { TouchableWithoutFeedback } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
 
 /**
  *  Signifies the props that need to be passed in to {@link DescriptiveBackButton}
@@ -55,11 +56,10 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
         mt={theme.dimensions.buttonPadding}
         height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
-        <VAIcon mt={1} name={'ChevronLeft'} fill={theme.colors.icon.link} width={15} height={13} maxWidth={25} />
+        <Icon name={'ChevronLeft'} fill={theme.colors.icon.link} width={30} height={28} maxWidth={36} />
         <TextView
           variant="DescriptiveBackButton"
           color="descriptiveBackButton"
-          ml={theme.dimensions.textIconMargin}
           allowFontScaling={false}
           accessible={false}>
           {label}

@@ -21,12 +21,7 @@ export const useHeaderStyles = (): StackNavigationOptions => {
   headerStyles = {
     ...headerStyles,
     headerLeft: (props): ReactNode => (
-      <BackButton
-        onPress={props.onPress}
-        canGoBack={props.canGoBack}
-        label={BackButtonLabelConstants.back}
-        showCarat={true}
-      />
+      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} />
     ),
     headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }

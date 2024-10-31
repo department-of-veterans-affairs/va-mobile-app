@@ -2,6 +2,8 @@ import React, { FC, ReactElement, useState } from 'react'
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
@@ -163,12 +165,11 @@ export const ButtonDecorator: FC<{
 
     default:
       return (
-        <VAIcon
+        <Icon
           name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
-          {...decoratorProps}
         />
       )
   }
