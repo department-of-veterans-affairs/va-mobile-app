@@ -8,6 +8,7 @@ import { map } from 'underscore'
 
 import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -28,7 +29,6 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { displayName, type, status, description, uploadDate, documents } = request
 
   useSubtaskProps({
-    title: displayName || '',
     leftButtonText: t('back'),
     onLeftButtonPress: () => navigation.goBack(),
     testID: 'fileRequestDetailsID',
@@ -81,6 +81,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={displayName || ''} />
+
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>

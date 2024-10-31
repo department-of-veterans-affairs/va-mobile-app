@@ -19,6 +19,7 @@ import {
   VAScrollView,
 } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -57,7 +58,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   useSubtaskProps({
-    title: t('askForClaimDecision.pageTitle'),
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancelPress(),
     testID: 'askForClaimDecisionPageTestID',
@@ -145,6 +145,8 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('askForClaimDecision.pageTitle')} />
+
       {loadingSubmitClaimDecision || loadingClaim ? (
         <LoadingComponent
           text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}

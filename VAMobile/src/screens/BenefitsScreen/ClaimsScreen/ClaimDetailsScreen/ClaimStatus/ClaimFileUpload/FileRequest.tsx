@@ -120,6 +120,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('fileRequest.title')} />
+
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
@@ -130,8 +132,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
         />
       ) : (
         <Box mb={contentMarginBottom}>
-          <SubtaskTitle title={t('fileRequest.title')} />
-
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"

@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -40,7 +41,6 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   })
 
   useSubtaskProps({
-    title: t('fileUpload.selectFiles'),
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancel(),
     scrollViewRef: scrollViewRef,
@@ -126,6 +126,8 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('fileUpload.selectFiles')} />
+
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

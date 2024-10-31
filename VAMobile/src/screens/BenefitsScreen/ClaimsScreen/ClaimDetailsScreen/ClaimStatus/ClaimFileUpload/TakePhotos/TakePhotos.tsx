@@ -9,6 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -41,7 +42,6 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   })
 
   useSubtaskProps({
-    title: t('fileUpload.selectPhotos'),
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancel(),
     scrollViewRef: scrollViewRef,
@@ -70,6 +70,8 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('fileUpload.selectPhotos')} />
+
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

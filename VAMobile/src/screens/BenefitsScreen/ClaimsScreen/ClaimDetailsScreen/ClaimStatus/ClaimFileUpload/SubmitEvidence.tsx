@@ -7,6 +7,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 
 import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -23,7 +24,6 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
   const { claimID } = route.params
 
   useSubtaskProps({
-    title: t('claimDetails.submitEvidence'),
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => navigation.goBack(),
   })
@@ -40,6 +40,8 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('claimDetails.submitEvidence')} />
+
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

@@ -25,6 +25,7 @@ import {
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
@@ -103,7 +104,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   })
 
   useSubtaskProps({
-    title: t('fileUpload.uploadPhotos'),
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => onCancel(),
     scrollViewRef: scrollViewRef,
@@ -361,6 +361,8 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('fileUpload.uploadPhotos')} />
+
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (

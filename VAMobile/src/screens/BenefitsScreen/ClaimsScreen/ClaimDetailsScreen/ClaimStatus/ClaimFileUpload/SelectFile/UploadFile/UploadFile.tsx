@@ -24,6 +24,7 @@ import {
 import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
@@ -72,7 +73,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const scrollViewRef = useRef<ScrollView>(null)
 
   useSubtaskProps({
-    title: t('fileUpload.uploadFiles'),
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => onCancel(),
     scrollViewRef: scrollViewRef,
@@ -313,6 +313,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   return (
     <VAScrollView>
+      <SubtaskTitle title={t('fileUpload.uploadFiles')} />
+
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
