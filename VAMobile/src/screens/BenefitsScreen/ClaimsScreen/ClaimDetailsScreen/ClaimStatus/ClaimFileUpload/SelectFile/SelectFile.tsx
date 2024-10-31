@@ -43,7 +43,6 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   useSubtaskProps({
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancel(),
-    scrollViewRef: scrollViewRef,
   })
 
   const onFileFolder = async (): Promise<void> => {
@@ -125,7 +124,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.selectFiles')} />
 
       <Box flex={1}>

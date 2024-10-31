@@ -31,7 +31,6 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   useSubtaskProps({
     leftButtonText: t('back'),
     onLeftButtonPress: () => navigation.goBack(),
-    testID: 'fileRequestDetailsID',
     leftButtonTestID: 'fileRequestDetailsBackID',
   })
 
@@ -80,7 +79,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="fileRequestDetailsID">
       <SubtaskTitle title={displayName || ''} />
 
       <Box mb={contentMarginBottom} flex={1}>

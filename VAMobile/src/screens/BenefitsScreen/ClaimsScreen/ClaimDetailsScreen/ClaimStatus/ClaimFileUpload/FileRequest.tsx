@@ -51,7 +51,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   useSubtaskProps({
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => navigation.goBack(),
-    testID: 'fileRequestPageTestID',
     leftButtonTestID: 'fileRequestPageBackID',
   })
 
@@ -119,7 +118,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="fileRequestPageTestID">
       <SubtaskTitle title={t('fileRequest.title')} />
 
       {loadingClaim ? (

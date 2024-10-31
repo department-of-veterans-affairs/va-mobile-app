@@ -75,7 +75,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   useSubtaskProps({
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => onCancel(),
-    scrollViewRef: scrollViewRef,
   })
 
   const waygate = getWaygateToggles().WG_UploadFile
@@ -312,7 +311,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.uploadFiles')} />
 
       {loadingFileUpload ? (

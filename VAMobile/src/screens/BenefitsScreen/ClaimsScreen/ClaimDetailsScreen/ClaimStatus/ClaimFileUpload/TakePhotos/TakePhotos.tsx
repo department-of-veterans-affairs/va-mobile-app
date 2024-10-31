@@ -44,8 +44,6 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   useSubtaskProps({
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancel(),
-    scrollViewRef: scrollViewRef,
-    testID: 'takePhotosTestID',
   })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
@@ -69,7 +67,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView scrollViewRef={scrollViewRef} testID="takePhotosTestID">
       <SubtaskTitle title={t('fileUpload.selectPhotos')} />
 
       <Box flex={1}>

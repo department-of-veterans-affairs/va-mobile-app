@@ -60,7 +60,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   useSubtaskProps({
     leftButtonText: t('back'),
     onLeftButtonPress: () => onCancelPress(),
-    testID: 'askForClaimDecisionPageTestID',
     leftButtonTestID: 'askForClaimDecisionBackID',
   })
 
@@ -144,7 +143,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   ]
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="askForClaimDecisionPageTestID">
       <SubtaskTitle title={t('askForClaimDecision.pageTitle')} />
 
       {loadingSubmitClaimDecision || loadingClaim ? (

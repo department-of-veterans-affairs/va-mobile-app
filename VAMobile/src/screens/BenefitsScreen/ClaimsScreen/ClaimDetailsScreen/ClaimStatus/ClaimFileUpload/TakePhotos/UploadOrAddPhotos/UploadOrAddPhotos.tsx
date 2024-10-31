@@ -106,7 +106,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   useSubtaskProps({
     leftButtonText: t('cancel'),
     onLeftButtonPress: () => onCancel(),
-    scrollViewRef: scrollViewRef,
   })
 
   useEffect(() => {
@@ -360,7 +359,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   }
 
   return (
-    <VAScrollView>
+    <VAScrollView scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.uploadPhotos')} />
 
       {loadingFileUpload ? (
