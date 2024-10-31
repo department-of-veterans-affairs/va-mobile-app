@@ -17,7 +17,7 @@ beforeAll(async () => {
   await openVaccineRecords()
 })
 
-describe('VaccineRecords', () => {
+describe('Vaccine Records Screen', () => {
   it('should show vaccine records list content', async () => {
     await expect(element(by.text('VA vaccines'))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID))).toExist()

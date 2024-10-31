@@ -12,7 +12,7 @@ beforeAll(async () => {
   await loginToDemoMode(false)
 })
 
-describe('Onboarding', () => {
+describe('Onboarding Screen', () => {
   it('should show the welcome onboarding content', async () => {
     const onboardingIconCheck = await element(by.id(OnboardingE2eIdConstants.VA_ICON_ID)).takeScreenshot(
       'VAIconOnboarding',

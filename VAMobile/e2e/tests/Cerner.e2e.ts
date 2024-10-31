@@ -59,7 +59,7 @@ beforeAll(async () => {
   }
 })
 
-describe(':android: Cerner', () => {
+describe(':android: Cerner Notice', () => {
   it('should match the cerner subtext on home screen', async () => {
     await waitFor(element(by.text(CernerIdConstants.CERNER_HOME_SUBTEXT_TEXT)))
       .toBeVisible()

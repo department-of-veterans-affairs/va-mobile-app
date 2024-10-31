@@ -19,7 +19,7 @@ const mockNotification = {
   },
 }
 
-describe(':ios: PushNotifications', () => {
+describe(':ios: Push Notifications', () => {
   it('dead state: should navigate to appropriate screen when launching', async () => {
     await device.launchApp({
       delete: true,

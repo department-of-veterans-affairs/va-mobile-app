@@ -148,7 +148,7 @@ export async function validateFilter(name: string, quantity: number, helperText?
   })
 }
 
-describe('Prescriptions', () => {
+describe('Prescriptions Screen', () => {
   it('should match the prescription page design', async () => {
     tempPath = await element(by.id(PrescriptionsE2eIdConstants.FILTER_PRESCRIPTIONS_TEST_ID)).takeScreenshot(
       'filterSortWrapperBox',

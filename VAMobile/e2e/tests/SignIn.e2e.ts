@@ -15,7 +15,7 @@ export const SignE2eIdConstants = {
   CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
 
-describe('SignIn', () => {
+describe('Sign In', () => {
   it('should show sign in page content', async () => {
     try {
       await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))

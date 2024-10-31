@@ -24,7 +24,7 @@ beforeAll(async () => {
   await openVAPaymentHistory()
 })
 
-describe('Payments', () => {
+describe('Payments Screen', () => {
   it('should match the Payments history page design', async () => {
     await expect(element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID))).toExist()
     await expect(element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID))).toExist()

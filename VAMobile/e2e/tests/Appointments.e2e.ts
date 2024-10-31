@@ -39,7 +39,7 @@ beforeAll(async () => {
   await openAppointments()
 })
 
-describe('Appointments', () => {
+describe('Appointments Screen', () => {
   it('should tap and open the appointment details links', async () => {
     await waitFor(element(by.text('Vilanisi Reddy')))
       .toBeVisible()

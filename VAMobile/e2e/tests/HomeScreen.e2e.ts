@@ -40,7 +40,7 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-describe('HomeScreen', () => {
+describe('Home Screen', () => {
   it(':android: should enable AF use case 3', async () => {
     await enableAF('WG_Home', 'AllowFunction')
     await verifyAF(undefined, 'AllowFunction', undefined)
