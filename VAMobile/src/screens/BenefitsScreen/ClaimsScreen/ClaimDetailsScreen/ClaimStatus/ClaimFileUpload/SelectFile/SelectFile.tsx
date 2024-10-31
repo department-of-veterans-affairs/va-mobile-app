@@ -31,7 +31,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { claimID, request } = route.params || {}
+  const { claimID, request } = route.params
   const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
