@@ -44,6 +44,7 @@ jobs:
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/update_releaseissue.md
+          assignees: ${{ env.ASSIGNEES }}
         env:
           versionNumber: ${{ env.VERSION }}
           qaDueDate: ${{env.QA_DUE_DATE}}
