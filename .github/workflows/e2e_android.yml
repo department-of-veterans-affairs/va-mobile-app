@@ -194,7 +194,7 @@ jobs:
         run: yarn env:staging
 
       - name: Bundle Android app
-        run: yarn e2e:android-build1
+        run: yarn e2e:android-build
 
       - name: Run e2e tests for Android - Full Test
         id: run_e2e_tests
@@ -395,9 +395,7 @@ jobs:
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
             removeBracket=$(echo $removeBracket | tr -d ',')
-            echo "$removeBracket"
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
-              echo "$z"
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
               if [[ "$missingCases" == "[]" ]]; then
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
@@ -409,7 +407,6 @@ jobs:
             done
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
-          echo "testCasesFromFileUpdated: $getTestCaseNewName"
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
           getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
@@ -449,7 +446,7 @@ jobs:
             else
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                -d '{"status_id": 4}' \
+                -d '{"status_id": 4, "comment": "Something failed in github actions outside of the e2e tests.  Please try again."}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
             fi
           done

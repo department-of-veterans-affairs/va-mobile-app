@@ -352,6 +352,7 @@ jobs:
         uses: actions/checkout@v3
       - name: update-test-names
         run: |
+          echo "" >> input.json
           for ((i=0; ; i+=250)); do
             echo "i = $i"
             getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
@@ -363,12 +364,33 @@ jobs:
               break
             fi
           done
+          getTest=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=9683" | jq .cases[])
+          getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          for y in ${{ inputs.tests_to_run}}; do
+            removeBracket=$(echo $y | tr -d '[')
+            removeBracket=$(echo $removeBracket | tr -d ']')
+            removeBracket=$(echo $removeBracket | tr -d ',')
+            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
+              if [[ "$missingCases" == "[]" ]]; then
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[ios]"))')
+                echo "" >> input.json
+                addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
+                echo $addMissingCasesToArray >> input.json
+                break
+              fi
+            done
+          done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
           getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
-                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
           updateRunWithNewCases=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
@@ -399,6 +421,11 @@ jobs:
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 -d '{"status_id": 1}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            else
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 4, "comment": "Something failed in github actions outside of the e2e tests.  Please try again."}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
             fi
           done
