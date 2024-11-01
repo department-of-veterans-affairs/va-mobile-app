@@ -1,8 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSelector } from 'react-redux'
 
-import store from 'store'
+import { useMutation } from '@tanstack/react-query'
+
+import { RootState } from 'store'
 import * as api from 'store/api'
-import { updateDemoMode } from 'store/slices/demoSlice'
+import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { clearStoredAuthCreds, finishInitialize, logoutFinish, logoutStart, retrieveRefreshToken } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
@@ -21,7 +23,7 @@ const logout = async () => {
 
   const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
 
-  return await fetch(AUTH_SIS_REVOKE_URL, {
+  return fetch(AUTH_SIS_REVOKE_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,14 +37,13 @@ const logout = async () => {
  * Returns a mutation for logging out a user
  */
 export const useLogout = () => {
-  const queryClient = useQueryClient()
   const dispatch = useAppDispatch()
-  const { demoMode } = store.getState().demo
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   return useMutation({
     mutationFn: logout,
     onMutate: async () => {
-      await logoutStart(queryClient)
+      await logoutStart()
       await clearCookies()
       if (demoMode) {
         dispatch(updateDemoMode(false, true))
@@ -52,8 +53,8 @@ export const useLogout = () => {
       await clearStoredAuthCreds()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
-      await finishInitialize(false, queryClient)
-      await logoutFinish(queryClient)
+      await finishInitialize(false)
+      await logoutFinish()
     },
     onError: (error) => {
       if (isErrorObject(error)) {

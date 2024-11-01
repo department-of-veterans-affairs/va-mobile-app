@@ -7,7 +7,6 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useQueryClient } from '@tanstack/react-query'
 import { pick } from 'underscore'
 
 import { useAuthSettings, useLogout } from 'api/auth'
@@ -62,7 +61,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
-  const queryClient = useQueryClient()
   const { mutate: logout } = useLogout()
 
   async function checkEncourageUpdateLocalVersion() {
@@ -145,7 +143,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           text: t('reset'),
           onPress: () => {
             console.debug('Resetting first time login flag')
-            debugResetFirstTimeLogin(logout, queryClient)
+            debugResetFirstTimeLogin(logout)
           },
         },
       ],

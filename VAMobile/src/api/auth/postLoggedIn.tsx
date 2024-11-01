@@ -8,7 +8,7 @@ import { isErrorObject } from 'utils/common'
 /**
  * Post to BE that a user is logged in
  */
-const postLoggedIn = async (): Promise<Response | undefined> => {
+const postLoggedIn = (): Promise<Response | undefined> => {
   return post('/v0/user/logged-in')
 }
 
@@ -18,14 +18,14 @@ const postLoggedIn = async (): Promise<Response | undefined> => {
 export const usePostLoggedIn = () => {
   return useMutation({
     mutationFn: postLoggedIn,
-    onMutate: async () => {
-      await logAnalyticsEvent(Events.vama_login_success(true))
+    onMutate: () => {
+      logAnalyticsEvent(Events.vama_login_success(true))
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
         if (error.status) {
-          await logAnalyticsEvent(Events.vama_user_call(error.status))
+          logAnalyticsEvent(Events.vama_user_call(error.status))
         }
       }
     },

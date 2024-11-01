@@ -7,9 +7,10 @@ import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
-import { QueryClient, UseMutateFunction } from '@tanstack/react-query'
+import { UseMutateFunction } from '@tanstack/react-query'
 
 import { authKeys } from 'api/auth'
+import queryClient from 'api/queryClient'
 import {
   AUTH_STORAGE_TYPE,
   AuthCredentialData,
@@ -204,13 +205,13 @@ export const checkFirstTimeLogin = async (): Promise<boolean> => {
 /**
  * Sets the flag used to determine if this is the first time a user has logged into the app
  */
-export const completeFirstTimeLogin = async (queryClient: QueryClient) => {
+export const completeFirstTimeLogin = async () => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, { ...userSettings, firstTimeLogin: false })
 }
 
-export const setBiometricsPreference = async (value: boolean, queryClient: QueryClient) => {
+export const setBiometricsPreference = async (value: boolean) => {
   await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE)
   const refreshToken = await retrieveRefreshToken()
   await saveRefreshToken(refreshToken || '')
@@ -219,13 +220,10 @@ export const setBiometricsPreference = async (value: boolean, queryClient: Query
   await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
 }
 
-export const debugResetFirstTimeLogin = async (
-  logout: UseMutateFunction<Response, Error, void, void>,
-  queryClient: QueryClient,
-) => {
+export const debugResetFirstTimeLogin = async (logout: UseMutateFunction<Response, Error, void, void>) => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
   await logout()
-  await setBiometricsPreference(false, queryClient)
+  await setBiometricsPreference(false)
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, { ...userSettings, firstTimeLogin: true })
 }
@@ -233,7 +231,7 @@ export const debugResetFirstTimeLogin = async (
 /**
  * Sets the flag used to determine if the biometrics preference screen should be displayed
  */
-export const setDisplayBiometricsPreferenceScreen = (value: boolean, queryClient: QueryClient) => {
+export const setDisplayBiometricsPreferenceScreen = (value: boolean) => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, { ...userSettings, displayBiometricsPreferenceScreen: value })
 }
@@ -241,16 +239,12 @@ export const setDisplayBiometricsPreferenceScreen = (value: boolean, queryClient
 /**
  * Signal the sync process is completed
  */
-export const completeSync = (queryClient: QueryClient) => {
+export const completeSync = () => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, { ...userSettings, syncing: false })
 }
 
-export const finishInitialize = async (
-  loggedIn: boolean,
-  queryClient: QueryClient,
-  authCredentials?: AuthCredentialData,
-) => {
+export const finishInitialize = async (loggedIn: boolean, authCredentials?: AuthCredentialData) => {
   // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
   if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
     await crashlytics().setCrashlyticsCollectionEnabled(false)
@@ -266,7 +260,7 @@ export const finishInitialize = async (
   })
 }
 
-export const loginStart = async (syncing: boolean, queryClient: QueryClient) => {
+export const loginStart = async (syncing: boolean) => {
   await logAnalyticsEvent(Events.vama_login_start(true, false))
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
@@ -276,7 +270,7 @@ export const loginStart = async (syncing: boolean, queryClient: QueryClient) => 
   })
 }
 
-export const loginFinish = async (isError: boolean, queryClient: QueryClient, authCredentials?: AuthCredentialData) => {
+export const loginFinish = async (isError: boolean, authCredentials?: AuthCredentialData) => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
@@ -287,7 +281,7 @@ export const loginFinish = async (isError: boolean, queryClient: QueryClient, au
   })
 }
 
-export const logoutStart = async (queryClient: QueryClient) => {
+export const logoutStart = async () => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
@@ -296,7 +290,7 @@ export const logoutStart = async (queryClient: QueryClient) => {
   })
 }
 
-export const logoutFinish = async (queryClient: QueryClient) => {
+export const logoutFinish = async () => {
   queryClient.clear()
 }
 
@@ -323,12 +317,12 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (queryClient: QueryClient, refreshAccessToken: () => void) => {
+export const initializeAuth = async (refreshAccessToken: () => void) => {
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-    await finishInitialize(false, queryClient)
-    await startBiometricsLogin(queryClient, refreshAccessToken)
+    await finishInitialize(false)
+    await startBiometricsLogin(refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
@@ -336,12 +330,12 @@ export const initializeAuth = async (queryClient: QueryClient, refreshAccessToke
       await refreshAccessToken()
     } else {
       await clearStoredAuthCreds()
-      await finishInitialize(false, queryClient)
+      await finishInitialize(false)
     }
   }
 }
 
-const startBiometricsLogin = async (queryClient: QueryClient, refreshAccessToken: () => void) => {
+const startBiometricsLogin = async (refreshAccessToken: () => void) => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   if (userSettings.loading) {
     return
@@ -351,10 +345,10 @@ const startBiometricsLogin = async (queryClient: QueryClient, refreshAccessToken
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
-      loginStart(true, queryClient)
+      loginStart(true)
       await refreshAccessToken()
     } else {
-      await finishInitialize(false, queryClient)
+      await finishInitialize(false)
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

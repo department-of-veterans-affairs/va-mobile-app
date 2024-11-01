@@ -2,7 +2,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthSettings } from 'api/auth'
 import { Box, TextView, VAScrollView } from 'components'
@@ -30,15 +29,14 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
     `biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`,
     t,
   )
-  const queryClient = useQueryClient()
 
   const onSkip = (): void => {
-    setDisplayBiometricsPreferenceScreen(false, queryClient)
+    setDisplayBiometricsPreferenceScreen(false)
   }
 
   const onUseBiometrics = (): void => {
-    setBiometricsPreference(true, queryClient)
-    setDisplayBiometricsPreferenceScreen(false, queryClient)
+    setBiometricsPreference(true)
+    setDisplayBiometricsPreferenceScreen(false)
   }
 
   return (

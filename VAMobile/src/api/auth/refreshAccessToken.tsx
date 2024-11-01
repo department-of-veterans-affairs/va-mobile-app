@@ -10,8 +10,8 @@ const { AUTH_SIS_TOKEN_REFRESH_URL } = getEnv()
 /**
  * Refresh a user access token
  */
-const refreshAccessToken = async (refreshToken: string): Promise<Response> => {
-  return await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
+const refreshAccessToken = (refreshToken: string): Promise<Response> => {
+  return fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -28,15 +28,15 @@ const refreshAccessToken = async (refreshToken: string): Promise<Response> => {
 export const useRefreshAccessToken = () => {
   return useMutation({
     mutationFn: refreshAccessToken,
-    onMutate: async () => {
-      await clearCookies()
+    onMutate: () => {
+      clearCookies()
     },
-    onSuccess: async (data) => {
-      await processAuthResponse(data)
+    onSuccess: (data) => {
+      processAuthResponse(data)
     },
-    onError: async (error) => {
+    onError: (error) => {
       logNonFatalErrorToFirebase(error, `processAuthResponse: Auth Service Error`)
-      await clearStoredAuthCreds()
+      clearStoredAuthCreds()
     },
   })
 }

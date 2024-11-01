@@ -1,8 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useQueryClient } from '@tanstack/react-query'
-
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Carousel, CarouselScreen, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -111,10 +109,9 @@ function OnboardingAppOverview() {
 
 function OnboardingCarousel() {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const queryClient = useQueryClient()
 
   const onCarouselEnd = async () => {
-    await completeFirstTimeLogin(queryClient)
+    await completeFirstTimeLogin()
   }
 
   const screenList: Array<CarouselScreen> = [

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthSettings } from 'api/auth'
 import { AlertWithHaptics, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
@@ -27,7 +26,6 @@ import DemoAlert from './DemoAlert'
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: userAuthSettings } = useAuthSettings()
-  const queryClient = useQueryClient()
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
@@ -77,7 +75,7 @@ function LoginScreen() {
   const onLoginInit = demoMode
     ? () => {
         setNewSession()
-        loginStart(true, queryClient)
+        loginStart(true)
       }
     : userAuthSettings?.firstTimeLogin
       ? () => {

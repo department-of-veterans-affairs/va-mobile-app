@@ -80,7 +80,7 @@ function SyncScreen({}: SyncScreenProps) {
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
-      loginFinish(false, queryClient)
+      loginFinish(false)
     }
   }, [dispatch, demoMode, loggedIn, queryClient])
 
@@ -96,7 +96,7 @@ function SyncScreen({}: SyncScreenProps) {
     }
 
     if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
-      completeSync(queryClient)
+      completeSync()
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
   }, [loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, queryClient, ENVIRONMENT])

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { useAuthSettings, useLogout } from 'api/auth'
@@ -42,7 +41,6 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const { data: userAuthSettings, isLoading: settingBiometricPreference } = useAuthSettings()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const signOutAlert = useDestructiveActionSheet()
-  const queryClient = useQueryClient()
   const { mutate: logout } = useLogout()
 
   const onShowConfirm = (): void => {
@@ -68,7 +66,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !userAuthSettings?.shouldStoreWithBiometric
-    setBiometricsPreference(newPrefValue, queryClient)
+    setBiometricsPreference(newPrefValue)
   }
   const supportedBiometric = userAuthSettings?.supportedBiometric
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
