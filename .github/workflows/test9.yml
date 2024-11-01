@@ -41,20 +41,3 @@ jobs:
       - name: Debug - Output Team Members
         run: |
           echo "Formatted Assignees: $ASSIGNEES"
-
-      
-      # Create Release Ticket with auto-assigned members
-      - name: Create Release Ticket
-        uses: JasonEtco/create-an-issue@v2
-        with:
-          filename: .github/ISSUE_TEMPLATE/update_releaseissue.md
-        env:
-          versionNumber: ${{ env.VERSION }}
-          qaDueDate: ${{env.QA_DUE_DATE}}
-          prodDueDate: ${{env.PROD_DUE_DATE}}
-          vaDueDate: ${{env.VA_DUE_DATE}}
-          releaseDate: ${{ env.RELEASE_DATE }}
-          issues: ${{ env.TABLE }}
-          assignees: ${{ env.ASSIGNEES }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
