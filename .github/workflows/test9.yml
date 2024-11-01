@@ -35,7 +35,7 @@ jobs:
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
           echo "Formatted Assignees: $TEAM_MEMBERS"
           # Update the markdown file to use the new assignees list
-          sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/update_release_issue.md
+          sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/update_releaseissue.md
       - name: Debug - Output Team Members
         run: |
           echo "Formatted Assignees: $ASSIGNEES"
