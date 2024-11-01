@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { AccessibilityProps } from 'react-native'
 
 import { generateTestIDForTextList } from 'utils/common'
 
@@ -12,7 +13,8 @@ import { TextLine } from './types'
 export type DefaultListItemObj = {
   /** lines of text to display */
   textLines: Array<TextLine>
-} & Partial<ListItemObj>
+} & Partial<ListItemObj> &
+  Partial<AccessibilityProps>
 
 /**
  * Props for {@link DefaultList}

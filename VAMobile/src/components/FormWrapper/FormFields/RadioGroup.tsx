@@ -170,6 +170,7 @@ const RadioGroup = <T,>({
         onPress: onSelectorChange,
         minHeight: 64,
         a11yRole: 'radio',
+        accessibilityLabel: 'radio',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
         testId: `${option.a11yLabel || option.labelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
