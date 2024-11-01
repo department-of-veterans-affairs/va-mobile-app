@@ -214,8 +214,6 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       shouldStoreWithBiometric: true,
       supportedBiometric: '',
       syncing: false,
-      codeVerifier: '',
-      codeChallenge: '',
     } as UserAuthSettings)
     if (queriesData?.length) {
       queriesData.forEach(({ queryKey, data }) => {

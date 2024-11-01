@@ -23,8 +23,6 @@ context('BiometricsPreferenceScreen', () => {
           shouldStoreWithBiometric: true,
           supportedBiometric: biometric,
           syncing: false,
-          codeVerifier: '1',
-          codeChallenge: '2',
         },
       },
     ]

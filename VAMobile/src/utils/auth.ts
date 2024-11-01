@@ -24,11 +24,13 @@ import * as api from 'store/api'
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
+import { pkceAuthorizeParams } from './oauth'
 import { isAndroid } from './platform'
 
 export const NEW_SESSION = '@store_new_session'
 export const FIRST_TIME_LOGIN = '@store_first_time_login'
 export const KEYCHAIN_DEVICE_SECRET_KEY = 'vamobileDeviceSecret'
+export const CODE_VERIFIER = 'code_verifier'
 
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
@@ -185,6 +187,31 @@ export const isBiometricsPreferred = async (): Promise<boolean> => {
 export const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
+}
+
+/**
+ * Generates code verifier and challenge, and stores the code verifier in AsyncStorage.
+ * The codeChallenge is returned and can be used to start the authorization flow.
+ * @returns {string} codeChallenge
+ */
+export const generateCodeVerifierAndChallenge = async (): Promise<string> => {
+  const { codeVerifier, codeChallenge } = await pkceAuthorizeParams()
+
+  // Store the codeVerifier in AsyncStorage, so we can retrieve it later to verify the authorization flow
+  await AsyncStorage.setItem(CODE_VERIFIER, codeVerifier)
+
+  // Return the codeChallenge which can be used to start the authorization flow
+  return codeChallenge
+}
+
+/**
+ * Retrieves the codeVerifier from AsyncStorage.
+ * The codeVerifier is generated using the pkceAuthorizeParams helper, and is used to verify the authorization flow.
+ * @returns {Promise<string | null>} The codeVerifier stored in AsyncStorage, or null if it does not exist.
+ */
+export const getCodeVerifier = async (): Promise<string | null> => {
+  const codeVerifier = await AsyncStorage.getItem(CODE_VERIFIER)
+  return codeVerifier
 }
 
 /**

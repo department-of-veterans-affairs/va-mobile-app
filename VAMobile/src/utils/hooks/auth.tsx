@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthSettings, useHandleTokenCallbackUrl } from 'api/auth'
+import { useHandleTokenCallbackUrl } from 'api/auth'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { generateCodeVerifierAndChallenge } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { startAuthSession } from 'utils/rnAuthSesson'
@@ -16,12 +17,12 @@ import { startAuthSession } from 'utils/rnAuthSesson'
 export const useStartAuth = (): (() => Promise<void>) => {
   const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
   const queryClient = useQueryClient()
-  const authSettingsQuery = useAuthSettings()
   const startAuth = async () => {
+    const codeChallenge = await generateCodeVerifierAndChallenge()
     await logAnalyticsEvent(Events.vama_login_start(true, false))
     const iOS = isIOS()
     try {
-      const callbackUrl = await startAuthSession(authSettingsQuery.data?.codeChallenge || '')
+      const callbackUrl = await startAuthSession(codeChallenge)
       const params = {
         url: callbackUrl,
         queryClient: queryClient,

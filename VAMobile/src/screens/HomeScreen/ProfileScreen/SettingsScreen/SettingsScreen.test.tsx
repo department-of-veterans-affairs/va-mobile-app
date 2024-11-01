@@ -66,8 +66,6 @@ context('SettingsScreen', () => {
           shouldStoreWithBiometric: true,
           supportedBiometric: supportedBiometric,
           syncing: false,
-          codeVerifier: '1',
-          codeChallenge: '2',
         },
       },
     ]

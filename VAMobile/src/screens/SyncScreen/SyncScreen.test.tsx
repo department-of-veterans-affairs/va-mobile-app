@@ -23,8 +23,6 @@ context('SyncScreen', () => {
           shouldStoreWithBiometric: true,
           supportedBiometric: 'Face',
           syncing: syncing,
-          codeVerifier: '1',
-          codeChallenge: '2',
         },
       },
     ]

@@ -51,8 +51,6 @@ export type UserAuthSettings = {
   loggingOut: boolean
   shouldStoreWithBiometric: boolean
   syncing: boolean
-  codeVerifier: string
-  codeChallenge: string
 
   authCredentials?: AuthCredentialData
   supportedBiometric?: string

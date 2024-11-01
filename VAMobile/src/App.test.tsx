@@ -57,8 +57,6 @@ context('App', () => {
             shouldStoreWithBiometric: false,
             supportedBiometric: undefined,
             syncing: false,
-            codeVerifier: '1',
-            codeChallenge: '2',
           },
         },
       ]
@@ -92,8 +90,6 @@ context('App', () => {
             shouldStoreWithBiometric: false,
             supportedBiometric: undefined,
             syncing: false,
-            codeVerifier: '1',
-            codeChallenge: '2',
           },
         },
       ]

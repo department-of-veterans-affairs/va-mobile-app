@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { UserAuthSettings, handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
+import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { clearCookies } from 'utils/rnAuthSesson'
@@ -16,8 +16,8 @@ const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
 /**
  * Refresh a user access token
  */
-const handleTokenCallbackUrl = (handleTokenCallbackParams: handleTokenCallbackParms): Promise<Response> => {
-  const userSettings = handleTokenCallbackParams.queryClient.getQueryData(authKeys.settings) as UserAuthSettings
+const handleTokenCallbackUrl = async (handleTokenCallbackParams: handleTokenCallbackParms): Promise<Response> => {
+  const codeVerifier = await getCodeVerifier()
   const { code } = parseCallbackUrlParams(handleTokenCallbackParams.url)
   return fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
     method: 'POST',
@@ -26,7 +26,7 @@ const handleTokenCallbackUrl = (handleTokenCallbackParams: handleTokenCallbackPa
     },
     body: new URLSearchParams({
       grant_type: 'authorization_code',
-      code_verifier: userSettings.codeVerifier,
+      code_verifier: codeVerifier || '',
       code,
     }).toString(),
   })
