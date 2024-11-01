@@ -207,6 +207,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
                 label: t('requestNotifications.turnOn'),
                 onPress: onUseNotifications,
               }}
+              testID="TurnOnNotificationsID"
             />
           ) : systemNotificationData?.systemNotificationsOn ? (
             <>

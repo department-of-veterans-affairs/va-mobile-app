@@ -49,7 +49,11 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
         <TextView paragraphSpacing={true} variant="MobileBody">
           {t('requestNotifications.youCanChange')}
         </TextView>
-        <Button onPress={onUseNotifications} label={t('requestNotifications.turnOn')} />
+        <Button
+          onPress={onUseNotifications}
+          label={t('requestNotifications.turnOn')}
+          testID="RequestNotificationTurnOnID"
+        />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <Button onPress={onSkip} label={t('requestNotifications.skip')} buttonType={ButtonVariants.Secondary} />
         </Box>
