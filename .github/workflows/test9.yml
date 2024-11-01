@@ -38,11 +38,7 @@ jobs:
         run: |
           echo "Formatted Assignees: $ASSIGNEES"
 
-      - name: Update Release Ticket Template with Assignees
-        run: |
-          # Update the assignees line in the template file with the fetched team members
-          sed -i "s/^assignees:.*$/assignees: $ASSIGNEES/" .github/ISSUE_TEMPLATE/update_releaseissue.md
-
+      
       # Create Release Ticket with auto-assigned members
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
