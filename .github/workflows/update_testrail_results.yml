@@ -41,6 +41,7 @@ jobs:
         with: 
           name: ${{inputs.test_names}}-e2e-junit
       - name: 'Find run ID in testRail'
+        if: failure() || success()
         id: run-id-selection
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
@@ -72,6 +73,7 @@ jobs:
             fi
           fi
       - name: 'Find section ID in testRail'
+        if: failure() || success()
         id: section-id-selection
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
