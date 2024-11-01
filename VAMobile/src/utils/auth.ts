@@ -290,10 +290,6 @@ export const logoutStart = async () => {
   })
 }
 
-export const logoutFinish = async () => {
-  queryClient.clear()
-}
-
 export const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {

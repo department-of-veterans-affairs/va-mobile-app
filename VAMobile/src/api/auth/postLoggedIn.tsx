@@ -18,7 +18,7 @@ const postLoggedIn = (): Promise<Response | undefined> => {
 export const usePostLoggedIn = () => {
   return useMutation({
     mutationFn: postLoggedIn,
-    onMutate: () => {
+    onSuccess: () => {
       logAnalyticsEvent(Events.vama_login_success(true))
     },
     onError: (error) => {

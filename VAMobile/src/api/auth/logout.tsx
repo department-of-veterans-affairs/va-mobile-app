@@ -1,12 +1,12 @@
 import { useSelector } from 'react-redux'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { RootState } from 'store'
 import * as api from 'store/api'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { clearStoredAuthCreds, finishInitialize, logoutFinish, logoutStart, retrieveRefreshToken } from 'utils/auth'
+import { clearStoredAuthCreds, finishInitialize, logoutStart, retrieveRefreshToken } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { useAppDispatch } from 'utils/hooks'
@@ -38,6 +38,7 @@ const logout = async () => {
  */
 export const useLogout = () => {
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   return useMutation({
@@ -54,7 +55,7 @@ export const useLogout = () => {
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       await finishInitialize(false)
-      await logoutFinish()
+      queryClient.clear()
     },
     onError: (error) => {
       if (isErrorObject(error)) {
