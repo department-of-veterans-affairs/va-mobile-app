@@ -33,9 +33,9 @@ jobs:
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
           ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
           echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
-          echo "Formatted Assignees: $TEAM_MEMBERS"
           # Update the markdown file to use the new assignees list
           sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/update_releaseissue.md
+          shell: bash
       - name: Debug - Output Team Members
         run: |
           echo "Formatted Assignees: $ASSIGNEES"
