@@ -281,15 +281,6 @@ export const loginFinish = async (isError: boolean, authCredentials?: AuthCreden
   })
 }
 
-export const logoutStart = async () => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  queryClient.setQueryData(authKeys.settings, {
-    ...userSettings,
-    loggingOut: true,
-    syncing: true,
-  })
-}
-
 export const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {
