@@ -32,19 +32,12 @@ jobs:
         run: |
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
           ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
-          echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
           # Update the markdown file to use the new assignees list
           sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/update_releaseissue.md
-          echo "Updated Markdown File Content:"
-          cat .github/ISSUE_TEMPLATE/update_releaseissue.md
       - name: Commit and Push Assignees Update to Markdown
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Action"
           git add .github/ISSUE_TEMPLATE/update_releaseissue.md
           git commit -m "Update assignees in release issue template"
-          git push      
-
-      - name: Debug - Output Team Members
-        run: |
-          echo "Formatted Assignees: $ASSIGNEES"
+          git push
