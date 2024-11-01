@@ -192,7 +192,6 @@ export const clearStoredAuthCreds = async (): Promise<void> => {
 /**
  * Generates code verifier and challenge, and stores the code verifier in AsyncStorage.
  * The codeChallenge is returned and can be used to start the authorization flow.
- * @returns {string} codeChallenge
  */
 export const generateCodeVerifierAndChallenge = async (): Promise<string> => {
   const { codeVerifier, codeChallenge } = await pkceAuthorizeParams()
@@ -207,7 +206,6 @@ export const generateCodeVerifierAndChallenge = async (): Promise<string> => {
 /**
  * Retrieves the codeVerifier from AsyncStorage.
  * The codeVerifier is generated using the pkceAuthorizeParams helper, and is used to verify the authorization flow.
- * @returns {Promise<string | null>} The codeVerifier stored in AsyncStorage, or null if it does not exist.
  */
 export const getCodeVerifier = async (): Promise<string | null> => {
   const codeVerifier = await AsyncStorage.getItem(CODE_VERIFIER)

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { UserAuthSettings, handleTokenCallbackParms } from 'api/types'
+import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
@@ -9,7 +9,6 @@ import getEnv from 'utils/env'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { usePostLoggedIn } from './postLoggedIn'
-import { authKeys } from './queryKeys'
 
 const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
 
