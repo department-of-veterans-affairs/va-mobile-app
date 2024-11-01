@@ -3,7 +3,11 @@ name: Testing Release Review Template
 about: Testing Template for requesting a production release for VA mobile app
 title: "{{ env.releaseDate }} Release Sign-Off: {{ env.versionNumber }}"
 labels: devops
+<<<<<<< HEAD
 assignees: IsraelleHub
+=======
+assignees: [timwright12,narin,IsraelleHub]
+>>>>>>> 0a72daf5de09bec26473142c01327e1490b724c6
 
 ---
 
