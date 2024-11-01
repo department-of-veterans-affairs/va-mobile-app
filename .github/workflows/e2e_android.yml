@@ -400,8 +400,7 @@ jobs:
               echo "$z"
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
               if [[ "$missingCases" == "[]" ]]; then
-                echo "Missing cases: $removeBracket"
-                matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
                 echo "" >> input.json
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
