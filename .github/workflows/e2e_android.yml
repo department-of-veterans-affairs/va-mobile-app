@@ -396,16 +396,18 @@ jobs:
             removeBracket=$(echo $removeBracket | tr -d ']')
             removeBracket=$(echo $removeBracket | tr -d ',')
             echo "$removeBracket"
-            missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
-            if [[ "$missingCases" == "[]" ]]; then
-              echo "Missing cases: $removeBracket"
-              missingCasesWithOS="$removeBracket [android]"
-              echo "$missingCasesWithOS"
-              matchMissingCases=$(echo $getTest| jq --arg getCase "$missingCasesWithOS" --compact-output 'select(.title | contains($getCase))')
-              echo "" >> input.json
-              addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
-              echo $addMissingCasesToArray >> input.json
-            fi
+            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+              echo "$z"
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
+              if [[ "$missingCases" == "[]" ]]; then
+                echo "Missing cases: $removeBracket"
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
+                echo "" >> input.json
+                addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
+                echo $addMissingCasesToArray >> input.json
+                break
+              fi
+            done
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           echo "testCasesFromFileUpdated: $getTestCaseNewName"
