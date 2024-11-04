@@ -87,6 +87,7 @@ export const CommonE2eIdConstants = {
   CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
   SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
+  HEALTH_TAB_BUTTON_ID: 'health.title',
 }
 
 /** Log the automation into demo mode
@@ -316,7 +317,7 @@ export async function openMilitaryInformation() {
 }
 
 export async function openHealth() {
-  await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.HEALTH_TAB_BUTTON_ID)).tap()
 }
 
 export async function openAppointments() {
