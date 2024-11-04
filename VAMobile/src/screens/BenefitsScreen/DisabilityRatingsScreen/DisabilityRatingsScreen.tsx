@@ -30,8 +30,6 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
-const detoxTestsToRun = ['DisabilityRatings'] // eslint-disable-line @typescript-eslint/no-unused-vars
-
 function DisabilityRatingsScreen() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -217,7 +215,7 @@ function DisabilityRatingsScreen() {
       backLabel={t('benefits.title')}
       backLabelOnPress={navigation.goBack}
       title={t('disabilityRatingDetails.title')}
-      testID="disabilityRatingTestID">
+      testID="disabilityRatingTestID1">
       {loading ? (
         <LoadingComponent text={t('disabilityRating.loading')} />
       ) : useDisabilityRatingError || !drNotInDowntime ? (

@@ -61,13 +61,27 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          firstInstance=true
-          for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
-            echo "$file"
-            e2ePathNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code | jq '[.[] | select(.name | contains(".e2e")) | .name] | unique')
-            echo "$e2ePathNames"
+          e2eTestsToRun = []
+          for e2eName in $(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]'); do  
+            for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
+              echo "$file" 
+              e2ePathNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/${file}\?ref=spike/9918-rachael-detox-add-what-to-run-to-code | jq '[.[] | .name')
+              echo "$e2ePathNames"
+              for y in e2ePathNames: do           
+                if [[ $e2eName == *$y* ]]; then
+                  e2eTestsToRun += [$e2eName]
+                  break
+                else
+                  for z in $(echo $y | sed 's/[A-Z]\+/\n&/g'); do
+                  if [[$z in *$e2eName* ]]; then
+                    e2eTestsToRun += [$e2eName]
+                    break
+                  fi
+                fi
+              done
+            done
           done
-          echo "TESTING_MATRIX=$e2ePathNames" >> $GITHUB_OUTPUT
-          echo "TEST_RUN=true" >> $GITHUB_OUTPUT
+            echo "TESTING_MATRIX=$e2eTestsToRun" >> $GITHUB_OUTPUT
+            echo "TEST_RUN=true" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
