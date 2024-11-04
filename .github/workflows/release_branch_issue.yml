@@ -20,7 +20,7 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
       - run: |
           sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
@@ -32,14 +32,27 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      # Fetch GitHub Group Members
-      - name: Fetch GitHub Group Members
+      - name: Format Assignees and Update Markdown
         run: |
-          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-admin/members --jq '.[].login')
-          ASSIGNEES=$(echo $TEAM_MEMBERS | tr '\n' ',')
-          ASSIGNEES=${ASSIGNEES%,}
-          echo "ASSIGNEES=$ASSIGNEES" >> $GITHUB_ENV
-      # Create Release Ticket with auto-assigned members
+          # Fetch GitHub Group Members
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          # Debug output just for testing
+          echo "Formatted Assignees: $ASSIGNEES" 
+          # Update the markdown file to use the new assignees list
+          sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/release_ticket.md
+      - name: Commit and Push Assignees Update to Markdown
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git add .github/ISSUE_TEMPLATE/release_ticket.md
+          # Check if there are any changes to commit
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update assignees in release issue template"
+            git push
+          fi
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:

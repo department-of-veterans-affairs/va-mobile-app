@@ -27,9 +27,9 @@ jobs:
       - uses: actions/checkout@v3
       - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
-      # Fetch GitHub Group Members
-      - name: Fetch GitHub Group Members
+      - name: Format Assignees and Update Markdown
         run: |
+          # Fetch GitHub Group Members
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
           ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
           # Debug output just for testing
@@ -48,3 +48,18 @@ jobs:
             git commit -m "Update assignees in release issue template"
             git push
           fi
+      # Create Release Ticket with auto-assigned members
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/update_releaseissue.md
+        env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
+          assignees: ${{ env.ASSIGNEES }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create-issue    
