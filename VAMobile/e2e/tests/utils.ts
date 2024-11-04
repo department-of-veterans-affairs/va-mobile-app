@@ -27,7 +27,6 @@ export const CommonE2eIdConstants = {
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
-  SKIP_BTN_TEXT: 'Skip',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
@@ -87,6 +86,7 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
   CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
+  SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
 }
 
 /** Log the automation into demo mode
@@ -122,13 +122,13 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
-  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
   if (skipOnboarding === true) {
-    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
 
     if (ifCarouselSkipBtnExist) {
-      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     }
   }
 }
@@ -396,7 +396,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
     await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
       .toBeVisible()
@@ -475,7 +475,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
@@ -627,7 +627,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap() ///TKD to change this one
+  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
