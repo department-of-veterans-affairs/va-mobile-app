@@ -99,7 +99,7 @@ jobs:
         id: matrix_value
         run: |
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ ${{ github.event_name }} == 'push' ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ ${{ github.event_name }} == 'push' ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
