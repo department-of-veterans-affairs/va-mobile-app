@@ -1342,10 +1342,10 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.13.0.tgz#713a1ab4b44d97acd732ecfc02287893059240e7"
   integrity sha512-mS2q9+fuYOSaGoXqrSDWGLUMep7vJi33AbjGcYcgtaGxT/K/lEA9Gy5L2sQ98OD2kbSI7/XAD1wsLfN754sHZw==
 
-"@department-of-veterans-affairs/mobile-component-library@0.21.0":
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.21.0.tgz#dc213b42c0eeb7dae04134ab369f1e4f4afc464a"
-  integrity sha512-U8vTYoIPAgbFnbtPLsTni0VD+e6SRUwf5jr4lLKOidhD+nl1VuuUd/5AMxs+mazMxyMPkHLzle6MzG4ZE0MSXg==
+"@department-of-veterans-affairs/mobile-component-library@0.27.0":
+  version "0.27.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.27.0.tgz#89f9117ebd81bf54abc0703d05624c89c11fea58"
+  integrity sha512-O1pIOqu63vvIBpb01yLIdlf/5PUiwm+/X+4IoAEF675Xjna8pPI6+l76g1DP7f314aweQBQhdJSiCHbcq4wolA==
   dependencies:
     "@os-team/i18next-react-native-language-detector" "^1.0.34"
     i18next "^23.12.2"
