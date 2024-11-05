@@ -17,19 +17,16 @@ Text is a typography component for headings, body copy, and display text.
 ## Usage
 
 ### When to use Text
-* 
+- 
+
+### When to consider something else
+- 
 
 ### How this component works
 - 
 
 ## Code usage
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/snackbar--docs)
-
-## Content considerations
-- 
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/text--docs)
 
 ## Accessibility considerations
-- 
-
-### Related
-* [Snackbar - Material Design](https://m3.material.io/components/snackbar/overview)
+- Paragraph spacing
