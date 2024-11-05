@@ -398,7 +398,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
         <Box
           mt={theme.dimensions.standardMarginBetween}
           mb={idx === group.endpoints.length - 1 ? theme.dimensions.standardMarginBetween : undefined}>
-          {IndividualQueryDisplay(endpoint, overrideErrors, setErrors, clearData)}
+          {IndividualQueryDisplay(endpoint, temporaryErrors, setErrors, clearData)}
         </Box>
       )
     })
