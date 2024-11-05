@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView, VAScrollView } from 'components'
+import { useNotificationContext } from 'components/NotificationManager'
 import { NAMESPACE } from 'constants/namespaces'
-import { setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -17,6 +17,7 @@ export type SyncScreenProps = Record<string, unknown>
 
 function RequestNotificationsScreen({}: SyncScreenProps) {
   const theme = useTheme()
+  const { setRequestNotifications, setRequestNotificationPreferenceScreen } = useNotificationContext()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -24,14 +25,14 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
     //This sets the async storage to not display this screen again
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
     //This sets the state variable for the session
-    dispatch(setNotificationsPreferenceScreen(false))
+    setRequestNotificationPreferenceScreen(false)
   }
 
   const onUseNotifications = (): void => {
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
-    dispatch(setNotificationsPreferenceScreen(false))
+    setRequestNotificationPreferenceScreen(false)
     //This actually triggers the notification manager code to request via OS.
-    dispatch(setRequestNotifications(true))
+    setRequestNotifications(true)
   }
 
   return (
