@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useAuthSettings, useBiometricsSettings } from 'api/auth'
+import { useBiometricsSettings } from 'api/auth'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'utils/auth'
