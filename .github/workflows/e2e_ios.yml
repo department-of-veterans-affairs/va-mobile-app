@@ -139,7 +139,6 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
-
     strategy:
       fail-fast: false
       matrix:
@@ -220,8 +219,8 @@ jobs:
         if: failure() || success()
         uses: actions/upload-artifact@v4
         with: 
-            name: ${{matrix.testsuite}}-e2e-junit
-            path: VAMobile/e2e/test_reports/e2e-junit.xml
+          name: e2e-junit-${{matrix.testsuite}}
+          path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
         if: failure() || steps.run_e2e_tests.outcome == 'failure'
@@ -328,16 +327,10 @@ jobs:
 
   matrix_send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs: [matrix-e2e-ios, output_detox_tests_to_run]
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
+    needs: [matrix-e2e-ios, output_detox_tests_to_run]    
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: "${{matrix.testsuite}}"
       testRail_name: ${{ inputs.testRail_name }}
       test_OS_name: "iOS"
     secrets: inherit
