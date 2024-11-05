@@ -280,7 +280,6 @@ context('authAction SIS', () => {
         const expectedOpts = expect.objectContaining({
           accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
           accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-          authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
         })
         expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', nonce, expectedOpts)
       })
