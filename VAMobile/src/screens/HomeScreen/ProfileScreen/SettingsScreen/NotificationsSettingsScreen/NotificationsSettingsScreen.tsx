@@ -190,7 +190,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       title={t('notifications.title')}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
-      ) : (hasError && systemNotificationData?.systemNotificationsOn) ||
+      ) : hasError ||
         (systemNotificationData?.systemNotificationsOn && pushPreferences && pushPreferences.preferences.length < 1) ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
