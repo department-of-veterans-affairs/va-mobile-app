@@ -417,13 +417,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     try {
       await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
     } catch (ex) {
-      await element(by.text('appUpdateButton')).tap() //should be able to switch to the same id as two lines above
+      await element(by.id('remoteConfigAppUpdateTestID')).tap()
     }
   } else if (AFFeature === 'WG_Health') {
     try {
       await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
     } catch (ex) {
-      await element(by.text('Enabled')).tap() //switch to two rows up
+      await element(by.id('remoteConfigEnableTestID')).tap()
     }
   }
 
@@ -432,13 +432,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       try {
         await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap() //switch to two rows up
+        await element(by.id('remoteConfigEnableTestID')).tap()
       }
     } else if (AFUseCase === 'DenyAccess') {
       try {
         await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap() //switch to two rows up
+        await element(by.id('remoteConfigEnableTestID')).tap()
       }
     }
   }
