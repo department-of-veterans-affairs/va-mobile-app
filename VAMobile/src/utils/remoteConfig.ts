@@ -70,7 +70,7 @@ export const defaults: FeatureToggleValues = {
   submitEvidenceExpansion: false,
   sso: false,
   testFeature: false,
-  useOldLinkComponent: true,
+  useOldLinkComponent: false,
   whatsNewUI: true,
 }
 
