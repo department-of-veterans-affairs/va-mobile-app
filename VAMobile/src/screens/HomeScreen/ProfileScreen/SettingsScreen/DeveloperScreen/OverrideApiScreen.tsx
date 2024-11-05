@@ -124,6 +124,7 @@ const IndividualQueryDisplay = (
         } else if (error.status === 418) {
           if (error.json) {
             setBackEndSelected(true)
+            setOtherSelected(false)
             const errorDetailsDict = error.json.errors[0]
             setRefreshable(errorDetailsDict?.refreshable || false)
             setInitialBETitle(errorDetailsDict.title)
@@ -159,7 +160,7 @@ const IndividualQueryDisplay = (
           setOtherSelected(false)
           setRefreshable(false)
           setInitialOtherErrorCode('500')
-          const newErrors = _.remove(overrideErrors, function (n) {
+          const newErrors = _.filter(overrideErrors, function (n) {
             return n.endpoint !== endpoint
           })
           if (!networkSelected) {
@@ -181,7 +182,7 @@ const IndividualQueryDisplay = (
           setOtherSelected(false)
           setRefreshable(false)
           setInitialOtherErrorCode('500')
-          const newErrors = _.remove(overrideErrors, function (n) {
+          const newErrors = _.filter(overrideErrors, function (n) {
             return n.endpoint !== endpoint
           })
           if (!backEndSelected) {
@@ -196,8 +197,8 @@ const IndividualQueryDisplay = (
                     detail: '',
                     code: '',
                     source: '',
-                    body: undefined,
-                    telephone: undefined,
+                    body: '',
+                    telephone: '',
                     refreshable: false,
                   },
                 ],
@@ -214,10 +215,10 @@ const IndividualQueryDisplay = (
             value={initialBETitle}
             inputType="none"
             onChange={(val) => {
-              const otherErrors = _.remove(overrideErrors, function (n) {
+              const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndError = _.remove(overrideErrors, function (n) {
+              const backEndError = _.filter(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
@@ -237,10 +238,10 @@ const IndividualQueryDisplay = (
             value={initialBEBody}
             inputType="none"
             onChange={(val) => {
-              const otherErrors = _.remove(overrideErrors, function (n) {
+              const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndError = _.remove(overrideErrors, function (n) {
+              const backEndError = _.filter(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
@@ -260,10 +261,10 @@ const IndividualQueryDisplay = (
             value={initialBEPhone}
             inputType="phone"
             onChange={(val) => {
-              const otherErrors = _.remove(overrideErrors, function (n) {
+              const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndError = _.remove(overrideErrors, function (n) {
+              const backEndError = _.filter(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
@@ -284,10 +285,10 @@ const IndividualQueryDisplay = (
             selected={refreshableSelected}
             onSelectionChange={() => {
               setRefreshable(!refreshableSelected)
-              const otherErrors = _.remove(overrideErrors, function (n) {
+              const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndError = _.remove(overrideErrors, function (n) {
+              const backEndError = _.filter(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
@@ -310,7 +311,7 @@ const IndividualQueryDisplay = (
           setRefreshable(false)
           setOtherSelected(!otherSelected)
           setInitialOtherErrorCode('500')
-          const newErrors = _.remove(overrideErrors, function (n) {
+          const newErrors = _.filter(overrideErrors, function (n) {
             return n.endpoint !== endpoint
           })
           if (!otherSelected) {
@@ -343,10 +344,10 @@ const IndividualQueryDisplay = (
             value={initialOtherErrorCode}
             inputType="phone"
             onChange={(val) => {
-              const otherErrors = _.remove(overrideErrors, function (n) {
+              const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
               })
-              const backEndError = _.remove(overrideErrors, function (n) {
+              const backEndError = _.filter(overrideErrors, function (n) {
                 return n.endpoint === endpoint
               })[0]
 
