@@ -2,19 +2,27 @@ import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffe
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { useAuthSettings } from 'api/auth'
 import { useRegisterDevice } from 'api/notifications'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 
 const foregroundNotifications: Array<string> = []
-
+const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
+const { IS_TEST } = getEnv()
 interface NotificationContextType {
   tappedForegroundNotification: boolean
   initialUrl: string
   setTappedForegroundNotification: Dispatch<SetStateAction<boolean>>
   setInitialUrl: Dispatch<SetStateAction<string>>
+  requestNotifications: boolean
+  setRequestNotifications: Dispatch<SetStateAction<boolean>>
+  requestNotificationPreferenceScreen: boolean
+  setRequestNotificationPreferenceScreen: Dispatch<SetStateAction<boolean>>
 }
 
 const NotificationContext = createContext<NotificationContextType>({
@@ -22,6 +30,10 @@ const NotificationContext = createContext<NotificationContextType>({
   initialUrl: '',
   setTappedForegroundNotification: () => {},
   setInitialUrl: () => {},
+  requestNotifications: false,
+  setRequestNotifications: () => {},
+  requestNotificationPreferenceScreen: false,
+  setRequestNotificationPreferenceScreen: () => {},
 })
 
 /**
@@ -34,6 +46,25 @@ const NotificationManager: FC = ({ children }) => {
   const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
   const [initialUrl, setInitialUrl] = useState('')
   const [eventsRegistered, setEventsRegistered] = useState(false)
+  const [requestNotifications, setRequestNotifications] = useState(false)
+  const [requestNotificationPreferenceScreen, setRequestNotificationPreferenceScreen] = useState(false)
+
+  useEffect(() => {
+    const checkRequestNotificationsPreferenceScreen = async () => {
+      if (IS_TEST) {
+        // In integration tests this will change the behavior and make it inconsistent across runs so return false
+        setRequestNotificationPreferenceScreen(false)
+        return
+      }
+
+      const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
+      console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
+
+      const shouldShowScreen = !setNotificationsPreferenceScreenVal
+      setRequestNotificationPreferenceScreen(shouldShowScreen)
+    }
+    checkRequestNotificationsPreferenceScreen()
+  }, [setRequestNotificationPreferenceScreen])
 
   useEffect(() => {
     const register = () => {
@@ -55,13 +86,21 @@ const NotificationManager: FC = ({ children }) => {
         registeredNotifications.remove()
         failedNotifications.remove()
       })
-      Notifications.registerRemoteNotifications()
+      if (userAuthSettings?.firstTimeLogin === false && requestNotifications === true) {
+        Notifications.registerRemoteNotifications()
+      }
     }
 
     if (userAuthSettings?.loggedIn && personalInformation?.id) {
       register()
     }
-  }, [userAuthSettings?.loggedIn, personalInformation?.id, registerDevice])
+  }, [
+    userAuthSettings?.firstTimeLogin,
+    userAuthSettings?.loggedIn,
+    requestNotifications,
+    personalInformation?.id,
+    registerDevice,
+  ])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
@@ -124,7 +163,16 @@ const NotificationManager: FC = ({ children }) => {
   const s = { flex: 1 }
   return (
     <NotificationContext.Provider
-      value={{ tappedForegroundNotification, setTappedForegroundNotification, initialUrl, setInitialUrl }}>
+      value={{
+        tappedForegroundNotification,
+        setTappedForegroundNotification,
+        initialUrl,
+        setInitialUrl,
+        requestNotifications,
+        setRequestNotifications,
+        requestNotificationPreferenceScreen,
+        setRequestNotificationPreferenceScreen,
+      }}>
       <View style={s}>{children}</View>
     </NotificationContext.Provider>
   )

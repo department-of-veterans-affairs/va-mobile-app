@@ -44,9 +44,10 @@ import {
   getHomeScreens,
   getPaymentsScreens,
 } from 'screens'
-import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
+import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
 import { AnalyticsState } from 'store/slices'
@@ -108,6 +109,7 @@ export type RootNavStackParamList = WebviewStackParams & {
 type StackNavParamList = WebviewStackParams & {
   Splash: undefined
   BiometricsPreference: undefined
+  RequestNotifications: undefined
   Sync: undefined
   Login: undefined
   LoaGate: undefined
@@ -216,6 +218,7 @@ export function AuthGuard() {
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
+  const { requestNotificationPreferenceScreen } = useNotificationContext()
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -392,6 +395,18 @@ export function AuthGuard() {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
+      </Stack.Navigator>
+    )
+  } else if (userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn) {
+    content = <OnboardingCarousel />
+  } else if (!userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn && requestNotificationPreferenceScreen) {
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RequestNotifications"
+          component={RequestNotificationsScreen}
+          options={{ ...topPaddingAsHeaderStyles }}
+        />
       </Stack.Navigator>
     )
   } else if (userAuthSettings?.loggedIn) {

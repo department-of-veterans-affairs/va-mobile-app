@@ -459,6 +459,21 @@ export type ClaimEventData = {
   suspenseDate?: string | null
   documents?: Array<ClaimEventDocumentData>
   phase?: number
+  documentId?: string
+}
+
+export type ClaimEFolderData = {
+  data: Array<ClaimEFolderDocuments>
+}
+
+export type ClaimEFolderDocuments = {
+  id: string
+  type: string
+  attributes: {
+    doc_type: string
+    type_description: string
+    received_at: string
+  }
 }
 
 export type ClaimAttributesData = {
@@ -535,6 +550,7 @@ export type ClaimEventDocumentData = {
   documentType?: string
   filename?: string
   uploadDate: string
+  documentId?: string
 }
 
 export type ClaimPhaseData = {

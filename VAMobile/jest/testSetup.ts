@@ -317,3 +317,7 @@ jest.mock('react-native-webview', () => {
     WebView: View,
   }
 })
+
+jest.mock('react-native-haptic-feedback', () => ({
+  HapticFeedbackTypes: {},
+}))
