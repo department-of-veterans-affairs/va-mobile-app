@@ -88,6 +88,8 @@ export const CommonE2eIdConstants = {
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
   SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
   HEALTH_TAB_BUTTON_ID: 'Health',
+  PAYMENTS_TAB_BUTTON_ID: 'Payments',
+  BENEFITS_TAB_BUTTON_ID: 'Benefits',
 }
 
 /** Log the automation into demo mode
@@ -325,7 +327,7 @@ export async function openAppointments() {
 }
 
 export async function openPayments() {
-  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openDirectDeposit() {
@@ -345,7 +347,7 @@ export async function openVAPaymentHistory() {
 }
 
 export async function openBenefits() {
-  await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openLetters() {
