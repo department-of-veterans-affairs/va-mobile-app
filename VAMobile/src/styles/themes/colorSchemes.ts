@@ -13,7 +13,7 @@ export const lightTheme = {
     headerDropShadow: colors.vadsColorBaseLighter,
     profileBanner: colors.vadsColorPrimary,
     ctaButton: colors.vadsColorSecondaryDark,
-    completedPhase: colors.uswdsSystemColorGreenCoolVivid70,
+    completedPhase: colors.uswdsSystemColorGreenCoolVivid50,
     currentPhase: colors.vadsColorPrimary,
     upcomingPhase: colors.vadsColorBaseLight,
     splashScreen: colors.vadsColorPrimaryDarker,
@@ -95,7 +95,7 @@ export const lightTheme = {
   },
   text: {
     appVersionAndBuild: colors.vadsColorBlack,
-    primary: primaryTextColor,
+    primary: colors.vadsColorPrimaryDarker,
     primaryContrast: colors.vadsColorBaseLightest,
     error: colors.vadsColorSecondaryDark,
     link: colors.vadsColorPrimary,
