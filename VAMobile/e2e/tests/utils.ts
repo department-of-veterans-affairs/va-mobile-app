@@ -90,6 +90,9 @@ export const CommonE2eIdConstants = {
   HEALTH_TAB_BUTTON_ID: 'Health',
   PAYMENTS_TAB_BUTTON_ID: 'Payments',
   BENEFITS_TAB_BUTTON_ID: 'Benefits',
+  HOME_TAB_BUTTON_ID: 'Home',
+  AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
+  AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
 }
 
 /** Log the automation into demo mode
@@ -415,30 +418,30 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   if (AFAppUpdate) {
     try {
-      await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
+      await expect(element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID))).toHaveToggleValue(true)
     } catch (ex) {
-      await element(by.id('remoteConfigAppUpdateTestID')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID)).tap()
     }
   } else if (AFFeature === 'WG_Health') {
     try {
-      await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
     } catch (ex) {
-      await element(by.id('remoteConfigEnableTestID')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
     }
   }
 
   if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.id('remoteConfigEnableTestID')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     } else if (AFUseCase === 'DenyAccess') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.id('remoteConfigEnableTestID')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     }
   }
@@ -460,7 +463,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       await loginToDemoMode()
     }
   } else {
-    await element(by.text('Home')).tap() //switch to home tab ID
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   }
 }
 
@@ -487,7 +490,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
 
-  await element(by.text('Home')).tap() //another home instance to switch
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
 
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
