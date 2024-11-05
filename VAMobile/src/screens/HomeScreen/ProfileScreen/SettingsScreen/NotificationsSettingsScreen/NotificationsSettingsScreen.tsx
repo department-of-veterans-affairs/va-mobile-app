@@ -33,12 +33,11 @@ import {
   SimpleListItemObj,
   TextView,
 } from 'components'
+import { useNotificationContext } from 'components/NotificationManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -79,13 +78,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { data: personalInformation } = usePersonalInformation()
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
-  const { requestNotifications } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { requestNotifications, setRequestNotifications, setRequestNotificationPreferenceScreen } =
+    useNotificationContext()
 
   const onUseNotifications = (): void => {
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
-    dispatch(setNotificationsPreferenceScreen(false))
+    setRequestNotificationPreferenceScreen(false)
     //This actually triggers the notification manager code to request via OS.
-    dispatch(setRequestNotifications(true))
+    setRequestNotifications(true)
   }
 
   const openSettings = () => {
