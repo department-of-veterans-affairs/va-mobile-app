@@ -37,8 +37,6 @@ jobs:
           # Fetch GitHub Group Members
           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
           ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
-          # Debug output just for testing
-          echo "Formatted Assignees: $ASSIGNEES" 
           # Update the markdown file to use the new assignees list
           sed -i "s/^assignees:.*$/assignees: [$ASSIGNEES]/" .github/ISSUE_TEMPLATE/release_ticket.md
       - name: Commit and Push Assignees Update to Markdown
