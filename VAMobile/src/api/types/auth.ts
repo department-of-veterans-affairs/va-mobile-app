@@ -43,16 +43,19 @@ export enum LOGIN_PROMPT_TYPE {
 }
 
 export type UserAuthSettings = {
-  canStoreWithBiometric: boolean
-  displayBiometricsPreferenceScreen: boolean
   firstTimeLogin: boolean
   loading: boolean
   loggedIn: boolean
   loggingOut: boolean
-  shouldStoreWithBiometric: boolean
   syncing: boolean
 
   authCredentials?: AuthCredentialData
+}
+
+export type UserBiometricsSettings = {
+  canStoreWithBiometric: boolean
+  displayBiometricsPreferenceScreen: boolean
+  shouldStoreWithBiometric: boolean
   supportedBiometric?: string
 }
 

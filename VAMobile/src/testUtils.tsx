@@ -14,7 +14,7 @@ import { ThemeProvider } from 'styled-components'
 
 import { authKeys } from 'api/auth'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
-import { UserAuthSettings } from 'api/types'
+import { UserAuthSettings, UserBiometricsSettings } from 'api/types'
 import { RootState } from 'store'
 import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
@@ -205,16 +205,18 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       userProfileUpdate: true,
     })
     queryClient.setQueryData(authKeys.settings, {
-      canStoreWithBiometric: true,
-      displayBiometricsPreferenceScreen: true,
       firstTimeLogin: false,
       loading: false,
       loggedIn: false,
       loggingOut: false,
-      shouldStoreWithBiometric: true,
-      supportedBiometric: '',
       syncing: false,
     } as UserAuthSettings)
+    queryClient.setQueryData(authKeys.biometrics, {
+      canStoreWithBiometric: true,
+      displayBiometricsPreferenceScreen: true,
+      shouldStoreWithBiometric: true,
+      supportedBiometric: '',
+    } as UserBiometricsSettings)
     if (queriesData?.length) {
       queriesData.forEach(({ queryKey, data }) => {
         queryClient.setQueryData(queryKey, data)

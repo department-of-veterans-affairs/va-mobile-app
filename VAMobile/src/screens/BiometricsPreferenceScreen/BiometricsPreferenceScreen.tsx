@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useAuthSettings } from 'api/auth'
+import { useAuthSettings, useBiometricsSettings } from 'api/auth'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'utils/auth'
@@ -21,8 +21,8 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const { data: userAuthSettings } = useAuthSettings()
-  const supportedBiometric = userAuthSettings?.supportedBiometric
+  const { data: userBiometricSettings } = useBiometricsSettings()
+  const supportedBiometric = userBiometricSettings?.supportedBiometric
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
   const biometricsA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
   const bodyText = getTranslation(

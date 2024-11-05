@@ -48,15 +48,20 @@ context('App', () => {
         {
           queryKey: authKeys.settings,
           data: {
-            canStoreWithBiometric: false,
-            displayBiometricsPreferenceScreen: false,
             firstTimeLogin: false,
             loading: false,
             loggedIn: false,
             loggingOut: false,
+            syncing: false,
+          },
+        },
+        {
+          queryKey: authKeys.biometrics,
+          data: {
+            canStoreWithBiometric: false,
+            displayBiometricsPreferenceScreen: false,
             shouldStoreWithBiometric: false,
             supportedBiometric: undefined,
-            syncing: false,
           },
         },
       ]
@@ -81,15 +86,20 @@ context('App', () => {
         {
           queryKey: authKeys.settings,
           data: {
-            canStoreWithBiometric: false,
-            displayBiometricsPreferenceScreen: false,
             firstTimeLogin: false,
             loading: false,
             loggedIn: true,
             loggingOut: false,
+            syncing: false,
+          },
+        },
+        {
+          queryKey: authKeys.biometrics,
+          data: {
+            canStoreWithBiometric: false,
+            displayBiometricsPreferenceScreen: false,
             shouldStoreWithBiometric: false,
             supportedBiometric: undefined,
-            syncing: false,
           },
         },
       ]

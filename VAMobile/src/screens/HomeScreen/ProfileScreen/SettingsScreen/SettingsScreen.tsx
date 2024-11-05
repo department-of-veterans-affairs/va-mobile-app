@@ -8,7 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { useAuthSettings, useLogout } from 'api/auth'
+import { useBiometricsSettings, useLogout } from 'api/auth'
 import {
   Box,
   ButtonDecoratorType,
@@ -38,7 +38,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const { data: userAuthSettings, isLoading: settingBiometricPreference } = useAuthSettings()
+  const { data: userBiometricSettings, isLoading: settingBiometricPreference } = useBiometricsSettings()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const signOutAlert = useDestructiveActionSheet()
   const { mutate: logout } = useLogout()
@@ -65,10 +65,10 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
-    const newPrefValue = !userAuthSettings?.shouldStoreWithBiometric
+    const newPrefValue = !userBiometricSettings?.shouldStoreWithBiometric
     setBiometricsPreference(newPrefValue)
   }
-  const supportedBiometric = userAuthSettings?.supportedBiometric
+  const supportedBiometric = userBiometricSettings?.supportedBiometric
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
   const supportedBiometricA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
 
@@ -78,7 +78,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: {
-      on: userAuthSettings?.shouldStoreWithBiometric,
+      on: userBiometricSettings?.shouldStoreWithBiometric,
       a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     },
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
@@ -103,7 +103,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const items: Array<SimpleListItemObj> = _.flatten([
     { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity'), detoxTestID: 'accountSecurityID' },
     // don't even show the biometrics option if it's not available
-    userAuthSettings?.canStoreWithBiometric ? biometricRow : [],
+    userBiometricSettings?.canStoreWithBiometric ? biometricRow : [],
     {
       text: t('notifications.title'),
       onPress: () => navigateTo('NotificationsSettings'),

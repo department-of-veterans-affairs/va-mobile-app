@@ -57,15 +57,20 @@ context('SettingsScreen', () => {
       {
         queryKey: authKeys.settings,
         data: {
-          canStoreWithBiometric: canStoreWithBiometric,
-          displayBiometricsPreferenceScreen: true,
           firstTimeLogin: false,
           loading: false,
           loggedIn: true,
           loggingOut: false,
+          syncing: false,
+        },
+      },
+      {
+        queryKey: authKeys.biometrics,
+        data: {
+          canStoreWithBiometric: canStoreWithBiometric,
+          displayBiometricsPreferenceScreen: true,
           shouldStoreWithBiometric: true,
           supportedBiometric: supportedBiometric,
-          syncing: false,
         },
       },
     ]

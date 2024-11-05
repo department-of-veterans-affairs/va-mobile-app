@@ -23,7 +23,14 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { MutateOptions, QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
-import { useAuthSettings, useHandleTokenCallbackUrl, useLogout, usePostLoggedIn, useRefreshAccessToken } from 'api/auth'
+import {
+  useAuthSettings,
+  useBiometricsSettings,
+  useHandleTokenCallbackUrl,
+  useLogout,
+  usePostLoggedIn,
+  useRefreshAccessToken,
+} from 'api/auth'
 import queryClient from 'api/queryClient'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
@@ -200,7 +207,9 @@ export function AuthGuard() {
   setlogout(logout)
   setRefreshAccessToken(refreshAccessToken)
   setFileSystemRefreshAccessToken(refreshAccessToken)
-  const { data: userAuthSettings, isLoading: initializing } = useAuthSettings()
+  const { data: userAuthSettings, isLoading: initializingAuth } = useAuthSettings()
+  const { data: userBiometricSettings, isLoading: initializingBiometrics } = useBiometricsSettings()
+  const initializing = initializingAuth || initializingBiometrics
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
@@ -377,8 +386,8 @@ export function AuthGuard() {
   } else if (
     userAuthSettings?.syncing &&
     userAuthSettings?.firstTimeLogin &&
-    userAuthSettings?.canStoreWithBiometric &&
-    userAuthSettings?.displayBiometricsPreferenceScreen
+    userBiometricSettings?.canStoreWithBiometric &&
+    userBiometricSettings?.displayBiometricsPreferenceScreen
   ) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">

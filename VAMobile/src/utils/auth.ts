@@ -17,6 +17,7 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
   UserAuthSettings,
+  UserBiometricsSettings,
 } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
@@ -256,8 +257,8 @@ export const setBiometricsPreference = async (value: boolean) => {
   await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE)
   const refreshToken = await retrieveRefreshToken()
   await saveRefreshToken(refreshToken || '')
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  queryClient.setQueryData(authKeys.settings, { ...userSettings, shouldStoreWithBiometric: value })
+  const userSettings = queryClient.getQueryData(authKeys.biometrics) as UserBiometricsSettings
+  queryClient.setQueryData(authKeys.biometrics, { ...userSettings, shouldStoreWithBiometric: value })
   await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
 }
 
@@ -273,8 +274,8 @@ export const debugResetFirstTimeLogin = async (logout: UseMutateFunction<Respons
  * Sets the flag used to determine if the biometrics preference screen should be displayed
  */
 export const setDisplayBiometricsPreferenceScreen = (value: boolean) => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  queryClient.setQueryData(authKeys.settings, { ...userSettings, displayBiometricsPreferenceScreen: value })
+  const userSettings = queryClient.getQueryData(authKeys.biometrics) as UserBiometricsSettings
+  queryClient.setQueryData(authKeys.biometrics, { ...userSettings, displayBiometricsPreferenceScreen: value })
 }
 
 /**
