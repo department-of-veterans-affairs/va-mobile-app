@@ -87,7 +87,7 @@ export const CommonE2eIdConstants = {
   CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
   SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
-  HEALTH_TAB_BUTTON_ID: 'health.title',
+  HEALTH_TAB_BUTTON_ID: 'Health',
 }
 
 /** Log the automation into demo mode
