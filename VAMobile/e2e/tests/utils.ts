@@ -417,13 +417,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     try {
       await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
     } catch (ex) {
-      await element(by.text('appUpdateButton')).tap()
+      await element(by.text('appUpdateButton')).tap() //should be able to switch to the same id as two lines above
     }
   } else if (AFFeature === 'WG_Health') {
     try {
       await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
     } catch (ex) {
-      await element(by.text('Enabled')).tap()
+      await element(by.text('Enabled')).tap() //switch to two rows up
     }
   }
 
@@ -432,13 +432,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       try {
         await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.text('Enabled')).tap() //switch to two rows up
       }
     } else if (AFUseCase === 'DenyAccess') {
       try {
         await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.text('Enabled')).tap() //switch to two rows up
       }
     }
   }
@@ -460,7 +460,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       await loginToDemoMode()
     }
   } else {
-    await element(by.text('Home')).tap()
+    await element(by.text('Home')).tap() //switch to home tab ID
   }
 }
 
@@ -487,7 +487,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
 
-  await element(by.text('Home')).tap()
+  await element(by.text('Home')).tap() //another home instance to switch
 
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
@@ -587,17 +587,19 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
       try {
-        await element(by.text('800-698-2411')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID'))).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
       await device.launchApp({ newInstance: false })
       try {
-        await element(by.text('TTY: 711')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(
+          by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID')),
+        ).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
