@@ -2,12 +2,14 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps, View } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
-import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
+import { Box, BoxProps, TextArea } from './index'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -20,8 +22,6 @@ export type AccordionCollapsibleProps = {
   a11yHint?: string
   /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
-  /** if true hides the accordion arrow and only displays header & collapsed content */
-  hideArrow?: boolean
   /** custom on press call if more action is needed when expanding/collapsing the accordion */
   customOnPress?: (expandedValue?: boolean) => void
   /** sets the initial value of expanded if an accordion should already be expanded on render */
@@ -39,7 +39,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   header,
   expandedContent,
   collapsedContent,
-  hideArrow,
   testID,
   customOnPress,
   expandedInitialValue,
@@ -70,17 +69,15 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     accessibilityRole: 'tab',
   }
 
-  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ChevronUp' : 'ChevronDown'
+  const iconName = expanded ? 'ExpandLess' : 'ExpandMore'
 
   const renderHeader = () => {
     const data = (
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
-        {!hideArrow && (
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
-          </Box>
-        )}
+        <Box alignItems="flex-end">
+          <Icon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={30} height={30} />
+        </Box>
       </Box>
     )
 
@@ -89,14 +86,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
           accessibilityLabel: testID,
         }
       : {}
-
-    if (hideArrow) {
-      return (
-        <Box {...labelProps} accessible={true}>
-          {data}
-        </Box>
-      )
-    }
 
     return (
       <Pressable {...pressableProps} {...labelProps} ref={headerRef}>

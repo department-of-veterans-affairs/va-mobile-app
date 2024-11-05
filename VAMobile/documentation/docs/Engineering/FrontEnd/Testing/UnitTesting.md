@@ -17,33 +17,61 @@ All React components should have at least one unit test. The ideal quantity of t
 Note that while a high coverage percentage is good, it doesn't ensure tests are complete and correct. It's important to think critically and implement tests that cover the key cases a user might encounter.
 
 ### More information
+
 - Google's [Code Coverage Best Practices](https://testing.googleblog.com/2020/08/code-coverage-best-practices.html)
 - [How to know what to test](https://kentcdodds.com/blog/how-to-know-what-to-test) (Kent C Dodds)
 
 ## Targeting by rendered text, label, or role
 
 &#10060; Avoid targeting child props based on numeric order:
+
 ```tsx
-expect(textView[5].props.children).toEqual('Rx #: 3636691')
+expect(textView[5].props.children).toEqual(`${t('prescription.rxNumber')}: 3636691`)
 ```
 
-&#9989; Instead, target rendered text, role, or accessibility label:
+&#9989; Instead, target rendered text, accessibility label, or role:
 
 ```tsx
-expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
-expect(screen.getByLabelText('Prescription number 3636691')).toBeTruthy()
-expect(screen.getByRole('checkbox', { name: 'Prescription 1 of 3', checked: true })).toBeTruthy()
+expect(screen.getByText(`${t('prescription.rxNumber')}: 3636691`)).toBeTruthy()
+expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3636691`)).toBeTruthy()
+expect(
+  screen.getByRole('checkbox', {
+    name: t('prescription.history.orderIdentifier', { idx: 1, total: 3 }),
+    checked: true,
+  }),
+).toBeTruthy()
 ```
 
 ### Why?
-This method reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. Targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions. Finally, this type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output. 
+
+This method reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. Targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions. Finally, this type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output.
 
 ### More information
+
 - React Testing Library's [guiding principles](https://testing-library.com/docs/guiding-principles)
 - [Some thoughts](https://www.boyney.io/blog/2019-05-21-my-experience-moving-from-enzyme-to-react-testing-library) on why this RTL approach is an improvement over Enzyme
 - [The Dangers of Shallow Rendering](https://mskelton.medium.com/the-dangers-of-shallow-rendering-343e48fe5f28)
 
+## Targeting by translated text
+
+&#10060; Avoid using actual strings to target elements:
+
+```tsx
+fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
+```
+
+&#9989; Instead, call the translation function as you do in the component under test:
+
+```tsx
+fireEvent.press(screen.getByRole('tab', { name: t('cernerAlertSM.header') }))
+```
+
+### Why?
+
+Using the translation function reduces test fragility. Minor wording changes won't break the test.
+
 ## Firing events
+
 &#10060; Avoid calling a callback function in a prop to simulate user interaction:
 
 ```tsx
@@ -53,33 +81,39 @@ testInstance.findByType(Pressable).props.onPress()
 &#9989; Instead, fire a press event:
 
 ```tsx
-fireEvent.press(screen.getByText('Cancel'))
+fireEvent.press(screen.getByText(t('cancel')))
 ```
 
 &#9989; Fire a changeText event:
 
 ```tsx
-fireEvent.changeText(screen.getByText('Phone'), '123-456-7890');
+fireEvent.changeText(screen.getByText(t('phone')), '123-456-7890')
 ```
 
 &#9989; Fire a scroll event:
 
 ```tsx
 fireEvent.scroll(screen.getByText('scroll-view'), {
-  nativeEvent: { contentOffset: { y: 200 } }
+  nativeEvent: { contentOffset: { y: 200 } },
 })
 ```
 
 ### Why?
+
 Calling a callback function in a prop only checks that the function runs. It doesn’t test that the element is visible to the user and that it’s wired up correctly. It’s also fragile because refactoring the component might change the props and break the test. Firing an event resolves these concerns, which also apply to text fields and scrolling.
 
 ## Exercising key functionality
-&#10060; Avoid tests that just check large quantities of static props:
+
+&#10060; Avoid tests that just check large quantities of static text:
 
 ```tsx
 expect(textView[6].props.children).toEqual('What’s next')
-expect(textView[7].props.children).toEqual("We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.")
-expect(textView[8].props.children).toEqual('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
+expect(textView[7].props.children).toEqual(
+  "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.",
+)
+expect(textView[8].props.children).toEqual(
+  'If you have questions about the status of your refill, contact your provider or local VA pharmacy.',
+)
 ```
 
 &#9989; Instead, focus on tests that check important functionality:
@@ -87,7 +121,7 @@ expect(textView[8].props.children).toEqual('If you have questions about the stat
 ```tsx
 describe('on click of the "Go to inbox" link', () => {
   it('calls useRouteNavigation and updateSecureMessagingTab', () => {
-    fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' }))
+    fireEvent.press(screen.getByRole('link', { name: t('secureMessaging.goToInbox') }))
     expect(navigate).toHaveBeenCalled()
     expect(updateSecureMessagingTab).toHaveBeenCalled()
   })
@@ -95,29 +129,34 @@ describe('on click of the "Go to inbox" link', () => {
 ```
 
 ### Why?
+
 Each test should add value by serving as a focused warning that something important has failed. Testing that a sequence of TextViews renders certain text doesn't tell us much. It's also fragile because the smallest text change breaks the test. Testing important and/or complex logic is more beneficial because that’s where high-impact regressions typically occur. In addition, tests for complicated logic serve as a form of documentation, letting engineers know how the code is supposed to function.
 
 ### More information
+
 - See #2 of [The 7 Sins of Unit Testing](https://www.testrail.com/blog/the-7-sins-of-unit-testing/) about why more assertions can be worse, not better
 
 ## Testing from the user’s perspective
+
 Consider what the user expects to do and see, then write tests that simulate it. For example, let's say the user expects to press “Select all”, then see two checked checkboxes and relevant text.
 
 &#9989; This test tells the user's story and checks it at the same time:
 
 ```tsx
 it('toggles items when "Select all" is pressed', () => {
-    fireEvent.press(screen.getByText('Select all'))
-    expect(screen.getByRole('checkbox', { name: 'One', checked: true })).toBeTruthy()
-    expect(screen.getByRole('checkbox', { name: 'Two', checked: true })).toBeTruthy()
-    expect(screen.getByText('2/2 selected')).toBeTruthy()
+  fireEvent.press(screen.getByText(t('select.all')))
+  expect(screen.getByRole('checkbox', { name: t('one'), checked: true })).toBeTruthy()
+  expect(screen.getByRole('checkbox', { name: t('two'), checked: true })).toBeTruthy()
+  expect(screen.getByText(t('selectedOutOfTotal', { selected: 2, total: 2 }))).toBeTruthy()
 })
 ```
 
 ### Why?
+
 By taking the user's point of view, user-focused tests help prevent the most damaging regressions, ones which prevent users from completing their desired tasks. But because implementation details aren't baked into the test, engineers retain the flexibility to refactor as needed without causing test failures.
 
 ### More information
+
 - Why it's important to focus on the [end user](https://kentcdodds.com/blog/avoid-the-test-user) and avoid the "test user"
 
 ## Test File Naming
@@ -127,6 +166,7 @@ The test file should live in the same location as its associated component with 
 `ClaimsScreen.tsx` will have a test file named `ClaimsScreen.test.tsx`
 
 ## Running Tests
+
 - Run unit tests with `yarn test`
 - Coverage can be found under `coverage/lcov-report/index.html`
 
@@ -174,12 +214,12 @@ This block of code will mock the entirety of the hooks util file using the origi
 navigateToPaymentMissingSpy = jest.fn()
 
 when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('PaymentMissing')
-      .mockReturnValue(navigateToPaymentMissingSpy)
+  .mockReturnValue(() => {})
+  .calledWith('PaymentMissing')
+  .mockReturnValue(navigateToPaymentMissingSpy)
 ```
 
-This will create another object  `navigateToPaymentMissingSpy` that will be returned if the hook is called with the parameters `'PaymentMissing'`
+This will create another object `navigateToPaymentMissingSpy` that will be returned if the hook is called with the parameters `'PaymentMissing'`
 
 ```tsx
 // Do something that will trigger a navigation to the PaymentMissing screen

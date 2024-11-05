@@ -13,6 +13,8 @@ export type TextAreaProps = {
   onPress?: () => void
   /** prop to remove border */
   noBorder?: boolean
+  /** optional testID */
+  testID?: string
 }
 
 /**
@@ -20,7 +22,7 @@ export type TextAreaProps = {
  *
  * @returns TextView component
  */
-const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
+const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children, testID }) => {
   const theme = useTheme()
 
   const borderProps: BoxProps = noBorder
@@ -53,7 +55,7 @@ const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
   }
 
   return (
-    <Box {...boxProps} {...borderProps}>
+    <Box {...boxProps} {...borderProps} testID={testID}>
       {children}
     </Box>
   )

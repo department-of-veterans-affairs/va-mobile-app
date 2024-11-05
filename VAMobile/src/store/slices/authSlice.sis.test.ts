@@ -82,13 +82,16 @@ const defaultEnvParams = {
 const sampleIdToken = 'TEST_TOKEN'
 const getItemMock = AsyncStorage.getItem as jest.Mock
 
-let mockedAuthResponse: { data: { access_token: string; refresh_token: string; id_token: string } }
+let mockedAuthResponse: {
+  data: { access_token: string; refresh_token: string; device_secret: string; id_token: string }
+}
 
 context('authAction SIS', () => {
   let testAccessToken: string
   let encryptedComponent: string
   let nonce: string
   let testRefreshToken: string
+  let testDeviceSecret: string
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -101,6 +104,7 @@ context('authAction SIS', () => {
       data: {
         access_token: testAccessToken,
         refresh_token: testRefreshToken,
+        device_secret: testDeviceSecret,
         id_token: sampleIdToken,
       },
     }

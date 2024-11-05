@@ -2,11 +2,12 @@ import React, { ReactElement } from 'react'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
-import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
-import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
+import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
 
@@ -83,66 +84,6 @@ export const getUserPhase = (phase: number): number => {
     return 3
   }
   return phase - 3
-}
-
-/** gets the correct date from each item in an event timeline */
-const getItemDate = (item: ClaimEventData): string => {
-  if (item.receivedDate) {
-    return item.receivedDate
-  } else if (item.documents && item.documents.length) {
-    return item.documents[item.documents.length - 1].uploadDate
-  } else if (item.type === 'other_documents_list' && item.uploadDate) {
-    return item.uploadDate
-  }
-
-  return item.date ? item.date : ''
-}
-
-/** checks to see if this is an event that kicks off a phase that is tracked or if it falls in the middle phases
- * that we roll into phase 3
- */
-const isEventOrPrimaryPhase = (event: ClaimEventData): boolean => {
-  if (event.type === 'phase_entered' && event.phase) {
-    return event.phase <= 3 || event.phase >= 7
-  }
-
-  return !!getItemDate(event)
-}
-
-/** takse a string that is in the event timeline as 'phase2' and returns a number to represent the phase */
-const getPhaseNumber = (phase: string): number => {
-  return parseInt(phase.replace('phase', ''), 10)
-}
-
-/** groups claim events by phase */
-export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData => {
-  const phases: { [key: string]: ClaimEventData[] } = {}
-  let activity: ClaimEventData[] = []
-  const phaseEvents = events
-    .map((event) => {
-      if (event.type.startsWith('phase')) {
-        return {
-          type: 'phase_entered',
-          phase: getPhaseNumber(event.type) + 1,
-          date: event.date,
-        } as ClaimEventData
-      }
-      return event
-    })
-    .filter(isEventOrPrimaryPhase)
-  phaseEvents.forEach((event) => {
-    if (event.type.startsWith('phase') && event.phase) {
-      activity.push(event)
-      phases[`${getUserPhase(event.phase)}`] = activity
-      activity = []
-    } else {
-      activity.push(event)
-    }
-  })
-  if (activity.length > 0) {
-    phases[1] = activity
-  }
-  return phases
 }
 
 /**
@@ -304,9 +245,9 @@ export const deletePhoto = (
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
   const indicatorDiameter = fs(30)
   return {
-    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    height: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    width: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 24 ? 24 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -324,7 +265,7 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
   if (useCheckMark) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" preventScaling={true} />
+        <Icon width={20} height={20} name={'Check'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {

@@ -39,7 +39,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     error: claimError,
     refetch: refetchClaim,
     isFetching: loadingClaim,
-  } = useClaim(claimID, undefined, { enabled: !claim })
+  } = useClaim(claimID, { enabled: !claim })
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
@@ -113,7 +113,8 @@ function FileRequest({ navigation, route }: FileRequestProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       title={t('fileRequest.title')}
-      testID="fileRequestPageTestID">
+      testID="fileRequestPageTestID"
+      leftButtonTestID="fileRequestPageBackID">
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (

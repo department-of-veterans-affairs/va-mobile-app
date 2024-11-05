@@ -31,14 +31,13 @@ References:
 * Removing a feature and/or screen
 * Changing the UX of global navigational elements (i.e. tab bar/bottom navigation, top bar, including treatments for back buttons, contextual actions and screen titles)
 
-
 ## IA documentation
 Understanding what’s guiding the app’s current information architecture and make future decisions that are in line with the existing organization, navigation, labeling, and indexing systems.
 
 ### Sitemap/flow diagram 
 A sitemap is a planning tool that visually shows how information will be grouped and labeled, where content will be located, and how a user will move through the app. This adaptation of a standard sitemap includes the system display logic for screens that have variants, key actions (buttons, links), common processes and points where it makes use of native mobile integrations. **This is the source of truth for the app’s IA.** 
 
-<iframe width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FTEEgHdlibzCilCj4LviHVF%2FVA-Mobile-app---Detailed-Sitemap-2.0%3Ftype%3Dwhiteboard%26node-id%3D0%253A1%26t%3DNOXEk15mCNO0XQ5Q-1" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Flagship mobile app sitemap" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FTEEgHdlibzCilCj4LviHVF%2FVA-Mobile-app---Detailed-Sitemap-2.0%3Ftype%3Dwhiteboard%26node-id%3D0%253A1%26t%3DNOXEk15mCNO0XQ5Q-1" allowfullscreen></iframe>
 
 [VA Mobile App - Detailed sitemap 2.0 (FigJam)](https://www.figma.com/file/TEEgHdlibzCilCj4LviHVF/VA-Mobile-app---Detailed-Sitemap-2.0?type=whiteboard&node-id=0%3A1&t=NOXEk15mCNO0XQ5Q-1)
 
@@ -51,16 +50,16 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 * **Home:** The app’s default screen—displays a combined, personalized view of the information (and tasks) most relevant to the individual Veteran from across the VA, plus persistent access to general VA info (ex: contact and location finder) and lesser used features like Profile and Settings.
   * **Profile (Subcategory):** Infrequently updated items like personal information (such as contact information, military information, DOB) that isn’t specific to a single category and app settings.
 * **Health:** All health-related features and statuses.
-  * Features: Appointments, Pharmacy, Medical records, Messaging.
+  * Features: Appointments, Prescriptions, VA vaccine records, Messaging (future: Medical records).
 * **Benefits:** All benefit-related features and statuses that are not health-related.
-  * Features: Disability rating, Claims, Education, VA Letters
-* **[Payments]:** A unified section for managing financial information from across the VA.
-  * Features: Benefit payments, medical copays, bills, travel reimbursements, direct deposit information.
+  * Features: Disability rating, Claims, VA Letters (future: Education)
+* **Payments:** A unified section for managing financial information from across the VA.
+  * Features: VA payment history, direct deposit information (future: Medical copays, Bills, Travel reimbursements).
 
 
 
 ### Adding new items to the app’s Information Architecture
-1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit#) is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
+1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-design/information-architecture/adding-new-features.md) is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
 1. **Always try to find a placement in an existing category first** before proposing a new top-level category for a feature. Confirm new category names and contents with card sort research before adding to the app.
 1. **Within a category, keep the hierarchy as flat as possible** in terms of screens (limit the levels it’s possible to drill down through in order to get to child screens), but without inlcuding too many options on a single screen. 
 1. **If there are many features within a category, group the features and label the groups** at category level before introducing additional levels into the screen hierarchy—this helps avoid cognitive overload.
@@ -72,5 +71,3 @@ The VA Health and Benefits app’s Information Architecture and navigation model
 * [**Phase I:** Two rounds of card sorting](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/information-architecture) (open and closed) with Veterans
 * [**Phase II:** Navigation model design exploration](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture-navigation#phase-ii---navigation-model-exploration--implementation), audit and comparative analysis
 * [**Phase III:** Evaluative testing](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/usability-testing/new%20navigation%20usability) with Veterans, including a usability study of the proposed navigation model and sitemap reflected through a low-fidelity prototype
-
-

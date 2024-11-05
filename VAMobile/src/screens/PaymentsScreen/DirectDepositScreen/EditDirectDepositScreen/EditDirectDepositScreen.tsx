@@ -216,6 +216,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'accountType',
+        confirmTestID: 'accountTypeConfirmID',
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
     },
@@ -241,7 +242,9 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         leftButtonText={t('cancel')}
         rightButtonText={saving ? '' : t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
-        title={saving ? '' : displayTitle}>
+        title={saving ? '' : displayTitle}
+        leftButtonTestID="directDepositBackID"
+        rightButtonTestID="directDepositSaveID">
         {saving ? (
           <LoadingComponent text={t('directDeposit.savingInformation')} />
         ) : (
@@ -250,7 +253,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
               <Box mb={standardMarginBetween}>
                 <AlertWithHaptics
                   variant="error"
-                  header={t('editDirectDeposit.pleaseCheckDDInfo')}
+                  description={t('editDirectDeposit.pleaseCheckDDInfo')}
                   focusOnError={onSaveClicked}
                   scrollViewRef={scrollViewRef}
                 />
@@ -271,7 +274,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
               <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
             </Box>
             <Box mt={condensedMarginBetween}>
-              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+              <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')} testID="directDepositFindTheseNumbersID">
                 <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
               </CollapsibleView>
             </Box>

@@ -24,79 +24,52 @@ function HealthHelp({}: HealthHelpProps) {
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const allCernerFacilities = facilitiesInfo?.length === cernerFacilities.length
-  const multiFacilities = cernerFacilities.length > 1
 
   const bullets: VABulletListText[] = cernerFacilities.map((facility: Facility) => ({
-    variant: 'cernerPanelFacility',
+    variant: 'MobileBody',
     text: facility.name,
-    a11yLabel: facility.name,
+    a11yLabel: a11yLabelVA(facility.name),
   }))
 
-  const multipleFacilitiesBody = (
-    <Box>
-      <TextView variant="cernerPanelHeader" mb={theme.dimensions.standardMarginBetween}>
-        {allCernerFacilities ? t('healthHelp.usesVAHealth.multi.all') : t('healthHelp.usesVAHealth.some')}
-      </TextView>
-      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.standardMarginBetween}>
-        {t('healthHelp.manageHealthCare.multi.both')}
-      </TextView>
-      <VABulletList listOfText={bullets} paragraphSpacing={true} />
-      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.condensedMarginBetween}>
-        {t('healthHelp.goToPortal.multi.both')}
-      </TextView>
-      {allCernerFacilities ? (
-        <></>
-      ) : (
-        <TextView variant="cernerPanelSubtext" my={theme.dimensions.condensedMarginBetween}>
-          {t('healthHelp.canStillUse.some')}
-        </TextView>
-      )}
-    </Box>
-  )
-
-  const singleFacilityBody = (
-    <Box>
-      <TextView variant="cernerPanelHeader" mb={theme.dimensions.standardMarginBetween}>
-        {allCernerFacilities ? t('healthHelp.usesVAHealth.single.all') : t('healthHelp.usesVAHealth.some')}
-      </TextView>
-      <TextView
-        variant="cernerPanelSubtext"
-        mb={theme.dimensions.standardMarginBetween}
-        accessibilityLabel={a11yLabelVA(
-          t('healthHelp.manageHealthCare.single.both.a11yLabel', {
-            facilityName: cernerFacilities[0].name,
-          }),
-        )}>
-        {t('healthHelp.manageHealthCare.single.both')}
-        <TextView variant="cernerPanelFacility">{cernerFacilities[0].name}</TextView>
-        {'?'}
-      </TextView>
-      <TextView variant="cernerPanelSubtext" mb={theme.dimensions.condensedMarginBetween}>
-        {t('healthHelp.goToPortal.single.both')}
-      </TextView>
-      {allCernerFacilities ? (
-        <></>
-      ) : (
-        <TextView variant="cernerPanelSubtext" my={theme.dimensions.condensedMarginBetween}>
-          {t('healthHelp.canStillUse.some')}
-        </TextView>
-      )}
-    </Box>
-  )
   return (
     <LargePanel title={t('healthHelp.title')} rightButtonText={t('close')}>
       <Box
         mx={theme.dimensions.standardMarginBetween}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.formMarginBetween}>
-        {multiFacilities ? multipleFacilitiesBody : singleFacilityBody}
-        <LinkWithAnalytics
-          type={'url'}
-          url={LINK_URL_GO_TO_PATIENT_PORTAL}
-          text={t('goToMyVAHealth')}
-          a11yLabel={a11yLabelVA(t('goToMyVAHealth'))}
-          testID={'goToMyVAHealthTestID'}
-        />
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={a11yLabelVA(t('healthHelp.usesVAHealth'))}
+          mb={theme.dimensions.standardMarginBetween}>
+          {t('healthHelp.usesVAHealth')}
+        </TextView>
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('healthHelp.goToPortal'))}
+          mb={theme.dimensions.condensedMarginBetween}>
+          {t('healthHelp.goToPortal')}
+        </TextView>
+        <VABulletList listOfText={bullets} paragraphSpacing={true} />
+        <Box mb={allCernerFacilities ? undefined : theme.dimensions.standardMarginBetween}>
+          <LinkWithAnalytics
+            type={'url'}
+            url={LINK_URL_GO_TO_PATIENT_PORTAL}
+            text={t('goToMyVAHealth')}
+            a11yLabel={a11yLabelVA(t('goToMyVAHealth'))}
+            testID={'goToMyVAHealthTestID'}
+          />
+        </Box>
+        {allCernerFacilities ? (
+          <></>
+        ) : (
+          <TextView
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('healthHelp.canStillUse'))}
+            my={theme.dimensions.condensedMarginBetween}>
+            {t('healthHelp.canStillUse')}
+          </TextView>
+        )}
       </Box>
     </LargePanel>
   )

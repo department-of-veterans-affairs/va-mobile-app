@@ -11,7 +11,9 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { Events } from 'constants/analytics'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
@@ -74,6 +76,10 @@ export type VAModalPickerProps = {
   showModalByDefault?: boolean
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional TestID for cancel button */
+  cancelTestID?: string
+  /** Option TestID for apply button */
+  confirmTestID?: string
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -94,6 +100,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   confirmBtnText,
   testID,
   showModalByDefault,
+  cancelTestID,
+  confirmTestID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -185,8 +193,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
-          <Box mr={8} ml={16} my={16}>
-            <VAIcon name="Sort" fill="pickerIcon" width={16} height={16} />
+          <Box ml={16} my={12}>
+            <Icon name="UnfoldMore" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
           </Box>
         </Box>
       </Box>
@@ -286,7 +294,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel} {...cancelButtonProps}>
+              <Pressable onPress={onCancel} {...cancelButtonProps} testID={cancelTestID}>
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={4}>
@@ -294,7 +302,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                   {getTranslation(labelKey || '', t)}
                 </TextView>
               </Box>
-              <Pressable onPress={onConfirm} {...confirmButtonProps}>
+              <Pressable onPress={onConfirm} {...confirmButtonProps} testID={confirmTestID}>
                 <TextView {...commonButtonProps}>{confirmLabel}</TextView>
               </Pressable>
             </Box>

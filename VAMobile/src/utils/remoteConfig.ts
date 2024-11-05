@@ -18,7 +18,6 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
-  | 'claimPhaseExpansion'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
@@ -30,13 +29,14 @@ export type FeatureToggleType =
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
   | 'submitEvidenceExpansion'
+  | 'sso'
   | 'testFeature'
+  | 'useOldLinkComponent'
   | 'whatsNewUI'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
-  claimPhaseExpansion: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
@@ -48,14 +48,15 @@ type FeatureToggleValues = {
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
   submitEvidenceExpansion: boolean
+  sso: boolean
   testFeature: boolean
+  useOldLinkComponent: boolean
   whatsNewUI: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   cernerTrueForDemo: false,
-  claimPhaseExpansion: true,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
@@ -66,8 +67,10 @@ export const defaults: FeatureToggleValues = {
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
-  submitEvidenceExpansion: true,
+  submitEvidenceExpansion: false,
+  sso: false,
   testFeature: false,
+  useOldLinkComponent: false,
   whatsNewUI: true,
 }
 

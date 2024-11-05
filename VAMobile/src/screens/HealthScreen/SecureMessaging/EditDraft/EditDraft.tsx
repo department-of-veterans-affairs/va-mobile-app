@@ -315,7 +315,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     menuViewActions.push({
       actionText: t('save'),
       addDivider: true,
-      iconName: 'Folder',
+      iconProps: { name: 'Folder', fill: theme.colors.icon.defaultMenuItem },
       accessibilityLabel: t('secureMessaging.saveDraft'),
       onPress: () => {
         setOnSaveDraftClicked(true)
@@ -326,9 +326,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   menuViewActions.push({
     actionText: t('delete'),
     addDivider: false,
-    iconName: 'Trash',
+    iconProps: { name: 'Delete', fill: theme.colors.icon.error },
     accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
-    iconColor: 'error',
     textColor: 'error',
     onPress: onDeletePressed,
   })
@@ -448,6 +447,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
@@ -666,7 +666,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       menuViewActions={isLoading ? undefined : menuViewActions}
       showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
-      testID="editDraftTestID">
+      testID="editDraftTestID"
+      rightButtonTestID="editDraftMoreID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

@@ -8,12 +8,12 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 
 ### Default
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--default)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=235-771&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Default (with icon)
 
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/link--default-with-icon)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=235-772&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default-with-icon&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/link--default-with-icon&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Additional variants
 * [Attachment](https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?args=&id=link--attachment&viewMode=story)
@@ -66,7 +66,8 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 * When linking Veterans to VA.gov, be sure to include VA.gov in the link text. For example, instead of saying “Learn more about benefits,” it’s better to say “Learn more about benefits on VA.gov”.
 
 ## Accessibility considerations
-* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/link/#accessibility-considerations)
+* For guidance on choosing between a Button or Link, see [additional documentation](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/).
+* For additional guidance, refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/link/#accessibility-considerations)
 
 ## Related
 * [Link - VA Design System](https://design.va.gov/components/link/)

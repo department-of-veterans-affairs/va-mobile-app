@@ -1,7 +1,8 @@
 name: VAHB Mobile App Change Request Form
 description: Use this template to formally request a new feature, enhancement to a feature, discovery, research, analytics request or other ask/change for the VA Mobile App team to evaluate.
 title: "Change Request: [name of change]"
-labels: [ change-request ]
+labels: [ "Epic", "Leads team", "needs-review" ]
+projects: ["department-of-veterans-affairs/823"]
 assignees: [ DonMcCaugheyUSDS, rtwell, Hallm13, kellylein ]
 body:
 - type: input

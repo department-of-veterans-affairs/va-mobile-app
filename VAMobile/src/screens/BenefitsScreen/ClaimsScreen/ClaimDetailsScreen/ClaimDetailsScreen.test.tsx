@@ -30,7 +30,6 @@ context('ClaimDetailsScreen', () => {
     featureFlag: boolean = false,
     claim?: Partial<ClaimData>,
   ): void => {
-    when(featureEnabled).calledWith('claimPhaseExpansion').mockReturnValue(featureFlag)
     when(featureEnabled).calledWith('submitEvidenceExpansion').mockReturnValue(featureFlag)
     let queriesData: QueriesData | undefined
     if (claim) {
@@ -60,7 +59,7 @@ context('ClaimDetailsScreen', () => {
 
   beforeEach(() => {
     when(api.get as jest.Mock)
-      .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+      .calledWith(`/v0/claim/600156928`, {})
       .mockResolvedValue({
         data: {
           ...claimData,
@@ -93,19 +92,7 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
-      await waitFor(() =>
-        expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy(),
-      )
-    })
-
-    it('should display the ClaimDetails component', async () => {
-      renderWithData(ClaimTypeConstants.ACTIVE, false, {
-        ...claimData,
-      })
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-      await waitFor(() => fireEvent.press(screen.getByText('Details')))
-
-      await waitFor(() => expect(screen.getByText('Claim type')).toBeTruthy())
+      await waitFor(() => expect(screen.getByTestId('Step 1 of 8. Claim received. Complete.')).toBeTruthy())
     })
 
     it('should display the Files component', async () => {
@@ -196,7 +183,7 @@ context('ClaimDetailsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {})
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData()

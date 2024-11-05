@@ -42,7 +42,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
-import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimFiles from './ClaimFiles/ClaimFiles'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -57,51 +56,47 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const scrollViewRef = useRef<ScrollView>(null)
   const navigateTo = useRouteNavigation()
-  const controlLabels = [
-    t('claimDetails.status'),
-    featureEnabled('claimPhaseExpansion') ? t('files') : t('claimDetails.details'),
-  ]
+  const controlIDs = ['claimsStatusID', 'claimsFilesID']
+  const controlLabels = [t('claimDetails.status'), t('files')]
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType } = route.params
   const queryClient = useQueryClient()
-  const abortController = new AbortController()
-  const abortSignal = abortController.signal
   const {
     data: claim,
     isFetching: loadingClaim,
     error: claimError,
     refetch: refetchClaim,
-  } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(-1)
 
   const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
 
   useFocusEffect(
     useCallback(() => {
-      setCount(numberOfItemsNeedingAttentionFromVet(attributes?.eventsTimeline || []))
+      if (attributes) {
+        setCount(numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline))
+      }
     }, [attributes]),
   ) //force a rerender due to react query updating data
 
-  const claimPhaseExpansionFlag = featureEnabled('claimPhaseExpansion')
   const submitEvidenceExpansionFlag = featureEnabled('submitEvidenceExpansion')
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
     if (loadingClaim) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
-      abortController.abort()
     }
   })
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
-      registerReviewEvent()
+      registerReviewEvent(true)
       logAnalyticsEvent(
         Events.vama_claim_details_open(
           claimID,
@@ -118,6 +113,16 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       setScrollIsEnabled(false)
     }
   }, [claim, loadingClaim, claimError, claimID, attributes])
+
+  useEffect(() => {
+    if (claimType === ClaimTypeConstants.ACTIVE && claim) {
+      if (count > 0 && !claim.attributes.waiverSubmitted) {
+        logAnalyticsEvent(Events.vama_claim_file_request(claimID))
+      } else if (submitEvidenceExpansionFlag && claim.attributes.open && count >= 0) {
+        logAnalyticsEvent(Events.vama_claim_submit_ev(claimID))
+      }
+    }
+  }, [claimType, submitEvidenceExpansionFlag, count, claim, claimID])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
@@ -177,7 +182,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   }
 
   const submitEvidencePress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
+    logAnalyticsEvent(Events.vama_claim_submit_tap(claimID, attributes.claimType))
     navigateTo('SubmitEvidence', { claimID })
   }
 
@@ -215,37 +220,35 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         </Box>
       )
     }
-    if (claimPhaseExpansionFlag) {
-      if (count > 0 && !claim?.attributes?.waiverSubmitted) {
-        const buttonProps: ButtonProps = {
-          buttonType: ButtonVariants.Primary,
-          label: t('claimPhase.fileRequests.button.label'),
-          a11yHint: t('claimPhase.fileRequests.button.a11yHint'),
-          onPress: fileRequestsPress,
-        }
-        const alertProps: AlertProps = {
-          variant: 'warning',
-          header: t('claimPhase.youHaveFileRequest', { count }),
-          primaryButton: buttonProps,
-          expandable: false,
-        }
-        return (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertWithHaptics {...alertProps} />
-          </Box>
-        )
-      } else if (submitEvidenceExpansionFlag && attributes?.open) {
-        const buttonProps: ButtonProps = {
-          buttonType: ButtonVariants.Primary,
-          label: t('claimDetails.submitEvidence'),
-          onPress: submitEvidencePress,
-        }
-        return (
-          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <Button {...buttonProps} />
-          </Box>
-        )
+    if (count > 0 && !claim?.attributes?.waiverSubmitted) {
+      const buttonProps: ButtonProps = {
+        buttonType: ButtonVariants.Primary,
+        label: t('claimPhase.fileRequests.button.label'),
+        a11yHint: t('claimPhase.fileRequests.button.a11yHint'),
+        onPress: fileRequestsPress,
       }
+      const alertProps: AlertProps = {
+        variant: 'warning',
+        header: t('claimPhase.youHaveFileRequest', { count }),
+        primaryButton: buttonProps,
+        expandable: false,
+      }
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics {...alertProps} />
+        </Box>
+      )
+    } else if (submitEvidenceExpansionFlag && attributes?.open) {
+      const buttonProps: ButtonProps = {
+        buttonType: ButtonVariants.Primary,
+        label: t('claimDetails.submitEvidence'),
+        onPress: submitEvidencePress,
+      }
+      return (
+        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Button {...buttonProps} />
+        </Box>
+      )
     }
     return <></>
   }
@@ -271,7 +274,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
           <LinkWithAnalytics
             type="custom"
             text={t('claimDetails.learnWhatToDoIfDisagreeLink')}
-            testID={t('claimDetails.learnWhatToDoIfDisagreeLink')}
+            testID="claimDetailsLearnWhatToDoIFDisagreeLinkID"
             onPress={whatShouldOnPress}
           />
         </Box>
@@ -283,7 +286,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <LinkWithAnalytics
           type="custom"
           text={t('claimDetails.whyWeCombineLink')}
-          testID={t('claimDetails.whyWeCombineLink')}
+          testID="claimDetailsWhyWeCombineLinkID"
           onPress={whyWeCombineOnPress}
         />
       </Box>
@@ -296,7 +299,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
-      testID="ClaimDetailsScreen">
+      testID="ClaimDetailsScreen"
+      backLabelTestID="claimsDetailsBackTestID">
       {loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />
       ) : claimError ? (
@@ -321,6 +325,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={a11yHints}
+                testIDs={controlIDs}
               />
             </Box>
           </Box>
@@ -333,8 +338,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
                 scrollViewRef={scrollViewRef}
               />
             )}
-            {claim && selectedTab === 1 && !featureEnabled('claimPhaseExpansion') && <ClaimDetails claim={claim} />}
-            {claim && selectedTab === 1 && featureEnabled('claimPhaseExpansion') && <ClaimFiles claim={claim} />}
+            {claim && selectedTab === 1 && <ClaimFiles claim={claim} />}
           </Box>
           {renderActiveClosedClaimStatusHelpLink()}
           <Box mt={theme.dimensions.condensedMarginBetween}>

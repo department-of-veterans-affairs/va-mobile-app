@@ -5,6 +5,7 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
 import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import {
   AppointmentCalendarButton,
@@ -13,11 +14,13 @@ import {
   AppointmentDetailsModality,
   AppointmentJoinSessionPrepareForVideo,
   AppointmentLocation,
+  AppointmentMedicationWording,
   AppointmentPersonalContactInfo,
   AppointmentPreferredModality,
   AppointmentProvider,
   AppointmentReasonAndComment,
   AppointmentTypeOfCare,
+  DEPRECATED_AppointmentCalendarButton,
 } from './SharedComponents'
 
 type VideoHomeAppointmentProps = {
@@ -42,17 +45,27 @@ function VideoHomeAppointment({
         <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentJoinSessionPrepareForVideo attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
-        <AppointmentCalendarButton
-          appointmentID={appointmentID}
-          attributes={attributes}
-          subType={subType}
-          type={type}
-        />
+        {featureEnabled('useOldLinkComponent') ? (
+          <DEPRECATED_AppointmentCalendarButton
+            appointmentID={appointmentID}
+            attributes={attributes}
+            subType={subType}
+            type={type}
+          />
+        ) : (
+          <AppointmentCalendarButton
+            appointmentID={appointmentID}
+            attributes={attributes}
+            subType={subType}
+            type={type}
+          />
+        )}
         <AppointmentTypeOfCare attributes={attributes} subType={subType} type={type} />
         <AppointmentPreferredModality subType={subType} type={type} />
         <AppointmentProvider attributes={attributes} subType={subType} type={type} />
         <AppointmentLocation attributes={attributes} subType={subType} type={type} />
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
+        <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}

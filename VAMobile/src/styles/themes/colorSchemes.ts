@@ -49,6 +49,7 @@ export const lightTheme = {
     linkRow: DSColors.vadsColorGrayWarmLight,
     skeletonLoader: DSColors.vadsColorBaseLighter,
     skeletonLoaderSecondary: DSColors.vadsColorBaseLightest,
+    bullet: colors.grayDark,
   },
   border: {
     aboutYou: DSColors.vadsColorGrayWarmLight,
@@ -170,8 +171,6 @@ export const lightTheme = {
     activityFooter: DSColors.vadsColorBaseDark,
     categoryLandingError: DSColors.vadsColorSecondaryDark,
     categoryLandingWarning: DSColors.vadsColorBase,
-    cernerPanel: colors.base,
-    cernerFooter: DSColors.vadsColorBaseDark,
   },
   buttonBackground: {
     buttonPrimary: colors.primary,
@@ -275,6 +274,7 @@ export const darkTheme = {
     linkRow: colors.darkmodeGrayWarmDark,
     skeletonLoader: DSColors.vadsColorGrayMedium,
     skeletonLoaderSecondary: DSColors.vadsColorBaseLight,
+    bullet: colors.grayLighter,
   },
   border: {
     aboutYou: colors.darkmodeBorder,
@@ -394,8 +394,6 @@ export const darkTheme = {
     activityFooter: DSColors.vadsColorBaseLightest,
     categoryLandingError: DSColors.uswdsSystemColorRedVivid40,
     categoryLandingWarning: DSColors.vadsColorBaseLightest,
-    cernerPanel: DSColors.vadsColorBaseLightest,
-    cernerFooter: DSColors.vadsColorBaseLightest,
   },
   buttonBackground: {
     buttonPrimary: colors.primaryDarker2,

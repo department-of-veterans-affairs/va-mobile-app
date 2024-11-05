@@ -51,7 +51,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [appointment, pendingAppointment, attributes])
 
@@ -75,7 +75,11 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           : AppointmentDetailsSubTypeConstants.Past
 
   return (
-    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+    <FeatureLandingTemplate
+      testID="PastApptDetailsTestID"
+      backLabel={t('appointments')}
+      backLabelOnPress={navigation.goBack}
+      title={t('details')}>
       {isPhoneAppointment ? (
         <PhoneAppointment
           appointmentID={appointment.id}

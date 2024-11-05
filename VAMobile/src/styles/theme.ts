@@ -85,8 +85,6 @@ export type VATextColors = {
   activityFooter: string
   categoryLandingError: string
   categoryLandingWarning: string
-  cernerPanel: string
-  cernerFooter: string
 }
 
 export type VAIconColors = {
@@ -172,10 +170,6 @@ export type VATypographyThemeVariants = {
   VeteranStatusBranch: string
   VeteranStatusProof: string
   webviewTitle: string
-  cernerPanelSubtext: string
-  cernerPanelHeader: string
-  cernerPanelFacility: string
-  cernerFooterText: string
   MobileFooterLink: string
 }
 
@@ -222,6 +216,7 @@ export type VABackgroundColors = {
   linkRow: string
   skeletonLoader: string
   skeletonLoaderSecondary: string
+  bullet: string
 }
 
 export type VABorderColors = {
@@ -348,8 +343,6 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
-    cernerPanelSubtext: VAFontSizes
-    cernerPanelHeader: VAFontSizes
     FooterText: VAFontSizes
   }
   mode: ColorSchemeTypes

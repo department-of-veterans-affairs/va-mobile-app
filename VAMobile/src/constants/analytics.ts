@@ -6,15 +6,6 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  vama_9385_api_cType: (endpoint: string, contentType: string): Event => {
-    return {
-      name: 'vama_9385_api_cType',
-      params: {
-        endpoint: endpoint,
-        contentType: contentType,
-      },
-    }
-  },
   vama_accordion_click: (section: string, isOpened: boolean): Event => {
     return {
       name: 'vama_accordion_click',
@@ -325,6 +316,23 @@ export const Events = {
         claim_type,
         claim_step,
         claim_submitted_date,
+      },
+    }
+  },
+  vama_claim_submit_ev: (claim_id: string): Event => {
+    return {
+      name: 'vama_claim_submit_ev',
+      params: {
+        claim_id,
+      },
+    }
+  },
+  vama_claim_submit_tap: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_claim_submit_tap',
+      params: {
+        claim_id,
+        claim_type,
       },
     }
   },
@@ -1080,6 +1088,11 @@ export const Events = {
       name: 'vama_sm_nonurgent',
     }
   },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
+    }
+  },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {
     return {
       name: 'vama_sm_open',
@@ -1117,6 +1130,14 @@ export const Events = {
       name: 'vama_snackbar_null',
       params: {
         location,
+      },
+    }
+  },
+  vama_sso_cookie_received: (received: boolean): Event => {
+    return {
+      name: 'vama_sso_cookie_received',
+      params: {
+        received,
       },
     }
   },
@@ -1174,6 +1195,14 @@ export const Events = {
       name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
+      },
+    }
+  },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
       },
     }
   },
