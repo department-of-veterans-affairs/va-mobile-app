@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'lodash'
 
+import queryClient from 'api/queryClient'
 import { Box, FeatureLandingTemplate, SelectorType, TextArea, TextView, VASelector, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -385,6 +386,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
   }, [clearData, dispatch])
 
   const saveErrors = () => {
+    queryClient.clear()
     dispatch(dispatchUpdateErrors(temporaryErrors))
   }
 
