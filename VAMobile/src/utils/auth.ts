@@ -218,13 +218,6 @@ export const getCodeVerifier = async (): Promise<string | null> => {
  */
 
 export const checkFirstTimeLogin = async (): Promise<boolean> => {
-  // On the first sign in, clear any stored credentials from previous installs
-  // In integration tests this will change the behavior and make it inconsistent across runs so return false
-  if (IS_TEST) {
-    return false
-  }
-  await clearStoredAuthCreds()
-
   let isFirstLogin = true
   // if we need to 'retrigger' onboarding for existing users in the future we should just increment
   // the AsyncStorage 'completed key' with a #.
@@ -237,8 +230,13 @@ export const checkFirstTimeLogin = async (): Promise<boolean> => {
     console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
     isFirstLogin = !firstLoginCompletedVal
   }
-
-  return isFirstLogin
+  // On the first sign in, clear any stored credentials from previous installs
+  // In integration tests this will change the behavior and make it inconsistent across runs so return false
+  if (isFirstLogin && !IS_TEST) {
+    await clearStoredAuthCreds()
+    return true
+  }
+  return false
 }
 
 /**
