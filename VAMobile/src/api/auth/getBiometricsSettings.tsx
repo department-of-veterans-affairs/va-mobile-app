@@ -13,7 +13,6 @@ const getBiometricsSettings = async (): Promise<UserBiometricsSettings> => {
   const biometricsPreferred = await isBiometricsPreferred()
   return {
     canStoreWithBiometric: !!supportedBiometric,
-    displayBiometricsPreferenceScreen: true,
     shouldStoreWithBiometric: biometricsPreferred,
     supportedBiometric: supportedBiometric,
   }

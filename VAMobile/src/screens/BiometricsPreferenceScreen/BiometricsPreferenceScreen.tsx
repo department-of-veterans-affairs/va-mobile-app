@@ -6,21 +6,22 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { useBiometricsSettings } from 'api/auth'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'utils/auth'
+import { dispatchUpdateDisplayBiometricsPreferenceScreen } from 'store/slices/authSlice'
+import { setBiometricsPreference } from 'utils/auth'
 import {
   getSupportedBiometricA11yLabel,
   getSupportedBiometricText,
   getSupportedBiometricTranslationTag,
   getTranslation,
 } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
 function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
+  const dispatch = useAppDispatch()
   const { data: userBiometricSettings } = useBiometricsSettings()
   const supportedBiometric = userBiometricSettings?.supportedBiometric
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
@@ -31,12 +32,12 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   )
 
   const onSkip = (): void => {
-    setDisplayBiometricsPreferenceScreen(false)
+    dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(false))
   }
 
   const onUseBiometrics = (): void => {
     setBiometricsPreference(true)
-    setDisplayBiometricsPreferenceScreen(false)
+    dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(false))
   }
 
   return (

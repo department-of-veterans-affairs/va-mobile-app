@@ -19,6 +19,7 @@ import { RootState } from 'store'
 import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
+import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -77,6 +78,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
   return configureStore({
     reducer: {
       accessibility: accessabilityReducer as any,
+      auth: authReducer as any,
       demo: demoReducer as any,
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
@@ -206,14 +208,9 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
     })
     queryClient.setQueryData(authKeys.settings, {
       firstTimeLogin: false,
-      loading: false,
-      loggedIn: false,
-      loggingOut: false,
-      syncing: false,
     } as UserAuthSettings)
     queryClient.setQueryData(authKeys.biometrics, {
       canStoreWithBiometric: true,
-      displayBiometricsPreferenceScreen: true,
       shouldStoreWithBiometric: true,
       supportedBiometric: '',
     } as UserBiometricsSettings)

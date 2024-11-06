@@ -12,10 +12,6 @@ const getAuthSettings = async (): Promise<UserAuthSettings> => {
   const firstTimeLogin = await checkFirstTimeLogin()
   return {
     firstTimeLogin: firstTimeLogin,
-    loading: false,
-    loggedIn: false,
-    loggingOut: false,
-    syncing: false,
   }
 }
 

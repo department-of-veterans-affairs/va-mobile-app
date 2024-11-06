@@ -57,7 +57,7 @@ import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformati
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
-import { AnalyticsState } from 'store/slices'
+import { AnalyticsState, AuthState } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -211,6 +211,9 @@ export function AuthGuard() {
   const { data: userBiometricSettings, isLoading: initializingBiometrics } = useBiometricsSettings()
   const initializing = initializingAuth || initializingBiometrics
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
+  const { loggedIn, syncing, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>(
+    (state) => state.auth,
+  )
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -308,10 +311,10 @@ export function AuthGuard() {
       },
     }
     console.debug('AuthGuard: initializing')
-    if (userAuthSettings?.loggedIn && tappedForegroundNotification) {
+    if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
-    } else if (!userAuthSettings?.loggedIn) {
+    } else if (loggedIn) {
       initializeAuth(() => {
         refreshAccessToken(getAccessToken() || '', mutateOptions)
       })
@@ -331,7 +334,7 @@ export function AuthGuard() {
       }
     }
   }, [
-    userAuthSettings?.loggedIn,
+    loggedIn,
     tappedForegroundNotification,
     setTappedForegroundNotification,
     refreshAccessToken,
@@ -384,10 +387,10 @@ export function AuthGuard() {
       </Stack.Navigator>
     )
   } else if (
-    userAuthSettings?.syncing &&
+    syncing &&
     userAuthSettings?.firstTimeLogin &&
     userBiometricSettings?.canStoreWithBiometric &&
-    userBiometricSettings?.displayBiometricsPreferenceScreen
+    displayBiometricsPreferenceScreen
   ) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
@@ -398,17 +401,17 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
-  } else if (userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn) {
+  } else if (userAuthSettings?.firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
-  } else if (userAuthSettings?.syncing) {
+  } else if (syncing) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
       </Stack.Navigator>
     )
-  } else if (userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn) {
+  } else if (userAuthSettings?.firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
-  } else if (!userAuthSettings?.firstTimeLogin && userAuthSettings?.loggedIn && requestNotificationPreferenceScreen) {
+  } else if (!userAuthSettings?.firstTimeLogin && loggedIn && requestNotificationPreferenceScreen) {
     content = (
       <Stack.Navigator>
         <Stack.Screen
@@ -418,7 +421,7 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
-  } else if (userAuthSettings?.loggedIn) {
+  } else if (loggedIn) {
     content = (
       <>
         <AuthedApp />

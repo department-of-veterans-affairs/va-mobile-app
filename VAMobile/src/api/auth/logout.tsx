@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { UserAuthSettings } from 'api/types'
 import { RootState } from 'store'
 import * as api from 'store/api'
+import { dispatchUpdateLoggingOut, dispatchUpdateSyncing } from 'store/slices'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { clearStoredAuthCreds, finishInitialize, retrieveRefreshToken } from 'utils/auth'
@@ -47,12 +48,8 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout,
     onMutate: async () => {
-      const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-      queryClient.setQueryData(authKeys.settings, {
-        ...userSettings,
-        loggingOut: true,
-        syncing: true,
-      })
+      dispatch(dispatchUpdateLoggingOut(true))
+      dispatch(dispatchUpdateSyncing(true))
       await clearCookies()
       if (demoMode) {
         dispatch(updateDemoMode(false, true))
@@ -62,7 +59,7 @@ export const useLogout = () => {
       await clearStoredAuthCreds()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
-      await finishInitialize(false)
+      await finishInitialize(dispatch, false)
       queryClient.clear()
     },
     onError: (error) => {

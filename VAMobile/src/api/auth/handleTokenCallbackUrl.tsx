@@ -6,6 +6,7 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
+import { useAppDispatch } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { usePostLoggedIn } from './postLoggedIn'
@@ -36,16 +37,17 @@ const handleTokenCallbackUrl = async (handleTokenCallbackParams: handleTokenCall
  */
 export const useHandleTokenCallbackUrl = () => {
   const { mutate: postLoggedIn } = usePostLoggedIn()
+  const dispatch = useAppDispatch()
   return useMutation({
     mutationFn: handleTokenCallbackUrl,
     onSettled: () => {
       logAnalyticsEvent(Events.vama_auth_completed())
-      loginStart(true)
+      loginStart(dispatch, true)
       clearCookies()
     },
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
-      await loginFinish(false, authCredentials)
+      await loginFinish(dispatch, false, authCredentials)
       postLoggedIn()
     },
     onError: (error) => {
@@ -54,7 +56,7 @@ export const useHandleTokenCallbackUrl = () => {
         if (error.status) {
           logAnalyticsEvent(Events.vama_login_token_fetch(error))
         }
-        loginFinish(true)
+        loginFinish(dispatch, true)
       }
     },
   })

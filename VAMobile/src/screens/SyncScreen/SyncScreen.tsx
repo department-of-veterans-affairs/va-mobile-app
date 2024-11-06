@@ -20,12 +20,12 @@ import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
+import { ErrorsState, checkForDowntimeErrors, dispatchUpdateSyncing } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
-import { completeSync, loginFinish } from 'utils/auth'
+import { loginFinish } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
@@ -80,7 +80,7 @@ function SyncScreen({}: SyncScreenProps) {
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
-      loginFinish(false)
+      loginFinish(dispatch, false)
     }
   }, [dispatch, demoMode, loggedIn, queryClient])
 
@@ -96,10 +96,20 @@ function SyncScreen({}: SyncScreenProps) {
     }
 
     if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
-      completeSync()
+      dispatch(dispatchUpdateSyncing(false))
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
-  }, [loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, queryClient, ENVIRONMENT])
+  }, [
+    loggedIn,
+    loggingOut,
+    downtimeWindowsFetched,
+    authorizedServicesFetched,
+    t,
+    syncing,
+    queryClient,
+    ENVIRONMENT,
+    dispatch,
+  ])
 
   return (
     <VAScrollView contentContainerStyle={splashStyles} removeInsets={true}>

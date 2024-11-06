@@ -21,7 +21,9 @@ import {
 } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
+import store, { AppDispatch } from 'store'
 import * as api from 'store/api'
+import { dispatchUpdateLoading, dispatchUpdateLoggedIn, dispatchUpdateSyncing } from 'store/slices'
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
@@ -270,23 +272,11 @@ export const debugResetFirstTimeLogin = async (logout: UseMutateFunction<Respons
   queryClient.setQueryData(authKeys.settings, { ...userSettings, firstTimeLogin: true })
 }
 
-/**
- * Sets the flag used to determine if the biometrics preference screen should be displayed
- */
-export const setDisplayBiometricsPreferenceScreen = (value: boolean) => {
-  const userSettings = queryClient.getQueryData(authKeys.biometrics) as UserBiometricsSettings
-  queryClient.setQueryData(authKeys.biometrics, { ...userSettings, displayBiometricsPreferenceScreen: value })
-}
-
-/**
- * Signal the sync process is completed
- */
-export const completeSync = () => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  queryClient.setQueryData(authKeys.settings, { ...userSettings, syncing: false })
-}
-
-export const finishInitialize = async (loggedIn: boolean, authCredentials?: AuthCredentialData) => {
+export const finishInitialize = async (
+  dispatch: AppDispatch,
+  loggedIn: boolean,
+  authCredentials?: AuthCredentialData,
+) => {
   // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
   if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
     await crashlytics().setCrashlyticsCollectionEnabled(false)
@@ -296,31 +286,31 @@ export const finishInitialize = async (loggedIn: boolean, authCredentials?: Auth
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
-    loggedIn: loggedIn,
-    syncing: userSettings?.syncing && loggedIn,
     authCredentials: authCredentials,
   })
+  dispatch(dispatchUpdateLoggedIn(loggedIn))
+  dispatch(dispatchUpdateSyncing(loggedIn && store.getState().auth.syncing))
 }
 
-export const loginStart = async (syncing: boolean) => {
+export const loginStart = async (dispatch: AppDispatch, syncing: boolean) => {
   await logAnalyticsEvent(Events.vama_login_start(true, false))
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
-    loading: true,
-    syncing: syncing,
   })
+  dispatch(dispatchUpdateLoading(true))
+  dispatch(dispatchUpdateSyncing(syncing))
 }
 
-export const loginFinish = async (isError: boolean, authCredentials?: AuthCredentialData) => {
+export const loginFinish = async (dispatch: AppDispatch, isError: boolean, authCredentials?: AuthCredentialData) => {
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
     authCredentials: authCredentials,
-    loading: isError,
-    loggedIn: !isError,
-    syncing: userSettings?.syncing && !isError,
   })
+  dispatch(dispatchUpdateLoading(isError))
+  dispatch(dispatchUpdateLoggedIn(!isError))
+  dispatch(dispatchUpdateSyncing(store.getState().auth.syncing && !isError))
 }
 
 export const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
@@ -346,12 +336,12 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (refreshAccessToken: () => void) => {
+export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-    await finishInitialize(false)
-    await startBiometricsLogin(refreshAccessToken)
+    await finishInitialize(dispatch, false)
+    await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
@@ -359,14 +349,14 @@ export const initializeAuth = async (refreshAccessToken: () => void) => {
       await refreshAccessToken()
     } else {
       await clearStoredAuthCreds()
-      await finishInitialize(false)
+      await finishInitialize(dispatch, false)
     }
   }
 }
 
-const startBiometricsLogin = async (refreshAccessToken: () => void) => {
-  const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
-  if (userSettings.loading) {
+const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+  const loading = store.getState().auth.loading
+  if (loading) {
     return
   }
   await logAnalyticsEvent(Events.vama_login_start(true, true))
@@ -374,10 +364,10 @@ const startBiometricsLogin = async (refreshAccessToken: () => void) => {
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
-      loginStart(true)
+      loginStart(dispatch, true)
       await refreshAccessToken()
     } else {
-      await finishInitialize(false)
+      await finishInitialize(dispatch, false)
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
