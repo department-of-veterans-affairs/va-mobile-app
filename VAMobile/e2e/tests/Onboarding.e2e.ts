@@ -6,6 +6,7 @@ export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',
   DONE_NEXT_BUTTON_ID: 'onboardingDoneNextButtonID',
   SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
+  NOTIFICATIONS_PAGE_HEADER: 'Stay updated with app notifications',
 }
 
 beforeAll(async () => {
@@ -71,20 +72,25 @@ describe('Onboarding Screen', () => {
     await expect(element(by.text('Welcome, Kimberly'))).toExist()
   })
 
-  it('verify the home page is displayed after tapping done', async () => {
+  it('verify the notifications page is displayed after tapping done', async () => {
     await element(by.id(OnboardingE2eIdConstants.DONE_NEXT_BUTTON_ID)).tap()
     await element(by.id(OnboardingE2eIdConstants.DONE_NEXT_BUTTON_ID)).tap()
     await element(by.id(OnboardingE2eIdConstants.DONE_NEXT_BUTTON_ID)).tap()
     await element(by.id(OnboardingE2eIdConstants.DONE_NEXT_BUTTON_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
+    await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
   })
 
-  it('verify the home page is displayed after skipping', async () => {
+  it('verify the notifications page is displayed after skipping', async () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode(false)
     await element(by.id(OnboardingE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
+	await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
+  })
+  
+  it('verify the home page is displayed after tapping turn on notifications', async () => {
+	await element(by.text('Turn on notifications').tap()
     await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
 })
