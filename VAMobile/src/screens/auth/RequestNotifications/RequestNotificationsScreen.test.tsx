@@ -8,40 +8,9 @@ import { context, render } from 'testUtils'
 
 import RequestNotificationsScreen from './RequestNotificationsScreen'
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    completeRequestNotifications: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    setNotificationsPreferenceScreen: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    setRequestNotifications: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 context('BiometricsPreferenceScreen', () => {
   const initializeTestInstance = () => {
-    render(<RequestNotificationsScreen />, {
-      preloadedState: {
-        auth: {
-          ...InitialState.auth,
-        },
-      },
-    })
+    render(<RequestNotificationsScreen />)
   }
 
   beforeEach(() => {

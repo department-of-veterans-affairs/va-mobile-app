@@ -8,7 +8,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { Box, TextView, VAScrollView } from 'components'
 import { useNotificationContext } from 'components/NotificationManager'
 import { NAMESPACE } from 'constants/namespaces'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
@@ -18,7 +18,6 @@ export type SyncScreenProps = Record<string, unknown>
 function RequestNotificationsScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const { setRequestNotifications, setRequestNotificationPreferenceScreen } = useNotificationContext()
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onSkip = (): void => {
