@@ -28,6 +28,7 @@ function RefillTag({ status }: RefillTagProps) {
     labelType: getTagTypeForStatus(status),
     onPress: () => navigateTo('StatusDefinition', { display: statusText, value: status }),
     a11yHint: t('prescription.history.a11yHint.status'),
+    a11yRole: 'link',
   }
 
   return (
