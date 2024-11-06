@@ -328,8 +328,28 @@ export function AuthGuard() {
     logCampaignAnalytics()
   }, [])
 
+  const [appInactive, setAppInactive] = useState(AppState.currentState !== 'active')
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (isIOS()) {
+        setAppInactive(state !== 'active')
+      }
+      return (): void => sub?.remove()
+    })
+  }, [])
+
   let content
-  if (initializing || loadingRemoteConfig) {
+  if (appInactive) {
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }}
+        />
+      </Stack.Navigator>
+    )
+  } else if (initializing || loadingRemoteConfig) {
     content = (
       <Stack.Navigator>
         <Stack.Screen
