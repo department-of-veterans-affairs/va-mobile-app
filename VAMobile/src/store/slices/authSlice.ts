@@ -313,9 +313,10 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   if (saveWithBiometrics) {
     // user opted to store with biometrics
-    const options: Keychain.SetOptions = {
+    const options: Keychain.Options = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+      authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
     }
     console.debug('saveRefreshToken:', options)
@@ -329,7 +330,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     // In development environment, allow saving refresh token/unlock without biometrics
   } else if (__DEV__) {
     console.debug('saveRefreshToken: saving non biometric protected')
-    const options: Keychain.SetOptions = {
+    const options: Keychain.Options = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
@@ -356,7 +357,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  */
 const storeRefreshToken = async (
   refreshToken: string,
-  options: Keychain.SetOptions,
+  options: Keychain.Options,
   storageType: AUTH_STORAGE_TYPE,
 ): Promise<void> => {
   const splitToken = refreshToken.split('.')

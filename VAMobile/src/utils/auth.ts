@@ -58,7 +58,7 @@ export const fetchSSOCookies = async () => {
  */
 export const storeDeviceSecret = async (deviceSecret: string) => {
   try {
-    const options: Keychain.SetOptions = {
+    const options: Keychain.Options = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
     }
