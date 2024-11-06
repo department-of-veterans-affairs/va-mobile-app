@@ -14,19 +14,20 @@ context('SyncScreen', () => {
       {
         queryKey: authKeys.settings,
         data: {
-          canStoreWithBiometric: true,
-          displayBiometricsPreferenceScreen: true,
           firstTimeLogin: false,
-          loading: false,
-          loggedIn: loggedIn,
-          loggingOut: loggingOut,
-          shouldStoreWithBiometric: true,
-          supportedBiometric: 'Face',
-          syncing: syncing,
         },
       },
     ]
-    render(<SyncScreen />, { queriesData })
+    render(<SyncScreen />, {
+      preloadedState: {
+        auth: {
+          loggedIn: loggedIn,
+          loggingOut: loggingOut,
+          syncing: syncing,
+        },
+      },
+      queriesData: queriesData,
+    })
   }
 
   beforeEach(() => {

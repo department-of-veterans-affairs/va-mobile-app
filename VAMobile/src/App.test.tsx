@@ -49,10 +49,6 @@ context('App', () => {
           queryKey: authKeys.settings,
           data: {
             firstTimeLogin: false,
-            loading: false,
-            loggedIn: false,
-            loggingOut: false,
-            syncing: false,
           },
         },
         {
@@ -69,6 +65,12 @@ context('App', () => {
         preloadedState: {
           settings: {
             loadingRemoteConfig: false,
+          },
+          auth: {
+            loading: false,
+            loggedIn: false,
+            loggingOut: false,
+            syncing: false,
           },
         },
         queriesData: queriesData,
@@ -87,10 +89,6 @@ context('App', () => {
           queryKey: authKeys.settings,
           data: {
             firstTimeLogin: false,
-            loading: false,
-            loggedIn: true,
-            loggingOut: false,
-            syncing: false,
           },
         },
         {
@@ -107,6 +105,12 @@ context('App', () => {
         preloadedState: {
           settings: {
             remoteConfigActivated: true,
+          },
+          auth: {
+            loading: false,
+            loggedIn: true,
+            loggingOut: false,
+            syncing: false,
           },
         },
         queriesData: queriesData,
