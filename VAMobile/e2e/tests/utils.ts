@@ -27,6 +27,7 @@ export const CommonE2eIdConstants = {
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
+  TURN_ON_NOTIFICATIONS_TEXT: 'Turn on notifications',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
@@ -136,6 +137,13 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
     if (ifCarouselSkipBtnExist) {
       await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     }
+  }
+  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+    true,
+  )
+  if (turnOnNotificationsBtnExist) {
+    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
   }
 }
 

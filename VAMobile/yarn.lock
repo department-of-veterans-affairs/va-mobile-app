@@ -2545,10 +2545,10 @@
   dependencies:
     "@tanstack/query-core" "5.59.13"
 
-"@testing-library/jest-dom@^6.6.2":
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.6.2.tgz#8186aa9a07263adef9cc5a59a4772db8c31f4a5b"
-  integrity sha512-P6GJD4yqc9jZLbe98j/EkyQDTPgqftohZF5FBkHY5BUERZmcf4HeO2k0XaefEg329ux2p21i1A1DmyQ1kKw2Jw==
+"@testing-library/jest-dom@^6.6.3":
+  version "6.6.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.6.3.tgz#26ba906cf928c0f8172e182c6fe214eb4f9f2bd2"
+  integrity sha512-IteBhl4XqYNkM54f4ejhLRJiZNqcSCoXUOG2CPK7qbD322KjQozM4kHQOfkG2oln9b9HTYqs+Sae8vBATubxxA==
   dependencies:
     "@adobe/css-tools" "^4.4.0"
     aria-query "^5.0.0"
@@ -2558,10 +2558,10 @@
     lodash "^4.17.21"
     redent "^3.0.0"
 
-"@testing-library/react-native@^12.8.0":
-  version "12.8.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.8.0.tgz#696e9ed09666c9cecd460160d47a52bfed28da09"
-  integrity sha512-peMIg+tKWGiR2GV4V7Zw74Nnn97Goqws1DrZleyj9NQXbK13FZIKxRBNM4tf1z4rAS8KE9nJ2nLXo0HFRBcqpw==
+"@testing-library/react-native@^12.8.1":
+  version "12.8.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.8.1.tgz#833c73a825aa87b9127717a44d4aeee44b59a963"
+  integrity sha512-/7PIFCpeqAD3j7nzKQhZtm1T6RR/O/tB1We7JHtYP5RpTBj8rPitEpt6xGrD8R0ymOh+DxDKK7Zovfv5uDSRWg==
   dependencies:
     jest-matcher-utils "^29.7.0"
     pretty-format "^29.7.0"
