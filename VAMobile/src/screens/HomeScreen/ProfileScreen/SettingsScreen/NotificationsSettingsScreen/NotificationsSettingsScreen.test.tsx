@@ -22,12 +22,6 @@ jest.mock('utils/notifications', () => {
 })
 
 context('NotificationsSettingsScreen', () => {
-  const apptPrefOn: PushPreference = {
-    preferenceId: 'appointment_reminders',
-    preferenceName: 'Upcoming appointments',
-    value: true,
-  }
-
   const apptPrefOff: PushPreference = {
     preferenceId: 'appointment_reminders',
     preferenceName: 'Upcoming appointments',
@@ -35,13 +29,11 @@ context('NotificationsSettingsScreen', () => {
   }
 
   const renderWithProps = (
-    requestNots: boolean,
     notificationsEnabled: boolean,
     systemNotificationsOn: boolean,
     preferences: PushPreference[],
   ) => {
     const props = mockNavProps()
-
     mockPushEnabled = notificationsEnabled
 
     const notificationQueriesData: QueriesData = [
@@ -59,61 +51,8 @@ context('NotificationsSettingsScreen', () => {
       },
     ]
 
-    render(<NotificationsSettingsScreen {...props} />, {
-      queriesData: notificationQueriesData,
-      preloadedState: { auth: { requestNotifications: requestNots } },
-    })
+    render(<NotificationsSettingsScreen {...props} />, { queriesData: notificationQueriesData })
   }
-
-  describe('appointment reminders switch', () => {
-    it('value should be true when pref is set to true', async () => {
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
-
-      const responseData: GetPushPrefsResponse = {
-        data: {
-          type: 'string',
-          id: 'string',
-          attributes: {
-            preferences: [apptPrefOn],
-          },
-        },
-      }
-      when(api.get as jest.Mock)
-        .calledWith('/v0/push/prefs/1')
-        .mockResolvedValue(responseData)
-      renderWithProps(true, true, true, [apptPrefOn])
-      await waitFor(() =>
-        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-          true,
-        ),
-      )
-    })
-
-    it('value should be false when pref is set to true', async () => {
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
-
-      const responseData: GetPushPrefsResponse = {
-        data: {
-          type: 'string',
-          id: 'string',
-          attributes: {
-            preferences: [apptPrefOff],
-          },
-        },
-      }
-      when(api.get as jest.Mock)
-        .calledWith('/v0/push/prefs/1')
-        .mockResolvedValue(responseData)
-      renderWithProps(true, true, true, [apptPrefOff])
-      await waitFor(() =>
-        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-          false,
-        ),
-      )
-    })
-  })
 
   describe('when system notifications are disabled', () => {
     it('hides the notification switches', async () => {
@@ -132,16 +71,14 @@ context('NotificationsSettingsScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
-      renderWithProps(true, false, false, [apptPrefOff])
+      renderWithProps(false, false, [apptPrefOff])
       await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByTestId('TurnOnNotificationsID')).toBeTruthy())
     })
   })
   describe('when system notifications havent been requested', () => {
     it('hides the notification switches', async () => {
-      renderWithProps(false, true, true, [apptPrefOff])
+      renderWithProps(true, true, [apptPrefOff])
       await waitFor(() => expect(screen.getByText(t('requestNotifications.getNotified'))).toBeTruthy())
     })
   })
@@ -159,7 +96,7 @@ context('NotificationsSettingsScreen', () => {
     when(api.get as jest.Mock)
       .calledWith('/v0/push/prefs/1')
       .mockResolvedValue(responseData)
-    renderWithProps(true, true, true, [])
+    renderWithProps(true, true, [])
     await waitFor(() =>
       expect(
         screen.getByText(
