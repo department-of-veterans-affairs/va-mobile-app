@@ -337,8 +337,10 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
 }
 
 export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+  if (store.getState().demo.demoMode) {
+    return
+  }
   const pType = await getAuthLoginPromptType()
-
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
     await startBiometricsLogin(dispatch, refreshAccessToken)
