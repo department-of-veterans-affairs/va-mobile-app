@@ -39,6 +39,7 @@ jobs:
         uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/update_release_issue.md
+          assignees: ${{ env.ASSIGNEES }}
         env:
           versionNumber: ${{ env.VERSION }}
           qaDueDate: ${{env.QA_DUE_DATE}}
@@ -46,6 +47,6 @@ jobs:
           vaDueDate: ${{env.VA_DUE_DATE}}
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
-          assignees: ${{ env.ASSIGNEES }}
+          ASSIGNEES: $ASSIGNEES
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
