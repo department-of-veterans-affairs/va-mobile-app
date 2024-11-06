@@ -24,10 +24,11 @@ All content throughout the app is clear and direct to ensure that users understa
 
 ### Go beyond guideline standards
 
-The VA Mobile app targets WCAG 2.2 Level AA and Level AAA success criteria and section 508 guidelines. For more information, see the following resources:
+The VA Mobile app targets WCAG 2.2 Level AA and Level AAA success criteria and section 508 guidelines. We also reference MCAG (Mobile Content Accessiblity Guidelines), when applicable. For more information, see the following resources:
 
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - [508 guidelines](https://www.access-board.gov/ict/#508-chapter-1-application-and-administration)
+- [MCAG (Mobile Content Accessibility Guidelines)](https://getevinced.github.io/mcag/)
 
 
 ### Comprehensive disability support
