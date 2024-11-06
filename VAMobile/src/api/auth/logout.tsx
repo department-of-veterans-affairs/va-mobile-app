@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { UserAuthSettings } from 'api/types'
 import { RootState } from 'store'
 import * as api from 'store/api'
 import { dispatchUpdateLoggingOut, dispatchUpdateSyncing } from 'store/slices'
@@ -13,8 +12,6 @@ import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { useAppDispatch } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
-
-import { authKeys } from './queryKeys'
 
 const { AUTH_SIS_REVOKE_URL } = getEnv()
 
