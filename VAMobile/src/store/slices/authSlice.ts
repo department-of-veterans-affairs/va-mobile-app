@@ -639,7 +639,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
     refreshToken = await retrieveRefreshToken()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    Alert.alert('Biometrics error', err)
+    Alert.alert('Biometrics error', JSON.stringify(err))
     if (isAndroid()) {
       if (err?.message?.indexOf('Cancel') > -1) {
         // cancel
