@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAppointments } from 'api/appointments'
-import { useAuthSettings } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
@@ -20,7 +19,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ErrorsState, checkForDowntimeErrors, dispatchUpdateSyncing } from 'store/slices'
+import { AuthState, ErrorsState, checkForDowntimeErrors, dispatchUpdateSyncing } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
@@ -41,10 +40,7 @@ function SyncScreen({}: SyncScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
   const queryClient = useQueryClient()
-  const { data: userAuthSettings } = useAuthSettings()
-  const loggedIn = userAuthSettings?.loggedIn
-  const loggingOut = userAuthSettings?.loggingOut
-  const syncing = userAuthSettings?.syncing
+  const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const { ENVIRONMENT } = getEnv()
 

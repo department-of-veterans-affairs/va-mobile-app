@@ -296,7 +296,7 @@ export function AuthGuard() {
     const mutateOptions: MutateOptions<Response, Error, string, void> = {
       onSuccess: async (data) => {
         const authCredentials = await processAuthResponse(data)
-        await finishInitialize(true, authCredentials)
+        await finishInitialize(dispatch, true, authCredentials)
         postLoggedIn()
       },
       onError: async (error) => {
@@ -307,7 +307,7 @@ export function AuthGuard() {
             await logAnalyticsEvent(Events.vama_login_token_refresh(error))
           }
         }
-        await finishInitialize(false)
+        await finishInitialize(dispatch, false)
       },
     }
     console.debug('AuthGuard: initializing')
@@ -315,7 +315,7 @@ export function AuthGuard() {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
     } else if (loggedIn) {
-      initializeAuth(() => {
+      initializeAuth(dispatch, () => {
         refreshAccessToken(getAccessToken() || '', mutateOptions)
       })
 
@@ -340,6 +340,7 @@ export function AuthGuard() {
     refreshAccessToken,
     handleTokenCallbackUrl,
     postLoggedIn,
+    dispatch,
   ])
 
   useEffect(() => {
