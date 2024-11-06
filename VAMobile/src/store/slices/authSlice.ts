@@ -379,12 +379,25 @@ const storeRefreshToken = async (
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('retrieveRefreshToken')
-  const result = await Promise.all([
-    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
-  ])
-  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+  const getToken = async () => {
+    let attemptCount = 3
+
+    while (attemptCount > 0) {
+      try {
+        console.debug('retrieveRefreshToken')
+        const result = await Promise.all([
+          AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+          Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+        ])
+        return result
+      } catch {
+        attemptCount -= 1
+      }
+    }
+  }
+
+  const result = await getToken()
+  const reconstructedToken = result && result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
 
   if (reconstructedToken) {
     await logAnalyticsEvent(Events.vama_login_token_get(true))
