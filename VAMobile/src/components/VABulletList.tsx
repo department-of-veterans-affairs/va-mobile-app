@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'

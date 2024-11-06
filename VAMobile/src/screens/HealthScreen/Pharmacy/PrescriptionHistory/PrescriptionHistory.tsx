@@ -234,7 +234,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon
+              <Icon
                 name={'ChevronRight'}
                 fill={theme.colors.icon.chevronListItem}
                 width={theme.dimensions.chevronListItemWidth}
