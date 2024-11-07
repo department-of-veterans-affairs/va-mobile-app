@@ -61,7 +61,7 @@ context('MultiTouchCard', () => {
   })
 
   it('calls onPress function on bottomContent click', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'bottom line 1' }))
+    fireEvent.press(screen.getByRole('link', { name: 'bottom line 1' }))
     expect(onPressSpy).toBeCalled()
   })
 })
