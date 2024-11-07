@@ -71,7 +71,7 @@ jobs:
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
         run: |
-          directoryNames=$(jq -c .directory < /home/runner/work/va-mobile-app/va-mobile-app/VAmobile/e2e/package.json)
+          directoryNames='cat ./VAMobile/e2e/package.json'
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             echo "$directory"
             if [[ $(echo $directoryNames | jq --arg fileName $directory '.$fileName') == null ]];
