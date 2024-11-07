@@ -128,7 +128,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
         name: request.submitted ? 'Check' : 'Close',
         width: 20,
         height: 20,
-        fill: theme.colors.icon.pagination,
+        fill: theme.colors.background.contentBox,
         preventScaling: true,
       }
 
