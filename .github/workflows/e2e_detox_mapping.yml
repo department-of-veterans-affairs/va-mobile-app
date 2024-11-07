@@ -73,16 +73,15 @@ jobs:
           directoryNames='cat ./VAMobile/e2e/package.json | jq '.directory''
           for ((i=0; i<$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length'); i+=1)); do
             directory=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq --arg number $i '.[$number]')
-            baseDirectory="${##*/}"
+            baseDirectory="${directory##*/}"
             if [[ $(echo $directoryNames | jq --arg fileName $baseDirectory '.["$fileName"]') == null ]]; then
               exit 1
             fi
           done
           fileNames='cat ./VAMobile/e2e/package.json | jq '.files''
-          changedDirectoryLength=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq 'length')
-          for ((i=0; i<$changedDirectoryLength; i+=1)); do
+          for ((i=0; i<$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq 'length'); i+=1)); do
             file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq --arg number $i '.[$number]')
-            baseFile="${##*/}"
+            baseFile="${file##*/}"
             if [[ $(echo $fileNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
               exit 1
             fi
