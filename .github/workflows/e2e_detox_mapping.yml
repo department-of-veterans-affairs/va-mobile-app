@@ -71,6 +71,7 @@ jobs:
         id: detox_mapping_check
         run: |
           directoryNames='cat ./VAMobile/e2e/package.json | jq '.directory''
+          echo "$directoryNames"
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             echo "$directory"
             baseDirectory=$(echo $directory | sed 's#.*/##')
