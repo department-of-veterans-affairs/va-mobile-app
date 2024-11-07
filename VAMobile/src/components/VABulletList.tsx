@@ -91,7 +91,11 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
             accessible={true}
             accessibilityRole="text">
             <Box mr={20} mt={12}>
-              <Box backgroundColor={'bullet'} height={6} width={6} />
+              <Box
+                backgroundColor={color === 'primaryContrast' ? 'brandedMainBackground' : 'bullet'}
+                height={6}
+                width={6}
+              />
             </Box>
             <TextView {...textViewProps} accessibilityLabel={a11yLabel}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
