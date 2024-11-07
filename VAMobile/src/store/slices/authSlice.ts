@@ -658,7 +658,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
-    refreshToken = await retrieveRefreshToken()
+    refreshToken = await retrieveRefreshToken(dispatch)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (isAndroid()) {
