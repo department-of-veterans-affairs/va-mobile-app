@@ -30,9 +30,14 @@ jobs:
       - run: gh auth login --with-token < token.txt
       - name: Create Release Ticket and Assign Team Members
         run: |
-          # Create the release ticket and capture its issue number
-          ISSUE_NUMBER=$(gh issue create --title "Release Ticket" --body "Generated release ticket" --json number --jq '.number')
+         # Create release ticket using content from markdown file
+          ISSUE_URL=$(gh issue create --title "Release Ticket" --body-file .github/ISSUE_TEMPLATE/update_release_issue.md)
+          
+          # Extract issue number from URL
+          ISSUE_NUMBER=${ISSUE_URL##*/}
 
+      - name: Assign Team Members to Release Ticket
+        run: |
           # Add team members as assignees to the created release ticket
           gh issue edit "$ISSUE_NUMBER" $(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map("--add-assignee " + .login) | join(" ")')
         env:
