@@ -30,10 +30,6 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
-      device_specific:
-        description: 'Is your testRail run Android only? (only check if adding results to testRail)'
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -86,60 +82,59 @@ jobs:
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
-    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
-  # output_detox_tests_to_run:
-  #   runs-on: macos-latest-xl
-  #   needs: find_detox_tests_to_run
-  #   outputs: 
-  #     output1: ${{ steps.matrix_value.outputs.matrix }}
-  #     output2: ${{ steps.matrix_value.outputs.individual_matrix}}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ github.ref }}
-  #     - name: 'Get Matrix Value'
-  #       id: matrix_value
-  #       run: |
-  #         if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-  #           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
-  #             e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
-  #             echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-  #             echo "individual_matrix=" >> "$GITHUB_OUTPUT"
-  #           else
-  #             if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-  #               echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-  #               echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-  #             else
-  #               echo "matrix=" >> "$GITHUB_OUTPUT" 
-  #             fi
-  #           fi
-  #         else
-  #           if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
-  #             echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
-  #             if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-  #               if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
-  #                 e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
-  #                 echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
-  #                 echo "individual_matrix=" >> "$GITHUB_OUTPUT"
-  #               else
-  #                 if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-  #                   echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
-  #                   echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
-  #                 else
-  #                   echo "matrix=" >> "$GITHUB_OUTPUT" 
-  #                 fi
-  #               fi
-  #             else
-  #               resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
-  #               echo "matrix=$resp" >> "$GITHUB_OUTPUT"
-  #             fi
-  #           fi
-  #         fi
-  #       env:
-  #         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#   output_detox_tests_to_run:
+#     runs-on: macos-latest-xl
+#     needs: find_detox_tests_to_run
+#     outputs: 
+#       output1: ${{ steps.matrix_value.outputs.matrix }}
+#       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+#         with:
+#           ref: ${{ github.ref }}
+#       - name: 'Get Matrix Value'
+#         id: matrix_value
+#         run: |
+#           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+#             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+#               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+#               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+#               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+#             else
+#               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+#                 echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+#                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+#               else
+#                 echo "matrix=" >> "$GITHUB_OUTPUT" 
+#               fi
+#             fi
+#           else
+#             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
+#               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
+#               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
+#                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+#                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
+#                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+#                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
+#                 else
+#                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+#                     echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+#                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
+#                   else
+#                     echo "matrix=" >> "$GITHUB_OUTPUT" 
+#                   fi
+#                 fi
+#               else
+#                 resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
+#                 echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+#               fi
+#             fi
+#           fi
+#         env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # matrix-e2e-android:
   #   if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
@@ -242,12 +237,12 @@ jobs:
   #         avd-name: Pixel_4_XL_API_28
   #         script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         
-  #     - name: Upload e2e-junit
-  #       if: failure() || success()
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: ${{matrix.testsuite}}-e2e-junit
-  #         path: VAMobile/e2e/test_reports/e2e-junit.xml
+#       - name: Upload e2e-junit
+#         if: failure() || success()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: e2e-junit-${{matrix.testsuite}}
+#           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
   #     - name: Upload artifacts on failure
   #       if: failure() || steps.run_e2e_tests.outcome == 'failure'
@@ -337,50 +332,27 @@ jobs:
   #         fi
   #       env:
   #         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  #     - name: Make a ticket on failure (if needed)
-  #       if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
-  #       uses: JasonEtco/create-an-issue@v2
-  #       with:
-  #         filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
-  #         search_existing: open
-  #       env:
-  #         dateOfIssue: ${{ env.DATE_OF_ISSUE }}
-  #         OS: "Android"
-  #         issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       id: create-issue
   
-  # matrix-send_test_results_to_testrail:
-  #   if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-  #   needs: [matrix-e2e-android, output_detox_tests_to_run]
-  #   strategy:
-  #     fail-fast: false
-  #     max-parallel: 1
-  #     matrix:
-  #       testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
-  #   name: Update testRail Results
-  #   uses: ./.github/workflows/update_testrail_results.yml
-  #   with: 
-  #     test_names: "${{matrix.testsuite}}"
-  #     testRail_name: ${{ inputs.testRail_name }}
-  #     test_specific_OS_needed: ${{ inputs.device_specific}}
-  #     test_OS_name: "Android"
-  #   secrets: inherit
+#       - name: Make a ticket on failure (if needed)
+#         if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
+#         uses: JasonEtco/create-an-issue@v2
+#         with:
+#           filename: .github/ISSUE_TEMPLATE/detox_nightly_build_failure.md
+#           search_existing: open
+#         env:
+#           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
+#           OS: "Android"
+#           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         id: create-issue
+    
 #   matrix_send_test_results_to_testrail:
 #     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-#     needs: [matrix-e2e-android, output_detox_tests_to_run]
-#     strategy:
-#       fail-fast: false
-#       max-parallel: 1
-#       matrix:
-#         testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
+#     needs: [matrix-e2e-android, output_detox_tests_to_run]    
 #     name: Update testRail Results
 #     uses: ./.github/workflows/update_testrail_results.yml
 #     with: 
-#       test_names: "${{matrix.testsuite}}"
 #       testRail_name: ${{ inputs.testRail_name }}
-#       test_specific_OS_needed: ${{ inputs.device_specific}}
 #       test_OS_name: "Android"
 #     secrets: inherit
   

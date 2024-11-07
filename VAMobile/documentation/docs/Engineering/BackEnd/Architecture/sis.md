@@ -1,14 +1,8 @@
 ---
-title: IAM
+title: SIS
 ---
-
-## Authentication Sequence Diagram
-
-![IAM sequence diagram](../../../../static/img/backend/iam-authentication-sequence-diagram.png)
-
-## Vets-API Authentication Activity Diagram
-
-![API authentication diagram](../../../../static/img/backend/vets-api-authentication-activity-diagram.png)
+For more info on how SIS works after mobile passes to them, you can view their [docs](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/identity/Products/Sign-In%20Service/Engineering%20Docs/Authentication%20Types/Client%20Auth%20(User)/auth_flows/api_oauth.md
+) directly.
 
 ## Provider Details
 
