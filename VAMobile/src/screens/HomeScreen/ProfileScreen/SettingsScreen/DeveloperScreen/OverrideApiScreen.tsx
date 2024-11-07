@@ -88,7 +88,7 @@ const APIGroupings: {
       '/v0/messaging/health/folders/${folderID}/messages',
       '/v0/messaging/health/folders',
       '/v0/messaging/health/messages/',
-      '/v0/messaging/health/messages/recipients',
+      '/v0/messaging/health/recipients',
       '/v0/messaging/health/messages/signature',
       '/thread',
     ],
