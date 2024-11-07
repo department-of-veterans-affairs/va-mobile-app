@@ -22,14 +22,25 @@ const checkMedicationWording = async ({
     appointmentType === 'VA' ||
     appointmentType === 'ATLAS' ||
     appointmentType === 'GFE' ||
-    appointmentType === 'Home'
+    appointmentType === 'Home' ||
+    appointmentType === 'Claim'
   ) {
     if (
       appointmentStatus === 'Canceled' ||
       (!pastAppointment && (appointmentStatus === 'Upcoming' || appointmentStatus === 'Confirmed'))
     ) {
       await expect(element(by.text('Prepare for your appointment'))).toExist()
-      await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+      if (
+        appointmentType === 'Phone' ||
+        appointmentType === 'CC' ||
+        appointmentType === 'Onsite' ||
+        appointmentType === 'VA' ||
+        appointmentType === 'ATLAS' ||
+        appointmentType === 'GFE' ||
+        appointmentType === 'Home'
+      ) {
+        await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+      }
 
       if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
         await expect(element(by.text('Get your device ready to join.'))).toExist()
@@ -41,7 +52,26 @@ const checkMedicationWording = async ({
         await element(by.id('prepareForVideoVisitTestID')).tap()
         await expect(element(by.text('Appointments help'))).toExist()
         await element(by.text('Close')).tap()
+      } else if (appointmentType === 'Claim') {
+        await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
+        await expect(
+          element(
+            by.text(
+              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
+            ),
+          ),
+        ).toExist()
+        await expect(element(by.text('Learn more about claim exam appointments'))).toExist()
       } else {
+        await expect(element(by.text('You don’t need to bring anything to your exam.'))).not.toExist()
+        await expect(
+          element(
+            by.text(
+              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
+            ),
+          ),
+        ).not.toExist()
+        await expect(element(by.text('Learn more about claim exam appointments'))).not.toExist()
         await expect(element(by.text('Get your device ready to join.'))).not.toExist()
         await expect(element(by.id('prepareForVideoVisitTestID'))).not.toExist()
       }
