@@ -47,11 +47,11 @@ jobs:
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
+        id: create_issue
       - name: Assign Users to Release Ticket
         if: ${{ success() }}
         run: |
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
-          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
+          gh issue edit $ISSUE_NUMBER --add-assignee "$ASSIGNEES"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
