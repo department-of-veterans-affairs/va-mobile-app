@@ -8,19 +8,15 @@ We take a proactive, accessibility-first approach to everything we build. Access
 
 We also believe in accessibility beyond compliance. We don’t just meet the bare minimum of accessibility recommendations. We go above and beyond these recommendations to ensure we’re creating a product that is truly accessible to all of our users.
 
-
 ## Accessibility principles
-
 
 ### Based on VA standards
 
 The [VA design system](https://design.va.gov/) does not have comprehensive accessibility guidelines. However, it does [provide accessibility samples and guidelines](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Accessibility#:~:text=provide%20accessibility%20samples%20and%20guidelines) when it comes to design, content, and components. We base our design system on this existing system with modifications for native mobile apps.
 
-
 ### Content takes center stage
 
 All content throughout the app is clear and direct to ensure that users understand the information presented to them. A more thorough explanation of our best practices for accessible content can be found on the [content documentation page](/docs/Flagship%20design%20library/Content/content-style-guide).
-
 
 ### Go beyond guideline standards
 
@@ -29,7 +25,6 @@ The VA Mobile app targets WCAG 2.2 Level AA and Level AAA success criteria and s
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - [508 guidelines](https://www.access-board.gov/ict/#508-chapter-1-application-and-administration)
 - [MCAG (Mobile Content Accessibility Guidelines)](https://getevinced.github.io/mcag/)
-
 
 ### Comprehensive disability support
 
@@ -41,7 +36,6 @@ We aim to provide a usable experience for all Veterans and include disability su
 - Individuals with hearing impairments
 - Individuals with mental or cognitive disabilities
 
-
 ### Assistive technology support
 
 Our app and components are tested for accessibility with automated and manual techniques. Users should expect to be able to access our app using modern assistive technologies. These include native and third-party tools like:
@@ -52,21 +46,18 @@ Our app and components are tested for accessibility with automated and manual te
 - Bluetooth mouse and keyboard
 - Tools for readability
 
-
 ### Beyond disabilities
 
 We believe that accessibility also goes beyond disabilities and we strive to provide access to our app for users with limited connectivity and device performance.
-
 
 ### The Section 508 law
 
 Section 508 is a federal law that requires all U.S. government agencies to make their electronic and information technology and data accessible to everyone. By law, agencies must provide people with disabilities the same level of access as those without disabilities.
 
-
 ## Resources
 
-* [Accessibility checklist for UX designers](/docs/QA/QualityAssuranceProcess/Accessibility/a11y-checklist-ux-designers)
-* [Accessibility checklist for content designers](/docs/QA/QualityAssuranceProcess/Accessibility/a11y-checklist-content-designers)
-* [Haptic feedback](/docs/Flagship%20design%20library/Patterns/haptics)
-* [VA.gov mobile accessibility testing plan](/docs/QA/QualityAssuranceProcess/Accessibility/testing-plan)
-* [Native mobile app accessibility resources & articles](/docs/QA/QualityAssuranceProcess/Accessibility/resources)
+- [Accessibility checklist for UX designers](/docs/QA/QualityAssuranceProcess/Accessibility/a11y-checklist-ux-designers)
+- [Accessibility checklist for content designers](/docs/QA/QualityAssuranceProcess/Accessibility/a11y-checklist-content-designers)
+- [Haptic feedback](/docs/Flagship%20design%20library/Patterns/haptics)
+- [VA.gov mobile accessibility testing plan](/docs/QA/QualityAssuranceProcess/Accessibility/testing-plan)
+- [Native mobile app accessibility resources & articles](/docs/QA/QualityAssuranceProcess/Accessibility/resources)
