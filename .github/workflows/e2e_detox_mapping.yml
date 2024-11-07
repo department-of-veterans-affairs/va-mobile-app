@@ -52,16 +52,51 @@ jobs:
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
-      - name: Get file difference by file name
-        id: changed_files_file_name_not_json
+      - name: Get file difference by directory
+        id: changed_files_dir
         uses: tj-actions/changed-files@v41
         with:
           dir_names: true
+          dir_names_max_depth: 1
+          json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+      - name: Get file difference by file name
+        id: changed_files_file_name
+        uses: tj-actions/changed-files@v41
+        with:
+          json: true
+          dir_names: true
+          dir_names_include_files: true
+          base_sha: "${{ steps.get-sha.outputs.sha }}"
+      - name: Check if directory/file is in detox mapping
+        id: detox_mapping_check
+        run: |
+          directoryNames=$(jq -c .directory < /home/runner/work/va-mobile-app/va-mobile-app/VAmobile/e2e/package.json))
+          for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
+            echo "$directory"
+            if [[ $(echo $directoryNames | jq --arg fileName $directory '.$fileName') == null ]];
+              exit 1
+            fi
+          done
+          fileNames=$(jq -c .file < /home/runner/work/va-mobile-app/va-mobile-app/VAmobile/e2e/package.json))
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            echo "$file"
+            if [[ $(echo $fileNames | jq --arg fileName $directory '.$fileName') == null ]];
+              exit 1
+            fi
+          done
+
+      - name: Check if directory/file is spelled correctly
+        id: detox_mapping_spell_check
+        run: |
+          echo "$test"
+      - name: Check if e2eNames is spelled correctly
+        id: detox_mapping_e2e_names_spell_check
+        run:   
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          e2eTestsToRun = []
+          e2eTestsToRun=[]
           for e2eName in $(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]'); do  
             for file in ${{steps.changed_files_file_name_not_json.outputs.all_changed_and_modified_files}}; do
               echo "$file" 
