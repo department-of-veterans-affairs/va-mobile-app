@@ -61,6 +61,7 @@ const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
   loading: boolean
+  loadingRefreshToken: boolean
   initializing: boolean
   syncing: boolean
   error?: Error
@@ -87,6 +88,7 @@ export type AuthState = {
 
 export const initialAuthState: AuthState = {
   loading: false,
+  loadingRefreshToken: false,
   initializing: true,
   loggedIn: false,
   loggingOut: false,
@@ -376,9 +378,13 @@ const storeRefreshToken = async (
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
-const retrieveRefreshToken = async (): Promise<string | undefined> => {
+const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | undefined> => {
   let refreshToken
   let attemptCount = 3
+
+  if (dispatch) {
+    dispatch(dispatchStartLoadingRefreshToken())
+  }
 
   while (attemptCount > 0) {
     try {
@@ -402,6 +408,9 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
         await logAnalyticsEvent(Events.vama_login_token_get(true))
       } else {
         await logAnalyticsEvent(Events.vama_login_token_get(false))
+      }
+      if (dispatch) {
+        dispatch(dispatchFinishLoadingRefreshToken())
       }
     }
   }
@@ -883,6 +892,12 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
+    dispatchStartLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = true
+    },
+    dispatchFinishLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = false
+    },
   },
 })
 
@@ -904,6 +919,8 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
+  dispatchStartLoadingRefreshToken,
+  dispatchFinishLoadingRefreshToken,
 } = authSlice.actions
 
 export default authSlice.reducer
