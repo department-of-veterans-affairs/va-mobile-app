@@ -39,7 +39,8 @@ jobs:
       - name: Assign Team Members to Release Ticket
         run: |
           # Add team members as assignees to the created release ticket
-          gh issue edit "$ISSUE_NUMBER" $(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map("--add-assignee " + .login) | join(" ")')
+           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          gh issue edit "$ISSUE_NUMBER" --add-assignee "$TEAM_MEMBERS"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
