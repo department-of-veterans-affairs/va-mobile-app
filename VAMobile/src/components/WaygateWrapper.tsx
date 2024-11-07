@@ -57,12 +57,14 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           }
           focusOnError={false}
           testID="AFUseCase2TestID">
-          <ClickToCallPhoneNumber
-            displayedText={displayedTextPhoneNumber(phoneNumber)}
-            phone={phoneNumber}
-            a11yLabel={a11yLabelID(phoneNumber)}
-            variant={'base'}
-          />
+          {phoneNumber !== 'disable' ? (
+            <ClickToCallPhoneNumber
+              displayedText={displayedTextPhoneNumber(phoneNumber)}
+              phone={phoneNumber}
+              a11yLabel={a11yLabelID(phoneNumber)}
+              variant={'base'}
+            />
+          ) : null}
         </AlertWithHaptics>
       </Box>
     )
