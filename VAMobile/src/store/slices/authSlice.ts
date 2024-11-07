@@ -392,9 +392,9 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
       refreshToken =
         tokenArray && tokenArray[0] && tokenArray[1] ? `${tokenArray[0]}.${tokenArray[1].password}.V0` : undefined
       return refreshToken
-    } catch (error) {
+    } catch (error: any) {
       attemptCount -= 1
-      if (attemptCount === 0) {
+      if (attemptCount === 0 || error?.message?.includes('Cancel')) {
         throw error
       }
     } finally {
