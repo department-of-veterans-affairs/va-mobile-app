@@ -28,19 +28,32 @@ jobs:
       - uses: actions/checkout@v3
       - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
-      - name: Create Release Ticket and Assign Team Members
+      - name: Fetch GitHub Group Members
         run: |
-         # Create release ticket using content from markdown file
-          ISSUE_URL=$(gh issue create --title "Release Ticket" --body-file .github/ISSUE_TEMPLATE/update_release_issue.md)
-          
-          # Extract issue number from URL
-          ISSUE_NUMBER=${ISSUE_URL##*/}
-
-      - name: Assign Team Members to Release Ticket
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          # Debug output just for testing
+          echo "Formatted Assignees: $ASSIGNEES" 
+      # Create Release Ticket with auto-assigned members
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/update_release_issue.md
+        env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create_issue
+      - name: Assign Users to Release Ticket
+        if: ${{ success() }}
         run: |
-          # Add team members as assignees to the created release ticket
-           TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
-          gh issue edit "$ISSUE_NUMBER" --add-assignee "$TEAM_MEMBERS"
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          for user in $ASSIGNEES; do
+            gh issue edit $ISSUE_NUMBER --add-assignee "$user"
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
