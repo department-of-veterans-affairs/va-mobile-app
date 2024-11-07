@@ -391,6 +391,7 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
       refreshToken =
         tokenArray && tokenArray[0] && tokenArray[1] ? `${tokenArray[0]}.${tokenArray[1].password}.V0` : undefined
       return refreshToken
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       attemptCount -= 1
       if (attemptCount === 0 || error?.message?.includes('Cancel')) {
