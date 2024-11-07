@@ -42,3 +42,4 @@ jobs:
           gh issue edit "$ISSUE_NUMBER" $(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map("--add-assignee " + .login) | join(" ")')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
