@@ -85,14 +85,14 @@ jobs:
               exit 1
             fi
           done
-
       - name: Check if directory/file is spelled correctly
         id: detox_mapping_spell_check
         run: |
           echo "$test"
       - name: Check if e2eNames is spelled correctly
         id: detox_mapping_e2e_names_spell_check
-        run:   
+        run: |
+          echo "$testx"
       - name: Get testing matrix array
         id: testing_matrix
         run: |
