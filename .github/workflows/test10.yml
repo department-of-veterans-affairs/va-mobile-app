@@ -56,4 +56,4 @@ jobs:
             gh issue edit $ISSUE_NUMBER --add-assignee "$user"
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
