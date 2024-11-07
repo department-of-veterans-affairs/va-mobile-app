@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
+          ref: 'spike/9918-rachael-detox-add-what-to-run-to-code'
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
