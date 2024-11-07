@@ -57,13 +57,11 @@ jobs:
         uses: tj-actions/changed-files@v41
         with:
           dir_names: true
-          json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
         with:
-          json: true
           dir_names: true
           dir_names_include_files: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
@@ -71,7 +69,7 @@ jobs:
         id: detox_mapping_check
         run: |
           directoryNames='cat ./VAMobile/e2e/package.json | jq '.directory''
-          changedDirectoryLength= $(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length')
+          changedDirectoryLength=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq 'length')
           for ((i=0; i<$changedDirectoryLength; i+=1)); do
             directory=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} | jq --arg number $i '.[$number]')
             baseDirectory="${##*/}"
