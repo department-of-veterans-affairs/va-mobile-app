@@ -52,6 +52,6 @@ jobs:
         if: ${{ success() }}
         run: |
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
-          gh issue edit $ISSUE_NUMBER --add-assignees $ASSIGNEES
+          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
