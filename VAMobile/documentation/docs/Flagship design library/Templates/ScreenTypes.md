@@ -16,26 +16,10 @@ The VA mobile app has 5 main screen types that fall into two categories:
 
 ## Hierarchical screens
 
-### Home screen​
-<iframe width="500" height="800" alt="image of VA mobile app Home screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fdesign%2Fcdp7Be4UdYesq9fXeqaOgt%2FNavigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile%3Fm%3Dauto%26node-id%3D7733-11182%26t%3DGsZrpZDn1qDXDTr0-1" allowfullscreen></iframe>
-
-* **Definition:** The Home screen is the initial/default screen of the app. It sits at the top level of the hierarchical navigation and summarizes a Veteran's interactions with the VA mobile app. It also provides access to the Veteran's profile information.
-  
-  The Home screen contains several zones of variable and fixed content:
-  - **Activity:** Personalized modules that summarize "in-flight" activities and provide a secondary entry point to app features (variable appearance).
-  - **About you:** Personalized high-level data, including the Veteran Status card (fixed appearance).
-  - **VA resources:** General interest/evergreen links to VA tools as well as a banner space for announcements (fixed appearance).
-
-  The Home screen displays the tab bar and a link to the Veteran Crisis line. It does not display a back button.
-- **Screen transition:** Screen transition between home and categories is top-level peer (fade through).
-- **Scroll behavior:** Content scrolls if it exceeds the panel height.
-- **Resources:**
-  - [Figma file: Home screen template](https://www.figma.com/design/cdp7Be4UdYesq9fXeqaOgt/Navigation-2.0-Screen-Templates---%F0%9F%9A%A2-Shipped---VA-Mobile?node-id=7733-11182&t=GsZrpZDn1qDXDTr0-4)
-
 ### Category landing screen​
-<iframe width="500" height="500" alt="image of VA mobile app Category landing screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2738%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width="500" height="500" title="image of VA mobile app Category landing screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2738%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
-- **Definition:** Category screens sit at the top level of the hierarchical navigation (and are peers to the Home screen), grouping features of a similar type. Each category screen contains permanent entry points to features and variable description text when applicable. Features are grouped into subsections if the number of features in a category exceeds 6. Displays the tab bar and a link to the Veteran Crisis line. It does not display a back button.
+- **Definition:** The Category landing screen template is used by the navigation categories at the top of the app's hierarchy: Health, Benefits, and Payments. These navigation category landing screens group features of a similar type, providing permanent entry points to features and variable description text for each feature when applicable. The app's Home screen also uses this template, but has a special set of rules that distinguish it from the other top-level categories ([see Home Screen for a more detailed description](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Templates/Home)). The category landing screen template displays the tab bar and a link to the Veteran Crisis line. It does not display a back button. 
 - **Screen transition:** Screen transition between categories is top-level peer (fade through).
 - **Scroll behavior:** Content scrolls if it exceeds the panel height.
   - Screen title scroll behavior:
@@ -47,9 +31,9 @@ The VA mobile app has 5 main screen types that fall into two categories:
   - [Github ticket: Category landing screen template](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/3996)
 
 ### Feature landing screen​
-<iframe width="750" height="500" alt="image of VA mobile app feature landing/child screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2737%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width="750" height="500" title="image of VA mobile app feature landing/child screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2737%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
-- **Definition:** The “home” screen of a feature. Features are parent sections with multiple children that generally live within a category. A complex feature (like pharmacy or secure messaging) can also have subsections. Displays the tab bar and a descriptive back button.
+- **Definition:** The “home” screen of a feature. Features are parent sections with multiple children that generally live within a category. A complex feature (like Prescriptions or Messages) can also have subsections. Displays the tab bar and a descriptive back button.
 - **Screen transition:** Horizontal (pushing on & off from right).
 - **Scroll behavior:** Content scrolls if it exceeds the panel height.
   - Screen title scroll behavior:
@@ -62,7 +46,7 @@ The VA mobile app has 5 main screen types that fall into two categories:
   - [Github ticket: Feature landing/child screen template](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/3977)
 
 ### Child screen​
-<iframe width="750" height="500" alt="image of VA mobile app feature landing/child screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2737%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width="750" height="500" title="image of VA mobile app feature landing/child screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2737%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
 * **Definition:** Child screens live within a feature, generally an item in a list. It’s often the end point of a hierarchy. Displays the tab bar and a descriptive back button.
 * **Screen transition:** Horizontal (pushing on & off from right).
@@ -78,7 +62,7 @@ The VA mobile app has 5 main screen types that fall into two categories:
 
 ## Modal screens
 ### Fullscreen task/subtask​
-<iframe width = "750" height = "500" alt="image of fullscreen task/subtask mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2736%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width = "750" height = "500" title="image of fullscreen task/subtask mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2736%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
 * **Definition:** A contained, linear flow that is presented modally at any level of the app’s hierarchy, opening on a layer over the current screen and taking up the whole screen. A fullscreen task/subtask can be one or multiple steps, and it requires an explicit close or cancel button to exit. Use a task/subtask to enable something complex in order to lock in focus. Because it covers the entire screen, it is the only modally appearing screen over which other dialogs or panels can appear. It does not display the tab bar.
 * **Behaviors & Logic:**
@@ -97,7 +81,7 @@ The VA mobile app has 5 main screen types that fall into two categories:
   * [Github ticket: Fullscreen subtask template](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/3978)
 
 ### Large panel​
-<iframe width="750" height = "500" alt="image of large panel mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2739%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width="750" height = "500" title="image of large panel mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D661%253A2739%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
 * **Definition:** A contained (single step) task that is presented modally at any level of the app’s hierarchy and appears as a card that covers most of the underlying content. It displays a close button to exit, but can also swipe down or tap on background to close. Use a large panel to display more in depth detail (multiple paragraphs) or a small (quick) task, when you need to lock in focus and limit the possibility of abandoning. Cannot appear over another panel. Does not display the tab bar.
 * **Behaviors & Logic:**
@@ -120,7 +104,7 @@ The VA mobile app has 5 main screen types that fall into two categories:
   * [Github ticket: Large panel template](https://app.zenhub.com/workspaces/va-mobile-frontendqa-60f1a34998bc75000f2a489f/issues/gh/department-of-veterans-affairs/va-mobile-app/3979)
 
 ### Web view
-<iframe width="500" height = "500" alt="image of web view mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D208%253A2793%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
+<iframe width="500" height = "500" title="image of web view mobile app screen" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D208%253A2793%26t%3Db57jsZqgwHpuU2ja-1" allowfullscreen></iframe>
 
 
 * **Definition:** A screen that displays content from an outside website without requiring the user to leave the app. Requires an explicit close or cancel button to exit. Does not display tab bar due to required web toolbar.

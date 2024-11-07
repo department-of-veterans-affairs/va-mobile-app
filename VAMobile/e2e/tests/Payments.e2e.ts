@@ -1,6 +1,6 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
 
 export const PaymentsE2eIDConstants = {
   PAYMENTS_YEAR_PICKER_ID: 'selectAYearTestID',
@@ -8,6 +8,14 @@ export const PaymentsE2eIDConstants = {
   PAYMENT_HISTORY_1_ID: 'Regular Chapter 31 $603.33',
   PAYMENT_HISTORY_2_ID: 'Post-9/11 GI Bill $1,172.60',
   PAYMENT_INFO_INCORRECT_ID: 'paymentInfoIncorrectTestID',
+  PAYMENT_MISSING_ID: 'paymentsMissingPanelID',
+  PAYMENT_MISSING_CLOSE_ID: 'paymentsMissingCloseID',
+  PAYMENT_ISSUE_ID: 'paymentsIssuesPanelID',
+  PAYMENT_ISSUE_CLOSE_ID: 'paymentIssuesCloseID',
+  PAYMENT_DETAILS_BACK_ID: 'paymentDetailsBackID',
+  PAYMENT_HISTORY_SCROLL_ID: 'paymentHistoryTestID',
+  SELECT_A_YEAR_CANCEL_ID: 'selectAYearCancelTestID',
+  SELECT_A_YEAR_CONFIRM_ID: 'selectAYearConfirmTestID',
 }
 
 beforeAll(async () => {
@@ -26,23 +34,23 @@ describe('Payments Screen', () => {
 
   it("verify what if I'm missing a payment information", async () => {
     await element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID)).tap()
-    await expect(element(by.text("What if I'm missing a payment?")).atIndex(1)).toExist()
+    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_MISSING_ID))).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-827-1000')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await device.takeScreenshot('PaymentsMissingAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.text('Close')).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_MISSING_CLOSE_ID)).tap()
   })
 
   it('payment details: verify the payment details for paper check', async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
-    await expect(element(by.text('June 1, 2017'))).toExist()
+    await expect(element(by.text('June 1, 2024'))).toExist()
     await expect(element(by.text('Regular Chapter 31'))).toExist()
     await expect(element(by.text('$603.33'))).toExist()
     await expect(element(by.text('Paper Check'))).toExist()
@@ -51,51 +59,51 @@ describe('Payments Screen', () => {
 
   it("verify what if my payment information doesn't look right info", async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)).tap()
-    await expect(element(by.text("What if my payment information doesn't look right?")).atIndex(1)).toExist()
+    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_ISSUE_ID))).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.text('800-827-1000')).tap()
-      await device.takeScreenshot('PaymentIncorrectAndroidCallingScreen')
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
+      await device.takeScreenshot('PaymentsMissingAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
-      await element(by.text('TTY: 711')).tap()
-      await device.takeScreenshot('PaymentIncorrectAndroidCallingScreenTTY')
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
+      await device.takeScreenshot('PaymentsMissingAndroidCallingScreenTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
-    await element(by.text('Close')).tap()
-    await element(by.text('History')).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_ISSUE_CLOSE_ID)).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_DETAILS_BACK_ID)).tap()
   })
 
   it('verify the payment details for direct deposit', async () => {
     await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)))
       .toBeVisible()
-      .whileElement(by.id('paymentHistoryTestID'))
+      .whileElement(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).tap()
     await expect(element(by.text('BANK OF AMERICA, N.A.'))).toExist()
     await expect(element(by.text('********0567'))).toExist()
-    await element(by.text('History')).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_DETAILS_BACK_ID)).tap()
   })
 
   it('should tap on and cancel the select a year picker', async () => {
-    await element(by.id('paymentHistoryTestID')).scrollTo('top')
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_SCROLL_ID)).scrollTo('top')
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
     await expect(element(by.text('Select a year'))).toExist()
-    await element(by.text('Cancel')).tap()
-    await expect(element(by.text('2017')).atIndex(0)).toExist()
+    await element(by.id(PaymentsE2eIDConstants.SELECT_A_YEAR_CANCEL_ID)).tap()
+    await expect(element(by.text('2024')).atIndex(0)).toExist()
   })
 
-  it('should tap on and select 2016 from the select a year picker', async () => {
+  it('should tap on and select 2023 from the select a year picker', async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
-    await element(by.text('2016')).tap()
-    await element(by.text('Done')).tap()
-    await expect(element(by.text('2016')).atIndex(0)).toExist()
+    await element(by.text('2023')).tap()
+    await element(by.id(PaymentsE2eIDConstants.SELECT_A_YEAR_CONFIRM_ID)).tap()
+    await expect(element(by.text('2023')).atIndex(0)).toExist()
   })
 
   it('should verify the next and back page arrows work', async () => {
-    await element(by.id('paymentHistoryTestID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
-    await element(by.id('paymentHistoryTestID')).scrollTo('bottom')
-    await element(by.id('previous-page')).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
   })
 })

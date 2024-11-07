@@ -8,17 +8,17 @@ A segmented control is used to switch between related views of information withi
 
 ### Two segments
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)	|	[Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=211-244&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--2-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--2-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 
 ### Three segments
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--3-segments)	|	[Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=211-248&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--3-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--3-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 
 ### Four segments
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--4-segments)	|	[Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=211-253&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--4-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--4-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 
 ## Usage

@@ -201,11 +201,7 @@ const call = async function <T>(
 
     // Guard against responses that can't be parsed as JSON
     if (!response.headers.get('Content-Type')?.startsWith('application/json')) {
-      if (endpoint === '/v0/user/logged-in') {
-        return
-      } else {
-        logAnalyticsEvent(Events.vama_9385_api_cType(endpoint, response.headers.get('Content-Type') || ''))
-      }
+      return
     }
 
     // No errors found, return the response
@@ -235,12 +231,8 @@ const call = async function <T>(
   }
 }
 
-export const get = async function <T>(
-  endpoint: string,
-  params: Params = {},
-  abortSignal?: AbortSignal,
-): Promise<T | undefined> {
-  return call<T>('GET', endpoint, params, undefined, abortSignal)
+export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+  return call<T>('GET', endpoint, params, undefined)
 }
 
 export const post = async function <T>(
@@ -252,8 +244,12 @@ export const post = async function <T>(
   return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 
-export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('PUT', endpoint, params)
+export const put = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
+  return call<T>('PUT', endpoint, params, undefined, abortSignal)
 }
 
 export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {

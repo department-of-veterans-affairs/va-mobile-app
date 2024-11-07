@@ -49,7 +49,7 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
 
   return (
     <Box>
-      <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`}>
+      <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`} accessibilityRole="header">
         {prescriptionName}
       </TextView>
       <TextView variant={'HelperText'} color={'placeholder'} accessibilityLabel={`${rxNumberA11yLabel}.`}>

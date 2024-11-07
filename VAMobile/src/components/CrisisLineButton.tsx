@@ -29,6 +29,7 @@ const CrisisLineButton: FC = () => {
         borderRadius: 40,
       },
     ],
+    testID: 'veteransCrisisLineID',
   }
 
   return (

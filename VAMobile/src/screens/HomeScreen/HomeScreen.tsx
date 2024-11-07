@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
@@ -37,8 +38,6 @@ import {
   LoadingComponent,
   Nametag,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -291,8 +290,9 @@ export function HomeScreen({}: HomeScreenProps) {
     label: t('profile.title'),
     accessibilityRole: 'link',
     icon: {
-      name: 'ProfileSelected',
-    } as VAIconProps,
+      name: 'AccountCircle',
+      fill: theme.colors.icon.active,
+    } as IconProps,
     onPress: () => navigateTo('Profile'),
   }
 
@@ -344,11 +344,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   alignItems="center"
                   accessible={true}
                   accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                  <VAIcon
-                    name={'CircleCheckMark'}
-                    fill={DSColors.vadsColorSuccessDark}
-                    fill2={theme.colors.icon.transparent}
-                  />
+                  <Icon name={'CheckCircle'} fill={DSColors.vadsColorSuccessDark} width={30} height={30} />
                   <TextView
                     importantForAccessibility={'no'}
                     ml={theme.dimensions.condensedMarginBetween}

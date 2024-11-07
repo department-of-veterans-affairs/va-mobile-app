@@ -31,6 +31,7 @@ const mockOverrides = {
   preferredNameGenderWaygate: false,
   prescriptions: true,
   submitEvidenceExpansion: true,
+  sso: false,
   testFeature: false,
   useOldLinkComponent: false,
   whatsNewUI: false,

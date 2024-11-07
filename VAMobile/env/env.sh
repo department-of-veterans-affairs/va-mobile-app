@@ -15,7 +15,7 @@ echo "" > .env
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
-  AUTH_SIS_PREFIX="staging."
+  WEBSITE_PREFIX="staging."
   API_PREFIX="staging-api."
 else
   echo "Setting up Production environment"
@@ -27,7 +27,7 @@ echo "ENVIRONMENT=$environment" >> .env
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 
 # set SIS vars
-AUTH_SIS_ROOT="https://${AUTH_SIS_PREFIX}va.gov"
+AUTH_SIS_ROOT="https://${WEBSITE_PREFIX}va.gov"
 echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
 echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
 echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
@@ -50,6 +50,10 @@ else
 fi
 # set demo mode password
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
+
+# set website URLs
+echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://${WEBSITE_PREFIX}va.gov/health-care/schedule-view-va-appointments" >> .env
+
 # Get all vars that are the same across environments
 while read p; do
   echo "$p" >> .env
