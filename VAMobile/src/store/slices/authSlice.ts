@@ -1,4 +1,3 @@
-import { Alert } from 'react-native'
 import * as Keychain from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -649,10 +648,11 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
+    dispatch(dispatchStartSync())
     refreshToken = await retrieveRefreshToken()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    Alert.alert('Biometrics error', JSON.stringify(err))
+    dispatch(dispatchFinishSync())
     if (isAndroid()) {
       if (err?.message?.indexOf('Cancel') > -1) {
         // cancel
@@ -815,6 +815,9 @@ const authSlice = createSlice({
     dispatchSetFirstLogin: (state, action: PayloadAction<boolean>) => {
       state.firstTimeLogin = action.payload
     },
+    dispatchStartSync: (state) => {
+      state.syncing = true
+    },
     dispatchFinishSync: (state) => {
       state.syncing = false
     },
@@ -893,6 +896,7 @@ export const {
   dispatchSetNotificationsPreferenceScreen,
   dispatchSetRequestNotifications,
   dispatchSetFirstLogin,
+  dispatchStartSync,
   dispatchFinishSync,
   dispatchUpdateStoreBiometricsPreference,
   dispatchStartAuthorizeParams,
