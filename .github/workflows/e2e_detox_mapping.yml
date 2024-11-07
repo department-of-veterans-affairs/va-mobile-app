@@ -58,6 +58,7 @@ jobs:
         with:
           dir_names: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+          path: './VAMobile/src'
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
@@ -65,22 +66,25 @@ jobs:
           dir_names: true
           dir_names_include_files: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+          path: './VAMobile/src'
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
         run: |
           directoryNames='cat ./VAMobile/e2e/package.json | jq '.directory''
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             echo "$directory"
-            baseDirectory="${directory##*/}"
+            baseDirectory=$(echo $directory | sed 's#.*/##')
+            echo "$baseDirectory"
             if [[ $(echo $directoryNames | jq --arg fileName $baseDirectory '.["$fileName"]') == null ]]; then
               exit 1
             fi
           done
           fileNames='cat ./VAMobile/e2e/package.json | jq '.files''
-          for ((i=0; i<$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq 'length'); i+=1)); do
-            file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} | jq --arg number $i '.[$number]')
-            baseFile="${file##*/}"
-            if [[ $(echo $fileNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            echo "$file"
+            baseFile=$(echo $file | sed 's#.*/##')
+            echo "$baseFile"
+            if [[ $(echo $directoryNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
               exit 1
             fi
           done
