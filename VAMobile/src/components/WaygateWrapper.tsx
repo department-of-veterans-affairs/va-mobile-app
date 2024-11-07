@@ -42,8 +42,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
     const errorMsgBodyV2 = fixedWhiteSpaceString(waygate.errorMsgBodyV2)
     const text = errorMsgBodyV2.length > 0 ? errorMsgBodyV2 : waygate.errorMsgBody
-    const phoneNumber =
-      waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
+    const phoneNumber = waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : ''
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <AlertWithHaptics
@@ -57,7 +56,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           }
           focusOnError={false}
           testID="AFUseCase2TestID">
-          {phoneNumber !== 'disable' ? (
+          {phoneNumber ? (
             <ClickToCallPhoneNumber
               displayedText={displayedTextPhoneNumber(phoneNumber)}
               phone={phoneNumber}
