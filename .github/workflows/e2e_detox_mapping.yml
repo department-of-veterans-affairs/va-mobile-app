@@ -75,7 +75,7 @@ jobs:
             baseDirectory=$(echo $directory | sed 's#.*/##')
             baseDirectory=$(echo $baseDirectory | sed 's/ //g')
             echo "$baseDirectory"
-            directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.["$fileName"]')
+            directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
             echo "$directoryFound"
             directoryFound=$(echo $directoryNames | jq '.["NoClaimsAndAppealsAccess"]')
             echo "Test: $directoryFound"
