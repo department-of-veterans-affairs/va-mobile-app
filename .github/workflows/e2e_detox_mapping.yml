@@ -51,7 +51,7 @@ jobs:
       - name: List files in the repository
         run: |
           echo "${{ github.workspace}}"
-          ls ${{ github.workspace }}
+          ls ${{ github.workspace }}/VAMobile/e2e
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
