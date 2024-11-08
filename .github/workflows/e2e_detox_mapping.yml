@@ -133,6 +133,7 @@ jobs:
           test_matrix=""
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
+            echo "$directory"
             baseDirectory=$(echo $directory | sed 's#.*/##')
             baseDirectory=$(echo $baseDirectory | sed 's/ //g')
             echo "baseDirectory: $baseDirectory"
