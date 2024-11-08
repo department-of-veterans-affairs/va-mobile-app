@@ -73,6 +73,7 @@ jobs:
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             echo "$directory"
             baseDirectory=$(echo $directory | sed 's#.*/##')
+            baseDirectory=$(echo $baseDirectory | sed 's/ //g')
             echo "$baseDirectory"
             directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.["$fileName"]')
             echo "$directoryFound"
