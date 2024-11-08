@@ -1337,10 +1337,10 @@
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
-"@department-of-veterans-affairs/mobile-assets@0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.13.0.tgz#713a1ab4b44d97acd732ecfc02287893059240e7"
-  integrity sha512-mS2q9+fuYOSaGoXqrSDWGLUMep7vJi33AbjGcYcgtaGxT/K/lEA9Gy5L2sQ98OD2kbSI7/XAD1wsLfN754sHZw==
+"@department-of-veterans-affairs/mobile-assets@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.14.0.tgz#d035e01d646d5d3a596f52612dad6e443abbd669"
+  integrity sha512-yz3UK4TrmZJePII/MZEpOY1L8dDYGgtrGB6nk4omXE8DX4mJGWXn7D3D05qHNI7EtkjPUjnWHuQlrcIIp40vyQ==
 
 "@department-of-veterans-affairs/mobile-component-library@0.27.0":
   version "0.27.0"
@@ -1354,10 +1354,10 @@
     react-native-toast-notifications "^3.4.0"
     styled-components "^6.1.12"
 
-"@department-of-veterans-affairs/mobile-tokens@0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.17.1.tgz#d817f118d7e24e463bfd6f04b120ea48c27e58f1"
-  integrity sha512-tsT5OgRvDJ8yR2nzyWoCnwb6aluR0OVr7ZQvgCdRTHDPup3mQgrvtfGIhft2VM0WqkEcvr3hwYzMLmycWEMOMg==
+"@department-of-veterans-affairs/mobile-tokens@0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.19.0.tgz#04e03364ae1a693e7b1911de2425eb92cb664b7e"
+  integrity sha512-JeIaIrbx9acWuj+vmgj11sET1zDWblc7WTys6RPFNjzZSnjj4NPsiYX4uBL2o8KOiBb6HbSvgi8UWV3Dg/lX+A==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
