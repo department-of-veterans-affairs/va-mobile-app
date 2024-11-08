@@ -89,7 +89,6 @@ describe('Onboarding Screen', () => {
   })
 
   it('verify the home page is displayed after tapping turn on notifications', async () => {
-    await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     await element(by.text('Turn on notifications')).tap()
     await expect(element(by.text(CommonE2eIdConstants.HOME_ACTIVITY_HEADER_TEXT))).toExist()
   })
