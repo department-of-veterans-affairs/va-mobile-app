@@ -135,9 +135,10 @@ jobs:
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             baseDirectory=$(echo $directory | sed 's#.*/##')
             baseDirectory=$(echo $baseDirectory | sed 's/ //g')
+            echo "baseDirectory: $baseDirectory"
             directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" -c '.[$fileName]')
-            if [[ "$directoryFound" != "null" ]]; then
               echo "$directoryFound"
+            if [[ "$directoryFound" != "null" ]]; then
               if [[ "$firstInstanceDir" == "true" ]]; then
                 test_matrix=$directoryFound
                 firstInstanceDir="false"
