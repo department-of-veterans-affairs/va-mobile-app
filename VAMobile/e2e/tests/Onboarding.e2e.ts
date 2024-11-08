@@ -5,6 +5,7 @@ import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
 export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',
   DONE_NEXT_BUTTON_ID: 'onboardingDoneNextButtonID',
+  NOTIFICATIONS_PAGE_HEADER: 'Stay updated with app notifications',
 }
 
 beforeAll(async () => {
@@ -84,9 +85,9 @@ describe('Onboarding Screen', () => {
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode(false)
     await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
-	  await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
+    await expect(element(by.text(OnboardingE2eIdConstants.NOTIFICATIONS_PAGE_HEADER))).toExist()
   })
-  
+
   it('verify the home page is displayed after tapping turn on notifications', async () => {
     await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     await element(by.text('Turn on notifications')).tap()
