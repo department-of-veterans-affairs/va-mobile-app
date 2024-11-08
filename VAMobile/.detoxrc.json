@@ -36,6 +36,12 @@
       "device": {
         "avdName": "Pixel_4_XL_API_28"
       }
+    },
+    "attached": {
+      "type": "android.attached",
+      "device": {
+        "adbName": ".*"
+      }
     }
   },
   "configurations": {
@@ -46,6 +52,10 @@
     },
     "android": {
       "device": "emulator",
+      "app": "android"
+    },
+    "attached": {
+      "device": "attached",
       "app": "android"
     }
   },
