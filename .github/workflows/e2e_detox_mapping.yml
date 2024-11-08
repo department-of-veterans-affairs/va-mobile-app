@@ -128,22 +128,35 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
+          firstInstanceFile="true"
+          firstInstanceDir="true"
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             baseDirectory=$(echo $directory | sed 's#.*/##')
             baseDirectory=$(echo $baseDirectory | sed 's/ //g')
-            directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+            directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" -c '.[$fileName]')
             if [[ "$directoryFound" != "null" ]]; then
-              test_matrix += $directoryFound
+              echo "$directoryFound"
+              if [[ "$firstInstanceDir" == "true" ]]; then
+                test_matrix = $directoryFound
+                firstInstanceDir="false"
+              else
+                test_matrix += $directoryFound
+              fi
             fi
           done
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
-            fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            fileFound=$(echo $directoryNames | jq --arg fileName -c "$baseFile" '.[$fileName]')
             if [[ "$fileFound" != "null" ]]; then
-              test_matrix += $fileFound
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix = $fileFound
+                firstInstanceFile="false"
+              else
+                test_matrix += $fileFound
+              fi
             fi
           done
           test_matrix=$(echo $test_matrix | jq 'unique')
