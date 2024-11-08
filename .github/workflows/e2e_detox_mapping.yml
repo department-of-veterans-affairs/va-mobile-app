@@ -95,12 +95,23 @@ jobs:
       - name: Check if directory/file is spelled correctly
         id: detox_mapping_spell_check
         run: |
-          directoriesInSrc=$(find ${{ github.workspace }}/VAMobile/src -type d)
-          echo "$directoriesInSrc"
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             echo "$directory"
+            if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
+              directoryMisspelled="true"
+            fi
           done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in $(echo $fileNames | jq 'keys | .[]'); do
+            echo "$fileNames"
+            if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$fileNames') ]]; then
+              fileMisspelled="true"
+            fi
+          done
+          if [[ "$directorymisspeled" == "true" || "$filesMisspelled" == "true"]; then
+            exit 1
+          fi
       - name: Check if e2eNames is spelled correctly
         id: detox_mapping_e2e_names_spell_check
         run: |
