@@ -6,6 +6,7 @@ import _ from 'underscore'
 import { deviceKeys } from 'api/device/queryKeys'
 import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
+import store from 'store'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 
@@ -208,7 +209,7 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
-    const overrideErrors = _store?.getState().demo.overrideErrors as APIError[]
+    const overrideErrors = store.getState().demo.overrideErrors as APIError[]
     if (overrideErrors) {
       _.forEach(overrideErrors, (error) => {
         if (error.endpoint && endpoint.includes(error.endpoint)) {
