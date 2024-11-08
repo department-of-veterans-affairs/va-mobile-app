@@ -54,6 +54,7 @@ export const useLogout = () => {
     },
     onSettled: async () => {
       await clearStoredAuthCreds()
+      dispatch(dispatchUpdateLoggingOut(false))
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       await finishInitialize(dispatch, false)
