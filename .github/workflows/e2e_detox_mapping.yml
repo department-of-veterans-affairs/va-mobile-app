@@ -62,8 +62,6 @@ jobs:
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
         with:
-          dir_names: true
-          dir_names_include_files: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
           path: './VAMobile/src'
       - name: Check if directory/file is in detox mapping
