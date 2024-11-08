@@ -48,10 +48,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: spike/9918-rachael-detox-add-what-to-run-to-code
-      - name: List files in the repository
-        run: |
-          echo "${{ github.workspace}}"
-          ls ${{ github.workspace }}/VAMobile/e2e
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
@@ -74,22 +70,24 @@ jobs:
         id: detox_mapping_check
         run: |
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          echo "$directoryNames"
           for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
             echo "$directory"
             baseDirectory=$(echo $directory | sed 's#.*/##')
             echo "$baseDirectory"
-            if [[ $(echo $directoryNames | jq --arg fileName $baseDirectory '.["$fileName"]') == null ]]; then
-              exit 1
-            fi
-          done
-          fileNames='cat ./VAMobile/e2e/package.json | jq '.files''
-          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
-            echo "$file"
-            baseFile=$(echo $file | sed 's#.*/##')
-            echo "$baseFile"
-            if [[ $(echo $directoryNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
-              exit 1
+            directoryFound=$(echo $directoryNames | jq --arg fileName $baseDirectory '.["$fileName"]')
+            echo "$directoryFound"
+            directoryFound=$(echo $directoryNames | jq '.["NoClaimsAndAppealsAccess"]')
+            echo "Test: $directoryFound"
+            if [[ "$directoryFound" == "null" ]]; then
+              fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+              for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+                echo "$file"
+                baseFile=$(echo $file | sed 's#.*/##')
+                echo "$baseFile"
+                if [[ $(echo $directoryNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
+                  exit 1
+                fi
+              done
             fi
           done
       - name: Check if directory/file is spelled correctly
