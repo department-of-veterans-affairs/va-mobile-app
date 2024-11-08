@@ -84,7 +84,7 @@ jobs:
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
-            if [[ "$fileFound" == "nulle" ]]; then
+            if [[ "$fileFound" == "null" ]]; then
               noFilesFound="true"
               break
             fi
@@ -128,6 +128,26 @@ jobs:
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-            echo "test"
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
+            baseDirectory=$(echo $directory | sed 's#.*/##')
+            baseDirectory=$(echo $baseDirectory | sed 's/ //g')
+            directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+            if [[ "$directoryFound" != "null" ]]; then
+              test_matrix += $directoryFound
+            fi
+          done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            baseFile=$(echo $file | sed 's#.*/##')
+            baseFile=$(echo $baseFile | sed 's/ //g')
+            fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            if [[ "$fileFound" != "null" ]]; then
+              test_matrix += $fileFound
+            fi
+          done
+          test_matrix=$(echo $test_matrix | jq 'unique')
+          echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
+          echo "TEST_RUN=true" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
