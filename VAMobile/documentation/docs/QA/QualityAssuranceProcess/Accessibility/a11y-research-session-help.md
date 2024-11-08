@@ -7,24 +7,22 @@ title: Accessible Research Session Help
 *Last update: November 4, 2024*
 
 ## Locating the VA: Health and Benefits app
-With the recent update to iOS 18, users can now customize the appearance of their app icons without an additional shortcut or appearance customization app. There are options for light and dark mode for the app icons or to completely customize the color of the icons themselves. Prior to the update, we would have asked a sighted participant to locate the app icon with the white "VA" and blue background, however, a participant's app icon may no longer visually appear this way. On Android devices, it is also common for a user to customize their icons, font styles, etc. using shortcuts or apperance customization apps.
+With the recent update to iOS 18, users can now customize the appearance of their app icons without an additional shortcut or appearance customization app. There are now options available for light and dark mode for the app icons or to completely customize the color of the icons themselves. Prior to the update, we would have asked a sighted participant to locate the app icon with the white "VA" and blue background, however, a participant's app icon may no longer visually appear this way. On Android devices, it is also common for a user to customize the appearance of their app icons, font styles, etc. using shortcuts or apperance customization apps.
 
-Instead of relying on the app icon's appearance to describe and verify that the participant has the VA: Health and Benefits app installed, you should consider building a few extra minutes into your research study plan to verify that the participant has the app by asking them to open the app and visually looking at the splash / login screen in their screen share.
+Instead of relying on the app icon's appearance to describe and verify that the participant has the VA: Health and Benefits app installed, you should consider building a few extra minutes into your research study plan to verify that the participant has the correct app by asking them to open the app and visually look at the splash / login screen in their screen share to verify.
 
 If Perigean will be verifying this for you, notify your recruiter that they will need to request that the Veteran open the app and visually verify that they have the correct app installed. You should also consider supplying screenshots of the login screen to the recruiter in both dark and light modes, so that they have it to make the visual comparison themselves.
 
-For screen reader participants who are using VoiceOver or TalkBack, no matter what color options or icon style they may have chosen to use on their device, both screen readers will still announce the app as "VA".
+For screen reader participants who are using VoiceOver or TalkBack, no matter which color option or icon style they may have chosen to use on their device, both screen readers will still announce the app as "VA".
 
 
-## ioS
+## iOS
 
 ### How to enable screen sharing in Zoom when using VoiceOver
 1. In Zoom, navigate/swipe to the "share" (button) and double-tap
 2. Double-tap on the first option: "screen" (button)
 3. Double-tap on "start broadcast" (button)
     - The participant will then hear a countdown (3, 2, 1) and the screen will begin broadcasting.
-
-### Locating the VA: Health and Benefits mobile app
 
 ### Screen Curtain
 When VoiceOver is active and the participant has begun sharing their screen with you, you may notice that the screen is black and that you cannot see anything that is being shared. This is called **screen curtain**. If a participant has screen curtain enabled, you will not be able to see anything on the participants' screen unless they disable it. 
