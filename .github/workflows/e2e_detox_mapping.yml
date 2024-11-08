@@ -99,12 +99,14 @@ jobs:
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
               directoryMisspelled="true"
+              break
             fi
           done
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in $(echo $fileNames | jq 'keys | .[]'); do
             if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$file') ]]; then
               fileMisspelled="true"
+              break
             fi
           done
           if [[ "$directorymisspeled" == "true" || "$filesMisspelled" == "true" ]]; then
@@ -113,7 +115,16 @@ jobs:
       - name: Check if e2eNames is spelled correctly
         id: detox_mapping_e2e_names_spell_check
         run: |
-          echo "$testx"
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq 'keys | .[]'); do
+            for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]')
+              if [[ ! $(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name '$e2eTest') ]]; then
+                echo "$directory"
+                echo "$e2eTest"
+                exit 1
+              fi
+            done
+          done
       - name: Get testing matrix array
         id: testing_matrix
         run: |
