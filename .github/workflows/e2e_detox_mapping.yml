@@ -117,7 +117,7 @@ jobs:
         run: |
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
-            for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]')
+            for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]'); do
               if [[ ! $(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name '$e2eTest') ]]; then
                 echo "$directory"
                 echo "$e2eTest"
