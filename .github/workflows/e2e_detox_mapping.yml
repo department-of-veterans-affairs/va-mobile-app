@@ -77,24 +77,32 @@ jobs:
             echo "$baseDirectory"
             directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
             echo "$directoryFound"
-            directoryFound=$(echo $directoryNames | jq '.["NoClaimsAndAppealsAccess"]')
-            echo "Test: $directoryFound"
             if [[ "$directoryFound" == "null" ]]; then
-              fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-              for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
-                echo "$file"
-                baseFile=$(echo $file | sed 's#.*/##')
-                echo "$baseFile"
-                if [[ $(echo $directoryNames | jq --arg fileName $baseFile '.["$fileName"]') == null ]]; then
-                  exit 1
-                fi
-              done
+              noDirectoryFound="true"
+              break
             fi
           done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            baseFile=$(echo $file | sed 's#.*/##')
+            baseFile=$(echo $baseFile | sed 's/ //g')
+            fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            if [[ "$fileFound" == "nulle" ]]; then
+              noFilesFound="true"
+              break
+            fi
+          done
+          if [[ "$noDirectoryFound" == "true" || "$noFilesFound" == "true" ]]; then
+            exit 1
+          fi
       - name: Check if directory/file is spelled correctly
         id: detox_mapping_spell_check
         run: |
-          echo "$test"
+          directoriesInSrc=$(echo ls -d ${{ github.workspace }}/VAMobile/src | jq -R -s -c 'split("\n")[:-1]')
+          echo "$directoriesInSrc"
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq 'keys'); do
+          done
       - name: Check if e2eNames is spelled correctly
         id: detox_mapping_e2e_names_spell_check
         run: |

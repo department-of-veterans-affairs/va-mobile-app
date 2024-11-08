@@ -105,7 +105,12 @@
     "SplashScreen": ["Onboarding", "LoginScreen"],
     "slices": "all",
     "translations": "all",
-    "utils": "all"
+    "utils": "all",
+    "devices": [],
+    "BiometricsPreferenceScreen": [],
+    "SyncScreen": [],
+    "WebviewScreen": [],
+    "styles": []
   },
   "files": {
     "account.ts": ["DirectDeposit"],
@@ -173,22 +178,14 @@
       "Payments"
     ],
     "vaccine.ts": ["VaccineRecords"],
-    "api.ts": "all"
-  },
-  "noTestsNeeded": [
-    "devices",
-    "BiometricsPreferenceScreen",
-    "SyncScreen",
-    "WebviewScreen",
-    "types",
-    "styles",
-    "analytics.ts",
-    "backButtonLabels.ts",
-    "documentTypes.ts",
-    "errors.ts",
-    "linking.tsx",
-    "namespaces.ts",
-    "store.ts",
-    "utils.ts"
-  ]
+    "api.ts": "all",
+    "analytics.ts": [],
+    "backButtonLabels.ts": [],
+    "documentTypes.ts": [],
+    "errors.ts": [],
+    "linking.tsx": [],
+    "namespaces.ts": [],
+    "store.ts": [],
+    "utils.ts": []
+  }
 }
