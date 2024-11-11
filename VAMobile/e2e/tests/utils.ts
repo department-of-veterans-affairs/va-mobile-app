@@ -94,6 +94,9 @@ export const CommonE2eIdConstants = {
   HOME_TAB_BUTTON_ID: 'Home',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
+  CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
+  ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
+  PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
 }
 
 /** Log the automation into demo mode
@@ -516,13 +519,13 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Get prescription tracking') {
       await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (
@@ -549,7 +552,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
