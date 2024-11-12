@@ -27,7 +27,7 @@ export const useBiometricsSettings = () => {
     queryKey: authKeys.biometrics,
     queryFn: () => getBiometricsSettings(),
     meta: {
-      errorName: 'getBiometricsSettings: Service error',
+      errorName: 'getBiometricsSettings: error',
     },
   })
 }

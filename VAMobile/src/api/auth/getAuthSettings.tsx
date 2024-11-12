@@ -24,7 +24,7 @@ export const useAuthSettings = () => {
     queryKey: authKeys.settings,
     queryFn: () => getAuthSettings(),
     meta: {
-      errorName: 'getAuthSettings: Service error',
+      errorName: 'getAuthSettings: error',
     },
   })
 }
