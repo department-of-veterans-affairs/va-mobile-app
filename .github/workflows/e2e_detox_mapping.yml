@@ -122,14 +122,8 @@ jobs:
             echo "file $file"
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $fileNames | jq --arg fileName -c "$baseFile" '.[$fileName]')
-            if [[ "$fileFound" != "null" ]]; then
-              if [[ "$firstInstanceFile" == "true" ]]; then
-                test_matrix=$fileFound
-                firstInstanceFile="false"
-              else
-                test_matrix+=$fileFound
-              fi
-            else
+            echo "$fileFound"
+            if [[ "$fileFound" == "null" ]]; then
               echo "noFilesFound"
               fileDirectory=$(dirname $file)
               baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
@@ -140,6 +134,13 @@ jobs:
                 firstInstanceFile="false"
               else
                 test_matrix+=$directoryFound
+              fi
+            else
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix=$fileFound
+                firstInstanceFile="false"
+              else
+                test_matrix+=$fileFound
               fi
             fi
           done
