@@ -113,7 +113,6 @@ jobs:
         id: testing_matrix
         run: |
           firstInstanceFile="true"
-          test_matrix=""
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
@@ -127,12 +126,12 @@ jobs:
               echo "$baseDirectory"
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
               if [[ "$firstInstanceFile" == "true" ]]; then
-                test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$directoryFound
+                test_matrix=$(echo $test_matrix | jq -c '.')
                 firstInstanceFile="false"
               else
                 test_matrix=$(echo $test_matrix | jq -c '.')
-                test_matrix=$(echo $test_matrix | jq --arg matrix "$test_matrix" '. += $matrix')
+                test_matrix=$(echo $test_matrix | jq --arg matrix "$directoryFound" '. += $matrix')
                 echo "$test_matrix"
               fi
             else
