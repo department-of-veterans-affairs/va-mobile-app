@@ -24,8 +24,7 @@ context('IncorrectServiceInfo', () => {
   })
 
   it('should call DMDC on press', () => {
-    const i18nPhoneNumber = t('8005389552')
-    fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(i18nPhoneNumber) }))
-    expect(Linking.openURL).toHaveBeenCalledWith(`tel:${i18nPhoneNumber}`)
+    fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8005389552')) }))
+    expect(Linking.openURL).toHaveBeenCalledWith(`tel:${t('8005389552')}`)
   })
 })
