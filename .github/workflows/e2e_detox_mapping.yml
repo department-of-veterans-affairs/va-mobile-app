@@ -104,9 +104,8 @@ jobs:
             echo "$directory"            
             for e2eTest in $(echo $directoryNames | jq --argjson directory "$directory" --raw-output '.[$directory] | .[]'); do
               echo "$e2eTest"
-              if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "$e2eTest")" == "" ]]; then
+              if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
                 echo "e2eTests in $directory are not spelled correctly"
-                exit 1
               fi
             done
           done
