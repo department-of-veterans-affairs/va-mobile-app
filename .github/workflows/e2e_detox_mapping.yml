@@ -73,7 +73,7 @@ jobs:
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
             if [[ "$fileFound" == "null" ]]; then
-              fileDirectory=$(echo $file | sed 's\/.*//)
+              fileDirectory=$(echo $file | sed 's\/.*//')
               echo "$fileDirectory"
               baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
               echo "$baseDirectory"
