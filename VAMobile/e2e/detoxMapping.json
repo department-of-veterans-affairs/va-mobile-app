@@ -214,7 +214,7 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
-    "devices": [],
+    "device": [],
     "BiometricsPreferenceScreen": [],
     "SyncScreen": [],
     "WebviewScreen": [],
