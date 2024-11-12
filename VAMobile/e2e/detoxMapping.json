@@ -88,8 +88,8 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
-    "LoginScreen1": ["LoginScreen"],
-    "AppealsDetailsScreen": ["Appeals", "AppealsExpanded"],
+    "LoginScreen": ["LoginScreen"],
+    "AppealDetailsScreen": ["Appeals", "AppealsExpanded"],
     "ClaimDetailsScreen": ["Claims"],
     "ClaimLettersScreen": ["Claims"],
     "ClaimsAndAppealsListView": ["Appeals", "AppealsExpanded", "Claims"],
