@@ -68,10 +68,11 @@ jobs:
         id: detox_mapping_check
         run: |
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          direcotryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
-            fileFound=$(echo $directoryNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
             if [[ "$fileFound" == "null" ]]; then
               fileDirectory=$(echo $file | sed 's\/.*//')
               echo "$fileDirectory"
