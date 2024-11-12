@@ -50,10 +50,10 @@ jobs:
         id: create_issue
       - name: Assign Users to Release Ticket
         if: ${{ success() }}
+
         run: |
+          echo "Formatted Assignees: $ASSIGNEES" 
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
-          for user in $ASSIGNEES; do
-            gh issue edit $ISSUE_NUMBER --add-assignee "$user"
-          done
+          gh issue edit $ISSUE_NUMBER --add-assignee "$ASSIGNEES"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
