@@ -28,13 +28,6 @@ jobs:
       - uses: actions/checkout@v3
       - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
-      - name: Fetch GitHub Group Members
-        run: |
-          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
-          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
-          # Debug output just for testing
-          echo "Formatted Assignees: $ASSIGNEES" 
-      # Create Release Ticket with auto-assigned members
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
@@ -51,9 +44,12 @@ jobs:
       - name: Assign Users to Release Ticket
         if: ${{ success() }}
         run: |
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          # Debug output just for testing
+          echo "Formatted Assignees: $ASSIGNEES"
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
-          for user in $ASSIGNEES; do
-            gh issue edit $ISSUE_NUMBER --add-assignee "$user"
-          done
+          gh issue edit $ISSUE_NUMBER --add-assignee "ASSIGNEES"
+        
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
