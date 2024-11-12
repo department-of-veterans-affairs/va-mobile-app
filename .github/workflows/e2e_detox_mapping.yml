@@ -123,9 +123,7 @@ jobs:
               fileDirectory=$(dirname $file)
               baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
               baseDirectory=$(echo $baseDirectory | sed 's/ //g')
-              echo "$baseDirectory"
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
-              echo "$directoryFound"
               if [[ "$firstInstanceFile" == "true" ]]; then
                 test_matrix=$directoryFound
                 test_matrix=$(echo $test_matrix | jq -c '.')
@@ -133,19 +131,18 @@ jobs:
               else
                 test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
-                echo "$test_matrix"
               fi
             else
               if [[ "$firstInstanceFile" == "true" ]]; then
                 test_matrix=$fileFound
+                test_matrix=$(echo $test_matrix | jq -c '.')
                 firstInstanceFile="false"
               else
-                test_matrix+=$fileFound
-                echo "$test_matrix"
+                test_matrix=$(echo $test_matrix | jq -c '.')
+                test_matrix=$(echo $test_matrix | jq --argjson matrix "$fileFound" '. += $matrix')
               fi
             fi
           done
-          echo "$test_matrix"
           test_matrix=$(echo $test_matrix | jq -c 'unique')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
