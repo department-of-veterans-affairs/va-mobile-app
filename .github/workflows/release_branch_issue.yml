@@ -32,11 +32,6 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      # Fetch GitHub Group Members
-      - name: Fetch GitHub Group Members
-        run: |
-          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
-          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
@@ -48,9 +43,20 @@ jobs:
           vaDueDate: ${{env.VA_DUE_DATE}}
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
-          assignees: ${{ env.ASSIGNEES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
+        id: create_issue
+      - name: Assign Users to Release Ticket
+        if: ${{ success() }}
+        run: |
+          #Fetch GitHub Group Members
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          # Debug output just for testing
+          echo "Formatted Assignees: $ASSIGNEES"
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}  
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket
