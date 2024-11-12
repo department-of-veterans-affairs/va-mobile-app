@@ -125,13 +125,14 @@ jobs:
               baseDirectory=$(echo $baseDirectory | sed 's/ //g')
               echo "$baseDirectory"
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+              echo "$directoryFound"
               if [[ "$firstInstanceFile" == "true" ]]; then
                 test_matrix=$directoryFound
                 test_matrix=$(echo $test_matrix | jq -c '.')
                 firstInstanceFile="false"
               else
                 test_matrix=$(echo $test_matrix | jq -c '.')
-                test_matrix=$(echo $test_matrix | jq --arg matrix "$directoryFound" '. += $matrix')
+                test_matrix=$(echo $test_matrix | jq --argJson matrix "$directoryFound" '. += $matrix')
                 echo "$test_matrix"
               fi
             else
