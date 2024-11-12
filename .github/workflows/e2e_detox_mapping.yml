@@ -102,7 +102,7 @@ jobs:
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             echo "$directory"            
-            for e2eTest in $(echo $directoryNames | jq --arg directory "$directory" --raw-output '.[$directory] | .[]'); do
+            for e2eTest in $(echo $directoryNames | jq --argjson directory "$directory" --raw-output '.[$directory] | .[]'); do
               echo "$e2eTest"
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "$e2eTest")" == "" ]]; then
                 echo "e2eTests in $directory are not spelled correctly"
