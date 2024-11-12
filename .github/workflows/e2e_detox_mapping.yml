@@ -100,12 +100,21 @@ jobs:
         id: detox_mapping_e2e_names_spell_check
         run: |
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          for directory in $(echo $directoryNames | jq 'keys | .[]'); do
-            echo "$directory"            
+          for directory in $(echo $directoryNames | jq 'keys | .[]'); do          
             for e2eTest in $(echo $directoryNames | jq --argjson directory "$directory" --raw-output '.[$directory] | .[]'); do
               echo "$e2eTest"
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
                 echo "e2eTests in $directory are not spelled correctly"
+                echo "$e2eTests misspelled: $e2eTest"
+              fi
+            done
+          done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in $(echo $directoryNames | jq 'keys | .[]'); do           
+            for e2eTest in $(echo $fileNames | jq --argjson file "$file" --raw-output '.[$file] | .[]'); do
+              if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
+                echo "e2eTests in $file are not spelled correctly"
+                echo "$e2eTests misspelled: $e2eTest"
               fi
             done
           done
