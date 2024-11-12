@@ -120,9 +120,7 @@ jobs:
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
-            echo "$fileFound"
             if [[ "$fileFound" == "null" ]]; then
-              echo "noFilesFound"
               fileDirectory=$(dirname $file)
               baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
               baseDirectory=$(echo $baseDirectory | sed 's/ //g')
