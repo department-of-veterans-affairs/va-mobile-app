@@ -151,6 +151,7 @@ export type VABackgroundColors = {
   skeletonLoader: string
   skeletonLoaderSecondary: string
   bullet: string
+  carouselBullet: string
 }
 
 export type VABorderColors = {
