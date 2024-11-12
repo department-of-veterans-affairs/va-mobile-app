@@ -221,7 +221,7 @@
     "styles": []
   },
   "files": {
-    "account.ts": ["DirectDeposit"],
+    "accounts.ts": ["DirectDeposit"],
     "appointments.ts": ["Appointments", "AppointmentsExpanded"],
     "claims.ts": ["Claims", "Appeals", "AppealsExpanded"],
     "common.ts": [
@@ -289,7 +289,7 @@
     "claims.json": ["Claims", "Appeals", "AppealsExpanded"],
     "contactInformation.json": ["ContactInformation", "VALetters"],
     "decisionLetters.json": ["DecisionLetters"],
-    "disabilityRating.json": ["DisabilityRatings"],
+    "disablityRating.json": ["DisabilityRatings"],
     "getAuthorizedServices.json": [
       "Appeals",
       "AppealsExpanded",
