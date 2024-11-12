@@ -311,7 +311,7 @@
     "letters.json": ["VALetters"],
     "notifications.json": ["SettingsScreen", "PushNotifications"],
     "payments.json": ["Payments"],
-    "personalInformation.json": ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"],
+    "personalInformation.json": ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"],
     "prescriptions.json": ["Prescriptions"],
     "profile.json": [
       "ProfileScreen",
@@ -325,7 +325,7 @@
     "secureMessaging.json": ["Messages"],
     "vaccine.json": ["VaccineRecords"],
     "decisionLetters.ts": ["DecisionLetters"],
-    "demographics.ts": ["PeronsalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"],
+    "demographics.ts": ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"],
     "disabilityRating.ts": ["DisabilityRatings"],
     "letters.ts": ["VALetters"],
     "notifications.ts": ["SettingsScreen", "PushNotifications"],

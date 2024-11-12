@@ -105,6 +105,7 @@ jobs:
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
                 echo "e2eTests in $directory are not spelled correctly"
                 echo "$e2eTests misspelled: $e2eTest"
+                exit 1
               fi
             done
           done
@@ -114,6 +115,7 @@ jobs:
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
                 echo "e2eTests in $file are not spelled correctly"
                 echo "$e2eTests misspelled: $e2eTest"
+                exit 1
               fi
             done
           done
