@@ -332,7 +332,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+
       - name: Make a ticket on failure (if needed)
         if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
         uses: JasonEtco/create-an-issue@v2

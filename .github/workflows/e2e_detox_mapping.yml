@@ -47,7 +47,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: spike/9918-rachael-detox-add-what-to-run-to-code
+          fetch-depth: 0
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
@@ -72,6 +72,7 @@ jobs:
               baseDirectory=$(echo $baseDirectory | sed 's/ //g')
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
               if [[ "$directoryFound" == "null" ]]; then
+                echo "Missing File: $file or missing directory: $fileDirectory"
                 exit 1
               fi
             fi
@@ -83,6 +84,7 @@ jobs:
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
               directoryMisspelled="true"
+              echo "Directory misspelled: $directory"
               break
             fi
           done
@@ -90,6 +92,7 @@ jobs:
           for file in $(echo $fileNames | jq 'keys | .[]'); do
             if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$file') ]]; then
               fileMisspelled="true"
+              echo "File misspelled: $file"
               break
             fi
           done
@@ -103,8 +106,7 @@ jobs:
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]'); do
               if [[ ! $(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name '$e2eTest') ]]; then
-                echo "$directory"
-                echo "$e2eTest"
+                echo "e2eTests in $directory are not spelled correctly"
                 exit 1
               fi
             done
