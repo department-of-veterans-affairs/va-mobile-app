@@ -51,13 +51,6 @@ jobs:
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
-      - name: Get file difference by directory
-        id: changed_files_dir
-        uses: tj-actions/changed-files@v41
-        with:
-          dir_names: true
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
-          path: './VAMobile/src'
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
@@ -68,98 +61,91 @@ jobs:
         id: detox_mapping_check
         run: |
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          direcotryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
             if [[ "$fileFound" == "null" ]]; then
               fileDirectory=$(dirname $file)
-              echo "$fileDirectory"
               baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
-              echo "$baseDirectory"
               baseDirectory=$(echo $baseDirectory | sed 's/ //g')
-              echo "$baseDirectory"
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
               if [[ "$directoryFound" == "null" ]]; then
                 exit 1
               fi
             fi
           done
-      # - name: Check if directory/file is spelled correctly
-      #   id: detox_mapping_spell_check
-      #   run: |
-      #     directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-      #     for directory in $(echo $directoryNames | jq 'keys | .[]'); do
-      #       if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
-      #         directoryMisspelled="true"
-      #         break
-      #       fi
-      #     done
-      #     fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-      #     for file in $(echo $fileNames | jq 'keys | .[]'); do
-      #       if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$file') ]]; then
-      #         fileMisspelled="true"
-      #         break
-      #       fi
-      #     done
-      #     if [[ "$directorymisspeled" == "true" || "$filesMisspelled" == "true" ]]; then
-      #       exit 1
-      #     fi
-      # - name: Check if e2eNames is spelled correctly
-      #   id: detox_mapping_e2e_names_spell_check
-      #   run: |
-      #     directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-      #     for directory in $(echo $directoryNames | jq 'keys | .[]'); do
-      #       for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]'); do
-      #         if [[ ! $(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name '$e2eTest') ]]; then
-      #           echo "$directory"
-      #           echo "$e2eTest"
-      #           exit 1
-      #         fi
-      #       done
-      #     done
-      # - name: Get testing matrix array
-      #   id: testing_matrix
-      #   run: |
-      #     firstInstanceFile="true"
-      #     firstInstanceDir="true"
-      #     test_matrix=""
-      #     directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-      #     for directory in ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}; do
-      #       echo "$directory"
-      #       baseDirectory=$(echo $directory | sed 's#.*/##')
-      #       baseDirectory=$(echo $baseDirectory | sed 's/ //g')
-      #       echo "baseDirectory: $baseDirectory"
-      #       directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" -c '.[$fileName]')
-      #         echo "$directoryFound"
-      #       if [[ "$directoryFound" != "null" ]]; then
-      #         if [[ "$firstInstanceDir" == "true" ]]; then
-      #           test_matrix=$directoryFound
-      #           firstInstanceDir="false"
-      #         else
-      #           test_matrix+=$directoryFound
-      #         fi
-      #       fi
-      #     done
-      #     echo "doneWithDirectories"
-      #     fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-      #     for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
-      #       baseFile=$(echo $file | sed 's#.*/##')
-      #       echo "file $file"
-      #       baseFile=$(echo $baseFile | sed 's/ //g')
-      #       fileFound=$(echo $fileNames | jq --arg fileName -c "$baseFile" '.[$fileName]')
-      #       if [[ "$fileFound" != "null" ]]; then
-      #         if [[ "$firstInstanceFile" == "true" && "${{steps.changed_files_dir.outputs.all_changed_and_modified_files}}" == "" ]]; then
-      #           test_matrix=$fileFound
-      #           firstInstanceFile="false"
-      #         else
-      #           test_matrix+=$fileFound
-      #         fi
-      #       fi
-      #     done
-      #     test_matrix=$(echo $test_matrix | jq 'unique')
-      #     echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
-      #     echo "TEST_RUN=true" >> $GITHUB_OUTPUT
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check if directory/file is spelled correctly
+        id: detox_mapping_spell_check
+        run: |
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq 'keys | .[]'); do
+            if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
+              directoryMisspelled="true"
+              break
+            fi
+          done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in $(echo $fileNames | jq 'keys | .[]'); do
+            if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$file') ]]; then
+              fileMisspelled="true"
+              break
+            fi
+          done
+          if [[ "$directorymisspeled" == "true" || "$filesMisspelled" == "true" ]]; then
+            exit 1
+          fi
+      - name: Check if e2eNames is spelled correctly
+        id: detox_mapping_e2e_names_spell_check
+        run: |
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq 'keys | .[]'); do
+            for e2eTest in $($directoryNames | jq --arg directory "$directory" '.[$directory] | .[]'); do
+              if [[ ! $(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name '$e2eTest') ]]; then
+                echo "$directory"
+                echo "$e2eTest"
+                exit 1
+              fi
+            done
+          done
+      - name: Get testing matrix array
+        id: testing_matrix
+        run: |
+          firstInstanceFile="true"
+          firstInstanceDir="true"
+          test_matrix=""
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            baseFile=$(echo $file | sed 's#.*/##')
+            echo "file $file"
+            baseFile=$(echo $baseFile | sed 's/ //g')
+            fileFound=$(echo $fileNames | jq --arg fileName -c "$baseFile" '.[$fileName]')
+            if [[ "$fileFound" != "null" ]]; then
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix=$fileFound
+                firstInstanceFile="false"
+              else
+                test_matrix+=$fileFound
+              fi
+            else
+              echo "noFilesFound"
+              fileDirectory=$(dirname $file)
+              baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
+              baseDirectory=$(echo $baseDirectory | sed 's/ //g')
+              directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix=$directoryFound
+                firstInstanceFile="false"
+              else
+                test_matrix+=$directoryFound
+              fi
+            fi
+          done
+          echo "$test_matrix"
+          test_matrix=$(echo $test_matrix | jq 'unique')
+          echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
+          echo "TEST_RUN=true" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
