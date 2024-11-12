@@ -83,7 +83,7 @@ jobs:
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do
             echo "$directory"
-            test=$(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory'
+            test=$(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory')
             echo "directoryFound: $test"
             if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$directory') ]]; then
               directoryMisspelled="true"
