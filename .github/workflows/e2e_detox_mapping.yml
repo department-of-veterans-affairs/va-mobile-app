@@ -113,15 +113,12 @@ jobs:
         id: testing_matrix
         run: |
           firstInstanceFile="true"
-          firstInstanceDir="true"
           test_matrix=""
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          echo "$fileNames"
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
-            echo "$baseFile"
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
             echo "$fileFound"
             if [[ "$fileFound" == "null" ]]; then
@@ -132,11 +129,11 @@ jobs:
               echo "$baseDirectory"
               directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
               if [[ "$firstInstanceFile" == "true" ]]; then
-                test_matrix=$echo($test_matrix | jq -c '.')
+                test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$directoryFound
                 firstInstanceFile="false"
               else
-                test_matrix=$echo($test_matrix | jq -c '.')
+                test_matrix=$(echo $test_matrix | jq -c '.')
                 test_matrix=$(echo $test_matrix | jq --arg matrix "$test_matrix" '. += $matrix')
                 echo "$test_matrix"
               fi
