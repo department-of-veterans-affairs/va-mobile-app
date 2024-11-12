@@ -81,8 +81,7 @@ jobs:
         id: detox_mapping_spell_check
         run: |
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          for directory in $(echo $directoryNames | jq 'keys | .[]'); do
-            directory=$(echo $directory | tr -d '\n')
+          for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
             test=$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory")
             echo "$directory : $test"
             if [[ !$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory") ]]; then
