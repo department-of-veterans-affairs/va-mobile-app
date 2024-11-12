@@ -82,16 +82,14 @@ jobs:
         run: |
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
-            test=$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory")
-            echo "$directory : $test"
-            if [[ !$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory") ]]; then
+            if [[ "$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory")" == "null" ]]; then
               directoryMisspelled="true"
               echo "Directory misspelled: $directory"
             fi
           done
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          for file in $(echo $fileNames | jq 'keys | .[]'); do
-            if [[ ! $(find ${{ github.workspace }}/VAMobile/src -type d -name '$file') ]]; then
+          for file in $(echo $fileNames | jq -r 'keys | .[]'); do
+            if [[ "$(find ${{ github.workspace }}/VAMobile/src -type d -name "$file")" == "null" ]]; then
               fileMisspelled="true"
               echo "File misspelled: $file"
             fi
