@@ -50,6 +50,8 @@ jobs:
           echo "Formatted Assignees: $ASSIGNEES"
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
           gh issue edit $ISSUE_NUMBER --add-assignee "ASSIGNEES"
-        
+          echo "Formatted Assignees: $ASSIGNEES"
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          gh issue edit $ISSUE_NUMBER --add-assignee "$ASSIGNEES"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
