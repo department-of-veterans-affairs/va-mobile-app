@@ -95,7 +95,7 @@ export const lightTheme = {
   },
   text: {
     appVersionAndBuild: colors.vadsColorBlack,
-    primary: colors.vadsColorPrimaryDark,
+    primary: primaryTextColor,
     primaryContrast: colors.vadsColorBaseLightest,
     error: colors.vadsColorSecondaryDark,
     link: colors.vadsColorPrimary,
