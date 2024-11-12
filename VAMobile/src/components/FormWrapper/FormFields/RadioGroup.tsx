@@ -129,7 +129,8 @@ const RadioGroup = <T,>({
           <Box
             mb={theme.dimensions.standardMarginBetween}
             key={index}
-            mt={headerText ? theme.dimensions.contentMarginTop : 0}>
+            mt={headerText ? theme.dimensions.contentMarginTop : 0}
+            role={'radio'}>
             {getOption(option)}
           </Box>
         </Box>
@@ -170,7 +171,6 @@ const RadioGroup = <T,>({
         onPress: onSelectorChange,
         minHeight: 64,
         a11yRole: 'radio',
-        a11yHint: 'radio',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
         testId: `${option.a11yLabel || option.labelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
