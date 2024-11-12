@@ -213,6 +213,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         </TextView>
         <SimpleList items={firebaseList} />
       </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
+        </TextArea>
+      </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
