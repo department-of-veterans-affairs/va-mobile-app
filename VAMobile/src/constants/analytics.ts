@@ -6,15 +6,6 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  vama_9385_api_cType: (endpoint: string, contentType: string): Event => {
-    return {
-      name: 'vama_9385_api_cType',
-      params: {
-        endpoint: endpoint,
-        contentType: contentType,
-      },
-    }
-  },
   vama_accordion_click: (section: string, isOpened: boolean): Event => {
     return {
       name: 'vama_accordion_click',
@@ -1204,6 +1195,14 @@ export const Events = {
       name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
+      },
+    }
+  },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
       },
     }
   },

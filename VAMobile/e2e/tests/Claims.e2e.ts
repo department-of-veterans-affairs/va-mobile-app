@@ -48,7 +48,6 @@ export const ClaimsE2eIdConstants = {
   TAKE_OR_SELECT_PHOTOS_TEXT: 'Take or select photos',
   ACCEPTED_FILE_TYPES_TEXT: 'PDF (unlocked), GIF, JPEG, JPG, BMP, TXT',
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
-  CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   CLAIMS_HISTORY_SCREEN_ID: 'claimsHistoryID',
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
   CLAIMS_STATUS_ID: 'claimsStatusID',
@@ -97,7 +96,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_6_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_7_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_STATUS_STEP_8_ID))).toExist()
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
   })
 
@@ -126,7 +125,7 @@ describe('Claims Screen', () => {
     await setTimeout(2000)
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_3_STATUS_STEP_2_ID)))
       .toBeVisible()
-      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
     await setTimeout(2000)
     await element(by.text('Step 2')).tap()
@@ -139,7 +138,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify what you claimed section', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await expect(element(by.text("What you've claimed"))).toExist()
   })
 
@@ -241,7 +240,7 @@ describe('Claims Screen', () => {
 
   //flag has been turned off per slack convo in DSVA, commenting tests out until it is turned back on
   // it('should verify submit evidence button exists', async () => {
-  //   await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
+  //   await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
   //   await element(by.text('Submit evidence')).tap()
   // })
 
@@ -330,7 +329,7 @@ describe('Claims Screen', () => {
       element(by.id('Step 3 of 5. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.')),
     )
       .toBeVisible()
-      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
       .scroll(100, 'down')
     await element(
       by.id('Step 3 of 5. Evidence gathering, review, and decision. Current step. Step 1 through 2 complete.'),
@@ -361,14 +360,14 @@ describe('Claims Screen', () => {
   it('should verify details of claim on step 5', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID)).tap()
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Step 5 of 5. Complete. Complete.')).tap()
     await expect(element(by.text('Complete')).atIndex(1)).toExist()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
   })
 
   it('should tap on the closed tab', async () => {
-    await element(by.id('claimsHistoryClosedID')).tap()
+    await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_CLOSED_TAB_ID)).tap()
   })
 
   it('verify the status details page of closed claim with decision letter', async () => {
@@ -393,7 +392,7 @@ describe('Claims Screen', () => {
   })
 
   it('Verify what should I do if disagreement information', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_LEARN_WHAT_TO_DO)).atIndex(0).tap()
     await expect(element(by.text('What to do if you disagree with our decision')).atIndex(0)).toExist()
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DECISION_REVIEW_OPTIONS)).tap()
@@ -411,7 +410,7 @@ describe('Claims Screen', () => {
     ).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
     if (device.getPlatform() === 'android') {
-      await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
       await device.disableSynchronization()
       await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
@@ -422,7 +421,7 @@ describe('Claims Screen', () => {
   })
 
   it('verify files tab infomation', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
     await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
   })

@@ -42,7 +42,7 @@ title: Endpoint Creation Checklist
     $ref: '#/components/responses/504'
 ```
 
-Regenerated HTML file by running `generate_static_docs.sh` command (`modules/mobile/docs/generate_static_docs.sh`)
+Regenerated [OpenAPI documentation](./OpenAPIDocumentation.md) HTML file by running `modules/mobile/docs/generate_static_docs.sh`
 
 ### Monitoring
 

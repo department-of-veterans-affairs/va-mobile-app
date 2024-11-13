@@ -1,6 +1,5 @@
 ---
 title: Downtime Messages
-sidebar_position: 6
 ---
 
 # Downtime Messages

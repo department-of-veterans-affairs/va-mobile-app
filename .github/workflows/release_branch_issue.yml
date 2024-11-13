@@ -20,7 +20,7 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
       - run: |
           sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
@@ -32,7 +32,8 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - uses: JasonEtco/create-an-issue@v2
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
         env:
@@ -43,7 +44,17 @@ jobs:
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
+        id: create_issue
+      - name: Assign Users to Release Ticket
+        if: ${{ success() }}
+        run: |
+          # Fetch GitHub Group Members
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}  
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket
@@ -93,8 +104,8 @@ jobs:
         id: map_slack_ids
         run: |
           declare -A GITHUB_TO_SLACK_MAP
-          GITHUB_TO_SLACK_MAP["DJUltraTom"]="U02BBL9L0CU"
-          GITHUB_TO_SLACK_MAP["kellylein"]="UJHA49K6X"
+          GITHUB_TO_SLACK_MAP["TKDickson"]="U02PJLJ0H6H"
+          GITHUB_TO_SLACK_MAP["SarahHuber_AdHoc"]="U07U9EDGAFP"
           GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
           GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
           GITHUB_TO_SLACK_MAP["ala_yna"]="UQC180926"
@@ -110,8 +121,8 @@ jobs:
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_DJUltraTom: $DJUltraTom
-          SLACK_kellylein: $kellylein
+          SLACK_TKDickson: $TKDickson
+          SLACK_SarahHuberAdHoc: $SarahHuber_AdHoc
           SLACK_dumathane: $dumathane
           SLACK_timwright12: $timwright12
           SLACK_alayna: $ala_yna
@@ -132,8 +143,8 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-          - *Release Testing:* <@${SLACK_DJUltraTom}>\n\
-          - *Release Manager:* <@${SLACK_kellylein}>\n\
+          - *Release Testing:* <@${SLACK_TKDickson}>\n\
+          - *Release Manager:* <@${SLACK_SarahHuberAdHoc}>\n\
           - *Release Ticket Validation:* <@${SLACK_dumathane}>\n\
           - *Engineering:* <@${SLACK_dumathane}>, <@${SLACK_timwright12}>\n\
           - *Mobile Product Approvers:* H&B and Global - <@${SLACK_alayna}> Global - <@${SLACK_ajsarkar28}>\n\

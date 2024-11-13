@@ -1,8 +1,5 @@
 import { by, device, element, expect, waitFor } from 'detox'
-import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
-
-import { isIOS } from 'utils/platform'
 
 import {
   CommonE2eIdConstants,
@@ -13,38 +10,29 @@ import {
   toggleRemoteConfigFlag,
 } from './utils'
 
-export async function getDateWithTimeZone(dateString: string) {
-  const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
-  const dateUTC = date.toLocal()
-  let dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL))
-  if (device.getPlatform() === 'android') {
-    dateTime = dateTime.replace(' at ', ', ')
-  }
-  return dateTime
-}
-
 export const MessagesE2eIdConstants = {
-  MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
-  MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects',
-  MESSAGE_2_ID: 'Unread: Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
-  MESSAGE_2_READ_ID: 'Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit',
-  MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md October 26, 2021 General: Your requested info',
-  MESSAGE_4_ID: 'Cheryl Rodger, Md October 26, 2021 Appointment: Please read and prepare appropriately',
-  MESSAGE_5_ID: 'Vija A. Ravi, Md October 21, 2021 General: Summary of visit',
-  MESSAGE_6_ID: 'Ratana, Narin  October 21, 2021 Test: Preparing for your visit',
-  MESSAGE_7_ID: 'Ratana, Narin  September 17, 2021 Education: Good morning to you',
-  MESSAGE_10_ID: 'Ratana, Narin  September 17, 2021 COVID: Test',
-  FOLDERS_TEXT: 'Folders',
+  MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2024 Medication: Naproxen side effects',
+  MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2024 Medication: Naproxen side effects',
+  MESSAGE_2_ID: 'Unread: Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
+  MESSAGE_2_READ_ID: 'Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
+  MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
+  MESSAGE_3_READ_ID: 'Sarah Kotagal, Md August 26, 2024 General: Your requested info',
+  MESSAGE_4_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
+  MESSAGE_5_ID: 'Vija A. Ravi, Md July 21, 2024 General: Summary of visit',
+  MESSAGE_6_ID: 'Ratana, Narin  July 21, 2024 Test: Preparing for your visit',
+  MESSAGE_7_ID: 'Ratana, Narin  June 17, 2024 Education: Good morning to you',
+  MESSAGE_10_ID: 'Ratana, Narin  February 17, 2024 COVID: Test',
+  FOLDERS_ID: 'foldersID',
   MESSAGES_ID: 'messagesTestID',
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
   ONLY_USE_MESSAGES_TEXT: 'Only use messages for non-urgent needs',
-  ATTACHMENTS_BUTTON_TEXT: 'Add Files',
+  ATTACHMENTS_BUTTON_ID: 'messagesAttachmentsAddFilesID',
   ATTACHMENT_CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
   ATTACHMENT_PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
   ATTACHMENT_FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
   MESSAGE_INPUT_ID: 'reply field',
   SEND_BUTTON_ID: 'sendButtonTestID',
-  SELECT_A_FILE_ID: 'Select a file',
+  SELECT_A_FILE_ID: 'messagesSelectAFileID',
   REPLY_PAGE_TEST_ID: 'replyPageTestID',
   START_NEW_MESSAGE_TO_ID: 'to field',
   START_NEW_MESSAGE_CATEGORY_ID: 'picker',
@@ -64,6 +52,14 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
   EDIT_DRAFT_PAGE_TEST_ID: 'editDraftTestID',
+  BACK_TO_MESSAGES_ID: 'backToMessagesID',
+  MOVE_PICKER_ID: 'pickerMoveMessageID',
+  MOVE_PICKER_CANCEL_ID: 'pickerMoveMessageCancelID',
+  MOVE_PICKER_CONFIRM_ID: 'pickerMoveMessageConfirmID',
+  ATTACHMENTS_PAGE_CANCEL_ID: 'attachmentsCancelID',
+  MESSAGES_HELP_CLOSE_ID: 'messagesHelpCloseTestID',
+  MESSAGE_PICKER_CONFIRM_ID: 'messagePickerConfirmID',
+  FOLDERS_BACK_ID: 'foldersBackToMessagesID',
 }
 
 const tapItems = async (items: string, type: string) => {
@@ -90,7 +86,6 @@ const tapItems = async (items: string, type: string) => {
   await setTimeout(3000)
 }
 
-let dateWithTimeZone
 let messageCollapsed
 let messageExpanded
 
@@ -105,7 +100,7 @@ describe('Messages Screen', () => {
   it('should match the messages page design', async () => {
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(element(by.text('Inbox (3)'))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.FOLDERS_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toExist()
@@ -122,34 +117,22 @@ describe('Messages Screen', () => {
 
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
-    await expect(element(by.text('This conversation is too old for new replies'))).toExist()
-    await expect(
-      element(
-        by.text(
-          'The last message in this conversation is more than 45 days old. To continue this conversation, start a new message.',
-        ),
-      ),
-    ).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+    await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
   })
 
-  it('verify the message just opened is displayed as read', async () => {
-    await element(by.text('Messages')).tap()
-    await expect(
-      element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
-    ).toExist()
-  })
-
   it('verify message NEWER than 45 days information', async () => {
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
-    await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
 
   it(':android: verify phone links open', async () => {
@@ -189,23 +172,28 @@ describe('Messages Screen', () => {
     }
   })
 
+  it('verify the messages just opened are displayed as read', async () => {
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID))).toExist()
+    await expect(element(by.text('Inbox (1)'))).toExist()
+  })
+
   it('verify medication message details', async () => {
-    await element(by.text('Messages')).tap()
-    await element(by.id('Martha Kaplan, Md October 26, 2021 Medication: Naproxen side effects')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify COVID message details', async () => {
-    await element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
     await expect(element(by.text('COVID: Your requested info'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify general message details', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID)).tap()
     await expect(element(by.text('General: Vaccine Booster'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify appointment message details', async () => {
@@ -215,7 +203,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
     await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify other message details', async () => {
@@ -225,7 +213,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_5_ID)).tap()
     await expect(element(by.text('General: COVID vaccine booster?'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify test_results message details', async () => {
@@ -235,7 +223,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_6_ID)).tap()
     await expect(element(by.text('Test: Preparing for your visit'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('verify education message details', async () => {
@@ -245,7 +233,7 @@ describe('Messages Screen', () => {
       .scroll(100, 'down')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID)).tap()
     await expect(element(by.text('Education: Good morning to you'))).toExist()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   it('should tap on and then cancel the move option', async () => {
@@ -254,8 +242,8 @@ describe('Messages Screen', () => {
       .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
       .scroll(400, 'up')
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
-    await element(by.text('Move')).tap()
-    await element(by.text('Cancel')).tap()
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_CANCEL_ID)).tap()
   })
 
   it('should tap reply and verify the correct information is displayed', async () => {
@@ -263,19 +251,19 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_INPUT_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
   it('reply: verify talk to the veterans crisis line now is displayed', async () => {
-    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
-    await element(by.text('Done')).tap()
+    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
   })
 
   it('should tap add files and verify the correct info is displayed', async () => {
-    await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
+    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
     await expect(element(by.text('What to know about attaching files'))).toExist()
     await expect(element(by.text('You can attach up to 4 files to each message.'))).toExist()
     await expect(
@@ -284,21 +272,21 @@ describe('Messages Screen', () => {
     await expect(element(by.text('The maximum size for each file is 6 MB.'))).toExist()
     await expect(element(by.text('The maximum total size for all files attached to 1 message is 10 MB.'))).toExist()
     await expect(element(by.text("We can't save attachments in a draft."))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID))).toExist()
   })
 
   it('should tap cancel and verify that the reply page is displayed', async () => {
-    await element(by.text('Cancel')).atIndex(0).tap()
+    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_INPUT_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
   it('verify tap select a file action sheet options are correct', async () => {
-    await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
-    await element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_FILE_FOLDER_TEXT))).toExist()
@@ -307,10 +295,10 @@ describe('Messages Screen', () => {
   it('should close the action sheet and tap cancel', async () => {
     if (device.getPlatform() === 'android') {
       await element(by.text('Cancel ')).tap()
-      await element(by.text('Cancel')).atIndex(1).tap()
+      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
     } else {
       await element(by.text('Cancel')).atIndex(2).tap()
-      await element(by.text('Cancel')).atIndex(0).tap()
+      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
     }
   })
 
@@ -337,16 +325,12 @@ describe('Messages Screen', () => {
 
   it('should tap and move a message', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
-    await element(by.text('Move')).tap()
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_ID)).tap()
     await element(by.text('Custom Folder 2')).tap()
-    if (device.getPlatform() === 'android') {
-      await element(by.text('Move')).tap()
-    } else {
-      await element(by.text('Move')).atIndex(1).tap()
-    }
+    await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_CONFIRM_ID)).tap()
     await expect(element(by.text('Message moved to Custom Folder 2'))).toExist()
     await element(by.text('Dismiss')).tap()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
   //running on iOS only for the next few tests due to android wonkiness due to detox
@@ -361,9 +345,9 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: new message: verify talk to the veterans crisis line now', async () => {
-    await element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
-    await element(by.text('Done')).tap()
+    await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
   })
 
   it(':ios: verify only use messages for non-urgent needs information', async () => {
@@ -374,14 +358,14 @@ describe('Messages Screen', () => {
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
     await device.disableSynchronization()
     if (device.getPlatform() === 'android') {
-      await element(by.text('Call 988 and select 1')).tap()
+      await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_CALL_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('messagesHelpCrisisLinePhone')
       await device.launchApp({ newInstance: false })
 
       await element(by.id('messageHelpTestID')).scrollTo('bottom')
 
-      await element(by.text('TTY: 800-799-4889')).tap()
+      await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_TTY_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('messagesHelpCrisisLineTTY')
       await device.launchApp({ newInstance: false })
@@ -394,12 +378,12 @@ describe('Messages Screen', () => {
       await element(by.id('messageHelpTestID')).scrollTo('top')
     }
 
-    await element(by.text('Text 838255')).tap()
+    await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_TEXT_ID)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpText')
     await device.launchApp({ newInstance: false })
 
-    await element(by.text('Start a confidential chat')).tap()
+    await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_CHAT_ID)).tap()
     await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('messagesHelpChat')
@@ -408,7 +392,7 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: should close the messages help panel', async () => {
-    await element(by.id('messagesHelpCloseTestID')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGES_HELP_CLOSE_ID)).tap()
   })
 
   it(':ios: verify the correct errors displayed on save', async () => {
@@ -422,7 +406,7 @@ describe('Messages Screen', () => {
   it(':ios: should tap the to field and select a name', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
     await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
-    await element(by.text('Done')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_PICKER_CONFIRM_ID)).tap()
   })
 
   it(':ios: should tap the category field and select a category', async () => {
@@ -432,7 +416,7 @@ describe('Messages Screen', () => {
       .scroll(50, 'down')
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID)).tap()
     await element(by.text('Medication')).tap()
-    await element(by.text('Done')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_PICKER_CONFIRM_ID)).tap()
   })
 
   it(':ios: should add and delete text in the subject field', async () => {
@@ -463,28 +447,26 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
-    await expect(
-      element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')),
-    ).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.FOLDERS_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID))).toExist()
   })
 
   it('verify the attachment is on message with attachment', async () => {
-    await element(by.id('Diana Persson, Md October 26, 2021 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
     await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
   })
 
   it('navigate to the sent folder and select the first message', async () => {
     await openHealth()
     await openMessages()
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
+    await element(by.id(MessagesE2eIdConstants.FOLDERS_ID)).tap()
     await element(by.text('Sent')).tap()
   })
 
   it('verify a message threads', async () => {
     await element(
       by.id(
-        'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
+        'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2024 Appointment: Preparing for your visit',
       ),
     ).tap()
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
@@ -577,13 +559,13 @@ describe('Messages Screen', () => {
   })
 
   it('verify that the sent folder opens and is displayed', async () => {
-    await element(by.text('Messages')).tap()
-    await element(by.text('Sent')).tap()
+    await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
+    await element(by.id('Sent')).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
     await expect(
       element(
         by.id(
-          'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2021 Appointment: Preparing for your visit',
+          'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2024 Appointment: Preparing for your visit',
         ),
       ),
     ).toExist()
@@ -592,7 +574,7 @@ describe('Messages Screen', () => {
   it('verify a sent messages can display attachments', async () => {
     await element(
       by.id(
-        'Va Flagship Mobile Applications Interface 2_dayt29 November 3, 2021 Has attachment Education: Education Inquiry',
+        'Va Flagship Mobile Applications Interface 2_dayt29 November 3, 2024 Has attachment Education: Education Inquiry',
       ),
     ).tap()
     await expect(element(by.text('rn_image_picker_lib_temp_52383988-331b-4acc-baaf-9ae21c8a508e.jpg (0.92 MB)')))
@@ -600,7 +582,7 @@ describe('Messages Screen', () => {
 
   it('verify that custom folders exist with messages', async () => {
     await element(by.text('Sent')).tap()
-    await element(by.text('Messages')).tap()
+    await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
   })
 })

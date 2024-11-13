@@ -1,6 +1,5 @@
 ---
 title: Accessibility Information
-sidebar_position: 1
 ---
 
 # Accessibility Information
