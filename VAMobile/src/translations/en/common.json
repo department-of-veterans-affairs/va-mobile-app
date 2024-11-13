@@ -837,8 +837,6 @@
   "inAppFeedback.overallSatisfaction.satisfied": "Satisfied",
   "inAppFeedback.overallSatisfaction.verySatisfied": "Very satisfied",
   "inAppRecruitment.contracts": "VA contracts: 36C10B22C0011 & 36C10X18C0061",
-  "inAppRecruitment.userResearch": "User research",
-  "inAppRecruitment.userResearch.a11yHint": "Go to the user research page",
   "inAppRecruitment.goToQuestionnaire": "Go to questionnaire",
   "inAppRecruitment.goToQuestionnaire.loading": "Loading questionnaire...",
   "inAppRecruitment.learnMore": "Learn more about the Veteran Usability Project",
