@@ -129,8 +129,7 @@ const RadioGroup = <T,>({
           <Box
             mb={theme.dimensions.standardMarginBetween}
             key={index}
-            mt={headerText ? theme.dimensions.contentMarginTop : 0}
-            role={'radio'}>
+            mt={headerText ? theme.dimensions.contentMarginTop : 0}>
             {getOption(option)}
           </Box>
         </Box>
