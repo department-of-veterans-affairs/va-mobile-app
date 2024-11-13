@@ -459,6 +459,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
   await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+  await setTimeout(3000)
   await element(by.id('AFErrorPhoneNumberTestID')).replaceText('8006982411')
   await element(by.id('AFErrorPhoneNumberTestID')).tapReturnKey()
 
