@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -15,6 +15,7 @@ import {
   RadioGroupProps,
   TextView,
   VAModalPicker,
+  VATextInput,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
@@ -26,18 +27,13 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const theme = useTheme()
   const [taskCompleted, setTaskCompleted] = useState('')
   const [satisfaction, setSatisfaction] = useState('')
-  const task = route?.params?.task || ''
-  const [taskSelected, setTaskSelected] = useState(task)
+  const [task, setTaskOverride] = useState('')
 
   // useBeforeNavBackListener(navigation, () => {
   // logAnalyticsEvent(Events.vama_feedback_page_closed())
   // })
 
   const onChange = (value: string): void => {
-    setTaskCompleted(value)
-  }
-
-  const onChange2 = (value: string): void => {
     setSatisfaction(value)
   }
 
@@ -48,17 +44,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
 
   const radioGroupProps: RadioGroupProps<string> = {
     isRadioList: false,
-    onChange,
-    options: [
-      { labelKey: t('yes'), value: t('yes') },
-      { labelKey: t('no'), value: t('no') },
-    ],
-    value: taskCompleted,
-  }
-
-  const radioGroupProps2: RadioGroupProps<string> = {
-    isRadioList: false,
-    onChange: onChange2,
+    onChange: onChange,
     options: [
       {
         labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
@@ -84,101 +70,45 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
     value: satisfaction,
   }
 
-  const getInAppFeedbackCategoryPickerOptions = (): Array<PickerItem> => {
-    return [
-      {
-        value: 'Cancel Appointment',
-        label: 'Cancel Appointment',
-      },
-      {
-        value: 'Review Appointment',
-        label: 'Review Appointment',
-      },
-      {
-        value: 'Review Claim',
-        label: 'Review Claim',
-      },
-      {
-        value: 'Submit Claim',
-        label: 'Submit Claim',
-      },
-      {
-        value: 'Submit Claim Evidence',
-        label: 'Submit Claim Evidence',
-      },
-      {
-        value: 'Submit File Request',
-        label: 'Submit File Request',
-      },
-      {
-        value: 'Read New Message',
-        label: 'Read New Message',
-      },
-      {
-        value: 'Send New Message',
-        label: 'Send New Message',
-      },
-      {
-        value: 'Review Prescription',
-        label: 'Review Prescription',
-      },
-      {
-        value: 'Refill Prescription',
-        label: 'Refill Prescription',
-      },
-      {
-        value: 'Track Prescription',
-        label: 'Refill Prescription',
-      },
-      {
-        value: 'View Vaccine Record',
-        label: 'View Vaccine Record',
-      },
-      {
-        value: 'View Letters',
-        label: 'View Letters',
-      },
-    ]
-  }
-
   return (
     <LargePanel title={t('inAppFeedback.title')} rightButtonText={t('close')}>
-      <Box
-        mt={theme.dimensions.contentMarginTop}
-        mb={theme.dimensions.contentMarginBottom}
-        mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('inAppFeedback.needYourFeedback.header')}
+          {t('inAppFeedback.whatTask.header')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('inAppFeedback.needYourFeedback.body')}
+        <TextView variant="MobileBody" mb={theme.dimensions.alertBorderWidth}>
+          {t('inAppFeedback.whatTask.body')}
         </TextView>
-        <Box
-          borderTopWidth={theme.dimensions.borderWidth}
-          borderColor={theme.colors.border.menuDivider as BorderColorVariant}>
-          <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {t('inAppFeedback.taskSelection.header')}
-          </TextView>
-          <VAModalPicker
-            selectedValue={taskSelected || ''}
-            onSelectionChange={setTaskSelected}
-            pickerOptions={getInAppFeedbackCategoryPickerOptions()}
-            includeBlankPlaceholder={true}
-          />
-          <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {t('inAppFeedback.taskCompletedQuestion.header')}
-          </TextView>
-          <RadioGroup {...radioGroupProps} />
-        </Box>
-        <Box
-          borderTopWidth={theme.dimensions.borderWidth}
-          borderColor={theme.colors.border.menuDivider as BorderColorVariant}>
+        <VATextInput
+          inputType="none"
+          isTextArea={true}
+          value={task}
+          testID="AppFeedbackTaskID"
+          onChange={(val) => {
+            setTaskOverride(val)
+          }}
+        />
+        <Box>
           <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.overallSatisfaction.header')}
           </TextView>
-          <RadioGroup {...radioGroupProps2} />
+          <RadioGroup {...radioGroupProps} />
         </Box>
-        <Button onPress={onSubmit} label={t('submit')} />
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <Button onPress={onSubmit} label={t('submit')} />
+        </Box>
+        <Box
+          borderTopWidth={theme.dimensions.borderWidth}
+          borderColor={theme.colors.border.prescriptionDivider as BorderColorVariant}>
+          <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
+            {t('inAppFeedback.legalReqs.number')}
+          </TextView>
+          <TextView variant="HelperText">{t('inAppFeedback.legalReqs.expiration')}</TextView>
+          <TextView variant="HelperText">{t('inAppFeedback.legalReqs.burdenTime')}</TextView>
+          <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
+            {t('inAppFeedback.legalReqs.paragraph')}
+          </TextView>
+        </Box>
       </Box>
     </LargePanel>
   )
