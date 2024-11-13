@@ -257,7 +257,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
   }
 }
 
-export function askToGiveFeedback(): (task: string) => void {
+export function useGiveFeedback(): (task: string) => void {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
