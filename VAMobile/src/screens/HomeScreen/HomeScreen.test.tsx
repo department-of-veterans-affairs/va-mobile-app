@@ -2,6 +2,7 @@ import React from 'react'
 import { Linking } from 'react-native'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import {
@@ -15,6 +16,7 @@ import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -107,9 +109,7 @@ context('HomeScreen', () => {
         .mockRejectedValue('failure')
 
       initializeTestInstance()
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
 
     it('displays error message when one of the features are in downtime', async () => {
@@ -135,10 +135,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
 
     it('displays error message when all the features are in downtime', async () => {
@@ -169,10 +167,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.getByText('We can’t show all activity right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
 
     it('does not display an error message when all API calls succeed', async () => {
@@ -187,10 +183,8 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPrescriptionsPayload(3))
 
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all activity right now. Check back later.')).toBeFalsy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.error.cantShowAllActivity'))).toBeFalsy())
     })
 
     it('displays cerner related message if veteran has a cerner facility', async () => {
@@ -198,7 +192,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/facilities-info')
         .mockResolvedValue(getFacilitiesPayload(true))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText('Information from My VA Health portal not included.')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('activity.informationNotIncluded'))).toBeTruthy())
     })
 
     it('does not display cerner related message if veteran does not have a cerner facility', async () => {
@@ -207,7 +201,7 @@ context('HomeScreen', () => {
         .mockResolvedValue(getFacilitiesPayload(false))
       initializeTestInstance()
       await waitFor(() => expect(get).toBeCalledWith('/v0/facilities-info'))
-      await waitFor(() => expect(screen.queryByText('Information from My VA Health portal not included.')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.informationNotIncluded'))).toBeFalsy())
     })
   })
 
@@ -218,11 +212,14 @@ context('HomeScreen', () => {
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(upcomingAppointmentsCount))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Appointments' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('appointments') })).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByRole('link', {
-            name: `${upcomingAppointmentsCount} in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`,
+            name: t('appointments.activityButton.subText', {
+              count: upcomingAppointmentsCount,
+              dayCount: DEFAULT_UPCOMING_DAYS_LIMIT,
+            }),
           }),
         ).toBeTruthy(),
       )
@@ -233,7 +230,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(3))
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Appointments' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('appointments') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://appointments'))
     })
 
@@ -242,8 +239,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Appointments' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
     })
 
     it('is not displayed when the API call throws an error', async () => {
@@ -251,8 +248,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/appointments', expect.anything())
         .mockRejectedValue('fail')
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Appointments' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
     })
 
     it('is not displayed when appointments is in downtime', async () => {
@@ -271,8 +268,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Appointments' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
     })
   })
 
@@ -283,8 +280,16 @@ context('HomeScreen', () => {
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(activeClaimsCount))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Claims' })).toBeTruthy())
-      await waitFor(() => expect(screen.getByRole('link', { name: `${activeClaimsCount} active` })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('claims.title') })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByRole('link', {
+            name: t('claims.activityButton.subText', {
+              count: activeClaimsCount,
+            }),
+          }),
+        ).toBeTruthy(),
+      )
     })
 
     it('navigates to Claims history screen when pressed', async () => {
@@ -292,7 +297,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Claims' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('claims.title') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://claims'))
     })
 
@@ -301,8 +306,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Claims' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
 
     it('is not displayed when the API call throws an error', async () => {
@@ -310,8 +315,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockRejectedValue('fail')
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Claims' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
 
     it('is not displayed when there is a service error', async () => {
@@ -326,8 +331,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(2, serviceErrors))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Claims' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
 
     it('is not displayed when claims is in downtime', async () => {
@@ -349,8 +354,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Claims' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
   })
 
@@ -361,8 +366,14 @@ context('HomeScreen', () => {
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(getFoldersPayload(unreadMessageCount))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Messages' })).toBeTruthy())
-      await waitFor(() => expect(screen.getByRole('link', { name: `${unreadMessageCount} unread` })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('messages') })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByRole('link', {
+            name: t('secureMessaging.activityButton.subText', { count: unreadMessageCount }),
+          }),
+        ).toBeTruthy(),
+      )
     })
 
     it('navigates to Messages screen when pressed', async () => {
@@ -370,7 +381,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(getFoldersPayload(3))
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Messages' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('messages') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://messages'))
     })
 
@@ -379,8 +390,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(getFoldersPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Messages' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
     })
 
     it('is not displayed when the API call throws an error', async () => {
@@ -388,8 +399,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/messaging/health/folders')
         .mockRejectedValue('fail')
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Messages' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
     })
 
     it('is not displayed when secure messaging is in downtime', async () => {
@@ -408,8 +419,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Messages' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
     })
   })
 
@@ -420,9 +431,15 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(refillablePrescriptionsCount))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('link', { name: 'Prescriptions' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('prescription.title') })).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByRole('link', { name: `${refillablePrescriptionsCount} ready to refill` })).toBeTruthy(),
+        expect(
+          screen.getByRole('link', {
+            name: t('prescriptions.activityButton.subText', {
+              count: refillablePrescriptionsCount,
+            }),
+          }),
+        ).toBeTruthy(),
       )
     })
 
@@ -431,7 +448,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Prescriptions' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('prescription.title') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions'))
     })
 
@@ -440,8 +457,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Prescriptions' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
 
     it('is not displayed when the API call throws an error', async () => {
@@ -449,8 +466,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockRejectedValue('fail')
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Prescriptions' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
 
     it('is not displayed when prescriptions is in downtime', async () => {
@@ -469,18 +486,25 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: 'Prescriptions' })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
   })
 
   describe('About you section', () => {
     it('displays disability rating percentage when veteran has disability rating', async () => {
+      const disabilityRating = 100
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
-        .mockResolvedValue(getDisabilityRatingPayload(100))
+        .mockResolvedValue(getDisabilityRatingPayload(disabilityRating))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByLabelText('Disability rating 100% service connected')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByLabelText(
+            `${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRating })} ${t('disabilityRating.serviceConnected')}`,
+          ),
+        ).toBeTruthy(),
+      )
     })
 
     it('does not display disability rating percentage when veteran does not have disability rating', async () => {
@@ -488,8 +512,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('disabilityRating.title'))).toBeFalsy())
     })
 
     it('does not display disability rating percentage and show error message when disability ratings API call fails', async () => {
@@ -501,19 +525,22 @@ context('HomeScreen', () => {
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Disability rating')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('disabilityRating.title'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
 
     it('displays monthly payment amount when veteran has monthly compensation payment', async () => {
+      const monthlyAwardAmount = 3084.75
       when(get as jest.Mock)
         .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(3084.75))
+        .mockResolvedValue(getLetterBeneficiaryPayload(monthlyAwardAmount))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByLabelText('Monthly compensation payment $3,084.75')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByLabelText(`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(monthlyAwardAmount)}`),
+        ).toBeTruthy(),
+      )
     })
 
     it('does not display monthly payment amount when veteran does not have monthly compensation payment', async () => {
@@ -521,8 +548,8 @@ context('HomeScreen', () => {
         .calledWith('/v0/letters/beneficiary')
         .mockResolvedValue(getLetterBeneficiaryPayload(0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('monthlyCompensationPayment'))).toBeFalsy())
     })
 
     it('does not display monthly payment and show error message when the beneficiary API call fails', async () => {
@@ -534,11 +561,9 @@ context('HomeScreen', () => {
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Monthly compensation payment')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('monthlyCompensationPayment'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
 
     it("displays message when no 'About you' info exists", async () => {
@@ -551,10 +576,8 @@ context('HomeScreen', () => {
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
 
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeTruthy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeFalsy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.noInformation'))).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeFalsy())
     })
 
     it('displays error message when one of the features are in downtime', async () => {
@@ -577,10 +600,8 @@ context('HomeScreen', () => {
           } as ErrorsState,
         },
       })
-      await waitFor(() => expect(screen.queryByText('Loading your information...')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
 
     it("displays error message when some 'About you' info doesn't exist and rest of info has errors", async () => {
@@ -593,27 +614,25 @@ context('HomeScreen', () => {
         .mockRejectedValue('fail')
 
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('We can’t show your information right now.')).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.queryByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.noInformation'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
   })
 
   describe('VA resources section', () => {
     it('navigates to the "Contact VA" screen when the "Contact us" link is pressed', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('link', { name: 'Contact us' }))
+      fireEvent.press(screen.getByRole('link', { name: t('contactUs') }))
       expect(mockNavigationSpy).toBeCalledWith('ContactVA')
     })
 
     it('launches WebView when the "Find a VA location" link is pressed', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('link', { name: 'Find a VA location' }))
+      fireEvent.press(screen.getByRole('link', { name: t('findLocation.title') }))
       expect(mockNavigationSpy).toBeCalledWith('Webview', {
-        displayTitle: 'va.gov',
+        displayTitle: t('webview.vagov'),
         url: 'https://www.va.gov/find-locations/',
-        loadingMessage: 'Loading VA location finder...',
+        loadingMessage: t('webview.valocation.loading'),
       })
     })
   })
