@@ -30,10 +30,6 @@ on:
         description: 'Add results to testRail?'
         type: boolean
         required: false
-      device_specific:
-        description: 'Is your testRail run Android only? (only check if adding results to testRail)'
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -86,7 +82,6 @@ jobs:
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
-    if: github.event_name == 'pull_request' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
@@ -103,8 +98,8 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -120,7 +115,7 @@ jobs:
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -246,7 +241,7 @@ jobs:
         if: failure() || success()
         uses: actions/upload-artifact@v4
         with:
-          name: ${{matrix.testsuite}}-e2e-junit
+          name: e2e-junit-${{matrix.testsuite}}
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
@@ -353,18 +348,11 @@ jobs:
     
   matrix_send_test_results_to_testrail:
     if: (!cancelled()) && github.event.inputs.run_testRail == 'true'
-    needs: [matrix-e2e-android, output_detox_tests_to_run]
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        testsuite: ${{ fromJSON(needs.output_detox_tests_to_run.outputs.output1) }}     
+    needs: [matrix-e2e-android, output_detox_tests_to_run]    
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: "${{matrix.testsuite}}"
       testRail_name: ${{ inputs.testRail_name }}
-      test_specific_OS_needed: ${{ inputs.device_specific}}
       test_OS_name: "Android"
     secrets: inherit
   

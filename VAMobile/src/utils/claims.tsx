@@ -2,11 +2,12 @@ import React, { ReactElement } from 'react'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
 import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
-import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
 
@@ -244,9 +245,9 @@ export const deletePhoto = (
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
   const indicatorDiameter = fs(30)
   return {
-    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
-    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    height: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    width: indicatorDiameter > 24 ? 24 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 24 ? 24 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -264,7 +265,7 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
   if (useCheckMark) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" preventScaling={true} />
+        <Icon width={20} height={20} name={'Check'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {

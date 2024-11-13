@@ -58,7 +58,7 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({
   let bottomPressableProps: PressableProps = {
     onPress: bottomOnPress,
     accessible: true,
-    accessibilityRole: 'button',
+    accessibilityRole: 'link',
     accessibilityHint: bottomA11yHint,
   }
 
