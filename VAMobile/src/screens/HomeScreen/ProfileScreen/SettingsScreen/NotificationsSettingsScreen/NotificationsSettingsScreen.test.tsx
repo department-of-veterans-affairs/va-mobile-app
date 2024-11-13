@@ -3,6 +3,7 @@ import React from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { notificationKeys } from 'api/notifications'
 import { GetPushPrefsResponse, PushPreference } from 'api/types'
@@ -34,11 +35,13 @@ context('NotificationsSettingsScreen', () => {
   }
 
   const renderWithProps = (
+    requestNots: boolean,
     notificationsEnabled: boolean,
     systemNotificationsOn: boolean,
     preferences: PushPreference[],
   ) => {
     const props = mockNavProps()
+
     mockPushEnabled = notificationsEnabled
 
     const notificationQueriesData: QueriesData = [
@@ -56,7 +59,10 @@ context('NotificationsSettingsScreen', () => {
       },
     ]
 
-    render(<NotificationsSettingsScreen {...props} />, { queriesData: notificationQueriesData })
+    render(<NotificationsSettingsScreen {...props} />, {
+      queriesData: notificationQueriesData,
+      preloadedState: { auth: { requestNotifications: requestNots } },
+    })
   }
 
   describe('appointment reminders switch', () => {
@@ -76,7 +82,7 @@ context('NotificationsSettingsScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
-      renderWithProps(true, true, [apptPrefOn])
+      renderWithProps(true, true, true, [apptPrefOn])
       await waitFor(() =>
         expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
           true,
@@ -100,7 +106,7 @@ context('NotificationsSettingsScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
-      renderWithProps(true, true, [apptPrefOff])
+      renderWithProps(true, true, true, [apptPrefOff])
       await waitFor(() =>
         expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
           false,
@@ -126,11 +132,17 @@ context('NotificationsSettingsScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/push/prefs/1')
         .mockResolvedValue(responseData)
-      renderWithProps(false, false, [apptPrefOff])
+      renderWithProps(true, false, false, [apptPrefOff])
       await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
       await waitFor(() =>
         expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy(),
       )
+    })
+  })
+  describe('when system notifications havent been requested', () => {
+    it('hides the notification switches', async () => {
+      renderWithProps(false, true, true, [apptPrefOff])
+      await waitFor(() => expect(screen.getByText(t('requestNotifications.getNotified'))).toBeTruthy())
     })
   })
 
@@ -147,7 +159,7 @@ context('NotificationsSettingsScreen', () => {
     when(api.get as jest.Mock)
       .calledWith('/v0/push/prefs/1')
       .mockResolvedValue(responseData)
-    renderWithProps(true, true, [])
+    renderWithProps(true, true, true, [])
     await waitFor(() =>
       expect(
         screen.getByText(

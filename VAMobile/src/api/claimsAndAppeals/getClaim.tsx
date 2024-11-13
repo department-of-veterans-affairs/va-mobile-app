@@ -8,19 +8,19 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Fetch user Claim
  */
-const getClaim = async (id: string, abortSignal?: AbortSignal): Promise<ClaimData | undefined> => {
-  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, abortSignal)
+const getClaim = async (id: string): Promise<ClaimData | undefined> => {
+  const response = await get<ClaimGetData>(`/v0/claim/${id}`, {})
   return response?.data
 }
 
 /**
  * Returns a query for user Claim
  */
-export const useClaim = (id: string, abortSignal?: AbortSignal, options?: { enabled?: boolean }) => {
+export const useClaim = (id: string, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
     queryKey: [claimsAndAppealsKeys.claim, id],
-    queryFn: () => getClaim(id, abortSignal),
+    queryFn: () => getClaim(id),
     meta: {
       errorName: 'getClaim: Service error',
     },
