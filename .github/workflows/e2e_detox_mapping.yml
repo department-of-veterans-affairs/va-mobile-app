@@ -93,7 +93,7 @@ jobs:
             select(contains(["auth"])) += ["SignIn"] |
             select(contains(["authorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "VALetters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
             select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "VALetters"] |
-            select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
+            select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications", "Onboarding"] |
             select(contains(["Types"]) or contains(["VAImage"])) +=
               ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
             | unique')

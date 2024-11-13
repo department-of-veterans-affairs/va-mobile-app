@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
@@ -75,10 +76,10 @@ context('ProfileScreen', () => {
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(militaryServiceHistoryData)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('Personal information')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Contact information')).toBeFalsy())
-      await waitFor(() => expect(screen.getByText('Military information')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Settings')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('personalInformation.title'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText(t('contactInformation.title'))).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('militaryInformation.title'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('settings.title'))).toBeTruthy())
     })
   })
 
@@ -89,9 +90,7 @@ context('ProfileScreen', () => {
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
 
-      await waitFor(() =>
-        expect(screen.getByText('We can’t show all your information right now. Check back later.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
   })
 })
