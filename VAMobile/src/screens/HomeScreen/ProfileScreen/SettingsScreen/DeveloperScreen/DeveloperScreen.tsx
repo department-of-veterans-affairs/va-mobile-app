@@ -174,6 +174,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     },
   ]
 
+  const onFeedback = () => {
+    //logAnalyticsEvent(Events.vama_feedback_page_entered())
+    navigateTo('InAppFeedback')
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
@@ -201,6 +206,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
               {reviewCount ? parseInt(reviewCount, 10) : 0}
             </TextView>
           </Box>
+        </TextArea>
+        <TextArea>
+          <Button onPress={onFeedback} label={'In App Feedback Screen'} />
         </TextArea>
       </Box>
       <Box>

@@ -102,11 +102,6 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
-  const onFeedback = () => {
-    // logAnalyticsEvent(Events.vama_feedback_page_entered())
-    navigateTo('InAppFeedback')
-  }
-
   const items: Array<SimpleListItemObj> = _.flatten([
     { text: t('accountSecurity'), onPress: () => navigateTo('AccountSecurity'), detoxTestID: 'accountSecurityID' },
     // don't even show the biometrics option if it's not available
@@ -129,7 +124,6 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
       onPress: onPrivacyPolicy,
       detoxTestID: 'privacyPolicyID',
     },
-    { text: t('inAppFeedback.title'), a11yHintText: t('inAppFeedback.a11yHint'), onPress: onFeedback },
   ])
 
   const debugMenu = (): ReactNode => {
