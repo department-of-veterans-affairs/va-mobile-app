@@ -103,7 +103,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   }
 
   const onFeedback = () => {
-    logAnalyticsEvent(Events.vama_feedback_page_entered())
+    // logAnalyticsEvent(Events.vama_feedback_page_entered())
     navigateTo('InAppFeedback')
   }
 

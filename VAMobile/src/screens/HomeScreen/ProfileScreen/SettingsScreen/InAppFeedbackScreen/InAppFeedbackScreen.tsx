@@ -16,10 +16,8 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
@@ -31,9 +29,9 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const task = route?.params?.task || ''
   const [taskSelected, setTaskSelected] = useState(task)
 
-  useBeforeNavBackListener(navigation, () => {
-    logAnalyticsEvent(Events.vama_feedback_page_closed())
-  })
+  // useBeforeNavBackListener(navigation, () => {
+  // logAnalyticsEvent(Events.vama_feedback_page_closed())
+  // })
 
   const onChange = (value: string): void => {
     setTaskCompleted(value)
@@ -44,7 +42,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   }
 
   const onSubmit = (): void => {
-    logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
+    // logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
     navigation.goBack()
   }
 
