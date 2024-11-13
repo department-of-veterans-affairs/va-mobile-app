@@ -52,6 +52,8 @@ export const FIRST_TIME_LOGIN = '@store_first_time_login'
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
+const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
+const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
@@ -79,6 +81,8 @@ export type AuthState = {
   authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
+  requestNotificationsPreferenceScreen?: boolean
+  requestNotifications?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -94,6 +98,8 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
+  requestNotificationsPreferenceScreen: false,
+  requestNotifications: false,
 }
 
 /*
@@ -123,6 +129,18 @@ export const setDisplayBiometricsPreferenceScreen =
     dispatch(dispatchSetDisplayBiometricsPreferenceScreen(value))
   }
 
+export const setNotificationsPreferenceScreen =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetNotificationsPreferenceScreen(value))
+  }
+
+export const setRequestNotifications =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetRequestNotifications(value))
+  }
+
 /**
  * Signal the sync process is completed
  */
@@ -134,8 +152,13 @@ export const completeSync = (): AppThunk => async (dispatch) => {
  * Sets the flag used to determine if this is the first time a user has logged into the app
  */
 export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
-  await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
-  dispatch(dispatchSetFirstLogin(false))
+  if (isAndroid()) {
+    AsyncStorage.setItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+    dispatch(dispatchSetFirstLogin(false))
+  } else {
+    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+    dispatch(dispatchSetFirstLogin(false))
+  }
 }
 
 /**
@@ -158,17 +181,38 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
     dispatch(dispatchSetFirstLogin(false))
     return
   }
-
-  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
-
-  const isFirstLogin = !firstLoginCompletedVal
+  let isFirstLogin = true
+  // if we need to 'retrigger' onboarding for existing users in the future we should just increment
+  // the AsyncStorage 'completed key' with a #.
+  if (isAndroid()) {
+    const firstLoginCompletedVal = await AsyncStorage.getItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY)
+    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+    isFirstLogin = !firstLoginCompletedVal
+  } else {
+    const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+    isFirstLogin = !firstLoginCompletedVal
+  }
 
   // On the first sign in, clear any stored credentials from previous installs
   if (isFirstLogin) {
     await clearStoredAuthCreds()
   }
   dispatch(dispatchSetFirstLogin(isFirstLogin))
+}
+
+export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
+  if (IS_TEST) {
+    // In integration tests this will change the behavior and make it inconsistent across runs
+    dispatch(dispatchSetNotificationsPreferenceScreen(false))
+    return
+  }
+
+  const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
+  console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
+
+  const shouldShowScreen = !setNotificationsPreferenceScreenVal
+  dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
 }
 
 /**
@@ -625,6 +669,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
+  await dispatch(checkRequestNotificationsPreferenceScreen())
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
@@ -743,10 +788,17 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
       state.displayBiometricsPreferenceScreen = action.payload
+    },
+    dispatchSetNotificationsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
+      state.requestNotificationsPreferenceScreen = action.payload
+    },
+    dispatchSetRequestNotifications: (state, action: PayloadAction<boolean>) => {
+      state.requestNotifications = action.payload
     },
     dispatchSetFirstLogin: (state, action: PayloadAction<boolean>) => {
       state.firstTimeLogin = action.payload
@@ -772,6 +824,7 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
@@ -825,6 +878,8 @@ const authSlice = createSlice({
 export const {
   dispatchInitializeAction,
   dispatchSetDisplayBiometricsPreferenceScreen,
+  dispatchSetNotificationsPreferenceScreen,
+  dispatchSetRequestNotifications,
   dispatchSetFirstLogin,
   dispatchFinishSync,
   dispatchUpdateStoreBiometricsPreference,
