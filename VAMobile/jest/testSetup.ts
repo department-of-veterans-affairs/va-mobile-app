@@ -135,7 +135,9 @@ jest.mock('react-native-keychain', () => {
     },
     STORAGE_TYPE: {
       FB: 'MOCK_FacebookConceal',
-      AES: 'MOCK_KeystoreAESCBC',
+      AES: 'MOCK_KeystoreAESGCM',
+      AES_GCM: 'MOCK_KeystoreAESCBC',
+      AES_GCM_NO_AUTH: 'MOCK_KeystoreAESGCMNoAuth',
       RSA: 'MOCK_KeystoreRSAECB',
       KC: 'MOCK_keychain',
     },
