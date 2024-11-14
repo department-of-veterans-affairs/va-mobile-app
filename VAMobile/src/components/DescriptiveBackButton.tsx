@@ -15,7 +15,7 @@ import TextView from './TextView'
  */
 export type DescBackButtonProps = {
   /** the onPress function for the back button */
-  onPress: () => void
+  onPress?: () => void
   /** already translated display text */
   label: string
   /** already translated a11y text */
@@ -41,6 +41,9 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 
   useFocusEffect(focusOnButton ? setFocus : () => {})
+  if (!onPress) {
+    return null
+  }
 
   return (
     <TouchableWithoutFeedback

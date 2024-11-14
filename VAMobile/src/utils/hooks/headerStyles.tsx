@@ -17,12 +17,11 @@ import { useTheme } from 'utils/hooks'
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
-  const defaultOnPress: () => void = () => {}
 
   headerStyles = {
     ...headerStyles,
     headerLeft: (props): ReactNode => (
-      <DescriptiveBackButton onPress={props.onPress || defaultOnPress} label={BackButtonLabelConstants.back} />
+      <DescriptiveBackButton onPress={props.onPress} label={BackButtonLabelConstants.back} />
     ),
     headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
