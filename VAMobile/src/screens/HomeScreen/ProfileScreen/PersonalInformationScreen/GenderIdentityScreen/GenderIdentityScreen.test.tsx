@@ -20,7 +20,7 @@ context('GenderIdentityScreen', () => {
           TM: 'Transgender man',
           TF: 'Transgender woman',
           F: 'Woman',
-          N: t('personalInformation.genderIdentity.preferNotToAnswer'),
+          N: 'Prefer not to answer',
           O: 'A gender not listed here',
         },
       },
@@ -67,7 +67,7 @@ context('GenderIdentityScreen', () => {
     await waitFor(() =>
       expect(
         screen.getByText(
-          'You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.',
+          `${t('personalInformation.genderIdentity.changeSelection')}${t('personalInformation.genderIdentity.preferNotToAnswer')}.`,
         ),
       ).toBeTruthy(),
     )

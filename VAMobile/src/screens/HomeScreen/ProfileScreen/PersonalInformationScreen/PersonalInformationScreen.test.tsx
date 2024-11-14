@@ -29,7 +29,7 @@ when(get as jest.Mock)
           tm: 'Transgender Man',
           tf: 'Transgender Woman',
           f: 'Woman',
-          n: t('personalInformation.genderIdentity.preferNotToAnswer'),
+          n: 'Prefer not to answer',
           o: 'A gender not listed here',
         },
       },
