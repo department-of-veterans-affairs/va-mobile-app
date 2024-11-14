@@ -4,7 +4,7 @@ import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
-import { isErrorObject } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import getEnv from 'utils/env'
 import { useAppDispatch } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
@@ -50,6 +50,7 @@ export const useHandleTokenCallbackUrl = () => {
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
       await loginFinish(dispatch, false, authCredentials)
+      showSnackBar('Successfully logged in', dispatch)
       postLoggedIn()
     },
     onError: (error) => {
@@ -58,6 +59,7 @@ export const useHandleTokenCallbackUrl = () => {
         if (error.status) {
           logAnalyticsEvent(Events.vama_login_token_fetch(error))
         }
+        showSnackBar(error.message, dispatch)
         loginFinish(dispatch, true)
       }
     },
