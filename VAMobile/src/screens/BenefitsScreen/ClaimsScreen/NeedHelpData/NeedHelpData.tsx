@@ -20,7 +20,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
   const navigateTo = useRouteNavigation()
 
   function renderAppealData() {
-    if (!isAppeal) {
+    if (isAppeal) {
       return <></>
     }
 
