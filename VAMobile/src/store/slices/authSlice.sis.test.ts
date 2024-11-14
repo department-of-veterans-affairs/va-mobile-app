@@ -280,7 +280,7 @@ context('authAction SIS', () => {
         const expectedOpts = {
           accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
           accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-          authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+          securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
           storage: Keychain.STORAGE_TYPE.AES_GCM,
         }
         expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', nonce, expectedOpts)
@@ -486,7 +486,7 @@ context('authAction SIS', () => {
       const expectedOpts = {
         accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
         accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-        authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+        securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
         storage: Keychain.STORAGE_TYPE.AES_GCM,
       }
       console.debug(testRefreshToken)
