@@ -40,10 +40,12 @@ export const useHandleTokenCallbackUrl = () => {
   const dispatch = useAppDispatch()
   return useMutation({
     mutationFn: handleTokenCallbackUrl,
-    onSettled: () => {
-      logAnalyticsEvent(Events.vama_auth_completed())
+    onMutate: () => {
       loginStart(dispatch, true)
       clearCookies()
+    },
+    onSettled: () => {
+      logAnalyticsEvent(Events.vama_auth_completed())
     },
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
