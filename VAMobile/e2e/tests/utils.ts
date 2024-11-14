@@ -55,7 +55,7 @@ export const CommonE2eIdConstants = {
   CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
-  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
@@ -385,7 +385,7 @@ export async function openClaims() {
 }
 
 export async function openClaimsHistory() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openDeveloperScreen() {
