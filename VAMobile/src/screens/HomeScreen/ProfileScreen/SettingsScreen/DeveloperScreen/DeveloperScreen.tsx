@@ -39,6 +39,7 @@ import {
 } from 'utils/homeScreenAlerts'
 import { useAlert, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
@@ -180,6 +181,16 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
+      {featureEnabled('testFeature') && (
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          mb={theme.dimensions.standardMarginBetween}>
+          If you see this, A/B Testing is working!
+        </TextView>
+      )}
+
       <TextView
         variant={'MobileBodyBold'}
         accessibilityRole={'header'}
