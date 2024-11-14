@@ -1713,7 +1713,7 @@ PODS:
   - ReactNativeWebPFormat (1.2.0):
     - React-Core
     - SDWebImageWebPCoder
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (1.24.0):
     - React-Core
   - RNFBAnalytics (18.9.0):
     - Firebase/AnalyticsWithoutAdIdSupport (= 10.20.0)
@@ -1765,10 +1765,29 @@ PODS:
     - Yoga
   - RNKeychain (8.2.0):
     - React-Core
-  - RNLocalize (3.1.0):
+  - RNLocalize (3.2.1):
     - React-Core
-  - RNReactNativeHapticFeedback (2.2.0):
+  - RNReactNativeHapticFeedback (2.3.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNScreens (3.34.0):
     - DoubleConversion
     - glog
@@ -2194,7 +2213,7 @@ SPEC CHECKSUMS:
   ReactCommon: 289214026502e6a93484f4a46bcc0efa4f3f2864
   ReactNativeKeyboardManager: 60292dbac467c49841a7d69588208ec4a4f7b2a2
   ReactNativeWebPFormat: f5f043cc9ded052e535c3869ec341f91ba5a67c5
-  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCAsyncStorage: ec53e44dc3e75b44aa2a9f37618a49c3bc080a7a
   RNFBAnalytics: 60ffe0c9c80f404246e384d0d2076e35dd129b16
   RNFBApp: a3e139715386fe79a09c387f2dbeb6890eb05b39
   RNFBCrashlytics: e6d595ed2619e5e8ee3cdfd12c6a62e470280a03
@@ -2204,8 +2223,8 @@ SPEC CHECKSUMS:
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
   RNGestureHandler: 939f21fabf5d45a725c0bf175eb819dd25cf2e70
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
-  RNLocalize: e8694475db034bf601e17bd3dfa8986565e769eb
-  RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
+  RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
+  RNReactNativeHapticFeedback: 0d591ea1e150f36cb96d868d4e8d77272243d78a
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
   RNSVG: 963a95f1f5d512a13d11ffd50d351c87fb5c6890
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3

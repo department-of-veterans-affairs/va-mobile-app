@@ -52,6 +52,8 @@ export const FIRST_TIME_LOGIN = '@store_first_time_login'
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
+const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
+const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
@@ -59,6 +61,7 @@ const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
   loading: boolean
+  loadingRefreshToken: boolean
   initializing: boolean
   syncing: boolean
   error?: Error
@@ -79,10 +82,13 @@ export type AuthState = {
   authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
+  requestNotificationsPreferenceScreen?: boolean
+  requestNotifications?: boolean
 }
 
 export const initialAuthState: AuthState = {
   loading: false,
+  loadingRefreshToken: false,
   initializing: true,
   loggedIn: false,
   loggingOut: false,
@@ -94,6 +100,8 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
+  requestNotificationsPreferenceScreen: false,
+  requestNotifications: false,
 }
 
 /*
@@ -123,6 +131,18 @@ export const setDisplayBiometricsPreferenceScreen =
     dispatch(dispatchSetDisplayBiometricsPreferenceScreen(value))
   }
 
+export const setNotificationsPreferenceScreen =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetNotificationsPreferenceScreen(value))
+  }
+
+export const setRequestNotifications =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetRequestNotifications(value))
+  }
+
 /**
  * Signal the sync process is completed
  */
@@ -134,8 +154,13 @@ export const completeSync = (): AppThunk => async (dispatch) => {
  * Sets the flag used to determine if this is the first time a user has logged into the app
  */
 export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
-  await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
-  dispatch(dispatchSetFirstLogin(false))
+  if (isAndroid()) {
+    AsyncStorage.setItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+    dispatch(dispatchSetFirstLogin(false))
+  } else {
+    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+    dispatch(dispatchSetFirstLogin(false))
+  }
 }
 
 /**
@@ -158,17 +183,38 @@ export const checkFirstTimeLogin = (): AppThunk => async (dispatch) => {
     dispatch(dispatchSetFirstLogin(false))
     return
   }
-
-  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
-
-  const isFirstLogin = !firstLoginCompletedVal
+  let isFirstLogin = true
+  // if we need to 'retrigger' onboarding for existing users in the future we should just increment
+  // the AsyncStorage 'completed key' with a #.
+  if (isAndroid()) {
+    const firstLoginCompletedVal = await AsyncStorage.getItem(ANDROID_FIRST_LOGIN_COMPLETED_KEY)
+    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+    isFirstLogin = !firstLoginCompletedVal
+  } else {
+    const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+    isFirstLogin = !firstLoginCompletedVal
+  }
 
   // On the first sign in, clear any stored credentials from previous installs
   if (isFirstLogin) {
     await clearStoredAuthCreds()
   }
   dispatch(dispatchSetFirstLogin(isFirstLogin))
+}
+
+export const checkRequestNotificationsPreferenceScreen = (): AppThunk => async (dispatch) => {
+  if (IS_TEST) {
+    // In integration tests this will change the behavior and make it inconsistent across runs
+    dispatch(dispatchSetNotificationsPreferenceScreen(false))
+    return
+  }
+
+  const setNotificationsPreferenceScreenVal = await AsyncStorage.getItem(NOTIFICATION_COMPLETED_KEY)
+  console.debug(`checkRequestNotificationPreferenceScreen: is ${!setNotificationsPreferenceScreenVal}`)
+
+  const shouldShowScreen = !setNotificationsPreferenceScreenVal
+  dispatch(dispatchSetNotificationsPreferenceScreen(shouldShowScreen))
 }
 
 /**
@@ -268,10 +314,9 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   if (saveWithBiometrics) {
     // user opted to store with biometrics
-    const options: Keychain.Options = {
+    const options: Keychain.SetOptions = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
-      authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
     }
     console.debug('saveRefreshToken:', options)
@@ -285,7 +330,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     // In development environment, allow saving refresh token/unlock without biometrics
   } else if (__DEV__) {
     console.debug('saveRefreshToken: saving non biometric protected')
-    const options: Keychain.Options = {
+    const options: Keychain.SetOptions = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
@@ -312,7 +357,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  */
 const storeRefreshToken = async (
   refreshToken: string,
-  options: Keychain.Options,
+  options: Keychain.SetOptions,
   storageType: AUTH_STORAGE_TYPE,
 ): Promise<void> => {
   const splitToken = refreshToken.split('.')
@@ -333,21 +378,42 @@ const storeRefreshToken = async (
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
-const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('retrieveRefreshToken')
-  const result = await Promise.all([
-    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
-  ])
-  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | undefined> => {
+  let refreshToken
+  let attemptCount = 3
 
-  if (reconstructedToken) {
-    await logAnalyticsEvent(Events.vama_login_token_get(true))
-  } else {
-    await logAnalyticsEvent(Events.vama_login_token_get(false))
+  if (dispatch) {
+    dispatch(dispatchStartLoadingRefreshToken())
   }
 
-  return reconstructedToken
+  while (attemptCount > 0) {
+    try {
+      console.debug('retrieveRefreshToken')
+      const tokenArray = await Promise.all([
+        AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+        Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+      ])
+
+      refreshToken =
+        tokenArray && tokenArray[0] && tokenArray[1] ? `${tokenArray[0]}.${tokenArray[1].password}.V0` : undefined
+      return refreshToken
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      attemptCount -= 1
+      if (attemptCount === 0 || error?.message?.includes('Cancel')) {
+        throw error
+      }
+    } finally {
+      if (refreshToken) {
+        await logAnalyticsEvent(Events.vama_login_token_get(true))
+      } else {
+        await logAnalyticsEvent(Events.vama_login_token_get(false))
+      }
+      if (dispatch) {
+        dispatch(dispatchFinishLoadingRefreshToken())
+      }
+    }
+  }
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -592,7 +658,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
-    refreshToken = await retrieveRefreshToken()
+    refreshToken = await retrieveRefreshToken(dispatch)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (isAndroid()) {
@@ -623,6 +689,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
 export const initializeAuth = (): AppThunk => async (dispatch) => {
   let refreshToken: string | undefined
   await dispatch(checkFirstTimeLogin())
+  await dispatch(checkRequestNotificationsPreferenceScreen())
   const pType = await getAuthLoginPromptType()
 
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
@@ -741,10 +808,17 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
       state.displayBiometricsPreferenceScreen = action.payload
+    },
+    dispatchSetNotificationsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
+      state.requestNotificationsPreferenceScreen = action.payload
+    },
+    dispatchSetRequestNotifications: (state, action: PayloadAction<boolean>) => {
+      state.requestNotifications = action.payload
     },
     dispatchSetFirstLogin: (state, action: PayloadAction<boolean>) => {
       state.firstTimeLogin = action.payload
@@ -770,6 +844,7 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
+        requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
@@ -817,12 +892,20 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
+    dispatchStartLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = true
+    },
+    dispatchFinishLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = false
+    },
   },
 })
 
 export const {
   dispatchInitializeAction,
   dispatchSetDisplayBiometricsPreferenceScreen,
+  dispatchSetNotificationsPreferenceScreen,
+  dispatchSetRequestNotifications,
   dispatchSetFirstLogin,
   dispatchFinishSync,
   dispatchUpdateStoreBiometricsPreference,
@@ -836,6 +919,8 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
+  dispatchStartLoadingRefreshToken,
+  dispatchFinishLoadingRefreshToken,
 } = authSlice.actions
 
 export default authSlice.reducer

@@ -1,10 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ParamListBase } from '@react-navigation/native'
+
 import { TFunction } from 'i18next'
 
 import { Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import {
   AppointmentDetailsScreenType,
   AppointmentDetailsSubType,
@@ -12,23 +15,43 @@ import {
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
 
-const getWebViewLink = (onPress: () => void, t: TFunction) => (
-  <LinkWithAnalytics
-    type="custom"
-    icon={{ name: 'Launch' }}
-    onPress={onPress}
-    text={t('appointmentsTab.medicationWording.whatToBringLink')}
-  />
-)
+const { WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS, WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE } = getEnv()
+
+const getWebViewLink = (
+  type: AppointmentDetailsScreenType,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  t: TFunction,
+) => {
+  let text = t('appointmentsTab.medicationWording.whatToBringLink')
+  let url = WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS
+
+  if (type === AppointmentDetailsTypeConstants.ClaimExam) {
+    text = t('appointmentsTab.medicationWording.claimExam.webLink')
+    url = WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE
+  }
+
+  return (
+    <LinkWithAnalytics
+      type="custom"
+      icon={{ name: 'Launch' }}
+      onPress={() => {
+        navigateTo('Webview', {
+          url,
+          displayTitle: t('webview.vagov'),
+          loadingMessage: t('loading.vaWebsite'),
+        })
+      }}
+      text={text}
+    />
+  )
+}
 
 type AppointmentMedicationWordingProps = {
   subType: AppointmentDetailsSubType
   type: AppointmentDetailsScreenType
 }
-
-const { WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS } = getEnv()
 
 function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWordingProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -36,15 +59,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
   const body = t('appointmentsTab.medicationWording.default.body')
   const theme = useTheme()
 
-  const openWebviewLink = () => {
-    navigateTo('Webview', {
-      url: WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('loading.vaWebsite'),
-    })
-  }
-
-  const webViewLink = getWebViewLink(openWebviewLink, t)
+  const webViewLink = getWebViewLink(type, navigateTo, t)
 
   const getContent = () => {
     switch (type) {
@@ -74,6 +89,21 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
                 navigateTo('PrepareForVideoVisit')
               }}
             />
+          </>
+        )
+      case AppointmentDetailsTypeConstants.ClaimExam:
+        return (
+          <>
+            <VABulletList
+              listOfText={[
+                { text: t('appointmentsTab.medicationWording.claimExam.bullet1') },
+                {
+                  text: t('appointmentsTab.medicationWording.claimExam.bullet2'),
+                  a11yLabel: a11yLabelVA(t('appointmentsTab.medicationWording.claimExam.bullet2')),
+                },
+              ]}
+            />
+            {webViewLink}
           </>
         )
       default:
