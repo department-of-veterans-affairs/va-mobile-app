@@ -61,6 +61,7 @@ const authNonFatalErrorString = 'Auth Service Error'
 
 export type AuthState = {
   loading: boolean
+  loadingRefreshToken: boolean
   initializing: boolean
   syncing: boolean
   error?: Error
@@ -87,6 +88,7 @@ export type AuthState = {
 
 export const initialAuthState: AuthState = {
   loading: false,
+  loadingRefreshToken: false,
   initializing: true,
   loggedIn: false,
   loggingOut: false,
@@ -312,10 +314,9 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   if (saveWithBiometrics) {
     // user opted to store with biometrics
-    const options: Keychain.Options = {
+    const options: Keychain.SetOptions = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
-      authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
       storage: Keychain.STORAGE_TYPE.AES,
     }
@@ -330,7 +331,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     // In development environment, allow saving refresh token/unlock without biometrics
   } else if (__DEV__) {
     console.debug('saveRefreshToken: saving non biometric protected')
-    const options: Keychain.Options = {
+    const options: Keychain.SetOptions = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
@@ -358,7 +359,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  */
 const storeRefreshToken = async (
   refreshToken: string,
-  options: Keychain.Options,
+  options: Keychain.SetOptions,
   storageType: AUTH_STORAGE_TYPE,
 ): Promise<void> => {
   const splitToken = refreshToken.split('.')
@@ -379,21 +380,42 @@ const storeRefreshToken = async (
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
-const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('retrieveRefreshToken')
-  const result = await Promise.all([
-    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
-  ])
-  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | undefined> => {
+  let refreshToken
+  let attemptCount = 3
 
-  if (reconstructedToken) {
-    await logAnalyticsEvent(Events.vama_login_token_get(true))
-  } else {
-    await logAnalyticsEvent(Events.vama_login_token_get(false))
+  if (dispatch) {
+    dispatch(dispatchStartLoadingRefreshToken())
   }
 
-  return reconstructedToken
+  while (attemptCount > 0) {
+    try {
+      console.debug('retrieveRefreshToken')
+      const tokenArray = await Promise.all([
+        AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+        Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+      ])
+
+      refreshToken =
+        tokenArray && tokenArray[0] && tokenArray[1] ? `${tokenArray[0]}.${tokenArray[1].password}.V0` : undefined
+      return refreshToken
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      attemptCount -= 1
+      if (attemptCount === 0 || error?.message?.includes('Cancel')) {
+        throw error
+      }
+    } finally {
+      if (refreshToken) {
+        await logAnalyticsEvent(Events.vama_login_token_get(true))
+      } else {
+        await logAnalyticsEvent(Events.vama_login_token_get(false))
+      }
+      if (dispatch) {
+        dispatch(dispatchFinishLoadingRefreshToken())
+      }
+    }
+  }
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -638,7 +660,7 @@ export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) =
   dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
-    refreshToken = await retrieveRefreshToken()
+    refreshToken = await retrieveRefreshToken(dispatch)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (isAndroid()) {
@@ -872,6 +894,12 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
+    dispatchStartLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = true
+    },
+    dispatchFinishLoadingRefreshToken: (state) => {
+      state.loadingRefreshToken = false
+    },
   },
 })
 
@@ -893,6 +921,8 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
+  dispatchStartLoadingRefreshToken,
+  dispatchFinishLoadingRefreshToken,
 } = authSlice.actions
 
 export default authSlice.reducer
