@@ -135,7 +135,7 @@ describe('Home Screen', () => {
       .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
-    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))).toExist()
   })
 
   it('taps home then jumps to messages from messages button', async () => {
