@@ -27,7 +27,7 @@ export const CommonE2eIdConstants = {
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
-  SKIP_BTN_TEXT: 'Skip',
+  TURN_ON_NOTIFICATIONS_TEXT: 'Turn on notifications',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
@@ -87,6 +87,16 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
   CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
+  SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
+  HEALTH_TAB_BUTTON_ID: 'Health',
+  PAYMENTS_TAB_BUTTON_ID: 'Payments',
+  BENEFITS_TAB_BUTTON_ID: 'Benefits',
+  HOME_TAB_BUTTON_ID: 'Home',
+  AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
+  AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
+  CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
+  ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
+  PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
 }
 
 /** Log the automation into demo mode
@@ -122,14 +132,21 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
-  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
   if (skipOnboarding === true) {
-    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
 
     if (ifCarouselSkipBtnExist) {
-      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     }
+  }
+  const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
+    CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT,
+    true,
+  )
+  if (turnOnNotificationsBtnExist) {
+    await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
   }
 }
 
@@ -316,7 +333,7 @@ export async function openMilitaryInformation() {
 }
 
 export async function openHealth() {
-  await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.HEALTH_TAB_BUTTON_ID)).tap()
 }
 
 export async function openAppointments() {
@@ -324,7 +341,7 @@ export async function openAppointments() {
 }
 
 export async function openPayments() {
-  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openDirectDeposit() {
@@ -344,7 +361,7 @@ export async function openVAPaymentHistory() {
 }
 
 export async function openBenefits() {
-  await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openLetters() {
@@ -392,11 +409,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await waitFor(element(by.text('Remote Config')))
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.text('Remote Config')).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
     await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
       .toBeVisible()
@@ -412,30 +429,30 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   if (AFAppUpdate) {
     try {
-      await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
+      await expect(element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID))).toHaveToggleValue(true)
     } catch (ex) {
-      await element(by.text('appUpdateButton')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID)).tap()
     }
   } else if (AFFeature === 'WG_Health') {
     try {
-      await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
     } catch (ex) {
-      await element(by.text('Enabled')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
     }
   }
 
   if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     } else if (AFUseCase === 'DenyAccess') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     }
   }
@@ -445,6 +462,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
   await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+  await setTimeout(3000)
+  await element(by.id('AFErrorPhoneNumberTestID')).replaceText('8006982411')
+  await element(by.id('AFErrorPhoneNumberTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
   if (AFUseCase === 'DenyAccess') {
@@ -457,7 +477,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       await loginToDemoMode()
     }
   } else {
-    await element(by.text('Home')).tap()
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   }
 }
 
@@ -471,11 +491,11 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await waitFor(element(by.text('Remote Config')))
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.text('Remote Config')).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
@@ -484,7 +504,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
 
-  await element(by.text('Home')).tap()
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
 
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
@@ -502,13 +522,13 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Get prescription tracking') {
       await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (
@@ -535,7 +555,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
@@ -584,17 +604,19 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
       try {
-        await element(by.text('800-698-2411')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID'))).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
       await device.launchApp({ newInstance: false })
       try {
-        await element(by.text('TTY: 711')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(
+          by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID')),
+        ).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
