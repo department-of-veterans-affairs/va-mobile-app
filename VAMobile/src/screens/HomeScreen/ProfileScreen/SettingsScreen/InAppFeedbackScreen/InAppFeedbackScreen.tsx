@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -6,17 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
-import {
-  BorderColorVariant,
-  Box,
-  LargePanel,
-  PickerItem,
-  RadioGroup,
-  RadioGroupProps,
-  TextView,
-  VAModalPicker,
-  VATextInput,
-} from 'components'
+import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -25,7 +15,6 @@ type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFe
 function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [taskCompleted, setTaskCompleted] = useState('')
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
 
