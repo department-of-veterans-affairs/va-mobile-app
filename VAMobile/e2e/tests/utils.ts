@@ -38,11 +38,9 @@ export const CommonE2eIdConstants = {
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
-  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
-  MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
@@ -52,7 +50,6 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
@@ -97,6 +94,11 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
+  PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',
+  CONTACT_INFO_BUTTON_ID: 'toContactInfoID',
+  MILITARY_HISTORY_BUTTON_ID: 'toMilitaryHistoryID',
+  SETTINGS_BUTTON_ID: 'toSettingsID',
+  PROFILE_SCROLL_ID: 'profileID',
 }
 
 /** Log the automation into demo mode
@@ -317,19 +319,19 @@ export async function openProfile() {
 }
 
 export async function openSettings() {
-  await waitFor(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)))
+  await waitFor(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)))
     .toBeVisible()
-    .whileElement(by.id('profileID'))
+    .whileElement(by.id(CommonE2eIdConstants.PROFILE_SCROLL_ID))
     .scroll(50, 'down')
-  await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)).tap()
 }
 
 export async function openPersonalInformation() {
-  await element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID)).tap()
 }
 
 export async function openMilitaryInformation() {
-  await element(by.text(CommonE2eIdConstants.MILITARY_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openHealth() {
@@ -353,7 +355,7 @@ export async function openPrescriptions() {
 }
 
 export async function openContactInfo() {
-  await element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID)).tap()
 }
 
 export async function openVAPaymentHistory() {

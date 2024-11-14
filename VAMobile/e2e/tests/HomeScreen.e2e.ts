@@ -74,10 +74,10 @@ describe('Home Screen', () => {
 
   it('profile tab tap: verify the profile screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_INFORMATION_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID))).toExist()
   })
 
   it('home tab tap: verify the home screen tab items', async () => {
@@ -135,7 +135,7 @@ describe('Home Screen', () => {
       .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_ID))).toExist()
   })
 
   it('taps home then jumps to messages from messages button', async () => {
