@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
-function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
+function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
