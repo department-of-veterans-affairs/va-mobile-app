@@ -277,12 +277,12 @@ context('authAction SIS', () => {
 
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
-        const expectedOpts = expect.objectContaining({
+        const expectedOpts = {
           accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
           accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
           authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
           storage: Keychain.STORAGE_TYPE.AES_GCM,
-        })
+        }
         expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', nonce, expectedOpts)
       })
     })
@@ -483,12 +483,12 @@ context('authAction SIS', () => {
         },
         body: `refresh_token=${testRefreshToken}`,
       })
-      const expectedOpts = expect.objectContaining({
+      const expectedOpts = {
         accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
         accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
         authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
         storage: Keychain.STORAGE_TYPE.AES_GCM,
-      })
+      }
       console.debug(testRefreshToken)
       console.debug(tokenPayload)
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPayload)
