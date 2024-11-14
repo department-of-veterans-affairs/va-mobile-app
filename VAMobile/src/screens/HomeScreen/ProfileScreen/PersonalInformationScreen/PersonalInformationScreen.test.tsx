@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { DemographicsPayload, GenderIdentityOptionsPayload, UserDemographics } from 'api/types'
@@ -28,7 +29,7 @@ when(get as jest.Mock)
           tm: 'Transgender Man',
           tf: 'Transgender Woman',
           f: 'Woman',
-          n: 'Prefer not to answer',
+          n: t('personalInformation.genderIdentity.preferNotToAnswer'),
           o: 'A gender not listed here',
         },
       },
@@ -63,20 +64,18 @@ context('PersonalInformationScreen', () => {
 
   it('renders correctly', async () => {
     renderWithData()
-    expect(screen.getByText('Loading your personal information...')).toBeTruthy()
-    await waitFor(() => expect(screen.getByLabelText('Personal information')).toBeTruthy())
+    expect(screen.getByText(t('personalInformation.loading'))).toBeTruthy()
+    await waitFor(() => expect(screen.getByLabelText(t('personalInformation.title'))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('contactInformation.editNote'))).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByText('Any updates you make here will also update in your VA.gov profile.')).toBeTruthy(),
+      expect(screen.getByRole('link', { name: t('personalInformation.howToFixLegalName') })).toBeTruthy(),
     )
+    await waitFor(() => expect(screen.getByText(t('personalInformation.dateOfBirth'))).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByRole('link', { name: 'How to update or fix an error in your legal name' })).toBeTruthy(),
+      expect(screen.getByRole('link', { name: t('personalInformation.howToFixDateOfBirth') })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByText('Date of birth')).toBeTruthy())
-    await waitFor(() =>
-      expect(screen.getByRole('link', { name: 'How to fix an error in your date of birth' })).toBeTruthy(),
-    )
-    await waitFor(() => expect(screen.getByText('Preferred name')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('personalInformation.preferredName.title'))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('personalInformation.genderIdentity.title'))).toBeTruthy())
   })
 
   describe('when there is no birth date', () => {
@@ -95,7 +94,7 @@ context('PersonalInformationScreen', () => {
           },
         },
       ])
-      await waitFor(() => expect(screen.getByText('This information is not available right now')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('personalInformation.informationNotAvailable'))).toBeTruthy())
     })
   })
 
@@ -122,8 +121,24 @@ context('PersonalInformationScreen', () => {
   describe("when demographics information isn't set", () => {
     it('displays message on sharing gender identity and preferred name', async () => {
       renderWithData()
-      await waitFor(() => expect(screen.getByText('Sharing your gender identity is optional.')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Sharing your preferred name is optional.')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            t('personalInformation.genericBody', {
+              informationType: t('personalInformation.genderIdentity.title').toLowerCase(),
+            }),
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            t('personalInformation.genericBody', {
+              informationType: t('personalInformation.preferredName.title').toLowerCase(),
+            }),
+          ),
+        ).toBeTruthy(),
+      )
     })
   })
 
@@ -152,7 +167,7 @@ context('PersonalInformationScreen', () => {
         .mockRejectedValue({ networkError: 500 })
 
       renderWithData()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('errors.networkConnection.header'))).toBeTruthy())
     })
   })
 })
