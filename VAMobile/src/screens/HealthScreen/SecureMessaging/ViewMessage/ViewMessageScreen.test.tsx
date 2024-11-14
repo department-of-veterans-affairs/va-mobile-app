@@ -4,10 +4,13 @@ import { screen } from '@testing-library/react-native'
 
 import {
   CategoryTypeFields,
+  SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
+  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
@@ -195,6 +198,47 @@ context('ViewMessageScreen', () => {
     inboxUnreadCount: 0,
   }
 
+  const messages: SecureMessagingFolderMessagesGetData = {
+    data: [
+      {
+        type: 'test',
+        id: 1,
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'test',
+          body: 'test',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1-1-21',
+          senderId: 2,
+          senderName: 'mock sender',
+          recipientId: 3,
+          recipientName: 'mock recipient name',
+          readReceipt: 'mock read receipt',
+        },
+      },
+    ],
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+    meta: {
+      sort: {
+        sentDate: 'DESC',
+      },
+      pagination: {
+        currentPage: 1,
+        perPage: 1,
+        totalPages: 3,
+        totalEntries: 5,
+      },
+    },
+  }
+
   const initializeTestInstance = (messageID: number = 3) => {
     render(
       <ViewMessageScreen
@@ -222,6 +266,12 @@ context('ViewMessageScreen', () => {
         .mockResolvedValue(oldMessage)
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
       initializeTestInstance(45)
       await waitFor(() => expect(screen.getByText('mock sender 45')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Start new message')).toBeTruthy())
@@ -240,6 +290,12 @@ context('ViewMessageScreen', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(listOfFolders)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.INBOX}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(messages)
       initializeTestInstance()
       expect(screen.getByText('Loading your message...')).toBeTruthy()
       await waitFor(() => expect(screen.queryByRole('link', { name: '1-800-698-2411.Thank' })).toBeFalsy())
