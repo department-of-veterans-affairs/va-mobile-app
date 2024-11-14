@@ -9,7 +9,14 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { secureMessagingKeys, useFolders, useMessage, useMoveMessage, useThread } from 'api/secureMessaging'
+import {
+  secureMessagingKeys,
+  useFolderMessages,
+  useFolders,
+  useMessage,
+  useMoveMessage,
+  useThread,
+} from 'api/secureMessaging'
 import {
   MoveMessageParameters,
   SecureMessagingAttachment,
@@ -134,6 +141,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
 
+  const {
+    data: inboxMessagesData,
+    isFetching: loadingFolderMessages,
+    error: folderMessagesError,
+    refetch: refetchFolderMessages,
+  } = useFolderMessages(currentFolderIdParam, {
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
+
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
@@ -159,11 +175,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
       let updateQueries = false
-      const inboxMessagesData = queryClient.getQueryData([
-        secureMessagingKeys.folderMessages,
-        currentFolderIdParam,
-      ]) as SecureMessagingFolderMessagesGetData
-      const newInboxMessages = inboxMessagesData.data.map((m) => {
+      const newInboxMessages = inboxMessagesData?.data.map((m) => {
         if (m.attributes.messageId === message.messageId && m.attributes.readReceipt !== READ) {
           updateQueries = true
           m.attributes.readReceipt = READ
@@ -209,6 +221,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     messageData?.included,
     foldersData,
     messageData,
+    inboxMessagesData,
   ])
 
   const getFolders = (): PickerItem[] => {
@@ -354,8 +367,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
-  const hasError = foldersError || messageError || threadError || !smNotInDowntime
-  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage
+  const hasError = folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime
+  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage || loadingFolderMessages
   const isEmpty = !message || !thread
   const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
 
@@ -385,9 +398,17 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={screenID}
-          error={foldersError || messageError || threadError}
+          error={folderMessagesError || foldersError || messageError || threadError}
           onTryAgain={
-            foldersError ? refetchFolders : messageError ? refetchMessage : threadError ? refetchThread : undefined
+            folderMessagesError
+              ? refetchFolderMessages
+              : foldersError
+                ? refetchFolders
+                : messageError
+                  ? refetchMessage
+                  : threadError
+                    ? refetchThread
+                    : undefined
           }
         />
       ) : isEmpty ? (

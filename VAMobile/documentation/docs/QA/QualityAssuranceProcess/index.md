@@ -69,8 +69,9 @@ All issue tickets should be written using the [issue ticket template](https://gi
 
 | **Frequency** | **Definition** | **Examples** |
 | --- | --- | --- |
-| High frequency | Affects a component, screen, or action used by 15% or more of monthly users | Authentication, home page (including What's New and Encouraged Update), category landing screens, feature landing or child screens for most-used features (Claims, Upcoming Appointments, and Decision Letters), feature landing or child screens for next-most-used features (Prescriptions, Payments, Messaging, Letters, Disability Rating, and Military Info), and downloading a letter (decision or any other kind) |
-| Low frequency | Affects a component, screen, or action used by 14% or fewer of monthly users | All other app actions (send message, upload file, etc); and all screens not listed in high frequency examples |
+| High frequency | Affects a component, screen, or action used by 15% or more of monthly users | - Authentication/login <br/> - Home page (including What's New and Encouraged Update) <br/> - Category landing screens (Health, Benefits, Payments and Profile) <br/> - Feature landing and child screens for most-used features (Prescriptions, Upcoming Appointments, and Secure Messaging) <br/> - Feature landing and child screens for next-most-used features (Claims, Disability Rating, Letters, Payment History) <br/> - Key actions from the features already listed: med refill, sending a message (new or reply), and downloading a letter (decision or any other kind) |
+| Low frequency | Affects a component, screen, or action used by 14% or fewer of monthly users | All other all screens and app actions (upload file, change demographic info, etc) not listed in high frequency examples |
+_Frequency examples informed by the [Flagship Mobile Monthly Report](https://lookerstudio.google.com/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_xatxe90k9c)_
 
 ### User-submitted Bug Reports
 

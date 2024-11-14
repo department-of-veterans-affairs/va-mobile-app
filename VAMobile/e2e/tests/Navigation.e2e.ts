@@ -216,17 +216,17 @@ const navigateToPage = async (key, navigationDicValue) => {
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
       if (subNavigationArray[k] === 'Review file requests') {
-        await waitFor(element(by.text('Review file requests')))
+        await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)))
           .toBeVisible()
-          .whileElement(by.id('ClaimDetailsScreen'))
+          .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
           .scroll(100, 'up')
       } else if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
-          .whileElement(by.id('claimsHistoryID'))
+          .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
           .scroll(100, 'down')
       } else if (subNavigationArray[k] === 'Files') {
-        await element(by.id('ClaimsDetailsScreen')).scrollTo('top')
+        await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
       }
 
       if (k == 0 && key in featureID) {
@@ -248,22 +248,22 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.text('Review file requests')))
+      await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)))
         .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
         .scroll(100, 'up')
     } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(100, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Files' || subNavigationArray.slice(-1)[0] === 'Submit evidence') {
-      await element(by.id('ClaimDetailsScreen')).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     }
 
     if (subNavigationArray.slice(-1)[0] in featureID) {
