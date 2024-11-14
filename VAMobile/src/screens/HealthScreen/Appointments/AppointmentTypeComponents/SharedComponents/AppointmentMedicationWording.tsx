@@ -41,7 +41,6 @@ const getWebViewLink = (
           url,
           displayTitle: t('webview.vagov'),
           loadingMessage: t('loading.vaWebsite'),
-          useSSO: true,
         })
       }}
       text={text}
