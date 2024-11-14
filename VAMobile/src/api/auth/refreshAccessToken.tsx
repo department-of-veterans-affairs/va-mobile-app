@@ -1,8 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
 
+import { dispatchUpdateLoadingRefreshToken } from 'store/slices'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { clearStoredAuthCreds, processAuthResponse } from 'utils/auth'
 import getEnv from 'utils/env'
+import { useAppDispatch } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 const { AUTH_SIS_TOKEN_REFRESH_URL } = getEnv()
@@ -26,10 +28,15 @@ const refreshAccessToken = (refreshToken: string): Promise<Response> => {
  * Returns a mutation for refreshing a user access token
  */
 export const useRefreshAccessToken = () => {
+  const dispatch = useAppDispatch()
   return useMutation({
     mutationFn: refreshAccessToken,
     onMutate: () => {
+      dispatch(dispatchUpdateLoadingRefreshToken(true))
       clearCookies()
+    },
+    onSettled: () => {
+      dispatch(dispatchUpdateLoadingRefreshToken(false))
     },
     onSuccess: (data) => {
       processAuthResponse(data)
