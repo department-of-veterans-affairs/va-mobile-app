@@ -8,12 +8,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthSettings } from 'api/auth'
-import { AlertWithHaptics, Box, CrisisLineButton, VALogo, VAScrollView, WaygateWrapper } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  CrisisLineButton,
+  LoadingComponent,
+  TextView,
+  VALogo,
+  VAScrollView,
+  WaygateWrapper,
+} from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { AuthState } from 'store/slices'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
+import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart } from 'utils/auth'
@@ -26,6 +37,8 @@ import DemoAlert from './DemoAlert'
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: userAuthSettings } = useAuthSettings()
+  const { loadingRefreshToken } = useSelector<RootState, AuthState>((state) => state.auth)
+
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
@@ -97,7 +110,7 @@ function LoginScreen() {
         backgroundColor={theme.colors.background.main}
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
-      <CrisisLineButton />
+      {!loadingRefreshToken && <CrisisLineButton />}
       {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
@@ -116,19 +129,40 @@ function LoginScreen() {
           accessibilityRole="image"
           accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
+          {loadingRefreshToken && (
+            <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={70}>
+              <LoadingComponent
+                justTheSpinnerIcon={true}
+                spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+              />
+              <TextView
+                variant={'MobileBody'}
+                justifyContent={'center'}
+                color={'primary'}
+                alignItems={'center'}
+                textAlign={'center'}
+                mt={theme.dimensions.standardMarginBetween}>
+                {t('sync.progress.signin')}
+              </TextView>
+            </Box>
+          )}
         </Box>
-        <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
-          <Button onPress={onLoginInit} label={t('signin')} />
-        </Box>
-        <Box mx={theme.dimensions.gutter} mb={70}>
-          <Button
-            onPress={onFacilityLocator}
-            label={t('findLocation.title')}
-            a11yLabel={a11yLabelVA(t('findLocation.title'))}
-            buttonType={ButtonVariants.Secondary}
-          />
-        </Box>
-        <AppVersionAndBuild textColor={'appVersionAndBuild'} />
+        {!loadingRefreshToken && (
+          <>
+            <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+              <Button onPress={onLoginInit} label={t('signin')} />
+            </Box>
+            <Box mx={theme.dimensions.gutter} mb={70}>
+              <Button
+                onPress={onFacilityLocator}
+                label={t('findLocation.title')}
+                a11yLabel={a11yLabelVA(t('findLocation.title'))}
+                buttonType={ButtonVariants.Secondary}
+              />
+            </Box>
+            <AppVersionAndBuild textColor={'appVersionAndBuild'} />
+          </>
+        )}
       </Box>
     </VAScrollView>
   )

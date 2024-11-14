@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 export type AuthState = {
+  loadingRefreshToken: boolean
   loading: boolean
   loggedIn: boolean
   loggingOut: boolean
@@ -9,6 +10,7 @@ export type AuthState = {
 }
 
 export const initialAuthState: AuthState = {
+  loadingRefreshToken: false,
   loading: false,
   loggedIn: false,
   loggingOut: false,
@@ -26,6 +28,9 @@ const authSlice = createSlice({
     dispatchUpdateLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload
     },
+    dispatchUpdateLoadingRefreshToken: (state, action: PayloadAction<boolean>) => {
+      state.loadingRefreshToken = action.payload
+    },
     dispatchUpdateLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.loggedIn = action.payload
     },
@@ -42,6 +47,7 @@ const authSlice = createSlice({
 })
 
 export const {
+  dispatchUpdateLoadingRefreshToken,
   dispatchUpdateLoading,
   dispatchUpdateLoggedIn,
   dispatchUpdateLoggingOut,
