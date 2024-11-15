@@ -45,7 +45,6 @@ export const CommonE2eIdConstants = {
   OK_UNIVERSAL_TEXT: 'OK',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
-  DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
@@ -99,6 +98,7 @@ export const CommonE2eIdConstants = {
   MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   VACCINES_BUTTON_ID: 'toVaccineListID',
+  DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
 }
 
 /** Log the automation into demo mode
@@ -391,7 +391,7 @@ export async function openClaimsHistory() {
 }
 
 export async function openDeveloperScreen() {
-  await element(by.text(CommonE2eIdConstants.DEVELOPER_SCREEN_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_BUTTON_ID)).tap()
 }
 
 /**

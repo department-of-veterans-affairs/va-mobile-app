@@ -135,7 +135,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     ]
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween} testID="toDeveloperScreenID">
         <SimpleList items={debugButton} />
       </Box>
     )
