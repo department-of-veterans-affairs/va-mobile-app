@@ -1,0 +1,15 @@
+name: '[Code Quality] Check Native iOs Builds'
+description: 'This test has the opposite filter of native_build_check_ios.yml so that required checks dont hang'
+
+on:
+  pull_request:
+    paths-ignore:
+      - "VAMobile/ios/**"
+
+jobs:
+  ios_native_build:
+    runs-on: ubuntu-latest
+    name: iOS Test Build
+    steps:
+      - run: echo "PASS -- No native ios files updated."
+

@@ -1,0 +1,15 @@
+name: '[Code Quality] Check Native iOs Builds'
+description: 'Tests to see that changes to native files do not break the iOs build process'
+
+on:
+  pull_request:
+    paths:
+      - "VAMobile/ios/**"
+
+jobs:
+  ios_native_build:
+    name: iOS Test Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: test_build_only

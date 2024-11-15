@@ -1,0 +1,14 @@
+name: '[Code Quality] Check Native Android Builds'
+description: 'This test has the opposite filter of native_build_check_android.yml so that required checks dont hang'
+
+on:
+  pull_request:
+    paths-ignore:
+      - "VAMobile/android/**"
+
+jobs:
+  android_native_build:
+    runs-on: ubuntu-latest
+    name: Android Test Build
+    steps:
+      - run: echo "PASS -- No native android files updated."
