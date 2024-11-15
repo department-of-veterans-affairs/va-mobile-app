@@ -9,7 +9,6 @@ import {
   openBenefits,
   openDisabilityRating,
   openMilitaryInformation,
-  openPersonalInformation,
   openProfile,
 } from './utils'
 
@@ -21,7 +20,6 @@ export const VeteranStatusCardConstants = {
   VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT: 'United States Army',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT: 'July 13, 1970 – August 31, 1998',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT: 'September 01, 1998 – January 01, 2000',
-  VETERAN_STATUS_DATE_OF_BIRTH_TEXT: 'January 01, 1950',
   VETERAN_STATUS_DISCLAIMER_TEXT:
     "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any VA benefits.",
   VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT: '800-827-1000',
@@ -44,7 +42,6 @@ export async function validateVeteranStatusDesign() {
   await expect(element(by.id('veteranStatusBranchTestID'))).toExist()
   await expect(element(by.id('veteranStatusDisabilityRatingTestID'))).toExist()
   await expect(element(by.id('veteranStatusMilitaryServiceTestID')).atIndex(0)).toExist()
-  await expect(element(by.id('veteranStatusDOBTestID'))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISCLAIMER_TEXT))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT))).toExist()
   await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
@@ -149,15 +146,6 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
-    await element(by.id(VeteranStatusCardConstants.BACK_TO_PROFILE_ID)).tap()
-  })
-
-  it('verify the date of birth matches the dob in the app', async () => {
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DATE_OF_BIRTH_TEXT))).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-    await openPersonalInformation()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DATE_OF_BIRTH_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.BACK_TO_PROFILE_ID)).tap()
   })
 
