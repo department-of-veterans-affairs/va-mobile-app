@@ -54,7 +54,7 @@ jobs:
         # This should match the numbers of items in the matrix chunk array above
         run: bash ${GITHUB_WORKSPACE}/.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 5
   bundle:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
