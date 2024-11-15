@@ -3,7 +3,7 @@ description: 'This test has the opposite filter of native_build_checks.yml so th
 
 on:
   pull_request:
-    paths:
+    paths-ignore:
       - "VAMobile/android/**"
       - "VAMobile/ios/**"
 
