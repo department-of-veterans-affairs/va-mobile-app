@@ -9,5 +9,5 @@ on:
 jobs:
   ios_native_build:
     name: iOS Test Build
-    uses: ./.github/workflows/native_build_check_ios
+    uses: ./.github/workflows/native_build_check_ios.yml
 
