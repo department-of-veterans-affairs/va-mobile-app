@@ -1342,10 +1342,10 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.14.0.tgz#d035e01d646d5d3a596f52612dad6e443abbd669"
   integrity sha512-yz3UK4TrmZJePII/MZEpOY1L8dDYGgtrGB6nk4omXE8DX4mJGWXn7D3D05qHNI7EtkjPUjnWHuQlrcIIp40vyQ==
 
-"@department-of-veterans-affairs/mobile-component-library@0.27.1-alpha.3":
-  version "0.27.1-alpha.3"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.27.1-alpha.3.tgz#d381836f64209b0cd21752a1ceefccb38021015f"
-  integrity sha512-4UR9FrlDW7HdU6TO993gQ6L0fO9tMelyT+MvhsHhEYVKZQmAGuWpnB61TRp+XLStjTGceFCSj0MgYGvVe6zu+w==
+"@department-of-veterans-affairs/mobile-component-library@0.27.1-alpha.6":
+  version "0.27.1-alpha.6"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.27.1-alpha.6.tgz#8f04aa44bf5decf752a84e602f99e669b3cc6a06"
+  integrity sha512-ynsCAqLB9UFvS3zgicQEPLl3ia38FdgaPCyZ1RKQK9KvSIWlpc+E9Io29uTwXe3niXGommrjUVZRqJAF8VYnWA==
   dependencies:
     "@os-team/i18next-react-native-language-detector" "^1.0.34"
     i18next "^23.12.2"
@@ -1354,10 +1354,10 @@
     react-native-toast-notifications "^3.4.0"
     styled-components "^6.1.12"
 
-"@department-of-veterans-affairs/mobile-tokens@0.19.0":
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.19.0.tgz#04e03364ae1a693e7b1911de2425eb92cb664b7e"
-  integrity sha512-JeIaIrbx9acWuj+vmgj11sET1zDWblc7WTys6RPFNjzZSnjj4NPsiYX4uBL2o8KOiBb6HbSvgi8UWV3Dg/lX+A==
+"@department-of-veterans-affairs/mobile-tokens@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.20.0.tgz#a159eed07f335abf129a69cb2a096e9427b7b3fc"
+  integrity sha512-BvrzlvZNO4pYVaJU1+qXW6L9EEnLK/t+zG7ueQNu/6B9zCcIPvN16hYziTJxau/SBkZcHQdnPALzEh99lbjVSA==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
