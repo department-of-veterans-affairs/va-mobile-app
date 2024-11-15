@@ -90,8 +90,8 @@ jobs:
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
-          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
-            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+          if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]] || [[ "${{ github.event.push.actor.login }}" == "dependabot[bot]" ]]; then
+            if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]] || [[ "${{ github.event.push.actor.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
@@ -107,7 +107,7 @@ jobs:
             if [[ "${{ needs.find_detox_tests_to_run.outputs.test_run }}" != "" ]]; then
               echo "${{needs.find_detox_tests_to_run.outputs.test_matrix}}"
               if [[ "${{needs.find_detox_tests_to_run.outputs.test_matrix}}" == "[]" ]]; then
-                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+                if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]] || [[ "${{ github.event.push.actor.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
