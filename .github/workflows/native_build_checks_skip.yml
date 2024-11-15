@@ -10,11 +10,11 @@ on:
 jobs:
   ios:
     runs-on: ubuntu-latest
-    name: Validate changes to DataDog Service Catalog Files
+    name: iOS Test Build
     steps:
       - run: echo "PASS -- No native ios files updated."
   android:
     runs-on: ubuntu-latest
-    name: Validate changes to DataDog Service Catalog Files
+    name: Android Test Build
     steps:
       - run: echo "PASS -- No native android files updated."
