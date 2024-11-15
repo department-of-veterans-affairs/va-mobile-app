@@ -17,3 +17,5 @@ jobs:
     name: Android Test Build
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
+    with:
+      lane: test_build_only
