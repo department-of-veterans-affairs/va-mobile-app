@@ -5,8 +5,7 @@ on:
   workflow_call:
 
 jobs:
-  ios_build:
+  build_ios:
     runs-on: ubuntu-latest
-    name: iOS Test Build
     steps:
       - run: echo "PASS -- No native ios files updated."
