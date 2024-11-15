@@ -1,6 +1,5 @@
 ---
 title: Contributing
-sidebar_position: 2
 ---
 
 ## VA Health & Benefits: Mobile & Web Collaboration
