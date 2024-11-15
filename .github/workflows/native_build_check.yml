@@ -3,7 +3,7 @@ description: 'Tests to see that changes to native files do not break the build p
 
 on:
   pull_request:
-    paths-ignore:
+    paths:
       - "VAMobile/android/**"
       - "VAMobile/ios/**"
 
