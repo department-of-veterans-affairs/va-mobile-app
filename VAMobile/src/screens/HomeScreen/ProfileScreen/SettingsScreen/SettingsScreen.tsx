@@ -113,8 +113,8 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), detoxTestID: 'shareAppID', onPress: onShare },
     {
-      text: t('inAppRecruitment.giveFeedback'),
-      a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'),
+      text: t('giveFeedback'),
+      a11yHintText: t('giveFeedback.a11yHint'),
       onPress: () => navigateTo('InAppRecruitment'),
       detoxTestID: 'inAppRecruitmentID',
     },

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -8,7 +9,10 @@ import { RootNavStackParamList } from 'App'
 
 import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
+import { useExternalLink, useTheme } from 'utils/hooks'
+
+const { LINK_URL_OMB_PAGE } = getEnv()
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
@@ -17,14 +21,11 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
+  const launchExternalLink = useExternalLink()
 
   // useBeforeNavBackListener(navigation, () => {
   // logAnalyticsEvent(Events.vama_feedback_page_closed())
   // })
-
-  const onChange = (value: string): void => {
-    setSatisfaction(value)
-  }
 
   const onSubmit = (): void => {
     // logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
@@ -33,7 +34,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
 
   const radioGroupProps: RadioGroupProps<string> = {
     isRadioList: false,
-    onChange: onChange,
+    onChange: setSatisfaction,
     options: [
       {
         labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
@@ -73,9 +74,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
           isTextArea={true}
           value={task}
           testID="AppFeedbackTaskID"
-          onChange={(val) => {
-            setTaskOverride(val)
-          }}
+          onChange={setTaskOverride}
         />
         <Box>
           <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
@@ -96,6 +95,14 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
           <TextView variant="HelperText">{t('inAppFeedback.legalReqs.burdenTime')}</TextView>
           <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
             {t('inAppFeedback.legalReqs.paragraph')}
+          </TextView>
+          <Pressable onPress={() => launchExternalLink(LINK_URL_OMB_PAGE)} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileFooterLink" mt={theme.dimensions.standardMarginBetween}>
+              {t('inAppFeedback.legalReqs.paragraph.link')}
+            </TextView>
+          </Pressable>
+          <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
+            {t('inAppFeedback.legalReqs.paragraph.2')}
           </TextView>
         </Box>
       </Box>
