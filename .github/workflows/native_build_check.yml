@@ -1,0 +1,19 @@
+name: '[Code Quality] Check Native Builds'
+description: 'Tests to see that changes to native files do not break the build process'
+
+on:
+  pull_request:
+    paths-ignore:
+      - "VAMobile/android/**"
+      - "VAMobile/ios/**"
+
+jobs:
+  ios:
+    name: iOS Test Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+
+  android:
+    name: Android Test Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
