@@ -206,7 +206,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_5_API_33
           script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         continue-on-error: true
 
@@ -221,7 +221,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_5_API_33
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
 
       - name: Run e2e tests for Android on failure
@@ -234,7 +234,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_5_API_33
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         
       - name: Upload e2e-junit
