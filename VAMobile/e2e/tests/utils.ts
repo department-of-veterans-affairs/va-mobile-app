@@ -31,7 +31,6 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
-  PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
@@ -99,6 +98,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
+  PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
 }
 
 /** Log the automation into demo mode
@@ -315,7 +315,7 @@ export async function openVeteransCrisisLine() {
 }
 
 export async function openProfile() {
-  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID)).tap()
 }
 
 export async function openSettings() {

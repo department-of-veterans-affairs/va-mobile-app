@@ -1,17 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  checkImages,
-  disableAF,
-  enableAF,
-  loginToDemoMode,
-  openDeveloperScreen,
-  openProfile,
-  openSettings,
-  verifyAF,
-} from './utils'
+import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
   PAYMENTS_BTN_ID: 'Payments',
@@ -54,11 +44,11 @@ describe('Home Screen', () => {
 
   it('should show primary home page header content', async () => {
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 
   it('should verify the nav bar at the bottom of the screen', async () => {
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT))).toExist()
@@ -73,7 +63,7 @@ describe('Home Screen', () => {
   })
 
   it('profile tab tap: verify the profile screen tab items', async () => {
-    await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
+    await element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID)).tap()
     await expect(element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID))).toExist()
@@ -82,7 +72,7 @@ describe('Home Screen', () => {
 
   it('home tab tap: verify the home screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 
   it('benefits tab tap: verify the benefits screen tab items', async () => {
