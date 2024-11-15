@@ -58,7 +58,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
         <VAIcon mt={1} name={'ChevronLeft'} fill={theme.colors.icon.link} width={15} height={13} maxWidth={25} />
         <TextView
           variant="DescriptiveBackButton"
-          color="descriptiveBackButton"
+          color="link"
           ml={theme.dimensions.textIconMargin}
           allowFontScaling={false}
           accessible={false}>
