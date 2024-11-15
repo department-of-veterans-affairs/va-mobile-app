@@ -435,21 +435,23 @@ export function AuthGuard() {
     )
   } else {
     content = (
-      <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ ...topPaddingAsHeaderStyles, title: t('login') }}
-        />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
-        <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+      <>
+        <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ ...topPaddingAsHeaderStyles, title: t('login') }}
+          />
+          <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
+          <Stack.Screen name="Webview" component={WebviewScreen} />
+          <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+        </Stack.Navigator>
         <Toast
           {...snackBarProps}
           ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)}
           offsetBottom={bottomOffset}
         />
-      </Stack.Navigator>
+      </>
     )
   }
 
