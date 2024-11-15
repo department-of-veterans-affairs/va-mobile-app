@@ -94,10 +94,10 @@ describe('Home Screen', () => {
 
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {

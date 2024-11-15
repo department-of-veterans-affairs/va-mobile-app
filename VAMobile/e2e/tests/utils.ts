@@ -33,19 +33,15 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
-  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
   SETTINGS_ROW_TEXT: 'Settings',
-  VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
-  MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
   LEAVING_APP_CANCEL_TEXT: 'Go back',
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
@@ -99,6 +95,10 @@ export const CommonE2eIdConstants = {
   DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
   PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
   DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
+  APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
+  MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
+  PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
+  VACCINES_BUTTON_ID: 'toVaccineListID',
 }
 
 /** Log the automation into demo mode
@@ -339,7 +339,7 @@ export async function openHealth() {
 }
 
 export async function openAppointments() {
-  await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
@@ -351,7 +351,7 @@ export async function openDirectDeposit() {
 }
 
 export async function openPrescriptions() {
-  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID)).tap()
 }
 
 export async function openContactInfo() {
@@ -375,11 +375,11 @@ export async function openDisabilityRating() {
 }
 
 export async function openVaccineRecords() {
-  await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID)).tap()
 }
 
 export async function openMessages() {
-  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID)).tap()
 }
 
 export async function openClaims() {
