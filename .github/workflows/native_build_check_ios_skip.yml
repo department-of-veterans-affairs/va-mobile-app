@@ -8,6 +8,6 @@ on:
 
 jobs:
   ios_native_build:
-    runs-on: ubuntu-latest
-    uses: ./.github/workflows/native_build_check_ios_reusable.yml
+    name: iOS Test Build
+    uses: ./.github/workflows/native_build_check_ios
 
