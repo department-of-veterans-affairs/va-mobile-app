@@ -34,7 +34,7 @@
     "emulator": {
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_4_XL_API_28"
+        "avdName": "Pixel_5_API_33"
       }
     }
   },
