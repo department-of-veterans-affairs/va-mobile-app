@@ -1,0 +1,12 @@
+name: '[Code Quality] Check Native iOs Builds'
+description: 'This is a reusable workflow so that required checks work correctly. see https://github.com/orgs/community/discussions/36680'
+
+on:
+  workflow_call:
+
+jobs:
+  ios_build:
+    runs-on: ubuntu-latest
+    name: iOS Test Build
+    steps:
+      - run: echo "PASS -- No native ios files updated."

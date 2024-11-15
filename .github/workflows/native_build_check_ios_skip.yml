@@ -9,7 +9,5 @@ on:
 jobs:
   ios_native_build:
     runs-on: ubuntu-latest
-    name: iOS Test Build
-    steps:
-      - run: echo "PASS -- No native ios files updated."
+    uses: ./.github/workflows/native_build_check_ios_reusable.yml
 
