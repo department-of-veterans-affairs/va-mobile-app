@@ -117,7 +117,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
 
   const borderProps: BoxProps = {
     borderTopWidth: 1,
-    borderTopColor: 'prescriptionDivider',
+    borderTopColor: 'divider',
     mt: theme.dimensions.standardMarginBetween,
     pt: theme.dimensions.standardMarginBetween,
   }

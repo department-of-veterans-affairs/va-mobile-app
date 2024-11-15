@@ -70,7 +70,7 @@ function DetailsTextSections({
     <Box
       mt={standardMarginBetween}
       borderTopWidth={1}
-      borderTopColor={'prescriptionDivider'}
+      borderTopColor={'divider'}
       pt={standardMarginBetween}>
       <Box {...containerProps}>
         <Box accessible={hasRightText ? true : false} accessibilityRole={'text'}>

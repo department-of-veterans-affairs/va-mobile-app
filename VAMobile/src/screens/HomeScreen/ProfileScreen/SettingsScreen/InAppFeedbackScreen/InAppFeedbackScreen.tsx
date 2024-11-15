@@ -87,7 +87,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         </Box>
         <Box
           borderTopWidth={theme.dimensions.borderWidth}
-          borderColor={theme.colors.border.prescriptionDivider as BorderColorVariant}>
+          borderColor={theme.colors.border.divider as BorderColorVariant}>
           <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
             {t('inAppFeedback.legalReqs.number')}
           </TextView>
