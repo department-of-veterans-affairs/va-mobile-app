@@ -3,8 +3,8 @@ description: 'This test has the opposite filter of native_build_check_android.ym
 
 on:
   pull_request:
-    paths-ignore:
-      - "VAMobile/android/**"
+    paths:
+      - "!VAMobile/android/**"
 
 jobs:
   android_native_build:

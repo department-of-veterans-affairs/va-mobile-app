@@ -3,8 +3,8 @@ description: 'This test has the opposite filter of native_build_check_ios.yml so
 
 on:
   pull_request:
-    paths-ignore:
-      - "VAMobile/ios/**"
+    paths:
+      - "!VAMobile/ios/**"
 
 jobs:
   ios_native_build:
