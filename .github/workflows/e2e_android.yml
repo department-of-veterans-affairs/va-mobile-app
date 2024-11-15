@@ -201,8 +201,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
+          api-level: 33
+          profile: pixel_5
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
@@ -216,8 +216,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
+          api-level: 33
+          profile: pixel_5
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
@@ -229,8 +229,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
-          profile: pixel_6_pro
+          api-level: 33
+          profile: pixel_5
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
