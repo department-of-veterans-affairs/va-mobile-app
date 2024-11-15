@@ -202,17 +202,32 @@ platform :android do
 
   def promote_pre_prod
     begin
-      prod = google_play_track_version_codes(track:"production")
-      stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
-      # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
+      prod = google_play_track_version_codes(track: "production")
+      stash = google_play_track_version_codes(track: "Pre-Prod Stash")
+      
+      # Check if promotion is allowed based on version codes
       if stash.max > prod.max
+        # Promote the version from Pre-Prod Stash to production
         supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
-        version = google_play_track_release_names(track:"production")
-        slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+        
+        # Get the release names and verify the promotion
+        promoted_version = google_play_track_release_names(track: "production").max_by { |s| Gem::Version.new(s) }
+        
+        # Delay briefly for 5 min to allow Google Play to process the update (optional, tweak as needed)
+        sleep 300
+        
+        # Check if the promoted version is live on production
+        live_version = google_play_track_version_codes(track: "production").max
+        if live_version == stash.max
+          slack_release_success(promoted_version, "Android")
+        else
+          raise "Version promotion was successful, but the latest version is not live yet."
+        end
       end
     rescue => e
-      version = google_play_track_release_names(track:"production")
-      slack_release_error(version.max_by{ |s| Gem::Version.new(s) }, "Android", e)
+      # Send an error notification if promotion fails or the live version check fails
+      latest_version = google_play_track_release_names(track: "production").max_by { |s| Gem::Version.new(s) }
+      slack_release_error(latest_version, "Android", e)
     end
   end
 
