@@ -87,9 +87,9 @@ describe('Home Screen', () => {
 
   it('benefits tab tap: verify the benefits screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.DISABILITY_RATING_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID))).toExist()
   })
 
   it('health tab tap: verify the health screen tab items', async () => {

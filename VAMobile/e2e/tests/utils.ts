@@ -38,8 +38,6 @@ export const CommonE2eIdConstants = {
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
-  LETTERS_ROW_TEXT: 'VA letters and documents',
-  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
@@ -51,7 +49,6 @@ export const CommonE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
-  CLAIMS_BUTTON_TEXT: 'Claims',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
@@ -99,6 +96,9 @@ export const CommonE2eIdConstants = {
   MILITARY_HISTORY_BUTTON_ID: 'toMilitaryHistoryID',
   SETTINGS_BUTTON_ID: 'toSettingsID',
   PROFILE_SCROLL_ID: 'profileID',
+  CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
+  LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
+  DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
 }
 
 /** Log the automation into demo mode
@@ -367,11 +367,11 @@ export async function openBenefits() {
 }
 
 export async function openLetters() {
-  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openDisabilityRating() {
-  await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DISABILITY_RATING_BUTTON_ID)).tap()
 }
 
 export async function openVaccineRecords() {
@@ -383,7 +383,7 @@ export async function openMessages() {
 }
 
 export async function openClaims() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openClaimsHistory() {

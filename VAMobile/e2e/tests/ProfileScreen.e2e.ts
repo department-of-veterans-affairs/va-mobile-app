@@ -4,10 +4,6 @@ import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
-  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
-  PERSONAL_INFO_ROW_TEXT: 'Personal information',
-  CONTACT_INFO_ROW_TEXT: 'Contact information',
-  MILITARY_INFO_ROW_TEXT: 'Military information',
   BANNER_NAME_ID: 'Kimberly Washington',
   BANNER_BRANCH_ID: 'United States Coast Guard',
 }
