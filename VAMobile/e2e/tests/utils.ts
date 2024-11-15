@@ -35,7 +35,6 @@ export const CommonE2eIdConstants = {
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
-  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
   SETTINGS_ROW_TEXT: 'Settings',
@@ -48,7 +47,6 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
@@ -99,6 +97,8 @@ export const CommonE2eIdConstants = {
   CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
   LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
   DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
+  PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
+  DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
 }
 
 /** Log the automation into demo mode
@@ -347,7 +347,7 @@ export async function openPayments() {
 }
 
 export async function openDirectDeposit() {
-  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID)).tap()
 }
 
 export async function openPrescriptions() {
@@ -359,7 +359,7 @@ export async function openContactInfo() {
 }
 
 export async function openVAPaymentHistory() {
-  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openBenefits() {

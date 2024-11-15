@@ -102,8 +102,8 @@ describe('Home Screen', () => {
 
   it('payments tab tap: verify the payments screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID))).toExist()
   })
 
   it('personalization: verify the health screen subtext', async () => {
