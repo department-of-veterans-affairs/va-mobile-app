@@ -335,7 +335,6 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
-      storage: Keychain.STORAGE_TYPE.AES_GCM_NO_AUTH,
     }
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
