@@ -274,7 +274,7 @@ export function useGiveFeedback(): (task: string) => void {
         style: 'cancel',
         onPress: onCancelPress,
       },
-      { text: t('inAppFeedback.popup.accept'), onPress: onOKPress, style: 'default' },
+      { text: t('giveFeedback'), onPress: onOKPress, style: 'default' },
     ])
   }
 }

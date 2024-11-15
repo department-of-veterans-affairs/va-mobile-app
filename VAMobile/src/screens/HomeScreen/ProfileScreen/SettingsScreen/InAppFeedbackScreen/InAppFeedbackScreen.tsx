@@ -60,7 +60,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   }
 
   return (
-    <LargePanel title={t('inAppFeedback.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('giveFeedback')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('inAppFeedback.whatTask.header')}
