@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { ViewStyle } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import LottieView from 'lottie-react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
-import colors from 'styles/themes/VAColors'
 import { useTheme } from 'utils/hooks'
 
 export type LoadingComponentProps = {
@@ -51,6 +51,8 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
     alignContent: 'center',
   }
 
+  const spinnerIconColor = spinnerColor || colors.vadsColorPrimary
+
   const getSpinner = () => {
     return (
       <LottieView
@@ -62,11 +64,11 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
         colorFilters={[
           {
             keypath: 'Shape Layer 9',
-            color: spinnerColor || colors.primary,
+            color: spinnerIconColor,
           },
           {
             keypath: 'Shape Layer 11',
-            color: spinnerColor || colors.primary,
+            color: spinnerIconColor,
           },
         ]}
       />
