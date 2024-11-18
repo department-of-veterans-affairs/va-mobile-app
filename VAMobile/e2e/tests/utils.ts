@@ -499,7 +499,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-    .scroll(600, 'down')
+    .scroll(400, 'down')
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
