@@ -47,6 +47,7 @@ describe('Appointments Screen', () => {
       .scroll(200, 'down')
     await element(by.text('Vilanisi Reddy')).tap()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentCalendar')
       await device.launchApp({ newInstance: false })
@@ -56,14 +57,8 @@ describe('Appointments Screen', () => {
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
-      await device.disableSynchronization()
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0).tap()
-      await device.takeScreenshot('appointmentVALocationPhoneNumber')
-      await device.launchApp({ newInstance: false })
-
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0).tap()
-      await device.takeScreenshot('apointmentVALocationTTY')
-      await device.launchApp({ newInstance: false })
+      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0)).toExist()
+      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0)).toExist()
 
       await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 

@@ -229,6 +229,10 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 2', async () => {
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)))
+      .toBeVisible()
+      .whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_HISTORY_SCREEN_ID))
+      .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.id('Step 2 of 5. Initial review. Current step. Step 1 complete.'))).toExist()
     await expect(
