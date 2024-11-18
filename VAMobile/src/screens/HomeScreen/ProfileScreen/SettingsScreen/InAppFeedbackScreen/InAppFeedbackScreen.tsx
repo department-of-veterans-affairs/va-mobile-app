@@ -83,7 +83,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
           <RadioGroup {...radioGroupProps} />
         </Box>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <Button onPress={onSubmit} label={t('submit')} />
+          <Button onPress={onSubmit} label={t('inAppFeedback.submitFeedback')} />
         </Box>
         <Box
           borderTopWidth={theme.dimensions.borderWidth}
