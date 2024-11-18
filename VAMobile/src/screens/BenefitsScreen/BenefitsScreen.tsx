@@ -84,9 +84,14 @@ export function BenefitsScreen({}: BenefitsScreenProps) {
           subText={showClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
           showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
+          testID="toClaimsLandingID"
         />
-        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
-        <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
+        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} testID="toLettersLandingID" />
+        <LargeNavButton
+          title={t('disabilityRating.title')}
+          onPress={onDisabilityRatings}
+          testID="toDisabilityRatingID"
+        />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={claimsAndAppealsError || !!nonFatalErrors} />}
       </Box>
     </CategoryLanding>
