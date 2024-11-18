@@ -6,7 +6,7 @@ import { VATextColors } from 'styles/theme'
 import { useExternalLink } from 'utils/hooks'
 import { useTheme } from 'utils/hooks'
 
-import Box from './Box'
+import Box, { BackgroundVariant } from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
 
 /**
@@ -44,12 +44,15 @@ export type VABulletListProps = {
 
   /** optional paragraph spacing */
   paragraphSpacing?: boolean
+
+  /** optional bullet color */
+  bulletColor?: BackgroundVariant
 }
 
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bulletColor }) => {
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
 
@@ -91,7 +94,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing }) =
             accessible={true}
             accessibilityRole="text">
             <Box mr={20} mt={12}>
-              <Box backgroundColor={'bullet'} height={6} width={6} />
+              <Box backgroundColor={bulletColor || 'bullet'} height={6} width={6} />
             </Box>
             <TextView {...textViewProps} accessibilityLabel={a11yLabel}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}

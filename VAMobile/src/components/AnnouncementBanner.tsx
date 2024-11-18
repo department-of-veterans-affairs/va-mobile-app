@@ -2,11 +2,10 @@ import React, { FC } from 'react'
 import { Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { Box, TextView } from 'components'
 import { useExternalLink, useTheme } from 'utils/hooks'
-
-import colors from '../styles/themes/VAColors'
 
 interface AnnouncementBannerProps {
   /** Text for announcement title */
@@ -26,7 +25,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
     paddingVertical: theme.dimensions.formMarginBetween,
     paddingHorizontal: theme.dimensions.cardPadding,
     backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.buttonBackground.announcementBanner,
-    shadowColor: colors.black,
+    shadowColor: colors.vadsColorBlack,
     ...Platform.select({
       ios: {
         shadowOffset: { width: 0, height: 6 },
