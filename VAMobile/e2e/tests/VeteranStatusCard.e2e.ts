@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the veteran status - home page and veteran status - informational crosscheck test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Home Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in military information, disability ratings, veteran status, or home screen or if anything is changed in src/store/api/demo/mocks/profile.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -32,6 +38,9 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
+/*
+Validates the veteran status page design
+*/
 export async function validateVeteranStatusDesign() {
   await expect(element(by.text('Veteran status'))).toExist()
   const veteranStatusCardVAIcon = await element(by.id('VeteranStatusCardVAIcon')).takeScreenshot(
@@ -52,6 +61,9 @@ export async function validateVeteranStatusDesign() {
   checkImages(veteranStatusCardBranchIcon)
 }
 
+/*
+Validates the phone and tty links work as expected
+*/
 export async function tapPhoneAndTTYLinks() {
   it(':android: should tap phone and TTY links', async () => {
     await device.disableSynchronization()
@@ -89,6 +101,10 @@ export async function tapPhoneAndTTYLinks() {
   })
 }
 
+/*
+Validates that the military information is correct
+param militaryBranch: String name of the military branch to test
+*/
 export async function verifyMilitaryInfo(militaryBranch) {
   it(militaryBranch + ': verify the name and branch matches the home/profile page', async () => {
     await changeMockData(
