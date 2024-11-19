@@ -895,7 +895,7 @@
   "loadingActivity": "Loading activity",
   "loaGate.signInWithVerifiedAccount": "Sign in with a verified account",
   "loaGate.p1": "You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.",
-  "loaGate.p2.noVerifiedAccount": "Don't yet have a verified account? ",
+  "loaGate.p2.noVerifiedAccount": "Don’t yet have a verified account? ",
   "loaGate.p2": "Continue to the sign-in page. Follow the instructions to create a Login.gov or ID.me account. Then come back here and sign in. We’ll help you verify your identity for your account.",
   "loaGate.p3.notSureOfAccount": "Not sure if your account is verified? ",
   "loaGate.p3": "Sign in now. We’ll tell you if you need to verify.",
