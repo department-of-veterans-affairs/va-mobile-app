@@ -131,6 +131,7 @@ Text rows are adaptive to the viewport’s width and have a legible length.
 | Text line lengths do not exceed 70 characters per row, including spaces.  | **Minor**   |
 
 ## 3.5.2. Error Suggestion
+
 In cases where user input results in an error and a correction can be made, the error message includes a suggestion for revision.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
