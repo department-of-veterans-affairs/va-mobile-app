@@ -95,6 +95,7 @@ This guideline addresses the ability of users to quickly and intuitively navigat
 | Screens and components do not require two-dimensional scrolling, except when:<br/><ul><li>Two-dimensional scrolling is essential for understanding the content or the application's functionality (e.g., maps, diagrams, large data tables, games)</li></ul>                     | **Serious**   |
 
 ## 3.1.1. Screen Titled
+
 Ensure that the mobile application's pivotal screens or primary views, which convey essential information or denote significant content changes, have clear and descriptive textual identifier.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
