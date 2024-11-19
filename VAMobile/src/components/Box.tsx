@@ -4,23 +4,14 @@ import { FlexAlignType, View, ViewProps } from 'react-native'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import {
-  VABackgroundColors,
-  VABorderColors,
-  VAButtonBackgroundColors,
-  VAButtonBorderColors,
-  VAListTagColors,
-  VATheme,
-} from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VATheme } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
-type VAListTagColorsVariant = keyof VAListTagColors
-export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant | VAListTagColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors
-type VAButtonBorderColorsVariant = keyof VAButtonBorderColors
 export type BorderColorVariant = VABorderColorsVariant | VAButtonBackgroundColorsVariant
 export type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
 export type BorderWidths = 'default' | number
@@ -194,8 +185,7 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
   }
   return (
     theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
-    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
-    theme.colors.listTag[bgVariant as VAListTagColorsVariant]
+    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant]
   )
 }
 
@@ -218,9 +208,7 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] =
-      theme.colors.border[color as VABorderColorsVariant] ||
-      theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
+    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant]
   }
   return styles
 }

@@ -37,7 +37,7 @@ import {
   overrideLocalVersion,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useAlert, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useGiveFeedback, useRouteNavigation, useTheme } from 'utils/hooks'
 import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -52,6 +52,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const resetFirstTimeLoginAlert = useAlert()
+  const inAppFeedback = useGiveFeedback()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
@@ -174,6 +175,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     },
   ]
 
+  const onFeedback = () => {
+    //logAnalyticsEvent(Events.vama_feedback_page_entered())
+    inAppFeedback('Developer')
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('settings.title')}
@@ -202,6 +208,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
             </TextView>
           </Box>
         </TextArea>
+        <TextArea>
+          <Button onPress={onFeedback} label={'In App Feedback Screen'} />
+        </TextArea>
       </Box>
       <Box>
         <TextView
@@ -212,6 +221,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Firebase
         </TextView>
         <SimpleList items={firebaseList} />
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
+        </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>

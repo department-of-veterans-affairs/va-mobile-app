@@ -11,6 +11,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 
 import { transform } from './demo/store'
+import { APIError } from './types'
 
 const { API_ROOT } = getEnv()
 
@@ -206,6 +207,21 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
+    const overrideErrors = _store?.getState().demo.overrideErrors as APIError[]
+    if (overrideErrors) {
+      _.forEach(overrideErrors, (error) => {
+        if (error.endpoint && endpoint.includes(error.endpoint)) {
+          throw error
+        }
+        if (
+          error.endpoint === '/v0/messaging/health/folders/${folderID}/messages' &&
+          endpoint.includes('/v0/messaging/health/folders/') &&
+          endpoint.includes('/messages')
+        ) {
+          throw error
+        }
+      })
+    }
     // we are in demo and need to transform the request from the demo store
     return new Promise((resolve) => {
       setTimeout(async () => {
