@@ -105,6 +105,7 @@ Ensure that the mobile application's pivotal screens or primary views, which con
 | Screen's title is unique                                                         | **Minor**    |
 
 ## 3.1.6. Section Headings
+
 On screens containing different content sections, each section has a heading to organize the content.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
