@@ -3,6 +3,7 @@ title: Additional Guidance
 ---
 
 # Beyond WCAG: Additional MCAG Guidance
+
 Although MCAG is based on the success criteria outlined in [WCAG 2.2](https://www.w3.org/TR/WCAG22/), there are many of these guidelines that they have expanded upon to be more inclusive of native mobile apps. The list below includes much of this additional guidance that should be considered when working in the VA: Health and Benefits app.
 
 _**Note:** MCAG rates each guideline as minor, moderate, severe, or critical. With minor being the least important and critical being the most important._
