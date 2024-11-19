@@ -85,6 +85,7 @@ Some external assistive technology devices that can be connected to smartphones 
 | If a smartphone device supports the connection of an external assistive technology device, users can reach and operate controls and other interactive elements of the UI through the assistive technology. | **Critical**  |
 
 ## 2.5. Navigable
+
 This guideline addresses the ability of users to quickly and intuitively navigate to any control area and content in the user interface with any user agent or assistive technology supported by the device.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
