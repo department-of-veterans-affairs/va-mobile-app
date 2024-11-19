@@ -418,13 +418,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
       .toBeVisible()
       .whileElement(by.id('remoteConfigTestID'))
-      .scroll(200, 'down')
+      .scroll(600, 'down')
     await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id('remoteConfigTestID'))
-    .scroll(200, 'down')
+    .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
 
   if (AFAppUpdate) {
@@ -499,7 +499,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-    .scroll(200, 'down')
+    .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
@@ -568,7 +568,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id('homeScreenID'))
-        .scroll(200, 'down')
+        .scroll(600, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] !== 'Appointments') {
       await waitFor(element(by.text(featureNavigationArray[j])))
