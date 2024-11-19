@@ -42,7 +42,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
 
   const textProps: TextViewProps = {
     variant: 'HelperTextBold',
-    color: 'footerButton',
+    color: 'link',
     textAlign: 'center',
     width: width,
     maxFontSizeMultiplier: 2.5,

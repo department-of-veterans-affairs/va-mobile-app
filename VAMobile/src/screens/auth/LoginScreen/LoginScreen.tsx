@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import {
   AlertWithHaptics,
@@ -24,7 +25,6 @@ import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
-import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -138,7 +138,7 @@ function LoginScreen() {
             <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={70}>
               <LoadingComponent
                 justTheSpinnerIcon={true}
-                spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+                spinnerColor={theme.mode === 'dark' ? colors.vadsColorBaseLightest : colors.vadsColorPrimary}
               />
               <TextView
                 variant={'MobileBody'}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
@@ -10,7 +11,6 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -60,7 +60,7 @@ export const Nametag = () => {
         marginBottom: theme.dimensions.standardMarginBetween,
         paddingRight: theme.dimensions.buttonPadding,
         marginHorizontal: theme.dimensions.condensedMarginBetween,
-        shadowColor: colors.black,
+        shadowColor: colors.vadsColorBlack,
         ...Platform.select({
           ios: {
             shadowOffset: { width: 0, height: 6 },
