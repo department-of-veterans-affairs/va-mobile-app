@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { Box, TextView, VAIcon } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
-
-import colors from '../styles/themes/VAColors'
 
 interface ActivityButtonProps {
   /** Text for header */
@@ -28,7 +28,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
     backgroundColor: pressed
       ? theme.colors.buttonBackground.activityButtonActive
       : theme.colors.buttonBackground.activityButton,
-    shadowColor: colors.black,
+    shadowColor: colors.vadsColorBlack,
     ...Platform.select({
       ios: {
         shadowOffset: { width: 0, height: 6 },
@@ -80,7 +80,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
               height={24}
               name="RightArrowInCircle"
               fill={theme.colors.icon.activityButton}
-              fill2={theme.colors.icon.transparent}
+              fill2={'transparent'}
               ml={theme.dimensions.listItemDecoratorMarginLeft}
               preventScaling={true}
             />

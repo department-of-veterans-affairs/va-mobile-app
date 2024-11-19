@@ -31,33 +31,19 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
-  PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
-  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
-  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
-  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
-  LETTERS_ROW_TEXT: 'VA letters and documents',
-  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
-  MILITARY_INFORMATION_ROW_TEXT: 'Military information',
-  VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
-  MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
   LEAVING_APP_CANCEL_TEXT: 'Go back',
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  CONTACT_INFORMATION_TEXT: 'Contact information',
-  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
-  CLAIMS_BUTTON_TEXT: 'Claims',
-  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
-  DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
@@ -94,6 +80,25 @@ export const CommonE2eIdConstants = {
   HOME_TAB_BUTTON_ID: 'Home',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
+  CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
+  ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
+  PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
+  PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',
+  CONTACT_INFO_BUTTON_ID: 'toContactInfoID',
+  MILITARY_HISTORY_BUTTON_ID: 'toMilitaryHistoryID',
+  SETTINGS_BUTTON_ID: 'toSettingsID',
+  PROFILE_SCROLL_ID: 'profileID',
+  CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
+  LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
+  DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
+  PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
+  DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
+  APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
+  MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
+  PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
+  VACCINES_BUTTON_ID: 'toVaccineListID',
+  DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
+  PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
 }
 
 /** Log the automation into demo mode
@@ -310,23 +315,23 @@ export async function openVeteransCrisisLine() {
 }
 
 export async function openProfile() {
-  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID)).tap()
 }
 
 export async function openSettings() {
-  await waitFor(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)))
+  await waitFor(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)))
     .toBeVisible()
-    .whileElement(by.id('profileID'))
+    .whileElement(by.id(CommonE2eIdConstants.PROFILE_SCROLL_ID))
     .scroll(50, 'down')
-  await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)).tap()
 }
 
 export async function openPersonalInformation() {
-  await element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID)).tap()
 }
 
 export async function openMilitaryInformation() {
-  await element(by.text(CommonE2eIdConstants.MILITARY_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openHealth() {
@@ -334,7 +339,7 @@ export async function openHealth() {
 }
 
 export async function openAppointments() {
-  await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
@@ -342,19 +347,19 @@ export async function openPayments() {
 }
 
 export async function openDirectDeposit() {
-  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID)).tap()
 }
 
 export async function openPrescriptions() {
-  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID)).tap()
 }
 
 export async function openContactInfo() {
-  await element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID)).tap()
 }
 
 export async function openVAPaymentHistory() {
-  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openBenefits() {
@@ -362,31 +367,31 @@ export async function openBenefits() {
 }
 
 export async function openLetters() {
-  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openDisabilityRating() {
-  await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DISABILITY_RATING_BUTTON_ID)).tap()
 }
 
 export async function openVaccineRecords() {
-  await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID)).tap()
 }
 
 export async function openMessages() {
-  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID)).tap()
 }
 
 export async function openClaims() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openClaimsHistory() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openDeveloperScreen() {
-  await element(by.text(CommonE2eIdConstants.DEVELOPER_SCREEN_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_BUTTON_ID)).tap()
 }
 
 /**
@@ -459,6 +464,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
   await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+  await setTimeout(3000)
+  await element(by.id('AFErrorPhoneNumberTestID')).replaceText('8006982411')
+  await element(by.id('AFErrorPhoneNumberTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
   if (AFUseCase === 'DenyAccess') {
@@ -516,13 +524,13 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Get prescription tracking') {
       await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (
@@ -549,7 +557,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {

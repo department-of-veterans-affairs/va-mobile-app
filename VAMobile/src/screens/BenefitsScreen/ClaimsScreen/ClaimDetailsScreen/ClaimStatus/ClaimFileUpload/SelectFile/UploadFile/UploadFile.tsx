@@ -358,7 +358,10 @@ function UploadFile({ navigation, route }: UploadFileProps) {
               />
             </Box>
           </Box>
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+          <Box
+            mt={theme.dimensions.standardMarginBetween}
+            mx={theme.dimensions.gutter}
+            mb={theme.dimensions.contentMarginBottom}>
             <Button
               onPress={() => {
                 if (filesList?.length === 0) {

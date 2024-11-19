@@ -81,12 +81,21 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
               <LargeNavButton
                 title={t('personalInformation.title')}
                 onPress={() => navigateTo('PersonalInformation')}
+                testID="toPersonalInfoID"
               />
-              <LargeNavButton title={t('contactInformation.title')} onPress={() => navigateTo('ContactInformation')} />
+              <LargeNavButton
+                title={t('contactInformation.title')}
+                onPress={() => navigateTo('ContactInformation')}
+                testID="toContactInfoID"
+              />
             </>
           )}
-          <LargeNavButton title={t('militaryInformation.title')} onPress={() => navigateTo('MilitaryInformation')} />
-          <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} />
+          <LargeNavButton
+            title={t('militaryInformation.title')}
+            onPress={() => navigateTo('MilitaryInformation')}
+            testID="toMilitaryHistoryID"
+          />
+          <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} testID="toSettingsID" />
           {(serviceHistoryError || serviceHistoryInDowntime) && (
             <Box mx={theme.dimensions.condensedMarginBetween}>
               <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={serviceHistoryError} />

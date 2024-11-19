@@ -67,11 +67,7 @@ function DetailsTextSections({
     : {}
 
   return (
-    <Box
-      mt={standardMarginBetween}
-      borderTopWidth={1}
-      borderTopColor={'prescriptionDivider'}
-      pt={standardMarginBetween}>
+    <Box mt={standardMarginBetween} borderTopWidth={1} borderTopColor={'divider'} pt={standardMarginBetween}>
       <Box {...containerProps}>
         <Box accessible={hasRightText ? true : false} accessibilityRole={'text'}>
           {getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}
