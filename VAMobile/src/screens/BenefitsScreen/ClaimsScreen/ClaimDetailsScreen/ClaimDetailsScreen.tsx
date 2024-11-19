@@ -198,12 +198,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID, claim })
+    navigateTo('FileRequestSubtask', { claimID, claim })
   }
 
   const submitEvidencePress = () => {
     logAnalyticsEvent(Events.vama_claim_submit_tap(claimID, attributes.claimType))
-    navigateTo('SubmitEvidence', { claimID })
+    navigateTo('SubmitEvidenceSubtask', { claimID })
   }
 
   const getActiveClosedClaimInformationAlertOrSubmitButton = () => {
