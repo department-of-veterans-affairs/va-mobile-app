@@ -15,6 +15,7 @@ Since there is no specific guidance within WCAG for mobile app teams to follow, 
 
 
 ### WCAG vs. MCAG
+
 * WCAG is designed for web technologies and practices.
     * Not all WCAG success criteria are mapped to mobile and there are issues specific to mobile that WCAG does not cover.
 * WCAG naturally refers to keyboard usage widely since it is the most essential assistance technology for the web and many mobile accessibility features are not considered.
