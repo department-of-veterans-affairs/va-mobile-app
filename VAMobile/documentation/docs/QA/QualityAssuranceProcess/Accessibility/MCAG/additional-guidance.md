@@ -19,6 +19,7 @@ Assistive technologies can reach, parse, and convey essential content and user-o
 | Assistive technologies can reach and trigger every user-operable element, except when:<br/><ul><li>The element has a nearby equivalent alternative that's operable by assistive technologies.</li></ul>           | **Critical** |
 
 ## 1.3.1. Real-time Updates Modalities
+
 Real-time updates including essential status or value changes are conveyed in various modalities so all users can perceive them.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
