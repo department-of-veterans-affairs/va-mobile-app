@@ -428,7 +428,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               />
             </Box>
           </Box>
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box
+            mt={theme.dimensions.standardMarginBetween}
+            mb={theme.dimensions.contentMarginBottom}
+            mx={theme.dimensions.gutter}>
             <Button
               onPress={() => {
                 if (imagesList?.length === 0) {

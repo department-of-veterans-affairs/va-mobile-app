@@ -293,6 +293,7 @@ export function HomeScreen({}: HomeScreenProps) {
       fill: theme.colors.icon.active,
     } as IconProps,
     onPress: () => navigateTo('Profile'),
+    testID: 'toProfileScreenID',
   }
 
   const boxProps: BoxProps = {
