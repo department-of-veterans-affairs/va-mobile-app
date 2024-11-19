@@ -169,7 +169,7 @@ export type VABorderColors = {
   focusedPickerAndInput: string
   menuDivider: string
   photoUpload: string
-  prescriptionDivider: string
+  divider: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
