@@ -286,11 +286,11 @@ const finishInitialize = async (
   }
 
   // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
-  if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
-    await crashlytics().setCrashlyticsCollectionEnabled(false)
-    await analytics().setAnalyticsCollectionEnabled(false)
-    await performance().setPerformanceCollectionEnabled(false)
-  }
+  // if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
+  //   await crashlytics().setCrashlyticsCollectionEnabled(false)
+  //   await analytics().setAnalyticsCollectionEnabled(false)
+  //   await performance().setPerformanceCollectionEnabled(false)
+  // }
 
   dispatch(dispatchInitializeAction(payload))
 }
