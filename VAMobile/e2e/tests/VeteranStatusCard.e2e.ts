@@ -110,7 +110,7 @@ export async function verifyMilitaryInfo(militaryBranch) {
     await element(by.text('Home')).tap()
     await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
       .toBeVisible()
-      .whileElement(by.id('homeScreenID'))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
     await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
@@ -129,7 +129,7 @@ describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
     await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
       .toBeVisible()
-      .whileElement(by.id('homeScreenID'))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
     await validateVeteranStatusDesign()
