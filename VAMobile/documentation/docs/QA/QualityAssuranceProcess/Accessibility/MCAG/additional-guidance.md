@@ -59,6 +59,7 @@ Avoid relying only on colors to distinguish between elements' state and value or
 | Conveying information, indicating an action, or prompting a response, are not communicated solely by color. | **Serious**  |
 
 ## 2.1.2. Simplified Gestures
+
 User actions that require complex gestures, like path-based or multipoint gestures, have a single-pointer alternative.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
