@@ -1,6 +1,4 @@
-
 # Image optimization before release build. This workflow commit only images that have been optimized
-
 
 name: '[Build] Optimize Image'
 
