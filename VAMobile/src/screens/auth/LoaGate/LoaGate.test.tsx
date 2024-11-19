@@ -12,18 +12,14 @@ context('LoaGate', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Sign in' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Sign in with a verified account' })).toBeTruthy()
     expect(
       screen.getByText(
-        'Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.',
+        'You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.',
       ),
     ).toBeTruthy()
-    expect(
-      screen.getByText(
-        'If you haven’t yet verified your identity, we’ll help you complete the process when you sign in.',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('tab', { name: "Read more if you haven't yet verified" })).toBeTruthy()
+    expect(screen.getByText('Don’t yet have a verified account? ')).toBeTruthy()
+    expect(screen.getByText('Not sure if your account is verified? ')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Continue to sign in' })).toBeTruthy()
   })
 })
