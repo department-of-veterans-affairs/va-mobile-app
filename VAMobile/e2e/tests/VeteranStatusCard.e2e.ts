@@ -76,10 +76,7 @@ export async function tapPhoneAndTTYLinks() {
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
 
-    await waitFor(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0))
-      .toBeVisible()
-      .whileElement(by.id('veteranStatusTestID'))
-      .scroll(200, 'down')
+    await element(by.id('veteranStatusTestID')).scrollTo('bottom')
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     try {
       await element(by.text('Dismiss')).tap()
@@ -93,7 +90,7 @@ export async function tapPhoneAndTTYLinks() {
       .toBeVisible()
       .whileElement(by.id('veteranStatusTestID'))
       .scroll(200, 'down')
-    await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
     await setTimeout(2000)
     await device.takeScreenshot('VeteranStatusPeriodOfServiceErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
