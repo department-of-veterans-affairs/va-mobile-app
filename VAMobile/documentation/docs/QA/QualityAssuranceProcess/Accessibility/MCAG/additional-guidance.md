@@ -129,6 +129,7 @@ In cases where user input results in an error and a correction can be made, the 
 | When there is an option for it, error messages include suggestions for revision, except when:<br/><ul><li>The information may jeopardize the security or privacy of the user.</li></ul> | **Serious**  |
 
 ## 4.1.1. Text Scaling
+
 All text sizes in the UI are updated and adjusted to the text size set by the user in the operating system’s settings.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
