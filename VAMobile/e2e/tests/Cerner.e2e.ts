@@ -63,7 +63,7 @@ describe(':android: Cerner Notice', () => {
   it('should match the cerner subtext on home screen', async () => {
     await waitFor(element(by.text(CernerIdConstants.CERNER_HOME_SUBTEXT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id('homeScreenID'))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(CernerIdConstants.CERNER_HOME_SUBTEXT_TEXT))).toExist()
   })
