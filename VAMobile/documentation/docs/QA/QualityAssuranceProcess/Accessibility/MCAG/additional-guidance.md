@@ -68,6 +68,7 @@ User actions that require complex gestures, like path-based or multipoint gestur
 | [Multipoint gestures](https://getevinced.github.io/mcag/terminology#multipoint-gestures) have a keyboard alternative       | **Critical**  |
 
 ## 2.2. External Devices Support
+
 Smartphones are designed with various accessibility features to accommodate users with diverse needs and they often support connectivity with external assistive technology devices.
 
 Some external assistive technology devices that can be connected to smartphones include:
