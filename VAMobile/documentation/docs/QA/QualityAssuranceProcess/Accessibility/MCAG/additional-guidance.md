@@ -49,6 +49,7 @@ Any keyboard operable user interface has a mode of operation where the keyboard 
 | Focus indication has a contrast of at least 3:1 with its background.                 | **Serious**  |
 
 ## 1.4.4. Distinguished by Color
+
 Avoid relying only on colors to distinguish between elements' state and value or to convey essential information.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
