@@ -122,6 +122,7 @@ When text is scaled to the maximum size allowed by the operating system, it is n
 | Spaces between paragraphs (on subsequent paragraphs) should be at least two tines of the line spacing. | **Minor**              |
 
 ## 3.3.5. Text Lines Length
+
 Text rows are adaptive to the viewport’s width and have a legible length.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
