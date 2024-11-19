@@ -7,6 +7,7 @@ title: MCAG
 ## What is MCAG?
 
 ### Accessibility Guidelines for Mobile Apps
+
 The [Mobile Content Accessibility Guidelines (MCAG)](https://getevinced.github.io/mcag/) include the requirements of the [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/TR/WCAG22/) version 2.2, but also refers to the unique differences and challenges of mobile apps that are not included in WCAG.
 
 MCAG follows the same structure as WCAG. However, since its use is intended for development teams, its internal division relies more on Apple's Human Interface Guidelines and Android's Accessibility Principles. 
