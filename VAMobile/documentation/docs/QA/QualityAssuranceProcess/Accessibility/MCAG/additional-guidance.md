@@ -11,6 +11,7 @@ MCAG rates each guideline as minor, moderate, severe, or critical. With minor be
 :::
 
 ## 1.1.1. Accessibility Enabled
+
 Assistive technologies can reach, parse, and convey essential content and user-operable elements in the UI.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
