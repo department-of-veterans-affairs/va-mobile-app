@@ -67,10 +67,8 @@ Validates the phone and tty links work as expected
 export async function tapPhoneAndTTYLinks() {
   it(':android: should tap phone and TTY links', async () => {
     await device.disableSynchronization()
-    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id('veteranStatusTestID'))
-      .scroll(200, 'down')
+    await element(by.id('veteranStatusTestID')).scrollTo('bottom')
+
     await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
     await setTimeout(1000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorPhoneNumber')
@@ -141,6 +139,7 @@ describe('Veteran Status Card', () => {
 
   it('should match design in the profile screen', async () => {
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await setTimeout(2000)
     await openProfile()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
     await validateVeteranStatusDesign()
@@ -154,6 +153,7 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await setTimeout(2000)
     await openMilitaryInformation()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
