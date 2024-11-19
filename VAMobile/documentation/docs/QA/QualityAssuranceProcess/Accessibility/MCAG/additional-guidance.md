@@ -38,7 +38,7 @@ Toast messages (snackbars) are implemented so assistive technologies announce th
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | The content of toast elements is announced by assistive technologies without the focus shifting to them.               | **Critical**  |
 | The font size of toast messages should be at the size of the rest of the application’s body text.                      | **Serious**   |
-| East toast message should stay visible for at least 5 seconds plus one extra second for every 120 words (rounding up). | **Serious**   |
+| Each toast message should stay visible for at least 5 seconds plus one extra second for every 120 words (rounding up). | **Serious**   |
 
 ## 1.4.3. Discernible Focus Indication
 Any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.
