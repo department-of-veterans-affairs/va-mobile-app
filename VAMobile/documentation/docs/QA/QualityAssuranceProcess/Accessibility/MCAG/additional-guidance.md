@@ -113,6 +113,7 @@ On screens containing different content sections, each section has a heading to 
 | In a screen with a multiple content sections, each section has a heading, except when:<br/><ul><li>The section has another identifier that can be determined and announced programmatically **and**</li><li>Sections are distinguished from each other visually.</li></ul> | **Serious**  |
 
 ## 3.3.2. Scaled Text Legibility
+
 When text is scaled to the maximum size allowed by the operating system, it is not clipped, obscured, overlapped, or covered by other texts or elements.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
