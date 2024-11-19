@@ -247,7 +247,8 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     width: '100%',
     minHeight: minHeight || theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    pl: theme.dimensions.gutter,
+    pr: decorator === undefined ? theme.dimensions.buttonPadding : theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
@@ -283,7 +284,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         )}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box
+            ml={decorator === undefined ? 0 : theme.dimensions.listItemDecoratorMarginLeft}
+            importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}
