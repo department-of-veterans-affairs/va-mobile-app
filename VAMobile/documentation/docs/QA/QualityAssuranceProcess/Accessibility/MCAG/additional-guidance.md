@@ -137,6 +137,7 @@ All text sizes in the UI are updated and adjusted to the text size set by the us
 | In the operating system settings (typically under accessibility), increase the font size to the maximum. The application's texts should resize proportionally according to the user's settings. | **Minor – Serious** |
 
 ## 4.1.2. Adaptive Display Modes
+
 The UI and content are adaptive to the operating system’s color modes, such as dark and inverted color modes.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
