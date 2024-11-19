@@ -425,6 +425,7 @@
   "claimDetails.whatYouHaveClaimed": "What you've claimed",
   "claimDetails.whyWeCombineLink": "Find out why we sometimes combine claims",
   "claimDetails.whyWeCombinePanel": "Why we sometimes combine claims",
+  "claimFile.loading": "Loading your claim file...",
   "claimInformation.loading": "Loading your claim details...",
   "claimLetters.download.error": "Letter not loaded",
   "claimLetters.downloading": "Loading your claim letter...",
