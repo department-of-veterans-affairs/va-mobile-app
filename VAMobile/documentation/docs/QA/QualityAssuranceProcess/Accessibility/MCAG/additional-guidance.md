@@ -72,6 +72,7 @@ User actions that require complex gestures, like path-based or multipoint gestur
 Smartphones are designed with various accessibility features to accommodate users with diverse needs and they often support connectivity with external assistive technology devices.
 
 Some external assistive technology devices that can be connected to smartphones include:
+
 * Braille Displays
 * Switch Control Devices
 * Eye-tracking Systems
