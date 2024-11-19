@@ -4,10 +4,6 @@ import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
-  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
-  PERSONAL_INFO_ROW_TEXT: 'Personal information',
-  CONTACT_INFO_ROW_TEXT: 'Contact information',
-  MILITARY_INFO_ROW_TEXT: 'Military information',
   BANNER_NAME_ID: 'Kimberly Washington',
   BANNER_BRANCH_ID: 'United States Coast Guard',
 }
@@ -23,10 +19,10 @@ describe('Profile Screen', () => {
       .toExist()
       .withTimeout(6000)
 
-    await expect(element(by.text(ProfileE2eIdConstants.PERSONAL_INFO_ROW_TEXT))).toExist()
-    await expect(element(by.text(ProfileE2eIdConstants.MILITARY_INFO_ROW_TEXT))).toExist()
-    await expect(element(by.text(ProfileE2eIdConstants.CONTACT_INFO_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID))).toExist()
   })
 
   it('should show profile banner elements', async () => {

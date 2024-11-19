@@ -1,5 +1,9 @@
-import { Commands } from 'react-native-webview/lib/RNCWebViewNativeComponent'
-
+/*
+Description:
+Detox script that follows the Veterans Crisis Line test case found in testRail (VA Mobile App > RC Regression Test > Manual > Home Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in Veterans Crisis Line
+*/
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 

@@ -64,6 +64,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
           accessibilityRole: headerButton.accessibilityRole,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
+          testID: headerButton.testID,
         }
       : undefined,
     shadow: theme.mode === 'light',

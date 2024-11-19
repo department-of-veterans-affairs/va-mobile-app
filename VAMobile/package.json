@@ -99,7 +99,7 @@
     "@react-native/babel-preset": "0.75.4",
     "@react-native/eslint-config": "^0.75.3",
     "@react-native/metro-config": "^0.75.3",
-    "@react-native/typescript-config": "0.76.0",
+    "@react-native/typescript-config": "0.76.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react-native": "^12.8.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
