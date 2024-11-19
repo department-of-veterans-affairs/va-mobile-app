@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
+import { AccessibilityRole, Pressable, PressableProps, useWindowDimensions } from 'react-native'
 
 import { useTheme } from 'utils/hooks'
 
@@ -36,10 +36,13 @@ export type LabelTagProps = {
 
   /** Optional accessibility hint if there is an on press */
   a11yHint?: string
+
+  /** Optional role to override the default role of button */
+  a11yRole?: AccessibilityRole
 }
 
 /**Common component to show a text inside a tag*/
-const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel }) => {
+const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel, a11yRole }) => {
   const theme = useTheme()
   const fontScale = useWindowDimensions().fontScale
   const adjustSize = fontScale >= 2
@@ -84,7 +87,7 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
     let pressableProps: PressableProps = {
       onPress: onPress,
       accessible: true,
-      accessibilityRole: 'button',
+      accessibilityRole: a11yRole || 'button',
     }
 
     if (a11yHint) {

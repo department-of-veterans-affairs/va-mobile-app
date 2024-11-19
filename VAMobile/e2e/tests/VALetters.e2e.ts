@@ -1,3 +1,10 @@
+/*
+Description:
+Detox script that follows the VA Letters and Documents test case found in testRail (VA Mobile App > RC Regression Test > Manual > Benefits Page Elements)
+Note: This test does not cover verifying that the correct letter is downloaded because demo mode mocks the letter downloads.
+When to update:
+This script should be updated whenever new things are added/changed in src/screens/BenefitsScreen/Letters, anything is added/changed in src/api/letters or if anything is changed in src/store/api/demo/mocks/letters.json.
+*/
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -12,6 +19,7 @@ import {
   toggleRemoteConfigFlag,
 } from './utils'
 
+//Add any new letter type to the letter_types array here.
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
   DOWNLOAD_DOCUMENTS_TEXT: 'Downloaded documents will list your address as:',
