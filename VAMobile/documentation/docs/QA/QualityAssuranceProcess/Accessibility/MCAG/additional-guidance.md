@@ -31,6 +31,7 @@ Real-time updates including essential status or value changes are conveyed in va
 | Time-sensitive real-time updates reflected in push notifications while not using the app, except when users have turned off notification from the app. | **Moderate – Critical** |
 
 ## 1.3.2. Perceivable Toasts (Snackbars)
+
 Toast messages (snackbars) are implemented so assistive technologies announce their content and they stay visible for enough time so that all users can fully perceive them.
 
 | **Test**                                                                                                                                                   | **Impact**                  |
