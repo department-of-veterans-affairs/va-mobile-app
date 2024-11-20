@@ -280,8 +280,8 @@ let theme: VATheme = {
     paginationTopPadding: 40,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
-    chevronListItemWidth: 10,
-    chevronListItemHeight: 15,
+    chevronListItemWidth: 30,
+    chevronListItemHeight: 45,
     linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,

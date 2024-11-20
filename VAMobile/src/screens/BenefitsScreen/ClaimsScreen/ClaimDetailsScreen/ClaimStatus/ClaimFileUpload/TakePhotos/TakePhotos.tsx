@@ -7,21 +7,23 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
-type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
+type TakePhotosProps = StackScreenProps<FileRequestStackParams, 'TakePhotos'>
 
 function TakePhotos({ navigation, route }: TakePhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -37,6 +39,11 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     if (isActionSheetVisible) {
       e.preventDefault()
     }
+  })
+
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => onCancel(),
   })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
@@ -60,12 +67,9 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   }
 
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('back')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectPhotos')}
-      testID="takePhotosTestID">
+    <VAScrollView scrollViewRef={scrollViewRef} testID="takePhotosTestID">
+      <SubtaskTitle title={t('fileUpload.selectPhotos')} />
+
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -139,7 +143,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           testID={t('fileUpload.takePhotos')}
         />
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
