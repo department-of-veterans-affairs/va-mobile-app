@@ -1,12 +1,11 @@
 name: "App Store requirement checks"
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - develop
       - 'release/v**'
-      - '9228-automation---add-status-checks-for-app-store-requirements'
     paths:
       - "VAMobile/ios/fastlane/metadata/en-US/**"
       - "VAMobile/ios/fastlane/screenshots/**"
