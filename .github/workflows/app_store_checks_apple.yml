@@ -10,8 +10,6 @@ on:
       - "VAMobile/ios/fastlane/metadata/en-US/**"
       - "VAMobile/ios/fastlane/screenshots/**"
 
-
-
 jobs:
   check_ios_ipad_pro2_images:
     uses: ./.github/workflows/check_max_size.yml
