@@ -196,7 +196,7 @@ platform :android do
   def upload(track, skip_meta = true)
     puts "Skip meta: " + skip_meta.to_s
     supply(
-      track: track,
+      track: track, 
       package_name: "gov.va.mobileapp",
       skip_upload_metadata: skip_meta,
       skip_upload_changelogs: skip_meta,
