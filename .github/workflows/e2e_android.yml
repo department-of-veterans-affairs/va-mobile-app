@@ -394,7 +394,6 @@ jobs:
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
-          
           for y in ${{needs.output_detox_tests_to_run.outputs.output3}}; do
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
@@ -411,7 +410,7 @@ jobs:
                 if [[ ("$removeBracket" == "Appeals" || "$removeBracket" == "AppointmentsExpanded" || "$removeBracket" == "AppealsExpanded") ]]; then
                   title="$removeBracket [android]"
                   matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
-                else if [[ ("$removeBracket" == "Appointments") ]]; then
+                elif [[ ("$removeBracket" == "Appointments") ]]; then
                   title="$removeBracket Screen [android]"
                   matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
                 else
