@@ -17,12 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          echo ${{ toJSON(github) }}
           if [[ $(${{ inputs.file_counting_function }}) -gt ${{ inputs.max_size }} ]]
           then
-            echo "PR exceeds app store limits on images in this directory"
+            echo "PR exceeds app store limits of ${{ inputs.max_size }} for this check"
             exit 1
-          else
-            echo "we are good here"
           fi
         working-directory: ${{ inputs.working_dir }}
