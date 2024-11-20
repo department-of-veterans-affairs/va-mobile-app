@@ -398,9 +398,9 @@ jobs:
               removeBracket=$(echo $removeBracket | tr ',' ' ')
             else
               removeBracket=$(echo $removeBracket | tr -d ',')
-            fi      
+            fi   
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
-              if [ "$removeBracket" == "AppealsExpanded" || "$removeBracket" == "AppointmentsExpanded"]; then
+              if [[ "$removeBracket" == "AppealsExpanded" ]] || [[ "$removeBracket" == "AppointmentsExpanded" ]]; then
                 missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
               else
                 missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
@@ -408,7 +408,7 @@ jobs:
               echo "$z"
               echo "$missingCases"
               if [[ "$missingCases" == "[]" ]]; then
-                if [ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments"]; then
+                if [[ "$removeBracket" == "Appeals" ]] || [[ "$removeBracket" == "Appointments" ]]; then
                   matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title == "'"$getTestName"' [android]"))')
                 else
                   matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
