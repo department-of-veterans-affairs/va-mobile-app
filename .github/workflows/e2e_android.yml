@@ -90,6 +90,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+      output3: ${{ steps.matrix_value.outputs.testRail_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -102,10 +103,12 @@ jobs:
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+              echo "testRail_matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                 echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "testRail_matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -118,13 +121,16 @@ jobs:
                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+                  echo "testRail_matrix=$e2eNames" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                     echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    echo "testRail_matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
+                    echo "testRail_matrix=" >> "$GITHUB_OUTPUT"
                   fi
                 fi
               else
@@ -384,7 +390,7 @@ jobs:
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
-          for y in ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}; do
+          for y in ${{needs.output_detox_tests_to_run.outputs.output3}}; do
             echo "$y"
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
