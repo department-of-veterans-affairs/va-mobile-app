@@ -4,7 +4,7 @@ on:
       working_dir:
         required: true
         type: string
-      max_files:
+      max_size:
         required: true
         type: string
       file_counting_function:
@@ -17,7 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          if [[ $(${{ inputs.file_counting_function }}) -gt ${{ inputs.max_files }} ]]
+          echo ${{ toJSON(github) }}
+          if [[ $(${{ inputs.file_counting_function }}) -gt ${{ inputs.max_size }} ]]
           then
             echo "PR exceeds app store limits on images in this directory"
             exit 1

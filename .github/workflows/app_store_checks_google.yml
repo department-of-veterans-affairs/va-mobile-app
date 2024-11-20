@@ -1,0 +1,90 @@
+name: "App Store requirement checks"
+
+on:
+  pull_request:
+
+jobs:
+  check_max_android_phone_screenshots:
+    uses: ./.github/workflows/max_files_check.yml
+    with:
+      max_size: 8
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
+  check_max_android_seven_inch_screenshots:
+    uses: ./.github/workflows/max_files_check.yml
+    with:
+      max_size: 8
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
+  check_android_long_description:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 4000
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US
+      file_counting_function: wc -c full-description.txt | awk '{print $1}'
+  check_android_short_description:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 80
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US
+      file_counting_function: wc -c short-description.txt | awk '{print $1}'
+  check_android_change_log:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 500
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US/changelogs
+      file_counting_function: wc -c default.txt | awk '{print $1}'
+  check_android_release_name:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 50
+      working_dir: VAMobile/android/fastlane/metadata/android/en-US
+      file_counting_function: wc -c title.txt | awk '{print $1}'
+
+
+  check_ios_ipad_pro2_images:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 10
+      working_dir: VAMobile/ios/fastlane/screenshots/en-US
+      file_counting_function: find . -maxdepth 1 -name "ipadPro2*" -printf '.' | wc -m
+  check_ios_ipad_pro13_images:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 10
+      working_dir: VAMobile/ios/fastlane/screenshots/en-US
+      file_counting_function: find . -maxdepth 1 -name "ipadPro13*" -printf '.' | wc -m
+  check_ios_ipad_pro129_images:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 10
+      working_dir: VAMobile/ios/fastlane/screenshots/en-US
+      file_counting_function: find . -maxdepth 1 -name "ipadPro12*" -printf '.' | wc -m
+  check_ios_iphone55_images:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 10
+      working_dir: VAMobile/ios/fastlane/screenshots/en-US
+      file_counting_function: find . -maxdepth 1 -name "phone5*" -printf '.' | wc -m
+  check_ios_iphone67_images:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 10
+      working_dir: VAMobile/ios/fastlane/screenshots/en-US
+      file_counting_function: find . -maxdepth 1 -name "iphone6*" -printf '.' | wc -m
+  check_ios_description:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 4000
+      working_dir: VAMobile/ios/fastlane/metadata/en-US
+      file_counting_function: wc -c description.txt | awk '{print $1}'
+  check_ios_release_notes:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 4000
+      working_dir: VAMobile/ios/fastlane/metadata/en-US
+      file_counting_function: wc -c release_notes.txt | awk '{print $1}'
+  check_ios_keyword:
+    uses: ./.github/workflows/check_max_size.yml
+    with:
+      max_size: 1000
+      working_dir: VAMobile/ios/fastlane/metadata/en-US
+      file_counting_function: wc -c keywords.txt | awk '{print $1}'
