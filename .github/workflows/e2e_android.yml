@@ -396,12 +396,11 @@ jobs:
             removeBracket=$(echo $removeBracket | tr -d ']')
             if [[ "${{ inputs.tests_to_run}}" == "" ]]; then
               removeBracket=$(echo $removeBracket | tr ',' ' ')
-              removeBracket=$(echo $removeBracket | tr -d '.e2e.ts')
             else
               removeBracket=$(echo $removeBracket | tr -d ',')
             fi   
             echo "$removeBracket"
-            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g;s/\..*//'); do
               if [[ "$removeBracket" == "AppealsExpanded" || "$removeBracket" == "AppointmentsExpanded" ]]; then
                 missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
               else
