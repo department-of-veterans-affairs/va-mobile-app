@@ -1,8 +1,6 @@
 import { ReactComponent as Add} from '@componentsDocs/VAIcon/svgs/Add.svg';
 import { ReactComponent as Building} from '@componentsDocs/VAIcon/svgs/Building.svg';
 import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/CheckMark.svg';
-import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
-import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
 import { ReactComponent as CircleCheckMark} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
 import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/Compose.svg';
 import { ReactComponent as ExclamationTriangle} from '@componentsDocs/VAIcon/svgs/ExclamationTriangle.svg';
@@ -33,8 +31,6 @@ Add | <Add  className="icons"/> | Add.svg
 Building | <Building  className="icons"/> | Building.svg
 Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
 Check Mark in Circle | <CircleCheckMark  className="icons"/> | CircleCheckMark.svg
-Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
-Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
 Compose | <Compose  className="icons"/> | Compose.svg
 Exclamation Triangle | <ExclamationTriangle  className="icons"/> | ExclamationTriangle.svg
 External Link | <ExternalLink  className="icons"/> | ExternalLink.svg

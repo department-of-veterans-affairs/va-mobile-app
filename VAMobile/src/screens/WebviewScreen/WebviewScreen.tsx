@@ -122,7 +122,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           onPress={props.onPress}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.done}
-          showCarat={false}
         />
       ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,

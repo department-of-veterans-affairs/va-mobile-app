@@ -5,20 +5,28 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, FullScreenSubtask, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type SubmitEvidenceProps = StackScreenProps<BenefitsStackParamList, 'SubmitEvidence'>
+import { SubmitEvidenceStackParams } from './SubmitEvidenceSubtask'
+
+type SubmitEvidenceProps = StackScreenProps<SubmitEvidenceStackParams, 'SubmitEvidence'>
 
 function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
+
+  useSubtaskProps({
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => navigation.goBack(),
+  })
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, null, 'Submit Evidence', 'file'))
@@ -31,10 +39,9 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      title={t('claimDetails.submitEvidence')}
-      onLeftButtonPress={navigation.goBack}>
+    <VAScrollView>
+      <SubtaskTitle title={t('claimDetails.submitEvidence')} />
+
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -62,7 +69,7 @@ function SubmitEvidence({ navigation, route }: SubmitEvidenceProps) {
           />
         </Box>
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
