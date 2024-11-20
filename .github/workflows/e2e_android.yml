@@ -400,7 +400,9 @@ jobs:
               removeBracket=$(echo $removeBracket | tr -d ',')
             fi   
             echo "$removeBracket"
-            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g;s/\..*//'); do
+            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+              z=$(echo $z | sed 's/\..*//')
+              echo "$z"
               if [[ "$removeBracket" == "AppealsExpanded" || "$removeBracket" == "AppointmentsExpanded" ]]; then
                 missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(select(index($testsTypedIn)))') 
               else
