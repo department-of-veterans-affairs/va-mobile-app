@@ -4,9 +4,9 @@ import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
-import { isErrorObject, showSnackBar } from 'utils/common'
+import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
-import { useAppDispatch } from 'utils/hooks'
+import { useAppDispatch, useShowActionSheet } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { usePostLoggedIn } from './postLoggedIn'
@@ -38,11 +38,22 @@ const handleTokenCallbackUrl = async (handleTokenCallbackParams: handleTokenCall
 export const useHandleTokenCallbackUrl = () => {
   const { mutate: postLoggedIn } = usePostLoggedIn()
   const dispatch = useAppDispatch()
+  const showActionSheet = useShowActionSheet()
+  const options = ['Close']
   return useMutation({
     mutationFn: handleTokenCallbackUrl,
     onMutate: () => {
       loginStart(dispatch, true)
       clearCookies()
+      console.log('should show started pop up')
+      showActionSheet(
+        {
+          title: 'Login started',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
     },
     onSettled: () => {
       logAnalyticsEvent(Events.vama_auth_completed())
@@ -50,8 +61,16 @@ export const useHandleTokenCallbackUrl = () => {
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
       await loginFinish(dispatch, false, authCredentials)
-      showSnackBar('Successfully logged in', dispatch)
       postLoggedIn()
+      console.log('should show success pop up')
+      showActionSheet(
+        {
+          title: 'Login success',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
     },
     onError: (error) => {
       if (isErrorObject(error)) {
@@ -59,8 +78,17 @@ export const useHandleTokenCallbackUrl = () => {
         if (error.status) {
           logAnalyticsEvent(Events.vama_login_token_fetch(error))
         }
-        showSnackBar(error.message, dispatch)
         loginFinish(dispatch, true)
+        console.log('should show error pop up')
+        showActionSheet(
+          {
+            title: 'Login settled',
+            message: error.message,
+            options,
+            cancelButtonIndex: 0,
+          },
+          () => {},
+        )
       }
     },
   })

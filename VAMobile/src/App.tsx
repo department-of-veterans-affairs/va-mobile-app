@@ -446,11 +446,6 @@ export function AuthGuard() {
           <Stack.Screen name="Webview" component={WebviewScreen} />
           <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
         </Stack.Navigator>
-        <Toast
-          {...snackBarProps}
-          ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)}
-          offsetBottom={bottomOffset}
-        />
       </>
     )
   }
