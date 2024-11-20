@@ -1,7 +1,11 @@
+import { useSelector } from 'react-redux'
+
 import { useMutation } from '@tanstack/react-query'
 
 import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
+import { RootState } from 'store'
+import { AuthState } from 'store/slices'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
@@ -39,6 +43,9 @@ export const useHandleTokenCallbackUrl = () => {
   const { mutate: postLoggedIn } = usePostLoggedIn()
   const dispatch = useAppDispatch()
   const showActionSheet = useShowActionSheet()
+  const { loggedIn, loggingOut, syncing, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>(
+    (state) => state.auth,
+  )
   const options = ['Close']
   return useMutation({
     mutationFn: handleTokenCallbackUrl,
@@ -66,6 +73,7 @@ export const useHandleTokenCallbackUrl = () => {
       showActionSheet(
         {
           title: 'Login success',
+          message: `LoggedIN: ${loggedIn}, LoggingOut: ${loggingOut}, Syncing: ${syncing}, DisplayBiometricsPreferenceScreen: ${displayBiometricsPreferenceScreen}`,
           options,
           cancelButtonIndex: 0,
         },
@@ -82,7 +90,7 @@ export const useHandleTokenCallbackUrl = () => {
         console.log('should show error pop up')
         showActionSheet(
           {
-            title: 'Login settled',
+            title: 'Login error',
             message: error.message,
             options,
             cancelButtonIndex: 0,

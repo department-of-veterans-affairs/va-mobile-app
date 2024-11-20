@@ -297,8 +297,8 @@ export const loginStart = async (dispatch: AppDispatch, syncing: boolean) => {
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
   })
-  dispatch(dispatchUpdateLoading(true))
-  dispatch(dispatchUpdateSyncing(syncing))
+  await dispatch(dispatchUpdateLoading(true))
+  await dispatch(dispatchUpdateSyncing(syncing))
 }
 
 export const loginFinish = async (dispatch: AppDispatch, isError: boolean, authCredentials?: AuthCredentialData) => {
@@ -307,9 +307,9 @@ export const loginFinish = async (dispatch: AppDispatch, isError: boolean, authC
     ...userSettings,
     authCredentials: authCredentials,
   })
-  dispatch(dispatchUpdateLoading(isError))
-  dispatch(dispatchUpdateLoggedIn(!isError))
-  dispatch(dispatchUpdateSyncing(store.getState().auth.syncing && !isError))
+  await dispatch(dispatchUpdateLoading(isError))
+  await dispatch(dispatchUpdateLoggedIn(!isError))
+  await dispatch(dispatchUpdateSyncing(store.getState().auth.syncing && !isError))
 }
 
 export const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
