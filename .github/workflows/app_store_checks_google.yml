@@ -11,15 +11,17 @@ on:
 
 jobs:
   check_max_android_phone_screenshots:
-    uses: ./.github/workflows/max_files_check.yml
+    uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 8
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
+      file_counting_function: ls | wc -l
   check_max_android_seven_inch_screenshots:
-    uses: ./.github/workflows/max_files_check.yml
+    uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 8
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
+      file_counting_function: ls | wc -l
   check_android_long_description:
     uses: ./.github/workflows/check_max_size.yml
     with:
