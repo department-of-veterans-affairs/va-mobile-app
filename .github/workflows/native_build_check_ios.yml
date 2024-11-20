@@ -1,5 +1,5 @@
+# Tests to see that changes to native files do not break the iOs build process
 name: '[Code Quality] Check Native iOs Builds'
-#description: 'Tests to see that changes to native files do not break the iOs build process'
 
 on:
   pull_request:

@@ -1,5 +1,5 @@
+# This is a reusable workflow so that required checks work correctly. see https://github.com/orgs/community/discussions/36680
 name: '[Code Quality] Check Native iOs Builds'
-#description: 'This is a reusable workflow so that required checks work correctly. see https://github.com/orgs/community/discussions/36680'
 
 on:
   workflow_call:

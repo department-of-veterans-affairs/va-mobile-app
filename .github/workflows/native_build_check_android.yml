@@ -1,5 +1,5 @@
-name: '[Code Quality] Check Native Android Builds'
-#description: 'Tests to see that changes to native files do not break the Android build process'
+#  Tests to see that changes to native files do not break the Android build process
+  name: '[Code Quality] Check Native Android Builds'
 
 on:
   pull_request:
