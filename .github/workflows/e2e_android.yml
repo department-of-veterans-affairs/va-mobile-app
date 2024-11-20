@@ -394,14 +394,19 @@ jobs:
             echo "$y"
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
-            removeBracket=$(echo $removeBracket | tr -d ',')
-            echo "$removeBracket"
+            if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
+              removeBracket=$(echo $removeBracket | tr ',' ' ')
+            else
+              removeBracket=$(echo $removeBracket | tr -d ',')
+            fi
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
-              echo "$z"
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
+              echo "$z"
+              echo "$missingCases"
               if [[ "$missingCases" == "[]" ]]; then
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
                 echo "" >> input.json
+                echo "$matchMissingCases"
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
                 break
