@@ -90,6 +90,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+      output3: ${{ steps.matrix_value.outputs.testRail_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -130,6 +131,8 @@ jobs:
               else
                 resp=${{toJson(needs.find_detox_tests_to_run.outputs.test_matrix)}}
                 echo "matrix=$resp" >> "$GITHUB_OUTPUT"
+                testRailResponse=${{needs.find_detox_tests_to_run.outputs.test_matrix}}
+                echo "testRail_matrix=$testRailResponse" >> "$GITHUB_OUTPUT"
               fi
             fi
           fi
@@ -193,7 +196,7 @@ jobs:
         run: yarn env:staging
 
       - name: Bundle Android app
-        run: yarn e2e:android-build
+        run: yarn e2e:android-build1
 
       - name: Run e2e tests for Android - Full Test
         id: run_e2e_tests
@@ -384,10 +387,12 @@ jobs:
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
-          for y in ${{ inputs.tests_to_run}}; do
+          for y in ${{ needs.output_detox_tests_to_run.outputs.output1 }}; do
+            echo "$y"
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
             removeBracket=$(echo $removeBracket | tr -d ',')
+            echo "$removeBracket"
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(select(index($testsTypedIn)))') 
               if [[ "$missingCases" == "[]" ]]; then
