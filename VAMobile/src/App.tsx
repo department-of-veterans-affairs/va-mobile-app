@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
@@ -186,7 +187,9 @@ function MainApp() {
                         barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
                         backgroundColor={currentTheme.colors.background.main}
                       />
-                      <AuthGuard />
+                      <SnackbarProvider>
+                        <AuthGuard />
+                      </SnackbarProvider>
                     </SafeAreaProvider>
                   </NotificationManager>
                 </NavigationContainer>
