@@ -142,19 +142,11 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             </TextView>
           </Box>
         )}
-        <Box {...boxProps}>
+        <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
           <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.periodOfService')}
           </TextView>
           {getPeriodOfService}
-        </Box>
-        <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
-          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
-            {t('personalInformation.dateOfBirth')}
-          </TextView>
-          <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
-            {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
-          </TextView>
         </Box>
         <Box mb={theme.dimensions.formMarginBetween}>
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>

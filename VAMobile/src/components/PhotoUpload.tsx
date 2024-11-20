@@ -5,6 +5,7 @@ import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-nat
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
@@ -14,7 +15,6 @@ import { themeFn } from 'utils/theme'
 
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import { VAIcon } from './index'
 
 type PhotoUploadProps = {
   /** width of the photo */
@@ -169,7 +169,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
         </Box>
       ) : (
         <Box {...boxProps} mb={20}>
-          <VAIcon name="UploadPhoto" />
+          <Icon name="AddCircle" />
           <TextView color="primaryContrast" variant="HelperText">
             {t('veteranStatus.uploadPhoto')}
           </TextView>

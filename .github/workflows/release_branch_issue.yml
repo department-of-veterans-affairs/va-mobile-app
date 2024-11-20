@@ -105,7 +105,7 @@ jobs:
         run: |
           declare -A GITHUB_TO_SLACK_MAP
           GITHUB_TO_SLACK_MAP["TKDickson"]="U02PJLJ0H6H"
-          GITHUB_TO_SLACK_MAP["SarahHuber_AdHoc"]="U07U9EDGAFP"
+          GITHUB_TO_SLACK_MAP["SarahHuber-AdHoc"]="U07U9EDGAFP"
           GITHUB_TO_SLACK_MAP["dumathane"]="U02RC1BRZBP"
           GITHUB_TO_SLACK_MAP["timwright12"]="U01DBDAJZ18"
           GITHUB_TO_SLACK_MAP["ala_yna"]="UQC180926"

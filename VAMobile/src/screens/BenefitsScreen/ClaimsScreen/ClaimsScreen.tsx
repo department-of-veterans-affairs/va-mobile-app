@@ -33,7 +33,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       backLabelOnPress={navigation.goBack}
       title={t('claims.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} />
+        <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} testID="toClaimsHistoryID" />
         <LargeNavButton title={t('claimLetters.title')} onPress={onClaimLettersPress} testID="toClaimLettersID" />
       </Box>
     </FeatureLandingTemplate>

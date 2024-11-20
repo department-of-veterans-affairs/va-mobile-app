@@ -8,12 +8,13 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
-import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
+import { Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import SubtaskTitle from './SubtaskTitle'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -96,12 +97,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
-
-  const titleTextProps: TextViewProps = {
-    variant: 'BitterHeading',
-    accessibilityLabel: titleA11yLabel,
-    accessibilityRole: 'header',
-  }
 
   const message = t('areYouSure')
 
@@ -191,11 +186,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
         {showCrisisLineButton && <CrisisLineButton />}
-        {title && (
-          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-            <TextView {...titleTextProps}>{title}</TextView>
-          </Box>
-        )}
+        {title && <SubtaskTitle title={title} a11yLabel={titleA11yLabel} mt={titleMarginTop} />}
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>
