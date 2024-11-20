@@ -408,8 +408,10 @@ jobs:
               echo "$z"
               echo "$missingCases"
               if [[ "$missingCases" == "[]" ]]; then
+                echo "$removeBracket"
                 if [[ "$removeBracket" == "Appeals" ]] || [[ "$removeBracket" == "Appointments" ]]; then
-                  matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title == "'"$getTestName"' [android]"))')
+                  echo "$test"
+                  matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title == "'"$getCase"' [android]"))')
                 else
                   matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
                 fi
