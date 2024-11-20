@@ -113,7 +113,7 @@ platform :android do
     )
   end
 
-  desc "makes a test build to ensure changes to native directories did not brak build process. DOES NOT DISTRIBUTE"
+  desc "Makes a test build to ensure changes to native directories did not break build process. DOES NOT DISTRIBUTE"
   lane :test_build_only do |options|
     bundle("Release")
   end
@@ -196,7 +196,7 @@ platform :android do
   def upload(track, skip_meta = true)
     puts "Skip meta: " + skip_meta.to_s
     supply(
-      track: track, 
+      track: track,
       package_name: "gov.va.mobileapp",
       skip_upload_metadata: skip_meta,
       skip_upload_changelogs: skip_meta,
