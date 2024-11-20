@@ -12,7 +12,7 @@ on:
         type: string
 
 jobs:
-  check_max_files2:
+  check_max_files:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
