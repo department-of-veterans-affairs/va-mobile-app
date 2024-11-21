@@ -7,7 +7,7 @@ jobs:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
-      ticketNumber: ${{steps.create-issue.outputs.number}}
+      ticketNumber: ${{steps.create_issue.outputs.number}}
       versionNumber: ${{env.VERSION}}
       releaseDate: ${{env.RELEASE_DATE}}
       qaDueDate: ${{env.QA_DUE_DATE}}

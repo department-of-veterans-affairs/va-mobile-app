@@ -109,6 +109,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   useEffect(() => {
     if (downloadFile) {
+      logAnalyticsEvent(Events.vama_claim_file_view())
       refetchEFolderDocument()
       setDownloadFile(false)
     }
