@@ -58,7 +58,7 @@ Text is a typography component for headings, body copy, and display text.
 
 ### How this component works
 - This component is built using the [composite typography tokens](/va-mobile-app/design/Foundation/Design%20tokens/Typography#text-styles).
-- Paragraph spacing is set to the recommended values based on WCAG. If needed, you may increase/decrease the spacing to meet your needs.
+- Paragraph spacing is set to the minimum recommended values to align with accessibility guidelines ([WCAG SC 1.4.12](https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html)). While you can increase the amount of paragraph spacing, you should not decrease without consulting an accessibility specialist.
 
 ### Choosing between variations
 There are 9 variations of the Text component.
@@ -68,9 +68,6 @@ There are 9 variations of the Text component.
 
 ## Code usage
 [Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/text--docs)
-
-## Accessibility considerations
-- Should we mention anything about paragraph spacing or line height or anything?
 
 ## Related
 - Text list (coming soon)

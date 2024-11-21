@@ -12,7 +12,7 @@ Typographical selections intended to meet the highest standards of usability and
 Typography tokens define each property of a text style. They include font family, style, size, line height, and letter spacing. Math is used to calculate values for size and line height.
 
 - The base font size is 16. Additional sizes are created using a scale of 1.125
-- The default line height is set to 1.5x the font size. For headings, the line height is set to 1.2x.
+- The default line height is set to 1.5x the font size. For headings, the line height is set to 1.2x. Line heights follow [accessibility best practices](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Accessibility/a11y-checklist-ux-designers) and should not be decreased without consulting an accessibility specialist.
 
 ### Primitive
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/design-tokens-typography--docs#primitive)
