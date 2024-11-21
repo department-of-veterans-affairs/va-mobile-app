@@ -419,7 +419,7 @@ jobs:
                 title="$removeBracket [android]"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               else
-                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
               fi
               echo "" >> input.json
               echo "$matchMissingCases"
