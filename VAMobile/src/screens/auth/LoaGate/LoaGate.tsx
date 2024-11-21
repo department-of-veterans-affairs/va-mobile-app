@@ -43,7 +43,7 @@ function LoaGate({}: LoaGateProps) {
           <TextView {...titleTextProps}>{t('loaGate.p2.noVerifiedAccount')}</TextView>
           {t('loaGate.p2')}
         </TextView>
-        <TextView mb={theme.dimensions.standardMarginBetween} {...bodyTextProps}>
+        <TextView {...bodyTextProps}>
           <TextView {...titleTextProps}>{t('loaGate.p3.notSureOfAccount')}</TextView>
           {t('loaGate.p3')}
         </TextView>
