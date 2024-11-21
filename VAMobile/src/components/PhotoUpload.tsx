@@ -6,7 +6,7 @@ import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-nat
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
@@ -37,11 +37,11 @@ type StyledImageProps = {
 }
 
 const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${themeFn<StyledImageProps>((_theme, props) => props.width)}px;
-  height: ${themeFn<StyledImageProps>((_theme, props) => props.height)}px;
-  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
-  border-width: ${themeFn<StyledImageProps>((_theme, props) => props.borderWidth)}px;
-  border-color: ${themeFn<StyledImageProps>((_theme, props) => props.borderColor)};
+  width: ${themeFn<StyledImageProps>((_theme, props) => props.width.toString())}px;
+  height: ${themeFn<StyledImageProps>((_theme, props) => props.height.toString())}px;
+  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius.toString())}px;
+  border-width: ${themeFn<StyledImageProps>((_theme, props) => props.borderWidth.toString())}px;
+  border-color: ${themeFn<StyledImageProps>((_theme, props) => props.borderColor.toString())};
 `
 //TODO: Add this back to the VeteranStatusScreen when decided upon
 const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {

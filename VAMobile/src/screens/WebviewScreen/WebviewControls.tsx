@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

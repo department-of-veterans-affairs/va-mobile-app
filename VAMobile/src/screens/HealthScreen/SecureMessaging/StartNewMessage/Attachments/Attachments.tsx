@@ -6,7 +6,7 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import _ from 'underscore'
 
 import { AlertWithHaptics, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
@@ -30,8 +30,8 @@ import { themeFn } from 'utils/theme'
 const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
-  max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
-  height: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.height)}px;
+  max-width: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.maxWidth.toString())};
+  height: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.height.toString())}px;
 `
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>

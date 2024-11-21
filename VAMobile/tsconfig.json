@@ -17,5 +17,5 @@
     "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"],
-  "include": ["global.d.ts", "react-i18next.d.ts", "src", "__tests__", "e2e"]
+  "include": ["global.d.ts", "styled.d.ts", "react-i18next.d.ts", "src", "__tests__", "e2e"]
 }

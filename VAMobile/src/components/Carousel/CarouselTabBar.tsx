@@ -6,7 +6,7 @@ import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/t
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import _ from 'underscore'
 
 import { a11yHintProp } from 'utils/accessibility'
@@ -21,7 +21,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 
 const StyledPressable = styled(Pressable)`
-  min-height: ${themeFn((theme) => theme.dimensions.touchableMinHeight)}px;
+  min-height: ${themeFn((theme) => theme.dimensions.touchableMinHeight.toString())}px;
   justify-content: center;
 `
 

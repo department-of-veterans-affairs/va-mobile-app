@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { Asset } from 'react-native-image-picker/src/types'
 
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
@@ -37,9 +37,9 @@ type StyledImageProps = {
 }
 
 const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${themeFn<StyledImageProps>((_theme, props) => props.width)}px;
-  height: ${themeFn<StyledImageProps>((_theme, props) => props.height)}px;
-  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
+  width: ${themeFn<StyledImageProps>((_theme, props) => props.width.toString())}px;
+  height: ${themeFn<StyledImageProps>((_theme, props) => props.height.toString())}px;
+  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius.toString())}px;
 `
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, photoPosition }) => {

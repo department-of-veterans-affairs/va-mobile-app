@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react'
 import { FlexAlignType, View, ViewProps } from 'react-native'
 
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import _ from 'underscore'
 
 import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VATheme } from 'styles/theme'
@@ -282,9 +282,10 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     .join(';\n')
 }
 
-const StyledBox = styled(View)`
+const StyledBox = styled(View)<BoxProps>`
   ${themeFn<BoxProps>((theme, props) => createBoxStyles(theme, props))};
 `
+
 /**
  * A common component for layout. It conforms to the convention of [m] [my] [mx] [mt] [mb] [ml] [mr]
  * for specifying margins. It also accepts dimensions for padding in the same form.

@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { AccessibilityProps, Pressable, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import { RootState } from 'store'
 import { AccessibilityState } from 'store/slices/accessibilitySlice'
@@ -84,15 +84,19 @@ const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string =>
   return theme.colors.text[props.textDecorationColor as keyof VATextColors] || ''
 }
 
-const StyledText = styled(Text)`
-  ${themeFn<TextViewProps>(getFontFamily)}
-  ${themeFn<TextViewProps>((theme, props) => (props.color ? `color:${getColor(theme, props)};` : ''))}
-  ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
-  ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
-  ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
-  ${themeFn<TextViewProps>((theme, props) =>
-    props.textDecorationColor ? `text-decoration-color:${getTextDecorationColor(theme, props)}` : '',
-  )};
+const getTextStyles = (theme: VATheme, props: TextViewProps) => {
+  return `
+    ${props.textTransform ? `text-transform: ${props.textTransform};` : ''}
+    ${props.textDecoration ? `text-decoration: ${props.textDecoration};` : ''}
+    ${props.textDecorationColor ? `text-decoration-color: ${getTextDecorationColor(theme, props)};` : ''}
+  `
+}
+
+const StyledText = styled(Text)<TextViewProps>`
+  ${(props) => themeFn<TextViewProps>(getFontFamily)(props)};
+  ${themeFn<TextViewProps>((theme, props) => (props.color ? `color: ${getColor(theme, props)};` : ''))};
+  ${(props) => themeFn<TextViewProps>(createBoxStyles)(props)};
+  ${(props) => themeFn<TextViewProps>(getTextStyles)(props)};
 `
 
 /**

@@ -7,7 +7,7 @@ import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/t
 import { NavigationHelpers, ParamListBase, TabNavigationState, useIsFocused } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yValueProp } from 'utils/accessibility'
