@@ -402,7 +402,7 @@ jobs:
             keep1stWord=$(echo $addSpace | sed 's/\s.*$//')
             echo "$keep1stWord"
             
-            if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments"]]; then
+            if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] == $testsTypedIn')
             elif [[ "$removeBracket" == "VALetters" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters" 'map(contains($testsTypedIn)) | .[]') 
