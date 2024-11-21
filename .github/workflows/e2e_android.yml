@@ -404,20 +404,22 @@ jobs:
             if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] == $testsTypedIn')
             elif [[ "$removeBracket" == "VALetters" ]]; then
-              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters" 'map(contains($testsTypedIn)) | .[]') 
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters" '.[] | select(contains($testsTypedIn))') 
             else
-              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(contains($testsTypedIn)) | .[]')
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] | select(contains($testsTypedIn))')
             fi
 
-            if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
+            if [[ "$missingCases" == "" ]]; then
               if [[ "$removeBracket" == "Appointments" ]]; then
                 title="$removeBracket Screen [android]"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               elif [[ "$removeBracket" == "VALetters" ]]; then
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "VA Letters [android]")')
-              else
+              elif [[ "$removeBracket" == "Appeals" ]]; then
                 title="$removeBracket [android]"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
+              else
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
               fi
               echo "" >> input.json
               echo "$matchMissingCases"
@@ -430,8 +432,8 @@ jobs:
               continue
             fi
 
-            missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$addSpace" 'map(contains($testsTypedIn)) | .[]')
-            if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
+            missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$addSpace" '.[] | select(contains($testsTypedIn))')
+            if [[ "$missingCases" == "" ]]; then
               title="$addSpace [android]"
               matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               echo "$matchMissingCases"
@@ -445,8 +447,8 @@ jobs:
             fi
 
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
-              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" 'map(contains($testsTypedIn)) | .[]')
-              if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" '.[] | select(contains($testsTypedIn))')
+              if [[ "$missingCases" == "" ]]; then
                 echo "$z"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
                 if [[ "$matchMissingCases" != "" ]]; then
