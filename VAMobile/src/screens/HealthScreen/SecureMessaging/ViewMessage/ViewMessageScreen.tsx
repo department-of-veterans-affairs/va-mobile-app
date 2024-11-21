@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
@@ -40,7 +41,6 @@ import {
   VAIconProps,
   VAModalPicker,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
@@ -50,8 +50,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -105,9 +104,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -271,12 +270,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     const currentFolder = Number(folderWhereMessageIs.current)
     folderWhereMessagePreviousewas.current = currentFolder.toString()
     const newFolder = Number(value)
-    const snackbarMessages: SnackbarMessages = {
-      successMsg: GenerateFolderMessage(t, newFolder, folders, false, false),
-      errorMsg: GenerateFolderMessage(t, newFolder, folders, false, true),
-      undoMsg: GenerateFolderMessage(t, currentFolder, folders, true, false),
-      undoErrorMsg: GenerateFolderMessage(t, currentFolder, folders, true, true),
-    }
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
@@ -299,10 +292,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam] })
           logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
-          showSnackBar(
-            snackbarMessages.successMsg,
-            dispatch,
-            () => {
+          snackbar.show(GenerateFolderMessage(t, newFolder, folders, false, false), {
+            onActionPressed: () => {
               const undoParams: MoveMessageParameters = { messageID: messageID, newFolderID: currentFolder }
               const undoMutateOptions = {
                 onSuccess: () => {
@@ -311,46 +302,28 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                     queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam],
                   })
                   logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
-                  showSnackBar(
-                    snackbarMessages.undoMsg ? snackbarMessages.undoMsg : snackbarMessages.successMsg,
-                    dispatch,
-                    undefined,
-                    true,
-                    false,
-                    true,
-                  )
+                  snackbar.show(GenerateFolderMessage(t, currentFolder, folders, true, false))
                   setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
                   folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
                 },
                 onError: () => {
-                  showSnackBar(
-                    snackbarMessages.undoErrorMsg ? snackbarMessages.undoErrorMsg : snackbarMessages.errorMsg,
-                    dispatch,
-                    () => moveMessage(undoParams, undoMutateOptions),
-                    false,
-                    true,
-                    true,
-                  )
+                  snackbar.show(GenerateFolderMessage(t, currentFolder, folders, true, true), {
+                    isError: true,
+                    onActionPressed: () => moveMessage(undoParams, undoMutateOptions),
+                  })
                   setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
                   folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
                 },
               }
               moveMessage(undoParams, undoMutateOptions)
             },
-            false,
-            false,
-            true,
-          )
+          })
         },
         onError: () => {
-          showSnackBar(
-            snackbarMessages.undoErrorMsg ? snackbarMessages.undoErrorMsg : snackbarMessages.errorMsg,
-            dispatch,
-            () => moveMessage(params, mutateOptions),
-            false,
-            true,
-            true,
-          )
+          snackbar.show(GenerateFolderMessage(t, currentFolder, folders, true, true), {
+            isError: true,
+            onActionPressed: () => moveMessage(params, mutateOptions),
+          })
           setNewCurrentFolderID(folderWhereMessagePreviousewas.current)
           folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
         },
