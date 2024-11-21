@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { Alert, Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -9,6 +9,7 @@ import { RootNavStackParamList } from 'App'
 
 import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { checkStringForPII } from 'utils/common'
 import getEnv from 'utils/env'
 import { useExternalLink, useTheme } from 'utils/hooks'
 
@@ -28,8 +29,28 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   // })
 
   const onSubmit = (): void => {
+    const { found, newText } = checkStringForPII(task)
     // logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
-    navigation.goBack()
+    if (found) {
+      console.log('Before task: ', task)
+      Alert.alert('Please Remove PII', 'We detected something that seems like PII, please remove it to continue', [
+        {
+          text: 'Return to feedback',
+          style: 'cancel',
+          onPress: () => {},
+        },
+        {
+          text: 'submit anyways',
+          onPress: () => {
+            setTaskOverride(newText)
+            console.log('After task: ', task)
+            navigation.goBack()
+          },
+        },
+      ])
+    } else {
+      navigation.goBack()
+    }
   }
 
   const radioGroupProps: RadioGroupProps<string> = {
