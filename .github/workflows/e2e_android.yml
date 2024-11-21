@@ -395,6 +395,7 @@ jobs:
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
           for y in ${{needs.output_detox_tests_to_run.outputs.output3}}; do
+            missingCases=""
             echo "$y"
             removeBracket=$(echo $y | tr -d '[')
             removeBracket=$(echo $removeBracket | tr -d ']')
@@ -403,12 +404,13 @@ jobs:
             
             if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] == $testsTypedIn')
+              echo "$missingCases"
             elif [[ "$removeBracket" == "VALetters" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters" '.[] | select(contains($testsTypedIn))') 
             else
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] | select(contains($testsTypedIn))')
             fi
-
+            
             if [[ "$missingCases" == "" ]]; then
               if [[ "$removeBracket" == "Appointments" ]]; then
                 title="$removeBracket Screen [android]"
@@ -457,7 +459,8 @@ jobs:
                   echo $addMissingCasesToArray >> input.json
                   break
                 fi
-              fi
+              else
+                break
             done
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
