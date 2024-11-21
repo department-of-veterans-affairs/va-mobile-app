@@ -7,9 +7,8 @@ export const SignE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
   LOA_P1_TEXT:
     'You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.',
-  LOA_P2_TEXT:
-    'Continue to the sign-in page. Follow the instructions to create a Login.gov or ID.me account. Then come back here and sign in. We’ll help you verify your identity for your account.',
-  LOA_P3_TEXT: 'Sign in now. We’ll tell you if you need to verify.',
+  LOA_P2_TEXT: 'Don’t yet have a verified account? ',
+  LOA_P3_TEXT: 'Not sure if your account is verified? ',
   CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
 
