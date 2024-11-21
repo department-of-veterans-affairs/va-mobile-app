@@ -420,12 +420,14 @@ jobs:
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               fi
               echo "" >> input.json
-              if [[ "$matchMissingCases" != "" && "$matchMissingCases" != "false" ]]; then
+              if [[ "$matchMissingCases" != "false" ]]; then
+                echo "Test"
                 echo "$matchMissingCases"
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
                 continue
               fi
+              echo "Test1"
             else
               continue
             fi
@@ -435,7 +437,7 @@ jobs:
             if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
               title="$addSpace [android]"
               matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
-              if [[ "$matchMissingCases" != "" && "$matchMissingCases" != "false" ]]; then
+              if [[ "$matchMissingCases" != "false" ]]; then
                 echo "$matchMissingCases"
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
