@@ -7,8 +7,8 @@ export const SignE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
   LOA_P1_TEXT:
     'You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.',
-  LOA_P2_TEXT: 'Don’t yet have a verified account? ',
-  LOA_P3_TEXT: 'Not sure if your account is verified? ',
+  LOA_P2_TEXT: 'Don’t yet have a verified account?',
+  LOA_P3_TEXT: 'Not sure if your account is verified?',
   CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
 
@@ -30,7 +30,7 @@ describe('Sign In', () => {
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P1_TEXT))).toExist()
-    // await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
+    await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P3_TEXT))).toExist()
     await expect(element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID))).toExist()
   })
