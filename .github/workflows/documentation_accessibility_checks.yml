@@ -3,6 +3,7 @@ name: '[Documentation] Accessibility Check'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
+  pull_request:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
