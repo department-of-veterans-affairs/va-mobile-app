@@ -403,7 +403,7 @@ jobs:
             addSpace=$(echo $removeBracket | sed 's/\([^[:blank:]]\)\([[:upper:]]\)/\1 \2/g')
             
             if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
-              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'select(.[] == "'"$testsTypedIn"'"'))
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'select(.[] == "'"$testsTypedIn"'")')
               echo "$missingCases"
             elif [[ "$removeBracket" == "VALetters" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters" '.[] | select(contains($testsTypedIn))') 
