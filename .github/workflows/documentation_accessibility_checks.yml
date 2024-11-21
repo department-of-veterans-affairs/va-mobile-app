@@ -1,9 +1,6 @@
 name: '[Documentation] Accessibility Check'
 
-# Adapted from https://docusaurus.io/docs/deployment
-
 on:
-  pull_request:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
@@ -27,7 +24,7 @@ jobs:
         run: npm install -g @axe-core/cli@latest
       - name: Install latest version of chromeDriver
         run: npm install -g chromedriver@latest
-      - name: Test build
+      - name: Run build to generate sitemap
         working-directory: VAMobile
         run: |
           yarn install --frozen-lockfile
