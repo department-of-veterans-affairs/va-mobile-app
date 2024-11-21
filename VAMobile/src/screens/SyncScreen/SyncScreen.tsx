@@ -26,7 +26,7 @@ import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { loginFinish } from 'utils/auth'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 function SyncScreen({}: SyncScreenProps) {
@@ -37,6 +37,7 @@ function SyncScreen({}: SyncScreenProps) {
     backgroundColor: theme.colors.background.loginScreen,
   }
   const dispatch = useAppDispatch()
+  const showActionSheet = useShowActionSheet()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
   const queryClient = useQueryClient()
@@ -81,6 +82,7 @@ function SyncScreen({}: SyncScreenProps) {
   }, [dispatch, demoMode, loggedIn, queryClient])
 
   useEffect(() => {
+    const options = ['Close']
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -93,6 +95,15 @@ function SyncScreen({}: SyncScreenProps) {
 
     if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
       dispatch(dispatchUpdateSyncing(false))
+      showActionSheet(
+        {
+          title: 'Maybe this is getting called',
+          message: `LoggedIN: ${loggedIn}, LoggingOut: ${loggingOut}, Syncing: ${syncing}, sync screen values`,
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     }
   }, [
