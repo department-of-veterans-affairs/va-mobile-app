@@ -449,8 +449,7 @@ jobs:
             missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$keep1stWord" 'map(contains($testsTypedIn)) | .[]')
             echo "$missingCases"
             if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
-              title="$keep1stWord [android]"
-              matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
+              matchMissingCases=$(echo $getTest| jq --arg getCase "$keep1stWord" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
               echo "$matchMissingCases"
               if [[ "$matchMissingCases" != "" ]]; then
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
