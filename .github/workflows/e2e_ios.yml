@@ -92,6 +92,7 @@ jobs:
         run: |
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
+              e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
               testRail=$(echo $e2eNames | tr ',' ' ')
               testRail=$(echo $testRail | sed 's/\S*\(.e2e.ts\)\S*//g')
