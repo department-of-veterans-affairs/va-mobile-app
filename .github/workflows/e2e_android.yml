@@ -399,7 +399,6 @@ jobs:
             removeBracket=$(echo $removeBracket | tr -d ']')
             removeBracket=$(echo $removeBracket | tr -d ',')
             addSpace=$(echo $removeBracket | sed 's/\([^[:blank:]]\)\([[:upper:]]\)/\1 \2/g')
-            keep1stWord=$(echo $addSpace | sed 's/\s.*$//')
             
             if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] == $testsTypedIn')
@@ -421,8 +420,8 @@ jobs:
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               fi
               echo "" >> input.json
-              echo "$matchMissingCases"
-              if [[ "$matchMissingCases" != "" ]]; then
+              if [[ "$matchMissingCases" != "" && "$matchMissingCases" != "false" ]]; then
+                echo "$matchMissingCases"
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
                 continue
@@ -436,8 +435,8 @@ jobs:
             if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
               title="$addSpace [android]"
               matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
-              echo "$matchMissingCases"
-              if [[ "$matchMissingCases" != "" ]]; then
+              if [[ "$matchMissingCases" != "" && "$matchMissingCases" != "false" ]]; then
+                echo "$matchMissingCases"
                 addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                 echo $addMissingCasesToArray >> input.json
                 continue
@@ -452,8 +451,8 @@ jobs:
               if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
                 echo "$z"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[android]"))')
-                echo "$matchMissingCases"
-                if [[ "$matchMissingCases" != "" ]]; then
+                if [[ "$matchMissingCases" != "" && "$matchMissingCases" != "false" ]]; then
+                  echo "$matchMissingCases"
                   addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
                   echo $addMissingCasesToArray >> input.json
                   break
