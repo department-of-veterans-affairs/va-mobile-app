@@ -400,7 +400,6 @@ jobs:
             removeBracket=$(echo $removeBracket | tr -d ',')
             addSpace=$(echo $removeBracket | sed 's/\([^[:blank:]]\)\([[:upper:]]\)/\1 \2/g')
             keep1stWord=$(echo $addSpace | sed 's/\s.*$//')
-            echo "$keep1stWord"
             
             if [[ "$removeBracket" == "Appeals" || "$removeBracket" == "Appointments" ]]; then
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] == $testsTypedIn')
@@ -409,8 +408,9 @@ jobs:
             else
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" 'map(contains($testsTypedIn)) | .[]')
             fi
+            echo "$missingCases"
 
-            if [[ "$missingCases" == "false" ]]; then
+            if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
               if [[ "$removeBracket" == "Appointments" ]]; then
                 title="$removeBracket Screen [android]"
                 matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
@@ -432,7 +432,8 @@ jobs:
             fi
 
             missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$addSpace" 'map(contains($testsTypedIn)) | .[]')
-            if [[ "$missingCases" == "false" ]]; then
+            echo "$missingCases"
+            if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
               title="$addSpace [android]"
               matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               echo "$matchMissingCases"
@@ -446,7 +447,8 @@ jobs:
             fi
 
             missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$keep1stWord" 'map(contains($testsTypedIn)) | .[]')
-            if [[ "$missingCases" == "false" ]]; then
+            echo "$missingCases"
+            if [[ "$missingCases" == "false" || "$missingCases" == "" ]]; then
               title="$keep1stWord [android]"
               matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
               echo "$matchMissingCases"
