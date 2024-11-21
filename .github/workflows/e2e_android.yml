@@ -434,6 +434,7 @@ jobs:
               continue
             fi
 
+            missingCases=""
             missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$addSpace" '.[] | select(contains($testsTypedIn))')
             if [[ "$missingCases" == "" ]]; then
               title="$addSpace [android]"
@@ -449,6 +450,7 @@ jobs:
             fi
 
             for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+              missingCases=""
               missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" '.[] | select(contains($testsTypedIn))')
               if [[ "$missingCases" == "" ]]; then
                 echo "$z"
@@ -461,6 +463,7 @@ jobs:
                 fi
               else
                 break
+              fi
             done
           done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
