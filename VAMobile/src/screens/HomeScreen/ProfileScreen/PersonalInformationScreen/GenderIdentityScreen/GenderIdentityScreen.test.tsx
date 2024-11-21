@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -62,11 +63,11 @@ context('GenderIdentityScreen', () => {
       .calledWith('/v0/user/gender_identity/edit')
       .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
-    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('personalInformation.genderIdentity.title'))).toBeTruthy())
     await waitFor(() =>
       expect(
         screen.getByText(
-          'You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.',
+          `${t('personalInformation.genderIdentity.changeSelection')}${t('personalInformation.genderIdentity.preferNotToAnswer')}.`,
         ),
       ).toBeTruthy(),
     )
@@ -75,12 +76,14 @@ context('GenderIdentityScreen', () => {
     await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy())
     await waitFor(() =>
       expect(
-        screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' }),
+        screen.getByRole('radio', { name: t('personalInformation.genderIdentity.preferNotToAnswer') }),
       ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: t('personalInformation.genderIdentity.whatToKnow.title') })).toBeTruthy(),
     )
   })
 
@@ -92,8 +95,8 @@ context('GenderIdentityScreen', () => {
       .mockResolvedValue(genderIdentityOptionsPayload)
     initializeTestInstance()
 
-    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Save' })))
-    await waitFor(() => expect(screen.queryByText('Select an option')).toBeTruthy())
+    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('save') })))
+    await waitFor(() => expect(screen.queryByText(t('selectOption'))).toBeTruthy())
   })
 
   it('renders the ErrorComponent when an error occurs', async () => {
@@ -105,7 +108,7 @@ context('GenderIdentityScreen', () => {
 
     initializeTestInstance()
     await waitFor(() => {
-      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy()
     })
   })
 })

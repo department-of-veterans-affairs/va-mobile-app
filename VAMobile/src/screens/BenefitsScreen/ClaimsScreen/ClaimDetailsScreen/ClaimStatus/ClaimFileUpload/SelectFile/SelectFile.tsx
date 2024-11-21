@@ -7,19 +7,22 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertWithHaptics, Box, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
 const { IS_TEST } = getEnv()
 
-type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
+type SelectFilesProps = StackScreenProps<FileRequestStackParams, 'SelectFile'>
 
 function SelectFile({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -35,6 +38,11 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     if (isActionSheetVisible) {
       e.preventDefault()
     }
+  })
+
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => onCancel(),
   })
 
   const onFileFolder = async (): Promise<void> => {
@@ -116,11 +124,9 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   }
 
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('back')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectFiles')}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
+      <SubtaskTitle title={t('fileUpload.selectFiles')} />
+
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -162,7 +168,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         mx={theme.dimensions.gutter}>
         <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
       </Box>
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 
