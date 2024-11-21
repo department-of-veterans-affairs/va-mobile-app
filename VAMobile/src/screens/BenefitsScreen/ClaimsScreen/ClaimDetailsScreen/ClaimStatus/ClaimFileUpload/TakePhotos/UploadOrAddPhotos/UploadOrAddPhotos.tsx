@@ -6,7 +6,7 @@ import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
@@ -23,7 +23,6 @@ import {
   TextView,
   VAScrollView,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -33,9 +32,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { showSnackBar } from 'utils/common'
 import {
-  useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useOrientation,
@@ -50,12 +47,12 @@ import { FileRequestStackParams } from '../../FileRequestSubtask'
 type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
 
 function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
   const { claimID, request: originalRequest, firstImageResponse } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
-  const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
@@ -71,10 +68,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('fileUpload.submitted'),
-    errorMsg: t('fileUpload.submitted.error'),
-  }
   const [imagesEmptyError, setImagesEmptyError] = useState(false)
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
@@ -153,9 +146,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             'photo',
           ),
         )
-        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
+        snackbar.show(t('fileUpload.submitted'))
       },
-      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
+      onError: () =>
+        snackbar.show(t('fileUpload.submitted.error'), { isError: true, onActionPressed: onUploadConfirmed }),
     }
     const params: UploadFileToClaimParamaters = {
       claimID,

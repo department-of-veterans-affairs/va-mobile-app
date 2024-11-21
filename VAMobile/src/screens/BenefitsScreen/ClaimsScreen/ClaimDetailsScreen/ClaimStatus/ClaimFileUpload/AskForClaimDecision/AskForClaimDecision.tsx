@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useClaim, useSubmitClaimDecision } from 'api/claimsAndAppeals'
 import {
@@ -27,17 +28,16 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { FileRequestStackParams } from '../FileRequestSubtask'
 
 type AskForClaimDecisionProps = StackScreenProps<FileRequestStackParams, 'AskForClaimDecision'>
 
 function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
+  const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const { claimID } = route.params
   const { data: claim, error: loadingClaimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
   const {
@@ -102,9 +102,9 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     const mutateOptions = {
       onSuccess: () => {
         setSubmittedDecision(true)
-        showSnackBar('Request sent', dispatch, undefined, true, false, true)
+        snackbar.show('Request sent')
       },
-      onError: () => showSnackBar('Request could not be sent', dispatch, () => onSubmit, false, true),
+      onError: () => snackbar.show('Request could not be sent', { isError: true, onActionPressed: () => onSubmit }),
     }
     submitClaimDecision(claimID, mutateOptions)
   }
