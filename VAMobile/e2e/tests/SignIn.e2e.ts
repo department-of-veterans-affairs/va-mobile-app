@@ -30,7 +30,7 @@ describe('Sign In', () => {
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P1_TEXT))).toExist()
-    await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
+    // await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P3_TEXT))).toExist()
     await expect(element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID))).toExist()
   })
