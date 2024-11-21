@@ -15,17 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Clean npm cache
         run: npm cache clean --force
       - name: Install Axe CLI globally
         run: npm install -g @axe-core/cli@latest
-      - name: Update npm 
-        run: npm install -g npm@latest
-      - uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: yarn
-          cache-dependency-path: VAMobile/yarn.lock 
       - name: Install latest version of chromeDriver
         run: npm install -g chromedriver@latest
       - name: Test build
