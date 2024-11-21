@@ -32,6 +32,7 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           cd documentation
+          npx update-browserslist-db@latest
           yarn install --frozen-lockfile
           yarn build
       - name: Start web server
@@ -77,7 +78,7 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
           channel_name: va-mobile-build-alerts
-          message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+          message: 'Accessibility issues detected. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
         run: |
           curl -X POST \
                -H "Authorization: Bearer $SLACK_API_TOKEN" \
