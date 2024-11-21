@@ -203,7 +203,7 @@ jobs:
         run: yarn env:staging
 
       - name: Bundle Android app
-        run: yarn e2e:android-build1
+        run: yarn e2e:android-build
 
       - name: Run e2e tests for Android - Full Test
         id: run_e2e_tests
