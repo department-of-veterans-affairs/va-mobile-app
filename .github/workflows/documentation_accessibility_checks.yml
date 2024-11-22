@@ -59,8 +59,8 @@ jobs:
             issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
             if [[ ! -z "$issues" ]]
             then
-              pages_with_errors=$(pages_with_errors+1)
-              total_errors=$(total_errors+issues)
+              pages_with_errors=$((pages_with_errors + 1))
+              total_errors=$((total_errors + issues))
             fi
           done
           
