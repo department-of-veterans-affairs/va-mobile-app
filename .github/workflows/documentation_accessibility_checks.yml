@@ -28,7 +28,7 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install ChromeDriver
-        run: npm install -g chromedriver@126.0.0
+        run: npm install -g chromedriver
       - name: Test build
         working-directory: VAMobile
         run: |
