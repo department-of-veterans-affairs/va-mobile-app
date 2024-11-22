@@ -1,16 +1,12 @@
-import { useSelector } from 'react-redux'
-
 import { useMutation } from '@tanstack/react-query'
 
 import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
-import { RootState } from 'store'
-import { AuthState } from 'store/slices'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
-import { useAppDispatch, useShowActionSheet } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
 
 import { usePostLoggedIn } from './postLoggedIn'
@@ -42,25 +38,12 @@ const handleTokenCallbackUrl = async (handleTokenCallbackParams: handleTokenCall
 export const useHandleTokenCallbackUrl = () => {
   const { mutate: postLoggedIn } = usePostLoggedIn()
   const dispatch = useAppDispatch()
-  const showActionSheet = useShowActionSheet()
-  const { loggedIn, loggingOut, syncing, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>(
-    (state) => state.auth,
-  )
-  const options = ['Close']
+
   return useMutation({
     mutationFn: handleTokenCallbackUrl,
     onMutate: () => {
       loginStart(dispatch, true)
       clearCookies()
-      console.log('should show started pop up')
-      showActionSheet(
-        {
-          title: 'Login started',
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
     },
     onSettled: () => {
       logAnalyticsEvent(Events.vama_auth_completed())
@@ -69,16 +52,6 @@ export const useHandleTokenCallbackUrl = () => {
       const authCredentials = await processAuthResponse(data)
       await loginFinish(dispatch, false, authCredentials)
       postLoggedIn()
-      console.log('should show success pop up')
-      showActionSheet(
-        {
-          title: 'Login success',
-          message: `LoggedIN: ${loggedIn}, LoggingOut: ${loggingOut}, Syncing: ${syncing}, DisplayBiometricsPreferenceScreen: ${displayBiometricsPreferenceScreen}`,
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
     },
     onError: (error) => {
       if (isErrorObject(error)) {
@@ -87,16 +60,6 @@ export const useHandleTokenCallbackUrl = () => {
           logAnalyticsEvent(Events.vama_login_token_fetch(error))
         }
         loginFinish(dispatch, true)
-        console.log('should show error pop up')
-        showActionSheet(
-          {
-            title: 'Login error',
-            message: error.message,
-            options,
-            cancelButtonIndex: 0,
-          },
-          () => {},
-        )
       }
     },
   })
