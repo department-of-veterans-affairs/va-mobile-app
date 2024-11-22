@@ -475,9 +475,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   }
   await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).replaceText(AFUseCase)
   await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).tapReturnKey()
-  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).replaceText('AF Heading Test')
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).replaceText(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT)
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).tapReturnKey()
-  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).replaceText('AF Body Test')
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).replaceText(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT)
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).tapReturnKey()
   await setTimeout(3000)
   await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_PHONE_ID)).replaceText('8006982411')
