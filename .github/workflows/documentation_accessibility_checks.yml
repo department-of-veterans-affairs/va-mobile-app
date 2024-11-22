@@ -16,7 +16,8 @@ jobs:
     name: Accessibility Check
     runs-on: ubuntu-latest
     outputs:
-      num_issues: ${{ steps.accessibility_check.outputs.num_issues }}
+      pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
+      total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Axe CLI globally
@@ -29,10 +30,6 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install ChromeDriver
         run: npm install -g chromedriver
-      - name: Test build
-        working-directory: VAMobile
-        run: |
-          yarn install --frozen-lockfile
       - name: Start web server
         working-directory: VAMobile/documentation
         run: |
@@ -63,8 +60,20 @@ jobs:
             echo "number of issues: $issues"
             if [[ ! -z "$issues" ]]
             then
-             echo "do some mathing here"
+              pages_with_errors=$((pages_with_errors + 1))
+              total_errors=$((total_errors + issues))
             fi
           done
           
-          echo "$total_errors found on $pages_with_errors different pages"
+          # Output to runner
+          echo "pages_with_errors=pages_with_errors" >> $GITHUB_OUTPUT
+          echo "total_errors=total_errors" >> $GITHUB_OUTPUT
+
+  start_slack_thread:
+    name: Start Slack thread
+    needs: axe-scan
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }} Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'
