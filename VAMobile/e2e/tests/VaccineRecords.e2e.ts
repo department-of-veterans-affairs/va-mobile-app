@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the vaccines - view list of all immunization records and vaccines - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in vaccines or if anything is changed in src/store/api/demo/mocks/vaccine.json.
+*/
 import { by, element, expect } from 'detox'
 
 import { checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'

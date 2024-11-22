@@ -1,0 +1,15 @@
+#  Tests to see that changes to native files do not break the Android build process
+  name: '[Code Quality] Check Native Android Builds'
+
+on:
+  pull_request:
+    paths:
+      - "VAMobile/android/**"
+
+jobs:
+  android_native_build:
+    name: Android Test Build
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: test_build_only

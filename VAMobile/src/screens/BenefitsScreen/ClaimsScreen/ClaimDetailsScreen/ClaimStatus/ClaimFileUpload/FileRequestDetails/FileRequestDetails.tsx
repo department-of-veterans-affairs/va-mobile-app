@@ -6,16 +6,19 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, FullScreenSubtask, TextArea, TextView } from 'components'
+import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
+type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
 
 function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -24,6 +27,12 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, type, status, description, uploadDate, documents } = request
+
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => navigation.goBack(),
+    leftButtonTestID: 'fileRequestDetailsBackID',
+  })
 
   const hasUploaded = hasUploadedOrReceived(request)
   const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
@@ -70,12 +79,9 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('back')}
-      onLeftButtonPress={navigation.goBack}
-      title={displayName || ''}
-      testID="fileRequestDetailsID"
-      leftButtonTestID="fileRequestDetailsBackID">
+    <VAScrollView testID="fileRequestDetailsID">
+      <SubtaskTitle title={displayName || ''} />
+
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -133,7 +139,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
           </Box>
         </Box>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

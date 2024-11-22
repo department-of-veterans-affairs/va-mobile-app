@@ -4,6 +4,7 @@ import { StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -21,7 +22,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, ErrorsState, checkForDowntimeErrors, dispatchUpdateSyncing } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
-import colors from 'styles/themes/VAColors'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { loginFinish } from 'utils/auth'
@@ -124,7 +124,7 @@ function SyncScreen({}: SyncScreenProps) {
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
           <LoadingComponent
             justTheSpinnerIcon={true}
-            spinnerColor={theme.mode === 'dark' ? colors.grayLightest : colors.primary}
+            spinnerColor={theme.mode === 'dark' ? DSColors.vadsColorBaseLightest : DSColors.vadsColorPrimary}
           />
           <TextView
             variant={'MobileBody'}

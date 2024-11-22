@@ -1,17 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  checkImages,
-  disableAF,
-  enableAF,
-  loginToDemoMode,
-  openDeveloperScreen,
-  openProfile,
-  openSettings,
-  verifyAF,
-} from './utils'
+import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
   PAYMENTS_BTN_ID: 'Payments',
@@ -54,11 +44,11 @@ describe('Home Screen', () => {
 
   it('should show primary home page header content', async () => {
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 
   it('should verify the nav bar at the bottom of the screen', async () => {
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT))).toExist()
@@ -73,37 +63,37 @@ describe('Home Screen', () => {
   })
 
   it('profile tab tap: verify the profile screen tab items', async () => {
-    await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_INFORMATION_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
+    await element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID)).tap()
+    await expect(element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID))).toExist()
   })
 
   it('home tab tap: verify the home screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
-    await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 
   it('benefits tab tap: verify the benefits screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.DISABILITY_RATING_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID))).toExist()
   })
 
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID))).toExist()
   })
 
   it('personalization: verify the health screen subtext', async () => {
@@ -135,7 +125,7 @@ describe('Home Screen', () => {
       .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))).toExist()
   })
 
   it('taps home then jumps to messages from messages button', async () => {

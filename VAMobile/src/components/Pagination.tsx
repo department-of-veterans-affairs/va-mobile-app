@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -9,7 +11,6 @@ import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 export type PaginationProps = {
   /** page number */
@@ -36,7 +37,7 @@ type PaginationArrowProps = {
   /** test id */
   testID: string
   /** props for icon */
-  iconProps: VAIconProps
+  iconProps: IconProps
 }
 
 export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, iconProps, testID, disabled }) => {
@@ -54,13 +55,13 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   const boxProps: BoxProps = {
     backgroundColor: disabled ? 'buttonSecondaryDisabled' : 'buttonPrimary',
     minHeight: theme.dimensions.touchableMinHeight,
-    p: 15,
+    p: 5,
     borderRadius: 5,
   }
   return (
     <Pressable {...pressableProps} testID={testID} accessibilityLabel={testID}>
       <Box {...boxProps}>
-        <VAIcon fill={theme.colors.icon.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
+        <Icon fill={theme.colors.icon.pagination} width={36} height={36} preventScaling={true} {...iconProps} />
       </Box>
     </Pressable>
   )

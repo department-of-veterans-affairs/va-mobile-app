@@ -58,8 +58,6 @@ describe('Military Info Screen', () => {
   verifyMilitaryInfo('United States Space Force')
 
   it('should open new screen if military service information is incorrect', async () => {
-    await openProfile()
-    await openMilitaryInformation()
     await element(by.id(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_ID)).tap()
     await expect(
       element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1)),

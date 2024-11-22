@@ -32,6 +32,7 @@ import {
   useRefreshAccessToken,
 } from 'api/auth'
 import queryClient from 'api/queryClient'
+import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
 import { Events } from 'constants/analytics'
@@ -51,9 +52,12 @@ import {
   getHomeScreens,
   getPaymentsScreens,
 } from 'screens'
-import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
+import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
+import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
+import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
@@ -110,6 +114,14 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditDirectDeposit: {
     displayTitle: string
   }
+  FileRequestSubtask: {
+    claimID: string
+    claim: ClaimData | undefined
+  }
+  SubmitEvidenceSubtask: {
+    claimID: string
+  }
+  InAppFeedback: { task: string }
   Tabs: undefined
 }
 
@@ -514,6 +526,17 @@ export function AuthedApp() {
           component={EditDirectDepositScreen}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
+        <RootNavStack.Screen
+          name="SubmitEvidenceSubtask"
+          component={SubmitEvidenceSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen
+          name="FileRequestSubtask"
+          component={FileRequestSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}
