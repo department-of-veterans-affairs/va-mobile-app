@@ -1023,7 +1023,7 @@
   "onboarding.payments.header": "Manage your payments",
   "onboarding.payments.paymentHistory.bullet": "Review the history of payments we’ve sent to you",
   "onboarding.progressBarA11yHint.viewingPage": "Viewing page {{currPage}} of 4 of the onboarding tutorial",
-  "onboarding.skipA11yHint": "Exit onboarding tutorial and navigate to the Home page",
+  "onboarding.skipA11yHint": "Exit onboarding tutorial and navigate to the Push Notification Consent page",
   "onboarding.welcomeMessage": "Welcome, {{firstName}}",
   "openInBrowser": "Open in browser",
   "openInBrowser.a11yHint": "Opens the page in your device's browser",
