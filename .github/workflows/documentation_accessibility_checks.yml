@@ -54,7 +54,7 @@ jobs:
           
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
-            output=$(axe "$url" --timeout=300000 --exit)
+            output=$(axe "$url")
             echo "${output}"
             
             echo "Checking number of issues"
