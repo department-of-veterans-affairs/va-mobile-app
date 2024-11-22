@@ -314,7 +314,7 @@ export function AuthGuard() {
     if (loggedIn && tappedForegroundNotification) {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
-    } else if (loggedIn) {
+    } else if (!loggedIn) {
       initializeAuth(dispatch, () => {
         refreshAccessToken(getAccessToken() || '', mutateOptions)
       })

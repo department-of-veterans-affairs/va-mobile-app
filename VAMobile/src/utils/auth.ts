@@ -287,6 +287,9 @@ export const finishInitialize = async (
     ...userSettings,
     authCredentials: authCredentials,
   })
+  console.log('finish initialize')
+  console.log(loggedIn)
+  console.log(store.getState().auth.syncing)
   dispatch(dispatchUpdateLoggedIn(loggedIn))
   dispatch(dispatchUpdateSyncing(loggedIn && store.getState().auth.syncing))
 }
@@ -297,6 +300,8 @@ export const loginStart = async (dispatch: AppDispatch, syncing: boolean) => {
   queryClient.setQueryData(authKeys.settings, {
     ...userSettings,
   })
+  console.log('login start')
+  console.log(syncing)
   await dispatch(dispatchUpdateLoading(true))
   await dispatch(dispatchUpdateSyncing(syncing))
 }
@@ -307,6 +312,9 @@ export const loginFinish = async (dispatch: AppDispatch, isError: boolean, authC
     ...userSettings,
     authCredentials: authCredentials,
   })
+  console.log('login finish')
+  console.log(isError)
+  console.log(store.getState().auth.syncing)
   await dispatch(dispatchUpdateLoading(isError))
   await dispatch(dispatchUpdateLoggedIn(!isError))
   await dispatch(dispatchUpdateSyncing(store.getState().auth.syncing && !isError))
@@ -341,14 +349,17 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
   }
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
+    console.log('Initialize auth unlock')
     await finishInitialize(dispatch, false)
     await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
+      console.log('refresh token initialize auth')
       await refreshAccessToken()
     } else {
+      console.log('initialize auth clear creds')
       await clearStoredAuthCreds()
       await finishInitialize(dispatch, false)
     }
@@ -365,9 +376,11 @@ const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: (
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
+      console.log('biometrics start refresh token')
       loginStart(dispatch, true)
       await refreshAccessToken()
     } else {
+      console.log('no refresh token biometrics')
       await finishInitialize(dispatch, false)
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

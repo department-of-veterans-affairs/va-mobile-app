@@ -53,6 +53,7 @@ export const useLogout = () => {
       }
     },
     onSettled: async () => {
+      console.log('logging out')
       await clearStoredAuthCreds()
       dispatch(dispatchUpdateLoggingOut(false))
       api.setAccessToken(undefined)
