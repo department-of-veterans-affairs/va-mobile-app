@@ -36,7 +36,6 @@ jobs:
       - name: Start web server
         working-directory: VAMobile/documentation
         run: |
-          rm -rf node-modules/
           yarn install --frozen-lockfile
           yarn build
           yarn start &
