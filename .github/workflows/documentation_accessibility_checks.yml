@@ -58,7 +58,7 @@ jobs:
             echo "${output}"
             
             echo "Checking number of issues"
-            issues=$(echo "${output}" | grep -oP '\d+ Accessibility issues detected')
+            issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
 
             echo "number of issues: $issues"
             if [[ ! -z "$issues" ]]
