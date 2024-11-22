@@ -5,7 +5,7 @@ name: '[Build] Optimize Image'
 on:
   push:
     branches:
-      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+      - chanel-9687-automation-update-optimization-workflow-to-automatically-push-chages-through-pr
 
 jobs:
   optimize_images:
@@ -32,13 +32,23 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
+          git checkout -b optimize-images-$(date +'%Y%m%d%H%M%S')
           git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Optimize images before release build"
-            git push
+            git push --set-upstream origin HEAD
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Optimize images before release build"
+          branch: optimize-images-$(date +'%Y%m%d%H%M%S')
+          title: "Optimize images before release build"
+          body: |
+            This PR optimizes images in preparation for the release build.
