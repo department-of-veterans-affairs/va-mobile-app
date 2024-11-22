@@ -63,7 +63,7 @@ jobs:
             echo "number of issues: $issues"
             if [[ ! -z "$issues" ]]
             then
-             
+             echo "do some mathing here"
             fi
           done
           
