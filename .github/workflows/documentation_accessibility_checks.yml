@@ -30,6 +30,10 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install ChromeDriver
         run: npm install -g chromedriver
+      - name: Install mobile app modules
+        working-directory: VAMobile
+        run: |
+          yarn install --frozen-lockfile
       - name: Start web server
         working-directory: VAMobile/documentation
         run: |
