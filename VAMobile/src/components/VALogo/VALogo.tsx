@@ -14,7 +14,7 @@ export const VALogo: FC<VALogoProps> = ({ variant, testID }) => {
   const theme = useTheme()
 
   const logoProps: ImageProps = {
-    width: 257,
+    width: 256,
     height: 57,
   }
 
