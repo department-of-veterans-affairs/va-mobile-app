@@ -46,7 +46,7 @@ jobs:
         run: |
           # Extract URLs from sitemap and iterate
           output="$(axe "localhost:3000/va-mobile-app/docs/Operations/App%20metrics/Dashboard")"
-          echo $output
+          printf $output
           issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
           if [[ ! -z "$issues" ]]
           then
