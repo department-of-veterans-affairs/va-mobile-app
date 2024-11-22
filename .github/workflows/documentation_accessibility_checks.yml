@@ -56,11 +56,14 @@ jobs:
           do
             output=$(axe "$url")
             echo "${output}"
-            issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
+            
+            echo "Checking number of issues"
+            issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)' --exit)
+            
+            echo "number of issues: $issues"
             if [[ ! -z "$issues" ]]
             then
-              pages_with_errors=$((pages_with_errors + 1))
-              total_errors=$((total_errors + issues))
+             
             fi
           done
           
