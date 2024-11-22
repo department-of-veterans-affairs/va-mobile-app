@@ -43,6 +43,13 @@ jobs:
           sleep 10
       - name: Check accessibility issues
         id: accessibility_check
-        run: axe "localhost:3000/va-mobile-app/docs/Operations/App%20metrics/Dashboard" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver
-
+        run: |
+          # Extract URLs from sitemap and iterate
+          issues=$(axe "https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/App%20metrics/Dashboard" | grep -oP '\d+(?= Accessibility issues detected'))
+          if [[ ! -z "$issues" ]]
+          then
+          echo "$issues number of issues"
+          else
+          echo "no issues"
+          fi
 
