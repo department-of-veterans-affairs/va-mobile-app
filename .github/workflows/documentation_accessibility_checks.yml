@@ -70,8 +70,8 @@ jobs:
           done
           
           # Output to runner
-          echo "pages_with_errors=pages_with_errors" >> $GITHUB_OUTPUT
-          echo "total_errors=total_errors" >> $GITHUB_OUTPUT
+          echo "pages_with_errors=$pages_with_errors" >> $GITHUB_OUTPUT
+          echo "total_errors=$total_errors" >> $GITHUB_OUTPUT
 
   start_slack_thread:
     name: Start Slack thread
