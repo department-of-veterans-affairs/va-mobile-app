@@ -52,8 +52,8 @@ jobs:
           # Counter for total errors
           total_errors=0
           
-          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//')
-            do
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
+          do
             output=$(axe "$url")
             echo "${output}"
             issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
