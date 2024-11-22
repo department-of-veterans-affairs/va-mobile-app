@@ -5,7 +5,7 @@ name: '[Build] Optimize Image'
 on:
   push:
     branches:
-      - chanel-9687-automation-update-optimization-workflow-to-automatically-push-chages-through-pr
+      - chanel-9687-automation-update-optimization-workflow-to-automatically-push-changes-through-pr
 
 jobs:
   optimize_images:
