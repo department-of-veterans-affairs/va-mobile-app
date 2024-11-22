@@ -45,7 +45,9 @@ jobs:
         id: accessibility_check
         run: |
           # Extract URLs from sitemap and iterate
-          issues=$(axe "https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/App%20metrics/Dashboard" | grep -oP '\d+(?= Accessibility issues detected)')
+          output=$(axe "https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/App%20metrics/Dashboard")
+          echo $output
+          issues= echo $output | grep -oP '\d+(?= Accessibility issues detected)'
           if [[ ! -z "$issues" ]]
           then
           echo "$issues number of issues"
