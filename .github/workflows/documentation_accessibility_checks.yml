@@ -54,11 +54,11 @@ jobs:
           
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
-            output=$(axe "$url")
+            output=$(axe "$url" --timeout=300000 --exit)
             echo "${output}"
             
             echo "Checking number of issues"
-            issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)' --timeout=300000 --exit )
+            issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
             
             echo "number of issues: $issues"
             if [[ ! -z "$issues" ]]
