@@ -1,7 +1,3 @@
-import { logAnalyticsEvent } from 'utils/analytics'
-
-import { Events } from './analytics'
-
 export const DEFAULT_PAGE_SIZE = 10
 export const LARGE_PAGE_SIZE = 5000
 
@@ -24,23 +20,6 @@ export const WebProtocolTypesConstants: {
 }
 
 export const COVID19 = 'COVID-19'
-
-export const SnackBarConstants: {
-  animationDuration: number
-  duration: number
-} = {
-  animationDuration: 100,
-  duration: 900000,
-}
-
-export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
-  if (screenName) {
-    if (!snackBar) {
-      logAnalyticsEvent(Events.vama_snackbar_null(`CloseSnackbarOnNavigation - ${screenName.split('-')[0]}`))
-    }
-    snackBar?.hideAll()
-  }
-}
 
 export const DIRECT_DEPOSIT = 'Direct Deposit'
 

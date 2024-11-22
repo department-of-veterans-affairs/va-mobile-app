@@ -13,14 +13,9 @@ import { PhoneData } from 'api/types/PhoneData'
 import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
-import { Events } from 'constants/analytics'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
-import { updatBottomOffset } from 'store/slices/snackBarSlice'
-import theme from 'styles/themes/standardTheme'
 
-import { logAnalyticsEvent } from './analytics'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -311,47 +306,6 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
   }
 
   return item as T
-}
-
-/**
- * Function to show snackbar
- * @param message - snackbar message
- * @param dispatch - dispatch function to change the bottom offset
- * @param actionPressed - action to perform on undo
- * @param isUndo - if user pressed undo it will not show undo again
- * @param isError - if it is an error will show the error icon
- * @param withNavBar - offset snackbar to be over the bottom nav
- * @returns snackbar
- */
-export function showSnackBar(
-  message: string,
-  dispatch: AppDispatch,
-  actionPressed?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
-  if (!snackBar) {
-    logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
-  }
-  snackBar?.hideAll()
-  dispatch(
-    updatBottomOffset(
-      withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset,
-    ),
-  )
-  snackBar?.show(message, {
-    type: 'custom_snackbar',
-    data: {
-      onActionPressed: () => {
-        if (actionPressed) {
-          actionPressed()
-        }
-      },
-      isUndo,
-      isError,
-    },
-  })
 }
 
 /**

@@ -6,9 +6,6 @@ import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
-import Toast from 'react-native-toast-notifications'
-import ToastContainer from 'react-native-toast-notifications'
-import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { Provider, useSelector } from 'react-redux'
 
 import analytics from '@react-native-firebase/analytics'
@@ -27,9 +24,7 @@ import { ThemeProvider } from 'styled-components'
 import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
-import SnackBar from 'components/SnackBar'
-import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
-import { SnackBarConstants } from 'constants/common'
+import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -61,7 +56,6 @@ import {
   sendUsesScreenReaderAnalytics,
 } from 'store/slices/accessibilitySlice'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
-import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import getEnv from 'utils/env'
@@ -220,7 +214,6 @@ export function AuthGuard() {
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>(
     (state) => state.accessibility,
   )
-  const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const headerStyles = useHeaderStyles()
@@ -231,14 +224,6 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
 
-  const snackBarProps: Partial<ToastProps> = {
-    duration: SnackBarConstants.duration,
-    animationDuration: SnackBarConstants.animationDuration,
-    renderType: {
-      custom_snackbar: (toast) => <SnackBar {...toast} />,
-    },
-    swipeEnabled: false,
-  }
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void =>
@@ -383,16 +368,7 @@ export function AuthGuard() {
       </Stack.Navigator>
     )
   } else if (loggedIn) {
-    content = (
-      <>
-        <AuthedApp />
-        <Toast
-          {...snackBarProps}
-          ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)}
-          offsetBottom={bottomOffset}
-        />
-      </>
-    )
+    content = <AuthedApp />
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
@@ -447,19 +423,7 @@ export function AuthedApp() {
 
   return (
     <>
-      <RootNavStack.Navigator
-        screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
-        initialRouteName="Tabs"
-        screenListeners={{
-          transitionStart: (e) => {
-            if (e.data.closing) {
-              CloseSnackbarOnNavigation(e.target)
-            }
-          },
-          blur: (e) => {
-            CloseSnackbarOnNavigation(e.target)
-          },
-        }}>
+      <RootNavStack.Navigator screenOptions={{ ...headerStyles, detachPreviousScreen: false }} initialRouteName="Tabs">
         <RootNavStack.Screen
           name="Tabs"
           component={AppTabs}
