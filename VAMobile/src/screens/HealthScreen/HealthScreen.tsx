@@ -25,6 +25,8 @@ import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import AllergyDetailsScreen from './Allergies/AllergyDetails/AllergyDetailsScreen'
+import AllergyListScreen from './Allergies/AllergyList/AllergyListScreen'
 import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
@@ -162,6 +164,7 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
+        <LargeNavButton title="Allergies" onPress={() => navigateTo('AllergyList')} testID="toAllergyListID" />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {cernerExist && (
@@ -257,6 +260,16 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="VaccineList"
         component={VaccineListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="AllergyDetails"
+        component={AllergyDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="AllergyList"
+        component={AllergyListScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
