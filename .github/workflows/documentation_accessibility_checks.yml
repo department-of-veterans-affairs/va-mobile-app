@@ -44,14 +44,24 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
-          # Extract URLs from sitemap and iterate
-          output=$(axe "localhost:3000/va-mobile-app/docs/Operations/App%20metrics/Dashboard")
-          echo "${output}"
-          issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
-          if [[ ! -z "$issues" ]]
-          then
-          echo "$issues number of issues"
-          else
-          echo "no issues"
-          fi
-
+          # Path to the downloaded sitemap file
+          sitemap_path="VAMobile/documentation/build/sitemap.xml"
+          
+          # Counter for urls with errors
+          pages_with_errors=0
+          # Counter for total errors
+          total_errors=0
+          
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//')
+            do
+            output=$(axe "$url")
+            echo "${output}"
+            issues=$(echo $output | grep -oP '\d+(?= Accessibility issues detected)')
+            if [[ ! -z "$issues" ]]
+            then
+              pages_with_errors=$(pages_with_errors+1)
+              total_errors=$(total_errors+issues)
+            fi
+          done
+          
+          echo "$total_errors found on $pages_with_errors different pages"
