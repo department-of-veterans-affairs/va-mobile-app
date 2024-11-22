@@ -51,6 +51,7 @@ export async function validateVeteranStatusDesign() {
   await expect(element(by.id('veteranStatusBranchTestID'))).toExist()
   await expect(element(by.id('veteranStatusDisabilityRatingTestID'))).toExist()
   await expect(element(by.id('veteranStatusMilitaryServiceTestID')).atIndex(0)).toExist()
+  await expect(element(by.id('veteranStatusDODTestID'))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISCLAIMER_TEXT))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT))).toExist()
   await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
