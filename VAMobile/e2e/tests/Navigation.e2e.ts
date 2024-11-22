@@ -37,18 +37,6 @@ const navigationDic = {
     ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
     //['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received January 01, 2021', 'Review file requests'], 'File requests'],
-    [
-      'Claims.e2e',
-      [
-        'Claims',
-        'Claims history',
-        'Received January 01, 2021',
-        'Review file requests',
-        'Dental disability - More information needed',
-      ],
-      'Dental disability - More information needed',
-    ],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'JESSE_GRAY_600246732_526.pdf'],
     [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
@@ -96,8 +84,6 @@ const featureID = {
   'Received July 20, 2021': 'claimsHistoryID',
   'Received January 01, 2021': 'claimsHistoryID',
   'Received July 17, 2008': 'claimsHistoryID',
-  'Review file requests': 'claimStatusDetailsID',
-  'Dental disability - More information needed': 'fileRequestPageTestID',
   'Review letters': 'lettersPageID',
   Health: 'healthCategoryTestID',
   Appointments: 'appointmentsTestID',
@@ -215,12 +201,7 @@ const navigateToPage = async (key, navigationDicValue) => {
   } else {
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
-      if (subNavigationArray[k] === 'Review file requests') {
-        await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)))
-          .toBeVisible()
-          .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
-          .scroll(100, 'up')
-      } else if (subNavigationArray[k] === 'Received July 17, 2008') {
+      if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
           .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
@@ -247,12 +228,7 @@ const navigateToPage = async (key, navigationDicValue) => {
       await element(by.text(subNavigationArray[k])).tap()
     }
 
-    if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
-        .scroll(100, 'up')
-    } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
+    if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))

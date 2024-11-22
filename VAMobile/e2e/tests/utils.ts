@@ -125,6 +125,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
       .toExist()
       .withTimeout(60000)
   }
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
@@ -134,6 +138,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
+  await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
   if (skipOnboarding === true) {
