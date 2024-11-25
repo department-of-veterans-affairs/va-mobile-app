@@ -11,9 +11,12 @@ jobs:
   optimize_images:
     name: Optimize Images
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: optimize-images-${{ github.run_id }} # Declare environment variable here
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+  
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
       - name: Optimize iOS images
@@ -28,11 +31,13 @@ jobs:
           
           cd ../sevenInchScreenshots/
           imagemin * --out-dir=.
+      
       - name: Commit optimized images
         run: |
+        
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git checkout -b optimize-images-$(date +'%Y%m%d%H%M%S')
+          git checkout -b ${{ env.BRANCH_NAME }}
           git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           if git diff --cached --quiet; then
@@ -47,8 +52,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Optimize images before release build"
-          branch: optimize-images-$(date +'%Y%m%d%H%M%S')
+          branch: ${{ env.BRANCH_NAME }}
           title: "Optimize images before release build"
           body: |
             This PR optimizes images in preparation for the release build.
