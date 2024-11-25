@@ -11,6 +11,8 @@ jobs:
   optimize_images:
     name: Optimize Images
     runs-on: ubuntu-latest
+    outputs:
+      pr_url: ${{ steps.create_pr.outputs.pull-request-url }} # Declare the output for PR URL
     env:
       BRANCH_NAME: optimize-images-${{ github.run_id }} # Declare environment variable here
     steps:
@@ -48,13 +50,19 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug Git Information
+        run: |
+          echo "Current Branch: $(git branch --show-current)"
+          echo "GitHub Ref: ${{ github.ref }}"
+          echo "GitHub Run ID: ${{ github.run_id }}"
+          git remote -v
       - name: Create a Pull Request
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
-          base: ${{ github.ref_name }}
+          base: develop
           title: "Optimize images before release build"
           body: |
             This PR optimizes images in preparation for the release build.
@@ -62,11 +70,21 @@ jobs:
       - name: Pull Request Details
         run: |
           echo "Pull request URL: ${{ steps.create_pr.outputs.pull-request-url }}"
-      - name: Post message to Slack
-        id: post_message
+
+  start_slack_thread:
+      name: Start Slack thread
+      runs-on: ubuntu-latest
+      if: ${{ success() }}
+      needs: optimize_images
+      steps:
+      - name: Notify Slack
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          channel_name: va-mobile-app-automation-test-channel
+          message: 'Pull request created to review optimzed images before release build: ${{ needs.optimize_images.outputs.pr_url }}. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
         run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"va-mobile-app-automation-test-channel","text":"Pull request created: ${{ steps.create_pr.outputs.pull-request-url }}. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
+          curl -X POST \
+               -H "Authorization: Bearer $SLACK_API_TOKEN" \
+               -H "Content-Type: application/json" \
+               -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
+               https://slack.com/api/chat.postMessage
