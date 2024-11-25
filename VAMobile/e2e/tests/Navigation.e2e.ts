@@ -1,6 +1,6 @@
 /*
 Description:
-Detox script that runs dark mode, landscape, and font size accesability tests
+Detox script that runs dark mode, landscape, and font size accessibility tests
 When to update:
 This script should be updated whenever a new feature/new page that has the bottom nav bar is added to the app. See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
@@ -116,8 +116,8 @@ const featureID = {
 let scrollID
 let textResized
 
-/*Constants for accesability related command line options.  
-Any new accesability related command line options should be added here. */
+/*Constants for accessibility related command line options.  
+Any new accessibility related command line options should be added here. */
 export const NavigationE2eConstants = {
   DARK_MODE_OPTIONS:
     device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
@@ -136,7 +136,7 @@ export const NavigationE2eConstants = {
 }
 
 /*
-Takes a screenshot for each accesability option and compares it to a known screenshot (when done locally).
+Takes a screenshot for each accessibility option and compares it to a known screenshot (when done locally).
 param key: Dictionary key from navigationDic. Corresponds to the sections given on the lower nav bar (Home, Health, Benefits, Payments)
 param navigationDicValue: Dictionary value from navigationDic. Corresponds to the feature in the section that has a lower nav bar
 param accessibilityFeatureType: String value that tells the test what accessability test to run or null value that verifies that a feature is in the right place navigation wise
