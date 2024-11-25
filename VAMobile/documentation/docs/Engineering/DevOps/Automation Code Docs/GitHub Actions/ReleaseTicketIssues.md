@@ -6,7 +6,7 @@ This document outlines the steps to follow when the automation to create a relea
 
 ## Past Issue Description
 
-The job to create the release branch or issue failed due to an incorrect GitHub username in the [release_ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/ISSUE_TEMPLATE/release_ticket.md) template. Although the release itself was successful, the workflow to generate the associated  release ticket and  sclack coordination thread did not complete as expected.
+The job to create the release branch or issue failed due to an incorrect GitHub username in the [release_ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/ISSUE_TEMPLATE/release_ticket.md) template. Although the release itself was successful, the workflow to generate the associated  release ticket and  slack coordination thread did not complete as expected.
 
 ## Steps to Resolve the Issue
 
