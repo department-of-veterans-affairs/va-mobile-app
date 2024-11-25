@@ -99,6 +99,21 @@ export const CommonE2eIdConstants = {
   VACCINES_BUTTON_ID: 'toVaccineListID',
   DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
   PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
+  SAVE_TEXT: 'Save',
+  ENABLED_TEXT: 'Enabled',
+  AF_UPDATE_NOW_BUTTON_TEXT: 'Update now',
+  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
+  AF_ERROR_MSG_TITLE_INPUT_ID: 'AFErrorMsgTitleTestID',
+  AF_ERROR_MSG_TITLE_ENTERED_TEXT: 'AF Heading Test',
+  AF_ERROR_MSG_BODY_INPUT_ID: 'AFErrorMsgBodyTestID',
+  AF_BODY_ENTERED_TEXT: 'AF Body Test',
+  AF_ERROR_MSG_PHONE_ID: 'AFErrorPhoneNumberTestID',
+  AF_TYPE_INPUT_ID: 'AFTypeTestID',
+  DEVELOPER_SCREEN_SCROLL_ID: 'developerScreenTestID',
+  VIEW_MESSAGE_ID: 'viewMessageTestID',
+  CONTACT_INFO_SCREEN_ID: 'ContactInfoTestID',
+  HOME_SCREEN_SCROLL_ID: 'homeScreenID',
+  AF_USE_CASE_TWO_ID: 'AFUseCase2TestID',
 }
 
 /** Log the automation into demo mode
@@ -413,19 +428,19 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await openDeveloperScreen()
   await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
-    .whileElement(by.id('developerScreenTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
     .scroll(200, 'down')
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
     await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
       .toBeVisible()
-      .whileElement(by.id('remoteConfigTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'down')
     await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
-    .whileElement(by.id('remoteConfigTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
     .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
 
@@ -458,21 +473,21 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       }
     }
   }
-  await element(by.id('AFTypeTestID')).replaceText(AFUseCase)
-  await element(by.id('AFTypeTestID')).tapReturnKey()
-  await element(by.id('AFErrorMsgTitleTestID')).replaceText('AF Heading Test')
-  await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
-  await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
-  await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+  await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).replaceText(AFUseCase)
+  await element(by.id(CommonE2eIdConstants.AF_TYPE_INPUT_ID)).tapReturnKey()
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).replaceText(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT)
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_INPUT_ID)).tapReturnKey()
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).replaceText(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT)
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_BODY_INPUT_ID)).tapReturnKey()
   await setTimeout(3000)
-  await element(by.id('AFErrorPhoneNumberTestID')).replaceText('8006982411')
-  await element(by.id('AFErrorPhoneNumberTestID')).tapReturnKey()
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_PHONE_ID)).replaceText('8006982411')
+  await element(by.id(CommonE2eIdConstants.AF_ERROR_MSG_PHONE_ID)).tapReturnKey()
 
-  await element(by.text('Save')).tap()
+  await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
     await waitFor(element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)))
       .toBeVisible()
-      .whileElement(by.id('remoteConfigTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
       .scroll(600, 'up')
     await element(by.text(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT)).tap()
     if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
@@ -485,7 +500,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
 export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
   if (AFUseCaseName === 'AllowFunction') {
-    await element(by.id('Home')).tap()
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode()
@@ -495,7 +510,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await openDeveloperScreen()
   await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
-    .whileElement(by.id('developerScreenTestID'))
+    .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
     .scroll(200, 'down')
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await waitFor(element(by.text(AFFeature)))
@@ -503,15 +518,15 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
     .scroll(600, 'down')
   await element(by.text(AFFeature)).tap()
-  await element(by.text('Enabled')).tap()
-  await element(by.text('Save')).tap()
+  await element(by.text(CommonE2eIdConstants.ENABLED_TEXT)).tap()
+  await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
 
   await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
 
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
-    await expect(element(by.text('AF Heading Test'))).not.toExist()
-    await expect(element(by.text('AF Body Test'))).not.toExist()
+    await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).not.toExist()
+    await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).not.toExist()
   }
   await device.uninstallApp()
   await device.installApp()
@@ -537,12 +552,12 @@ const navigateToFeature = async (featureNavigationArray) => {
       featureNavigationArray[j] === 'Reply' ||
       featureNavigationArray[j] === 'Only use messages for non-urgent needs'
     ) {
-      await element(by.id('viewMessageTestID')).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Email address') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('ContactInfoTestID'))
+        .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Received July 17, 2008') {
@@ -561,21 +576,17 @@ const navigateToFeature = async (featureNavigationArray) => {
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
-      if (device.getPlatform() === 'ios') {
-        await element(by.text(featureNavigationArray[j])).tap()
-      } else {
-        await element(by.text('Request Refill ')).tap()
-      }
+      await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
     } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Proof of Veteran status') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('homeScreenID'))
+        .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
         .scroll(200, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[0] === 'HomeScreen.e2e' && featureNavigationArray[j] !== 'Appointments') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('homeScreenID'))
+        .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
         .scroll(200, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else {
@@ -594,13 +605,13 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     featureName = featureNavigationArray[featureNavigationArray.length - 1]
     await navigateToFeature(featureNavigationArray)
   }
-  await expect(element(by.text('AF Heading Test'))).toExist()
-  await expect(element(by.text('AF Body Test'))).toExist()
+  await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).toExist()
+  await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).toExist()
   if (AFUseCase === 'DenyAccess') {
     try {
-      await element(by.text('OK')).tap()
+      await element(by.text(CommonE2eIdConstants.OK_UNIVERSAL_TEXT)).tap()
     } catch (ex) {
-      await element(by.text('OK')).atIndex(0).tap()
+      await element(by.text(CommonE2eIdConstants.OK_UNIVERSAL_TEXT)).atIndex(0).tap()
     }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     if (device.getPlatform() === 'android') {
@@ -608,7 +619,11 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       try {
         await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(
+          by
+            .id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)
+            .withAncestor(by.id(CommonE2eIdConstants.AF_USE_CASE_TWO_ID)),
+        ).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
@@ -617,7 +632,9 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
         await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
         await element(
-          by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID')),
+          by
+            .id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)
+            .withAncestor(by.id(CommonE2eIdConstants.AF_USE_CASE_TWO_ID)),
         ).tap()
       }
       await setTimeout(5000)
@@ -628,9 +645,9 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
     if (AFUseCaseUpgrade) {
       try {
-        await expect(element(by.text('Update now'))).toExist()
+        await expect(element(by.text(CommonE2eIdConstants.AF_UPDATE_NOW_BUTTON_TEXT))).toExist()
       } catch (ex) {
-        await expect(element(by.text('Update now')).atIndex(1)).toExist()
+        await expect(element(by.text(CommonE2eIdConstants.AF_UPDATE_NOW_BUTTON_TEXT)).atIndex(1)).toExist()
       }
     }
   }
