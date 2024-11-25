@@ -2,6 +2,8 @@ import React, { FC, ReactElement, useState } from 'react'
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
@@ -163,12 +165,11 @@ export const ButtonDecorator: FC<{
 
     default:
       return (
-        <VAIcon
+        <Icon
           name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
-          {...decoratorProps}
         />
       )
   }
@@ -246,7 +247,8 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     width: '100%',
     minHeight: minHeight || theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    pl: theme.dimensions.gutter,
+    pr: decorator === undefined ? theme.dimensions.buttonPadding : theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
@@ -282,7 +284,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         )}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box
+            ml={decorator === undefined ? 0 : theme.dimensions.listItemDecoratorMarginLeft}
+            importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}

@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { setAnalyticsUserProperty } from 'utils/analytics'
@@ -93,14 +94,15 @@ export const Nametag = () => {
               )}
             </Box>
             {showVeteranStatus && (
-              <VAIcon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.linkRow}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                preventScaling={true}
-                ml={theme.dimensions.listItemDecoratorMarginLeft}
-              />
+              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+                <Icon
+                  name={'ChevronRight'}
+                  fill={theme.colors.icon.linkRow}
+                  width={theme.dimensions.chevronListItemWidth}
+                  height={theme.dimensions.chevronListItemHeight}
+                  preventScaling={true}
+                />
+              </Box>
             )}
           </Box>
         </Pressable>

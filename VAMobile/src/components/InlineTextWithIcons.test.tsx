@@ -35,11 +35,11 @@ context('InlineTextWithIcons', () => {
       },
       leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
       rightIconProps: {
-        name: 'ChevronRight',
+        name: 'Chat',
         width: 16,
         height: 16,
         fill: 'spinner',
-        testID: 'ChevronRight',
+        testID: 'Chat',
       } as VAIconProps,
     } as InlineTextWithIconsProps
 
@@ -61,6 +61,6 @@ context('InlineTextWithIcons', () => {
   it('renders icons', () => {
     expect(screen.getByTestId('Unread')).toBeTruthy()
     expect(screen.getByTestId('PaperClip')).toBeTruthy()
-    expect(screen.getByTestId('ChevronRight')).toBeTruthy()
+    expect(screen.getByTestId('Chat')).toBeTruthy()
   })
 })
