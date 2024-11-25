@@ -53,6 +53,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
+          base: ${{ github.ref_name }}
           title: "Optimize images before release build"
           body: |
             This PR optimizes images in preparation for the release build.
