@@ -460,21 +460,6 @@ export function checkStringForPII(body: string): { found: boolean; newText: stri
       found = true
       text = 'xxxxxxx@xxx.xxx'
     }
-    // if (index !== 0 && index !== bodySplit.length - 1) {
-    //   //checking phone/ssn by concating several split texts for white space seperators.
-    //   const previousText = bodySplit[index - 1]
-    //   const nextText = bodySplit[index + 1]
-    //   const testString = previousText + ' ' + text + ' ' + nextText
-    //   phoneMatch = PHONE_REGEX_EXP.exec(testString)
-    //   ssnMatch = SSN_REGEX_EXP.exec(testString)
-    //   if (phoneMatch) {
-    //     found = true
-    //     text = '###-###-####'
-    //   } else if (ssnMatch) {
-    //     found = true
-    //     text = '###-##-####'
-    //   }
-    // }
     newText = newText.concat(text)
     newText = newText.concat(whiteSpace.pop() || '')
   })
